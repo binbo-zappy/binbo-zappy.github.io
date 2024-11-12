@@ -345,5 +345,30 @@
   
   
   
+  <entry>
+    <title>ubuntu虚拟机磁盘扩容</title>
+    <link href="/2022/12/13/ubuntu%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%A3%81%E7%9B%98%E6%89%A9%E5%AE%B9/"/>
+    <url>/2022/12/13/ubuntu%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%A3%81%E7%9B%98%E6%89%A9%E5%AE%B9/</url>
+    
+    <content type="html"><![CDATA[<h1 id="Ubuntu虚拟机磁盘空间不够，如何扩容"><a href="#Ubuntu虚拟机磁盘空间不够，如何扩容" class="headerlink" title="Ubuntu虚拟机磁盘空间不够，如何扩容"></a>Ubuntu虚拟机磁盘空间不够，如何扩容</h1><h2 id="一、软件版本"><a href="#一、软件版本" class="headerlink" title="一、软件版本"></a>一、软件版本</h2><p>1.vmware 15.5.0</p><p>2.ubuntu 20.04</p><h2 id="二、操作步骤"><a href="#二、操作步骤" class="headerlink" title="二、操作步骤"></a>二、操作步骤</h2><p>1.打开虚拟机设置，点击硬盘<br><img src="/../imgs/ubuntu%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%A3%81%E7%9B%98%E6%89%A9%E5%AE%B9/15fc8dc4f12fa5028a9388249f3af272.png" alt="在这里插入图片描述"></p><p>2.点击扩展<br><img src="/../imgs/ubuntu%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%A3%81%E7%9B%98%E6%89%A9%E5%AE%B9/03bf87f8780d1f5f0d7b6c7130f738ca.png" alt="在这里插入图片描述"></p><p>3.此处我由50G增加到70G，点击扩展<br><img src="/../imgs/ubuntu%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%A3%81%E7%9B%98%E6%89%A9%E5%AE%B9/19983adb5563d49266bf294485b59606.png" alt="在这里插入图片描述"></p><p>4.开启虚拟机</p><p>5.点击磁盘<br><img src="/../imgs/ubuntu%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%A3%81%E7%9B%98%E6%89%A9%E5%AE%B9/c8428adcd11dfe842401ab61e80d16f2.png" alt="在这里插入图片描述"></p><p>6.看到有21G的未分配的磁盘空间</p><p><img src="/../imgs/ubuntu%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%A3%81%E7%9B%98%E6%89%A9%E5%AE%B9/226cfc5dee27ecee83abb2ac08898792.png" alt="在这里插入图片描述"></p><p>7.点击扩展分区</p><p><img src="/../imgs/ubuntu%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%A3%81%E7%9B%98%E6%89%A9%E5%AE%B9/e8a7616f83cfd499830719c53a862147.png" alt="在这里插入图片描述"></p><p>8.点击设置</p><p><img src="/../imgs/ubuntu%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%A3%81%E7%9B%98%E6%89%A9%E5%AE%B9/6b93eb112dfe8bce5b66ddb825349451.png" alt="在这里插入图片描述"></p><p>9.调整大小</p><p>10.把按钮拖动到最大，点击调整大小<br><img src="/../imgs/ubuntu%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%A3%81%E7%9B%98%E6%89%A9%E5%AE%B9/64180784c7a86f2bccc1103506efefda.png" alt="在这里插入图片描述"></p><p>11.选择文件系统进行同样的操作</p><p>12.在终端使用命令 df查看</p><p><img src="/../imgs/ubuntu%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%A3%81%E7%9B%98%E6%89%A9%E5%AE%B9/c8b5025526882a778881a1c67620328d.png" alt="在这里插入图片描述"></p><p>扩容成功！！！！！！！！！</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>linux</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>ubuntu</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
   
 </search>
