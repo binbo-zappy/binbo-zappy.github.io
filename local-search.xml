@@ -4,36 +4,23 @@
   
   
   <entry>
-    <title>操作系统</title>
-    <link href="/2024/11/12/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
-    <url>/2024/11/12/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</url>
-    
-    <content type="html"><![CDATA[]]></content>
-    
-    
-    
-  </entry>
-  
-  
-  
-  <entry>
-    <title>计算机网络</title>
-    <link href="/2024/11/12/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"/>
-    <url>/2024/11/12/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/</url>
+    <title>c++ todo</title>
+    <link href="/2024/11/12/cpp/"/>
+    <url>/2024/11/12/cpp/</url>
     
     <content type="html"><![CDATA[]]></content>
     
     
     <categories>
       
-      <category>network</category>
+      <category>c++</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>network</tag>
+      <tag>c++</tag>
       
     </tags>
     
@@ -42,7 +29,61 @@
   
   
   <entry>
-    <title>github+hexo 搭建个人网站</title>
+    <title>操作系统 todo</title>
+    <link href="/2024/11/12/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
+    <url>/2024/11/12/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>计算机基础</category>
+      
+      <category>操作系统</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>os</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>计算机网络 todo</title>
+    <link href="/2024/11/12/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"/>
+    <url>/2024/11/12/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>计算机基础</category>
+      
+      <category>计算机网络</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>os</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>github+hexo 搭建个人网站 todo</title>
     <link href="/2024/11/12/github-hexo-%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E7%BD%91%E7%AB%99/"/>
     <url>/2024/11/12/github-hexo-%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E7%BD%91%E7%AB%99/</url>
     
@@ -67,7 +108,7 @@
   
   
   <entry>
-    <title>matlab</title>
+    <title>matlab todo</title>
     <link href="/2024/11/12/matlab/"/>
     <url>/2024/11/12/matlab/</url>
     
@@ -92,7 +133,7 @@
   
   
   <entry>
-    <title>rust</title>
+    <title>rust todo</title>
     <link href="/2024/11/12/rust/"/>
     <url>/2024/11/12/rust/</url>
     
