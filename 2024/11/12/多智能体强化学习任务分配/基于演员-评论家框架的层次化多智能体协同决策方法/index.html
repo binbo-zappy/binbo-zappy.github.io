@@ -22,18 +22,18 @@
     <meta name="description" content="主要内容这篇文章的主要内容是提出了一种基于演员-评论家（Actor-Critic，AC）框架的层次化多智能体协同决策方法，旨在解决复杂作战环境下多智能体协同决策中的任务分配不合理和决策一致性较差的问题。该方法通过将决策过程分为不同层次，并使用AC框架来实现智能体之间的信息交流和决策协同，以提高决策效率和战斗力。在高层次，顶层智能体制定任务决策，将总任务分解并分配给底层智能体。在低层次，底层智能体根">
 <meta property="og:type" content="article">
 <meta property="og:title" content="基于演员-评论家框架的层次化多智能体协同决策方法">
-<meta property="og:url" content="http://binbo-zappy.github.io/2024/11/12/%E5%9F%BA%E4%BA%8E%E6%BC%94%E5%91%98-%E8%AF%84%E8%AE%BA%E5%AE%B6%E6%A1%86%E6%9E%B6%E7%9A%84%E5%B1%82%E6%AC%A1%E5%8C%96%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%8D%8F%E5%90%8C%E5%86%B3%E7%AD%96%E6%96%B9%E6%B3%95/index.html">
+<meta property="og:url" content="http://binbo-zappy.github.io/2024/11/12/%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E4%BB%BB%E5%8A%A1%E5%88%86%E9%85%8D/%E5%9F%BA%E4%BA%8E%E6%BC%94%E5%91%98-%E8%AF%84%E8%AE%BA%E5%AE%B6%E6%A1%86%E6%9E%B6%E7%9A%84%E5%B1%82%E6%AC%A1%E5%8C%96%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%8D%8F%E5%90%8C%E5%86%B3%E7%AD%96%E6%96%B9%E6%B3%95/index.html">
 <meta property="og:site_name" content="Binbo">
 <meta property="og:description" content="主要内容这篇文章的主要内容是提出了一种基于演员-评论家（Actor-Critic，AC）框架的层次化多智能体协同决策方法，旨在解决复杂作战环境下多智能体协同决策中的任务分配不合理和决策一致性较差的问题。该方法通过将决策过程分为不同层次，并使用AC框架来实现智能体之间的信息交流和决策协同，以提高决策效率和战斗力。在高层次，顶层智能体制定任务决策，将总任务分解并分配给底层智能体。在低层次，底层智能体根">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://binbo-zappy.github.io/2024/11/12/%E5%9F%BA%E4%BA%8E%E6%BC%94%E5%91%98-%E8%AF%84%E8%AE%BA%E5%AE%B6%E6%A1%86%E6%9E%B6%E7%9A%84%E5%B1%82%E6%AC%A1%E5%8C%96%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%8D%8F%E5%90%8C%E5%86%B3%E7%AD%96%E6%96%B9%E6%B3%95/image-20241112210938443.png">
+<meta property="og:image" content="http://binbo-zappy.github.io/2024/11/12/%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E4%BB%BB%E5%8A%A1%E5%88%86%E9%85%8D/%E5%9F%BA%E4%BA%8E%E6%BC%94%E5%91%98-%E8%AF%84%E8%AE%BA%E5%AE%B6%E6%A1%86%E6%9E%B6%E7%9A%84%E5%B1%82%E6%AC%A1%E5%8C%96%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%8D%8F%E5%90%8C%E5%86%B3%E7%AD%96%E6%96%B9%E6%B3%95/image-20241112210938443.png">
 <meta property="article:published_time" content="2024-11-12T11:57:12.000Z">
 <meta property="article:modified_time" content="2024-11-13T02:43:31.380Z">
 <meta property="article:author" content="Binbo">
 <meta property="article:tag" content="RL">
 <meta property="article:tag" content="科研">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://binbo-zappy.github.io/2024/11/12/%E5%9F%BA%E4%BA%8E%E6%BC%94%E5%91%98-%E8%AF%84%E8%AE%BA%E5%AE%B6%E6%A1%86%E6%9E%B6%E7%9A%84%E5%B1%82%E6%AC%A1%E5%8C%96%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%8D%8F%E5%90%8C%E5%86%B3%E7%AD%96%E6%96%B9%E6%B3%95/image-20241112210938443.png">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/2024/11/12/%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E4%BB%BB%E5%8A%A1%E5%88%86%E9%85%8D/%E5%9F%BA%E4%BA%8E%E6%BC%94%E5%91%98-%E8%AF%84%E8%AE%BA%E5%AE%B6%E6%A1%86%E6%9E%B6%E7%9A%84%E5%B1%82%E6%AC%A1%E5%8C%96%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%8D%8F%E5%90%8C%E5%86%B3%E7%AD%96%E6%96%B9%E6%B3%95/image-20241112210938443.png">
   
   
   
@@ -280,7 +280,7 @@
               <div class="markdown-body">
                 
                 <h1 id="主要内容"><a href="#主要内容" class="headerlink" title="主要内容"></a>主要内容</h1><p>这篇文章的主要内容是提出了一种基于演员-评论家（Actor-Critic，AC）框架的层次化多智能体协同决策方法，旨在解决复杂作战环境下多智能体协同决策中的任务分配不合理和决策一致性较差的问题。该方法通过将决策过程分为不同层次，并使用AC框架来实现智能体之间的信息交流和决策协同，以提高决策效率和战斗力。在高层次，顶层智能体制定任务决策，将总任务分解并分配给底层智能体。在低层次，底层智能体根据子任务进行动作决策，并将结果反馈给高层次。</p>
-<h1 id="研究方法和算法实现："><a href="#研究方法和算法实现：" class="headerlink" title="研究方法和算法实现："></a>研究方法和算法实现：</h1><img src="/2024/11/12/%E5%9F%BA%E4%BA%8E%E6%BC%94%E5%91%98-%E8%AF%84%E8%AE%BA%E5%AE%B6%E6%A1%86%E6%9E%B6%E7%9A%84%E5%B1%82%E6%AC%A1%E5%8C%96%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%8D%8F%E5%90%8C%E5%86%B3%E7%AD%96%E6%96%B9%E6%B3%95/image-20241112210938443.png" srcset="/img/loading.gif" lazyload alt="image-20241112210938443" style="zoom:40%;">
+<h1 id="研究方法和算法实现："><a href="#研究方法和算法实现：" class="headerlink" title="研究方法和算法实现："></a>研究方法和算法实现：</h1><img src="/2024/11/12/%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E4%BB%BB%E5%8A%A1%E5%88%86%E9%85%8D/%E5%9F%BA%E4%BA%8E%E6%BC%94%E5%91%98-%E8%AF%84%E8%AE%BA%E5%AE%B6%E6%A1%86%E6%9E%B6%E7%9A%84%E5%B1%82%E6%AC%A1%E5%8C%96%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%8D%8F%E5%90%8C%E5%86%B3%E7%AD%96%E6%96%B9%E6%B3%95/image-20241112210938443.png" srcset="/img/loading.gif" lazyload alt="image-20241112210938443" style="zoom:40%;">
 
 <ol>
 <li><p><strong>决策层次划分：</strong></p>
@@ -387,7 +387,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>基于演员-评论家框架的层次化多智能体协同决策方法</div>
-      <div>http://binbo-zappy.github.io/2024/11/12/基于演员-评论家框架的层次化多智能体协同决策方法/</div>
+      <div>http://binbo-zappy.github.io/2024/11/12/多智能体强化学习任务分配/基于演员-评论家框架的层次化多智能体协同决策方法/</div>
     </div>
     <div class="license-meta">
       
