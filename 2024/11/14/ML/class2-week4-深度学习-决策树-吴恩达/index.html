@@ -19,25 +19,24 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="主要内容这篇文章的主要内容是提出了一种基于演员-评论家（Actor-Critic，AC）框架的层次化多智能体协同决策方法，旨在解决复杂作战环境下多智能体协同决策中的任务分配不合理和决策一致性较差的问题。该方法通过将决策过程分为不同层次，并使用AC框架来实现智能体之间的信息交流和决策协同，以提高决策效率和战斗力。在高层次，顶层智能体制定任务决策，将总任务分解并分配给底层智能体。在低层次，底层智能体根">
+    <meta name="description" content="决策树   根节点 决策节点 叶节点  决策树学习算法的工作是，从所有可能的决策树中，尝试选择一个希望在训练集上表现良好的树，然后理想地泛化到新数据，例如交叉验证和测试集   1. 学习过程 决策树学习的第一步是，我们必须决定在根节点使用什么特征。    决策 2：何时停止分裂？  当一个节点完全是一类时 当分裂一个节点会导致树超过最大深度时 当纯度分数的提高低于一个阈值时 当节点中的样本数量低于">
 <meta property="og:type" content="article">
-<meta property="og:title" content="基于演员-评论家框架的层次化多智能体协同决策方法">
-<meta property="og:url" content="http://binbo-zappy.github.io/2024/11/12/%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E4%BB%BB%E5%8A%A1%E5%88%86%E9%85%8D/%E5%9F%BA%E4%BA%8E%E6%BC%94%E5%91%98-%E8%AF%84%E8%AE%BA%E5%AE%B6%E6%A1%86%E6%9E%B6%E7%9A%84%E5%B1%82%E6%AC%A1%E5%8C%96%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%8D%8F%E5%90%8C%E5%86%B3%E7%AD%96%E6%96%B9%E6%B3%95/index.html">
+<meta property="og:title" content="2.4 深度学习-决策树-吴恩达">
+<meta property="og:url" content="http://binbo-zappy.github.io/2024/11/14/ML/class2-week4-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-%E5%86%B3%E7%AD%96%E6%A0%91-%E5%90%B4%E6%81%A9%E8%BE%BE/index.html">
 <meta property="og:site_name" content="Binbo">
-<meta property="og:description" content="主要内容这篇文章的主要内容是提出了一种基于演员-评论家（Actor-Critic，AC）框架的层次化多智能体协同决策方法，旨在解决复杂作战环境下多智能体协同决策中的任务分配不合理和决策一致性较差的问题。该方法通过将决策过程分为不同层次，并使用AC框架来实现智能体之间的信息交流和决策协同，以提高决策效率和战斗力。在高层次，顶层智能体制定任务决策，将总任务分解并分配给底层智能体。在低层次，底层智能体根">
+<meta property="og:description" content="决策树   根节点 决策节点 叶节点  决策树学习算法的工作是，从所有可能的决策树中，尝试选择一个希望在训练集上表现良好的树，然后理想地泛化到新数据，例如交叉验证和测试集   1. 学习过程 决策树学习的第一步是，我们必须决定在根节点使用什么特征。    决策 2：何时停止分裂？  当一个节点完全是一类时 当分裂一个节点会导致树超过最大深度时 当纯度分数的提高低于一个阈值时 当节点中的样本数量低于">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://binbo-zappy.github.io/imgs/RL.png">
-<meta property="article:published_time" content="2024-11-12T11:57:12.000Z">
-<meta property="article:modified_time" content="2024-11-13T13:58:27.051Z">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/ml.png">
+<meta property="article:published_time" content="2024-11-14T00:55:51.000Z">
+<meta property="article:modified_time" content="2024-11-14T01:54:26.242Z">
 <meta property="article:author" content="Binbo">
-<meta property="article:tag" content="RL">
-<meta property="article:tag" content="科研">
+<meta property="article:tag" content="ML">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/RL.png">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/ml.png">
   
   
   
-  <title>基于演员-评论家框架的层次化多智能体协同决策方法 - Binbo</title>
+  <title>2.4 深度学习-决策树-吴恩达 - Binbo</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -203,7 +202,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="基于演员-评论家框架的层次化多智能体协同决策方法"></span>
+            <span id="subtitle" data-typed-text="2.4 深度学习-决策树-吴恩达"></span>
           
         </div>
 
@@ -214,8 +213,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-11-12 19:57" pubdate>
-          2024年11月12日 晚上
+        <time datetime="2024-11-14 08:55" pubdate>
+          2024年11月14日 早上
         </time>
       </span>
     
@@ -226,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.2k 字
+          686 字
         
       </span>
     
@@ -237,7 +236,7 @@
         
         
         
-          10 分钟
+          6 分钟
         
       </span>
     
@@ -274,72 +273,109 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">基于演员-评论家框架的层次化多智能体协同决策方法</h1>
+            <h1 id="seo-header">2.4 深度学习-决策树-吴恩达</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="主要内容"><a href="#主要内容" class="headerlink" title="主要内容"></a>主要内容</h1><p>这篇文章的主要内容是提出了一种基于演员-评论家（Actor-Critic，AC）框架的层次化多智能体协同决策方法，旨在解决复杂作战环境下多智能体协同决策中的任务分配不合理和决策一致性较差的问题。该方法通过将决策过程分为不同层次，并使用AC框架来实现智能体之间的信息交流和决策协同，以提高决策效率和战斗力。在高层次，顶层智能体制定任务决策，将总任务分解并分配给底层智能体。在低层次，底层智能体根据子任务进行动作决策，并将结果反馈给高层次。</p>
-<h1 id="研究方法和算法实现："><a href="#研究方法和算法实现：" class="headerlink" title="研究方法和算法实现："></a>研究方法和算法实现：</h1><div align="center"><img src="/2024/11/12/%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E4%BB%BB%E5%8A%A1%E5%88%86%E9%85%8D/%E5%9F%BA%E4%BA%8E%E6%BC%94%E5%91%98-%E8%AF%84%E8%AE%BA%E5%AE%B6%E6%A1%86%E6%9E%B6%E7%9A%84%E5%B1%82%E6%AC%A1%E5%8C%96%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%8D%8F%E5%90%8C%E5%86%B3%E7%AD%96%E6%96%B9%E6%B3%95/image-20241112210938443.png" srcset="/img/loading.gif" lazyload alt="image-20241112210938443" style="zoom:40%;" align="center"></div>
-
-<ol>
-<li><strong>决策层次划分：</strong><ul>
-<li>高层次（High Level, HL）：顶层智能体负责制定任务决策，将总任务分解并分配给底层智能体。</li>
-<li>低层次（Low Level, LL）：底层智能体根据子任务进行动作决策，并将结果反馈给高层次。</li>
+                <h2 id="决策树"><a href="#决策树" class="headerlink" title="决策树"></a>决策树</h2><p><img src="/2024/11/14/ML/class2-week4-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-%E5%86%B3%E7%AD%96%E6%A0%91-%E5%90%B4%E6%81%A9%E8%BE%BE/image-20231012075401986.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/11/14/ML/class2-week4-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-%E5%86%B3%E7%AD%96%E6%A0%91-%E5%90%B4%E6%81%A9%E8%BE%BE/image-20231012075410387.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li><p>根节点 决策节点 叶节点</p>
+</li>
+<li><p>决策树学习算法的工作是，从所有可能的决策树中，尝试选择一个希望在训练集上表现良好的树，然后理想地泛化到新数据，例如交叉验证和测试集</p>
+</li>
+</ul>
+<h3 id="1-学习过程"><a href="#1-学习过程" class="headerlink" title="1. 学习过程"></a>1. 学习过程</h3><ul>
+<li>决策树学习的第一步是，我们必须决定在根节点使用什么特征。</li>
+</ul>
+<p><img src="/2024/11/14/ML/class2-week4-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-%E5%86%B3%E7%AD%96%E6%A0%91-%E5%90%B4%E6%81%A9%E8%BE%BE/image-20231012081611286.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li><p>决策 2：何时停止分裂？</p>
+<ul>
+<li>当一个节点完全是一类时</li>
+<li>当分裂一个节点会导致树超过最大深度时</li>
+<li>当纯度分数的提高低于一个阈值时</li>
+<li>当节点中的样本数量低于一个阈值时</li>
 </ul>
 </li>
-<li><strong>状态空间和动作空间的分割：</strong><ul>
-<li>根据层级关系对状态空间和指令空间进行分割，HL决策针对全局作战态势信息下达宏观作战指令，LL决策对执行宏观作战指令的作战编组进行动作操控。</li>
+<li><p>您可能想要限制决策树深度的一个原因是确保我们的树不会变得太大和笨重，其次，通过保持树小，它不太容易过度拟合。</p>
+</li>
+</ul>
+<h3 id="2-纯度"><a href="#2-纯度" class="headerlink" title="2. 纯度"></a>2. 纯度</h3><h4 id="2-1-熵-entropy"><a href="#2-1-熵-entropy" class="headerlink" title="2.1 熵 entropy"></a>2.1 熵 entropy</h4><p><img src="/2024/11/14/ML/class2-week4-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-%E5%86%B3%E7%AD%96%E6%A0%91-%E5%90%B4%E6%81%A9%E8%BE%BE/image-20231012082638836.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/11/14/ML/class2-week4-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-%E5%86%B3%E7%AD%96%E6%A0%91-%E5%90%B4%E6%81%A9%E8%BE%BE/image-20231012082823450.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li><p>选择拆分信息增益</p>
+</li>
+<li><p>减少熵</p>
+</li>
+<li><p>信息增益 分之前的熵减去分后熵的加权平均</p>
+</li>
+<li><p>停止标准，每次信息增益如果太小停止分类</p>
+</li>
+</ul>
+<p><img src="/2024/11/14/ML/class2-week4-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-%E5%86%B3%E7%AD%96%E6%A0%91-%E5%90%B4%E6%81%A9%E8%BE%BE/image-20231012083632353.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/11/14/ML/class2-week4-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-%E5%86%B3%E7%AD%96%E6%A0%91-%E5%90%B4%E6%81%A9%E8%BE%BE/image-20231012083921344.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="2-2-整合"><a href="#2-2-整合" class="headerlink" title="2.2 整合"></a>2.2 整合</h4><ul>
+<li>从根节点开始，包含所有样本</li>
+<li>计算所有可能特征的信息增益，并选择信息增益最高的特征</li>
+<li>根据选定的特征划分数据集，并创建树的左分支和右分支</li>
+<li>持续重复分裂过程，直到满足停止条件：<ul>
+<li>当一个节点完全是一类时</li>
+<li>当分裂一个节点会导致树超过最大深度时</li>
+<li>额外分裂的信息增益小于阈值时</li>
+<li>当节点中的样本数量低于阈值时</li>
 </ul>
 </li>
-<li><strong>上层任务分解</strong><ul>
-<li>给定总任务<em>M</em>，拆分成子任务集{𝑀0,𝑀1,⋯,𝑀𝑖}</li>
-<li>每一个子任务有任务类型、任务时间、任务状态和作战单元类型，可用one-hot独热码<ul>
-<li>任务类型：主要分为打击任务和巡逻任务，打击任务包含对空拦截、对陆打击，巡逻任务包含空战巡逻、反地面战巡逻</li>
-<li>任务时间：做离散化处理，用时刻𝑇1和时刻𝑇2来表示</li>
-<li>任务状态：启动、未启动</li>
-<li>作战单元：导弹驱逐舰和轰炸机</li>
+</ul>
+<p><img src="/2024/11/14/ML/class2-week4-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-%E5%86%B3%E7%AD%96%E6%A0%91-%E5%90%B4%E6%81%A9%E8%BE%BE/image-20231012084601880.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>递归分类</li>
+</ul>
+<h3 id="3-独热编码-one-hot"><a href="#3-独热编码-one-hot" class="headerlink" title="3. 独热编码 one-hot"></a>3. 独热编码 one-hot</h3><p><img src="/2024/11/14/ML/class2-week4-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-%E5%86%B3%E7%AD%96%E6%A0%91-%E5%90%B4%E6%81%A9%E8%BE%BE/image-20231012085239987.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li><p>通过one-hot编码，您可以让决策树处理可以采用两个以上离散值的特征，您还可以将其应用于新网络或线性回归或逻辑回归训练。</p>
+</li>
+<li><p>连续值</p>
+</li>
+<li><p>尝试不同的阈值，计算纯度</p>
+</li>
+</ul>
+<h3 id="4-回归树"><a href="#4-回归树" class="headerlink" title="4. 回归树"></a>4. 回归树</h3><p><img src="/2024/11/14/ML/class2-week4-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-%E5%86%B3%E7%AD%96%E6%A0%91-%E5%90%B4%E6%81%A9%E8%BE%BE/image-20231012090404205.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>尝试减少方差</li>
+</ul>
+<p><img src="/2024/11/14/ML/class2-week4-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-%E5%86%B3%E7%AD%96%E6%A0%91-%E5%90%B4%E6%81%A9%E8%BE%BE/image-20231012091154958.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="5-使用多个决策树"><a href="#5-使用多个决策树" class="headerlink" title="5. 使用多个决策树"></a>5. 使用多个决策树</h3><p><img src="/2024/11/14/ML/class2-week4-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-%E5%86%B3%E7%AD%96%E6%A0%91-%E5%90%B4%E6%81%A9%E8%BE%BE/image-20231012092643280.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="5-1-有放回的采样"><a href="#5-1-有放回的采样" class="headerlink" title="5.1 有放回的采样"></a>5.1 有放回的采样</h4><ul>
+<li><p>构建新的数据集</p>
+</li>
+<li><p>随机森林算法 Random Forest Algorithm</p>
+</li>
+</ul>
+<p><img src="/2024/11/14/ML/class2-week4-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-%E5%86%B3%E7%AD%96%E6%A0%91-%E5%90%B4%E6%81%A9%E8%BE%BE/image-20231012093230276.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li><p>随机化特征选择</p>
+<ul>
+<li>在每个节点选择用于分裂的特征时，如果有n个特征可用，随机选择一个包含k个特征的子集（k &lt; n），并允许算法仅从这个特征子集中进行选择。</li>
 </ul>
 </li>
-<li>在根据想定场景设计出子任务后，HL需要根据任务类型规划出任务启动时间，并进一步确定任务的启动次序。</li>
-</ul>
+<li><p>k的选择（根号n，log2(n)）</p>
 </li>
-<li><strong>奖惩函数设计：</strong><ul>
-<li>高层智能体只需要聚焦于 子任务选择是否合适，因此高层智能体的奖励函数HL<del>r</del>设计为当任务合适时给予正奖励回报，反之则为负奖励回报。本文中根据全局任务是否完成判断子任务选择是否正确。</li>
 </ul>
-</li>
-<li><strong>基于AC框架的层次化多智能体算法框架：</strong><ul>
-<li>离策略修正的层次化学习(Hierarchical  reinforcement learning with off-policy correction,  HIRO)[31]算法是一种使用两层策略结构来解决复杂强化学习问题的一种单智能体算法，核心思想是高层策略提出目标，低层策略完成这一目标。</li>
-<li>采用部分可观察马尔可夫决策过程（POMDP）对环境进行建模。</li>
-<li>利用深度确定性策略梯度（Deep Deterministic Policy Gradient, DDPG）算法作为基础，结合多智能体深度强化学习，形成了Hierarchical Multi-Agent Actor-Critic（HMaAC）算法。</li>
+<h4 id="5-2-XGBoost-extreme-Gradient-Boosting"><a href="#5-2-XGBoost-extreme-Gradient-Boosting" class="headerlink" title="5.2 XGBoost (extreme Gradient Boosting)"></a>5.2 XGBoost (extreme Gradient Boosting)</h4><ul>
+<li>提升树的开源实现</li>
+<li>快速高效的实现</li>
+<li>默认分裂标准和停止分裂标准的好选择</li>
+<li>内置正则化以防止过拟合</li>
+<li>机器学习竞赛中极具竞争力的算法（例如：Kaggle竞赛）</li>
 </ul>
-</li>
-<li><strong>HMaAC算法设计：</strong><ul>
-<li>初始化顶层和底层的Critic网络和Actor网络，以及经验回放缓冲池。</li>
-<li>通过采样和最小化损失函数更新Critic网络，通过策略梯度更新Actor网络。</li>
-<li>引入熵约束的概念，最大化策略的熵以学习设置合适的子目标。</li>
+<p><img src="/2024/11/14/ML/class2-week4-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-%E5%86%B3%E7%AD%96%E6%A0%91-%E5%90%B4%E6%81%A9%E8%BE%BE/image-20231012094738491.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="6-何时使用决策树"><a href="#6-何时使用决策树" class="headerlink" title="6. 何时使用决策树"></a>6. 何时使用决策树</h3><ul>
+<li>表格数据</li>
 </ul>
-</li>
-<li><strong>仿真环境与仿真结果：</strong><ul>
-<li>使用联合作战仿真推演平台作为实验验证环境，进行了2v2、4v4、6v6等不同规模的作战场景实验。</li>
-<li>实验结果显示，HMaAC算法在多种复杂作战场景下均取得了较好的性能，展现了其在提升军事作战协同决策能力方面的潜力。</li>
-</ul>
-</li>
-<li><strong>网络结构设计和训练参数：</strong><ul>
-<li>设计了上层和下层的神经网络结构，均使用3层全连接层，使用ReLU和Tanh作为激活函数。</li>
-<li>设定了一系列超参数，如最大episode数量、批处理参数、熵正则项系数等。</li>
-</ul>
-</li>
-</ol>
-<p><img src="/2024/11/12/%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E4%BB%BB%E5%8A%A1%E5%88%86%E9%85%8D/%E5%9F%BA%E4%BA%8E%E6%BC%94%E5%91%98-%E8%AF%84%E8%AE%BA%E5%AE%B6%E6%A1%86%E6%9E%B6%E7%9A%84%E5%B1%82%E6%AC%A1%E5%8C%96%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%8D%8F%E5%90%8C%E5%86%B3%E7%AD%96%E6%96%B9%E6%B3%95/image-20241113205648783.png" srcset="/img/loading.gif" lazyload></p>
-<ol>
-<li><strong>训练结果分析：</strong><ul>
-<li>对比了HMaAC算法和MADDPG算法在2v2仿真场景中的表现，HMaAC算法在奖励值和收敛速度上优于MADDPG算法。</li>
-</ul>
-</li>
-</ol>
-<p>文章最后指出，尽管HMaAC算法在实验中表现出色，但仍需在实地测试和实战演练中进一步验证其可行性和有效性，同时探讨在更复杂多样化作战环境中的适应性和鲁棒性。</p>
-<p>[1]傅妍芳,雷凯麟,魏佳宁,等.基于演员-评论家框架的层次化多智能体协同决策方法[J].兵工学报,2024,45(10):3385-3396.</p>
+<p><img src="/2024/11/14/ML/class2-week4-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-%E5%86%B3%E7%AD%96%E6%A0%91-%E5%90%B4%E6%81%A9%E8%BE%BE/image-20231012095356821.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/11/14/ML/class2-week4-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-%E5%86%B3%E7%AD%96%E6%A0%91-%E5%90%B4%E6%81%A9%E8%BE%BE/image-20231012095814528.png" srcset="/img/loading.gif" lazyload></p>
 
                 
               </div>
@@ -358,12 +394,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E7%A7%91%E7%A0%94/" class="category-chain-item">科研</a>
+  <a href="/categories/AI/" class="category-chain-item">AI</a>
   
   
     <span>></span>
     
-  <a href="/categories/%E7%A7%91%E7%A0%94/%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E4%BB%BB%E5%8A%A1%E5%88%86%E9%85%8D/" class="category-chain-item">多智能体强化学习任务分配</a>
+  <a href="/categories/AI/ML/" class="category-chain-item">ML</a>
   
   
 
@@ -380,9 +416,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/RL/" class="print-no-link">#RL</a>
-      
-        <a href="/tags/%E7%A7%91%E7%A0%94/" class="print-no-link">#科研</a>
+        <a href="/tags/ML/" class="print-no-link">#ML</a>
       
     </div>
   
@@ -394,8 +428,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>基于演员-评论家框架的层次化多智能体协同决策方法</div>
-      <div>http://binbo-zappy.github.io/2024/11/12/多智能体强化学习任务分配/基于演员-评论家框架的层次化多智能体协同决策方法/</div>
+      <div>2.4 深度学习-决策树-吴恩达</div>
+      <div>http://binbo-zappy.github.io/2024/11/14/ML/class2-week4-深度学习-决策树-吴恩达/</div>
     </div>
     <div class="license-meta">
       
@@ -407,7 +441,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年11月12日</div>
+          <div>2024年11月14日</div>
         </div>
       
       
@@ -439,9 +473,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/11/13/ML/class1-week3-%E6%9C%89%E7%9B%91%E7%9D%A3%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9B%9E%E5%BD%92%E5%92%8C%E5%88%86%E7%B1%BB-%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/" title="1.3 有监督机器学习回归和分类-逻辑回归-吴恩达">
+                      <a href="/2024/11/14/ML/class3-week1-%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0-%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0-%E5%90%B4%E6%81%A9%E8%BE%BE/" title="3.1 无监督学习-无监督学习-吴恩达">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">1.3 有监督机器学习回归和分类-逻辑回归-吴恩达</span>
+                        <span class="hidden-mobile">3.1 无监督学习-无监督学习-吴恩达</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -449,8 +483,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/11/12/hexo/github-hexo-%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E7%BD%91%E7%AB%99/" title="github+hexo 搭建个人网站">
-                        <span class="hidden-mobile">github+hexo 搭建个人网站</span>
+                      <a href="/2024/11/14/ML/class2-week3-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-%E5%9C%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%A1%B9%E7%9B%AE%E4%B8%AD%E4%B8%8B%E4%B8%80%E6%AD%A5%E8%AF%A5%E5%81%9A%E4%BB%80%E4%B9%88-%E5%90%B4%E6%81%A9%E8%BE%BE/" title="2.3 深度学习-在机器学习项目中下一步该做什么-吴恩达">
+                        <span class="hidden-mobile">2.3 深度学习-在机器学习项目中下一步该做什么-吴恩达</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
