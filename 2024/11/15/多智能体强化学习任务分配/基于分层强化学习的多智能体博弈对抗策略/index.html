@@ -1,0 +1,792 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1. 主要内容1.1 研究内容 提出了一种结合任务可解释性的指挥官-集群多智能体分层强化学习算法，提高算法在复杂博弈场景中的收敛速度。 设计了一种结合软决策树的多智能体分层强化学习算法，增强了策略的解释性。 基于模糊决策树建立了博弈对抗策略，通过挖掘战法规则，模拟人的决策过程。 在联合作战实验平台上设计了空战博弈场景和海空联合作战场景，验证了所提算法的有效性。  1.2 算法设计与实验验证 设计了">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于分层强化学习的多智能体博弈对抗策略 todo">
+<meta property="og:url" content="http://binbo-zappy.github.io/2024/11/15/%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E4%BB%BB%E5%8A%A1%E5%88%86%E9%85%8D/%E5%9F%BA%E4%BA%8E%E5%88%86%E5%B1%82%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E7%9A%84%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%8D%9A%E5%BC%88%E5%AF%B9%E6%8A%97%E7%AD%96%E7%95%A5/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="1. 主要内容1.1 研究内容 提出了一种结合任务可解释性的指挥官-集群多智能体分层强化学习算法，提高算法在复杂博弈场景中的收敛速度。 设计了一种结合软决策树的多智能体分层强化学习算法，增强了策略的解释性。 基于模糊决策树建立了博弈对抗策略，通过挖掘战法规则，模拟人的决策过程。 在联合作战实验平台上设计了空战博弈场景和海空联合作战场景，验证了所提算法的有效性。  1.2 算法设计与实验验证 设计了">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/RL.png">
+<meta property="article:published_time" content="2024-11-15T11:03:31.000Z">
+<meta property="article:modified_time" content="2024-11-15T11:16:47.891Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="RL">
+<meta property="article:tag" content="科研">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/RL.png">
+  
+  
+  
+  <title>基于分层强化学习的多智能体博弈对抗策略 todo - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="基于分层强化学习的多智能体博弈对抗策略 todo"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-11-15 19:03" pubdate>
+          2024年11月15日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          21 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">基于分层强化学习的多智能体博弈对抗策略 todo</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="1-主要内容"><a href="#1-主要内容" class="headerlink" title="1. 主要内容"></a>1. 主要内容</h2><h3 id="1-1-研究内容"><a href="#1-1-研究内容" class="headerlink" title="1.1 研究内容"></a>1.1 研究内容</h3><ul>
+<li>提出了一种结合任务可解释性的指挥官-集群多智能体分层强化学习算法，提高算法在复杂博弈场景中的收敛速度。</li>
+<li>设计了一种结合软决策树的多智能体分层强化学习算法，增强了策略的解释性。</li>
+<li>基于模糊决策树建立了博弈对抗策略，通过挖掘战法规则，模拟人的决策过程。</li>
+<li>在联合作战实验平台上设计了空战博弈场景和海空联合作战场景，验证了所提算法的有效性。</li>
+</ul>
+<h3 id="1-2-算法设计与实验验证"><a href="#1-2-算法设计与实验验证" class="headerlink" title="1.2 算法设计与实验验证"></a>1.2 算法设计与实验验证</h3><ul>
+<li>设计了指挥官-集群分层强化学习算法，并通过实验验证了其在收敛性、解释性与作战效能方面的优势。</li>
+<li>设计了结合软决策树的分层强化学习算法，验证了其在策略解释性和算法收敛性方面的优势。</li>
+<li>提出了基于模糊决策树的博弈对抗策略，并通过实验验证了其分类效果和战法规则提取效果。</li>
+</ul>
+<h3 id="1-3-实验环境与设置"><a href="#1-3-实验环境与设置" class="headerlink" title="1.3 实验环境与设置"></a>1.3 实验环境与设置</h3><ul>
+<li>使用了“StarCraft2”作为实验平台，设计了多种博弈场景，包括简单同构智能体控制场景、复杂同构智能体控制场景和复杂异构智能体控制场景。</li>
+</ul>
+<h3 id="1-4-结论与展望"><a href="#1-4-结论与展望" class="headerlink" title="1.4 结论与展望"></a>1.4 结论与展望</h3><ul>
+<li>论文提出的分层强化学习算法在多智能体博弈对抗中具有实际应用价值和潜力，尤其在提高指挥部快速决策能力和军队快速反应打击能力上。</li>
+<li>论文还指出了研究的局限性，并对未来的研究方向提出了展望，包括消除上层智能体学习训练结果对模型性能的负面影响，以及针对模糊环境下多层次、多目标的决策问题开展研究。</li>
+</ul>
+<h2 id="2-研究方法"><a href="#2-研究方法" class="headerlink" title="2. 研究方法"></a>2. 研究方法</h2><ul>
+<li><strong>分层强化学习（HRL）</strong>：文章采用分层强化学习方法来处理多智能体复杂博弈场景中的策略优化问题。这种方法通过将复杂的决策问题分解为多个层次，使得学习过程更加高效和可解释。</li>
+<li><strong>结合任务可解释性</strong>：文章提出了结合任务可解释性的指挥官-集群分层强化学习算法，通过模仿学习设计可解释的子任务，引入专家经验，提高算法的收敛速度。</li>
+<li><strong>软决策树</strong>：为了增强策略的解释性，文章设计了结合软决策树的分层强化学习算法，通过引入线性权重表示状态特征与决策结果之间的因果逻辑。</li>
+<li><strong>模糊决策树</strong>：文章进一步挖掘战法规则，建立基于模糊决策树的博弈对抗策略，模拟人的决策过程，并提取模糊决策树中隐藏的战术规则。</li>
+</ul>
+<h2 id="3-算法实现"><a href="#3-算法实现" class="headerlink" title="3. 算法实现"></a>3. 算法实现</h2><ul>
+<li><strong>指挥官-集群分层强化学习算法（HES）</strong>：文章实现了一种指挥官-集群分层强化学习算法，该算法包含上层指挥官决策模型和下层集群作战模型，通过可解释子任务实现信息传递。</li>
+<li><strong>结合软决策树的分层强化学习算法（HEE）</strong>：文章实现了一种结合软决策树的分层强化学习算法，该算法在HES算法框架基础上，将软决策树结构融入宏观决策过程中。</li>
+<li><strong>基于模糊决策树的博弈对抗策略（FDTGAS）</strong>：文章实现了一种基于模糊决策树的博弈对抗策略，通过预处理对抗数据，构建模糊决策树，并从中提取战法规则。</li>
+</ul>
+<h2 id="4-上层决策模型的主要特点和实现细节："><a href="#4-上层决策模型的主要特点和实现细节：" class="headerlink" title="4. 上层决策模型的主要特点和实现细节："></a>4. 上层决策模型的主要特点和实现细节：</h2><h3 id="4-1-指挥官-集群分层强化学习算法（HES）中的上层决策模型"><a href="#4-1-指挥官-集群分层强化学习算法（HES）中的上层决策模型" class="headerlink" title="4.1 指挥官-集群分层强化学习算法（HES）中的上层决策模型"></a>4.1 指挥官-集群分层强化学习算法（HES）中的上层决策模型</h3><ul>
+<li><strong>指挥官决策模型</strong>：模拟战争中高级指挥官的决策过程，基于战争总体形势的变化制定总体作战规划，并将战斗子任务分配给下层战斗单位。</li>
+<li><strong>任务可解释性</strong>：结合任务可解释性思想，设计可解释的子任务，将专家经验引入到分层框架中，引导智能体进行定向学习，提高算法的收敛速度。</li>
+</ul>
+<h3 id="4-2-结合软决策树的分层强化学习算法（HEE）中的上层决策模型"><a href="#4-2-结合软决策树的分层强化学习算法（HEE）中的上层决策模型" class="headerlink" title="4.2 结合软决策树的分层强化学习算法（HEE）中的上层决策模型"></a>4.2 结合软决策树的分层强化学习算法（HEE）中的上层决策模型</h3><ul>
+<li><strong>软决策树（SDT）</strong>：引入软决策树结构，改进传统的决策树模型，使其可以替代神经网络拟合动作价值函数，增强模型的可解释性。</li>
+<li><strong>线性权重</strong>：在软决策树的叶子节点引入线性模型，通过线性权重表示状态特征与决策结果之间的因果逻辑，增强策略的解释性。</li>
+</ul>
+<h3 id="4-3-基于模糊决策树的博弈对抗策略中的上层决策模型"><a href="#4-3-基于模糊决策树的博弈对抗策略中的上层决策模型" class="headerlink" title="4.3 基于模糊决策树的博弈对抗策略中的上层决策模型"></a>4.3 基于模糊决策树的博弈对抗策略中的上层决策模型</h3><ul>
+<li><strong>模糊决策树</strong>：构建模糊决策树模拟人的决策过程，处理高维度数据集中的模糊性和不确定性，提高分类的准确率和模型的泛化能力。</li>
+<li><strong>战法规则提取</strong>：从模糊决策树中提取隐含的战法规则，建立以IF-THEN规则形式表示的博弈对抗策略。</li>
+</ul>
+<h3 id="4-4-实现细节"><a href="#4-4-实现细节" class="headerlink" title="4.4 实现细节"></a>4.4 实现细节</h3><ul>
+<li><strong>神经网络建模</strong>：上层决策模型通常采用神经网络进行建模，使用深度学习技术来处理高维数据和复杂的决策问题。</li>
+<li><strong>参数更新</strong>：上层决策模型的参数通过梯度下降法进行更新，利用经验回放机制和策略梯度方法来优化模型性能。</li>
+<li><strong>目标分解</strong>：上层智能体学习目标的分解策略，将复杂的任务分解为多个子目标，通过子目标的实现逐步达成最终目标。</li>
+</ul>
+<h3 id="4-5-应用场景"><a href="#4-5-应用场景" class="headerlink" title="4.5 应用场景"></a>4.5 应用场景</h3><ul>
+<li><strong>联合作战实验平台</strong>：在空战博弈场景和海空联合作战场景中，上层决策模型负责制定整体作战策略，指导下层作战单元执行具体的作战任务。</li>
+</ul>
+<h2 id="5-上层决策模型的具体实现细节"><a href="#5-上层决策模型的具体实现细节" class="headerlink" title="5. 上层决策模型的具体实现细节"></a>5. 上层决策模型的具体实现细节</h2><h3 id="5-1-指挥官-集群分层强化学习算法（HES）的上层决策模型"><a href="#5-1-指挥官-集群分层强化学习算法（HES）的上层决策模型" class="headerlink" title="5.1 指挥官-集群分层强化学习算法（HES）的上层决策模型"></a>5.1 指挥官-集群分层强化学习算法（HES）的上层决策模型</h3><h4 id="设计理念"><a href="#设计理念" class="headerlink" title="设计理念"></a>设计理念</h4><ul>
+<li><strong>指挥官角色</strong>：模拟高级指挥官的决策过程，负责在战争或博弈的宏观层面上制定战略。</li>
+<li><strong>任务分解</strong>：将复杂的任务分解为可解释的子任务，这些子任务对下层集群作战模型来说是具体的战术目标。</li>
+</ul>
+<h4 id="实现细节"><a href="#实现细节" class="headerlink" title="实现细节"></a>实现细节</h4><ul>
+<li><strong>神经网络架构</strong>：使用神经网络来拟合指挥官的决策策略，该网络输入全局观测状态，输出子任务或战术目标。</li>
+<li><strong>模仿学习</strong>：基于专家经验设计可解释的子任务，通过模仿学习将专家知识整合到神经网络的训练过程中。</li>
+<li><strong>参数更新</strong>：利用梯度下降方法更新神经网络参数，以最小化损失函数，提高决策质量。</li>
+</ul>
+<h3 id="5-2-结合软决策树的分层强化学习算法（HEE）的上层决策模型"><a href="#5-2-结合软决策树的分层强化学习算法（HEE）的上层决策模型" class="headerlink" title="5.2 结合软决策树的分层强化学习算法（HEE）的上层决策模型"></a>5.2 结合软决策树的分层强化学习算法（HEE）的上层决策模型</h3><h4 id="设计理念-1"><a href="#设计理念-1" class="headerlink" title="设计理念"></a>设计理念</h4><ul>
+<li><strong>软决策树（SDT）</strong>：引入软决策树来增强策略的解释性，SDT 结合了神经网络的非线性建模能力和决策树的可解释性。</li>
+</ul>
+<h4 id="实现细节-1"><a href="#实现细节-1" class="headerlink" title="实现细节"></a>实现细节</h4><ul>
+<li><strong>树结构优化</strong>：对传统的软决策树结构进行改进，引入线性权重来表示状态特征与决策结果之间的因果逻辑。</li>
+<li><strong>线性叶子节点</strong>：在SDT的叶子节点使用线性模型，这些模型通过学习状态特征的权重来预测动作价值。</li>
+<li><strong>在线学习</strong>：SDT模型支持在线学习，能够根据实时数据更新模型参数，增强模型对新态势的适应能力。</li>
+</ul>
+<h3 id="5-3-基于模糊决策树的博弈对抗策略的上层决策模型"><a href="#5-3-基于模糊决策树的博弈对抗策略的上层决策模型" class="headerlink" title="5.3 基于模糊决策树的博弈对抗策略的上层决策模型"></a>5.3 基于模糊决策树的博弈对抗策略的上层决策模型</h3><h4 id="设计理念-2"><a href="#设计理念-2" class="headerlink" title="设计理念"></a>设计理念</h4><ul>
+<li><strong>模糊决策树</strong>：利用模糊决策树处理高维度数据集中的模糊性和不确定性，提高决策的准确性和泛化能力。</li>
+</ul>
+<h4 id="实现细节-2"><a href="#实现细节-2" class="headerlink" title="实现细节"></a>实现细节</h4><ul>
+<li><strong>属性模糊化</strong>：将连续型属性转换为模糊集合，并通过隶属度函数计算属性值在模糊集合中的隶属度。</li>
+<li><strong>分裂属性选择</strong>：基于分类不确定性选择分裂属性，以最小化节点的平均模糊信息熵。</li>
+<li><strong>战法规则提取</strong>：从模糊决策树中提取IF-THEN形式的战法规则，为博弈对抗提供具体的策略指导。</li>
+</ul>
+<h3 id="5-4-通用实现细节"><a href="#5-4-通用实现细节" class="headerlink" title="5.4 通用实现细节"></a>5.4 通用实现细节</h3><h4 id="损失函数与优化"><a href="#损失函数与优化" class="headerlink" title="损失函数与优化"></a>损失函数与优化</h4><ul>
+<li><strong>损失函数</strong>：设计损失函数以衡量模型预测与实际结果之间的差异，常用的损失函数包括均方误差等。</li>
+<li><strong>优化算法</strong>：采用Adam优化器等高级优化算法来更新模型参数，提高训练效率和模型性能。</li>
+</ul>
+<h4 id="训练与验证"><a href="#训练与验证" class="headerlink" title="训练与验证"></a>训练与验证</h4><ul>
+<li><strong>训练过程</strong>：通过与环境的交互不断收集数据，利用这些数据训练上层决策模型。</li>
+<li><strong>验证与测试</strong>：在不同的博弈场景中验证上层决策模型的有效性，调整模型参数以适应不同的战术需求。</li>
+</ul>
+<p>这些实现细节共同构成了上层决策模型的核心，使其能够在多智能体博弈对抗中发挥关键作用。通过这些细节的实现，上层决策模型能够提供有效的战略指导，并与下层执行模型协同工作，实现整体任务目标。</p>
+<p>[1]乔天润.基于分层强化学习的多智能体博弈对抗策略[D].东南大学,2023.DOI:10.27014&#x2F;d.cnki.gdnau.2023.001144.</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%A7%91%E7%A0%94/" class="category-chain-item">科研</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E7%A7%91%E7%A0%94/%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E4%BB%BB%E5%8A%A1%E5%88%86%E9%85%8D/" class="category-chain-item">多智能体强化学习任务分配</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/RL/" class="print-no-link">#RL</a>
+      
+        <a href="/tags/%E7%A7%91%E7%A0%94/" class="print-no-link">#科研</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>基于分层强化学习的多智能体博弈对抗策略 todo</div>
+      <div>http://binbo-zappy.github.io/2024/11/15/多智能体强化学习任务分配/基于分层强化学习的多智能体博弈对抗策略/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年11月15日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/11/15/%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E4%BB%BB%E5%8A%A1%E5%88%86%E9%85%8D/%E9%9D%A2%E5%90%91%E5%85%B5%E6%A3%8B%E6%8E%A8%E6%BC%94%E7%9A%84%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%88%86%E5%B1%82%E4%BB%BB%E5%8A%A1%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E7%A0%94%E7%A9%B6/" title="面向兵棋推演的强化学习分层任务优化技术研究">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">面向兵棋推演的强化学习分层任务优化技术研究</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/11/15/%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E4%BB%BB%E5%8A%A1%E5%88%86%E9%85%8D/%E5%9F%BA%E4%BA%8E%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E7%9A%84%E5%88%86%E5%B1%82%E5%86%B3%E7%AD%96%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95/" title="基于多智能体强化学习的分层决策优化方法">
+                        <span class="hidden-mobile">基于多智能体强化学习的分层决策优化方法</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

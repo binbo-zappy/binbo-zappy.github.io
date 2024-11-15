@@ -4,6 +4,203 @@
   
   
   <entry>
+    <title>1.5 计算机网络的性能指标</title>
+    <link href="/2024/11/15/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/1-5-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9A%84%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87/"/>
+    <url>/2024/11/15/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/1-5-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9A%84%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87/</url>
+    
+    <content type="html"><![CDATA[<h1 id="1-5-计算机网络的性能指标"><a href="#1-5-计算机网络的性能指标" class="headerlink" title="1.5 计算机网络的性能指标"></a>1.5 计算机网络的性能指标</h1><table><thead><tr><th align="center">指标</th><th align="left">评测</th></tr></thead><tbody><tr><td align="center">速率</td><td align="left">连接在计算机网络上的主机在数字信道上传送比特的速率，也称为比特率或数据率<br>bit&#x2F;s（b&#x2F;s，bps)，kb&#x2F;s，Mb&#x2F;s，Gb&#x2F;s</td></tr><tr><td align="center">带宽</td><td align="left">用来表示网络的通信线路所能传送数据的能力，单位为Hz<br>因此网络带宽表示在单位时间内从网络中的某一点到另一点所能通过的“最高数据量”<br>与速率指标相同</td></tr><tr><td align="center">吞吐量</td><td align="left">吞吐量表示在单位时间内通过某个网络（或信道、接口）的数据量。<br>吞吐量被经常用于对现实世界中的网络的一种测量，以便知道实际上到底有多少数据量能够通过网络。<br>吞吐量受网络的带宽或额定速率的限制。</td></tr><tr><td align="center">时延</td><td align="left">网络时延由三部分组成，分别为发送时延，传播时延，处理时延<br>网卡的发送速率，信道带宽，交换机的接口速率共同决定了发送时延<br><img src="/2024/11/15/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/1-5-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9A%84%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87/image-20241115211453147.png"></td></tr><tr><td align="center">时延带宽积</td><td align="left">1. 若发送端连续发送数据，则在所发送的第一个比特即将到达终点时，<br>     发送端就已经发送了时延带宽积个比特。<br>2. 链路的时延带宽积又称为以比特为单位的链路长度。</td></tr><tr><td align="center">往返时间（RTT）</td><td align="left">双向交互一次所需的时间<br>从源主机发送分组开始，直到源主机收到来自目的主机的确认分组为止</td></tr><tr><td align="center">利用率</td><td align="left">分为信道利用率，网络利用率<br>信道利用率：表示某信道有百分之几的时间是被利用的<br>网络利用率：全网络的信道利用率加权平均<br>信道利用率并非越高越好，高利用率会引发高时延</td></tr><tr><td align="center">丢包率</td><td align="left">丢包率即分组丢失率，是指在一定的时间范围内，传输过程中丢失的分组数量与总分组数量的比率。<br>丢包率具体可分为接口丢包率、结点丢包率、链路丢包率、路径丢包率、网络丢包率等<br></td></tr></tbody></table><ol><li><p>补充</p><ol><li>时延计算公式</li></ol></li></ol><p>$$<br>发送时延 &#x3D; \frac{分组长度}{发送速率}\\<br>$$</p><p>$$<br>发送时延 &#x3D; \frac{信道长度}{电磁波传播速率}<br>$$</p><ol start="2"><li>时延带宽积</li></ol><p>$$<br>时延带宽积 &#x3D; 传播时延 \times 带宽<br>$$</p><ul><li>处理时延一般不计算</li></ul><ol start="3"><li><p>网络当前时延与信道利用率之间的关系<br>$$<br>D为网络当前时延，D_0为网络空闲时的时延，U为信道利用率\<br>$$</p></li><li><p>丢包率计算公式<br>$$<br>丢包率 &#x3D; \frac{一定时间范围内丢失的分组数量}{总分组数量}<br>$$</p><p>$$<br>D &#x3D; \frac{D_0}{1-U}<br>$$</p></li><li><p>分组丢失的两种情况</p><ol><li>分组在传输过程中出现误码，被结点丢弃</li><li>分组到达一台队列已满的分组交换机时被丢弃，在通信量较大时就可能造成网络拥塞。</li></ol></li><li><p>丢包率反映了网络的拥塞情况</p><ol><li>无拥塞时路径丢包率为0</li><li>轻度拥塞时路径丢包率为1%~4%</li><li>严重拥塞时路径丢包率为5%~15%</li></ol></li><li><p>n个分组，m段链路，忽略处理时延，总时延的计算（假设分组等长，各链路长度相同，带宽相同）<br>$$<br>总时延 &#x3D; n个分组的发送时延 + 1个分组的发送时延 \times (m-1) + 1段链路的传播时延 \times m<br>$$</p></li></ol>]]></content>
+    
+    
+    <categories>
+      
+      <category>计算机基础</category>
+      
+      <category>计算机网络</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>计算机网络</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>1.4 计算机网络的定义和分类</title>
+    <link href="/2024/11/15/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/1-4-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9A%84%E5%AE%9A%E4%B9%89%E5%92%8C%E5%88%86%E7%B1%BB/"/>
+    <url>/2024/11/15/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/1-4-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9A%84%E5%AE%9A%E4%B9%89%E5%92%8C%E5%88%86%E7%B1%BB/</url>
+    
+    <content type="html"><![CDATA[<h1 id="1-4-计算机网络的定义和分类"><a href="#1-4-计算机网络的定义和分类" class="headerlink" title="1.4 计算机网络的定义和分类"></a>1.4 计算机网络的定义和分类</h1><h2 id="1-定义"><a href="#1-定义" class="headerlink" title="1. 定义"></a>1. 定义</h2><ol><li><p>简单定义：一些<strong>互相连接</strong>的，<strong>自治</strong>的计算机的<strong>集合</strong></p><blockquote><p>互连：是指计算机之间可以通过有线或无线的方式进行数据通信；<br>自治：是指独立的计算机，它有自己的硬件和软件，可以单独运行使用；<br>集合：是指至少需要两台计算机。</p></blockquote></li><li><p>计算机网络的较好的定义</p><blockquote><p>计算机网络主要是由一些通用的、可编程的硬件互连而成的，而这些硬件并非专门用来实现某一特定目的（例如，传送数据或视频信号)。这些可编程的硬件能够用来传送多种不同类型的数据，并能支持广泛的和日益增长的应用。</p></blockquote><ol><li>计算机网络所连接的硬件，并不限于一般的计算机，而是包括了智能手机等智能硬件</li><li>计算机网络并非专门用来传送数据，而是能够支持很多种的应用（包括今后可能出现的名种应用)</li></ol></li></ol><h2 id="2-分类"><a href="#2-分类" class="headerlink" title="2. 分类"></a>2. 分类</h2><h3 id="2-1-按交换技术分类"><a href="#2-1-按交换技术分类" class="headerlink" title="2.1 按交换技术分类"></a>2.1 按交换技术分类</h3><ol><li>电路交换网路</li><li>报文交换网络</li><li>分组交换网络</li></ol><h3 id="2-2-按使用者分类"><a href="#2-2-按使用者分类" class="headerlink" title="2.2 按使用者分类"></a>2.2 按使用者分类</h3><ol><li><p>公用网</p><blockquote><p>电信公司出资建造,给电信公司缴纳费用即可使用</p></blockquote></li><li><p>专用网</p><blockquote><p>不向外人提供服务</p></blockquote></li></ol><h3 id="2-3-按传输介质分类"><a href="#2-3-按传输介质分类" class="headerlink" title="2.3 按传输介质分类"></a>2.3 按传输介质分类</h3><ol><li><p>有线网路</p><blockquote><p>包括双绞线网络,光纤网络等</p></blockquote></li><li><p>无线网络</p><blockquote><p>WIFI应用普遍</p></blockquote></li></ol><h3 id="2-4-按覆盖范围分类"><a href="#2-4-按覆盖范围分类" class="headerlink" title="2.4 按覆盖范围分类"></a>2.4 按覆盖范围分类</h3><ol><li><p>广域网(WAN)</p><blockquote><p>可以覆盖一个国家,地区甚至几个洲</p><p>WAN是因特网的核心部分,为核心路由器提供远距离高速连接</p></blockquote></li><li><p>城域网(MAN)</p><blockquote><p>覆盖一个街区,或几个城市</p><p>通常作为城市骨干网,互连学校,企业,机构的局域网</p></blockquote></li><li><p>局域网(LAN)</p><blockquote><p>覆盖一个实验室,一幢楼,一个校园等</p></blockquote></li><li><p>个域网(PAN)</p><blockquote><p>即无线个人区域网(WPAN),在各人工作的地方,将属于个人使用的电子设备用无线技术连接起来的网络</p></blockquote></li></ol><h3 id="2-5-按拓扑结构分类"><a href="#2-5-按拓扑结构分类" class="headerlink" title="2.5 按拓扑结构分类"></a>2.5 按拓扑结构分类</h3><ol><li>总线型网络</li></ol><p><img src="/2024/11/15/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/1-4-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9A%84%E5%AE%9A%E4%B9%89%E5%92%8C%E5%88%86%E7%B1%BB/image-20230712140101315.png"></p><ol start="2"><li>星型网络</li></ol><p><img src="/2024/11/15/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/1-4-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9A%84%E5%AE%9A%E4%B9%89%E5%92%8C%E5%88%86%E7%B1%BB/image-20230712140145867.png"></p><ol start="3"><li>环型网络</li></ol><p><img src="/2024/11/15/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/1-4-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9A%84%E5%AE%9A%E4%B9%89%E5%92%8C%E5%88%86%E7%B1%BB/image-20230712140251758.png"></p><ol start="4"><li>网状型网络</li></ol><p><img src="/2024/11/15/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/1-4-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9A%84%E5%AE%9A%E4%B9%89%E5%92%8C%E5%88%86%E7%B1%BB/image-20230712140454142.png"></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>计算机基础</category>
+      
+      <category>计算机网络</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>计算机网络</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>1.3 三种交换方式</title>
+    <link href="/2024/11/15/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/1-3-%E4%B8%89%E7%A7%8D%E4%BA%A4%E6%8D%A2%E6%96%B9%E5%BC%8F/"/>
+    <url>/2024/11/15/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/1-3-%E4%B8%89%E7%A7%8D%E4%BA%A4%E6%8D%A2%E6%96%B9%E5%BC%8F/</url>
+    
+    <content type="html"><![CDATA[<h1 id="1-3-三种交换方式"><a href="#1-3-三种交换方式" class="headerlink" title="1.3 三种交换方式"></a>1.3 三种交换方式</h1><h2 id="1-电路交换-Circuit-Switching"><a href="#1-电路交换-Circuit-Switching" class="headerlink" title="1. 电路交换(Circuit Switching)"></a>1. 电路交换(Circuit Switching)</h2><ul><li>电话交换机接通电话线的方式称为电路交换，中间设备是电话交换机</li><li>从通信资源的分配角度来看，交换(Switching)就是按照某种方式动态地分配传输线路的资源；</li><li>当使用电路交换来传送计算机数据时，其线路的传输效率往往很低。</li><li>不适合计算机传输数据，因为占用通信资源，却迟迟不使用，造成通信资源的浪费</li></ul><p><img src="/2024/11/15/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/1-3-%E4%B8%89%E7%A7%8D%E4%BA%A4%E6%8D%A2%E6%96%B9%E5%BC%8F/image-20241115203653573.png" alt="电话交换机"></p><ol><li>电话交换的三个步骤<ol><li>建立连接（分配通信资源）</li><li>通话（一直占用通信资源）</li><li>释放连接（归还通信资源）</li></ol></li><li>优点<ol><li>通信时延小</li><li>有序传输</li><li>没有冲突</li><li>适用范围广</li><li>实时性强</li><li>控制简单</li></ol></li><li>缺点<ol><li>建立连接时间长</li><li>线路独占，使用效率低</li><li>灵活性差</li><li>难以规格化</li></ol></li></ol><h2 id="2-分组交换-Packet-Switching-※"><a href="#2-分组交换-Packet-Switching-※" class="headerlink" title="2. 分组交换(Packet Switching)※"></a>2. 分组交换(Packet Switching)※</h2><p><img src="/2024/11/15/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/1-3-%E4%B8%89%E7%A7%8D%E4%BA%A4%E6%8D%A2%E6%96%B9%E5%BC%8F/image-20241115204514266.png"></p><blockquote><p>通常把表示消息的整块数据称为一个报文</p></blockquote><ol><li><p>步骤</p><ol><li><p>发送方：构造分组，发送分组</p></li><li><p>路由器：缓存分组，转发分组</p></li><li><p>接收方：接收分组，还原报文</p></li></ol></li><li><p>优点</p><ol><li>无需建立连接</li><li>线路利用率高</li><li>简化了存储管理</li><li>加速传输</li><li>减少出错概率和重发数据量</li></ol></li><li><p>缺点</p><ol><li><p>引起了转发时延</p></li><li><p>需要传输额外的信息量</p></li><li><p>对于数据报服务，存在失序、丢失或重复分组的问题;</p><p>对于虚电路服务存在呼叫建立、数据传输和虚电路释放三个过程</p></li></ol></li></ol><h2 id="3-报文交换-Message-Switching"><a href="#3-报文交换-Message-Switching" class="headerlink" title="3. 报文交换(Message Switching)"></a>3. 报文交换(Message Switching)</h2><blockquote><p>与分组交换类似，但对报文大小没有限制，也不分组，现代已很少使用该方法</p></blockquote><ol><li><p>优点</p><ol><li>无需建立连接</li><li>动态分配线路</li><li>提高线路可靠性</li><li>提高线路利用率</li><li>提供多目标服务</li></ol></li><li><p>缺点</p><ol><li>引起了转发时延</li><li>需要较大存储缓存空间</li><li>需要传输额外的信息量</li></ol></li></ol><p><img src="/2024/11/15/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/1-3-%E4%B8%89%E7%A7%8D%E4%BA%A4%E6%8D%A2%E6%96%B9%E5%BC%8F/image-20241115204815895.png"></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>计算机基础</category>
+      
+      <category>计算机网络</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>计算机网络</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>HCTA：多智能体强化学习中的分层合作任务分配</title>
+    <link href="/2024/11/15/%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E4%BB%BB%E5%8A%A1%E5%88%86%E9%85%8D/HCTA%EF%BC%9A%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E4%B8%AD%E7%9A%84%E5%88%86%E5%B1%82%E5%90%88%E4%BD%9C%E4%BB%BB%E5%8A%A1%E5%88%86%E9%85%8D/"/>
+    <url>/2024/11/15/%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E4%BB%BB%E5%8A%A1%E5%88%86%E9%85%8D/HCTA%EF%BC%9A%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E4%B8%AD%E7%9A%84%E5%88%86%E5%B1%82%E5%90%88%E4%BD%9C%E4%BB%BB%E5%8A%A1%E5%88%86%E9%85%8D/</url>
+    
+    <content type="html"><![CDATA[<h1 id="HCTA-Hierarchical-Cooperative-Task-Allocation-in-Multi-Agent-Reinforcement-Learning"><a href="#HCTA-Hierarchical-Cooperative-Task-Allocation-in-Multi-Agent-Reinforcement-Learning" class="headerlink" title="HCTA:Hierarchical Cooperative Task Allocation in Multi-Agent Reinforcement Learning"></a>HCTA:Hierarchical Cooperative Task Allocation in Multi-Agent Reinforcement Learning</h1><h2 id="1-主要内容"><a href="#1-主要内容" class="headerlink" title="1. 主要内容"></a>1. 主要内容</h2><ol><li><strong>子任务选择</strong>：</li></ol><ul><li>基于行动链的长期行为特征动态选择每个智能体适合的子任务。</li></ul><ol start="2"><li><strong>层次化策略学习</strong>：</li></ol><ul><li>结合上述子任务分解和选择，形成层次化合作策略学习框架。在上层动态选择子任务，并在下层根据上层的任务分配结果指导具体决策策略的学习。</li></ul><ol start="3"><li><strong>双时序分辨率框架</strong>：</li></ol><ul><li>HCTA使用双时序分辨率框架，在低时序分辨率的时标上进行任务选择，然后在高时序分辨率的时标上进行策略学习。</li></ul><ol start="4"><li><strong>实验验证</strong>：</li></ol><ul><li>在StarCraft II环境中进行广泛的实验，以评估HCTA框架在不同难度级别上的表现，并与其他基线算法进行比较。</li></ul><p>这些方法共同构成了文章提出的HCTA框架，旨在通过层次化和动态的任务分配来提高多智能体系统在复杂任务中的合作效率和学习效果。</p><ul><li>在本文中，我们的目标是使<strong>个体的子组能够通过人类在处理复杂任务时使用的分解思想来学习解决不同的子任务。</strong></li></ul><h2 id="2-子任务分解"><a href="#2-子任务分解" class="headerlink" title="2. 子任务分解"></a>2. 子任务分解</h2><p>在文章中提到的HCTA（Hierarchical Cooperative Task Allocation）框架中，子任务的分解是通过以下步骤实现的：</p><ol><li><strong>行动表示学习（Action Representation Learning）</strong>：</li></ol><ul><li>首先，框架通过行动表示学习来实现子任务的分解。这是通过创建一个能够反映行动对环境和其他智能体影响的表示（即<code>za = fθ(a; θe)</code>）来完成的，其中<code>za</code>是行动的表示，<code>a</code>是行动本身，<code>θ</code>是学习到的参数。</li></ul><ol start="2"><li><strong>行动空间聚类（Action Space Clustering）</strong>：</li></ol><ul><li>基于行动表示的结果，整个行动空间被聚类分解为多个子行动空间，每个子行动空间对应一个子任务。这样的分解减少了每个子任务的行动空间维度，使得相应的智能体在具有相似效果的行动空间中搜索。</li></ul><ol start="3"><li><strong>行动链模型（Action Chain Model）</strong>：</li></ol><ul><li>使用行动链模型来学习行动编码器。每个智能体选择多个时间步的行动表示作为行动链编码器的输入。通过自注意力机制，智能体学习与自身属性相关的多步行动的累积效应。</li></ul><ol start="4"><li><strong>子任务定义（Subtask Definition）</strong>：</li></ol><ul><li>文章中对子任务的定义是：对于一个给定的合作多智能体任务<code>G</code>，一个角色<code>ρi</code>是一个包含子任务<code>ϕi</code>的元组，<code>ϕi</code>由<code>⟨Ai, Ii, S, P, R, Ωi, O, γ⟩</code>组成，其中<code>Ai</code>是子任务的行动空间，<code>Ii</code>是智能体的子集，且满足<code>Ii ⊂ I</code>，<code>∪iIi = I</code>，<code>Ii ∩ Ij = ∅</code>（对于<code>i ≠ j</code>）。</li></ul><ol start="5"><li><strong>长期行为链（Long-term Behavior Chain）</strong>：</li></ol><ul><li>基于行动链的结果，生成反映智能体行为特征的长期行动链。这个长期行为链用于动态选择适合每个智能体的子任务。</li></ul><p>通过这些步骤，HCTA框架能够将复杂的多智能体任务分解为更小、更易于管理的子任务，每个子任务都涉及一个较小的行动观察空间，从而使智能体能够更有效地专注于特定的子任务。这种分解方法不仅提高了任务分配的效率，还降低了计算复杂度，并使得智能体能够更好地协作以完成复杂的任务。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>科研</category>
+      
+      <category>多智能体强化学习任务分配</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>RL</tag>
+      
+      <tag>科研</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>面向兵棋推演的强化学习分层任务优化技术研究</title>
+    <link href="/2024/11/15/%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E4%BB%BB%E5%8A%A1%E5%88%86%E9%85%8D/%E9%9D%A2%E5%90%91%E5%85%B5%E6%A3%8B%E6%8E%A8%E6%BC%94%E7%9A%84%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%88%86%E5%B1%82%E4%BB%BB%E5%8A%A1%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E7%A0%94%E7%A9%B6/"/>
+    <url>/2024/11/15/%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E4%BB%BB%E5%8A%A1%E5%88%86%E9%85%8D/%E9%9D%A2%E5%90%91%E5%85%B5%E6%A3%8B%E6%8E%A8%E6%BC%94%E7%9A%84%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%88%86%E5%B1%82%E4%BB%BB%E5%8A%A1%E4%BC%98%E5%8C%96%E6%8A%80%E6%9C%AF%E7%A0%94%E7%A9%B6/</url>
+    
+    <content type="html"><![CDATA[<h2 id="1-主要内容"><a href="#1-主要内容" class="headerlink" title="1. 主要内容"></a>1. 主要内容</h2><p>论文深入探讨了分层控制结构的多智能体强化学习算法在兵棋推演环境中的应用，旨在优化复杂和不确定环境下的任务分配和多智能体任务的执行过程。主要研究内容包括：</p><ol><li>针对实时兵棋推演环境，设计了兵棋AI的状态空间和动作空间，并生成了敌我对抗态势的关键特征信息。通过离散化连续动作的操作优化了原始动作空间，简化了多智能体的交互过程，加快了网络学习速度。</li><li>提出了一种融合注意力机制的DQN算法（ADQN），通过嵌入网络和注意力对输入进行向量化处理后输入DQN网络，将环境分解为独立的子环境，并重新定义特定于子任务的动作-价值函数，有效提高了在复杂环境中进行任务分配的质量和效率。</li><li>基于深度强化学习的多级控制结构，提出了多智能体分层自主决策算法（ADQN-MAPPO），结合了多智能体近端策略优化算法与ADQN算法，通过将复杂任务划分成子任务进行分配后再执行，增强了智能体自主决策的能力，提高了算法模型的训练速度和决策能力。</li></ol><p>论文通过在山地3v3和水田3v3的兵棋推演环境中的实验，验证了ADQN-MAPPO算法在得分能力、胜率、步均推理时间以及模型的泛化能力等方面的优越性能。研究结果对进一步提升分层控制结构的多智能体强化学习算法在兵棋推演以及其他复杂应用环境中的性能和应用范围提供了参考意义。</p><h2 id="2-分层决策框架"><a href="#2-分层决策框架" class="headerlink" title="2. 分层决策框架"></a>2. 分层决策框架</h2><p>这篇论文中提出的分层决策框架是为了解决兵棋推演环境中的多智能体任务分配和执行问题。分层决策框架包括两个主要层次：任务分配层和智能体决策层。以下是这两个层次的详细介绍：</p><h3 id="2-1-任务分配层"><a href="#2-1-任务分配层" class="headerlink" title="2.1 任务分配层"></a>2.1 任务分配层</h3><p>任务分配层的目的是将全局任务分解为多个子任务，并将这些子任务分配给不同的智能体。这一层主要关注如何在多智能体系统中高效地分配任务，以便每个智能体可以专注于自己的子任务，从而提高整体任务执行的效率和效果。</p><ul><li><strong>状态空间和动作空间设计</strong>：在这一层中，状态空间包括了整个环境的总体状态，如战场上的地形、敌我双方的兵力部署等。动作空间则由子任务的编号集合构成，意味着每个智能体的动作是选择一个子任务来执行。</li><li><strong>子任务设计</strong>：根据兵棋推演游戏的特性，将总体任务细分为行军、进攻、防御、支援、夺控等子任务。每个子任务由任务名称、编号、类型、关系、目标等元素组成。</li><li><strong>ADQN算法</strong>：提出了一种融合注意力机制的DQN算法（ADQN），用于处理任务分配问题。ADQN算法通过智能体对子任务的执行，将环境分解为独立的子环境，并重新定义特定于子任务的动作-价值函数。</li></ul><h3 id="2-2-智能体决策层"><a href="#2-2-智能体决策层" class="headerlink" title="2.2 智能体决策层"></a>2.2 智能体决策层</h3><p>智能体决策层根据任务分配层分配的子任务，每个智能体需要做出具体的行动决策来完成任务。这一层主要关注智能体如何在局部环境中做出最优决策。</p><ul><li><strong>MAPPO算法</strong>：在这一层中，使用了多智能体近端策略优化算法（MAPPO），它是一种适用于多智能体环境的强化学习算法，可以处理分布式部分可观察马尔可夫决策过程（DEC-POMDP）。</li><li><strong>策略网络和评价网络</strong>：每个智能体都有自己的策略网络，根据局部观测信息产生动作。同时，有一个全局评价网络根据全局环境信息生成状态价值，用于指导策略网络的更新。</li><li><strong>分层架构的优势</strong>：通过分层架构，上层任务分配网络可以在更大的时间尺度上运行，而下层智能体策略网络则在更细的尺度上做出决策。这种分层方法有助于提高智能体在兵棋推演环境中的决策效率和效果。</li></ul><h3 id="2-3-ADQN-MAPPO算法"><a href="#2-3-ADQN-MAPPO算法" class="headerlink" title="2.3 ADQN-MAPPO算法"></a>2.3 ADQN-MAPPO算法</h3><p>ADQN-MAPPO算法是将ADQN算法和MAPPO算法结合的分层决策框架。这种框架通过将复杂任务分解为子任务，并在不同的抽象层次上学习策略，解决了大规模复杂环境下的决策问题。ADQN-MAPPO算法在实验中表现出了优越的性能，包括更高的得分能力、胜率以及更快的收敛速度。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>科研</category>
+      
+      <category>多智能体强化学习任务分配</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>RL</tag>
+      
+      <tag>科研</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>基于分层强化学习的多智能体博弈对抗策略 todo</title>
+    <link href="/2024/11/15/%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E4%BB%BB%E5%8A%A1%E5%88%86%E9%85%8D/%E5%9F%BA%E4%BA%8E%E5%88%86%E5%B1%82%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E7%9A%84%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%8D%9A%E5%BC%88%E5%AF%B9%E6%8A%97%E7%AD%96%E7%95%A5/"/>
+    <url>/2024/11/15/%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E4%BB%BB%E5%8A%A1%E5%88%86%E9%85%8D/%E5%9F%BA%E4%BA%8E%E5%88%86%E5%B1%82%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E7%9A%84%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%8D%9A%E5%BC%88%E5%AF%B9%E6%8A%97%E7%AD%96%E7%95%A5/</url>
+    
+    <content type="html"><![CDATA[<h2 id="1-主要内容"><a href="#1-主要内容" class="headerlink" title="1. 主要内容"></a>1. 主要内容</h2><h3 id="1-1-研究内容"><a href="#1-1-研究内容" class="headerlink" title="1.1 研究内容"></a>1.1 研究内容</h3><ul><li>提出了一种结合任务可解释性的指挥官-集群多智能体分层强化学习算法，提高算法在复杂博弈场景中的收敛速度。</li><li>设计了一种结合软决策树的多智能体分层强化学习算法，增强了策略的解释性。</li><li>基于模糊决策树建立了博弈对抗策略，通过挖掘战法规则，模拟人的决策过程。</li><li>在联合作战实验平台上设计了空战博弈场景和海空联合作战场景，验证了所提算法的有效性。</li></ul><h3 id="1-2-算法设计与实验验证"><a href="#1-2-算法设计与实验验证" class="headerlink" title="1.2 算法设计与实验验证"></a>1.2 算法设计与实验验证</h3><ul><li>设计了指挥官-集群分层强化学习算法，并通过实验验证了其在收敛性、解释性与作战效能方面的优势。</li><li>设计了结合软决策树的分层强化学习算法，验证了其在策略解释性和算法收敛性方面的优势。</li><li>提出了基于模糊决策树的博弈对抗策略，并通过实验验证了其分类效果和战法规则提取效果。</li></ul><h3 id="1-3-实验环境与设置"><a href="#1-3-实验环境与设置" class="headerlink" title="1.3 实验环境与设置"></a>1.3 实验环境与设置</h3><ul><li>使用了“StarCraft2”作为实验平台，设计了多种博弈场景，包括简单同构智能体控制场景、复杂同构智能体控制场景和复杂异构智能体控制场景。</li></ul><h3 id="1-4-结论与展望"><a href="#1-4-结论与展望" class="headerlink" title="1.4 结论与展望"></a>1.4 结论与展望</h3><ul><li>论文提出的分层强化学习算法在多智能体博弈对抗中具有实际应用价值和潜力，尤其在提高指挥部快速决策能力和军队快速反应打击能力上。</li><li>论文还指出了研究的局限性，并对未来的研究方向提出了展望，包括消除上层智能体学习训练结果对模型性能的负面影响，以及针对模糊环境下多层次、多目标的决策问题开展研究。</li></ul><h2 id="2-研究方法"><a href="#2-研究方法" class="headerlink" title="2. 研究方法"></a>2. 研究方法</h2><ul><li><strong>分层强化学习（HRL）</strong>：文章采用分层强化学习方法来处理多智能体复杂博弈场景中的策略优化问题。这种方法通过将复杂的决策问题分解为多个层次，使得学习过程更加高效和可解释。</li><li><strong>结合任务可解释性</strong>：文章提出了结合任务可解释性的指挥官-集群分层强化学习算法，通过模仿学习设计可解释的子任务，引入专家经验，提高算法的收敛速度。</li><li><strong>软决策树</strong>：为了增强策略的解释性，文章设计了结合软决策树的分层强化学习算法，通过引入线性权重表示状态特征与决策结果之间的因果逻辑。</li><li><strong>模糊决策树</strong>：文章进一步挖掘战法规则，建立基于模糊决策树的博弈对抗策略，模拟人的决策过程，并提取模糊决策树中隐藏的战术规则。</li></ul><h2 id="3-算法实现"><a href="#3-算法实现" class="headerlink" title="3. 算法实现"></a>3. 算法实现</h2><ul><li><strong>指挥官-集群分层强化学习算法（HES）</strong>：文章实现了一种指挥官-集群分层强化学习算法，该算法包含上层指挥官决策模型和下层集群作战模型，通过可解释子任务实现信息传递。</li><li><strong>结合软决策树的分层强化学习算法（HEE）</strong>：文章实现了一种结合软决策树的分层强化学习算法，该算法在HES算法框架基础上，将软决策树结构融入宏观决策过程中。</li><li><strong>基于模糊决策树的博弈对抗策略（FDTGAS）</strong>：文章实现了一种基于模糊决策树的博弈对抗策略，通过预处理对抗数据，构建模糊决策树，并从中提取战法规则。</li></ul><h2 id="4-上层决策模型的主要特点和实现细节："><a href="#4-上层决策模型的主要特点和实现细节：" class="headerlink" title="4. 上层决策模型的主要特点和实现细节："></a>4. 上层决策模型的主要特点和实现细节：</h2><h3 id="4-1-指挥官-集群分层强化学习算法（HES）中的上层决策模型"><a href="#4-1-指挥官-集群分层强化学习算法（HES）中的上层决策模型" class="headerlink" title="4.1 指挥官-集群分层强化学习算法（HES）中的上层决策模型"></a>4.1 指挥官-集群分层强化学习算法（HES）中的上层决策模型</h3><ul><li><strong>指挥官决策模型</strong>：模拟战争中高级指挥官的决策过程，基于战争总体形势的变化制定总体作战规划，并将战斗子任务分配给下层战斗单位。</li><li><strong>任务可解释性</strong>：结合任务可解释性思想，设计可解释的子任务，将专家经验引入到分层框架中，引导智能体进行定向学习，提高算法的收敛速度。</li></ul><h3 id="4-2-结合软决策树的分层强化学习算法（HEE）中的上层决策模型"><a href="#4-2-结合软决策树的分层强化学习算法（HEE）中的上层决策模型" class="headerlink" title="4.2 结合软决策树的分层强化学习算法（HEE）中的上层决策模型"></a>4.2 结合软决策树的分层强化学习算法（HEE）中的上层决策模型</h3><ul><li><strong>软决策树（SDT）</strong>：引入软决策树结构，改进传统的决策树模型，使其可以替代神经网络拟合动作价值函数，增强模型的可解释性。</li><li><strong>线性权重</strong>：在软决策树的叶子节点引入线性模型，通过线性权重表示状态特征与决策结果之间的因果逻辑，增强策略的解释性。</li></ul><h3 id="4-3-基于模糊决策树的博弈对抗策略中的上层决策模型"><a href="#4-3-基于模糊决策树的博弈对抗策略中的上层决策模型" class="headerlink" title="4.3 基于模糊决策树的博弈对抗策略中的上层决策模型"></a>4.3 基于模糊决策树的博弈对抗策略中的上层决策模型</h3><ul><li><strong>模糊决策树</strong>：构建模糊决策树模拟人的决策过程，处理高维度数据集中的模糊性和不确定性，提高分类的准确率和模型的泛化能力。</li><li><strong>战法规则提取</strong>：从模糊决策树中提取隐含的战法规则，建立以IF-THEN规则形式表示的博弈对抗策略。</li></ul><h3 id="4-4-实现细节"><a href="#4-4-实现细节" class="headerlink" title="4.4 实现细节"></a>4.4 实现细节</h3><ul><li><strong>神经网络建模</strong>：上层决策模型通常采用神经网络进行建模，使用深度学习技术来处理高维数据和复杂的决策问题。</li><li><strong>参数更新</strong>：上层决策模型的参数通过梯度下降法进行更新，利用经验回放机制和策略梯度方法来优化模型性能。</li><li><strong>目标分解</strong>：上层智能体学习目标的分解策略，将复杂的任务分解为多个子目标，通过子目标的实现逐步达成最终目标。</li></ul><h3 id="4-5-应用场景"><a href="#4-5-应用场景" class="headerlink" title="4.5 应用场景"></a>4.5 应用场景</h3><ul><li><strong>联合作战实验平台</strong>：在空战博弈场景和海空联合作战场景中，上层决策模型负责制定整体作战策略，指导下层作战单元执行具体的作战任务。</li></ul><h2 id="5-上层决策模型的具体实现细节"><a href="#5-上层决策模型的具体实现细节" class="headerlink" title="5. 上层决策模型的具体实现细节"></a>5. 上层决策模型的具体实现细节</h2><h3 id="5-1-指挥官-集群分层强化学习算法（HES）的上层决策模型"><a href="#5-1-指挥官-集群分层强化学习算法（HES）的上层决策模型" class="headerlink" title="5.1 指挥官-集群分层强化学习算法（HES）的上层决策模型"></a>5.1 指挥官-集群分层强化学习算法（HES）的上层决策模型</h3><h4 id="设计理念"><a href="#设计理念" class="headerlink" title="设计理念"></a>设计理念</h4><ul><li><strong>指挥官角色</strong>：模拟高级指挥官的决策过程，负责在战争或博弈的宏观层面上制定战略。</li><li><strong>任务分解</strong>：将复杂的任务分解为可解释的子任务，这些子任务对下层集群作战模型来说是具体的战术目标。</li></ul><h4 id="实现细节"><a href="#实现细节" class="headerlink" title="实现细节"></a>实现细节</h4><ul><li><strong>神经网络架构</strong>：使用神经网络来拟合指挥官的决策策略，该网络输入全局观测状态，输出子任务或战术目标。</li><li><strong>模仿学习</strong>：基于专家经验设计可解释的子任务，通过模仿学习将专家知识整合到神经网络的训练过程中。</li><li><strong>参数更新</strong>：利用梯度下降方法更新神经网络参数，以最小化损失函数，提高决策质量。</li></ul><h3 id="5-2-结合软决策树的分层强化学习算法（HEE）的上层决策模型"><a href="#5-2-结合软决策树的分层强化学习算法（HEE）的上层决策模型" class="headerlink" title="5.2 结合软决策树的分层强化学习算法（HEE）的上层决策模型"></a>5.2 结合软决策树的分层强化学习算法（HEE）的上层决策模型</h3><h4 id="设计理念-1"><a href="#设计理念-1" class="headerlink" title="设计理念"></a>设计理念</h4><ul><li><strong>软决策树（SDT）</strong>：引入软决策树来增强策略的解释性，SDT 结合了神经网络的非线性建模能力和决策树的可解释性。</li></ul><h4 id="实现细节-1"><a href="#实现细节-1" class="headerlink" title="实现细节"></a>实现细节</h4><ul><li><strong>树结构优化</strong>：对传统的软决策树结构进行改进，引入线性权重来表示状态特征与决策结果之间的因果逻辑。</li><li><strong>线性叶子节点</strong>：在SDT的叶子节点使用线性模型，这些模型通过学习状态特征的权重来预测动作价值。</li><li><strong>在线学习</strong>：SDT模型支持在线学习，能够根据实时数据更新模型参数，增强模型对新态势的适应能力。</li></ul><h3 id="5-3-基于模糊决策树的博弈对抗策略的上层决策模型"><a href="#5-3-基于模糊决策树的博弈对抗策略的上层决策模型" class="headerlink" title="5.3 基于模糊决策树的博弈对抗策略的上层决策模型"></a>5.3 基于模糊决策树的博弈对抗策略的上层决策模型</h3><h4 id="设计理念-2"><a href="#设计理念-2" class="headerlink" title="设计理念"></a>设计理念</h4><ul><li><strong>模糊决策树</strong>：利用模糊决策树处理高维度数据集中的模糊性和不确定性，提高决策的准确性和泛化能力。</li></ul><h4 id="实现细节-2"><a href="#实现细节-2" class="headerlink" title="实现细节"></a>实现细节</h4><ul><li><strong>属性模糊化</strong>：将连续型属性转换为模糊集合，并通过隶属度函数计算属性值在模糊集合中的隶属度。</li><li><strong>分裂属性选择</strong>：基于分类不确定性选择分裂属性，以最小化节点的平均模糊信息熵。</li><li><strong>战法规则提取</strong>：从模糊决策树中提取IF-THEN形式的战法规则，为博弈对抗提供具体的策略指导。</li></ul><h3 id="5-4-通用实现细节"><a href="#5-4-通用实现细节" class="headerlink" title="5.4 通用实现细节"></a>5.4 通用实现细节</h3><h4 id="损失函数与优化"><a href="#损失函数与优化" class="headerlink" title="损失函数与优化"></a>损失函数与优化</h4><ul><li><strong>损失函数</strong>：设计损失函数以衡量模型预测与实际结果之间的差异，常用的损失函数包括均方误差等。</li><li><strong>优化算法</strong>：采用Adam优化器等高级优化算法来更新模型参数，提高训练效率和模型性能。</li></ul><h4 id="训练与验证"><a href="#训练与验证" class="headerlink" title="训练与验证"></a>训练与验证</h4><ul><li><strong>训练过程</strong>：通过与环境的交互不断收集数据，利用这些数据训练上层决策模型。</li><li><strong>验证与测试</strong>：在不同的博弈场景中验证上层决策模型的有效性，调整模型参数以适应不同的战术需求。</li></ul><p>这些实现细节共同构成了上层决策模型的核心，使其能够在多智能体博弈对抗中发挥关键作用。通过这些细节的实现，上层决策模型能够提供有效的战略指导，并与下层执行模型协同工作，实现整体任务目标。</p><p>[1]乔天润.基于分层强化学习的多智能体博弈对抗策略[D].东南大学,2023.DOI:10.27014&#x2F;d.cnki.gdnau.2023.001144.</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>科研</category>
+      
+      <category>多智能体强化学习任务分配</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>RL</tag>
+      
+      <tag>科研</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>基于多智能体强化学习的分层决策优化方法</title>
+    <link href="/2024/11/15/%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E4%BB%BB%E5%8A%A1%E5%88%86%E9%85%8D/%E5%9F%BA%E4%BA%8E%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E7%9A%84%E5%88%86%E5%B1%82%E5%86%B3%E7%AD%96%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95/"/>
+    <url>/2024/11/15/%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E4%BB%BB%E5%8A%A1%E5%88%86%E9%85%8D/%E5%9F%BA%E4%BA%8E%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E7%9A%84%E5%88%86%E5%B1%82%E5%86%B3%E7%AD%96%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95/</url>
+    
+    <content type="html"><![CDATA[<h1 id="1-主要内容"><a href="#1-主要内容" class="headerlink" title="1. 主要内容"></a>1. 主要内容</h1><ol><li><strong>背景与目的</strong>：<ul><li>随着信息技术和人工智能的发展，大数据驱动的辅助决策方法变得更加科学和准确。</li><li>强化学习在决策优化方面具有优势，但传统方法难以解决多层次、多目标的决策优化问题，尤其是在长周期决策优化问题中，学习奖励的滞后性限制了效率。</li></ul></li><li><strong>方法论</strong>：<ul><li>提出基于多智能体强化学习的分层决策优化方法，应用目标分解思想解决长期决策优化问题。</li><li>该方法基于强化学习理论，使具有层级关系的多智能体相互合作，上层智能体学习目标的分解策略，下层智能体学习完成目标的行动策略。</li></ul></li></ol><h1 id="2-研究方法"><a href="#2-研究方法" class="headerlink" title="2. 研究方法"></a>2. 研究方法</h1><p>文章中提到的分层决策优化方法（HDQ）算法的具体实现涉及以下几个关键步骤：</p><ol><li><p><strong>定义智能体和环境交互</strong>：</p><ul><li>强化学习基于马尔可夫决策过程（MDP），包含状态集合 ( S )，动作集合 ( A )，状态转移矩阵 ( P )，奖励集合 ( R )，以及折扣率 ( \gamma )。</li></ul></li><li><p><strong>目标分解与层级决策</strong>：</p><ul><li>将长期目标 ( G ) 分解为子目标 ( g_t )，并通过计算状态 ( s_t ) 与子目标 ( g_t ) 之间的距离 ( dis(gt, st) ) 来判断子目标是否完成。</li></ul></li><li><p><strong>智能体的层级结构</strong>：</p><ul><li>设计具有层级关系的上层智能体 ( \pi_1 ) 和下层智能体 ( \pi_2 )。</li><li>上层智能体学习目标的分解策略，下层智能体学习实现子目标的行动策略。</li></ul></li><li><p><strong>神经网络建模</strong>：</p><ul><li>使用深度Q网络（DQN）作为值函数逼近器，引入神经网络来估计动作价值 ( Q(s, a; \theta) )。</li><li>采用Dueling DQN来缓解高估Q值的问题，引入优势函数 ( A(s, a) )。</li></ul></li><li><p><strong>智能体的参数更新</strong>：</p><ul><li>智能体参数交替更新，共同学习完成团队任务的最佳策略。</li><li>使用梯度下降法更新神经网络参数 ( \theta )，学习率 ( \alpha )。</li></ul></li><li><p><strong>实验设计与数据预处理</strong>：</p><ul><li>从MIMIC-IV数据库中提取脓毒症患者数据，包括性别、年龄、体重、SOFA评分等45个特征。</li><li>使用均值插值方法处理缺失值，最大最小归一化方法消除特征量纲。</li></ul></li><li><p><strong>状态和动作空间的定义</strong>：</p><ul><li>状态空间通过K-means算法聚类降维，定义700个不同的状态类别。</li><li>子目标基于SOFA评分，动作空间定义为两种药物组成的二维矩阵。</li></ul></li><li><p><strong>奖励函数的设计</strong>：</p><ul><li>设计分段常数函数作为奖励函数，根据患者的生存状态和状态改善情况给予不同的奖励。</li></ul></li></ol><p>[1]张倩,李天皓,白春光.基于多智能体强化学习的分层决策优化方法[J].电子科技大学学报(社科版),2022,24(06):90-96.DOI:10.14071&#x2F;j.1008-8105(2022)-1056.</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>科研</category>
+      
+      <category>多智能体强化学习任务分配</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>RL</tag>
+      
+      <tag>科研</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>基于层次控制的多智能体对抗研究</title>
     <link href="/2024/11/14/%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E4%BB%BB%E5%8A%A1%E5%88%86%E9%85%8D/%E5%9F%BA%E4%BA%8E%E5%B1%82%E6%AC%A1%E6%8E%A7%E5%88%B6%E7%9A%84%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%AF%B9%E6%8A%97%E7%A0%94%E7%A9%B6/"/>
     <url>/2024/11/14/%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E4%BB%BB%E5%8A%A1%E5%88%86%E9%85%8D/%E5%9F%BA%E4%BA%8E%E5%B1%82%E6%AC%A1%E6%8E%A7%E5%88%B6%E7%9A%84%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%AF%B9%E6%8A%97%E7%A0%94%E7%A9%B6/</url>
@@ -278,11 +475,38 @@
   
   
   <entry>
+    <title>1.2 因特网概述</title>
+    <link href="/2024/11/12/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/1.2%E5%9B%A0%E7%89%B9%E7%BD%91%E6%A6%82%E8%BF%B0/"/>
+    <url>/2024/11/12/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/1.2%E5%9B%A0%E7%89%B9%E7%BD%91%E6%A6%82%E8%BF%B0/</url>
+    
+    <content type="html"><![CDATA[<h1 id="1-2-因特网概述"><a href="#1-2-因特网概述" class="headerlink" title="1.2 因特网概述"></a>1.2 因特网概述</h1><h2 id="1-网络，互联网和因特网"><a href="#1-网络，互联网和因特网" class="headerlink" title="1. 网络，互联网和因特网"></a>1. 网络，互联网和因特网</h2><ul><li>网络是由若干结点和链接这些结点的链路组成</li><li>多个网络通过路由器互连起来，构成一个覆盖范围更大的网路，称为互联网</li><li>因特网是世界上最大的互联网络，连接在因特网上的计算机称为主机</li></ul><h3 id="1-1-internet和Internet的区别"><a href="#1-1-internet和Internet的区别" class="headerlink" title="1.1 internet和Internet的区别"></a>1.1 internet和Internet的区别</h3><ol><li>internet(互联网或互连网)是一个通用名词，它泛指由多个计算机网络互连而成的网络。在这些网络之间的通信协议可以是任意的。</li><li>Internet(因特网)则是一个专用名词，它指当前全球最大的、开放的、由众多网络相互连接而成的特定计算机网络，它采用TCPP协议族作为通信的规则，其前身是美国的ARPANET。</li></ol><h2 id="2-因特网服务提供者ISP-Internet-Service-Provider"><a href="#2-因特网服务提供者ISP-Internet-Service-Provider" class="headerlink" title="2. 因特网服务提供者ISP(Internet Service Provider)"></a>2. 因特网服务提供者ISP(Internet Service Provider)</h2><ul><li>通过向ISP缴纳费用，拿到IP地址和通信线路，路由器等连网设备的使用权</li><li>同时，每个接入因特网的用户，也可以成为ISP，只需购买调制解调器或路由器这样的设备，让其他用户与之相连</li></ul><p><img src="/2024/11/12/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/1.2%E5%9B%A0%E7%89%B9%E7%BD%91%E6%A6%82%E8%BF%B0/image-20241115201435974.png" alt="image-20241115201435974"></p><h3 id="2-1-基于ISP的三层结构的因特网"><a href="#2-1-基于ISP的三层结构的因特网" class="headerlink" title="2.1 基于ISP的三层结构的因特网"></a>2.1 基于ISP的三层结构的因特网</h3><ul><li>第一层：国际性区域</li><li>第二层：区域性或国家性覆盖规模</li><li>第三层：本地ISP</li></ul><p><img src="/2024/11/12/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/1.2%E5%9B%A0%E7%89%B9%E7%BD%91%E6%A6%82%E8%BF%B0/image-20241115201638639.png" alt="image-20241115201638639"></p><h2 id="3-因特网的标准化工作"><a href="#3-因特网的标准化工作" class="headerlink" title="3. 因特网的标准化工作"></a>3. 因特网的标准化工作</h2><ol><li><p>因特网的标准化工作对因特网的发展起到了非常重要的作用。</p></li><li><p>因特网在制定其标准上的一个很大的特点是面向公众。</p><ol><li>因特网所有的<a href="http://www.ietf.org/rfc.html">RFC(Request For Comments)技术文档</a>都可从因特网上免费下载；</li><li>任何人都可以随时用电子邮件发表对某个文档的意见或建议。</li></ol></li><li><p>因特网协会ISOC是一个国际性组织，它负责对因特网进行全面管理，以及在世界范围内促进其发展和使用。</p><ol><li>因特网体系结构委员会IAB,负责管理因特网有关协议的开发：</li><li>因特网工程部ETF，负责研究中短期工程问题，主要针对协议的开发和标准化</li><li>因特网研究部IRTF,从事理论方面的研究和开发一些需要长期考虑的问题。</li></ol></li><li><p>制订因特网的正式标准要经过以下4个阶段：</p><ol><li>因特网草案（在这个阶段还不是RFC文档）</li><li>建议标准（从这个阶段开始就成为RFC文档）<br>因特网体系结构委员会A由</li><li>草案标准</li><li>因特网标准</li></ol><blockquote><p>只有一小部分RFC文档最后才能变成因特网标准</p></blockquote></li></ol><h2 id="4-因特网的组成"><a href="#4-因特网的组成" class="headerlink" title="4. 因特网的组成"></a>4. 因特网的组成</h2><ol><li><p>边缘部分</p><blockquote><p>由所有连接在因特网上 的主机组成。这部分是用户直接使用的，用来进行通信（传送数据，音频或视频)和资源共享。</p></blockquote></li><li><p>核心部分</p><blockquote><p>由大量网络和连接这些网络的路由器组成。这部分是为边缘部分提供服务的（提供连通性和交换）</p></blockquote><ol><li><strong>路由器</strong>是实现<strong>分组交换</strong>的关键构件，任务是<strong>转发收到的分组</strong></li></ol></li></ol>]]></content>
+    
+    
+    <categories>
+      
+      <category>计算机基础</category>
+      
+      <category>计算机网络</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>os</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>github+hexo 搭建个人网站</title>
     <link href="/2024/11/12/hexo/github-hexo-%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E7%BD%91%E7%AB%99/"/>
     <url>/2024/11/12/hexo/github-hexo-%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E7%BD%91%E7%AB%99/</url>
     
-    <content type="html"><![CDATA[<h1 id="配置环境"><a href="#配置环境" class="headerlink" title="配置环境"></a>配置环境</h1><h2 id="安装准备"><a href="#安装准备" class="headerlink" title="安装准备"></a>安装准备</h2><p>Git版本：Git-2.47.0.2-64-bit</p><p>Node.js版本：node-v22.11.0-x64</p><ol><li>官网下载，一路下一步安装即可。</li></ol><p>安装完成，右键git bash here，输入</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">git --version<br>node -v<br>npm -v<br></code></pre></td></tr></table></figure><p>安装成功，可查看版本。</p><ol start="2"><li>安装hexo:</li></ol><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">npm install hexo -g<br></code></pre></td></tr></table></figure><p>hexo 安装成功，输入</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo -v<br></code></pre></td></tr></table></figure><h2 id="git-配置SSH-key"><a href="#git-配置SSH-key" class="headerlink" title="git 配置SSH key"></a>git 配置SSH key</h2><ol><li>生成key</li></ol><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">ssh-keygen -t rsa -C <span class="hljs-string">&quot;xxx@qq.com&quot;</span><br></code></pre></td></tr></table></figure><ol start="2"><li>进入C:\用户\用户名.ssh，进入ssh文件夹，复制id_rsa.pub文件里的所有内容</li><li>打开github主页，点击个人设置，点击左侧SSH and GPG keys，点击New SSh key</li><li>标题随便起，将复制的内容粘贴到Key，点击Add SSH key</li><li>测试是否成功，在git bash中输入：</li></ol><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">ssh -T git@github.com<br></code></pre></td></tr></table></figure><p><font style="color:rgb(83, 88, 97);">如果遇到选择，输入yes，看到成功即可。</font></p><ol start="6"><li>配置账号密码</li></ol><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">git config --global user.name <span class="hljs-string">&quot;xxx&quot;</span> <span class="hljs-comment">#你的github用户名</span><br>git config --global user.email <span class="hljs-string">&quot;xxx@163.com&quot;</span> <span class="hljs-comment">#填写你的github注册邮箱</span><br></code></pre></td></tr></table></figure><ol start="7"><li>安装部署插件</li></ol><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">npm install hexo-deployer-git -save<br></code></pre></td></tr></table></figure><h1 id="搭建个人博客"><a href="#搭建个人博客" class="headerlink" title="搭建个人博客"></a>搭建个人博客</h1><ol><li>新建文件夹，初始化个人博客，右键打开git bash，输入</li></ol><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo init <span class="hljs-comment">#初始化</span><br></code></pre></td></tr></table></figure><ol start="2"><li>生成静态网页并预览</li></ol><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo g <span class="hljs-comment"># 生成静态页面</span><br>hexo s <span class="hljs-comment"># 预览</span><br></code></pre></td></tr></table></figure><ol start="3"><li><p>打开网址即可预览</p></li><li><p>打开github 创建与用户名同名的仓库：username.github.io，并查看主分支是main or master</p></li><li><p>打开博客目录下的_config.ymal，找到对应内容并修改</p></li></ol><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs yml"><span class="hljs-attr">deploy:</span><br>  <span class="hljs-attr">type:</span> <span class="hljs-string">git</span><br>  <span class="hljs-attr">repository:</span> <span class="hljs-string">git@github.com:username/username.github.io.git</span><br>  <span class="hljs-attr">branch:</span> <span class="hljs-string">main</span><br></code></pre></td></tr></table></figure><ol start="6"><li>发布到github</li></ol><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo d<br></code></pre></td></tr></table></figure><ol start="7"><li>新建博客</li></ol><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo new <span class="hljs-string">&#x27;blog-name&#x27;</span><br></code></pre></td></tr></table></figure><p>在source&#x2F;_post目录下可查看新建的md文件。</p><p>注：可在hexo s服务开启的状态下修改问价内容查看预览内容。</p><p>要设置其他主题，可自行查找，博主参考Fluid风格的blog <a href="https://hexo.fluid-dev.com/docs/">Hexo Fluid 用户手册</a>。</p>]]></content>
+    <content type="html"><![CDATA[<h1 id="配置环境"><a href="#配置环境" class="headerlink" title="配置环境"></a>配置环境</h1><h2 id="安装准备"><a href="#安装准备" class="headerlink" title="安装准备"></a>安装准备</h2><p>Git版本：Git-2.47.0.2-64-bit</p><p>Node.js版本：node-v22.11.0-x64</p><ol><li>官网下载，一路下一步安装即可。</li></ol><p>安装完成，右键git bash here，输入</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">git --version<br>node -v<br>npm -v<br></code></pre></td></tr></table></figure><p>安装成功，可查看版本。</p><ol start="2"><li>安装hexo:</li></ol><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">npm install hexo -g<br></code></pre></td></tr></table></figure><p>hexo 安装成功，输入</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo -v<br></code></pre></td></tr></table></figure><h2 id="git-配置SSH-key"><a href="#git-配置SSH-key" class="headerlink" title="git 配置SSH key"></a>git 配置SSH key</h2><ol><li>生成key</li></ol><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">ssh-keygen -t rsa -C <span class="hljs-string">&quot;xxx@qq.com&quot;</span><br></code></pre></td></tr></table></figure><ol start="2"><li>进入C:\用户\用户名.ssh，进入ssh文件夹，复制id_rsa.pub文件里的所有内容</li><li>打开github主页，点击个人设置，点击左侧SSH and GPG keys，点击New SSh key</li><li>标题随便起，将复制的内容粘贴到Key，点击Add SSH key</li><li>测试是否成功，在git bash中输入：</li></ol><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">ssh -T git@github.com<br></code></pre></td></tr></table></figure><p><font style="color:rgb(83, 88, 97);">如果遇到选择，输入yes，看到成功即可。</font></p><ol start="6"><li>配置账号密码</li></ol><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">git config --global user.name <span class="hljs-string">&quot;xxx&quot;</span> <span class="hljs-comment">#你的github用户名</span><br>git config --global user.email <span class="hljs-string">&quot;xxx@163.com&quot;</span> <span class="hljs-comment">#填写你的github注册邮箱</span><br></code></pre></td></tr></table></figure><ol start="7"><li>安装部署插件</li></ol><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">npm install hexo-deployer-git -save<br></code></pre></td></tr></table></figure><h1 id="搭建个人博客"><a href="#搭建个人博客" class="headerlink" title="搭建个人博客"></a>搭建个人博客</h1><ol><li>新建文件夹，初始化个人博客，右键打开git bash，输入</li></ol><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo init <span class="hljs-comment">#初始化</span><br></code></pre></td></tr></table></figure><ol start="2"><li>生成静态网页并预览</li></ol><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo g <span class="hljs-comment"># 生成静态页面</span><br>hexo s <span class="hljs-comment"># 预览</span><br></code></pre></td></tr></table></figure><ol start="3"><li><p>打开网址即可预览</p></li><li><p>打开github 创建与用户名同名的仓库：username.github.io，并查看主分支是main or master</p></li><li><p>打开博客目录下的_config.ymal，找到对应内容并修改</p></li></ol><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs yml"><span class="hljs-attr">deploy:</span><br>  <span class="hljs-attr">type:</span> <span class="hljs-string">git</span><br>  <span class="hljs-attr">repository:</span> <span class="hljs-string">git@github.com:username/username.github.io.git</span><br>  <span class="hljs-attr">branch:</span> <span class="hljs-string">main</span><br></code></pre></td></tr></table></figure><ol start="6"><li>发布到github</li></ol><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo d<br></code></pre></td></tr></table></figure><ol start="7"><li>新建博客</li></ol><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo new <span class="hljs-string">&#x27;blog-name&#x27;</span><br>hexo new title -p  <span class="hljs-string">&#x27;subdir/title&#x27;</span><br></code></pre></td></tr></table></figure><p>在source&#x2F;_post目录下可查看新建的md文件。</p><p>注：可在hexo s服务开启的状态下修改问价内容查看预览内容。</p><p>要设置其他主题，可自行查找，博主参考Fluid风格的blog <a href="https://hexo.fluid-dev.com/docs/">Hexo Fluid 用户手册</a>。</p>]]></content>
     
     
     <categories>
@@ -299,6 +523,31 @@
       <tag>git</tag>
       
       <tag>个人博客</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>rust todo</title>
+    <link href="/2024/11/12/Rust/rust/"/>
+    <url>/2024/11/12/Rust/rust/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>rust</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>rust</tag>
       
     </tags>
     
