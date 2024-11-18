@@ -4,6 +4,492 @@
   
   
   <entry>
+    <title>6.7 万维网WWW</title>
+    <link href="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-7-%E4%B8%87%E7%BB%B4%E7%BD%91WWW/"/>
+    <url>/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-7-%E4%B8%87%E7%BB%B4%E7%BD%91WWW/</url>
+    
+    <content type="html"><![CDATA[<h2 id="万维网WWW"><a href="#万维网WWW" class="headerlink" title="万维网WWW"></a>万维网WWW</h2><blockquote><p>即 World Wide Web，是一个大规模的、联机式的信息储藏所，是运行在因特网上的一个分布式应用。</p></blockquote><ol><li><p>统一资源定位符URL</p><blockquote><p>万维网使用统一资源定位符URL来指明因特网上任何种类“资源”的位置。</p><p>其一般形式为：<code>&lt;协议&gt;：/∥&lt;主机&gt;：&lt;端口&gt;/&lt;路径&gt;</code></p></blockquote></li><li><p>超文本传输协议HTTP</p><blockquote><p>超文本传输协议 HTTP (HyperText Transfer Protocol) 定义了浏览器（即万维网客户进程）<br>怎样向万维网服务器请求万维网文档以及万维网服务器怎样把万维网文档传送给浏览器。</p></blockquote><ol><li><p>HTTP1.0</p><blockquote><p>采用非持续连接方式。每次浏览器要请求一个文件都要与服务器建立TCP连接(80端口)，<br>当收到响应后就立即关闭连接。</p></blockquote></li><li><p>HTTP1.1</p><blockquote><ol><li><p>采用持续连接方式。万维网服务器在发送响应后仍然保持这条连接，使同一个客户（浏览器）和该服务器可以继续在这条连接上传送后续的HTTP请求报文和响应报文。</p></li><li><p>为了进一步提高效率，还可采用流水线方式，即浏览器在收到HTTP的响应报文之前<br>就能够连续发送多个请求报文。</p></li></ol></blockquote></li></ol></li><li><p>HTTP两种报文——请求报文和响应报文</p><blockquote><p>报文中的每一个字段都是一些ASCII码串，并且每个字段的长度都是不确定的。</p></blockquote><ol><li><p>请求报文格式<br><img src="https://raw.githubusercontent.com/Ag-epiphany/typora_Pictures/main/1689763938693.png" alt="1689763938693"></p></li><li><p>响应报文格式<br><img src="https://raw.githubusercontent.com/Ag-epiphany/typora_Pictures/main/1689763996008.png" alt="1689763996008"></p></li></ol></li><li><p>Cookie技术</p><blockquote><p>Cookie提供了一种机制使得万维网服务器能够“记住”用户，而无需用户主动提供用户标识信息。<br>也就是说，Cookie是一种<strong>对无状态的HTTP进行状态化</strong>的技术。</p></blockquote><p><img src="https://raw.githubusercontent.com/Ag-epiphany/typora_Pictures/main/image-20230719184205348.png" alt="image-20230719184205348"></p></li><li><p>万维网缓存（Web缓存）</p><blockquote><p>在万维网中还可以使用缓存机制以提高万维网的效率。<br>可位于客户机，也可位于中间系统上，位于中间系统上的Web缓存又称为代理服务器。</p></blockquote><p><img src="https://raw.githubusercontent.com/Ag-epiphany/typora_Pictures/main/image-20230719183530450.png" alt="image-20230719183530450"></p><table><thead><tr><th>字段</th><th>说明</th></tr></thead><tbody><tr><td>Last-Modified</td><td>最后修改时间</td></tr><tr><td>Expires</td><td>有效期</td></tr></tbody></table><ol><li>若过了最后有效期，则在客户机发来请求时，代理服务器向原始服务器发送请求得到新的数据<ol><li>若原始服务器的数据也未更改，则发回一个不带实体数据的响应报文，<br>代理服务器收到后更新有效期，将数据发给客户机</li><li>若原始服务器的数据更改，那么发回新数据的响应报文，代理服务器更新数据以及两个字段并将新数据发给客户机</li></ol></li></ol></li></ol>]]></content>
+    
+    
+    <categories>
+      
+      <category>计算机基础</category>
+      
+      <category>计算机网络</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>计算机网络</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>6.6 电子邮件</title>
+    <link href="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-6-%E7%94%B5%E5%AD%90%E5%8D%8F%E8%AE%AE/"/>
+    <url>/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-6-%E7%94%B5%E5%AD%90%E5%8D%8F%E8%AE%AE/</url>
+    
+    <content type="html"><![CDATA[<h1 id="6-6-电子邮件"><a href="#6-6-电子邮件" class="headerlink" title="6.6 电子邮件"></a>6.6 电子邮件</h1><h2 id="1-电子邮件系统"><a href="#1-电子邮件系统" class="headerlink" title="1. 电子邮件系统"></a>1. 电子邮件系统</h2><blockquote><p>电子邮件系统采用客户&#x2F;服务器方式。三个主要组成构件：用户代理，邮件服务器以及电子邮件所需的协议</p></blockquote><ol><li>用户代理是用户与电子邮件系统的接口，又称为电子邮件客户端软件</li><li>邮件服务器是电子邮件系统的基础设施。因特网上所有的SP都有邮件服务器，其功能是发送和接收邮件，同时还要负责维护用户的邮箱。</li><li>协议包括邮件发送协议（例如SMTP)和邮件读取协议（例如POP3)。</li></ol><p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-6-%E7%94%B5%E5%AD%90%E5%8D%8F%E8%AE%AE/image-20241118190659564.png"></p><h2 id="2-简单邮件传送协议SMTP"><a href="#2-简单邮件传送协议SMTP" class="headerlink" title="2. 简单邮件传送协议SMTP"></a>2. 简单邮件传送协议SMTP</h2><ol><li><p>基本工作原理</p><p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-6-%E7%94%B5%E5%AD%90%E5%8D%8F%E8%AE%AE/image-20241118191131692.png"></p></li><li><p>SMTP协议只能传送ASCII码文本数据，不能传送可执行文件或其他的二进制对象。</p></li><li><p>SMTP不能满足传送多媒体邮件（例如带有图片、音频或视频数据）的需要。并且许多其他非英语国家的文字(例如中文、俄文、甚至带有重音符号的法文或德文)也无法用SMTP传送。</p></li><li><p>为解决SMTP传送非ASCII码文本的问题，提出了多用途因特网邮件扩展MIME</p><ol><li>增加了5个新的邮件首部字段，这些字段提供了有关邮件主体的信息。</li><li>定义了许多邮件内容的格式，对多媒体电子邮件的表示方法进行了标准化。</li><li>定义了传送编码，可对任何内容格式进行转换，而不会被邮件系统改变。</li></ol></li><li><p>实际上，MIME不仅仅用于SMTP,也用于后来的同样面向ASCII字符的HTTP。</p></li></ol><p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-6-%E7%94%B5%E5%AD%90%E5%8D%8F%E8%AE%AE/image-20241118191715497.png"></p><h2 id="3-电子邮件的格式"><a href="#3-电子邮件的格式" class="headerlink" title="3. 电子邮件的格式"></a>3. 电子邮件的格式</h2><ul><li>一个电子邮件有信封和内容两部分。而内容又由首部和主体两部分构成。</li></ul><p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-6-%E7%94%B5%E5%AD%90%E5%8D%8F%E8%AE%AE/image-20241118191547061.png"></p><ol><li>高亮部分为比较重要的部分，为必填项。</li></ol><h2 id="4-邮件读取协议"><a href="#4-邮件读取协议" class="headerlink" title="4. 邮件读取协议"></a>4. 邮件读取协议</h2><ol><li><p>邮局协议POP3</p><blockquote><p>非常简单、功能有限的邮件读取协议。用户只能以下载并删除方式或下载并保留方式从邮件服务器下载邮件到用户方计算机。不允许用户在邮件服务器上管理自己的邮件。</p></blockquote></li><li><p>因特网邮件访问协议IMAP</p><blockquote><p>功能比POP3强大的邮件读取协议。用户在自己的计算机上就可以操控邮件服务器中的邮箱，就像在本地操控一样，因此IMAP是一个联机协议。</p></blockquote></li><li><p>POP3和IMAP4都采用基于TCP连接的客户&#x2F;服务器方式。</p><ol><li>POP3使用端口110 </li><li>IMAP4使用端口143</li></ol></li></ol><h2 id="5-基于万维网的电子邮件"><a href="#5-基于万维网的电子邮件" class="headerlink" title="5. 基于万维网的电子邮件"></a>5. 基于万维网的电子邮件</h2><ul><li>通过浏览器登录（提供用户名和口令）邮件服务器万维网网站就可以撰写、收发、阅读和管理电子邮件。这种工作模式与IMAP很类似，不同的是用户计算机无需安装专门的用户代理程序，只需要使用通用的万维网浏览器。</li><li>这种工作摸式在用户浏览器与邮件服务器网站之间使用HTTP协议，而邮件服务器之间使用SMTP协议。</li></ul><p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-6-%E7%94%B5%E5%AD%90%E5%8D%8F%E8%AE%AE/image-20241118192409368.png"></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>计算机基础</category>
+      
+      <category>计算机网络</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>计算机网络</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>6.5 文件传送协议FTP</title>
+    <link href="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-5-%E6%96%87%E4%BB%B6%E4%BC%A0%E9%80%81%E5%8D%8F%E8%AE%AEFTP/"/>
+    <url>/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-5-%E6%96%87%E4%BB%B6%E4%BC%A0%E9%80%81%E5%8D%8F%E8%AE%AEFTP/</url>
+    
+    <content type="html"><![CDATA[<h2 id="6-5-文件传送协议FTP"><a href="#6-5-文件传送协议FTP" class="headerlink" title="6.5 文件传送协议FTP"></a>6.5 文件传送协议FTP</h2><ol><li>FTP提供交互式的访问，允许客户指明文件的类型与格式（如指明是否使用ASCII码），并允许文件具有存取权限（如访问文件的用户必须经过授权，并输入有效的口令）</li><li>FTP屏蔽了各计算机系统的细节，因而适合于在异构网络中任意计算机之间传送文件</li></ol><h2 id="1-基本原理"><a href="#1-基本原理" class="headerlink" title="1. 基本原理"></a>1. 基本原理</h2><p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-5-%E6%96%87%E4%BB%B6%E4%BC%A0%E9%80%81%E5%8D%8F%E8%AE%AEFTP/image-20230719151544230.png"></p><ol><li>FTP客户和服务器之间要建立以下两个并行的TCP连接<ol><li>控制连接，在<strong>整个会话期间一直保持打开</strong>，用于传送FTP相关<strong>控制命令</strong></li><li>数据连接，用于文件传输，在<strong>每次文件传输时才建立</strong>，<strong>传输结束就关闭</strong></li></ol></li><li>默认情况下，FTP使用TCP 21端口进行控制连接，TCP 20端口进行数据连接。<br>但是，是否使用TCP20端口建立数据连接与传输模式有关，主动方式使用TCP 20端口<br>被动方式由服务器和客户端自行协商决定。</li></ol>]]></content>
+    
+    
+    <categories>
+      
+      <category>计算机基础</category>
+      
+      <category>计算机网络</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>计算机网络</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>6.4 域名系统DNS</title>
+    <link href="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-4-%E5%9F%9F%E5%90%8D%E7%B3%BB%E7%BB%9FDNS/"/>
+    <url>/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-4-%E5%9F%9F%E5%90%8D%E7%B3%BB%E7%BB%9FDNS/</url>
+    
+    <content type="html"><![CDATA[<h1 id="6-4-域名系统DNS"><a href="#6-4-域名系统DNS" class="headerlink" title="6.4 域名系统DNS"></a>6.4 域名系统DNS</h1><h2 id="1-DNS介绍"><a href="#1-DNS介绍" class="headerlink" title="1. DNS介绍"></a>1. DNS介绍</h2><ol><li>域名系统DNS是因特网使用的命名系统，用来把便于人们记忆的具有特定含义的主机名（例如<a href="http://www.hust.cn),转换为便于机器处理的ip地址./">www.hust.cn),转换为便于机器处理的IP地址。</a></li><li>因特网是否可以只使用1台DNS服务器？<ol><li>这种做法并不可取。因为因特网的规摸很大，这样的域名服务器肯定会因为超负荷而无法正常工作，而且一旦域名服务器出现故障，整个因特网就会瘫痪。</li><li>早在1983年，因特网就开始采用层次结构的命名树作为主机的名字(即域名)，并使用分布式的域名系统DNS</li><li>DNS使大多数域名都在本地解析，仅少量解折需要在因特网上通信，因此系统效率很高。</li><li>由于DNS是分布式系统，即使单个计算机出了故障，也不会妨碍整个系统的正常运行</li></ol></li><li>域名和IP地址的映射关系必须保存在域名服务器中，供所有其他应用查询。显然不能将所有信息都储存在一台域名服务器中。DNS使用分布在各地的域名服务器来实现域名到IP地址的转换。</li><li>DNS报文使用运输层的UDP协议进行封装，运输层端口号为53</li></ol><h2 id="2-层次树状域名结构"><a href="#2-层次树状域名结构" class="headerlink" title="2. 层次树状域名结构"></a>2. 层次树状域名结构</h2><ol><li>因特网采用层次树状结构的域名结构…三级域名.二级域名.顶级域名<ol><li>每一级的域名都由英文字母和数字组成，不超过63个字符，不区分大小写字母。</li><li>级别最低的域名写在最左边，而级别最高的顶级域名写在最右边。</li><li>完整的域名不超过255个字符。</li></ol></li><li>域名系统既不规定一个域名需要包含多少个下级域名，也不规定每一级的域名代表什么意思。</li><li>各级域名由其上一级的域名管理机构管理，而最高的顶级域名则由因特网名称与数字地址分配机构CANN进行管理。</li></ol><h3 id="2-1-域名层次划分"><a href="#2-1-域名层次划分" class="headerlink" title="2.1 域名层次划分"></a>2.1 域名层次划分</h3><ol><li>顶级域名TLD（Top Level Domain）<ol><li>国家顶级域名nTLD<ol><li>采用IS03166的规定。如cn表示中国，us表示美国，uk表示英国、等等。</li></ol></li><li>通用顶级域名<ol><li>最常见的通用顶级域名有七个，即：com(公司企业)、net(网络服务机构)、org(非营利性组织)、int(国际组织)、edu(美国教育结构)、gov(美国政府部门)、mil(美国军事部门)。</li></ol></li><li>反向域（arpa）<ol><li>用于反向域名解析，即IP地址反向解析为域名。</li></ol></li></ol></li><li>在国家顶级域名下注册的二级域名均由该国家自行确定。例如，顶级域名为j的日本，将其教育和企业机构的二级域名定为ac和co,而不用edu和com。</li><li>我国则将二级域名划分为以下两类：<ol><li>类别域名<ol><li>共七个：ac(科研机构)、com(工、商、金融等企业)、edu(教育机构)、gov(政府部门)、net(提供网络服务的机构)、mil(军事机构)和org(非营利性组织)。</li></ol></li><li>行政区域名<ol><li>共34个，适用于我国的各省、自治区、直辖市。例如：b为北京市、sh为上海市、js为江苏省，等等。</li></ol></li></ol></li><li>顶级域名由ICANN管理，顶级域名以下的二级域名，三级域名等，都由其上一级域名管理机构自行管理。</li></ol><p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-4-%E5%9F%9F%E5%90%8D%E7%B3%BB%E7%BB%9FDNS/image-20241118165949003.png"></p><h3 id="2-2-域名服务器类型"><a href="#2-2-域名服务器类型" class="headerlink" title="2.2 域名服务器类型"></a>2.2 域名服务器类型</h3><ul><li>域名和IP地址的映射关系必须保存在域名服务器中，供所有其他应用查询。显然不能将所有信息都储存在一台域名服务器中。DNS使用分布在各地的域名服务器来实现域名到IP地址的转换。</li></ul><ol><li>根域名服务器<ol><li>根域名服务器是最高层次的域名服务器。<br>每个根域名服务器都知道所有的顶级域名服务器的域名及其IP地址。<br>因特网上共有13个不同IP地址的根域名服务器。</li><li>尽管我们将这13个根域名服务器中的每一个都视为单个的服务器，但“每台服务器”实际上是由许多分布在世界各地的计算机构成的服务器群集。当本地域名服务器向根域名服务器发出查询请求时，路由器就把查询请求报文转发到离这个DNS客户最近的一个根域名服务器。<br>这就加快了DNS的查询过程，同时也更合理地利用了因特网的资源。</li><li>根域名服务器通常并不直接对域名进行解析，而是返回该域名所属顶级域名的顶级域名服务器的IP地址。</li></ol></li><li>顶级域名服务器<ol><li>这些域名服务器负责管理在该顶级域名服务器注册的所有二级域名。<br>当收到DNS查询请求时就给出相应的回答（可能是最后的结果，也可能是下一级权限域名服务器的P地址)。</li></ol></li><li>权限域名服务器<ol><li>这些域名服务器负责管理某个区的域名。<br>每一个主机的域名都必须在某个权限域名服务器处注册登记。<br>因此权限域名服务器知道其管辖的域名与IP地址的映射关系。</li><li>另外，权限域名服务器还知道其下级域名服务器的地址</li></ol></li><li>本地域名服务器<ol><li>本地域名服务器不属于上述的域名服务器的等级结构。<br>当一个主机发出DNS请求报文时，这个报文就首先被送往该主机的本地域名服务器。</li><li>本地域名服务器起着代理的作用，会将该报文转发到上述的域名服务器的等级结构中。</li><li>每一个因特网服务提供者ISP，一个大学一个大学里的学院，都可以拥有一个本地域名服务器，它有时也称为默认域名服务器。本地域名服务器离用户较近，一般不超过几个路由器<br>的距离，也有可能就在同一个局域网中。</li><li>本地域名服务器的IP地址需要直接配置在需要域名解析的主机中，</li></ol></li></ol><h2 id="3-DNS域名解析两种方式"><a href="#3-DNS域名解析两种方式" class="headerlink" title="3. DNS域名解析两种方式"></a>3. DNS域名解析两种方式</h2><ul><li>递归解析和迭代解析</li></ul><p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-4-%E5%9F%9F%E5%90%8D%E7%B3%BB%E7%BB%9FDNS/image-20230718233234205.png"></p><ol><li>为了提高DNS的查询效率，并减轻根域名服务器的负荷和减少因特网上的DNS查询报文数量，在域名服务器和主机中广泛地使用了高速缓存。</li><li>DNS报文使用运输层的UDP协议进行封装，运输层端口号为53</li></ol>]]></content>
+    
+    
+    <categories>
+      
+      <category>计算机基础</category>
+      
+      <category>计算机网络</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>计算机网络</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>6.3 动态主机配置协议DHCP</title>
+    <link href="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-3-%E5%8A%A8%E6%80%81%E4%B8%BB%E6%9C%BA%E9%85%8D%E7%BD%AE%E5%8D%8F%E8%AE%AEDHCP/"/>
+    <url>/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-3-%E5%8A%A8%E6%80%81%E4%B8%BB%E6%9C%BA%E9%85%8D%E7%BD%AE%E5%8D%8F%E8%AE%AEDHCP/</url>
+    
+    <content type="html"><![CDATA[<h1 id="6-3-动态主机配置协议DHCP"><a href="#6-3-动态主机配置协议DHCP" class="headerlink" title="6.3 动态主机配置协议DHCP"></a>6.3 动态主机配置协议DHCP</h1><ul><li>动态主机配置协议DHCP(Dynamic Host Configuration Protocol))提供了一种机制，称为即插即用连网。</li><li>这种机制允许一台计算机加入新网络时可自动获取P地址等网络配置信息而不用手工参与。</li></ul><ol><li><p>DHCP报文在运输层使用UDP协议封装</p><ol><li>DHCP客户使用的UDP端口号为68</li><li>DHCP服务器使用的UDP端口号为67</li></ol></li><li><p>客户端向DHCP服务器申请IP的全过程</p></li></ol><p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-3-%E5%8A%A8%E6%80%81%E4%B8%BB%E6%9C%BA%E9%85%8D%E7%BD%AE%E5%8D%8F%E8%AE%AEDHCP/image-20241118164104548.png"></p><ul><li><p>使用ARP检测所分配到的IP地址是否已被网络中其他主机占用：</p><ul><li>若被占用：给DHCP服务器发送“DHCP DECLINE”报文敬销IP地址租约，并重新发送“DHCP DISCOVER”报文；</li><li>若未被占用：可以使用租约中的P地址与网络中其他主机通信了。</li></ul></li><li><p>使用ARP确保所选IP地址未被网络中其他主机占用</p></li></ul><table><thead><tr><th>报文</th><th>包含字段</th></tr></thead><tbody><tr><td>DHCP DISCOVER</td><td>事务ID，DHCP的MAC地址</td></tr><tr><td>DHCP OFFER</td><td>事务ID，配置信息：IP地址，子网掩码，地址租期，默认网关，DNS服务器</td></tr><tr><td>DHCP REQUEST</td><td>事务ID，DHCP的MAC地址，接受的租约中的IP地址，提供此租约的DHCP服务器的IP地址</td></tr></tbody></table><ol start="3"><li>DHCP中继代理</li></ol><blockquote><p>路由器不会转发普通的广播分组，并且我们也不希望在每个网络中都配置一台DHCP服务器，所以DHCP中继代理出现了。</p></blockquote><p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-3-%E5%8A%A8%E6%80%81%E4%B8%BB%E6%9C%BA%E9%85%8D%E7%BD%AE%E5%8D%8F%E8%AE%AEDHCP/image-20241118164332043.png"></p><ul><li>DHCP DISCOVER:DHCP发现报文</li><li>DHCP OFFER:DHCP提供报文</li><li>DHCP REQUEST:DHCP请求报文</li><li>DHCP ACK:DHCP确认报文</li><li>DHCP NACK:DHCP否认报文</li><li>DHCP RELEASE:DHCP释放报文</li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>计算机基础</category>
+      
+      <category>计算机网络</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>计算机网络</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>6.2 客户服务器方式和对等方式</title>
+    <link href="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-2-%E5%AE%A2%E6%88%B7%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%96%B9%E5%BC%8F%E5%92%8C%E5%AF%B9%E7%AD%89%E6%96%B9%E5%BC%8F/"/>
+    <url>/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-2-%E5%AE%A2%E6%88%B7%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%96%B9%E5%BC%8F%E5%92%8C%E5%AF%B9%E7%AD%89%E6%96%B9%E5%BC%8F/</url>
+    
+    <content type="html"><![CDATA[<h1 id="6-2-客户-服务器方式（C-S）和对等方式（P2P方式）"><a href="#6-2-客户-服务器方式（C-S）和对等方式（P2P方式）" class="headerlink" title="6.2 客户&#x2F;服务器方式（C&#x2F;S）和对等方式（P2P方式）"></a>6.2 客户&#x2F;服务器方式（C&#x2F;S）和对等方式（P2P方式）</h1><ul><li>网络应用程序运行在处于网络边缘的不同的端系统上，通过彼此间的通信来共同完成某项任务。</li><li>开发一种新的网络应用首先要考虑的问题就是网络应用程序在各种端系统上的组织方式和它们之间的关系。目前流行的主要有以下两种：<ul><li>客户&#x2F;服务器(Client&#x2F;Server,C&#x2F;S)方式</li><li>对等(Peer-to-Peer,P2P)方式</li></ul></li></ul><h2 id="1-客户-服务器-Client-Server-C-S-方式"><a href="#1-客户-服务器-Client-Server-C-S-方式" class="headerlink" title="1. 客户&#x2F;服务器(Client&#x2F;Server,C&#x2F;S)方式"></a>1. 客户&#x2F;服务器(Client&#x2F;Server,C&#x2F;S)方式</h2><ul><li><p>C&#x2F;S方式</p><ul><li>客户和服务器是指通信中所涉及的两个应用进程。</li><li>客户&#x2F;服务器方式所描述的是进程之间服务和被服务的关系。</li><li>客户是服务请求方，服务器是服务提供方。</li><li>服务器总是处于运行状态，并等待客户的服务请求。服务器具有固定端口号（例如HTTP服务器的默认端口号为80)，而运行服务器的主机也具有固定的P地址。</li></ul></li><li><p>C&#x2F;S方式是因特网上传统的、同时也是最成熟的方式，很多我们熟悉的网络应用采用的都是C&#x2F;S方式。包括万维网WWW、电子邮件、文件传输FTP等。</p></li><li><p>基于C&#x2F;S方式的应用服务通常是服务集中型的，即应用服务集中在网络中比客户计算机少得多的服务<br>器计算机上。</p><ul><li>由于一台服务器计算机要为多个客户机提供服务，在C&#x2F;S应用中，常会出现服务器计算机跟不上众多客户机请求的情况。</li><li>为此，在C&#x2F;S应用中，常用计算机群集（或服务器场）构建一个强大的虚拟服务器。</li></ul></li></ul><h2 id="2-对等方式（P2P方式）"><a href="#2-对等方式（P2P方式）" class="headerlink" title="2. 对等方式（P2P方式）"></a>2. 对等方式（P2P方式）</h2><ul><li><p>P2P方式</p><ul><li>在P2P方式中，没有固定的服务请求者和服务提供者，分布在网络边缘各端系统中的应用进程是对等的，被称为对等方。</li><li>对等方相互之间直接通信，每个对等方既是服务的请求者，又是服务的提供者。</li></ul></li><li><p>目前，在因特网上流行的P2P应用主要包括P2P文件共享、即时通信、P2P流媒体、分布式存储等。</p></li><li><p>基于P2P的应用是服务分散型的，因为服务不是集中在少数几个服务器计算机中，而是分散在大量对等计算机中，这些计算机并不为服务提供商所有，而是为个人控制的桌面计算机和笔记本电脑，它们通常位于住宅、校园和办公室中。</p></li><li><p>P2P方式的最突出特性之一就是它的可扩展性。因为系统每增加一个对等方，不仅增加的是服务的请求者，同时也增加了服务的提供者，系统性能不会因规摸的增大而降低。</p></li><li><p>P2P方式具有成本上的优势，因为它通常不需要庞大的服务器设施和服务器带宽。为了降低成本，服务提供商对于将P2P方式用于应用的兴趣越来越大。</p></li></ul><p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-2-%E5%AE%A2%E6%88%B7%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%96%B9%E5%BC%8F%E5%92%8C%E5%AF%B9%E7%AD%89%E6%96%B9%E5%BC%8F/image-20241118162748601.png"></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>计算机基础</category>
+      
+      <category>计算机网络</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>计算机网络</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>6.1 应用层概述</title>
+    <link href="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-1-%E5%BA%94%E7%94%A8%E5%B1%82%E6%A6%82%E8%BF%B0/"/>
+    <url>/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-1-%E5%BA%94%E7%94%A8%E5%B1%82%E6%A6%82%E8%BF%B0/</url>
+    
+    <content type="html"><![CDATA[<h1 id="6-1-应用层"><a href="#6-1-应用层" class="headerlink" title="6.1 应用层"></a>6.1 应用层</h1><p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-1-%E5%BA%94%E7%94%A8%E5%B1%82%E6%A6%82%E8%BF%B0/image-20241118161627816.png"></p><ul><li>应用层是计算机网络体系结构的最顶层，是设计和建立计算机网络的最终目的，也是计算机网络中发展最快的部分。<ul><li>早期基于文本的应用（电子邮件、远程登绿、文件传输、新闻组）<ul><li>20世纪90年代将因特网带入干家万户的万维网WWW</li></ul></li><li>当今流行的即时通信、P2P文件共享及各种音视频应用计算设备的小型化和“无处不在”，宽带住宅接入和无线接入的日益普及和迅速发展，为未来更多的新型应用提供了广阔的舞台。</li></ul></li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>计算机基础</category>
+      
+      <category>计算机网络</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>计算机网络</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>5.9 TCP报文段的首部格式</title>
+    <link href="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-9-TCP%E6%8A%A5%E6%96%87%E6%AE%B5%E7%9A%84%E9%A6%96%E9%83%A8%E6%A0%BC%E5%BC%8F/"/>
+    <url>/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-9-TCP%E6%8A%A5%E6%96%87%E6%AE%B5%E7%9A%84%E9%A6%96%E9%83%A8%E6%A0%BC%E5%BC%8F/</url>
+    
+    <content type="html"><![CDATA[<h1 id="5-9-TCP报文段的首部格式"><a href="#5-9-TCP报文段的首部格式" class="headerlink" title="5.9 TCP报文段的首部格式"></a>5.9 TCP报文段的首部格式</h1><ul><li>为了实现可靠传输，TCP采用了面向字节流的方式。</li><li>但TCP在发送数据时，是从发送缓存取出一部分或全部字节并给其添加一个首部使之成为TCP报文段后进行发送。<ul><li>一个TCP报文段由首部和数据载荷两部分构成；</li><li>TCP的全部功能都体现在它首部中各字段的作用。</li></ul></li></ul><p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-9-TCP%E6%8A%A5%E6%96%87%E6%AE%B5%E7%9A%84%E9%A6%96%E9%83%A8%E6%A0%BC%E5%BC%8F/image-20241118153709722.png"></p><table><thead><tr><th>字段</th><th>说明</th></tr></thead><tbody><tr><td>源端口</td><td>占16比特，写入源端口号，用来标识发送该TCP报文段的应用进程</td></tr><tr><td>目的端口</td><td>占16比特，写入目的端口号，用来标识接收该TCP报文段的应用进程</td></tr><tr><td>序号</td><td>占32比特，取值范围[0,2^32^-1]，序号增加到最后一个后，下一个序号就又回到0。<br>指出本TCP报文段数据载荷的第一个字节的序号。</td></tr><tr><td>确认号</td><td>占32比特，取值范围[0,2^32^-1]，确认号增加到最后一个后，下一个确认号就又回到0。<br>指出期望收到对方下一个TCP报文段的数据载荷的第一个字节的序号，同时也是对之前收到的所有数据的确认。</td></tr><tr><td>确认标志位ACK</td><td>取值为1时确认号字段才有效：取值为0时确认号字段无效</td></tr><tr><td>数据偏移</td><td>占4比特，并以4字节为单位。<br>用来指出TCP报文段的数据载荷部分的起始处距离TCP报文段的起始处有多远。</td></tr><tr><td>保留</td><td>占6比特，保留为今后使用，但目前应置为0。</td></tr><tr><td>窗口</td><td>占16比特，以字节为单位。指出发送本报文段的一方的接收窗口。<br>窗口值作为接收方让发送方设置其发送窗口的依据。<br>这是以接收方的接收能力来控制发送方的发送能力，称为流量控制。</td></tr><tr><td>校验和</td><td>占16比特，检查范围包括TCP报文段的首部和数据载荷两部分。<br>在计算校验和时，要在TCP报文段的前面加上12字节的伪首部。</td></tr><tr><td>同步标志位SYN</td><td>在TCP连接建立时用来同步序号</td></tr><tr><td>终止标志位FIN</td><td>用来释放TCP连接。</td></tr><tr><td>复位标志位RST</td><td>用来复位TCP连接。<br>当RST&#x3D;1时，表明TCP连接出现了异常，必须释放连接，然后再重新建立连接。<br>RST置1还用来拒绝一个非法的报文段或拒绝打开一个TCP连接。</td></tr><tr><td>推送标志位PSH</td><td>接收方的TCP收到该标志位为1的报文段会尽快上交应用进程。<br>而不必等到接收缓存都填满后再向上交付。</td></tr><tr><td>紧急标志位URG</td><td>取值为1时紧急指针字段有效：取值为0时紧急指针字段无效。</td></tr><tr><td>紧急指针</td><td>占16比特，以字节为单位，用来指明紧急数据的长度。</td></tr><tr><td>选项</td><td>1. 最大报文段长度MSS选项：TCP报文段数据载荷部分的最大长度。<br>2. 窗口扩大选项：为了扩大窗口（提高吞吐率）<br>3. 时间戳选项：<br>     a. 用来计算往返时间RTT<br>     b. 用于处理序号超范围的情况，又称为防止序号绕回PAWS。<br>4. 选择确认选项<br>选项的作用是为了扩展TCP报文段首部的功能</td></tr><tr><td>填充</td><td>由于选项的长度可变，因此使用填充来确保报文段首部能被4整除<br>(因为数据偏移字段，也就是首部长度字段，是以4字节为单位的)</td></tr></tbody></table><ul><li>紧急数据：<ul><li>当发送方有紧急数据时，可将紧急数据插队到发送缓存的最前面，并立刻封装到一个TCP报文段中进行发送。</li><li>紧急指针会指出本报文段数据载荷部分包含了多长的紧急数据，紧急数据之后是普通数据。</li><li>接收方将紧急数据部分取出，并直接上交应用程序，而不必在接受缓存中排队。</li></ul></li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>计算机基础</category>
+      
+      <category>计算机网络</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>计算机网络</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>5.8 TCP的运输连接管理</title>
+    <link href="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-8-TCP%E7%9A%84%E8%BF%90%E8%BE%93%E8%BF%9E%E6%8E%A5%E7%AE%A1%E7%90%86/"/>
+    <url>/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-8-TCP%E7%9A%84%E8%BF%90%E8%BE%93%E8%BF%9E%E6%8E%A5%E7%AE%A1%E7%90%86/</url>
+    
+    <content type="html"><![CDATA[<h1 id="5-8-TCP的运输连接管理"><a href="#5-8-TCP的运输连接管理" class="headerlink" title="5.8 TCP的运输连接管理"></a>5.8 TCP的运输连接管理</h1><ul><li>TCP是面向连接的协议，它基于运输连接来传送TCP报文段。</li><li>TCP运输连接的建立和释放是每一次面向连接的通信中必不可少的过程。</li><li>TCP运输连接有以下三个阶段：<ul><li>建立TCP连接</li><li>数据传送</li><li>释放TCP连接</li></ul></li><li>TCP的运输连接管理就是使运输连接的建立和释放都能正常地进行。</li></ul><p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-8-TCP%E7%9A%84%E8%BF%90%E8%BE%93%E8%BF%9E%E6%8E%A5%E7%AE%A1%E7%90%86/image-20241118150137225.png"></p><h2 id="1-TCP的连接建立（三次握手）"><a href="#1-TCP的连接建立（三次握手）" class="headerlink" title="1. TCP的连接建立（三次握手）"></a>1. TCP的连接建立（三次握手）</h2><blockquote><p>TCP的连接建立要解决以下三个问题：</p><ol><li>使TCP双方能够确知对方的存在</li><li>使TCP双方能够协商一些参数（如最大窗口值、是否使用窗口扩大选项和时间戳选项以及服务质量等）</li><li>使TCP双方能够对运输实体资源（如缓存大小、连接表中的项目等）进行分配。</li></ol></blockquote><ol><li><p>三次握手建立连接的过程</p><blockquote><p>也就是使用三个TCP报文建立连接</p><ul><li>传输控制块<ul><li>TCP连接表</li><li>指向发送和接收缓存的指针</li><li>指向重传队列的指针</li><li>当前的发送和接收序号</li></ul></li></ul></blockquote><p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-8-TCP%E7%9A%84%E8%BF%90%E8%BE%93%E8%BF%9E%E6%8E%A5%E7%AE%A1%E7%90%86/image-20230718175005023.png" alt="image-20230718175005023"></p></li><li><p>两报文建立连接会发生以下问题<br><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-8-TCP%E7%9A%84%E8%BF%90%E8%BE%93%E8%BF%9E%E6%8E%A5%E7%AE%A1%E7%90%86/image-20230718175045894.png" alt="image-20230718175045894"></p></li><li><p>注意<br>(1)TCP的标准规定，SYN&#x3D;1的报文段不能携带数据，但要消耗掉一个序号。<br>(2)TCP的标准规定，普通的确认报文段如果不携带数据，则不消耗序号。</p></li></ol><h2 id="2-TCP的连接释放（四次挥手）"><a href="#2-TCP的连接释放（四次挥手）" class="headerlink" title="2. TCP的连接释放（四次挥手）"></a>2. TCP的连接释放（四次挥手）</h2><ol><li><p>四报文挥手过程<br><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-8-TCP%E7%9A%84%E8%BF%90%E8%BE%93%E8%BF%9E%E6%8E%A5%E7%AE%A1%E7%90%86/image-20230718182458129.png" alt="image-20230718182458129"></p></li><li><p>若不等待2MSL则有可能发生以下情况</p><blockquote><p>最后一个确认报文丢失，导致服务器进程陷入最后确定状态，无法进入关闭状态</p></blockquote><p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-8-TCP%E7%9A%84%E8%BF%90%E8%BE%93%E8%BF%9E%E6%8E%A5%E7%AE%A1%E7%90%86/image-20230718182524772.png" alt="image-20230718182524772"></p></li></ol><p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-8-TCP%E7%9A%84%E8%BF%90%E8%BE%93%E8%BF%9E%E6%8E%A5%E7%AE%A1%E7%90%86/image-20241118153322909.png"></p><ul><li>TCP服务器进程每收到一次TCP客户进程的数据，就重新设置并启动保活计时器(2小时定时)</li><li>若保活计时器定时周期内未收到TCP客户进程发来的数据，则当保活计时器到时后，TCP服务器进程就向TP客户进程发送一个探测报文段，以后则每隔75秒钟发送一次。若一连发送10个探测报文段后仍无TCP客户进程的响应，TCP服务器进程就认为TCP客户进程所在主机出了故障，接着就关闭这个连接。</li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>计算机基础</category>
+      
+      <category>计算机网络</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>计算机网络</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>5.7 TCP可靠传输的实现</title>
+    <link href="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-7-TCP%E5%8F%AF%E9%9D%A0%E4%BC%A0%E8%BE%93%E7%9A%84%E5%AE%9E%E7%8E%B0/"/>
+    <url>/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-7-TCP%E5%8F%AF%E9%9D%A0%E4%BC%A0%E8%BE%93%E7%9A%84%E5%AE%9E%E7%8E%B0/</url>
+    
+    <content type="html"><![CDATA[<h1 id="5-7-TCP可靠传输的实现"><a href="#5-7-TCP可靠传输的实现" class="headerlink" title="5.7 TCP可靠传输的实现"></a>5.7 TCP可靠传输的实现</h1><ol><li><p>TCP基于以<strong>字节为单位的滑动窗口</strong>来实现可靠传输。</p><ol><li><p>发送方在未收到接收方的确认时，可将发送窗口内还未发送的数据全部发送出去</p></li><li><p>接收方只接收序号落入发送窗口内的数据</p><blockquote><p>虽然发送方的发送窗口是根据接收方的接收窗口设置的，<br>但在同一时刻，发送方的发送窗口并不总是和接收方的接收窗口一样大。</p></blockquote></li><li><p>网络传送窗口值需要经历一定的时间滞后，井且这个时间还是不确定的。</p></li><li><p>发送方还可能根据网络当时的拥塞情况适当减小自己的发送窗口尺寸</p></li></ol></li></ol><p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-7-TCP%E5%8F%AF%E9%9D%A0%E4%BC%A0%E8%BE%93%E7%9A%84%E5%AE%9E%E7%8E%B0/image-20241118144647353.png"></p><ol start="2"><li><p>对于不按序到达的数据应如何处理，TCP并无明确规定</p><ol><li>如果接收方把不按序到达的数据一律丢弃，那么接收窗口的管理将会比较简单，<br>但这样做对网络资源的利用不利，因为发送方会重复传送较多的数据。</li><li>TCP通常对不按序到达的数据是先临时存放在接收窗口中，等到字节流中所缺少的字节收到后，再按序交付上层的应用进程</li><li>TCP要求接收方必须有累积确认和捎带确认机制，这样可以减小传输开销。接收方可以在合适的时候发送确认，也可以在自己有数据要发送时把确认信息顺便捎带上。<ol><li>接收方不应过分推迟发送确认，否则会导致发送方不必要的超时重传，这反而浪费了网络的资源。</li><li>TCP标准规定，确认推迟的时间不应超过0.5秒。若收到一连串具有最大长度的报文段，则必须每隔一个报文段就发送一个确认</li><li>梢带确认实际上并不经常发生，因为大多数应用程序很少同时在两个方向上发送数据。</li></ol></li></ol></li><li><p>TCP的通信是全双工通信。</p><blockquote><p>通信中的每一方都在发送和接收报文段。<br>因此，每一方都有自己的发送窗口和接收窗口。在谈到这些窗口时，一定要弄清楚是哪一方的窗口。</p></blockquote></li></ol>]]></content>
+    
+    
+    <categories>
+      
+      <category>计算机基础</category>
+      
+      <category>计算机网络</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>计算机网络</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>5.6 TCP超时重传时间的选择</title>
+    <link href="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-6-TCP%E8%B6%85%E6%97%B6%E9%87%8D%E4%BC%A0%E6%97%B6%E9%97%B4%E7%9A%84%E9%87%8D%E4%BC%A0/"/>
+    <url>/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-6-TCP%E8%B6%85%E6%97%B6%E9%87%8D%E4%BC%A0%E6%97%B6%E9%97%B4%E7%9A%84%E9%87%8D%E4%BC%A0/</url>
+    
+    <content type="html"><![CDATA[<h1 id="5-6-TCP超时重传的时间的选择（RTO）"><a href="#5-6-TCP超时重传的时间的选择（RTO）" class="headerlink" title="5.6 TCP超时重传的时间的选择（RTO）"></a>5.6 TCP超时重传的时间的选择（RTO）</h1><ul><li>利用每次测量得到的RTT样本，计算加权平均往返时间RTTs(又称为平滑的往返时间)。</li><li>超时重传的时间应略大于RTTs的值。</li></ul><ol><li><p>计算RTT<del>S</del><br>$$<br>初始RTT_S &#x3D; 测得的第一个RTT<br>$$<br>$$<br> RTTs &#x3D; (1-\alpha)\times 旧的RTTs + \alpha \times 新的RTT样本<br>$$<br>建议 $\alpha$ &#x3D; 0.125</p></li><li><p>计算RTT<del>D</del><br>$$<br>初始RTT_D &#x3D; \frac{RTT_1}{2}\<br>RTT_D &#x3D; (1 - \beta) \times 旧的RTT_D + \beta \times \vert RTT_S - 新的RTT样本 \vert<br>$$<br>建议$\beta$ &#x3D; 0.25</p></li><li><p>针对出现超时重传时无法测准往返时间RTT的问题，Kan提出了一个算法：在计算<br>加权平均往返时间RTTs时，只要报文段重传了，就不采用其往返时间RTT样本。也<br>就是出现重传时，不重新计算RTTs,进而超时重传时间RTO也不会重新计算。</p></li><li><p>这又引起了新的问题。设想出现这样的情况：报文段的时延突然增大了很多，并目<br>之后很长一段时间都会保持这种时延。因此在原来得出的重传时间内，不会收到确<br>认报文段。于是就重传报文段。但根据Kar算法，不考虑重传的报文段的往返时间<br>样本。这样，超时重传时间就无法更新。这会导致报文段反复被重传。</p></li><li><p>因此，要对Kan算法进行修正。方法是：报文段每重传一次，就把超时重传时间<br>RTO增大一些。典型的做法是将新RTO的值取为旧RTO值的2倍。</p></li><li><p>计算超时重传时间<br>$$<br>RTO &#x3D; RTT_S + 4 \times RTT_D<br>$$<br>只要某报文段超时重传，就将RTO设为原来的两倍，而不是按照上述公式计算</p></li></ol><p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-6-TCP%E8%B6%85%E6%97%B6%E9%87%8D%E4%BC%A0%E6%97%B6%E9%97%B4%E7%9A%84%E9%87%8D%E4%BC%A0/image-20241118125512601.png"></p><p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-6-TCP%E8%B6%85%E6%97%B6%E9%87%8D%E4%BC%A0%E6%97%B6%E9%97%B4%E7%9A%84%E9%87%8D%E4%BC%A0/image-20241118125933926.png"></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>计算机基础</category>
+      
+      <category>计算机网络</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>计算机网络</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>5.5 TCP的拥塞控制</title>
+    <link href="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-5-TCP%E7%9A%84%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6/"/>
+    <url>/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-5-TCP%E7%9A%84%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6/</url>
+    
+    <content type="html"><![CDATA[<h1 id="5-5-TCP拥塞控制"><a href="#5-5-TCP拥塞控制" class="headerlink" title="5.5 TCP拥塞控制"></a>5.5 TCP拥塞控制</h1><ol><li>在某段时间，若对网络中某一资源的需求超过了该资源所能提供的可用部分，网络性能就要变坏。这种情况就叫做拥塞(congestion)。</li><li>在计算机网络中的链路容量（即带宽）、交换结点中的缓存和处理机等，都是网络的资源。</li><li>若出现拥塞而不进行控制，整个网络的吞吐量将随输入负荷的增大而下降。</li></ol><p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-5-TCP%E7%9A%84%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6/image-20241118122339061.png"></p><h2 id="1-拥塞避免算法"><a href="#1-拥塞避免算法" class="headerlink" title="1. 拥塞避免算法"></a>1. 拥塞避免算法</h2><ul><li>下面介绍这四种拥塞控制算法的基本原理，假定如下条件：<ul><li>数据是单方向传送，而另一个方向只传送确认。</li><li>接收方总是有足够大的缓存空间，因而发送方发送窗口的大小由网络的拥塞程度来决定。</li><li>以最大报文段MSS的个数为讨论问题的单位，而不是以字节为单位。</li></ul></li></ul><h3 id="1-1-慢开始与拥塞避免算法"><a href="#1-1-慢开始与拥塞避免算法" class="headerlink" title="1.1 慢开始与拥塞避免算法"></a>1.1 慢开始与拥塞避免算法</h3><ol><li><p>发送方维护一个叫做拥塞窗口cwd的状态变量，其值取决于网络的拥塞程度，并且动态变化。</p><ol><li><p>拥塞窗口cwd的维护原则</p><ol><li>只要网络没有出现拥塞，拥塞窗口就再增大一些；</li><li>但只要网络出现拥塞，拥塞窗口就减少一些。</li><li>具体做法<ol><li>发生超时重传后，将门限ssthresh设为拥塞窗口的一半，并将当前拥塞窗口设为1</li><li>重新运行开始慢开始算法</li></ol></li></ol></li><li><p>判断出现网络拥塞的依据</p><blockquote><p>没有按时收到应当到达的确认报文（即发生超时重传）。</p></blockquote></li></ol></li><li><p>发送方将拥塞窗口作为发送窗口swnd,即 swnd&#x3D;cwnd。</p></li><li><p>维护一个慢开始门限ssthresh状态变量</p><ol><li>当cwnd&lt;ssthresh时，使用慢开始算法</li><li>当cwnd&gt;ssthresh时，停止使用慢开始算法而改用拥塞避免算法：</li><li>当cwnd&#x3D;ssthresh时，既可使用慢开始算法，也可使用拥塞避免算法。</li></ol></li><li><p>慢开始指数增长，从1开始，每次×2</p></li><li><p>拥塞避免，拥塞窗口每次加1</p></li><li><p>出现拥塞，ssthresh值更新为cwnd的一半</p></li><li><p>cwnd值置为1，再重新开始慢开始算法</p></li></ol><p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-5-TCP%E7%9A%84%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6/image-20241118123625970.png"></p><ul><li><p>“慢开始”是指一开始向网络注入的报文段少，并不是指拥塞窗口cwd增长速度慢；</p></li><li><p>“拥塞避免”并非指完全能够避免拥塞，而是指在拥塞避免阶段将拥塞窗口控制为按线性规律增长，使网络比较不容易出现拥塞</p></li><li><p>慢开始和拥塞避免算法是1988年提出的TCP拥塞控制算法(TCP Tahoe版本)</p></li><li><p>1990年又增加了两个新的拥塞控制算法（改进TCP的性能），这就是快重传和快恢复(TCP Reno.版本)。</p><ul><li>有时，个别报文段会在网络中丢失，但实际上网络并未发生拥塞。<ul><li>这将导致发送方超时重传，并误认为网络发生了拥塞；</li><li>发送方把拥塞窗口cwd又设置为最小值1，并错误地启动慢开始算法，因而降低了传输效率</li></ul></li></ul></li><li><p>采用快重传算法可以让发送方尽早知道发生了个别报文段的丢失。</p></li><li><p>所谓快重传，就是使发送方尽快进行重传，而不是等超时重传计时器超时再重传。</p></li></ul><h3 id="1-2-快重传与快恢复"><a href="#1-2-快重传与快恢复" class="headerlink" title="1.2 快重传与快恢复"></a>1.2 快重传与快恢复</h3><ol><li>要求接收方不要等待自己发送数据时才进行捎带确认，而是要立即发送确认</li><li>即使收到了失序的报文段也要立即发出对已收到的报文段的重复确认。</li><li>发送方一旦<strong>收到3个连续的重复确认</strong>，就将相应的报文段立即重传，<br>而不是等该报文段的超时重传计时器超时再重传。</li><li>对于个别丢失的报文段，发送方不会出现超时重传，也就不会误认为出现了拥塞（进而降低拥塞窗口cwd为1）。使用快重传可以使整个网络的吞吐量提高约20%。</li><li>发送方一旦收到3个重复确认，就知道现在只是丢失了个别的报文段。<br>于是不启动慢开始算法，而执行<strong>快恢复算法</strong><ol><li>发送方将慢开始<strong>门限ssthresh值</strong>和<strong>拥塞窗口cwnd值</strong>调整为<strong>当前窗口的一半</strong></li><li>开始执行拥塞避免算法。</li><li>也有的快恢复实现是把快恢复开始时的拥塞窗口cwnd值再增大一些，即等于新的ssthresh+3。<ol><li>既然发送方收到3个重复的确认，就表明有3个数据报文段已经离开了网络，这3个报文段不再消耗网络资源而是停留在接收方的接收缓存中，可见现在网络中不是堆积了报文段而是减少了3个报文段。因此可以适当把拥塞窗口扩大些。</li></ol></li></ol></li></ol><p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-5-TCP%E7%9A%84%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6/image-20241118124545558.png"></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>计算机基础</category>
+      
+      <category>计算机网络</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>计算机网络</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>5.4 TCP的流量控制</title>
+    <link href="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-4-TCP%E7%9A%84%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6/"/>
+    <url>/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-4-TCP%E7%9A%84%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6/</url>
+    
+    <content type="html"><![CDATA[<h2 id="TCP流量控制"><a href="#TCP流量控制" class="headerlink" title="TCP流量控制"></a>TCP流量控制</h2><ul><li><p>所谓流量控制 ( flow control )就是让发送方的发送速率不要太快，要让接收方来得及接收。</p></li><li><p>TCP接收方利用自己的接收窗口的大小来限制发送方发送窗口的大小。</p></li></ul><p>$$<br>发送窗口 &#x3D; Min(发送方拥塞窗口，接受方接收窗口)<br>$$</p><p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-4-TCP%E7%9A%84%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6/image-20241118120929780.png" alt="image-20241118120929780"></p><p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-4-TCP%E7%9A%84%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6/image-20241118121512615.png"></p><p>注意</p><ol><li>TCP发送方收到接收方的零窗口通知后，应启动持续计时器。持续计时器超时后，向接收方发送零窗口探测报文。</li></ol><blockquote><p>若是零窗口探测报文传输过程中丢失，则在其重发计数器超时后重发该报文</p></blockquote>]]></content>
+    
+    
+    <categories>
+      
+      <category>计算机基础</category>
+      
+      <category>计算机网络</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>计算机网络</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>5.3 UDP和TCP的对比</title>
+    <link href="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-3-UDP%E5%92%8CTCP%E7%9A%84%E5%AF%B9%E6%AF%94/"/>
+    <url>/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-3-UDP%E5%92%8CTCP%E7%9A%84%E5%AF%B9%E6%AF%94/</url>
+    
+    <content type="html"><![CDATA[<h1 id="5-3-UDP和TCP的对比"><a href="#5-3-UDP和TCP的对比" class="headerlink" title="5.3 UDP和TCP的对比"></a>5.3 UDP和TCP的对比</h1><ul><li>用户数据报协议UDP:(User Datagram Protocol)<ul><li>无连接</li></ul></li><li>传输控制协议TCP：Transmission Control Protocol<ul><li>面向连接</li></ul></li></ul><p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-3-UDP%E5%92%8CTCP%E7%9A%84%E5%AF%B9%E6%AF%94/image-20241118111939771.png"></p><ul><li>UDP支持单播、多播以及广播</li><li>TCP仅支持单播</li></ul><p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-3-UDP%E5%92%8CTCP%E7%9A%84%E5%AF%B9%E6%AF%94/image-20241118112226603.png"></p><ul><li>UDP是面向应用报文的</li><li>TCP是面向字节流的</li></ul><p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-3-UDP%E5%92%8CTCP%E7%9A%84%E5%AF%B9%E6%AF%94/image-20241118112458492.png"></p><ul><li>UDP向上层提供无连接不可靠传输服务(适用于IP电话、视频会议等实时应用)</li><li>TCP向上层提供面向连接的可靠传输服务(适用于要求可靠传输的应用，例如文件传输)</li></ul><p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-3-UDP%E5%92%8CTCP%E7%9A%84%E5%AF%B9%E6%AF%94/image-20241118112750466.png"></p><ul><li>UDP用户数据报首部仅8字节</li><li>TCP报文段首部最小20字节，最大60字节</li></ul><p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-3-UDP%E5%92%8CTCP%E7%9A%84%E5%AF%B9%E6%AF%94/image-20241118112843761.png"></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>计算机基础</category>
+      
+      <category>计算机网络</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>计算机网络</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>5.2 运输层端口号、复用与分用的概念</title>
+    <link href="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-2-%E8%BF%90%E8%BE%93%E5%B1%82%E7%AB%AF%E5%8F%A3%E5%8F%B7-%E5%A4%8D%E7%94%A8%E4%B8%8E%E5%88%86%E7%94%A8%E7%9A%84%E6%A6%82%E5%BF%B5/"/>
+    <url>/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-2-%E8%BF%90%E8%BE%93%E5%B1%82%E7%AB%AF%E5%8F%A3%E5%8F%B7-%E5%A4%8D%E7%94%A8%E4%B8%8E%E5%88%86%E7%94%A8%E7%9A%84%E6%A6%82%E5%BF%B5/</url>
+    
+    <content type="html"><![CDATA[<h1 id="5-2-运输层端口号，复用，分用"><a href="#5-2-运输层端口号，复用，分用" class="headerlink" title="5.2 运输层端口号，复用，分用"></a>5.2 运输层端口号，复用，分用</h1><h2 id="1-端口号"><a href="#1-端口号" class="headerlink" title="1. 端口号"></a>1. 端口号</h2><ol><li><p>因为因特网上的计算机并不是使用统一的操作系统，不同的操作系统又使用不同格式的进程标识符，为了使运行不同操作系统的计算机的应用进程之间能够进行网络通信，就必须使用统一的方法对TCP&#x2F;IP体系的应用进程进行标识。</p></li><li><p>TCP&#x2F;IP体系的运输层使用端口号来区分应用层的不同应用进程，端口号使用16比特表示，取值范围 [0,65535]。</p></li></ol><p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-2-%E8%BF%90%E8%BE%93%E5%B1%82%E7%AB%AF%E5%8F%A3%E5%8F%B7-%E5%A4%8D%E7%94%A8%E4%B8%8E%E5%88%86%E7%94%A8%E7%9A%84%E6%A6%82%E5%BF%B5/image-20241118110803598.png" alt="端口号的划分"></p><ol start="3"><li>端口号只具有本地意义，即端口号只是为了标识本计算机应用层中的各进程，在因特网中，不同计算机中的相同端口号是没有联系的。</li></ol><h2 id="2-发送方的复用和接收方的分用"><a href="#2-发送方的复用和接收方的分用" class="headerlink" title="2. 发送方的复用和接收方的分用"></a>2. 发送方的复用和接收方的分用</h2><p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-2-%E8%BF%90%E8%BE%93%E5%B1%82%E7%AB%AF%E5%8F%A3%E5%8F%B7-%E5%A4%8D%E7%94%A8%E4%B8%8E%E5%88%86%E7%94%A8%E7%9A%84%E6%A6%82%E5%BF%B5/image-20241118111045703.png"></p><ol><li>TCP&#x2F;IP体系的应用层常用协议所使用运输层的熟知端口号</li></ol><p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-2-%E8%BF%90%E8%BE%93%E5%B1%82%E7%AB%AF%E5%8F%A3%E5%8F%B7-%E5%A4%8D%E7%94%A8%E4%B8%8E%E5%88%86%E7%94%A8%E7%9A%84%E6%A6%82%E5%BF%B5/image-20241118111132310.png"></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>计算机基础</category>
+      
+      <category>计算机网络</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>计算机网络</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>5.1 运输层概述</title>
+    <link href="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-1-%E8%BF%90%E8%BE%93%E5%B1%82%E6%A6%82%E8%BF%B0/"/>
+    <url>/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-1-%E8%BF%90%E8%BE%93%E5%B1%82%E6%A6%82%E8%BF%B0/</url>
+    
+    <content type="html"><![CDATA[<h1 id="5-1-运输层概述"><a href="#5-1-运输层概述" class="headerlink" title="5.1 运输层概述"></a>5.1 运输层概述</h1><ul><li><p>实际上在计算机网络中进行通信的真正实体是位于通信两端主机中的进程</p></li><li><p>如何为运行在不同主机上的应用进程提供直接的通信服务是运输层的任务，运输层协议又称为端到端协议。</p></li><li><p>运输层向高层用户屏蔽了下面网络核心的细节（如网络拓扑、所采用的路由选择协议等)，它使应用进程看见的就好像是在两个运输层实体之间有一条端到端的逻辑通信信道。</p></li><li><p>根据应用需求的不同，因特网的运输层为应用层提供了两种不同的运输协议，即面向连接的TCP和无连接的UDP,这两种协议就是本章要讨论的主要内容。</p></li></ul><p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-1-%E8%BF%90%E8%BE%93%E5%B1%82%E6%A6%82%E8%BF%B0/image-20241118110058782.png"></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>计算机基础</category>
+      
+      <category>计算机网络</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>计算机网络</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>4.9 虚拟专用网VPN与网络地址转换NAT</title>
+    <link href="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-9-%E8%99%9A%E6%8B%9F%E4%B8%93%E7%94%A8%E7%BD%91VPN%E4%B8%8E%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E8%BD%AC%E6%8D%A2NAT/"/>
+    <url>/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-9-%E8%99%9A%E6%8B%9F%E4%B8%93%E7%94%A8%E7%BD%91VPN%E4%B8%8E%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E8%BD%AC%E6%8D%A2NAT/</url>
+    
+    <content type="html"><![CDATA[<h1 id="4-9-虚拟专用网络VPN与网络地址转换NAT"><a href="#4-9-虚拟专用网络VPN与网络地址转换NAT" class="headerlink" title="4.9 虚拟专用网络VPN与网络地址转换NAT"></a>4.9 虚拟专用网络VPN与网络地址转换NAT</h1><h2 id="1-VPN"><a href="#1-VPN" class="headerlink" title="1. VPN"></a>1. VPN</h2><ul><li>利用公用的因特网作为本机构各专用网之间的通信载体，这样的专用网又称为虚拟专用网。</li><li>VPN要保证传输数据的安全性，会将原始的内部数据报进行加密，然后再将其封装成为在因特网上发送到的外部数据报。</li></ul><ol><li>VPN类型<ol><li>同一机构内不同部门的内部网络所构成的虚拟专用网VPN又称为内联网VPN</li><li>有时一个机构的VPN需要有某些外部机构（通常就是合作伙伴）参加进来。这样的VPN就称为外联网VPN</li><li>在外地工作的员工需要访问公司内部的专用网络时，只要在任何地点接入到因特网，运行驻留在员工PC中的VPN软件，在员工的PC和公司的主机之间建立VPN隧道，即可访问专用网络中的资源。这种VPN称为远程接入VPN。</li></ol></li></ol><h2 id="2-NAT"><a href="#2-NAT" class="headerlink" title="2. NAT"></a>2. NAT</h2><ul><li>NAT能使大量使用内部专用地址的专用网络用户共享少量外部全球地址来访问因特网上的主机和资源。</li><li>传统NAT是将每个本地IP转换为一个公有IP，意味着路由器中NAT映射表记录N个全球IP，则对应的子网最多只能有N台主机，这不符预期。</li></ul><ol><li>由于绝大多数的网络应用都是使用运输层协议TCP或UDP来传送数据，因此可以利用运输层的端口号和IP地址一起进行转换。<ol><li>这样用一个全球P地址就可以使多个拥有本地地址的主机同时和因特网上的主机进行通信。这种将端口号和P地址一起进行转换的技术叫作网络地址与端口号转换NAPT (Network Address and Port Translation)。</li></ol></li><li>收到来自外网的IP数据报后，在NAPT转换表中找不到相应的记录！</li><li>对于一些P2P网络应用，需要外网主机主动与内网主机进行通信，在通过NAT时会遇到问题，需要网络应用自己使用一些特殊的NAT穿越技术来解决问题。</li><li>由于NAT对外网屏蔽了内网主机的网络地址，能为内网的主机提供一定的安全保护。</li></ol><p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-9-%E8%99%9A%E6%8B%9F%E4%B8%93%E7%94%A8%E7%BD%91VPN%E4%B8%8E%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E8%BD%AC%E6%8D%A2NAT/image-20241118104142578.png"></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>计算机基础</category>
+      
+      <category>计算机网络</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>计算机网络</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>4.8 网际控制报文协议</title>
+    <link href="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-8-%E7%BD%91%E9%99%85%E6%8E%A7%E5%88%B6%E6%8A%A5%E6%96%87%E5%8D%8F%E8%AE%AE/"/>
+    <url>/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-8-%E7%BD%91%E9%99%85%E6%8E%A7%E5%88%B6%E6%8A%A5%E6%96%87%E5%8D%8F%E8%AE%AE/</url>
+    
+    <content type="html"><![CDATA[<h1 id="4-8-网际控制报文协议ICMP"><a href="#4-8-网际控制报文协议ICMP" class="headerlink" title="4.8 网际控制报文协议ICMP"></a>4.8 网际控制报文协议ICMP</h1><ul><li>为了更有效地转发P数据报和提高交付成功的机会，在网际层使用了网际控制报文协议<ul><li>主机或路由器使用ICMP来发送差错报告报文和询问报文</li><li>ICMP报文被封装在IP数据报中发送</li></ul></li></ul><h2 id="1-五种差错报告报文"><a href="#1-五种差错报告报文" class="headerlink" title="1. 五种差错报告报文"></a>1. 五种差错报告报文</h2><h3 id="1-1-终点不可达"><a href="#1-1-终点不可达" class="headerlink" title="1.1 终点不可达"></a>1.1 终点不可达</h3><ol><li>当路由器或主机不能交付数据报时，就向源点发送终点不可达报文。</li><li>具体可再根据ICMP的代码字段细分为目的网络不可达、目的主机不可达、目的协议不可达、目的端口不可达、目的网络未知、目的主机未知等13种错误。</li></ol><h3 id="1-2-源点抑制"><a href="#1-2-源点抑制" class="headerlink" title="1.2 源点抑制"></a>1.2 源点抑制</h3><ol><li>当路由器或主机由于拥塞而丢弃数据报时，就向源点发送源点抑制报文，使源点知道应当把数据报的发送速率放慢。</li></ol><h3 id="1-3-时间超过"><a href="#1-3-时间超过" class="headerlink" title="1.3 时间超过"></a>1.3 时间超过</h3><ol><li>当路由器收到一个目的1P地址不是自己的P数据报，会将其生存时间TTL字段的值减1。</li><li>若结果不为0，则将该P数据报转发出去；若结果为0，除丢弃该P数据报外，还要向源点发送时间超过报文。</li></ol><h3 id="1-4-参数问题"><a href="#1-4-参数问题" class="headerlink" title="1.4 参数问题"></a>1.4 参数问题</h3><ol><li>当路由器或目的主机收到P数据报后，根据其首部中的检验和字段发现首部在传输过程中出现了误码，就丢弃该数据报，并向源点发送参数问题报文。</li></ol><h3 id="1-5-改变路由-重定向"><a href="#1-5-改变路由-重定向" class="headerlink" title="1.5 改变路由(重定向)"></a>1.5 改变路由(重定向)</h3><ol><li>路由器把改变路由报文发送给主机，让主机知道下次应将数据报发送给另外的路由器（可通过更好的路由）。</li></ol><h2 id="2-当发生以下情况时不应该发送IMCP差错报告报文"><a href="#2-当发生以下情况时不应该发送IMCP差错报告报文" class="headerlink" title="2. 当发生以下情况时不应该发送IMCP差错报告报文"></a>2. 当发生以下情况时不应该发送IMCP差错报告报文</h2><ol><li>对ICMP差错报告报文不再发送ICMP差错报告报文</li><li>对第一个分片的数据报片的所有后续数据报片都不发送ICMP差错报告报文</li><li>对具有多播地址的数据报都不发送ICMP差错报告报文</li><li>对具有特殊地址（如127.0.0.0或0.0.0.0）的数据报不发送ICMP差错报告报文</li></ol><h2 id="3-常用的ICMP询问报文"><a href="#3-常用的ICMP询问报文" class="headerlink" title="3. 常用的ICMP询问报文"></a>3. 常用的ICMP询问报文</h2><ol><li>回送请求和回答</li><li>ICMP回送请求报文是由主机回或路由器向一个特定的目的主机发出的询问，收到此报文的主机必须给源主机或路由器发送ICMP回送回答报文。<ol start="2"><li>这种询问报文用来测试目的站是否可达及了解其有关状态。</li></ol></li><li>时间戳请求和回答<ol><li>ICMP时间戳请求报文是请某个主机或路由器回答当前的日期和时间。</li><li>在ICMP时间戳回答报文中有一个32位的字段，其中写入的整数代表从1900年1月1日起到当前时刻一共有多少秒。</li><li>这种询问报文用来进行时钟同步和测量时间</li></ol></li></ol><h2 id="4-ICMP应用"><a href="#4-ICMP应用" class="headerlink" title="4. ICMP应用"></a>4. ICMP应用</h2><h3 id="4-1-分组网间探测（PING）"><a href="#4-1-分组网间探测（PING）" class="headerlink" title="4.1 分组网间探测（PING）"></a>4.1 分组网间探测（PING）</h3><blockquote><p>Packet Internet Groper</p></blockquote><ol><li>用来测试主机或路由器间的连通性</li><li>应用层直接使用网际层的ICMP(没有通过运输层的TCP或UDP)</li><li>使用ICMP回送请求和回答报文</li></ol><h3 id="4-2-跟踪路由"><a href="#4-2-跟踪路由" class="headerlink" title="4.2 跟踪路由"></a>4.2 跟踪路由</h3><blockquote><p>traceroute</p><p>用来测试P数据报从源主机到达目的主机要经过哪些路由器</p></blockquote><ol><li><p>Windows版本</p><blockquote><p>tracert命令<br>应用层直接使用网际层ICMP<br>使用了ICMP回送请求和回答报文以及差错报告报文</p></blockquote></li><li><p>Unix版本</p><blockquote><p>traceroute命令<br>在运输层使用UDP协议<br>仅使用ICMP差错报告报文</p></blockquote></li></ol>]]></content>
+    
+    
+    <categories>
+      
+      <category>计算机基础</category>
+      
+      <category>计算机网络</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>计算机网络</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>4.7 IPv4数据报的首部格式</title>
     <link href="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-7-IPv4%E6%95%B0%E6%8D%AE%E6%8A%A5%E7%9A%84%E9%A6%96%E9%83%A8%E6%A0%BC%E5%BC%8F/"/>
     <url>/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-7-IPv4%E6%95%B0%E6%8D%AE%E6%8A%A5%E7%9A%84%E9%A6%96%E9%83%A8%E6%A0%BC%E5%BC%8F/</url>
