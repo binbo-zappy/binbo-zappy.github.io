@@ -19,16 +19,16 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="万维网WWW 即 World Wide Web，是一个大规模的、联机式的信息储藏所，是运行在因特网上的一个分布式应用。   统一资源定位符URL  万维网使用统一资源定位符URL来指明因特网上任何种类“资源”的位置。 其一般形式为：&lt;协议&gt;：&#x2F;∥&lt;主机&gt;：&lt;端口&gt;&#x2F;&lt;路径&gt;   超文本传输协议HTTP  超文本传输协议 HTTP (HyperText">
+    <meta name="description" content="6.7 万维网WWW 即 World Wide Web，是一个大规模的、联机式的信息储藏所，是运行在因特网上的一个分布式应用。    统一资源定位符URL  万维网使用统一资源定位符URL来指明因特网上任何种类“资源”的位置。 其一般形式为：&lt;协议&gt;：&#x2F;∥&lt;主机&gt;：&lt;端口&gt;&#x2F;&lt;路径&gt;   超文本传输协议HTTP  超文本传输协议 HTTP (Hype">
 <meta property="og:type" content="article">
 <meta property="og:title" content="6.7 万维网WWW">
 <meta property="og:url" content="http://binbo-zappy.github.io/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-7-%E4%B8%87%E7%BB%B4%E7%BD%91WWW/index.html">
 <meta property="og:site_name" content="Binbo">
-<meta property="og:description" content="万维网WWW 即 World Wide Web，是一个大规模的、联机式的信息储藏所，是运行在因特网上的一个分布式应用。   统一资源定位符URL  万维网使用统一资源定位符URL来指明因特网上任何种类“资源”的位置。 其一般形式为：&lt;协议&gt;：&#x2F;∥&lt;主机&gt;：&lt;端口&gt;&#x2F;&lt;路径&gt;   超文本传输协议HTTP  超文本传输协议 HTTP (HyperText">
+<meta property="og:description" content="6.7 万维网WWW 即 World Wide Web，是一个大规模的、联机式的信息储藏所，是运行在因特网上的一个分布式应用。    统一资源定位符URL  万维网使用统一资源定位符URL来指明因特网上任何种类“资源”的位置。 其一般形式为：&lt;协议&gt;：&#x2F;∥&lt;主机&gt;：&lt;端口&gt;&#x2F;&lt;路径&gt;   超文本传输协议HTTP  超文本传输协议 HTTP (Hype">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/network.jpg">
 <meta property="article:published_time" content="2024-11-18T09:27:29.000Z">
-<meta property="article:modified_time" content="2024-11-18T11:02:23.020Z">
+<meta property="article:modified_time" content="2024-11-18T14:37:37.268Z">
 <meta property="article:author" content="Binbo">
 <meta property="article:tag" content="计算机网络">
 <meta name="twitter:card" content="summary_large_image">
@@ -225,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          662 字
+          795 字
         
       </span>
     
@@ -236,7 +236,7 @@
         
         
         
-          6 分钟
+          7 分钟
         
       </span>
     
@@ -278,9 +278,10 @@
             
               <div class="markdown-body">
                 
-                <h2 id="万维网WWW"><a href="#万维网WWW" class="headerlink" title="万维网WWW"></a>万维网WWW</h2><blockquote>
+                <h1 id="6-7-万维网WWW"><a href="#6-7-万维网WWW" class="headerlink" title="6.7 万维网WWW"></a>6.7 万维网WWW</h1><blockquote>
 <p>即 World Wide Web，是一个大规模的、联机式的信息储藏所，是运行在因特网上的一个分布式应用。</p>
 </blockquote>
+<p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-7-%E4%B8%87%E7%BB%B4%E7%BD%91WWW/image-20241118192932067.png" srcset="/img/loading.gif" lazyload alt="万维网文档"></p>
 <ol>
 <li><p>统一资源定位符URL</p>
 <blockquote>
@@ -295,7 +296,8 @@
 <ol>
 <li><p>HTTP1.0</p>
 <blockquote>
-<p>采用非持续连接方式。每次浏览器要请求一个文件都要与服务器建立TCP连接(80端口)，<br>当收到响应后就立即关闭连接。</p>
+<p>采用非持续连接方式。每次浏览器要请求一个文件都要与服务器建立TCP连接(80端口)，当收到响应后就立即关闭连接。</p>
+<p>每请求一个文档就要有两倍的TT的开销。若一个网页上有很多引用对象（例如图片等），那么请求每一个对象都需要花费2RTT的时间。<br>为了减小时延，浏览器通常会建立多个并行的TCP连接同时请求多个对象。但是，这会大量占用万维网服务器的资源，特别是万维网服务器往往要同时服务于大量客户的请求，这会使其负担很重。</p>
 </blockquote>
 </li>
 <li><p>HTTP1.1</p>
@@ -315,9 +317,9 @@
 <p>报文中的每一个字段都是一些ASCII码串，并且每个字段的长度都是不确定的。</p>
 </blockquote>
 <ol>
-<li><p>请求报文格式<br><img src="https://raw.githubusercontent.com/Ag-epiphany/typora_Pictures/main/1689763938693.png" srcset="/img/loading.gif" lazyload alt="1689763938693"></p>
+<li><p>请求报文格式<br><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-7-%E4%B8%87%E7%BB%B4%E7%BD%91WWW/image-20241118222527016.png" srcset="/img/loading.gif" lazyload></p>
 </li>
-<li><p>响应报文格式<br><img src="https://raw.githubusercontent.com/Ag-epiphany/typora_Pictures/main/1689763996008.png" srcset="/img/loading.gif" lazyload alt="1689763996008"></p>
+<li><p>响应报文格式<br><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-7-%E4%B8%87%E7%BB%B4%E7%BD%91WWW/1689763996008.png" srcset="/img/loading.gif" lazyload alt="1689763996008"></p>
 </li>
 </ol>
 </li>
@@ -331,7 +333,7 @@
 <blockquote>
 <p>在万维网中还可以使用缓存机制以提高万维网的效率。<br>可位于客户机，也可位于中间系统上，位于中间系统上的Web缓存又称为代理服务器。</p>
 </blockquote>
-<p><img src="https://raw.githubusercontent.com/Ag-epiphany/typora_Pictures/main/image-20230719183530450.png" srcset="/img/loading.gif" lazyload alt="image-20230719183530450"></p>
+<p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-7-%E4%B8%87%E7%BB%B4%E7%BD%91WWW/image-20230719183530450.png" srcset="/img/loading.gif" lazyload alt="image-20230719183530450"></p>
 <table>
 <thead>
 <tr>
