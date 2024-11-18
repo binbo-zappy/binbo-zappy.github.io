@@ -1,0 +1,929 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="4.6 路由选择协议1. 路由选择协议 早期RFC文档中，使用“网关”这个词指代路由器，现代使用“路由器”指代路由器，两者为同一设备的不同名称  1.1 静态路由选择 由人工配置的网络路由、默认路由、特定主机路由，黑洞路由等都属于静态路由。 这种人工配置方式简单、开销小，但不能及时适应网络状态（流量、拓扑等）的变化 一般只在小规模网络中采用。  1.2 动态路由选择 路由器通过路由选择协议自动获取">
+<meta property="og:type" content="article">
+<meta property="og:title" content="4.6 路由选择协议">
+<meta property="og:url" content="http://binbo-zappy.github.io/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-6-%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%8D%8F%E8%AE%AE/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="4.6 路由选择协议1. 路由选择协议 早期RFC文档中，使用“网关”这个词指代路由器，现代使用“路由器”指代路由器，两者为同一设备的不同名称  1.1 静态路由选择 由人工配置的网络路由、默认路由、特定主机路由，黑洞路由等都属于静态路由。 这种人工配置方式简单、开销小，但不能及时适应网络状态（流量、拓扑等）的变化 一般只在小规模网络中采用。  1.2 动态路由选择 路由器通过路由选择协议自动获取">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/network.jpg">
+<meta property="article:published_time" content="2024-11-17T11:56:01.000Z">
+<meta property="article:modified_time" content="2024-11-18T01:50:54.682Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="计算机网络">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/network.jpg">
+  
+  
+  
+  <title>4.6 路由选择协议 - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="4.6 路由选择协议"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-11-17 19:56" pubdate>
+          2024年11月17日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          21 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">4.6 路由选择协议</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="4-6-路由选择协议"><a href="#4-6-路由选择协议" class="headerlink" title="4.6 路由选择协议"></a>4.6 路由选择协议</h1><h2 id="1-路由选择协议"><a href="#1-路由选择协议" class="headerlink" title="1. 路由选择协议"></a>1. 路由选择协议</h2><blockquote>
+<p>早期RFC文档中，使用“网关”这个词指代路由器，现代使用“路由器”指代路由器，两者为同一设备的不同名称</p>
+</blockquote>
+<h3 id="1-1-静态路由选择"><a href="#1-1-静态路由选择" class="headerlink" title="1.1 静态路由选择"></a>1.1 静态路由选择</h3><ol>
+<li>由人工配置的网络路由、默认路由、特定主机路由，黑洞路由等都属于静态路由。</li>
+<li>这种人工配置方式简单、开销小，但不能及时适应网络状态（流量、拓扑等）的变化</li>
+<li>一般只在小规模网络中采用。</li>
+</ol>
+<h3 id="1-2-动态路由选择"><a href="#1-2-动态路由选择" class="headerlink" title="1.2 动态路由选择"></a>1.2 动态路由选择</h3><ol>
+<li>路由器通过路由选择协议自动获取路由信息比较复杂、开销比较大，</li>
+<li>能较好地适应网络状态的变化</li>
+<li>适用于大规模网络</li>
+</ol>
+<h3 id="1-3-因特网所采用的路由选择协议的主要特点"><a href="#1-3-因特网所采用的路由选择协议的主要特点" class="headerlink" title="1.3 因特网所采用的路由选择协议的主要特点"></a>1.3 因特网所采用的路由选择协议的主要特点</h3><ol>
+<li>自适应<ol>
+<li>动态路由选择，能较好地适应网络状态的变化</li>
+</ol>
+</li>
+<li>分布式<ol>
+<li>路由器之间交换路由信息</li>
+</ol>
+</li>
+<li>分层次<ol>
+<li>将整个因特网划分为许多较小的自治系统AS(Autonomous System）</li>
+</ol>
+</li>
+</ol>
+<p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-6-%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%8D%8F%E8%AE%AE/image-20241117204127866.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="1-4-因特网采用分层次的路由选择协议"><a href="#1-4-因特网采用分层次的路由选择协议" class="headerlink" title="1.4 因特网采用分层次的路由选择协议"></a>1.4 因特网采用分层次的路由选择协议</h3><p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-6-%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%8D%8F%E8%AE%AE/image-20241117204721689.png" srcset="/img/loading.gif" lazyload></p>
+<ol>
+<li><p>一般一个ISP负责的所有网络作为一个自治系统</p>
+<ol>
+<li>内部网关协议（IGP）和外部网关协议（EGP）是协议分类的总称，不是具体的协议名</li>
+</ol>
+</li>
+<li><p>路由选择协议</p>
+</li>
+</ol>
+<p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-6-%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%8D%8F%E8%AE%AE/image-20241117204849446.png" srcset="/img/loading.gif" lazyload></p>
+<ol start="3">
+<li>路由器的基本结构</li>
+</ol>
+<p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-6-%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%8D%8F%E8%AE%AE/image-20241117204931573.png" srcset="/img/loading.gif" lazyload></p>
+<ol start="4">
+<li>路由表一般仅包含从目的网络到下一跳的映射</li>
+<li>路由表需要对网络拓扑变化的计算最优化<ol>
+<li>转发表是从路由表得出的</li>
+<li>转发表的结构应当使查找过程最优化</li>
+</ol>
+</li>
+</ol>
+<h2 id="2-路由信息RIP协议工作原理"><a href="#2-路由信息RIP协议工作原理" class="headerlink" title="2. 路由信息RIP协议工作原理"></a>2. 路由信息RIP协议工作原理</h2><ol>
+<li>路由信息协议RIP(Routing Information Protocol)是内部网关协议IGP中最先得到广泛使用的协议之一，其相关标准文档为RFC1058。</li>
+<li>RIP要求自治系统AS内的每一个路由器都要维护从它自己到AS内其他每一个网络的距离记录。这是一组距离，称为“距离向量”。</li>
+<li>RIP使用跳数(Hop Count)作为度量(Metric)来衡量到达目的网络的距离。<ol>
+<li>路由器到直连网络的距离定义为1。路由器到非直连网络的距离定义为所经过的路由器数加1。</li>
+<li>允许一条路径最多只能包含15个路由器。“距离”等于16时相当于不可达。因此，RIP只适用于小型互联网。</li>
+</ol>
+</li>
+<li>RIP认为好的路由就是“距离短”的路由，也就是所通过路由器数量最少的路由</li>
+<li>当到达同一目的网络有多条“距离相等”的路由时，可以进行等价负载均衡</li>
+</ol>
+<p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-6-%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%8D%8F%E8%AE%AE/image-20241117205628647.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="2-1-特点"><a href="#2-1-特点" class="headerlink" title="2.1 特点"></a>2.1 特点</h3><ol>
+<li>仅和相邻路由器交换信息</li>
+<li>交换的信息是自己的路由表</li>
+<li>周期性交换该信息</li>
+</ol>
+<h3 id="2-2-RP的基本工作流程"><a href="#2-2-RP的基本工作流程" class="headerlink" title="2.2 RP的基本工作流程"></a>2.2 RP的基本工作流程</h3><ol>
+<li>路由器刚开始工作时，只知道自己到直连网络的距离为1。</li>
+<li>每个路由器仅和相邻路由器周期性地交换并更新路由信息。</li>
+<li>若干次交换和更新后，每个路由器都知道到达本AS内各网络的最短距离和下一跳地址，称为收敛。</li>
+</ol>
+<h3 id="2-3-更新规则"><a href="#2-3-更新规则" class="headerlink" title="2.3 更新规则"></a>2.3 更新规则</h3><ol>
+<li>发现了新的网络，添加</li>
+<li>到达目的网络，相同下一跳，最新消息，更新</li>
+<li>到达目的网络，不同下一跳，新路由优势，更新</li>
+<li>到达目的网络，不同下一跳，新路由劣势，不更新</li>
+<li>到达目的网络，不同下一跳，等价负载均衡</li>
+</ol>
+<ul>
+<li>RIP存在“坏消息传播得慢”的问题</li>
+</ul>
+<blockquote>
+<p>坏消息传播得慢”又称为路由环路或距离无穷计数问题，这是距离向量算法的一个固有问题。</p>
+</blockquote>
+<ul>
+<li>可以采取多种措施减少出现该问题的概率或减小该问题带来的危害。<ul>
+<li>限制最大路径距离为15(16表示不可达)</li>
+<li>当路由表发生变化时就立即发送更新报文（即“触发更新”），而不仅是周期性发送</li>
+<li>让路由器记录收到某特定路由信息的接口，而不让同一路由信息再通过此接口向反方向传送（即“水平分割”）</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-开放最短路径OSPF协议的工作原理"><a href="#3-开放最短路径OSPF协议的工作原理" class="headerlink" title="3. 开放最短路径OSPF协议的工作原理"></a>3. 开放最短路径OSPF协议的工作原理</h2><h3 id="3-1-OSPF协议"><a href="#3-1-OSPF协议" class="headerlink" title="3.1 OSPF协议"></a>3.1 OSPF协议</h3><ol>
+<li>开放最短路径优先OSPF(Open Shortest Path First),是为克服RIP的缺点在1989年开发出来的。</li>
+<li>“开放”表明OSPF协议不是受某一家厂商控制，而是公开发表的。</li>
+<li>“最短路径优先”是因为使用了Dijkstra提出的最短路径算法SPF。</li>
+<li>OSPF是基于链路状态的，而不像RIP那样是基于距离向量的。</li>
+<li>OSPF采用SPF算法计算路由，从算法上保证了不会产生路由环路。</li>
+<li>OSPF不限制网络规模，更新效率高，收敛速度快。</li>
+</ol>
+<h3 id="3-2-链路"><a href="#3-2-链路" class="headerlink" title="3.2 链路"></a>3.2 链路</h3><ol>
+<li>链路状态是指本路由器都和哪些路由器相邻，以及相应链路的“代价”(cost)。</li>
+<li>“代价”用来表示费用、距离、时延、带宽，等等。这些都由网络管理人员来决定。</li>
+</ol>
+<p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-6-%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%8D%8F%E8%AE%AE/image-20241117211227799.png" srcset="/img/loading.gif" lazyload></p>
+<ol>
+<li>OSPF相邻路由器之间通过交互问候(Hllo)分组，建立和维护邻居关系。<ol>
+<li>Hello分组封装在IP数据报中，发往组播地址224.0.0.5；</li>
+</ol>
+</li>
+</ol>
+<p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-6-%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%8D%8F%E8%AE%AE/image-20241117211306170.png" srcset="/img/loading.gif" lazyload></p>
+<ol start="2">
+<li>发送周期为10秒<ol>
+<li>40秒未收到来自邻居路由器的Hlo分组，则认为该邻居路由器不可达。</li>
+</ol>
+</li>
+</ol>
+<p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-6-%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%8D%8F%E8%AE%AE/image-20241117211527755.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="3-3-链路状态通告"><a href="#3-3-链路状态通告" class="headerlink" title="3.3 链路状态通告"></a>3.3 链路状态通告</h3><blockquote>
+<p>使用OSPF的每个路由器都会产生链路状态通告 LSA  (Link State Advertisement)。</p>
+</blockquote>
+<ol>
+<li>LSA中包含以下内容：<ol>
+<li>直连网络的链路状态信息</li>
+<li>邻居路由器的链路状态信息</li>
+</ol>
+</li>
+<li>LSA被封装在链路状态更新分组LSU中，采用洪泛法发送。<br>使用OSPF的每个路由器都有一个链路状态数据库LSDB，用于存储LSA。</li>
+<li>通过各路由器洪泛发送封装有自己LSA的LSU分组，各路由器的LSDB最终将达到一致。</li>
+<li>使用OSPF的各路由器基于LSDB进行最短路径优先SPF计算，构建出各自到达其他各路由器的最短路径，即构建各自的路由表。</li>
+</ol>
+<p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-6-%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%8D%8F%E8%AE%AE/image-20241117211848406.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="3-4-OSPF共有五种分组类型"><a href="#3-4-OSPF共有五种分组类型" class="headerlink" title="3.4 OSPF共有五种分组类型"></a>3.4 OSPF共有五种分组类型</h3><ol>
+<li>问候分组（Hello）<ol>
+<li>用来发现和维护邻居路由器的可达性。</li>
+</ol>
+</li>
+<li>数据库描述分组（DD）<ol>
+<li>向邻居路由器给出自己的链路状态数据库中的所有链路状态项目的摘要信息</li>
+</ol>
+</li>
+<li>链路状态请求分组（LSR）<ol>
+<li>向邻居路由器请求发送某些链路状态项目的详细信息。</li>
+</ol>
+</li>
+<li>链路状态更新分组（LSU）<ol>
+<li>路由器使用这种分组将其链路状态进行洪泛发送，即用洪泛法对全网更新链路状态。</li>
+</ol>
+</li>
+<li>链路确认分组（LSA）<ol>
+<li>这是对链路状态更新分组的确认分组。</li>
+</ol>
+</li>
+</ol>
+<p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-6-%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%8D%8F%E8%AE%AE/image-20230717155343654.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="3-5-OSPF的基本工作过程"><a href="#3-5-OSPF的基本工作过程" class="headerlink" title="3.5 OSPF的基本工作过程"></a>3.5 OSPF的基本工作过程</h3><p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-6-%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%8D%8F%E8%AE%AE/image-20230717155522453.png" srcset="/img/loading.gif" lazyload></p>
+<ol>
+<li>OSPF在多点接入的网络中路由器邻里关系的建立<ol>
+<li>选举指定路由器DR(designated router)和备用的指定路由器BDR(backup designated router)</li>
+<li>所有的非DR&#x2F;BDR只与DR&#x2F;BDR建立邻居关系，即非DR&#x2F;BDR之间通过DR&#x2F;BDR交换信息</li>
+</ol>
+</li>
+</ol>
+<p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-6-%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%8D%8F%E8%AE%AE/image-20230717155708575.png" srcset="/img/loading.gif" lazyload></p>
+<ol start="2">
+<li>为了使OSPF能够用于规模很大的网络，OSPF把一个自治系统再划分为若干个更小的范围，叫做区域(Area)<ol>
+<li>划分区域的好处就是把利用洪泛法交换链路状体信息的范围局限于每一个区域而不是整个自治系统，这就减少了整个网络上的通信量。</li>
+<li>每个区域不大于200个路由器</li>
+</ol>
+</li>
+</ol>
+<p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-6-%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%8D%8F%E8%AE%AE/image-20241117213232150.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="4-边界网关协议BGP的基本工作原理"><a href="#4-边界网关协议BGP的基本工作原理" class="headerlink" title="4. 边界网关协议BGP的基本工作原理"></a>4. 边界网关协议BGP的基本工作原理</h2><h3 id="4-1-BGP原理"><a href="#4-1-BGP原理" class="headerlink" title="4.1 BGP原理"></a>4.1 BGP原理</h3><ol>
+<li>BGP只能是力求寻找一条能够到达目的网络且比较好的路由（不能兜圈子），而并非要寻找一条最佳路由</li>
+<li>BGP要解决的问题<ol>
+<li>在不同自治系统内，度量路由的“代价”（距离，带宽，费用等)可能不同。因此，对于自治系统之间的路由选择，使用“代价”作为度量来寻找最佳路由是不行的。</li>
+<li>自治系统之间的路由选择必须考虑相关策略（政治，经济，安全等）</li>
+</ol>
+</li>
+</ol>
+<h3 id="4-2-交换路由的过程"><a href="#4-2-交换路由的过程" class="headerlink" title="4.2 交换路由的过程"></a>4.2 交换路由的过程</h3><ol>
+<li><p>在配置BGP时，每个自治系统的管理员要选择至少一个路由器作为该自治系统的“BGP发言人”，不同自治系统的BGP发言人要交换路由信息，首先必须建立TCP连接，端口号为179</p>
+</li>
+<li><p>在此TCP连接上交换BGP报文以建立BGP会话</p>
+</li>
+<li><p>利用BGP会话交换路由信息（例如，增加新的路由，或撤销过时的路由，以及报告出错的情况等）</p>
+<blockquote>
+<p>使用TCP连接交换路由信息的两个BGP发言人，彼此称为对方的邻站(neighbor)或对等站(peer)</p>
+</blockquote>
+</li>
+<li><p>BGP发言人除了运行BGP外，还必须运行自己所在自治系统所使用的内部网关协议IGP,例如OSPF或RIP。</p>
+</li>
+<li><p>当BGP发言人互相交换了网络可达性的信息后，各BGP发言人就根据所采用的策略从收到的路由信息中找出到达各自治系统的较好的路由。也就是构造出树形结构、不存在回路的自治系统连通图。</p>
+</li>
+</ol>
+<h3 id="4-3-BGP适用于多级结构的因特网"><a href="#4-3-BGP适用于多级结构的因特网" class="headerlink" title="4.3 BGP适用于多级结构的因特网"></a>4.3 BGP适用于多级结构的因特网</h3><p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-6-%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%8D%8F%E8%AE%AE/image-20241117214100280.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="4-4-BGP-4四种报文类型"><a href="#4-4-BGP-4四种报文类型" class="headerlink" title="4.4 BGP-4四种报文类型"></a>4.4 BGP-4四种报文类型</h3><table>
+<thead>
+<tr>
+<th align="center">报文</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">OPEN(打开)报文</td>
+<td align="left">用来与相邻的另一个BGP发言人建立关系，使通信初始化</td>
+</tr>
+<tr>
+<td align="center">UPDATE(更新)报文</td>
+<td align="left">用来通告某一路由的信息，以及列出要撤销的多条路由</td>
+</tr>
+<tr>
+<td align="center">KEEPALIVE(保活)报文</td>
+<td align="left">用来周期性地证实邻站的连通性。</td>
+</tr>
+<tr>
+<td align="center">NOTIFICATION(通知)报文</td>
+<td align="left">用来发送检测到的差错。</td>
+</tr>
+</tbody></table>
+<p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-6-%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%8D%8F%E8%AE%AE/image-20241117214318616.png" srcset="/img/loading.gif" lazyload></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" class="category-chain-item">计算机基础</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="category-chain-item">计算机网络</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="print-no-link">#计算机网络</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>4.6 路由选择协议</div>
+      <div>http://binbo-zappy.github.io/2024/11/17/计算机网络/4-6-路由选择协议/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年11月17日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-7-IPv4%E6%95%B0%E6%8D%AE%E6%8A%A5%E7%9A%84%E9%A6%96%E9%83%A8%E6%A0%BC%E5%BC%8F/" title="4.7 IPv4数据报的首部格式">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">4.7 IPv4数据报的首部格式</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-5-%E9%9D%99%E6%80%81%E8%B7%AF%E7%94%B1%E9%85%8D%E7%BD%AE%E5%8F%8A%E5%85%B6%E5%8F%AF%E8%83%BD%E4%BA%A7%E7%94%9F%E7%9A%84%E8%B7%AF%E7%94%B1%E7%8E%AF%E8%B7%AF%E9%97%AE%E9%A2%98/" title="4.5 静态路由配置及其可能产生的路由环路问题">
+                        <span class="hidden-mobile">4.5 静态路由配置及其可能产生的路由环路问题</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
