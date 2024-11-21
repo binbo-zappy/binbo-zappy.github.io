@@ -1,0 +1,925 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1.3 操作系统运行环境 1. 操作系统的运行机制1.1 程序是如何运行的? 一条高级语言的代码翻译过来可能会对应多条二进制机器指令 程序运行的过程其实是CPU执行一条一条的机器指令的过程 “指令”就是处理机(CPU)能识别、执行的最基本命令    1.2 内核程序 vs 应用程序 应用程序 普通程序员写的程序就是”应用程序”   内核程序 微软、苹果有一帮人负责实现操作系统, 他们写的是”内核程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="1.3 操作系统运行环境">
+<meta property="og:url" content="http://binbo-zappy.github.io/2024/11/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/1-3-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="1.3 操作系统运行环境 1. 操作系统的运行机制1.1 程序是如何运行的? 一条高级语言的代码翻译过来可能会对应多条二进制机器指令 程序运行的过程其实是CPU执行一条一条的机器指令的过程 “指令”就是处理机(CPU)能识别、执行的最基本命令    1.2 内核程序 vs 应用程序 应用程序 普通程序员写的程序就是”应用程序”   内核程序 微软、苹果有一帮人负责实现操作系统, 他们写的是”内核程">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/OS.png">
+<meta property="article:published_time" content="2024-11-19T07:00:54.000Z">
+<meta property="article:modified_time" content="2024-11-19T07:55:36.384Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="操作系统">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/OS.png">
+  
+  
+  
+  <title>1.3 操作系统运行环境 - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="1.3 操作系统运行环境"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-11-19 15:00" pubdate>
+          2024年11月19日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          22 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">1.3 操作系统运行环境</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="1-3-操作系统运行环境"><a href="#1-3-操作系统运行环境" class="headerlink" title="1.3 操作系统运行环境"></a>1.3 操作系统运行环境</h1><p><img src="/2024/11/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/1-3-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83/image-20241119150939015.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="1-操作系统的运行机制"><a href="#1-操作系统的运行机制" class="headerlink" title="1. 操作系统的运行机制"></a>1. <strong>操作系统的运行机制</strong></h2><h3 id="1-1-程序是如何运行的"><a href="#1-1-程序是如何运行的" class="headerlink" title="1.1 程序是如何运行的?"></a>1.1 <strong>程序是如何运行的?</strong></h3><ul>
+<li>一条高级语言的代码翻译过来可能会对应多条二进制机器指令</li>
+<li>程序运行的过程其实是CPU执行一条一条的机器指令的过程<ul>
+<li>“指令”就是处理机(CPU)能识别、执行的最基本命令</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-2-内核程序-vs-应用程序"><a href="#1-2-内核程序-vs-应用程序" class="headerlink" title="1.2 内核程序 vs 应用程序"></a>1.2 <strong>内核程序 vs 应用程序</strong></h3><ul>
+<li><strong>应用程序</strong><ul>
+<li>普通程序员写的程序就是”应用程序”</li>
+</ul>
+</li>
+<li><strong>内核程序</strong><ul>
+<li>微软、苹果有一帮人负责实现操作系统, 他们写的是”内核程序”</li>
+<li>由很多内核程序组成了”<strong>操作系统内核</strong>“, 或简称”<strong>内核(Kernel)</strong>“</li>
+<li>内核是操作系统最重要最核心的部分, 也是最接近硬件的部分, 甚至可以说, 一个操作系统只要有内核就够了(eg: Docker→ 仅需Linux内核)</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-3-特权指令-vs-非特权指令"><a href="#1-3-特权指令-vs-非特权指令" class="headerlink" title="1.3 特权指令 vs 非特权指令"></a>1.3 <strong>特权指令 vs 非特权指令</strong></h3><ul>
+<li><strong>特权指令</strong><ul>
+<li>操作系统内核作为”管理者”, 有时会让CPU执行一些”特权指令”, 如: 内存清零指令, 这些指令影响重大, 只允许”管理者” – 即操作系统内核来使用</li>
+</ul>
+</li>
+<li><strong>非特权指令</strong><ul>
+<li>应用程序只能使用”非特权指令”, 如: 加法指令、减法指令</li>
+<li>在CPU设计和生产的时候就划分了特权指令和非特权指令， 因此CPU执行一条指令前就能判断出其类型</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-4-用户态-vs-内核态"><a href="#1-4-用户态-vs-内核态" class="headerlink" title="1.4 用户态 vs 内核态"></a>1.4 <strong>用户态 vs 内核态</strong></h3><ul>
+<li>CPU有两种状态: “<strong>内核态</strong>“ 和 “<strong>用户态</strong>“<ul>
+<li>CPU中有一个寄存器叫<strong>程序状态字寄存器(PSW)</strong>, 其中有一个二进制位能够表示CPU为用户态还是内核态</li>
+<li>内核态&#x3D;核心态&#x3D;<strong>管态</strong>; 用户态&#x3D;<strong>目态</strong></li>
+</ul>
+</li>
+<li><strong>用户态</strong><ul>
+<li>处于用户态时, 说明此时正在运行的是应用程序, 此时只能执行非特权指令</li>
+</ul>
+</li>
+<li><strong>核心态</strong><ul>
+<li>处于核心态时, 说明此时正在运行的是内核程序, 此时可以执行特权指令</li>
+</ul>
+</li>
+<li><strong>两种状态的切换</strong><ul>
+<li><strong>内核态 → 用户态</strong><ul>
+<li>执行一条特权指令 – 修改PSW的标志位为”用户态”, 这个动作意味着操作系统将主动让出CPU特权</li>
+</ul>
+</li>
+<li><strong>用户态 → 内核态</strong><ul>
+<li>由”<strong>中断</strong>“引发, 硬件自动完成变态过程, 触发中断信号意味着操作系统将强行夺回CPU的使用权</li>
+<li>除了非法使用特权指令之外, 还有很多事件会触发中断信号。一个共性是: 但凡需要操作系统介入的地方, 都会触发中断信号</li>
+</ul>
+</li>
+<li><strong>示例</strong>:<ol>
+<li>刚开机时, CPU为”内核态”, 操作系统内核程序先上CPU运行</li>
+<li>开机完成后, 用户可以启动某个应用程序</li>
+<li>操作系统内核程序在合适的时候主动让出CPU, 让该应用程序上CPU运行<ul>
+<li>操作系统内核在让出CPU之前, 会用一条特权指令把PSW的标志位设置为”用户态”</li>
+</ul>
+</li>
+<li>应用程序运行在”用户态”</li>
+<li>此时黑客在应用程序中植入了一条特权指令, 企图破坏系统</li>
+<li>CPU发现接下来要执行的这条指令是特权指令, 但是自己又处于”用户态”</li>
+<li>这个非法事件会引发一个<strong>中断信号</strong><ul>
+<li>CPU检测到中断信号后, 会立即变为”内核态”, 并停止运行当前的应用程序, 转而运行处理中断信号的内核程序</li>
+</ul>
+</li>
+<li>“中断”使操作系统再次夺回CPU的控制权</li>
+<li>操作系统会对引发中断的事件进行处理, 处理完了再把CPU使用权交给应用程序</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-中断和异常"><a href="#2-中断和异常" class="headerlink" title="2. 中断和异常"></a><strong>2. 中断和异常</strong></h2><p><img src="/2024/11/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/1-3-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83/image-20241119154048407.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>“<strong>中断</strong>”是让操作系统内核夺回CPU使用权的唯一途径</li>
+</ul>
+<h3 id="2-1-内中断-异常"><a href="#2-1-内中断-异常" class="headerlink" title="2.1 内中断(异常)"></a>2.1 内中断(异常)</h3><ul>
+<li>与当前执行的指令有关，中断信号来源于CPU内部</li>
+<li><strong>示例</strong>:<ol>
+<li>试图在用户态下执行特权指令</li>
+<li>执行除法指令时发现除数为 0<ul>
+<li>若当前执行的指令是非法的，则会引发一个中断信号</li>
+</ul>
+</li>
+<li>有时候应用程序想请求操作系统内核的服务，此时会执行一条特殊的指令 – <strong>陷入指令</strong><ul>
+<li>**(访管指令)**，该指令会引发一个内部中断信号</li>
+<li>执行“陷入指令”，意味着应用程序主动地将CPU控制权还给操作系统内核</li>
+<li>“<strong>系统调用</strong>”就是通过陷入指令完成的</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><strong>分类</strong>:<ul>
+<li><strong>陷阱、陷入(trap)</strong><ul>
+<li>由陷入指令引发，是应用程序故意引发的</li>
+</ul>
+</li>
+<li><strong>故障(fault)</strong><ul>
+<li>由错误条件引起的，可能被内核程序修复</li>
+<li>内核程序修复故障后会把CPU使用权还给应用程序，让它继续执行下去</li>
+<li>如：<strong>缺页故障(缺页中断)</strong></li>
+</ul>
+</li>
+<li><strong>终止(abort)</strong><ul>
+<li>由致命错误引起，内核程序无法修复该错误</li>
+<li>因此一般不再将CPU使用权还给引发终止的应用程序，而是直接终止该应用程序</li>
+<li>如： 整数除0、非法使用特权指令</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-2-外中断-中断"><a href="#2-2-外中断-中断" class="headerlink" title="2.2 外中断(中断)"></a>2.2 <strong>外中断(中断)</strong></h3><ul>
+<li><p>与当前执行的指令无关，中断信号来源于CPU外部</p>
+</li>
+<li><p>每一条指令执行结束时，CPU都会例行检查是否有外中断信号</p>
+</li>
+<li><p><strong>示例</strong>:</p>
+<ul>
+<li>时钟中断 – 由时钟部件发来的中断信号<ul>
+<li>时钟部件每隔一个时间片（如 50ms）会给CPU发送一个时钟中断信号</li>
+</ul>
+</li>
+<li>I&#x2F;O中断 – 由输入&#x2F;输出设备发来的中断信号<ul>
+<li>如打印机打印完成后, 向CPU发送中断信号, CPU根据中断信号执行对应的<strong>中断处理程序</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>注意</strong>：</p>
+<ul>
+<li>大多数的教材、试卷中，“<strong>中断</strong>”特指狭义的中断，即<strong>外中断</strong>。而<strong>内中断</strong>一般称为“<strong>异常</strong>”</li>
+</ul>
+</li>
+<li><p><strong>中断机制的基本原理</strong></p>
+<ul>
+<li>不同的中断信号，需要用不同的<strong>中断处理程序</strong>来处理</li>
+<li>当CPU检测到中断信号后，会根据中断信号的类型去查询“<strong>中断向量表</strong>”，以此来找到相应的中断处理程序在内存中的存放位置</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-系统调用"><a href="#3-系统调用" class="headerlink" title="3. 系统调用"></a><strong>3. 系统调用</strong></h2><p><img src="/2024/11/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/1-3-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83/image-20241119155457023.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="3-1-什么是系统调用"><a href="#3-1-什么是系统调用" class="headerlink" title="3.1 什么是系统调用?"></a>3.1 <strong>什么是系统调用?</strong></h3><ul>
+<li><p>操作系统作为用户和计算机硬件之间的接口，需要向上提供一些简单易用的服务。主要包括<strong>命令接口</strong>和<strong>程序接口</strong>，其中，程序接口由一组<strong>系统调用</strong>组成</p>
+</li>
+<li><p>“系统调用”是操作系统提供给应用程序（程序员&#x2F;编程人员）使用的接口，可以理解为一种可供应用程序调用的特殊函数，应用程序可以通过系统调用来请求获得操作系统内核的服务</p>
+</li>
+</ul>
+<h3 id="3-2-系统调用与库函数的区别"><a href="#3-2-系统调用与库函数的区别" class="headerlink" title="3.2 系统调用与库函数的区别"></a>3.2 <strong>系统调用与库函数的区别</strong></h3><table>
+<thead>
+<tr>
+<th align="center">普通应用程序</th>
+<th align="center">可直接进行系统调用，也可使用库函数。有的库函数涉及系统调用，有的不涉及</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">编程语言</td>
+<td align="center">向上提供库函数。有时会将系统调用封装成库函数，以隐藏系统调用的一些细节，使程序员编程更加方便</td>
+</tr>
+<tr>
+<td align="center">操作系统</td>
+<td align="center">向上提供系统调用，使得上层程序能请求内核的服务</td>
+</tr>
+<tr>
+<td align="center">裸机</td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<ul>
+<li><p>不涉及系统调用的库函数：如的“取绝对值”的函数</p>
+</li>
+<li><p>涉及系统调用的库函数：如“创建一个新文件”的函数</p>
+</li>
+<li><p>总之，部分库函数是对系统调用的进一步封装，应用程序可以使用库函数进行间接系统调用，也可以进行直接系统调用</p>
+</li>
+</ul>
+<h3 id="3-3-为什么系统调用是必须的"><a href="#3-3-为什么系统调用是必须的" class="headerlink" title="3.3 为什么系统调用是必须的?"></a>3.3 <strong>为什么系统调用是必须的?</strong></h3><ul>
+<li><strong>生活场景</strong>:<ul>
+<li>去学校打印店打印论文，你按下了 WPS 的“打印”选项，打印机开始工作。 你的论文打印到一半时，另一位同学按下了 Word 的“打印”按钮，开始打印他自己的论文。</li>
+</ul>
+</li>
+<li><strong>思考</strong>:<ul>
+<li>如果两个进程可以随意地、并发地共享打印机资源(<strong>同时共享</strong>)，会发生什么情况？<ul>
+<li>两个进程并发运行，打印机设备交替地收到 WPS 和 Word 两个进程发来的打印请求，结果两篇论文的内容混杂在一起了</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>解决方法</strong>:<ul>
+<li>由操作系统内核对共享资源进行统一的管理，并向上提供 “系统调用” ，用户进程想要使用打印机这种共享资源，只能通过系统调用向操作系统内核发出请求，以此来实现不同的进程对打印机资源的<strong>互斥共享</strong>，内核会对各个请求进行协调处理</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-4-什么功能要用系统调用实现"><a href="#3-4-什么功能要用系统调用实现" class="headerlink" title="3.4 什么功能要用系统调用实现?"></a>3.4 <strong>什么功能要用系统调用实现?</strong></h3><ul>
+<li><p>应用程序通过系统调用请求操作系统的服务。而系统中的各种<strong>共享资源</strong>都由操作系统内核统一掌管，因此凡是<strong>与共享资源有关的操作</strong>（如存储分配、I&#x2F;O操作、文件管理等），都必须通过系统调用的方式向操作系统内核提出服务请求，由操作系统内核代为完成。这样可以保证系统的稳定性和安全性，防止用户进行非法操作</p>
+</li>
+<li><p><strong>功能分类(了解即可)</strong>:</p>
+<ul>
+<li>设备控制: 完成设备的 请求&#x2F;释放&#x2F;启动 等功能</li>
+<li>文件管理: 完成文件的 读&#x2F;写&#x2F;创建&#x2F;删除 等功能</li>
+<li>进程控制: 完成进程的 创建&#x2F;撤销&#x2F;阻塞&#x2F;唤醒 等功能</li>
+<li>进程通信: 完成进程之间的 消息传递&#x2F;信号传递 等功能</li>
+<li>内存管理: 完成内存的 分配&#x2F;回收 等功能</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-5-系统调用的过程"><a href="#3-5-系统调用的过程" class="headerlink" title="3.5 系统调用的过程"></a>3.5 <strong>系统调用的过程</strong></h3><ul>
+<li><p>传递系统调用参数（将系统调用需要的参数放到某些通用寄存器中） → 执行陷入指令（用户态）→ 执行相应的内核程序（根据寄存器中的参数判断用户需要哪种系统调用服务）处理系统调用（核心态）→ 返回应用程序</p>
+</li>
+<li><p><strong>注意</strong>:</p>
+<ul>
+<li><strong>陷入指令</strong>是在<strong>用户态</strong>执行的，执行陷入指令之后立即引发一个内中断，使CPU进入核心态</li>
+<li><strong>发出系统调用请求</strong>是在<strong>用户态</strong>，而<strong>对系统调用的相应处理</strong>在<strong>核心态</strong>下进行</li>
+</ul>
+</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" class="category-chain-item">计算机基础</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="category-chain-item">操作系统</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="print-no-link">#操作系统</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>1.3 操作系统运行环境</div>
+      <div>http://binbo-zappy.github.io/2024/11/19/操作系统/1-3-操作系统运行环境/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年11月19日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/11/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/1-4-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%BB%93%E6%9E%84/" title="1.4 操作系统结构">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">1.4 操作系统结构</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/11/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/1-2-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8F%91%E5%B1%95%E5%8E%86%E7%A8%8B/" title="1.2 操作系统发展历程">
+                        <span class="hidden-mobile">1.2 操作系统发展历程</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

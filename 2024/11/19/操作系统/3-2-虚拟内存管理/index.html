@@ -1,0 +1,952 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="3.2 虚拟内存管理1. 虚拟内存的基本概念在传统存储管理方式的基础上引入了交换技术、覆盖技术，使得内存利用率有所提升，并且能从逻 辑上扩充内存容量 传统存储管理方式：连续分配、非连续分配 传统存储管理方式的特征、缺点 传统存储管理方式中很多暂时用不到的数据也会长期占用内存，导致内存利用率不高 一次性 作业必须一次性全部装入内存后才能开始运行 这会造成两个问题： 作业很大时，不能全部装入内存，导致">
+<meta property="og:type" content="article">
+<meta property="og:title" content="3.2 虚拟内存管理">
+<meta property="og:url" content="http://binbo-zappy.github.io/2024/11/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/3-2-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="3.2 虚拟内存管理1. 虚拟内存的基本概念在传统存储管理方式的基础上引入了交换技术、覆盖技术，使得内存利用率有所提升，并且能从逻 辑上扩充内存容量 传统存储管理方式：连续分配、非连续分配 传统存储管理方式的特征、缺点 传统存储管理方式中很多暂时用不到的数据也会长期占用内存，导致内存利用率不高 一次性 作业必须一次性全部装入内存后才能开始运行 这会造成两个问题： 作业很大时，不能全部装入内存，导致">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/OS.png">
+<meta property="article:published_time" content="2024-11-19T01:47:03.000Z">
+<meta property="article:modified_time" content="2024-11-21T01:48:17.980Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="操作系统">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/OS.png">
+  
+  
+  
+  <title>3.2 虚拟内存管理 - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="3.2 虚拟内存管理"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-11-19 09:47" pubdate>
+          2024年11月19日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          48 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">3.2 虚拟内存管理</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="3-2-虚拟内存管理"><a href="#3-2-虚拟内存管理" class="headerlink" title="3.2 虚拟内存管理"></a><strong>3.2 虚拟内存管理</strong></h1><h2 id="1-虚拟内存的基本概念"><a href="#1-虚拟内存的基本概念" class="headerlink" title="1. 虚拟内存的基本概念"></a><strong>1. 虚拟内存的基本概念</strong></h2><p>在<strong>传统存储管理方式</strong>的基础上引入了<strong>交换技术</strong>、<strong>覆盖技术</strong>，使得内存利用率有所提升，并且能从逻</p>
+<p>辑上扩充内存容量</p>
+<p>传统存储管理方式：连续分配、非连续分配</p>
+<p><strong>传统存储管理方式的特征、缺点</strong></p>
+<p>传统存储管理方式中很多暂时用不到的数据也会长期占用内存，导致内存利用率不高</p>
+<p><strong>一次性</strong></p>
+<p>作业必须一次性全部装入内存后才能开始运行</p>
+<p>这会造成两个问题：</p>
+<p>作业很大时，不能全部装入内存，导致大作业无法运行</p>
+<p>当大量作业要求运行时，由于内存无法容纳所有作业，因此只有少量作业能运行，导</p>
+<p>致多道程序并发度下降</p>
+<p><strong>驻留性</strong></p>
+<p>一旦作业被装入内存，就会一直驻留在内存中，直至作业运行结束</p>
+<p>事实上，在一个时间段内，只需要访问作业的一小部分数据即可正常运行，这就导致了内存中</p>
+<p>会驻留大量的、暂时用不到的数据，浪费了宝贵的内存资源</p>
+<p>传统存储管理方式的这些问题可用<strong>虚拟存储技术</strong>解决</p>
+<p><strong>局部性原理</strong></p>
+<p><strong>时间局部性</strong></p>
+<p>如果执行了程序中的某条<strong>指令</strong>，那么不久后这条指令很有可能再次执行；如果某个<strong>数据</strong>被访问</p>
+<p>过，不久之后该数据很可能再次被访问（因为程序中存在大量的循环）</p>
+<p><strong>空间局部性</strong></p>
+<p>一旦程序访问了某个<strong>存储单元</strong>，在不久之后，其附近的存储单元也很有可能被访问（因为很多</p>
+<p>数据在内存中都是连续存放的，并且程序的指令也是顺序地在内存中存放的）</p>
+<p><strong>应用</strong>：</p>
+<p><strong>快表</strong>机构就是将近期常访问的页表项副本放到更高速的联想寄存器中</p>
+<p><strong>高速缓冲技术</strong>的思想：将近期会频繁访问到的数据放到更高速的存储器中，暂时用不到的</p>
+<p>数据放在更低速存储器中</p>
+<p><strong>虚拟内存的定义和特征</strong></p>
+<p><strong>定义</strong>:</p>
+<p>基于<strong>局部性原理</strong>，在程序装入时，可以将程序中<strong>很快会用到的部分装入内存，暂时用不到的部</strong></p>
+<p><strong>分留在外存</strong>，就可以让程序开始执行</p>
+<p>在程序执行过程中，当<strong>所访问的信息不在内存时</strong>，由<strong>操作系统负责将所需信息从外存调入内</strong></p>
+<p><strong>存</strong>，然后继续执行程序</p>
+<p>若内存空间不够，由<strong>操作系统</strong>负责<strong>将内存中暂时用不到的信息换出到外存</strong>。在操作系统的管理</p>
+<p>下，在用户看来似乎有一个比实际内存大得多的内存，这就是<strong>虚拟内存</strong></p>
+<p>操作系统<strong>虚拟性</strong>的一个体现，实际的物理内存大小没有变，只是在逻辑上进行了扩充</p>
+<p><strong>特征</strong>:</p>
+<p>虚拟内存有以下三个主要特征：</p>
+<p><strong>多次性</strong>：无需在作业运行时一次性全部装入内存，而是允许被分成多次调入内存</p>
+<p><strong>对换性</strong>：在作业运行时无需一直常驻内存，而是允许在作业运行过程中，将作业换入、换出</p>
+<p><strong>虚拟性</strong>：从逻辑上扩充了内存的容量，使用户看到的内存容量，远大于实际的容量</p>
+<p><strong>如何实现虚拟内存技术?</strong></p>
+<p>虚拟内存技术，允许一个作业分多次调入内存。如果采用连续分配方式，会不方便实现。因此，虚</p>
+<p>拟内存的实现需要建立在<strong>离散分配</strong>的内存管理方式基础上</p>
+<p><strong>传统的非连续分配存储管理</strong></p>
+<p>基本分页存储管理、基本分段存储管理、基本段页式存储管理</p>
+<p><strong>虚拟内存的实现</strong></p>
+<p><strong>请求分页存储管理</strong>、<strong>请求分段存储管理</strong>、<strong>请求段页式存储管理</strong></p>
+<p><strong>主要区别</strong>：</p>
+<p>在程序执行过程中，当<strong>所访问的信息不在内存时</strong>，由<strong>操作系统负责将所需信息从外存调入内</strong></p>
+<p><strong>存</strong>，然后继续执行程序</p>
+<p>操作系统要提供<strong>请求调页（或请求调段）</strong>功能</p>
+<p>若内存空间不够，由<strong>操作系统</strong>负责<strong>将内存中暂时用不到的信息换出到外存</strong></p>
+<p>操作系统要提供<strong>页面置换（或段置换）</strong>的功能</p>
+<h2 id="2-请求分页管理方式"><a href="#2-请求分页管理方式" class="headerlink" title="2. 请求分页管理方式"></a><strong>2. 请求分页管理方式</strong></h2><p>注意与<strong>基本分页存储管理</strong>的页表机制、地址变换流程对比学习</p>
+<p><strong>页表机制</strong></p>
+<p>与基本分页管理相比，<strong>请求分页管理</strong>中，为了实现“<strong>请求调页</strong>”，操作系统需要知道每个页面是否已</p>
+<p>经调入内存；如果还没调入，那么也需要知道该页面在外存中存放的位置</p>
+<p>当内存空间不够时，要实现“<strong>页面置换</strong>”，操作系统需要通过某些指标来决定到底换出哪个页面；有</p>
+<p>的页面没有被修改过，就不用再浪费时间写回外存。有的页面修改过，就需要将外存中的旧数据覆</p>
+<p>盖，因此，操作系统也需要记录各个页面是否被修改的信息</p>
+<p><strong>缺页中断机构</strong></p>
+<p>在请求分页系统中，每当<strong>要访问的页面不在内存</strong>时，便产生一个<strong>缺页中断</strong>，然后由操作系统的<strong>缺页</strong></p>
+<p><strong>中断处理程序处理中断</strong>。此时<strong>缺页的进程阻塞</strong>，放入阻塞队列，<strong>调页完成后再将其唤醒</strong>，放回就绪</p>
+<p>队列</p>
+<p>如果<strong>内存中有空闲块</strong>，则<strong>为进程分配一个空闲块</strong>，将所缺页面装入该块，并<strong>修改页表中相应的页表</strong></p>
+<p><strong>项</strong></p>
+<p>如果<strong>内存中没有空闲块</strong>，则<strong>由页面置换算法选择一个页面淘汰</strong>，若该页面在内存期间<strong>被修改过</strong>，则</p>
+<p>要<strong>将其写回外存</strong>。<strong>未修改过</strong>的页面<strong>不用写回外存</strong></p>
+<p><strong>缺页中断</strong>是因为当前执行的指令想要访问的目标页面未调入内存而产生的，因此属于<strong>内中断</strong></p>
+<p><strong>一条指令</strong>在执行期间，<strong>可能产生多次缺页中断</strong></p>
+<p>如：copy A to B，即将逻辑地址A中的数据复制到逻辑地址B，而A、B属于不同的页面，则有</p>
+<p>可能产生两次中断</p>
+<p><strong>地址变换机构</strong></p>
+<p>新增步骤1：请求调页（查到页表项时进行判断）</p>
+<p>新增步骤2：页面置换（需要调入页面，但没有空闲内存块时进行）</p>
+<p>新增步骤3：需要修改请求页表中的表项</p>
+<p><strong>过程</strong>:</p>
+<p><strong>注意</strong>: <strong>快表</strong>中有的页面一定是在内存中的。若<strong>某个页面被换出外存，则快表中的相应表项也要删</strong></p>
+<p><strong>除</strong>，否则可能访问错误的页面</p>
+<p><strong>补充细节</strong>:</p>
+<p>只有“写指令”才需要修改 “修改位”。并且，一般来说只需修改快表中的数据，只有要将</p>
+<p>快表项删除时才需要写回内存中的慢表。这样可以减少访存次数</p>
+<p>和普通的中断处理一样，缺页中断处理依然需要保留CPU现场</p>
+<p>需要用某种“<strong>页面置换算法</strong>” 来决定一个换出页面（下节内容）</p>
+<p>换入&#x2F;换出页面都需要启动慢速的I&#x2F;O操作，可见，如果换入&#x2F; 换出太频繁，会有很大的</p>
+<p>开销</p>
+<p>页面调入内存后，需要修改慢表，同时也需要将表项复制到快表中</p>
+<p>在具有快表机构的请求分页系统中，访问一个逻辑地址时，若发生缺页，则地址变换步</p>
+<p>骤是：</p>
+<p>查快表(未命中)–查慢表(发现未调入内存)–调页(调入的页面对应的表项会直接加入快表)-</p>
+<p>-查快表(命中)–访问目标内存单元</p>
+<h2 id="3-页面置换算法"><a href="#3-页面置换算法" class="headerlink" title="3. 页面置换算法"></a><strong>3. 页面置换算法</strong></h2><p>用<strong>页面置换算法</strong>决定应该换出哪个页面，页面的换入、换出需要磁盘I&#x2F;O，会有较大的开销，因此</p>
+<p>好的页面置换算法应该追求<strong>更少的缺页率</strong></p>
+<p>即让换入、换出的次数尽可能地少，尽量将不经常使用的页面换出</p>
+<p><strong>最佳置换算法（OPT）</strong></p>
+<p><strong>最佳置换算法（OPT，Optimal）</strong>：每次选择<strong>淘汰的页面</strong>将是<strong>以后永不使用</strong>，或者<strong>在最长时间内</strong></p>
+<p><strong>不再被访问的页面</strong>，这样可以保证最低的缺页率</p>
+<p>最佳置换算法可以保证最低的缺页率，但实际上，只有在进程执行的过程中才能知道接下来会访问</p>
+<p>到的是哪个页面。操作系统无法ᨀ 前预判页面访问序列。因此，<strong>最佳置换算法是无法实现的</strong></p>
+<p><strong>先进先出置换算法（FIFO）</strong></p>
+<p><strong>先进先出置换算法（FIFO）</strong>：每次选择<strong>淘汰的页面</strong>是<strong>最早进入内存的页面</strong></p>
+<p>实现方法：把调入内存的页面根据调入的先后顺序排成一个队列，需要换出页面时选择队头页</p>
+<p>面即可。队列的最大长度取决于系统为进程分配了多少个内存块</p>
+<p><strong>Belady 异常</strong> – 当为进程分配的物理块数增大时，缺页次数不减反增的异常现象</p>
+<p><strong>只有 FIFO 算法会产生 Belady 异常</strong>。另外，FIFO算法虽然实现简单，但是该算法与进程实际</p>
+<p>运行时的规律不适应，因为先进入的页面也有可能最经常被访问。因此，算法性能差</p>
+<p><strong>最近最久未使用置换算法（LRU）</strong></p>
+<p><strong>最近最久未使用置换算法（LRU，least recently used）</strong>：每次<strong>淘汰的页面</strong>是<strong>最近最久未使用的</strong></p>
+<p><strong>页面</strong></p>
+<p>实现方法：赋予每个页面对应的页表项中，<strong>用访问字段记录该页面自上次被访问以来所经历的</strong></p>
+<p><strong>时间t</strong>。当需要淘汰一个页面时，选择现有页面中 t 值最大的，即最近最久未使用的页面</p>
+<p>该算法的实现需要专门的硬件支持，虽然算法<strong>性能好</strong>，但是<strong>实现困难，开销大</strong></p>
+<p>在手动做题时，若需要淘汰页面，可以逆向检查此时在内存中的几个页面号。在<strong>逆向扫描过程中最</strong></p>
+<p><strong>后一个出现的页号就是要淘汰的页面</strong></p>
+<p><strong>时钟置换算法（CLOCK）</strong></p>
+<p>最佳置换算法 性能最好，但无法实现</p>
+<p>先进先出置换算法 实现简单，但算法性能差</p>
+<p>最近最久未使用置换算法 性能好，是最接近OPT算法性能的，但是实现起来需要专门的硬件支持，</p>
+<p>算法开销大</p>
+<p><strong>时钟置换算法</strong>是一种性能和开销较均衡的算法，又称<strong>CLOCK算法</strong>，或<strong>最近未用算法（NRU，Not</strong></p>
+<p><strong>Recently Used）</strong></p>
+<p>实现方法：为每个页面设置一个<strong>访问位</strong>，再将<strong>内存中的页面</strong>都通过链接指针<strong>链接成一个循环队</strong></p>
+<p><strong>列</strong>。当某页被访问时，其访问位置为1。当需要淘汰一个页面时，只需检查页的访问位。如果</p>
+<p>是0，就选择该页换出；如果是1，则将它置为0，暂不换出，继续检查下一个页面，若第一轮</p>
+<p>扫描中所有页面都是1，则将这些页面的访问位依次置为0后，再进行第二轮扫描 （第二轮扫描</p>
+<p>中一定会有访问位为0的页面，因此<strong>简单的CLOCK算法</strong>选择一个淘汰页面<strong>最多会经过两轮扫</strong></p>
+<p><strong>描</strong>）</p>
+<p><strong>改进型的时钟置换算法</strong></p>
+<p>简单的时钟置换算法 仅考虑到一个页面最近是否被访问过。事实上，如果被淘汰的页面没有被修改</p>
+<p>过，就不需要执行I&#x2F;O操作写回外存。<strong>只有被淘汰的页面被修改过时，才需要写回外存</strong></p>
+<p>因此，除了考虑一个页面最近有没有被访问过之外，操作系统还应考虑页面有没有被修改过。<strong>在其</strong></p>
+<p><strong>他条件都相同时，应优先淘汰没有修改过的页面</strong>，避免I&#x2F;O操作。这就是<strong>改进型的时钟置换算法</strong>的</p>
+<p>思想</p>
+<p><strong>修改位&#x3D;0</strong>，表示<strong>页面没有被修改过</strong>；<strong>修改位&#x3D;1</strong>，表示<strong>页面被修改过</strong></p>
+<p>为方便讨论，用<strong>（访问位，修改位）</strong>的形式表示各页面状态。如（1，1）表示一个页面近期被</p>
+<p>访问过，且被修改过</p>
+<p><strong>实现方法</strong>:</p>
+<p>将所有可能被置换的页面排成一个循环队列</p>
+<p>第一轮：从当前位置开始扫描到第一个（0，0）的帧用于替换</p>
+<p>本轮扫描不修改任何标志位</p>
+<p>第一优先级：最近没访问，且没修改的页面</p>
+<p>第二轮：若第一轮扫描失败，则重新扫描 ，查找第一个（0，1）的帧用于替换</p>
+<p><strong>本轮将所有扫描过的帧访问位设为0</strong></p>
+<p>第二优先级：最近没访问，但修改过的页面</p>
+<p>第三轮：若第二轮扫描失败，则重新扫描 ，查找第一个（0，0）的帧用于替换</p>
+<p>本轮扫描不修改任何标志位</p>
+<p>第三优先级：最近访问过，但没修改的页面</p>
+<p>第四轮：若第三轮扫描失败，则重新扫描 ，查找第一个（0，1）的帧用于替换</p>
+<p>第四优先级：最近访问过，且修改过的页面</p>
+<p>由于第二轮已将所有帧的访问位设为0，因此经过第三轮、第四轮扫描 一定会有一个帧被选</p>
+<p>中，因此<strong>改进型CLOCK置换算法</strong>选择一个淘汰页面<strong>最多会进行四轮扫描</strong></p>
+<h2 id="4-页面分配策略、抖动、工作集"><a href="#4-页面分配策略、抖动、工作集" class="headerlink" title="4. 页面分配策略、抖动、工作集"></a><strong>4. 页面分配策略、抖动、工作集</strong></h2><p><strong>驻留集</strong></p>
+<p><strong>指请求分页存储管理中给进程分配的物理块的集合</strong></p>
+<p>在采用了虚拟存储技术的系统中，<strong>驻留集大小一般小于进程的总大小</strong></p>
+<p>若驻留集太小，会导致缺页频繁，系统要花大量的时间来处理缺页，实际用于进程推进的时间很少</p>
+<p>驻留集太大，又会导致多道程序并发度下降，资源利用率降低</p>
+<p>考虑一个极端情况，若某进程共 有100个页面，则该进程的驻留集大小为100时进程可以全部</p>
+<p>放入内存，运行期间不可能再发生 缺页。若驻留集大小为1，则进程运行期间必定会极频繁地</p>
+<p>缺页</p>
+<p>所以应该选择一个合适的驻留集大小</p>
+<p><strong>页面分配、置换策略</strong></p>
+<p><strong>固定分配</strong>：操作系统为每个进程分配一组固定数目的物理块，在进程运行期间不再改变。即，<strong>驻留</strong></p>
+<p><strong>集大小不变</strong></p>
+<p><strong>可变分配</strong>：先为每个进程分配一定数目的物理块，在进程运行期间，可根据情况做适当的增加或减</p>
+<p>少。即，<strong>驻留集大小可变</strong></p>
+<p><strong>局部置换</strong>：发生缺页时只能选<strong>进程自己的物理块</strong>进行置换</p>
+<p><strong>全局置换</strong>：可以将<strong>操作系统保留的空闲物理块</strong>分配给缺页进程，也可以将<strong>别的进程持有的物理块</strong>置</p>
+<p>换到外存，再分配给缺页进程</p>
+<p><strong>局部置换</strong></p>
+<p><strong>全局置换</strong></p>
+<p><strong>固定分配</strong></p>
+<p><strong>可变分配</strong></p>
+<p>√</p>
+<p>√</p>
+<p>×</p>
+<p>√</p>
+<p><strong>全局置换</strong>意味着一个进程拥有的物理块数量必然会改变，因此<strong>不可能是固定分配</strong></p>
+<p><strong>固定分配局部置换</strong></p>
+<p>系统为每个进程分配一定数量的物理块，在整个运行期间都不改变。若进程在运行中发生缺</p>
+<p>页，则只能从该进程在内存中的页面中选出一页换出，然后再调入需要的页面</p>
+<p>这种策略的缺点是：很难在刚开始就确定应为每个进程分配多少个物理块才算合理</p>
+<p>采用这种策略的系统可以根据进程大小、优先级、或是根据程序员给出的参数来确定为一个进</p>
+<p>程分配的内存块数</p>
+<p><strong>可变分配全局置换</strong></p>
+<p>刚开始会为每个进程分配一定数量的物理块。操作系统会保持一个空闲物理块队列。当某进程</p>
+<p>发生缺页时，从空闲物理块中取出一块分配给该进程；若已无空闲物理块，则可选择一 个<strong>未锁</strong></p>
+<p><strong>定的页面</strong>换出外存，再将该物理块分配给缺页的进程</p>
+<p>系统会锁定一些页面，这些页面中 的内容不能置换出外存（如：重要 的内核数据可以设为</p>
+<p>“锁定”）</p>
+<p>采用这种策略时，只要某进程发生缺页， 都将获得新的物理块，仅当空闲物理块用完时，系统</p>
+<p>才选择一个未锁定的页面调出。被选择调出的页可能是系统中任何一个进程中的页，因此这个</p>
+<p>被选中的进程拥有的物理块会减少，缺页率会增加</p>
+<p>可变分配<strong>全局</strong>置换：只要缺页就给分配新物理块</p>
+<p><strong>可变分配局部置换</strong></p>
+<p>刚开始会为每个进程分配一定数量的物理块。当某进程发生缺页时，只允许从该进程自己的物</p>
+<p>理块中选出一个进行换出外存。</p>
+<p>如果进程在运行中频繁地缺页，系统会为该进程多分配几个物理块，直至该进程缺页率趋势适</p>
+<p>当程度；反之，如果进程在运行中缺页率特别低，则可适当减少分配给该进程的物理块</p>
+<p>可变分配<strong>局部</strong>置换：要根据发生缺页的频率来动态地增加或减少进程的物理块</p>
+<p><strong>何时调入页面</strong></p>
+<p><strong>预调页策略</strong></p>
+<p>根据<strong>局部性原理</strong>，一次调入若干个相邻的页面可能比一次调入一个页面更高效</p>
+<p>主要指<strong>空间局部性</strong>，即：如果当前访问了某个内存单元，在之后很有可能会接着访问与其相</p>
+<p>邻的那些内存单元</p>
+<p>但如果提前调入的页面中大多数都没被访问过，则又是低效的，因此可以预测不久之后可能访</p>
+<p>问到的页面，将它们预先调入内存，但目前预测成功率只有50%左右</p>
+<p>故这种策略<strong>主要用于进程的首次调入</strong>，由程序员指出应该先调入哪些部分</p>
+<p>运行前调入</p>
+<p><strong>请求调页策略</strong></p>
+<p>进程<strong>在运行期间发现缺页时才将所缺页面调入内存</strong></p>
+<p>运行时调入</p>
+<p>由这种策略调入的页面一定会被访问到，但由于每次只能调入一页，而每次调页都要磁盘I&#x2F;O操</p>
+<p>作，因此I&#x2F;O开销较大</p>
+<p><strong>从何处调入页面</strong></p>
+<p>系统<strong>拥有足够的对换区空间</strong>：页面的调入、调出都是在<strong>内存</strong>与<strong>对换区</strong>之间进行，这样可以保</p>
+<p>证页面的调入、调出速度很快。在进程运行前，需将进程相关的数据从<strong>文件区</strong>复制到<strong>对换区</strong></p>
+<p>系统<strong>缺少足够的对换区空间</strong>：凡是不会被修改的数据都直接从<strong>文件区</strong>调入，由于这些页面不</p>
+<p>会被修改，因此换出时不必写回磁盘，下次需要时再从<strong>文件区</strong>调入即可。对于可能被修改的</p>
+<p>部分，换出时需写回磁盘<strong>对换区</strong>，下次需要时再从<strong>对换区</strong>调入</p>
+<p><strong>UNIX 方式</strong>：运行之前进程有关的数据全部放在<strong>文件区</strong>，故未使用过的页面，都可从<strong>文件</strong></p>
+<p><strong>区</strong>调入。若被使用过的页面需要换出，则写回<strong>对换区</strong>，下次需要时从<strong>对换区</strong>调入</p>
+<p><strong>抖动（颠簸）现象</strong></p>
+<p>刚刚换出的页面马上又要换入内存，刚刚换入的页面马上又要换出外存，这种频繁的页面调度行为</p>
+<p>称为<strong>抖动(颠簸)</strong></p>
+<p>产生抖动的主要原因是进程频繁访问的页面数目高于可用的物理块数（<strong>分配给进程的物理块不够</strong>）</p>
+<p>为进程分配的物理块太少，会使进程发生抖动现象。为进程分配的物理块太多，又会降低系统</p>
+<p>整体的并发度，降低某些资源的利用率</p>
+<p>为了研究为应该为每个进程分配多少个物理块，Denning 提出了进程“<strong>工作集</strong>”的概念</p>
+<p><strong>工作集</strong></p>
+<p><strong>驻留集</strong>：指请求分页存储管理中给<strong>进程分配的内存块的集合</strong></p>
+<p><strong>工作集</strong>：指在某段时间间隔里，<strong>进程实际访问页面的集合</strong></p>
+<p><strong>工作集大小可能小于窗口尺寸</strong>，实际应用中，操作系统可以统计进程的工作集大小，根据工作集大</p>
+<p>小给进程分配若干内存块</p>
+<p>如：窗口尺寸为5，经过一段时间的监测发现某进程的工作集最大为3，那么说明该进程有很好</p>
+<p>的局部性，可以给这个进程分配3个以上的内存块即可满足进程的运行需要。一般来说，<strong>驻留</strong></p>
+<p><strong>集大小不能小于工作集大小</strong>，否则进程运行过程中将频繁缺页</p>
+<p>拓展：</p>
+<p>基于局部性原理可知，进程在一段时间内访问的页面与不久之后会访问的页面是有相关性的。</p>
+<p>因此，可以根据进程近期访问的页面集合（工作集）来设计一种页面置换算法 – 选择一个不在</p>
+<p>工作集中的页面进行淘汰</p>
+<h2 id="5-内存映射文件"><a href="#5-内存映射文件" class="headerlink" title="5. 内存映射文件"></a><strong>5. 内存映射文件</strong></h2><p><strong>内存映射文件（Memory-Mapped Files）</strong></p>
+<p><strong>内存映射文件</strong>：操作系统向上层程序员提供的功能（<strong>系统调用</strong>）</p>
+<p>方便程序员访问文件数据</p>
+<p><strong>传统的文件访问方式</strong></p>
+<p><strong>内存映射文件的访问方式</strong></p>
+<p>方便多个进程共享同一个文件</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" class="category-chain-item">计算机基础</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="category-chain-item">操作系统</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="print-no-link">#操作系统</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>3.2 虚拟内存管理</div>
+      <div>http://binbo-zappy.github.io/2024/11/19/操作系统/3-2-虚拟内存管理/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年11月19日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/11/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/4-1-%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80/" title="4.1 文件系统基础">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">4.1 文件系统基础</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-7-%E4%B8%87%E7%BB%B4%E7%BD%91WWW/" title="6.7 万维网WWW">
+                        <span class="hidden-mobile">6.7 万维网WWW</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
