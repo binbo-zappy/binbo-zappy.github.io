@@ -19,16 +19,16 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="事务事务是一组操作的集合，事务会把所有操作作为一个整体一起向系统提交或撤销操作请求，即这些操作要么同时成功，要么同时失败。 基本操作：         &#96;&#96;&#96;    1    2    3    4    5    6    7    8    9    10    11    12    13    14    15    16    17    18    19">
+    <meta name="description" content="5. 事务 事务是一组操作的集合，事务会把所有操作作为一个整体一起向系统提交或撤销操作请求，即这些操作要么同时成功，要么同时失败。  5.1 基本操作：1234567891011121314151617181920212223242526272829303132create table account(	id int auto_increment primary key comment &amp;#x27">
 <meta property="og:type" content="article">
 <meta property="og:title" content="5. 事务">
 <meta property="og:url" content="http://binbo-zappy.github.io/2024/11/26/MySQL/5-%E4%BA%8B%E5%8A%A1/index.html">
 <meta property="og:site_name" content="Binbo">
-<meta property="og:description" content="事务事务是一组操作的集合，事务会把所有操作作为一个整体一起向系统提交或撤销操作请求，即这些操作要么同时成功，要么同时失败。 基本操作：         &#96;&#96;&#96;    1    2    3    4    5    6    7    8    9    10    11    12    13    14    15    16    17    18    19">
+<meta property="og:description" content="5. 事务 事务是一组操作的集合，事务会把所有操作作为一个整体一起向系统提交或撤销操作请求，即这些操作要么同时成功，要么同时失败。  5.1 基本操作：1234567891011121314151617181920212223242526272829303132create table account(	id int auto_increment primary key comment &amp;#x27">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/MySQL.png">
 <meta property="article:published_time" content="2024-11-26T08:31:55.000Z">
-<meta property="article:modified_time" content="2024-11-26T08:34:53.101Z">
+<meta property="article:modified_time" content="2024-11-27T03:59:37.343Z">
 <meta property="article:author" content="Binbo">
 <meta property="article:tag" content="MySQL">
 <meta name="twitter:card" content="summary_large_image">
@@ -225,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          650 字
+          663 字
         
       </span>
     
@@ -278,228 +278,22 @@
             
               <div class="markdown-body">
                 
-                <h2 id="事务"><a href="#事务" class="headerlink" title="事务"></a><a href="#%E4%BA%8B%E5%8A%A1" title="事务"></a>事务</h2><p>事务是一组操作的集合，事务会把所有操作作为一个整体一起向系统提交或撤销操作请求，即这些操作要么同时成功，要么同时失败。</p>
-<p>基本操作：</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>&#96;&#96;&#96;</td>
-<td></td>
-</tr>
-<tr>
-<td>1</td>
-<td></td>
-</tr>
-<tr>
-<td>2</td>
-<td></td>
-</tr>
-<tr>
-<td>3</td>
-<td></td>
-</tr>
-<tr>
-<td>4</td>
-<td></td>
-</tr>
-<tr>
-<td>5</td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td></td>
-</tr>
-<tr>
-<td>7</td>
-<td></td>
-</tr>
-<tr>
-<td>8</td>
-<td></td>
-</tr>
-<tr>
-<td>9</td>
-<td></td>
-</tr>
-<tr>
-<td>10</td>
-<td></td>
-</tr>
-<tr>
-<td>11</td>
-<td></td>
-</tr>
-<tr>
-<td>12</td>
-<td></td>
-</tr>
-<tr>
-<td>13</td>
-<td></td>
-</tr>
-<tr>
-<td>14</td>
-<td></td>
-</tr>
-<tr>
-<td>15</td>
-<td></td>
-</tr>
-<tr>
-<td>16</td>
-<td></td>
-</tr>
-<tr>
-<td>17</td>
-<td></td>
-</tr>
-<tr>
-<td>18</td>
-<td></td>
-</tr>
-<tr>
-<td>19</td>
-<td></td>
-</tr>
-<tr>
-<td>20</td>
-<td></td>
-</tr>
-<tr>
-<td>21</td>
-<td></td>
-</tr>
-<tr>
-<td>22</td>
-<td></td>
-</tr>
-<tr>
-<td>23</td>
-<td></td>
-</tr>
-<tr>
-<td>24</td>
-<td></td>
-</tr>
-<tr>
-<td>​&#96;&#96;&#96;</td>
-<td>&#96;&#96;&#96;</td>
-</tr>
-<tr>
-<td>– 1. 查询张三账户余额</td>
-<td></td>
-</tr>
-<tr>
-<td>select * from account where name &#x3D; ‘张三’;</td>
-<td></td>
-</tr>
-<tr>
-<td>– 2. 将张三账户余额-1000</td>
-<td></td>
-</tr>
-<tr>
-<td>update account set money &#x3D; money - 1000 where name &#x3D; ‘张三’;</td>
-<td></td>
-</tr>
-<tr>
-<td>– 此语句出错后张三钱减少但是李四钱没有增加</td>
-<td></td>
-</tr>
-<tr>
-<td>模拟sql语句错误</td>
-<td></td>
-</tr>
-<tr>
-<td>– 3. 将李四账户余额+1000</td>
-<td></td>
-</tr>
-<tr>
-<td>update account set money &#x3D; money + 1000 where name &#x3D; ‘李四’;</td>
-<td></td>
-</tr>
-</tbody></table>
-<p>– 查看事务提交方式<br>SELECT @@AUTOCOMMIT;<br>– 设置事务提交方式，1为自动提交，0为手动提交，该设置只对当前会话有效<br>SET @@AUTOCOMMIT &#x3D; 0;<br>– 提交事务<br>COMMIT;<br>– 回滚事务<br>ROLLBACK;</p>
-<p>– 设置手动提交后上面代码改为：<br>select * from account where name &#x3D; ‘张三’;<br>update account set money &#x3D; money - 1000 where name &#x3D; ‘张三’;<br>update account set money &#x3D; money + 1000 where name &#x3D; ‘李四’;<br>commit;<br>​&#96;&#96;&#96; |</p>
+                <h1 id="5-事务"><a href="#5-事务" class="headerlink" title="5. 事务"></a>5. 事务</h1><ul>
+<li>事务是一组操作的集合，事务会把所有操作作为一个整体一起向系统提交或撤销操作请求，即这些操作要么同时成功，要么同时失败。</li>
+</ul>
+<h2 id="5-1-基本操作："><a href="#5-1-基本操作：" class="headerlink" title="5.1 基本操作："></a>5.1 基本操作：</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs mysql">create table account(<br>	id int auto_increment primary key comment &#x27;主键ID&#x27;,<br>    name varchar(10) comment &#x27;姓名&#x27;,<br>    money int comment &#x27;余额&#x27;<br>) comment &#x27;账户表&#x27;;<br>insert into account(id, name, money) values (null, &#x27;张三&#x27;, 2000),(null, &#x27;李四&#x27;, 2000);<br>update account set money = 2000;<br><br>-- 1. 查询张三账户余额<br>select * from account where name = &#x27;张三&#x27;;<br>-- 2. 将张三账户余额-1000<br>update account set money = money - 1000 where name = &#x27;张三&#x27;;<br>-- 此语句出错后张三钱减少但是李四钱没有增加<br>模拟sql语句错误<br>-- 3. 将李四账户余额+1000<br>update account set money = money + 1000 where name = &#x27;李四&#x27;;<br><br><br>-- 查看事务提交方式<br>SELECT @@AUTOCOMMIT;<br>-- 设置事务提交方式，1为自动提交，0为手动提交，该设置只对当前会话有效<br>SET @@AUTOCOMMIT = 0;<br>-- 提交事务<br>COMMIT;<br>-- 回滚事务<br>ROLLBACK;<br><br>-- 设置手动提交后上面代码改为：<br>select * from account where name = &#x27;张三&#x27;;<br>update account set money = money - 1000 where name = &#x27;张三&#x27;;<br>update account set money = money + 1000 where name = &#x27;李四&#x27;;<br>commit;<br></code></pre></td></tr></table></figure>
+
+
 <p>操作方式二：</p>
-<p>开启事务：<br><code>START TRANSACTION 或 BEGIN TRANSACTION;</code><br>提交事务：<br><code>COMMIT;</code><br>回滚事务：<br><code>ROLLBACK;</code></p>
-<p>操作实例：</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>&#96;&#96;&#96;</td>
-<td></td>
-</tr>
-<tr>
-<td>1</td>
-<td></td>
-</tr>
-<tr>
-<td>2</td>
-<td></td>
-</tr>
-<tr>
-<td>3</td>
-<td></td>
-</tr>
-<tr>
-<td>4</td>
-<td></td>
-</tr>
-<tr>
-<td>5</td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td></td>
-</tr>
-<tr>
-<td>​&#96;&#96;&#96;</td>
-<td>&#96;&#96;&#96;</td>
-</tr>
-<tr>
-<td>start transaction;</td>
-<td></td>
-</tr>
-<tr>
-<td>select * from account where name &#x3D; ‘张三’;</td>
-<td></td>
-</tr>
-<tr>
-<td>update account set money &#x3D; money - 1000 where name &#x3D; ‘张三’;</td>
-<td></td>
-</tr>
-<tr>
-<td>update account set money &#x3D; money + 1000 where name &#x3D; ‘李四’;</td>
-<td></td>
-</tr>
-<tr>
-<td>commit;</td>
-<td></td>
-</tr>
-<tr>
-<td>​&#96;&#96;&#96;</td>
-<td></td>
-</tr>
-</tbody></table>
-<h3 id="四大特性ACID"><a href="#四大特性ACID" class="headerlink" title="四大特性ACID"></a><a href="#%E5%9B%9B%E5%A4%A7%E7%89%B9%E6%80%A7ACID" title="四大特性ACID"></a>四大特性ACID</h3><ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- 开启事务：<br>START TRANSACTION 或 BEGIN TRANSACTION;<br>-- 提交事务：<br>COMMIT;<br>-- 回滚事务：<br>ROLLBACK;<br><br>操作实例：<br>start transaction;<br>select * from account where name = &#x27;张三&#x27;;<br>update account set money = money - 1000 where name = &#x27;张三&#x27;;<br>update account set money = money + 1000 where name = &#x27;李四&#x27;;<br>commit;<br></code></pre></td></tr></table></figure>
+
+<h2 id="5-2-四大特性ACID"><a href="#5-2-四大特性ACID" class="headerlink" title="5.2 四大特性ACID"></a>5.2 四大特性ACID</h2><ul>
 <li>原子性(Atomicity)：事务是不可分割的最小操作但愿，要么全部成功，要么全部失败</li>
 <li>一致性(Consistency)：事务完成时，必须使所有数据都保持一致状态</li>
 <li>隔离性(Isolation)：数据库系统提供的隔离机制，保证事务在不受外部并发操作影响的独立环境下运行</li>
 <li>持久性(Durability)：事务一旦提交或回滚，它对数据库中的数据的改变就是永久的</li>
 </ul>
-<h3 id="并发事务"><a href="#并发事务" class="headerlink" title="并发事务"></a><a href="#%E5%B9%B6%E5%8F%91%E4%BA%8B%E5%8A%A1" title="并发事务"></a>并发事务</h3><table>
+<h2 id="5-3-并发事务"><a href="#5-3-并发事务" class="headerlink" title="5.3 并发事务"></a>5.3 并发事务</h2><table>
 <thead>
 <tr>
 <th>问题</th>
@@ -519,11 +313,7 @@
 <td>一个事务按照条件查询数据时，没有对应的数据行，但是再插入数据时，又发现这行数据已经存在</td>
 </tr>
 </tbody></table>
-<blockquote>
-<p>这三个问题的详细演示：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Kr4y1i7ru?p=55cd">https://www.bilibili.com/video/BV1Kr4y1i7ru?p=55cd</a></p>
-</blockquote>
-<p>并发事务隔离级别：</p>
-<table>
+<h2 id="5-4-并发事务隔离级别："><a href="#5-4-并发事务隔离级别：" class="headerlink" title="5.4 并发事务隔离级别："></a>5.4 并发事务隔离级别：</h2><table>
 <thead>
 <tr>
 <th>隔离级别</th>
@@ -561,7 +351,10 @@
 <li>√表示在当前隔离级别下该问题会出现</li>
 <li>Serializable 性能最低；Read uncommitted 性能最高，数据安全性最差</li>
 </ul>
-<p>查看事务隔离级别：<br><code>SELECT @@TRANSACTION_ISOLATION;</code><br>设置事务隔离级别：<br><code>SET [ SESSION | GLOBAL ] TRANSACTION ISOLATION LEVEL &#123;READ UNCOMMITTED | READ COMMITTED | REPEATABLE READ | SERIALIZABLE &#125;;</code><br>SESSION 是会话级别，表示只针对当前会话有效，GLOBAL 表示对所有会话有效</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- 查看事务隔离级别：<br>SELECT @@TRANSACTION_ISOLATION;<br>-- 设置事务隔离级别：<br>SET [ SESSION | GLOBAL ] TRANSACTION ISOLATION LEVEL &#123;READ UNCOMMITTED | READ COMMITTED | REPEATABLE READ | SERIALIZABLE &#125;;<br><br>set session transaction isolation level REPEATABLE READ;<br></code></pre></td></tr></table></figure>
+
+
+<p>SESSION 是会话级别，表示只针对当前会话有效，GLOBAL 表示对所有会话有效</p>
 
                 
               </div>
