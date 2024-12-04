@@ -28,7 +28,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/hexo.jpg">
 <meta property="article:published_time" content="2024-11-12T05:03:38.000Z">
-<meta property="article:modified_time" content="2024-11-15T03:26:30.576Z">
+<meta property="article:modified_time" content="2024-12-04T11:56:52.559Z">
 <meta property="article:author" content="Binbo">
 <meta property="article:tag" content="git">
 <meta property="article:tag" content="个人博客">
@@ -226,7 +226,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          407 字
+          630 字
         
       </span>
     
@@ -237,7 +237,7 @@
         
         
         
-          4 分钟
+          6 分钟
         
       </span>
     
@@ -345,6 +345,39 @@ master</p></li>
 <p>在source/_post目录下可查看新建的md文件。</p>
 <p>注：可在hexo s服务开启的状态下修改问价内容查看预览内容。</p>
 <p>要设置其他主题，可自行查找，博主参考Fluid风格的blog <a target="_blank" rel="noopener" href="https://hexo.fluid-dev.com/docs/">Hexo Fluid 用户手册</a>。</p>
+<h1 id="常见问题">常见问题</h1>
+<h2 id="问题一">问题一</h2>
+<p>当数学公式复杂的时候，默认的渲染引擎无法正常渲染，解决办法如下：</p>
+<ol type="1">
+<li>windows安装pandoc
+<ol type="1">
+<li>下载win版本的msi文件，双击安装即可</li>
+<li>本地安装pandoc，安装之后记得重启电脑哦，否则会报错捏！</li>
+</ol></li>
+<li>更换渲染引擎
+<ol type="1">
+<li>卸载 hexo-renderer-marked 和 hexo-math</li>
+<li>安装 hexo-renderer-pandoc 和 hexo-filter-mathjax</li>
+</ol></li>
+</ol>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs sh">npm uninstall hexo-math --save<br>npm uninstall hexo-renderer-marked --save<br><br>npm install hexo-renderer-pandoc --save<br>npm install hexo-filter-mathjax --save<br></code></pre></td></tr></table></figure>
+<ol start="3" type="1">
+<li>修改配置</li>
+</ol>
+<ul>
+<li>打开 Hexo 根目录的 <code>_config.yml</code>
+文件，添加下面的代码：</li>
+</ul>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs json">mathjax<span class="hljs-punctuation">:</span><br>  tags<span class="hljs-punctuation">:</span> none # or &#x27;ams&#x27; or &#x27;all&#x27;<br>  single_dollars<span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span> # enable single dollar signs as in-line math delimiters<br>  cjk_width<span class="hljs-punctuation">:</span> <span class="hljs-number">0.9</span> # relative CJK char width<br>  normal_width<span class="hljs-punctuation">:</span> <span class="hljs-number">0.6</span> # relative normal (monospace) width<br>  append_css<span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span> # add CSS to pages rendered by MathJax<br>  every_page<span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">false</span></span> # if <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span> every page will be rendered by MathJax regardless the `mathjax` setting in Front-matter<br>  packages<span class="hljs-punctuation">:</span> # extra packages to load<br>  extension_options<span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><span class="hljs-punctuation">&#125;</span><br>    # you can put your extension options here<br>    # see http<span class="hljs-punctuation">:</span><span class="hljs-comment">//docs.mathjax.org/en/latest/options/input/tex.html#tex-extension-options for more detail</span><br></code></pre></td></tr></table></figure>
+<ol start="4" type="1">
+<li>重新构建</li>
+</ol>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sh">hexo clean<br>hexo g<br></code></pre></td></tr></table></figure>
+<ol start="5" type="1">
+<li>在客户端使用 mathjax 渲染数学公式。注意：来包裹行内公式的 $
+和公式之间不能有空格，否则会渲染失败。如：</li>
+</ol>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs tex"><span class="hljs-built_in">$</span>a<span class="hljs-built_in">$</span> <span class="hljs-params">#</span>ok<br><span class="hljs-built_in">$</span> a <span class="hljs-built_in">$</span> <span class="hljs-params">#</span>不ok<br></code></pre></td></tr></table></figure>
 
                 
               </div>
