@@ -1,0 +1,836 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="价值学习高级技巧 前面介绍了 DQN, 并且用 Q学习算法训练 DQN。如果用最原始的 Q 学习算法，那么训练出的 DQN 效果会很不理想。想要提升 DQN 的表现，需要用本章的高级技巧。文献中已经有充分实验结果表明这些高级技巧对 DQN 非常有效，而且这些技巧不冲突，可以一起使用。有些技巧并不局限于DQN，而是可以应用于多种价值学习和策略学习方法。 介绍经验回放 (experienc">
+<meta property="og:type" content="article">
+<meta property="og:title" content="5.1 经验回放">
+<meta property="og:url" content="http://binbo-zappy.github.io/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/5-1-%E7%BB%8F%E9%AA%8C%E5%9B%9E%E6%94%BE/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="价值学习高级技巧 前面介绍了 DQN, 并且用 Q学习算法训练 DQN。如果用最原始的 Q 学习算法，那么训练出的 DQN 效果会很不理想。想要提升 DQN 的表现，需要用本章的高级技巧。文献中已经有充分实验结果表明这些高级技巧对 DQN 非常有效，而且这些技巧不冲突，可以一起使用。有些技巧并不局限于DQN，而是可以应用于多种价值学习和策略学习方法。 介绍经验回放 (experienc">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/RL-WSS.png">
+<meta property="article:published_time" content="2024-12-04T08:02:51.000Z">
+<meta property="article:modified_time" content="2024-12-04T10:58:37.188Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="RL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/RL-WSS.png">
+  
+  
+  
+  <title>5.1 经验回放 - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="5.1 经验回放"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-12-04 16:02" pubdate>
+          2024年12月4日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          25 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">5.1 经验回放</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="价值学习高级技巧">价值学习高级技巧</h1>
+<p>前面介绍了 DQN, 并且用 Q学习算法训练 DQN。如果用最原始的 Q
+学习算法，那么训练出的 DQN 效果会很不理想。想要提升 DQN
+的表现，需要用本章的高级技巧。文献中已经有充分实验结果表明这些高级技巧对
+DQN
+非常有效，而且这些技巧不冲突，可以一起使用。有些技巧并不局限于DQN，而是可以应用于多种价值学习和策略学习方法。</p>
+<p>介绍经验回放 (experience replay) 和优先经验回放(prioritized
+experience replay)。讨论 DQN 的高估问题以及解决方案——目标网络(target
+network) 和双 Q 学习算法(double Q-learning)。</p>
+<p>介绍两种方法改进 DQN 的神经网络结构 (不是对 Q
+学习算法的改进)：对决网络 (dueling network),它把动作价值 (action value)
+分解成状态价值(state value) 与优势 (advantage)；噪声网络 (noisy net),
+它往神经网络的参数中加入随机噪声,鼓励探索。</p>
+<h1 id="经验回放">经验回放</h1>
+<p>经验回放(experience
+replay)是强化学习中一个重要的技巧，可以大幅提升强化学习的表现。经验回放的意思是把智能体与环境交互的记录
+(即经验)
+储存到一个数组里，事后反复利用这些经验训练智能体。这个数组被称为经验回放数组
+(replay buffer)。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/5-1-%E7%BB%8F%E9%AA%8C%E5%9B%9E%E6%94%BE/1733201744660-70545f81-e6a4-44ee-a10a-d8bb5762d746.png" srcset="/img/loading.gif" lazyload></p>
+<p>具体来说，把智能体的轨迹划分成<span class="math inline">\(s_t, a_t,
+r_t, s_{t+1}\)</span>这样的四元组，存入一个数组。需要人为指定数组的大小
+(记作<span class="math inline">\(b\)</span>)。数组中只保留最近<span class="math inline">\(b\)</span>条数据；当数组存满之后，删除掉最旧的数据。数组的大小<span class="math inline">\(b\)</span>是个需要调的超参数，会影响训练的结果。通常设置<span class="math inline">\(b\)</span>为<span class="math inline">\(10^5\sim10^6\)</span>。</p>
+<p>在实践中，要等回放数组中有足够多的四元组时，才开始做经验回放更新
+DQN。根据论文的实验分析，如果将 DQN 用于 Atari 游戏，最好是在收集到 20
+万条四元组时才开始做经验回放更新 DQN; 如果是用更好的 Rainbow DQN, 收集到
+8 万条四元组时就可以开始更新
+DQN。在回放数组中的四元组数量不够的时候，DQN 只与环境交互，而不去更新
+DQN 参数，否则实验效果不好。</p>
+<h1 id="经验回放的优点">经验回放的优点</h1>
+<p>经验回放的一个好处在于打破序列的相关性。训练 DQN
+的时候，每次我们用一个四元组对 DQN
+的参数做一次更新。我们希望相邻两次使用的四元组是独立的。然而当智能体收集经验的时候，相邻两个四元组<span class="math inline">\((s_t, a_t, r_t, s_{t+1})\)</span>和<span class="math inline">\((s_{t+1}, a_{t+1}, r_{t+1},
+s_{t+2})\)</span>有很强的相关性。依次使用这些强关联的四元组训练 DQN,
+效果往往会很差。经验回放每次从数组里随机抽取一个四元组，用来对 DQN
+参数做一次更新。这样随机抽到的四元组都是独立的，消除了相关性。</p>
+<p>经验回放的另一个好处是重复利用收集到的经验、而不是用一次就丢弃，这样可以用更少的样本数量达到同样的表现。重复利用经验、不重复利用经验的收敛曲线通常如图
+6.2 所示。图的横轴是样本数量，纵轴是平均回报。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/5-1-%E7%BB%8F%E9%AA%8C%E5%9B%9E%E6%94%BE/1733201838369-eb1a4f6e-ab3a-45b9-83d7-03c73331017c.png" srcset="/img/loading.gif" lazyload></p>
+<p>注 在阅读文献的时候请注意“样本数量"(sample complexity)
+与“更新次数"两者的区别。样本数量是指智能体从环境中获取的奖励<span class="math inline">\(r\)</span>的数量。而一次更新的意思是从经验回放数组里取出一个或多个四元组，用它对参数<span class="math inline">\(w\)</span>做一次更新。通常来说，样本数量更重要，因为在实际应用中收集经验比较困难。比如，在机器人的应用中，需要在现实世界做一次实验才能收集到一条经验，花费的时间和金钱远大于做一次计算。相对而言，做更新的次数不是那么重要，更新次数只会影响训练时的计算量而已。</p>
+<h1 id="经验回放的局限性">经验回放的局限性</h1>
+<p>需要注意，并非所有的强化学习方法都允许重复使用过去的经验。经验回放数组里的数据全都是用行为策略
+(behavior policy)
+控制智能体收集到的。在收集经验同时，我们也在不断地改进策略。策略的变化导致收集经验时用的行为策略是过时的策略，不同于当前我们想要更新的策略——即目标策略(target
+policy)。也就是说，经验回放数组中的经验通常是过时的行为策略收集的，而我们真正想要学的目标策略不同于过时的行为策略。</p>
+<p>有些强化学习方法允许行为策略不同于目标策略。这样的强化学习方法叫做异策略(off-policy)。比如
+Q 学习、确定策略梯度 (DPG)
+都属于异策略。由于它们允许行为策略不同于目标策略，过时的行为策略收集到的经验可以被重复利用。经验回放适用于异策略。</p>
+<p>有些强化学习方法要求行为策略与目标策略必须相同。这样的强化学习方法叫做同策略
+(on-policy)。比如 SARSA、REINFORCE、A2C
+都属于同策略。它们要求经验必须是当前的目标策略收集到的，而不能使用过时的经验。经验回放不适用于同策略。</p>
+<h1 id="优先经验回放">优先经验回放</h1>
+<p>优先经验回放 (prioritized experience replay)
+是一种特殊的经验回放方法，它比普通的经验回放效果更好：既能让收敛更快，也能让收敛时的平均回报更高。经验回放数组里有<span class="math inline">\(b\)</span>个四元组，普通经验回放每次均匀抽样得到一个样本——即四元组<span class="math inline">\((s_j, a_j, r_j, s_{j+1})\)</span>。用它来更新 DQN
+的参数。优先经验回放给每个四元组一个权重，然后根据权重做非均匀随机抽样。如果
+DQN 对<span class="math inline">\((s_j,
+a_j)\)</span>的价值判断不准确，即<span class="math inline">\(Q(s_j, a_j;
+w)\)</span>离<span class="math inline">\(Q^*(s_j,
+a_j)\)</span>较远，则四元组<span class="math inline">\((s_j, a_j, r_j,
+s_{j+1})\)</span>应当有较高的权重。</p>
+<p>为什么样本的重要性会有所不同呢？设想你用强化学习训练一辆无人车。经验回放数组中的样本绝大多数都是车辆正常行驶的情形，只有极少数样本是意外情况，比如旁边车辆强行变道、行人横穿马路、警察封路要求绕行。数组中的样本的重要性显然是不同的。绝大多数的样本都是车辆正常行驶，而且正常行驶的情形很容易处理，出错的可能性非常小。意外情况的样本非常少，但是又极其重要，处理不好就会车毁人亡。所以意外情况的样本应当有更高的权重，受到更多关注。这两种样本不应该同等对待。</p>
+<p>如何自动判断哪些样本更重要呢？举个例子，自动驾驶中的意外情况数量少、而且难以处理，导致
+DQN 的预测<span class="math inline">\(Q(s_j, a_j;
+w)\)</span>严重偏离真实价值<span class="math inline">\(Q^*(s_j,
+a_j)\)</span>。因此，要是<span class="math inline">\(|Q(s_j, a_j; w) -
+Q^*(s_j, a_j)|\)</span>较大，则应该给样本<span class="math inline">\((s_j, a_j, r_j,
+s_{j+1})\)</span>较高的权重。然而实际上我们不知道<span class="math inline">\(Q^*\)</span>，因此无从得知<span class="math inline">\(|Q(s_j, a_j; w) - Q^*(s_j,
+a_j)|\)</span>。不妨把它替换成 TD 误差。回忆一下，TD 误差的定义是：</p>
+<p><span class="math inline">\(\delta_j = \Delta Q(s_j, a_j;
+w_{\text{now}}) - [r_t + \gamma \cdot \max_a Q(s_{j+1}, a;
+w_{\text{now}})]\)</span></p>
+<p>如果 TD 误差的绝对值<span class="math inline">\(|\delta_j|\)</span>大，说明 DQN 对<span class="math inline">\((s_j,
+a_j)\)</span>的真实价值的评估不准确，那么应该给<span class="math inline">\((s_j, a_j, r_j,
+s_{j+1})\)</span>设置较高的权重。</p>
+<p>优先经验回放对数组里的样本做非均匀抽样。四元组<span class="math inline">\((s_j, a_j, r_j, s_{j+1})\)</span>的权重是 TD
+误差的绝对值<span class="math inline">\(|\delta_j|\)</span>。有两种方法设置抽样概率。一种抽样概率是：</p>
+<p><span class="math inline">\(p_j \propto |\delta_j| +
+\epsilon\)</span>.</p>
+<p>此处的<span class="math inline">\(\epsilon\)</span>是个很小的数，防止抽样概率接近零，用于保证所有样本都以非零的概率被抽到。另一种抽样方式先对<span class="math inline">\(|\delta_j|\)</span>做降序排列，然后计算</p>
+<p><span class="math inline">\(p_j \propto
+\frac{1}{\text{rank}(j)}\)</span>.</p>
+<p>此处的<span class="math inline">\(\text{rank}(j)\)</span>是<span class="math inline">\(|\delta_j|\)</span>的序号。大的<span class="math inline">\(|\delta_j|\)</span>的序号小，小的<span class="math inline">\(|\delta_j|\)</span>的序号大。两种方式的原理是一样的，<span class="math inline">\(|\delta_j|\)</span>大的样本被抽样到的概率大。</p>
+<p>优先经验回放做非均匀抽样，四元组<span class="math inline">\((s_j,
+a_j, r_j, s_{j+1})\)</span>被抽到的概率是<span class="math inline">\(p_j\)</span>。抽样是非均匀的，不同的样本有不同的抽样概率，这样会导致
+DQN 的预测有偏差。应该相应调整学习率，抵消掉不同抽样概率造成的偏差。TD
+算法用“随机梯度下降”来更新参数：</p>
+<p><span class="math inline">\(w_{\text{new}} \leftarrow w_{\text{now}}
+- \alpha \cdot g\)</span>,</p>
+<p>此处的<span class="math inline">\(\alpha\)</span>是学习率，<span class="math inline">\(g\)</span>是损失函数关于<span class="math inline">\(w\)</span>的梯度。如果用均匀抽样，那么所有样本有相同的学习率<span class="math inline">\(\alpha\)</span>。如果做非均匀抽样的话，应该根据抽样概率来调整学习率<span class="math inline">\(\alpha\)</span>。如果一条样本被抽样的概率大，那么它的学习率就应该比较小。可以这样设置学习率：</p>
+<p><span class="math inline">\(\alpha_j = \frac{\alpha}{(b \cdot
+p_j)^\beta}\)</span>,</p>
+<p>此处的<span class="math inline">\(b\)</span>是经验回放数组中样本的总数，<span class="math inline">\(\beta \in (0,
+1)\)</span>是个需要调的超参数（论文里建议一开始让<span class="math inline">\(\beta\)</span>比较小，最终增长到 1）。</p>
+<p>注 均匀抽样是一种特例，即所有抽样概率都相等：</p>
+<p><span class="math inline">\(p_1 = \cdots = p_b =
+\frac{1}{b}\)</span>.</p>
+<p>在这种情况下，有<span class="math inline">\((b \cdot p_j)^\beta =
+1\)</span>, 因此学习率都相同：</p>
+<p><span class="math inline">\(\alpha_1 = \cdots = \alpha_b =
+\alpha_o\)</span>.</p>
+<p>注 读者可能会问下面的问题。如果样本<span class="math inline">\((s_j,
+a_j, r_j, s_{j+1})\)</span>很重要，它被抽到的概率<span class="math inline">\(p_j\)</span>很大，可是它的学习率却很小。当<span class="math inline">\(\beta = 1\)</span>时，如果抽样概率<span class="math inline">\(p_j\)</span>变大 10 倍，则学习率<span class="math inline">\(\alpha_j\)</span>减小 10
+倍。抽样概率、学习率两者岂不是抵消了吗，那么优先经验回放有什么意义呢？大抽样概率、小学习率两者其实并没有抵消，因为下面两种方式并不等价：</p>
+<ul>
+<li>设置学习率为<span class="math inline">\(\alpha\)</span>,使用样本<span class="math inline">\((s_j, a_j, r_j,
+s_{j+1})\)</span>计算一次梯度，更新一次参数<span class="math inline">\(w\)</span>;</li>
+<li>设置学习率为<span class="math inline">\(\frac{\alpha}{10}\)</span>,
+使用样本<span class="math inline">\((s_j, a_j, r_j,
+s_{j+1})\)</span>计算十次梯度，更新十次参数<span class="math inline">\(w\)</span>。</li>
+</ul>
+<p>乍看起来两种方式区别不大，但其实第二种方式是对样本更有效的利用。第二种方式的缺点在于计算量大了十倍，所以第二种方式只被用于重要的样本。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/5-1-%E7%BB%8F%E9%AA%8C%E5%9B%9E%E6%94%BE/1733202010568-2c83e20c-97ce-4227-aeea-8a893769e0cd.png" srcset="/img/loading.gif" lazyload></p>
+<p>优先经验回放数组如图 6.3 所示。设<span class="math inline">\(b\)</span>为数组大小，需要手动调整。如果样本
+(即四元组) 的数量超过了<span class="math inline">\(b\)</span>,那么要删除最旧的样本。数组里记录了四元组、TD
+误差、抽样概率、以及学习率。注意，数组里存的 TD 误差<span class="math inline">\(\delta_j\)</span>是用很多步之前过时的 DQN
+参数计算出来的：</p>
+<p><span class="math inline">\(\delta_j = Q(s_j, a_j; w_{\text{old}}) -
+[r_t + \gamma \cdot \max_a Q(s_{j+1}, a; w_{\text{old}})]\)</span>.</p>
+<p>做经验回放的时候，每次取出一个四元组，用它计算出新的 TD 误差：</p>
+<p><span class="math inline">\(\delta_j&#39; = Q(s_j, a_j;
+w_{\text{now}}) - [r_t + \gamma \cdot \max_a Q(s_{j+1}, a;
+w_{\text{now}})]\)</span>,</p>
+<p>然后用它更新 DQN 的参数。用这个新的<span class="math inline">\(\delta_j&#39;\)</span>取代数组中旧的<span class="math inline">\(\delta_j\)</span>。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/AI/" class="category-chain-item">AI</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI/RL/" class="category-chain-item">RL</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI/RL/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/" class="category-chain-item">DRL-王树森</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/RL/" class="print-no-link">#RL</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>5.1 经验回放</div>
+      <div>http://binbo-zappy.github.io/2024/12/04/DRL-王树森/5-1-经验回放/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年12月4日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/5-2-%E9%AB%98%E4%BC%B0%E9%97%AE%E9%A2%98/" title="5.2 高估问题">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">5.2 高估问题</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/4-3-%E5%A4%9A%E6%AD%A5-TD%E7%9B%AE%E6%A0%87/" title="4.3 多步 TD目标">
+                        <span class="hidden-mobile">4.3 多步 TD目标</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

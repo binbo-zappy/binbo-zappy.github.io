@@ -19,12 +19,12 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="6.3 动态主机配置协议DHCP 动态主机配置协议DHCP(Dynamic Host Configuration Protocol))提供了一种机制，称为即插即用连网。 这种机制允许一台计算机加入新网络时可自动获取P地址等网络配置信息而不用手工参与。   DHCP报文在运输层使用UDP协议封装  DHCP客户使用的UDP端口号为68 DHCP服务器使用的UDP端口号为67   客户端向DHCP服务">
+    <meta name="description" content="6.3 动态主机配置协议DHCP  动态主机配置协议DHCP(Dynamic Host Configuration Protocol))提供了一种机制，称为即插即用连网。 这种机制允许一台计算机加入新网络时可自动获取P地址等网络配置信息而不用手工参与。   DHCP报文在运输层使用UDP协议封装  DHCP客户使用的UDP端口号为68 DHCP服务器使用的UDP端口号为67">
 <meta property="og:type" content="article">
 <meta property="og:title" content="6.3 动态主机配置协议DHCP">
 <meta property="og:url" content="http://binbo-zappy.github.io/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-3-%E5%8A%A8%E6%80%81%E4%B8%BB%E6%9C%BA%E9%85%8D%E7%BD%AE%E5%8D%8F%E8%AE%AEDHCP/index.html">
 <meta property="og:site_name" content="Binbo">
-<meta property="og:description" content="6.3 动态主机配置协议DHCP 动态主机配置协议DHCP(Dynamic Host Configuration Protocol))提供了一种机制，称为即插即用连网。 这种机制允许一台计算机加入新网络时可自动获取P地址等网络配置信息而不用手工参与。   DHCP报文在运输层使用UDP协议封装  DHCP客户使用的UDP端口号为68 DHCP服务器使用的UDP端口号为67   客户端向DHCP服务">
+<meta property="og:description" content="6.3 动态主机配置协议DHCP  动态主机配置协议DHCP(Dynamic Host Configuration Protocol))提供了一种机制，称为即插即用连网。 这种机制允许一台计算机加入新网络时可自动获取P地址等网络配置信息而不用手工参与。   DHCP报文在运输层使用UDP协议封装  DHCP客户使用的UDP端口号为68 DHCP服务器使用的UDP端口号为67">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/network.jpg">
 <meta property="article:published_time" content="2024-11-18T07:55:02.000Z">
@@ -278,39 +278,40 @@
             
               <div class="markdown-body">
                 
-                <h1 id="6-3-动态主机配置协议DHCP"><a href="#6-3-动态主机配置协议DHCP" class="headerlink" title="6.3 动态主机配置协议DHCP"></a>6.3 动态主机配置协议DHCP</h1><ul>
-<li>动态主机配置协议DHCP(Dynamic Host Configuration Protocol))提供了一种机制，称为即插即用连网。</li>
+                <h1 id="动态主机配置协议dhcp">6.3 动态主机配置协议DHCP</h1>
+<ul>
+<li>动态主机配置协议DHCP(Dynamic Host Configuration
+Protocol))提供了一种机制，称为即插即用连网。</li>
 <li>这种机制允许一台计算机加入新网络时可自动获取P地址等网络配置信息而不用手工参与。</li>
 </ul>
-<ol>
+<ol type="1">
 <li><p>DHCP报文在运输层使用UDP协议封装</p>
-<ol>
+<ol type="1">
 <li>DHCP客户使用的UDP端口号为68</li>
 <li>DHCP服务器使用的UDP端口号为67</li>
-</ol>
-</li>
-<li><p>客户端向DHCP服务器申请IP的全过程</p>
-</li>
+</ol></li>
+<li><p>客户端向DHCP服务器申请IP的全过程</p></li>
 </ol>
 <p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-3-%E5%8A%A8%E6%80%81%E4%B8%BB%E6%9C%BA%E9%85%8D%E7%BD%AE%E5%8D%8F%E8%AE%AEDHCP/image-20241118164104548.png" srcset="/img/loading.gif" lazyload></p>
 <ul>
-<li><p>使用ARP检测所分配到的IP地址是否已被网络中其他主机占用：</p>
+<li>使用ARP检测所分配到的IP地址是否已被网络中其他主机占用：
 <ul>
-<li>若被占用：给DHCP服务器发送“DHCP DECLINE”报文敬销IP地址租约，并重新发送“DHCP DISCOVER”报文；</li>
+<li>若被占用：给DHCP服务器发送“DHCP
+DECLINE”报文敬销IP地址租约，并重新发送“DHCP DISCOVER”报文；</li>
 <li>若未被占用：可以使用租约中的P地址与网络中其他主机通信了。</li>
-</ul>
-</li>
-<li><p>使用ARP确保所选IP地址未被网络中其他主机占用</p>
-</li>
+</ul></li>
+<li>使用ARP确保所选IP地址未被网络中其他主机占用</li>
 </ul>
 <table>
+
 <thead>
 <tr>
 <th>报文</th>
 <th>包含字段</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>DHCP DISCOVER</td>
 <td>事务ID，DHCP的MAC地址</td>
 </tr>
@@ -322,8 +323,9 @@
 <td>DHCP REQUEST</td>
 <td>事务ID，DHCP的MAC地址，接受的租约中的IP地址，提供此租约的DHCP服务器的IP地址</td>
 </tr>
-</tbody></table>
-<ol start="3">
+</tbody>
+</table>
+<ol start="3" type="1">
 <li>DHCP中继代理</li>
 </ol>
 <blockquote>

@@ -19,12 +19,12 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="2.4 编码与调制 1. 常用编码 码元：在使用时间域的波形表示数字信号时代表不同离散数值的基本波形。   不归零编码（存在同步问题）  需要额外一根传输线来传输时钟信号使发送方和接收方同步   归零编码（自同步，编码效率低）  曼彻斯特编码（传统以太网）    2. 编码与调制2.1 基本调制方法  调幅、调频、调相 混合调制">
+    <meta name="description" content="2.4 编码与调制  1. 常用编码  码元：在使用时间域的波形表示数字信号时代表不同离散数值的基本波形。   不归零编码（存在同步问题）  需要额外一根传输线来传输时钟信号使发送方和接收方同步  归零编码（自同步，编码效率低） 曼彻斯特编码（传统以太网）   2. 编码与调制 2.1 基本调制方法   调幅、调频、调相 混合调制">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2.4 编码与调制">
 <meta property="og:url" content="http://binbo-zappy.github.io/2024/11/16/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/2-4-%E7%BC%96%E7%A0%81%E4%B8%8E%E8%B0%83%E5%88%B6/index.html">
 <meta property="og:site_name" content="Binbo">
-<meta property="og:description" content="2.4 编码与调制 1. 常用编码 码元：在使用时间域的波形表示数字信号时代表不同离散数值的基本波形。   不归零编码（存在同步问题）  需要额外一根传输线来传输时钟信号使发送方和接收方同步   归零编码（自同步，编码效率低）  曼彻斯特编码（传统以太网）    2. 编码与调制2.1 基本调制方法  调幅、调频、调相 混合调制">
+<meta property="og:description" content="2.4 编码与调制  1. 常用编码  码元：在使用时间域的波形表示数字信号时代表不同离散数值的基本波形。   不归零编码（存在同步问题）  需要额外一根传输线来传输时钟信号使发送方和接收方同步  归零编码（自同步，编码效率低） 曼彻斯特编码（传统以太网）   2. 编码与调制 2.1 基本调制方法   调幅、调频、调相 混合调制">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/network.jpg">
 <meta property="article:published_time" content="2024-11-16T08:05:28.000Z">
@@ -278,24 +278,25 @@
             
               <div class="markdown-body">
                 
-                <h1 id="2-4-编码与调制"><a href="#2-4-编码与调制" class="headerlink" title="2.4 编码与调制"></a>2.4 编码与调制</h1><p><img src="/2024/11/16/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/2-4-%E7%BC%96%E7%A0%81%E4%B8%8E%E8%B0%83%E5%88%B6/image-20241116160902949.png" srcset="/img/loading.gif" lazyload></p>
-<h2 id="1-常用编码"><a href="#1-常用编码" class="headerlink" title="1. 常用编码"></a>1. 常用编码</h2><ul>
+                <h1 id="编码与调制">2.4 编码与调制</h1>
+<p><img src="/2024/11/16/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/2-4-%E7%BC%96%E7%A0%81%E4%B8%8E%E8%B0%83%E5%88%B6/image-20241116160902949.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="常用编码">1. 常用编码</h2>
+<ul>
 <li>码元：在使用时间域的波形表示数字信号时代表不同离散数值的基本波形。</li>
 </ul>
-<ol>
-<li><p>不归零编码（存在同步问题）</p>
+<ol type="1">
+<li>不归零编码（存在同步问题）
 <ul>
 <li>需要额外一根传输线来传输时钟信号使发送方和接收方同步</li>
-</ul>
-</li>
-<li><p>归零编码（自同步，编码效率低）</p>
-</li>
-<li><p>曼彻斯特编码（传统以太网）</p>
-</li>
+</ul></li>
+<li>归零编码（自同步，编码效率低）</li>
+<li>曼彻斯特编码（传统以太网）</li>
 </ol>
 <p><img src="/2024/11/16/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/2-4-%E7%BC%96%E7%A0%81%E4%B8%8E%E8%B0%83%E5%88%B6/image-20241116161158338.png" srcset="/img/loading.gif" lazyload></p>
-<h2 id="2-编码与调制"><a href="#2-编码与调制" class="headerlink" title="2. 编码与调制"></a>2. 编码与调制</h2><h3 id="2-1-基本调制方法"><a href="#2-1-基本调制方法" class="headerlink" title="2.1 基本调制方法"></a>2.1 基本调制方法</h3><p><img src="/2024/11/16/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/2-4-%E7%BC%96%E7%A0%81%E4%B8%8E%E8%B0%83%E5%88%B6/image-20241116161357102.png" srcset="/img/loading.gif" lazyload></p>
-<ol>
+<h2 id="编码与调制-1">2. 编码与调制</h2>
+<h3 id="基本调制方法">2.1 基本调制方法</h3>
+<p><img src="/2024/11/16/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/2-4-%E7%BC%96%E7%A0%81%E4%B8%8E%E8%B0%83%E5%88%B6/image-20241116161357102.png" srcset="/img/loading.gif" lazyload></p>
+<ol type="1">
 <li>调幅、调频、调相</li>
 <li>混合调制</li>
 </ol>

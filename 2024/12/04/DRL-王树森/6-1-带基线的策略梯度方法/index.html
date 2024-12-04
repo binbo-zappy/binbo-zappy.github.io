@@ -1,0 +1,785 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="带基线的策略梯度方法 上一章推导出策略梯度，并介绍了两种策略梯度方法——REINFORCE 和 actor-critic。 虽然上一章的方法在理论上是正确的，但是在实践中效果并不理想。本章介绍的带基线的策略梯度 (policy gradient with baseline) 可以大幅提升策略梯度方法的表现。使用基线(baseline) 之后，REINFORCE 变成 REINFORCE">
+<meta property="og:type" content="article">
+<meta property="og:title" content="6.1 带基线的策略梯度方法">
+<meta property="og:url" content="http://binbo-zappy.github.io/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/6-1-%E5%B8%A6%E5%9F%BA%E7%BA%BF%E7%9A%84%E7%AD%96%E7%95%A5%E6%A2%AF%E5%BA%A6%E6%96%B9%E6%B3%95/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="带基线的策略梯度方法 上一章推导出策略梯度，并介绍了两种策略梯度方法——REINFORCE 和 actor-critic。 虽然上一章的方法在理论上是正确的，但是在实践中效果并不理想。本章介绍的带基线的策略梯度 (policy gradient with baseline) 可以大幅提升策略梯度方法的表现。使用基线(baseline) 之后，REINFORCE 变成 REINFORCE">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/RL-WSS.png">
+<meta property="article:published_time" content="2024-12-04T08:02:55.000Z">
+<meta property="article:modified_time" content="2024-12-04T11:02:07.285Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="RL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/RL-WSS.png">
+  
+  
+  
+  <title>6.1 带基线的策略梯度方法 - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="6.1 带基线的策略梯度方法"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-12-04 16:02" pubdate>
+          2024年12月4日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          11 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">6.1 带基线的策略梯度方法</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="带基线的策略梯度方法">带基线的策略梯度方法</h1>
+<p>上一章推导出策略梯度，并介绍了两种策略梯度方法——REINFORCE 和
+actor-critic。</p>
+<p>虽然上一章的方法在理论上是正确的，但是在实践中效果并不理想。本章介绍的带基线的策略梯度
+(policy gradient with baseline)
+可以大幅提升策略梯度方法的表现。使用基线(baseline) 之后，REINFORCE 变成
+REINFORCE with baseline, actor-critic 变成 advantage actor-critic
+(A2C)。</p>
+<h2 id="策略梯度中的基线">策略梯度中的基线</h2>
+<p>首先回顾上一章的内容。策略学习通过最大化目标函数<span class="math inline">\(J(\theta) =
+\mathbb{E}_S[V_\pi(S)]\)</span>训练出策略网络<span class="math inline">\(\pi(a|s;\theta)\)</span>。可以用策略梯度<span class="math inline">\(\nabla_\theta J(\theta)\)</span>来更新参数<span class="math inline">\(\theta\)</span></p>
+<p><span class="math inline">\(\theta_{\text{new}} \leftarrow
+\theta_{\text{now}} + \beta \cdot \nabla_\theta
+J(\theta_{\text{now}}).\)</span></p>
+<p>策略梯度定理证明：</p>
+<p><span class="math inline">\(\nabla_\theta J(\theta) =
+\mathbb{E}_S\left[\mathbb{E}_{A\sim\pi(\cdot|S,\theta)}\left[Q_\pi(S,A)
+\cdot \nabla_\theta \ln \pi(A|S;\theta)\right]\right].\)</span></p>
+<p>上一章中，我们对策略梯度<span class="math inline">\(\nabla_\theta
+J(\theta)\)</span>做近似，推导出 REINFORCE 和 actor-critic;
+两种方法区别在于具体如何做近似。</p>
+<h2 id="基线-baseline">基线 (Baseline)</h2>
+<p>基于策略梯度公式 (8.1) 得出的 REINFORCE 和 actor-critic
+方法效果通常不好。只需对策略梯度公式 (8.1)
+做一个微小的改动，就能大幅提升表现：把<span class="math inline">\(b\)</span>作为动作价值函数<span class="math inline">\(Q_\pi(S,A)\)</span>的基线 (baseline), 用<span class="math inline">\(Q_\pi(S,A) - b\)</span></p>
+<p>替换掉<span class="math inline">\(Q_\pi\)</span>。设<span class="math inline">\(b\)</span>是任意的函数，只要不依赖于动作<span class="math inline">\(A\)</span>就可以，例如<span class="math inline">\(b\)</span>可以是状态价值函数<span class="math inline">\(V_\pi(S)\)</span>。</p>
+<p>定理 8.1. 带基线的策略梯度定理</p>
+<p>设<span class="math inline">\(b\)</span>是任意的函数，但是<span class="math inline">\(b\)</span>不能依赖于<span class="math inline">\(A\)</span>。把<span class="math inline">\(b\)</span>作为动作价值函数<span class="math inline">\(Q_\pi(S,A)\)</span>的基线，对策略梯度没有影响：</p>
+<p><span class="math inline">\(\nabla_\theta J(\theta) =
+\mathbb{E}_S\left[\mathbb{E}_{A\sim\pi(\cdot|S;\theta)}\left[(Q_\pi(S,A)
+- b) \cdot \nabla_\theta \ln \pi(A|S;\theta)\right]\right].\)</span></p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/6-1-%E5%B8%A6%E5%9F%BA%E7%BA%BF%E7%9A%84%E7%AD%96%E7%95%A5%E6%A2%AF%E5%BA%A6%E6%96%B9%E6%B3%95/c3d57c264988c4213064eeef36151b5a.png" srcset="/img/loading.gif" lazyload></p>
+<p>定理 8.1 说明<span class="math inline">\(b\)</span>的取值不影响策略梯度的正确性。不论是让<span class="math inline">\(b = 0\)</span>还是让<span class="math inline">\(b
+= V_\pi(S)\)</span>, 对期望的结果毫无影响，期望的结果都会等于<span class="math inline">\(\nabla_\theta J(\theta)\)</span>。其原因在于</p>
+<p><span class="math inline">\(\mathbb{E}_S\left[\mathbb{E}_{A\sim\pi(\cdot|S;\theta)}\left[b
+\cdot \nabla_\theta \ln \pi(A|S;\theta)\right]\right] = 0.\)</span></p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/6-1-%E5%B8%A6%E5%9F%BA%E7%BA%BF%E7%9A%84%E7%AD%96%E7%95%A5%E6%A2%AF%E5%BA%A6%E6%96%B9%E6%B3%95/1733224482543-ea224a19-4b62-467b-92f0-5a68098b84a3.png" srcset="/img/loading.gif" lazyload></p>
+<p>定理中的策略梯度表示成了期望的形式，我们对期望做蒙特卡洛近似。从环境中观测到一个状态<span class="math inline">\(s\)</span>,然后根据策略网络抽样得到<span class="math inline">\(a \sim
+\pi(\cdot|s;\theta)\)</span>。那么策略梯度<span class="math inline">\(\nabla_\theta
+J(\theta)\)</span>可以近似为下面的随机梯度：</p>
+<p><span class="math inline">\(\boldsymbol{g}_b(s,a;\theta) =
+\left[Q_\pi(s,a) - b\right] \cdot \nabla_\theta \ln
+\pi(a|s;\theta).\)</span></p>
+<p>不论<span class="math inline">\(b\)</span>的取值是 0 还是<span class="math inline">\(V_\pi(s)\)</span>, 得到的随机梯度<span class="math inline">\(\boldsymbol{g}_b(s,a;\theta)\)</span>都是<span class="math inline">\(\nabla_\theta J(\theta)\)</span>的无偏估计：</p>
+<p><span class="math inline">\(\text{Bias} =
+\mathbb{E}_{S,A}\left[\boldsymbol{g}_b(S,A;\theta)\right] -
+\nabla_\theta J(\theta) = 0.\)</span></p>
+<p>虽然<span class="math inline">\(b\)</span>的取值对<span class="math inline">\(\mathbb{E}_{S,A}\left[\boldsymbol{g}_b(S,A;\theta)\right]\)</span>毫无影响，但是<span class="math inline">\(b\)</span>对随机梯度<span class="math inline">\(\boldsymbol{g}_b(s,a;\theta)\)</span>是有影响的。用不同的<span class="math inline">\(b\)</span></p>
+<p>, 得到的方差</p>
+<p><span class="math inline">\(\text{Var} =
+\mathbb{E}_{S,A}\left\|\boldsymbol{g}_b(S,A;\theta) - \nabla_\theta
+J(\theta)\right\|^2\)</span></p>
+<p>会有所不同。如果<span class="math inline">\(b\)</span>很接近<span class="math inline">\(Q_\pi(s,a)\)</span>关于<span class="math inline">\(a\)</span>的均值，那么方差会比较小。因此，<span class="math inline">\(b = V_\pi(S)\)</span>是很好的基线。</p>
+<h2 id="基线的直观解释">基线的直观解释</h2>
+<p>策略梯度公式期望中的<span class="math inline">\(Q_\pi(S,A) \cdot
+\nabla_\theta \ln \pi(A|S;\theta)\)</span>的意义是什么呢？以图
+8.1中的左图为例。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/6-1-%E5%B8%A6%E5%9F%BA%E7%BA%BF%E7%9A%84%E7%AD%96%E7%95%A5%E6%A2%AF%E5%BA%A6%E6%96%B9%E6%B3%95/1733224326893-df037946-f4bf-4673-834a-ac957d5ac53d.png" srcset="/img/loading.gif" lazyload></p>
+<p>给定状态<span class="math inline">\(s_t\)</span>, 动作空间是<span class="math inline">\(A=\{左，右，上\}\)</span>,
+动作价值函数给每个动作打分：</p>
+<p><span class="math inline">\(Q_\pi(s_t,左)=80, Q_\pi(s_t,右)=-20,
+Q_\pi(s_t,上)=180\)</span></p>
+<p>这些分值会乘到梯度<span class="math inline">\(\nabla_\theta \ln
+\pi(A|S;\theta)\)</span>上。在做完梯度上升之后，新的策略会倾向于分值高的动作。</p>
+<ul>
+<li>动作价值<span class="math inline">\(Q_\pi(s_t,上)=180\)</span>很大，说明基于状态<span class="math inline">\(s_t\)</span>选择动作“上”是很好的决策。让梯度<span class="math inline">\(\nabla_\theta \ln
+\pi(上|s_t;\theta)\)</span>乘以大的系数<span class="math inline">\(Q_\pi(s_t,上)=180\)</span>,
+那么做梯度上升更新<span class="math inline">\(\theta\)</span>之后，会让<span class="math inline">\(\pi(上|s_t;\theta)\)</span>变大，在状态<span class="math inline">\(s_t\)</span>的情况下更倾向于动作“上”。</li>
+<li>相反，<span class="math inline">\(Q_\pi(s_t,右)=-20\)</span>说明基于状态<span class="math inline">\(s_t\)</span>选择动作“右”是糟糕的决策。让梯度<span class="math inline">\(\nabla_\theta \ln
+\pi(右|s_t;\theta)\)</span>乘以负的系数<span class="math inline">\(Q_\pi(s_t,右)=-20\)</span>,那么做梯度上升更新<span class="math inline">\(\theta\)</span>之后， 会让<span class="math inline">\(\pi(右|s_t;\theta)\)</span>变小，在状态<span class="math inline">\(s_t\)</span>的情况下选择动作“右”的概率更小。</li>
+</ul>
+<p>根据上述分析，我们在乎的是动作价值<span class="math inline">\(Q_\pi(s_t,左)\)</span>、<span class="math inline">\(Q_\pi(s_t,右)\)</span>、<span class="math inline">\(Q_\pi(s_t,上)\)</span>三者的相对大小，而非绝对大小。如果给三者都减去<span class="math inline">\(b=60\)</span>,那么三者的相对大小是不变的；动作“上”仍然是最好的，动作“右”仍然是最差的。因此<span class="math inline">\([Q_\pi(s_t,a_t) - b] \cdot \nabla_\theta \ln
+\pi(A|S;\theta)\)</span>依然能指导<span class="math inline">\(\theta\)</span>做调整，使得<span class="math inline">\(\pi(上|s_t;\theta)\)</span>变大，而<span class="math inline">\(\pi(右|s_t;\theta)\)</span>变小。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/AI/" class="category-chain-item">AI</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI/RL/" class="category-chain-item">RL</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI/RL/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/" class="category-chain-item">DRL-王树森</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/RL/" class="print-no-link">#RL</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>6.1 带基线的策略梯度方法</div>
+      <div>http://binbo-zappy.github.io/2024/12/04/DRL-王树森/6-1-带基线的策略梯度方法/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年12月4日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/6-2-%E5%B8%A6%E5%9F%BA%E7%BA%BF%E7%9A%84-REINFORCE-%E7%AE%97%E6%B3%95/" title="6.2 带基线的 REINFORCE 算法">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">6.2 带基线的 REINFORCE 算法</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/5-3-Dueling-Network/" title="5.3 Dueling Network">
+                        <span class="hidden-mobile">5.3 Dueling Network</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

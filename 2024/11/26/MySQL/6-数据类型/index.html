@@ -19,12 +19,12 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="6. 数据类型1. 整型   类型名称 取值范围 大小    TINYINT -128〜127 1个字节   SMALLINT -32768〜32767 2个宇节   MEDIUMINT -8388608〜8388607 3个字节   INT (INTEGHR) -2147483648〜2147483647 4个字节   BIGINT -9223372036854775808〜9223372036">
+    <meta name="description" content="6. 数据类型 1. 整型    类型名称 取值范围 大小     TINYINT -128〜127 1个字节   SMALLINT -32768〜32767 2个宇节   MEDIUMINT -8388608〜8388607 3个字节   INT (INTEGHR) -2147483648〜2147483647 4个字节   BIG">
 <meta property="og:type" content="article">
 <meta property="og:title" content="6. 数据类型">
 <meta property="og:url" content="http://binbo-zappy.github.io/2024/11/26/MySQL/6-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/index.html">
 <meta property="og:site_name" content="Binbo">
-<meta property="og:description" content="6. 数据类型1. 整型   类型名称 取值范围 大小    TINYINT -128〜127 1个字节   SMALLINT -32768〜32767 2个宇节   MEDIUMINT -8388608〜8388607 3个字节   INT (INTEGHR) -2147483648〜2147483647 4个字节   BIGINT -9223372036854775808〜9223372036">
+<meta property="og:description" content="6. 数据类型 1. 整型    类型名称 取值范围 大小     TINYINT -128〜127 1个字节   SMALLINT -32768〜32767 2个宇节   MEDIUMINT -8388608〜8388607 3个字节   INT (INTEGHR) -2147483648〜2147483647 4个字节   BIG">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/MySQL.png">
 <meta property="article:published_time" content="2024-11-26T09:30:53.000Z">
@@ -225,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          522 字
+          516 字
         
       </span>
     
@@ -278,7 +278,9 @@
             
               <div class="markdown-body">
                 
-                <h1 id="6-数据类型"><a href="#6-数据类型" class="headerlink" title="6. 数据类型"></a>6. 数据类型</h1><h2 id="1-整型"><a href="#1-整型" class="headerlink" title="1. 整型"></a>1. 整型</h2><table>
+                <h1 id="数据类型">6. 数据类型</h1>
+<h2 id="整型">1. 整型</h2>
+<table>
 <thead>
 <tr>
 <th>类型名称</th>
@@ -286,7 +288,8 @@
 <th>大小</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>TINYINT</td>
 <td>-128〜127</td>
 <td>1个字节</td>
@@ -311,9 +314,11 @@
 <td>-9223372036854775808〜9223372036854775807</td>
 <td>8个字节</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <p>无符号在数据类型后加 unsigned 关键字。</p>
-<h2 id="2-浮点型"><a href="#2-浮点型" class="headerlink" title="2. 浮点型"></a>2. 浮点型</h2><table>
+<h2 id="浮点型">2. 浮点型</h2>
+<table>
 <thead>
 <tr>
 <th>类型名称</th>
@@ -321,7 +326,8 @@
 <th>存储需求</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>FLOAT</td>
 <td>单精度浮点数</td>
 <td>4 个字节</td>
@@ -336,8 +342,11 @@
 <td>压缩的“严格”定点数</td>
 <td>M+2 个字节</td>
 </tr>
-</tbody></table>
-<h2 id="3-日期和时间"><a href="#3-日期和时间" class="headerlink" title="3. 日期和时间"></a>3. 日期和时间</h2><table>
+</tbody>
+</table>
+<h2 id="日期和时间">3. 日期和时间</h2>
+<table>
+
 <thead>
 <tr>
 <th>类型名称</th>
@@ -346,7 +355,8 @@
 <th>存储需求</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>YEAR</td>
 <td>YYYY</td>
 <td>1901 ~ 2155</td>
@@ -376,8 +386,11 @@
 <td>1980-01-01 00:00:01 UTC ~ 2040-01-19 03:14:07 UTC</td>
 <td>4 个字节</td>
 </tr>
-</tbody></table>
-<h2 id="4-字符串"><a href="#4-字符串" class="headerlink" title="4. 字符串"></a>4. 字符串</h2><table>
+</tbody>
+</table>
+<h2 id="字符串">4. 字符串</h2>
+<table>
+
 <thead>
 <tr>
 <th>类型名称</th>
@@ -385,15 +398,16 @@
 <th>存储需求</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>CHAR(M)</td>
 <td>固定长度非二进制字符串</td>
-<td>M 字节，1&lt;&#x3D;M&lt;&#x3D;255</td>
+<td>M 字节，1&lt;=M&lt;=255</td>
 </tr>
 <tr>
 <td>VARCHAR(M)</td>
 <td>变长非二进制字符串</td>
-<td>L+1字节，在此，L&lt; &#x3D; M和 1&lt;&#x3D;M&lt;&#x3D;255</td>
+<td>L+1字节，在此，L&lt; = M和 1&lt;=M&lt;=255</td>
 </tr>
 <tr>
 <td>TINYTEXT</td>
@@ -425,8 +439,10 @@
 <td>一个设置，字符串对象可以有零个或 多个SET成员</td>
 <td>1、2、3、4或8个字节，取决于集合 成员的数量（最多64个成员）</td>
 </tr>
-</tbody></table>
-<h2 id="5-二进制类型"><a href="#5-二进制类型" class="headerlink" title="5. 二进制类型"></a>5. 二进制类型</h2><table>
+</tbody>
+</table>
+<h2 id="二进制类型">5. 二进制类型</h2>
+<table>
 <thead>
 <tr>
 <th>类型名称</th>
@@ -434,10 +450,11 @@
 <th>存储需求</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>BIT(M)</td>
 <td>位字段类型</td>
-<td>大约 (M+7)&#x2F;8 字节</td>
+<td>大约 (M+7)/8 字节</td>
 </tr>
 <tr>
 <td>BINARY(M)</td>
@@ -469,7 +486,8 @@
 <td>非常大的BLOB</td>
 <td>L+4 字节，在此，L&lt;2^32</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 
                 
               </div>

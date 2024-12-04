@@ -1,0 +1,961 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="13. 以对象管理资源 123456void f()&#123;	Investment *pInv &#x3D; createInvestment();	···	delete pInv;&#125;  可能无法执行delete  在···中过早return 若delete位于某循环中，由于continue或者goto语句过早退出 ···内抛出异常 泄露的不只是内含投资对象的那块内存，还包括那">
+<meta property="og:type" content="article">
+<meta property="og:title" content="3. 资源管理">
+<meta property="og:url" content="http://binbo-zappy.github.io/2024/11/27/effective-cpp/3-%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="13. 以对象管理资源 123456void f()&#123;	Investment *pInv &#x3D; createInvestment();	···	delete pInv;&#125;  可能无法执行delete  在···中过早return 若delete位于某循环中，由于continue或者goto语句过早退出 ···内抛出异常 泄露的不只是内含投资对象的那块内存，还包括那">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/effective-cpp.png">
+<meta property="article:published_time" content="2024-11-27T12:17:07.000Z">
+<meta property="article:modified_time" content="2024-11-27T12:20:05.501Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="c++">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/effective-cpp.png">
+  
+  
+  
+  <title>3. 资源管理 - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="3. 资源管理"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-11-27 20:17" pubdate>
+          2024年11月27日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          27 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">3. 资源管理</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="以对象管理资源">13. 以对象管理资源</h2>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">f</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>	Investment *pInv = <span class="hljs-built_in">createInvestment</span>();<br>	···<br>	<span class="hljs-keyword">delete</span> pInv;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li><p>可能无法执行delete</p></li>
+<li><ol type="1">
+<li>在···中过早return</li>
+<li>若delete位于某循环中，由于continue或者goto语句过早退出</li>
+<li>···内抛出异常</li>
+<li>泄露的不只是内含投资对象的那块内存，还包括那些投资对象所保存的任何资源</li>
+</ol></li>
+<li><p>为确保createInvestment返回的资源总是被释放，我们需要将这些资源放在对象内，当控制流离开f，该对象的析构函数会自动释放那些资源</p></li>
+<li><p>实际上这正是隐身于本条款背后的半边想法，把资源放进对象内，我们便可以依赖c++的析构函数自动调用机制确保资源被释放</p></li>
+<li><p>许多资源被动态分配于heap内而后被用于单一区块或函数内，他们应该在控制流离开那个区块或者函数时被释放，标准程序库提供的auto_ptr正是针对这种形式而设计的特制产品</p></li>
+<li><p>auto_ptr是个”类指针对象“，也就是智能指针，其析构函数自动对齐所指对象调用delete</p></li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">f</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-function">std::auto_ptr&lt;Investment&gt; <span class="hljs-title">pInv</span><span class="hljs-params">(createInvestment())</span></span>;<br>    <br>&#125;<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li><p>两个想法</p></li>
+<li><ol type="1">
+<li>获得资源后立刻放进管理对象内</li>
+<li>管理对象运用析构函数确保资源被释放</li>
+</ol></li>
+<li><p>由于auto_ptr被销毁时会自动删除它所指之物，所以一定要注意别让给多个auto_ptr同时指向一个对象。</p></li>
+<li><p>auto_ptrs有一个不寻常的性质，若通过copy构造函数或copy
+assignment操作符复制他们，他们会变成null，而赋值所得的指针将取得资源的唯一拥有权</p></li>
+<li><p>收auto_ptrs管理的资源必须绝对没有一个以上的auto_ptr同时指向它，意味着auto_ptrs并非管理动态分配资源的神兵利器。</p></li>
+<li><ol type="1">
+<li>例如：STL容器要求其元素发挥正常的复制行为，因此这些容器容不得auto_ptr</li>
+</ol></li>
+<li><p>auto_ptr的替代方案是”引用计数型智慧指针（reference-counting smart
+pointer RCSP)</p></li>
+<li><ol type="1">
+<li>持续追踪共有多少对象指向某笔资源，并在无人指向它时自动删除该资源</li>
+<li>类似于垃圾回收，但无法打破环状引用，例如两个其实已经没被使用的对象彼此互指，因而好像还处在“被使用"状态</li>
+</ol></li>
+<li><p>tr1::shared_ptr就是个RCSP</p></li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">f</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>	std::<span class="hljs-function">tr1::shared_ptr&lt;Investment&gt; <span class="hljs-title">pInv</span><span class="hljs-params">(createInvestment())</span></span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li>复制行为正常</li>
+</ol>
+<h2 id="在资源管理类中小心copying行为">14.
+在资源管理类中小心copying行为</h2>
+<ol type="1">
+<li>资源取得时机便是初始化时机</li>
+<li>并非所有资源都是heap_based，auto_ptr和tr1::shared_ptr这样的智能指针往往不适合作为资源掌管者，需要建立自己的资源管理类</li>
+<li>例如，使用C
+api函数处理Mutex的互斥锁现象，共有lock和unlock两函数</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">lock</span><span class="hljs-params">(Mutex* pm)</span></span>;		<span class="hljs-comment">//锁定pm所指的互斥器</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">unlock</span><span class="hljs-params">(Mutex* pm)</span></span>;		<span class="hljs-comment">//将互斥器解除锁定</span><br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li><ol type="1">
+<li>为确保绝不会忘记将一个被锁住的Mutex解锁，希望建立一个class用来管理机锁</li>
+<li>这样的class的基本结构由RAII守则支配，也就是”资源在构造期间获得，在析构期间释放“</li>
+</ol></li>
+</ol>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs haskell"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-type">Lock</span>&#123; public:    explicit <span class="hljs-type">Lock</span>(<span class="hljs-type">Mutex</span>* <span class="hljs-title">pm</span>):mutexPtr(<span class="hljs-title">pm</span>)    &#123;lock(<span class="hljs-title">mutexPtr</span>);&#125;		//获得资源    ~<span class="hljs-type">Lock</span>() &#123;unlock(<span class="hljs-title">mutexPtr</span>);&#125; private:    mutex *mutexPtr; &#125;;</span><br></code></pre></td></tr></table></figure>
+<figure>
+<img src="/2024/11/27/effective-cpp/3-%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86/1706957067790-f5ba06f3-e9a3-4361-abcc-20e810519b61.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<ol type="1">
+<li><ol type="1">
+<li>当一个RAII对象被复制，会发生什么事?</li>
+</ol></li>
+</ol>
+<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs scss">Lock <span class="hljs-built_in">ml1</span>(&amp;m);	<span class="hljs-comment">//锁定m Lock ml2(ml1);	//将ml1复制到ml2身上，会发生什么是</span><br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li><ol type="1">
+<li><ol type="1">
+<li>禁止复制。许多时候允许RAII对象被复制并不合理，因为很少能够合理拥有”同步化基础器物“的副本。如果复制动作对RAII
+class并不合理，便应该禁止。条款6：如果coipying操作声明为private</li>
+</ol></li>
+</ol></li>
+</ol>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs angelscript"><span class="hljs-keyword">class</span> <span class="hljs-symbol">Lock: <span class="hljs-symbol">private</span></span> <span class="hljs-symbol">Uncopyable</span>&#123; <span class="hljs-keyword">public</span>: &#125;;<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li><ol type="1">
+<li><ol type="1">
+<li>对底层资源基础”引用计数法“。有时需要保有资源，直到它的最后一个使用者（某对象）被销毁。这种情况下复制RAII对象时，应该将该资源的”被引用数”递增。tr1::shared_ptr是如此。</li>
+</ol></li>
+</ol></li>
+<li><ol type="1">
+<li><ol type="1">
+<li><ol type="1">
+<li>通常只要内含一个tr1::shared_ptr成员变量，RAII
+classes便可出现reference-counting copying行为。</li>
+<li>如果Lock打算使用reference counting，可以改变mutexPtr类型，将Mutex*
+改为tr1::shared_ptr<Mutex>。然而不幸的是tr1::shared_ptr的缺省行为是“当引用次数为0时删除其所指物“，这不是我们所要的行为。当我们用上一个Mutex，我们想要做的释放动作是解除锁定而非删除</Mutex></li>
+<li>幸运的是tr1::shared_ptr允许指定所谓的”删除器”，那是一个函数或者函数对象，当引用次数为0时便被调用（此技能并不存在于auto_ptr——它总是将其指针删除）。删除器对tr1::shared_ptr构造函数而言时可有可无的第二参数，<img src="/2024/11/27/effective-cpp/3-%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86/1706957885163-8a0df2e6-aa4f-4198-b2a1-3535512eecc7.png" srcset="/img/loading.gif" lazyload alt="img"></li>
+<li>本例Lock
+class不声明析构函数，class析构函数会自动调用其non-static成员变量的析构函数。而mutexPtr的析构函数会在互斥器的引用次数为0时自动调用tr1::shared_ptr的删除器</li>
+</ol></li>
+</ol></li>
+</ol></li>
+<li><ol type="1">
+<li><ol type="1">
+<li>复制底部资源</li>
+</ol></li>
+</ol></li>
+<li><ol type="1">
+<li><ol type="1">
+<li><ol type="1">
+<li>复制资源管理对象时，进行的时深度拷贝</li>
+<li>某些标准字符串是由指向heap内存之指针构成。那种字符串对象内含一个指针指向一块heap内存。当这样一个字符串对象被复制，不论指针或其所指内存都会被制作出一个复件。这样的字符串展现深度复制行为</li>
+</ol></li>
+</ol></li>
+</ol></li>
+<li><ol type="1">
+<li><ol type="1">
+<li>转移底部资源的拥有权</li>
+</ol></li>
+</ol></li>
+<li><ol type="1">
+<li><ol type="1">
+<li><ol type="1">
+<li>某些罕见场合下你可能希望确保永远只有一个RAII对象指向一个未加工资源，即使RAII对象被复制依然如此。此时资源的拥有权会从被复制物转移到目标物。这是auto_ptr奉行的复制意义</li>
+<li>copying函数有可能被编译器自动创建出来，因此除非编译器所生版本做了你想做的事，否则你要自己i安歇他们</li>
+</ol></li>
+</ol></li>
+</ol></li>
+<li><p>tips：</p></li>
+<li><ol type="1">
+<li>复制RAII对象把必须一并复制它所管理的资源，所以资源的copying行为决定RAII对象的copying行为</li>
+<li>普遍而常见的RAII class
+copying行为是，抑制copying、施行引用计数法。不过其他行为也都可能被实现</li>
+</ol></li>
+</ol>
+<h2 id="在资源管理类中提供对原始资源的访问">15.
+在资源管理类中提供对原始资源的访问</h2>
+<ol type="1">
+<li>资源管理类是对抗资源泄露的堡垒，在一个完美世界中依赖这样的classes处理和资源之间的所有互动，而不是直接处理原始资源</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs cpp">std::tr1::shared_ptr&lt;Investment&gt;<span class="hljs-built_in">pInv</span>(<span class="hljs-built_in">createInvestment</span>());<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">dayHeld</span><span class="hljs-params">(<span class="hljs-type">const</span> Investment* pi)</span></span>;<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li>需要一个函数可将RAII
+class对象转换为其所内含之原始资源。有两个做法可以达成目标：显示转换和隐式转换</li>
+<li>显示转换tr1::shared_ptr和auto_ptr都提供一个get成员函数，用来执行显示转换，也就是它返回智能指针内部的原始指针（的复件）</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">int</span> days = <span class="hljs-built_in">daysHeld</span>(pInv.<span class="hljs-built_in">get</span>());    		<span class="hljs-comment">//将pInv内的原始指针传给daysHeld</span><br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li>就像几乎所有智能指针一样，tr1::shared_ptr和auto_ptr也重载了指针取值和操作符，它们允许隐式转换至底部原始指针</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Investment</span>&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">isTaxFree</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;<br>&#125;<br><span class="hljs-function">Investment* <span class="hljs-title">createInvestment</span><span class="hljs-params">()</span></span>;<br><br>std::<span class="hljs-function">tr1::shared_ptr&lt;Investment&gt; <span class="hljs-title">pil</span><span class="hljs-params">(createInvestment())</span></span>;	<span class="hljs-comment">//tr1::shared_ptr管理一笔资源</span><br><br><span class="hljs-type">bool</span> taxable1 = !(pil-&gt;<span class="hljs-built_in">isTaxFree</span>());		<span class="hljs-comment">//经由operator-&gt;访问资源</span><br><span class="hljs-function">std::auto_ptr&lt;Investment&gt; <span class="hljs-title">pi2</span><span class="hljs-params">(createInvestment())</span></span>;	<span class="hljs-comment">//令auto_ptr管理一笔资源</span><br><br><span class="hljs-type">bool</span> taxable2 = !((*pi2).<span class="hljs-built_in">isTaxFree</span>());		<span class="hljs-comment">//经由operator*访问资源</span><br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li>取得RAII对象内的原始资源，提供一个隐式转换函数</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Front</span>&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">FontHandle <span class="hljs-title">get</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123;<span class="hljs-keyword">return</span> f;&#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>这使得客户每次使用API必须调用get</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">changeFontSize</span><span class="hljs-params">(FontHandle f, <span class="hljs-type">int</span> newSize)</span></span>;<br><span class="hljs-function">Font <span class="hljs-title">f</span><span class="hljs-params">(getFont())</span></span>;<br><span class="hljs-type">int</span> newFontSize;<br><span class="hljs-built_in">changeFontSize</span>(f.<span class="hljs-built_in">get</span>(),newFontSize);	<span class="hljs-comment">//明白地将Font转换为FontHandle</span><br></code></pre></td></tr></table></figure>
+<p>提供隐式函数</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Font</span>&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-keyword">operator</span> <span class="hljs-title">FontHandle</span><span class="hljs-params">()</span> <span class="hljs-type">const</span><span class="hljs-comment">//隐式转换函数</span></span><br><span class="hljs-function"></span>&#123;<span class="hljs-keyword">return</span> f;&#125;<br>&#125;;<br><br><span class="hljs-function">Font <span class="hljs-title">f</span><span class="hljs-params">(getFont())</span></span>;<br><span class="hljs-type">int</span> newFontSize;<br><span class="hljs-built_in">changeFontSize</span>(f,newFontSize);<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li>但是这个隐式转换会增加错误发生机会，例如客户可能会在需要Font时意外创建一个FontHandle</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">Font <span class="hljs-title function_">f1</span><span class="hljs-params">(getFont()</span>); <span class="hljs-type">FontHandle</span> <span class="hljs-variable">f2</span> <span class="hljs-operator">=</span> f1; <span class="hljs-comment">// 原意要拷贝一个Font对象，却反而将f1隐式转换为其底部的FontHandle才复制它</span><br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li><p>以上程序有个FontHandle由Font对象f1管理，但那个FontHandle也可通过直接使用f2取得。那几乎不会有好下场，例如当f1被销毁，字体被释放，而f2因此成为"虚吊的"dangle。</p></li>
+<li><p>是否该提供一个显示转换函数（例如get函数）将RAII
+class转换为其底部资源，或是应该提供隐式转换，答案主要取决于RAII
+class被设计执行的特定工件，以及它被使用的情况。最佳设计可能是坚持条款18的忠告”让接口容易被正确使用，不易被误用“。</p></li>
+<li><p>通常显示转换函数如get是比较受欢迎的路子，因为它将非故意之类型转换的可能性最小化了，然而有时，隐式类型转换所带来的自然用法也会引发天秤倾斜</p></li>
+<li><p>RAII
+class内的那个返回原始资源的函数，与”封装“发生矛盾，但一般而言不是什么设计灾难。RAII
+class并不是为了封装某物存在，它们的存在是为了确保一个特殊行为——资源释放——会发生。如果一定要，当然也可以在这基本功能之上再加一层资源封装，但并非必要。</p></li>
+<li><p>也可以和身份松散的底层资源封装，获得真正的封装实现</p></li>
+<li><ol type="1">
+<li>例如tr1::shared_ptr将它所有计数机构封装了起来，但还是让外界很容易访问其所内含的原始指针。就像多数设计良好的classes一样，它隐藏了客户不需要看的部分，但备妥客户需要的所有东西</li>
+</ol></li>
+<li><p>APIs往往要求访问原始资源，所以每一个RAII
+class应该提供一个取得其所管理之资源的办法</p></li>
+<li><p>对原始资源的访问可能经由显示转换或隐式转换。一般而言显示转换比较安全，但隐式转换对客户比较方便</p></li>
+</ol>
+<h2 id="成对使用new和delete时采用相同形式">16.
+成对使用new和delete时采用相同形式</h2>
+<ol type="1">
+<li><p>当使用new时，有两件事发生</p></li>
+<li><ol type="1">
+<li>内存被分配出来，通过名为operator new的函数，</li>
+<li>针对此内存会有一个或更多析构函数被调用</li>
+</ol></li>
+<li><p>当使用delete时，也有两件事发生</p></li>
+<li><ol type="1">
+<li>针对此内存会有一个或更多析构函数被调用，然后内存才被释放</li>
+</ol></li>
+<li><p>即将被删除的指针，所指的是单一对象还是对象数组</p></li>
+<li><ol type="1">
+<li>单一对象的内存布局一般而言不同于数组的内存布局</li>
+<li>数组所用的内存通常还包括数组大小的记录，以便delete知道需要调用多少次析构函数，单一对象的内存则没有这笔记录。</li>
+<li><figure>
+<img src="/2024/11/27/effective-cpp/3-%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86/1707128830903-6f461996-372d-44ce-9519-3f32f4c53b41.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure></li>
+</ol></li>
+</ol>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-keyword">delete</span> stringPtr1; <span class="hljs-regexp">//</span>删除一个对象 <span class="hljs-keyword">delete</span> [] stringPtr2; <span class="hljs-regexp">//</span>删除一个由对象组成的数组<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li>调用new时使用[],必须在调用delete时也用[]，调用new时没有使用[],也不应该在对应delete时使用[]</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">typedef</span> std::string AddressLines[<span class="hljs-number">4</span>];<br>std::string* pal = <span class="hljs-keyword">new</span> AddressLines;<br><span class="hljs-keyword">delete</span> [] pal;<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li>尽量不要对数组做typedefs动作，可将其改为vector<string></string></li>
+</ol>
+<h2 id="以独立语句将newed对象置入智能指针">17.
+以独立语句将newed对象置入智能指针</h2>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">priority</span><span class="hljs-params">()</span></span>;		<span class="hljs-comment">//揭示处理程序的优先权</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">processWidget</span><span class="hljs-params">(std::str1::shared_ptr&lt;Widget&gt; pw, <span class="hljs-type">int</span> priority)</span></span>;<br><span class="hljs-comment">//在某动态分配所得的Widget上进行某些带有优先权的处理</span><br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li>由于”以对象管理资源“，processWidget决定对其动态分配得来的Widget运用智能指针（tr1::shared_ptr)</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-built_in">processWidget</span>(<span class="hljs-keyword">new</span> Widget, <span class="hljs-built_in">priority</span>());<span class="hljs-comment">//调用函数</span><br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li>不能通过编译，tr1::shared_ptr构造函数需要一个原始指针，但该构造函数是个explicit构造函数，无法进行隐式转换，要转换为智能指针</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-built_in">processWidget</span>(std::tr1::<span class="hljs-built_in">shared_ptr</span>&lt;Widget&gt;(<span class="hljs-keyword">new</span> Widget, <span class="hljs-built_in">priority</span>());<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li><p>虽然使用了对象管理式资源，却可能泄露资源</p></li>
+<li><p>编译器在产出一个processWidget调用码之前，必须核算即将被传递的各个实参，</p></li>
+<li><ol type="1">
+<li>第二个实参只是一个单纯的对priority函数的调用，</li>
+<li>第一个实参std::tr1::shared_ptr<Widget>(new Widget)由两部分组成</Widget></li>
+</ol></li>
+<li><ol type="1">
+<li><ol type="1">
+<li>执行”new Widget"表达式</li>
+<li>调用tr1::shared_ptr构造函数</li>
+</ol></li>
+</ol></li>
+<li><ol type="1">
+<li>在调用processWidget之前，编译器必须创建代码</li>
+</ol></li>
+<li><ol type="1">
+<li><ol type="1">
+<li>调用priority</li>
+<li>执行“new Widget"</li>
+<li>调用tr1::shared_ptr构造函数</li>
+</ol></li>
+</ol></li>
+<li><ol type="1">
+<li>new
+Widget执行于tr1::shared_ptr构造函数被调用之前，但priority的调用可以排在第一第二或者第三执行</li>
+<li>万一priority调用异常，new
+Widget返回的指针将会遗失，因为它尚未被置入tr1::shared_ptr内，后者使我们用来防止资源泄露的</li>
+<li>资源被创建和资源被转换为资源管理对象之间发生了异常干扰</li>
+<li>避免方法：使用分离语句，分别写出</li>
+</ol></li>
+<li><ol type="1">
+<li><ol type="1">
+<li>创建Widget</li>
+<li>将它置入一个智能指针内，然后再把那个智能指针传给processWidget</li>
+</ol></li>
+</ol></li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cpp">std::<span class="hljs-function">tr1::shared_ptr&lt;Widget&gt; <span class="hljs-title">pw</span><span class="hljs-params">(<span class="hljs-keyword">new</span> Widget)</span></span>; <span class="hljs-built_in">processWidget</span>(pw, <span class="hljs-built_in">priority</span>());<span class="hljs-comment">//不会造成资源泄露</span><br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li>请记住，以独立语句将newed对象存储于智能指针内，如果不这样做，一旦异常被抛出，有可能导致难以察觉的资源泄露</li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/c/" class="category-chain-item">c++</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/c/effective-c/" class="category-chain-item">effective c++</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/c/" class="print-no-link">#c++</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>3. 资源管理</div>
+      <div>http://binbo-zappy.github.io/2024/11/27/effective-cpp/3-资源管理/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年11月27日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/11/27/effective-cpp/4-%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%A3%B0%E6%98%8E/" title="4. 设计与声明">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">4. 设计与声明</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/11/27/effective-cpp/2-%E6%9E%84%E9%80%A0%E3%80%81%E6%9E%90%E6%9E%84%E3%80%81%E8%B5%8B%E5%80%BC%E8%BF%90%E7%AE%97/" title="2. 构造、析构、赋值运算">
+                        <span class="hidden-mobile">2. 构造、析构、赋值运算</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -19,12 +19,12 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="6.5 文件传送协议FTP FTP提供交互式的访问，允许客户指明文件的类型与格式（如指明是否使用ASCII码），并允许文件具有存取权限（如访问文件的用户必须经过授权，并输入有效的口令） FTP屏蔽了各计算机系统的细节，因而适合于在异构网络中任意计算机之间传送文件  1. 基本原理  FTP客户和服务器之间要建立以下两个并行的TCP连接 控制连接，在整个会话期间一直保持打开，用于传送FTP相关控制命">
+    <meta name="description" content="6.5 文件传送协议FTP  FTP提供交互式的访问，允许客户指明文件的类型与格式（如指明是否使用ASCII码），并允许文件具有存取权限（如访问文件的用户必须经过授权，并输入有效的口令） FTP屏蔽了各计算机系统的细节，因而适合于在异构网络中任意计算机之间传送文件  1. 基本原理   FTP客户和服务器之间要建立以下两个并行的TCP连接  控制连接，在整个会话期间一直保持打开">
 <meta property="og:type" content="article">
 <meta property="og:title" content="6.5 文件传送协议FTP">
 <meta property="og:url" content="http://binbo-zappy.github.io/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-5-%E6%96%87%E4%BB%B6%E4%BC%A0%E9%80%81%E5%8D%8F%E8%AE%AEFTP/index.html">
 <meta property="og:site_name" content="Binbo">
-<meta property="og:description" content="6.5 文件传送协议FTP FTP提供交互式的访问，允许客户指明文件的类型与格式（如指明是否使用ASCII码），并允许文件具有存取权限（如访问文件的用户必须经过授权，并输入有效的口令） FTP屏蔽了各计算机系统的细节，因而适合于在异构网络中任意计算机之间传送文件  1. 基本原理  FTP客户和服务器之间要建立以下两个并行的TCP连接 控制连接，在整个会话期间一直保持打开，用于传送FTP相关控制命">
+<meta property="og:description" content="6.5 文件传送协议FTP  FTP提供交互式的访问，允许客户指明文件的类型与格式（如指明是否使用ASCII码），并允许文件具有存取权限（如访问文件的用户必须经过授权，并输入有效的口令） FTP屏蔽了各计算机系统的细节，因而适合于在异构网络中任意计算机之间传送文件  1. 基本原理   FTP客户和服务器之间要建立以下两个并行的TCP连接  控制连接，在整个会话期间一直保持打开">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/network.jpg">
 <meta property="article:published_time" content="2024-11-18T08:45:26.000Z">
@@ -278,18 +278,22 @@
             
               <div class="markdown-body">
                 
-                <h2 id="6-5-文件传送协议FTP"><a href="#6-5-文件传送协议FTP" class="headerlink" title="6.5 文件传送协议FTP"></a>6.5 文件传送协议FTP</h2><ol>
+                <h2 id="文件传送协议ftp">6.5 文件传送协议FTP</h2>
+<ol type="1">
 <li>FTP提供交互式的访问，允许客户指明文件的类型与格式（如指明是否使用ASCII码），并允许文件具有存取权限（如访问文件的用户必须经过授权，并输入有效的口令）</li>
 <li>FTP屏蔽了各计算机系统的细节，因而适合于在异构网络中任意计算机之间传送文件</li>
 </ol>
-<h2 id="1-基本原理"><a href="#1-基本原理" class="headerlink" title="1. 基本原理"></a>1. 基本原理</h2><p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-5-%E6%96%87%E4%BB%B6%E4%BC%A0%E9%80%81%E5%8D%8F%E8%AE%AEFTP/image-20230719151544230.png" srcset="/img/loading.gif" lazyload></p>
-<ol>
-<li>FTP客户和服务器之间要建立以下两个并行的TCP连接<ol>
+<h2 id="基本原理">1. 基本原理</h2>
+<p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-5-%E6%96%87%E4%BB%B6%E4%BC%A0%E9%80%81%E5%8D%8F%E8%AE%AEFTP/image-20230719151544230.png" srcset="/img/loading.gif" lazyload></p>
+<ol type="1">
+<li>FTP客户和服务器之间要建立以下两个并行的TCP连接
+<ol type="1">
 <li>控制连接，在<strong>整个会话期间一直保持打开</strong>，用于传送FTP相关<strong>控制命令</strong></li>
 <li>数据连接，用于文件传输，在<strong>每次文件传输时才建立</strong>，<strong>传输结束就关闭</strong></li>
-</ol>
-</li>
-<li>默认情况下，FTP使用TCP 21端口进行控制连接，TCP 20端口进行数据连接。<br>但是，是否使用TCP20端口建立数据连接与传输模式有关，主动方式使用TCP 20端口<br>被动方式由服务器和客户端自行协商决定。</li>
+</ol></li>
+<li>默认情况下，FTP使用TCP 21端口进行控制连接，TCP 20端口进行数据连接。
+但是，是否使用TCP20端口建立数据连接与传输模式有关，主动方式使用TCP
+20端口 被动方式由服务器和客户端自行协商决定。</li>
 </ol>
 
                 

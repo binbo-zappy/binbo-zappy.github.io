@@ -1,0 +1,1066 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="32. 确定你的public继承塑模出is-a关系  “public继承”意味is-a is-a并非是唯-存在于classes之间的关系。另两个常见的关系是has-a(有一个)和is-implemented-in-terms-of(根据某物实现出)。 “public继承”意味is-a。适用于base classes身上的每一件事情一定也适用于derived classes身上，因为每">
+<meta property="og:type" content="article">
+<meta property="og:title" content="6. 继承和面向对象设计">
+<meta property="og:url" content="http://binbo-zappy.github.io/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="32. 确定你的public继承塑模出is-a关系  “public继承”意味is-a is-a并非是唯-存在于classes之间的关系。另两个常见的关系是has-a(有一个)和is-implemented-in-terms-of(根据某物实现出)。 “public继承”意味is-a。适用于base classes身上的每一件事情一定也适用于derived classes身上，因为每">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/effective-cpp.png">
+<meta property="article:published_time" content="2024-11-27T12:17:11.000Z">
+<meta property="article:modified_time" content="2024-11-27T12:20:48.856Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="c++">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/effective-cpp.png">
+  
+  
+  
+  <title>6. 继承和面向对象设计 - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="6. 继承和面向对象设计"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-11-27 20:17" pubdate>
+          2024年11月27日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          45 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">6. 继承和面向对象设计</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="确定你的public继承塑模出is-a关系">32.
+确定你的public继承塑模出is-a关系</h2>
+<ol type="1">
+<li>“public继承”意味is-a</li>
+<li>is-a并非是唯-存在于classes之间的关系。另两个常见的关系是has-a(有一个)和is-implemented-in-terms-of(根据某物实现出)。</li>
+<li>“public继承”意味is-a。适用于base
+classes身上的每一件事情一定也适用于derived
+classes身上，因为每一个derived class对象也都是一个base class对象。</li>
+</ol>
+<h2 id="避免遮掩继承而来的名称">33. 避免遮掩继承而来的名称</h2>
+<ol type="1">
+<li><p>base
+class内的某物（也许是个成员函数、typedef、或成员变量）时，编译器可以找出我们所指涉的东西，因为derived
+classes继承了声明于base classes内的所有东西。实际运作方式是，derived
+class作用域被嵌套在base class作用域内</p></li>
+<li><ol type="1">
+<li><figure>
+<img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707472078740-a22bc7ef-2776-4539-b414-6ec3f0d680bb.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure></li>
+</ol></li>
+<li><p>有时候你并不想继承base
+classes的所有函数，这是可以理解的。</p></li>
+<li><ol type="1">
+<li>在public继承下，这绝对不可能发生，因为它违反了public继承所暗示的“base和derived
+classes之间的isa关系”。（这也就是为什么上述using声明式被放在derived
+class的public区域的原因：base class内的public名称在publicly derived
+class内也应该是public。)</li>
+<li>然而在private继承之下（见条款39)它却可能是有意义的。例如假设Derived以private形式继承Base,而Derived唯想继承的mf1是那个无参数版本。using声明式在这里派不上用场，因为using声明式会令继承而来的某给定名称之所有同名函数在derived
+class中都可见。不，我们需要不同的技术，即一个简单的转交函数(forwarding
+function)</li>
+<li><figure>
+<img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707476895583-0a89d8bb-a633-4917-8512-b92d034b8377.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure></li>
+</ol></li>
+<li><figure>
+<img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707476841476-416c6a76-60d6-412c-895d-d675ff490a57.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure></li>
+<li><p>inline转交函数(forwarding
+function)的另一个用途是为那些不支持using声明式（注：这并非正确行为）的老旧编译器另辟一条新路，将继承而得的名称汇入derived
+class作用域内。</p></li>
+<li><p>derived classes内的名称会遮掩base
+classes内的名称。在public继承下从来没有人希望如此。</p></li>
+<li><p>为了让被遮掩的名称再见天日，可使用using声明式或转交函数(forwarding
+functions)</p></li>
+</ol>
+<h2 id="区分接口继承和实现继承">34. 区分接口继承和实现继承</h2>
+<ol type="1">
+<li><p>public继承由函数接口继承和函数实现继承</p></li>
+<li><p>身为class设计者，有时候你会希望</p></li>
+<li><ol type="1">
+<li>derived classes只继承成员函数的接口（也就是声明)；</li>
+<li>有时候你又会希望derived
+classes同时继承函数的接口和实现，但又希望能够覆写(override)它们所继承的实现；</li>
+<li>又有时候你希望derived
+classes同时继承函数的接口和实现，并且不允许覆写任何东西。</li>
+</ol></li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Shape</span>&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">draw</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>= <span class="hljs-number">0</span>;<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">error</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; msg)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">objectID</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Rectangle</span>: <span class="hljs-keyword">public</span> Shape&#123;&#125;;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Ellipse</span>: <span class="hljs-keyword">public</span> Shape&#123;&#125;;<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li><p>Shape是个抽象class;:它的pure
+virtual函数draw使它成为一个抽象class。所以客户不能够创建Shape
+class的实体，只能创建其derived
+classes的实体。尽管如此，Shape还是强烈影响了所有以public形式继承它的derived
+classes,因为：</p></li>
+<li><ol type="1">
+<li>成员函数的接口总是会被继承。pure
+virtual函数有两个最突出的特性：它们必须被任何“继承了它们”的具象class重新声明，而且它们在抽象class中通常没有定义。把这两个性质摆在一起，你就会明白：</li>
+<li>声明一个pure virtual函数的目的是为了让derived
+classes只继承函数接口。</li>
+<li>令人意外的是，我们竟然可以为pure
+virtual函数提供定义。也就是说你可以为Shape::draw供应一份实现代码，C++并不会发出怨言，但调用它的唯一途径是“调用时明确指出其class名称”：</li>
+<li><figure>
+<img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707526635349-d4f46534-4348-464c-b582-814b87939a8c.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure></li>
+<li>可以为简朴的impure virtual 函数提供更平常更安全的缺省实现</li>
+</ol></li>
+<li><p>简朴的impure virtual函数背后的故事和pure
+virtual函数有点不同。一如往常，derived classes继承其函数接口，但impure
+virtual函数会提供一份实现代码，derivedclasses可能覆写(override)它。</p></li>
+<li><p>声明简朴的（非纯）impure virtual函数的目的，是让derived
+classes继承该函数的接口和缺省实现。</p></li>
+<li><p>可以“提供缺省实现给derived
+classes,但除非它们明白要求否则免谈”。此间技俩在于切断“virtual函数接口”和其“缺省实现”之间的连接。</p></li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Airplane</span>&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">fly</span><span class="hljs-params">(<span class="hljs-type">const</span> Airport&amp; destination)</span> </span>= <span class="hljs-number">0</span>;<br><span class="hljs-keyword">protected</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">defaultFly</span><span class="hljs-params">(<span class="hljs-type">const</span> Airport&amp; destination)</span></span>;<br>&#125;;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Airplane::defaultFly</span><span class="hljs-params">(<span class="hljs-type">const</span> Airport&amp; destination)</span></span><br><span class="hljs-function"></span>&#123;<br>    缺省行为，将飞机飞至指定目的地<br>&#125;<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li>若想使用缺省实现（例如ModelA和ModelB),可以在其fly函数中对defaultFly做一个inline调用</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">ModelA</span>: <span class="hljs-keyword">public</span> Airplane&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">fly</span><span class="hljs-params">(<span class="hljs-type">const</span> Airport&amp; destination)</span> </span>&#123;<span class="hljs-built_in">defaultFly</span>(destination)&#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li>现在Modelc
+class不可能意外继承不正确的fly实现代码了，因为Airplane中的pure
+virtual函数迫使ModelC必须提供自己的fly版本：</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">ModelC</span>: <span class="hljs-keyword">public</span> Airplane&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">fly</span><span class="hljs-params">(<span class="hljs-type">const</span> Airport&amp; destination)</span></span>;<br>&#125;;<br><br><span class="hljs-type">void</span> ModelC:<span class="hljs-built_in">fly</span>(<span class="hljs-type">const</span> Airport&amp; destination)<br>&#123;<br>    将C型飞机飞至指定的目的地<br>&#125;<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li>pure virtual函数必须在derived
+classes中重新声明，但它们也可以拥有自己的实现</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Airplane</span>&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">fly</span><span class="hljs-params">(<span class="hljs-type">const</span> Airport&amp; destination)</span> </span>= <span class="hljs-number">0</span>;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Airplane::fly</span><span class="hljs-params">(cosnt Airport&amp; destiantion)</span></span><br><span class="hljs-function"></span>&#123;<br>    缺省行为<br>&#125;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">ModelA</span>: <span class="hljs-keyword">public</span> Airplane&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">fly</span><span class="hljs-params">(<span class="hljs-type">const</span> Airport&amp; destination)</span></span><br><span class="hljs-function">    </span>&#123;<br>        Airplane::<span class="hljs-built_in">fly</span>(destination);<br>    &#125;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">ModelC</span>: <span class="hljs-keyword">public</span> Airplane&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">fly</span><span class="hljs-params">(<span class="hljs-type">const</span> Airport&amp; destination)</span></span>;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">ModelC::fly</span><span class="hljs-params">(<span class="hljs-type">const</span> Airport&amp; destination)</span></span><br><span class="hljs-function"></span>&#123;<br>    飞指定地点<br>&#125;<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li><p>如果成员函数是个non-virtual函数，意味是它并不打算在derived
+classes中有不同的行为。实际上一个non-virtual成员函数所表现的不变性(invariant),凌驾其特异性（specialization),因为它表示不论derived
+class变得多么特异化，它的行为都不可以改变。就其自身而言：</p></li>
+<li><ol type="1">
+<li>声明non-virtual函数的目的是为了令derived
+classes继承函数的接口及一份强制性实现。</li>
+</ol></li>
+<li><p>pure
+virtual函数、simple(impure)virtual函数、non-virtual函数之间的差异，使你得以精确指定你想要derived
+classes继承的东西：只继承接口，或是继承接口和一份缺省实现，或是继承接口和一份强制实现。</p></li>
+<li><p>第一个错误是将所有函数声明为non-virtual。.这使得derived
+classes没有余裕空间进行特化工作。</p></li>
+<li><p>如果你关心virtual函数的成本，请容许我介绍所谓的80-20法则（也可见条款30)。这个法则说，一个典型的程序有80号的执行时间花费在20%的代码身上。此一法则十分重要，因为它意味，平均而言你的函数调用中可以有80号是virtual而不冲击程序的大体效率。所以当你担心是否有能力负担virtual函数的成本之前，请先将心力放在那举足轻重的20号代码上头，它才是真正的关键。</p></li>
+<li><p>另一个常见错误是将所有成员函数声明为virtual。有时候这样做是正确的，例如条款31的Interface
+classes。然而这也可能是class设计者缺乏坚定立场的前兆。某些函数就是不该在derived
+class中被重新定义，果真如此你应该将那些函数声明为non-virtual。.没有人有权利妄称你的class适用于任何人任何事任何物而他们只需花点时间重新定义你的函数就可以享受一切。如果你的不变性(invariant)凌驾特异性(specialization).，别害怕说出来。</p></li>
+<li><p>接口继承和实现继承不同。在public继承之下，derived
+classes总是继承base class的接口。</p></li>
+<li><p>pure virtual函数只具体指定接口继承。</p></li>
+<li><p>简朴的（非纯）impure
+virtual函数具体指定接口继承及缺省实现继承。</p></li>
+<li><p>non-virtual函数具体指定接口继承以及强制性实现继承。</p></li>
+</ol>
+<h2 id="考虑virtual函数以外的其他选择">35.
+考虑virtual函数以外的其他选择</h2>
+<ol type="1">
+<li><strong>藉由Non-Virtual Interface手法实现Template
+Method模式</strong></li>
+<li>直接在class定义式内呈现成员函数，那也就让它们全都暗自成了inline。</li>
+<li>这一基本设计，也就是“令客户通过public
+non-virtual成员函数间接调用private virtual函数”，称为non-virtual
+interface(NVI)手法。它是所谓Template
+Method设计模式（与C+templates并无关联）的一个独特表现形式。</li>
+<li>NVI手法的一个优点隐身在上述代码注释“做一些事前工作”和“做一些事后工作”之中。那些注释用来告诉你当时的代码保证在“virtual函数进行真正工作之前和之后”被调用。</li>
+<li>在NVI手法下其实没有必要让virtual函数一定得是private。某些class继承体系要求derived
+class在virtual函数的实现内必须调用其base
+class的对应兄弟，而为了让这样的调用合法，virtual函数必须是protected,不能是private。有时候virtual函数甚至一定得是public(例如具备多态性质的base
+classes的析构函数一见条款7)，这么一来就不能实施NVI手法了。</li>
+<li><strong>藉由Function Pointers实现Strategy模式</strong></li>
+<li>同一人物类型之不同实体可以有不同的健康计算函数。</li>
+</ol>
+<figure>
+<img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707530940516-84b197b8-7e89-4800-a3ee-0dab8bc0b127.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<ol type="1">
+<li>某己知人物之健康指数计算函数可在运行期变更。</li>
+<li>实际上任何时候当你将class内的某个机能（也许取道自某个成员函数）替换为class外部的某个等价机能（也许取道自某个non-member
+non-friend函数或另一个cass的non-friend成员函数)，这都是潜在争议点。</li>
+<li>唯一能够解决“需要以non-member函数访问class的non-public成分”的办法就是：弱化class的封装。运用函数指针替换virtual函数，其优点（像是“每个对象可各自拥有自己的健康计算函数”和“可在运行期改变计算函数”)是否足以弥补缺点（例如可能必须降低GameCharacter封装性)，是你必须根据每个设计情况的不同而抉择的。</li>
+<li><strong>藉由trl:function完成Strategy模式</strong></li>
+<li>一日习惯了templates以及它们对隐式接口（见条款41)的使用，基于函数指针的做法看起来便过分苛刻而死板了。</li>
+<li>如果我们不再使用函数指针（如前例的healthFunc),而是改用一个类型为tr1::unction的对象，这些约束就全都挥发不见了。就像条款54所说，这样的对象可持有（保存)任何可调用物(callable
+entity,也就是函数指针、函数对象、或成员函数指针)，只要其签名式兼容于需求端。</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">typedef</span> std::tr1::function&lt;<span class="hljs-type">int</span> (<span class="hljs-type">const</span> GameCharacter&amp;)&gt; HealthCalcFunc;<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li>tr1::function像一般的函数指针，这个tr1::function类型产生的对象可以持有任何与此签名式兼容的可调用物。所谓兼容，就是这个可调用物的参数可被隐式转换为const
+GameCharacter&amp;，而其返回类型可被隐式转换为int。</li>
+</ol>
+<figure>
+<img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707532060759-2bde1f88-4e85-4cc5-a399-2d7e09a552da.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<ol type="1">
+<li><strong>古典的Strategy模式</strong></li>
+</ol>
+<figure>
+<img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707532579120-22de152a-6b54-4379-bed2-10cd45c99d1a.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<figure>
+<img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707532676304-dc836a59-a083-478f-8354-18ceacc6e742.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<ol type="1">
+<li>本条款的根本忠告是，当你为解决问题而寻找某个设计方法时，不妨考虑virtual函数的替代方案。下面快速重点复习我们验证过的几个替代方案：</li>
+<li>使用non-virtual interface(NVI)手法，那是Template
+Method设计模式的一种特殊形式。它以public
+non-virtual成员函数包裹较低访问性(private或protected)的virtual函数。</li>
+<li>将virtual函数替换为“函数指针成员变量”，这是Strategy设计模式的一种分解表现形式。</li>
+<li>以trl:function成员变量替换virtual函数，因而允许使用任何可调用物(callable
+entity)搭配一个兼容于需求的签名式。这也是Strategy设计模式的某种形式。</li>
+<li>将继承体系内的virtual函数替换为另一个继承体系内的virtual函数。这是Strategy设计模式的传统实现手法。</li>
+<li>virtual函数的替代方案包括NVI手法及Strategy设计模式的多种形式。NⅥ手法自身是一个特殊形式的Template
+Method设计模式。</li>
+<li>将机能从成员函数移到clss外部函数，带来的一个缺点是，非成员函数无法访问class的non-public成员。</li>
+<li>trl:function对象的行为就像一般函数指针。这样的对象可接纳“与给定之目标签名式(target
+signature)兼容”的所有可调用物(callable entities)。</li>
+</ol>
+<h2 id="绝不重新定义继承而来的non-virtual函数">36.
+绝不重新定义继承而来的non-virtual函数</h2>
+<ol type="1">
+<li>绝对不要重新定义继承而来的non-virtual函数。</li>
+</ol>
+<h2 id="绝不重新定义继承而来的缺省参数值">37.
+绝不重新定义继承而来的缺省参数值</h2>
+<ol type="1">
+<li>继承一个带有缺省参数值的virtual函数</li>
+<li>virtual函数系动态绑定，而缺省参数值却是静态绑定。静态绑定又各前期绑定，early
+binding;动态绑定又名后期绑定，late binding。</li>
+<li>virtual函数是动态绑定，而缺省参数值却是静态绑定。意思是你可能会在“调用一个定义于derived
+class内的virtual函数”的同时，却使用base class为它所指定的缺省参数值</li>
+<li>条款35列了不少virtual函数的替代设计，其中之一是NVI(non-virtual
+interface)手法：令base class内的一个public non-virtual函数调用private
+virtual函数，后者可被derived
+classes重新定义。这里我们可以让non-virtual函数指定缺省参数，而private
+virtual函数负责真正的工作：</li>
+</ol>
+<figure>
+<img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707533914463-b881606c-63c1-42e5-b931-dc0cd789ac15.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<ol type="1">
+<li>绝对不要重新定义一个继承而来的缺省参数值，因为缺省参数值都是静态绑定，而virtual函数一你唯一应该覆写的东西一却是动态绑定。</li>
+</ol>
+<h2 id="通过符合塑模出has-a或根据某物实现出">38.
+通过符合塑模出has-a或根据某物实现出</h2>
+<ol type="1">
+<li>复合(composition)这个术语有许多同义词，包括la四yering（分层)，containment(内含)，aggregation(聚合）和embedding(内嵌)。</li>
+<li>当复合发生于应用域内的对象之间，表现出hasa的关系；当它发生于实现域内则是表现is-implemented-in-terms-of的关系</li>
+<li>比较麻烦的是区分is-a(是一种)和is-implemented-in-terms.-of(根据某物实现出)这两种对象关系。</li>
+<li>复合(composition)的意义和public继承完全不同。</li>
+<li>在应用域(application
+domain),复合意味has-a(有一个)。在实现域(implementation
+domain.),复合意味is-implemented-.in-terms-of(根据某物实现出)。</li>
+</ol>
+<h2 id="明智而审慎地使用private继承">39.
+明智而审慎地使用private继承</h2>
+<ol type="1">
+<li>如果classes之间的继承关系是private,编译器不会自动将一个derived
+class对象（例如Student)转换为一个base
+class对象（例如Person)。这和public继承的情况不同。</li>
+<li>第二条规则是，由private base class继承而来的所有成员，在derived
+class中都会变成private属性，纵使它们在base
+class中原本是protected或public属性。</li>
+<li>Private继承意味is-implemented-in-terms-of(根据某物实现出)，这个事实有点令人不安，因为条款38才刚指出复合(composition)的意义也是这样。你如何在两者之间取舍？答案很简单：尽可能使用复合，必要时才使用private继承。何时才是必要？主要是当protected成员和/或virtual函数牵扯进来的时候。其实还有一种激进情况，那是当空间方面的利害关系足以踢翻private继承的支柱时。</li>
+</ol>
+<figure>
+<img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707537572173-10f98648-129a-40e0-9e2a-41cc51d576cb.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<figure>
+<img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707537803594-b7aabf0a-f774-4507-9cbd-025c9830f8ce.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<ol type="1">
+<li>用复合取而代之，在Widget内声明一个嵌套式private
+class，后者以public形式继承Timer并重新定义onTick,</li>
+</ol>
+<figure>
+<img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707537869955-7d7f3471-2af4-4f93-a8c8-b7f220d266c3.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<ol type="1">
+<li>稍早我曾谈到，private继承主要用于“当一个意欲成为derived
+class者想访问一个意欲成为base
+class者的protected成分，或为了重新定义一或多个virtual函数”。但这时候两个classes之间的概念关系其实是is-implemented-in-terms-of(根据某物实现出)而非is-a。然而我也说过，有一种激进情况涉及空间最优化，可能会促使你选择“private继承”而不是“继承加复合”。</li>
+<li>这个激进情况真是有够激进，只适用于你所处理的clss不带任何数据时。这样的classes没有non-static成员变量，没有virtual函数（因为这种函数的存在会为每个对象带来一个ptr,见条款7)，也没有virtual
+base classes(因为这样的base
+classes也会招致体积上的额外开销，见条款40)。于是这种所谓的empty
+classes对象不使用任何空间，因为没有任何隶属对象的数据需要存储。然而由于技术上的理由，C++裁定凡是独立（非附属）对象都必须有非零大小，所以如果你这样做：</li>
+</ol>
+<figure>
+<img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707538435846-92a3eed4-f3de-4ef2-b328-4a62be1096f1.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<ol type="1">
+<li>几乎可以确定sizeof(HoldsAnInt)=sizeof(int)。这是所谓的EBO(empy base
+optimization;
+空白基类最优化)，我试过的所有编译器都有这样的结果。如果你是一个程序库开发人员，而你的客户非常在意空间，那么值得注意EBO。另外还值得知道的是，EBO一般只在单一继承（而非多重继承）下才可行，统治C++对象布局的那些规则通常表示EBO无法被施行于“拥有多个base”的derived
+classes身上。</li>
+<li>现实中的"empty"classes并不真的是empty。虽然它们从未拥有non-static成员变量，却往往内含typedefs,enums,.static成员变量，或non-virtual函数。STL就有许多技术用途的empty
+classes,其中内含有用的成员（通常是ypedefs),包括base classes
+unary_function和binary
+function,这些是“用户自定义之函数对象”通常会继承的classes.感谢EBO的广泛实践，使这样的继承很少增加derived
+classes的大小。</li>
+<li>尽管如此，让我们回到根本。大多数classes并非empy,所以EBO很少成为private继承的正当理由。更进一步说，大多数继承相当于isa,这是指public继承，不是private继承。复合和private继承都意味is-implemented-.in-terms-of,但复合比较容易理解，所以无论什么时候，只要可以，你还是应该选择复合。</li>
+<li>当你面对“并不存在is-a关系”的两个classes,其中一个需要访问另一个的protected成员，或需要重新定义其一或多个virtual函数，private继承极有可能成为正统设计策略。即便如此你也已经看到，一个混合了public继承和复合的设计，往往能够释出你要的行为，尽管这样的设计有较大的复杂度。“明智而审慎地使用private继承”意味，在考虑过所有其他方案之后，如果仍然认为private继承是“表现程序内两个classes之间的关系”的最佳办法，这才用它。</li>
+<li>Private继承意味is-implemented-in-terms
+of(根据某物实现出)。它通常比复合(composition)的级别低。但是当derived
+class需要访问protected base
+class的成员，或需要重新定义继承而来的virtual函数时，这么设计是合理的。</li>
+<li>和复合(composition)不同，private继承可以造成empty
+base最优化。这对致力于“对象尺寸最小化”的程序库开发者而言，可能很重要。</li>
+</ol>
+<h2 id="明智而审慎地使用多重继承">40. 明智而审慎地使用多重继承</h2>
+<ol type="1">
+<li>多重继承(multiple inheritance;ML)，单一继承(single
+inheritance;SI)</li>
+<li>当MI进入设计景框，程序有可能从一个以上的base
+classes继承相同名称（如函数、typedef等等）。那会导致较多的歧义(ambiguity)</li>
+<li>注意此例之中对checkOut的调用是歧义（模棱两可）的，即使两个函数之中只有一个可取用(一个类内的checkOut是public，另一个类内的却是private)。这与C++用来解析(resolving)重载函数调用的规则相符：在看到是否有个函数可取用之前，C++首先确认这个函数对此调用之言是最佳匹配。找出最佳匹配函数后才检验其可取用性。本例的两个checkOuts有相同的匹配程度(译注：因此才造成歧义)，没有所谓最佳匹配.因此ElectronicGadget::checkOut的可取用性也就从未被编译器审查。</li>
+<li>为了解决这个歧义，你必须明白指出你要调用哪-个base
+class内的函数：</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cpp">mp.BorrowableItem:<span class="hljs-built_in">checkOut</span>();<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li>多重继承的意思是继承1个以上的base classes,但这些base
+classes并不常在继承体系中义有更高级的base
+classes,因为那会导致要命的“钻石型多重继承”：</li>
+</ol>
+<figure>
+<img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707549791781-4e9c1ae9-f68c-4de5-9778-6e1c08f0fa75.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<ol type="1">
+<li>令所有直接继承自它的classes采用“virtual继承</li>
+</ol>
+<figure>
+<img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707549889972-ccb09a69-7fae-41ef-bbb7-43bf7c28d4ce.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<ol type="1">
+<li><p>C++标准程序库内含一个多重继承体系，class
+templates,名称分别是basic_ios, basic_istream,
+basic_ostream和basic_iostream</p></li>
+<li><p>从正确行为的观点看，public继承应该总是virtual。</p></li>
+<li><p>规则很简单：任何时候当你使用public继承，请改用virtual
+public继承.</p></li>
+<li><p>为避免继承得来的成员变量重复，编译器必须提供若干幕后戏法，而其后果是：使用virtual继承的那些classes所产生的对象往往比使用non-virtual继承的兄弟们体积大，访问virtual
+base classes的成员变量时，也比访问non-virtual base
+classes的成员变量速度慢。种种细节因编译器不同而异，但基本重点很清楚：你得为virtual继承付出代价。</p></li>
+<li><p>virtual继承的成本还包括其他方面。支配“virtual base
+classes初始化”的规则比起non-virtual bases的情况远为复杂且不直观。virtual
+base的初始化责任是由继承体系中的最低层(nost
+derived)class负责，这暗示</p></li>
+<li><ol type="1">
+<li>(1)classes若派生自virtual bases而需要初始化，必须认知其virtual
+bases一一不论那些bases距离多远，</li>
+<li>(2)当一个新的derived class加入继承体系中，它必须承担其virtual
+bases(不论直接或间接)的初始化责任。</li>
+</ol></li>
+<li><p>我对virtual base
+classes(亦相当于对virtual继承)的忠告很简单。</p></li>
+<li><ol type="1">
+<li>第一，非必要不使用virtual bases。平常请使用non-virtual继承。</li>
+<li>第二，如果你必须使用virtual base
+classes,尽可能避免在其中放置数据。这么一来你就不需担心这些classes身上</li>
+</ol></li>
+</ol>
+<figure>
+<img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707551059636-152e5f8e-fd50-4248-80b3-b5461267d06b.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<figure>
+<img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707551092898-8edf0efb-f1aa-4349-8d90-7069f57ffcc4.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<ol type="1">
+<li>多重继承比单一继承复杂。它可能导致新的歧义性，以及对virtual继承的需要。</li>
+<li>virtual继承会增加大小、速度、初始化（及赋值）复杂度等等成本。如果virtualbase
+classes不带任何数据，将是最具实用价值的情况。</li>
+<li>多重继承的确有正当用途。其中一个情节涉及“public继承某个Interface
+class”和“private继承某个协助实现的class”的两相组合。</li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/c/" class="category-chain-item">c++</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/c/effective-c/" class="category-chain-item">effective c++</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/c/" class="print-no-link">#c++</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>6. 继承和面向对象设计</div>
+      <div>http://binbo-zappy.github.io/2024/11/27/effective-cpp/6-继承和面向对象设计/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年11月27日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/11/27/effective-cpp/7-%E6%A8%A1%E6%9D%BF%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/" title="7. 模板与泛型编程">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">7. 模板与泛型编程</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/11/27/effective-cpp/5-%E5%AE%9E%E7%8E%B0/" title="5. 实现">
+                        <span class="hidden-mobile">5. 实现</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

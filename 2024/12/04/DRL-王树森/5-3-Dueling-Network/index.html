@@ -1,0 +1,985 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="对决网络 (Dueling Network) 本节介绍对决网络 (dueling network), 它是对 DQN 的神经网络结构的改进。它的基本想法是将最优动作价值\(Q^*\)分解成最优状态价值\(V^*\)加最优优势\(D^*\)。对决网络的训练与 DQN 完全相同，可以用 Q 学习算法或者双 Q 学习算法 。 最优优势函数 在介绍对决网络 (dueling network)之">
+<meta property="og:type" content="article">
+<meta property="og:title" content="5.3 Dueling Network">
+<meta property="og:url" content="http://binbo-zappy.github.io/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/5-3-Dueling-Network/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="对决网络 (Dueling Network) 本节介绍对决网络 (dueling network), 它是对 DQN 的神经网络结构的改进。它的基本想法是将最优动作价值\(Q^*\)分解成最优状态价值\(V^*\)加最优优势\(D^*\)。对决网络的训练与 DQN 完全相同，可以用 Q 学习算法或者双 Q 学习算法 。 最优优势函数 在介绍对决网络 (dueling network)之">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/RL-WSS.png">
+<meta property="article:published_time" content="2024-12-04T08:02:53.000Z">
+<meta property="article:modified_time" content="2024-12-04T11:00:03.481Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="RL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/RL-WSS.png">
+  
+  
+  
+  <title>5.3 Dueling Network - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="5.3 Dueling Network"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-12-04 16:02" pubdate>
+          2024年12月4日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          34 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">5.3 Dueling Network</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="对决网络-dueling-network">对决网络 (Dueling Network)</h1>
+<p>本节介绍对决网络 (dueling network), 它是对 DQN
+的神经网络结构的改进。它的基本想法是将最优动作价值<span class="math inline">\(Q^*\)</span>分解成最优状态价值<span class="math inline">\(V^*\)</span>加最优优势<span class="math inline">\(D^*\)</span>。对决网络的训练与 DQN
+完全相同，可以用 Q 学习算法或者双 Q 学习算法 。</p>
+<h2 id="最优优势函数">最优优势函数</h2>
+<p>在介绍对决网络 (dueling
+network)之前，先复习一些基础知识。动作价值函数<span class="math inline">\(Q_\pi(s, a)\)</span>是回报的期望：</p>
+<p><span class="math inline">\(Q_\pi(s, a) = \mathbb{E}[U_t | S_t = s,
+A_t = a]\)</span>.</p>
+<p>最优动作价值<span class="math inline">\(Q^*\)</span>的定义是：</p>
+<p><span class="math inline">\(Q^*(s, a) = \max_\pi Q_\pi(s, a), \forall
+s \in S, a \in A\)</span>.</p>
+<p>状态价值函数<span class="math inline">\(V_\pi(s)\)</span>是<span class="math inline">\(Q_\pi(s, a)\)</span>关于<span class="math inline">\(a\)</span>的期望：</p>
+<p><span class="math inline">\(V_\pi(s) = \mathbb{E}_{A \sim
+\pi}[Q_\pi(s, A)]\)</span>.</p>
+<p>最优状态价值<span class="math inline">\(V^*\)</span>的定义是：</p>
+<p><span class="math inline">\(V^*(s) = \max_\pi V_\pi(s), \forall s \in
+S\)</span>.</p>
+<p>最优优势函数 (optimal advantage function) 的定义是：</p>
+<p><span class="math inline">\(D^*(s, a) \triangleq Q^*(s, a) -
+V^*(s)\)</span>.</p>
+<p>通过数学推导，可以证明下面的定理：</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/5-3-Dueling-Network/1733215260567-a6f5c97f-8176-40e9-b342-7e0e9696aaf9.png" srcset="/img/loading.gif" lazyload></p>
+<p><span class="math inline">\(Q^*(s, a) = V^*(s) + D^*(s, a) - \max_a
+D^*(s, a) \quad \forall s \in S, a \in A\)</span>.</p>
+<h2 id="对决网络">对决网络</h2>
+<p>与 DQN 一样，对决网络 (dueling network) 也是对最优动作价值函数<span class="math inline">\(Q^*\)</span>的近似。对决网络与 DQN
+的区别在于神经网络结构不同。直观上，对决网络可以了解到哪些状态有价值或者没价值，而无需了解每个动作对每个状态的影响。实践中，对决网络具有更好的效果。由于对决网络与
+DQN 都是对<span class="math inline">\(Q^*\)</span>的近似，可以用完全相同的算法训练两种神经网络。</p>
+<p>对决网络由两个神经网络组成。一个神经网络记作<span class="math inline">\(D(s, a; w^D)\)</span>, 它是对最优优势函数<span class="math inline">\(D^*(s, a)\)</span>的近似。另一个神经网络记作<span class="math inline">\(V(s; w^V)\)</span>,它是对最优状态价值函数<span class="math inline">\(V^*(s)\)</span>的近似。把定理 6.1 中的<span class="math inline">\(D^*\)</span>和<span class="math inline">\(V^*\)</span>替换成相应的神经网络，那么最优动作价值函数<span class="math inline">\(Q^*\)</span>就被近似成下面的神经网络：</p>
+<p><span class="math inline">\(Q(s, a; w) \triangleq V(s; w^V) + D(s, a;
+w^D) - \max_{a \in \mathcal{A}} D(s, a; w^D).\)</span>.</p>
+<p>公式左边的<span class="math inline">\(Q(s, a;
+w)\)</span>就是对决网络，它是对最优动作价值函数<span class="math inline">\(Q^*\)</span>的近似。它的参数记作<span class="math inline">\(w \triangleq (w^V; w^D)\)</span>。</p>
+<p>对决网络的结构如图 6.6 所示。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/5-3-Dueling-Network/1733215564829-2b8fcd67-d02d-42ee-b881-92026b097436.png" srcset="/img/loading.gif" lazyload></p>
+<p>可以让两个神经网络<span class="math inline">\(D(s, a;
+w^D)\)</span>与<span class="math inline">\(V(s;
+w^V)\)</span>共享部分卷积层；这些卷积层把输入的状态<span class="math inline">\(s\)</span>映射成特征向量，特征向量是“优势头”与“状态价值头”的输入。优势头输出一个向量，向量的维度是动作空间的大小<span class="math inline">\(\|A\|\)</span>,
+向量每个元素对应一个动作。举个例子，动作空间是<span class="math inline">\(\{左，右，上\}\)</span>。优势头的输出是三个值：</p>
+<p><span class="math inline">\(D(s, 左; w^D) = -90, D(s, 右; w^D) =
+-420, D(s, 上; w^D) = 30\)</span>.</p>
+<p>状态价值头输出的是一个实数，比如</p>
+<p><span class="math inline">\(V(s; w^V) = 300\)</span>.</p>
+<p>首先计算</p>
+<p><span class="math inline">\(\max_a D(s, a; w^D) = \max\{-90, -420,
+30\} = 30\)</span>.</p>
+<p>然后用公式 (6.1) 计算出：</p>
+<p><span class="math inline">\(Q(s, 左; w) = 180, Q(s, 右; w) = -150,
+Q(s, 上; w) = 300\)</span>.</p>
+<p>这样就得到了对决网络的最终输出。</p>
+<h2 id="解决不唯一性">解决不唯一性</h2>
+<p>读者可能会有下面的疑问。对决网络是由定理 6.1
+推导出的，而定理中最右的一项恒等于零：</p>
+<p><span class="math inline">\(\max_a D^*(s, a) = 0, \forall s \in
+S\)</span>.</p>
+<p>也就是说，可以把最优动作价值写成两种等价形式：</p>
+<p><span class="math inline">\(\begin{array}{lll}
+Q_{\star}(s, a) &amp;=&amp; V_{\star}(s) + D_{\star}(s, a) &amp;
+\text{(第一种形式)} \\
+&amp;=&amp; V_{\star}(s) + D_{\star}(s, a) - \max_{a \in \mathcal{A}}
+D_{\star}(s, a). &amp; \text{(第二种形式)}
+\end{array}\)</span></p>
+<p>之前我们根据第二种形式实现对决网络。我们可否根据第一种形式，把对决网络按照下面的方式实现呢：</p>
+<p><span class="math inline">\(Q(s, a; w) = V(s; w^V) + D(s, a;
+w^D)\)</span>?</p>
+<p>答案是不可以这样实现对决网络，因为这样会导致不唯一性。假如这样实现对决网络，那么<span class="math inline">\(V\)</span>和<span class="math inline">\(D\)</span>可以随意上下波动，比如一个增大 100,
+另一个减小 100：</p>
+<p><span class="math inline">\(V(s; w^{\tilde{V}}) \triangleq V(s; w^V)
++ 100, D(s, a; w^{\tilde{D}}) \triangleq D(s, a; w^D) -
+100\)</span>.</p>
+<p>这样的上下波动不影响最终的输出：</p>
+<p><span class="math inline">\(V(s; w^V) + D(s, a; w^D) = V(s;
+w^{\tilde{V}}) + D(s, a; w^{\tilde{D}})\)</span>.</p>
+<p>这就意味着<span class="math inline">\(V\)</span>和<span class="math inline">\(D\)</span>的参数可以很随意地变化，却不会影响输出的
+Q。我们不希望这种情况出现，因为这会导致训练的过程中参数不稳定。</p>
+<p>因此很有必要在对决网络中加入<span class="math inline">\(\max_a D(s,
+a; w^D)\)</span>这一项。它使得<span class="math inline">\(V\)</span>和<span class="math inline">\(D\)</span>不能随意上下波动。假如让<span class="math inline">\(V\)</span>变大 100,让<span class="math inline">\(D\)</span>变小 100, 则对决网络的输出会增大
+100,而非不变：</p>
+<p><span class="math inline">\(V\left(s; \tilde{w}^{V}\right) +
+D\left(s, a; \tilde{w}^{D}\right) - \max_{a} D\left(s, a;
+\tilde{w}^{D}\right)\)</span>.</p>
+<p><span class="math inline">\(= V\left(s; w^{V}\right) + D\left(s, a;
+w^{D}\right) - \max_{a} D\left(s, a; w^{D}\right) + 100.\)</span></p>
+<p>以上讨论说明了为什么<span class="math inline">\(\max_a D(s, a;
+w^D)\)</span>这一项不能省略。</p>
+<h2 id="对决网络的实际实现">对决网络的实际实现</h2>
+<p>按照定理 6.1, 对决网络应该定义成：</p>
+<p><span class="math inline">\(Q(s, a; w) \triangleq V(s; w^V) + D(s, a;
+w^D) - \max_a D(s, a; w^D)\)</span>.</p>
+<p>最右边的 max 项的目的是解决不唯一性。实际实现的时候，用 mean 代替 max
+会有更好的效果。所以实际 上会这样定义对决网络：</p>
+<p><span class="math inline">\(Q(s, a; w) \triangleq V(s; w^V) + D(s, a;
+w^D) - \text{mean}_{a \in \mathcal{A}} D(s, a; w^D).\)</span>.</p>
+<p>对决网络与 DQN 都是对最优动作价值函数<span class="math inline">\(Q^*\)</span>的近似，所以对决网络的训练和决策与 DQN
+完全一样。比如可以这样训练对决网络：</p>
+<ul>
+<li>用<span class="math inline">\(\epsilon\)</span>-greedy
+算法控制智能体，收集经验，把<span class="math inline">\((s_j, a_j, r_j,
+s_{j+1})\)</span>这样的四元组存入经验回放数组。</li>
+<li>从数组里随机抽取四元组，用双 Q 学习算法更新对决网络参数<span class="math inline">\(w = (w^D, w^V)\)</span>。</li>
+</ul>
+<p>完成训练之后，基于当前状态<span class="math inline">\(s_t\)</span>,让对决网络给所有动作打分，然后选择分数最高的动作：</p>
+<p><span class="math inline">\(a_t = \underset{a \in
+A}{\operatorname{argmax}} Q(s_t, a; w)\)</span>.</p>
+<p>简而言之，怎么样训练 DQN,就怎么样训练对决网络；怎么样用 DQN
+做控制，就怎么样用对决网络做控制。如果一个技巧能改进 DQN
+的训练，这个技巧也能改进对决网络。同样的道理，因为 Q 学习算法导致 DQN
+出现高估，所以 Q 学习算法也会导致对决网络出现高估。</p>
+<h1 id="噪声网络">噪声网络</h1>
+<p>本节介绍噪声网络(noisy net),这是一种非常简单的方法，可以显著提高 DQN
+的表现。噪声网络的应用不局限于 DQN,
+它可以用于几乎所有的深度强化学习方法。</p>
+<h2 id="噪声网络的原理">噪声网络的原理</h2>
+<p>把神经网络中的参数<span class="math inline">\(w\)</span>替换成<span class="math inline">\(\mu + \sigma \circ \xi\)</span>。此处的<span class="math inline">\(\mu\)</span>、<span class="math inline">\(\sigma\)</span>、<span class="math inline">\(\xi\)</span>的形状与<span class="math inline">\(w\)</span>完全相同。</p>
+<p><span class="math inline">\(\mu\)</span>、<span class="math inline">\(\sigma\)</span>分别表示均值和标准差，它们是神经网络的参数，需要从经验中学习。<span class="math inline">\(\xi\)</span>是随机噪声，它的每个元素独立从标准正态分布<span class="math inline">\(\mathcal{N}(0,1)\)</span>中随机抽取。符号“<span class="math inline">\(\circ\)</span>”表示逐项乘积。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/5-3-Dueling-Network/1733216326369-7ef961a9-6932-415c-83e2-9a584cc9a6f2.png" srcset="/img/loading.gif" lazyload></p>
+<p>如果<span class="math inline">\(w\)</span>是向量，那么有</p>
+<p><span class="math inline">\(w_i = \mu_i + \sigma_i \cdot
+\xi_i\)</span>.</p>
+<p>如果<span class="math inline">\(w\)</span>是矩阵，那么有</p>
+<p><span class="math inline">\(w_{ij} = \mu_{ij} + \sigma_{ij} \cdot
+\xi_{ij}\)</span>.</p>
+<p>噪声网络的意思是参数<span class="math inline">\(w\)</span>的每个元素<span class="math inline">\(w_i\)</span>从均值为<span class="math inline">\(\mu_i\)</span>、标准差为<span class="math inline">\(\sigma_i\)</span>的正态分布中抽取。</p>
+<p>举个例子，某一个全连接层记作：</p>
+<p><span class="math inline">\(z = \text{ReLU}(Wx + b)\)</span>.</p>
+<p>公式中的向量<span class="math inline">\(x\)</span>是输入，矩阵<span class="math inline">\(W\)</span>和向量<span class="math inline">\(b\)</span>是参数，ReLU 是激活函数，<span class="math inline">\(z\)</span>是这一层的输出。噪声网络把这个全连接层替换成：</p>
+<p><span class="math inline">\(z = \text{ReLU}((W^\mu + W^\sigma \circ
+W^\xi)x + (b^\mu + b^\sigma \circ b^\xi))\)</span>.</p>
+<p>公式中的<span class="math inline">\(W^\mu\)</span>、<span class="math inline">\(W^\sigma\)</span>、<span class="math inline">\(b^\mu\)</span>、<span class="math inline">\(b^\sigma\)</span>是参数，需要从经验中学习。矩阵<span class="math inline">\(W^\xi\)</span>和向量<span class="math inline">\(b^\xi\)</span>的每个元素都是独立从<span class="math inline">\(\mathcal{N}(0,1)\)</span>中随机抽取的，表示噪声。</p>
+<p>训练噪声网络的方法与训练标准的神经网络完全相同，都是做反向传播计算梯度，然后用梯度更新神经参数。把损失函数记作<span class="math inline">\(L\)</span>。已知梯度<span class="math inline">\(\frac{\partial L}{\partial
+z}\)</span>,可以用链式法则算出损失关于参数的梯度：</p>
+<p><span class="math inline">\(\frac{\partial L}{\partial W^\mu} =
+\frac{\partial z}{\partial W^\mu} \cdot \frac{\partial L}{\partial z},
+\frac{\partial L}{\partial b^\mu} = \frac{\partial z}{\partial b^\mu}
+\cdot \frac{\partial L}{\partial z}, \frac{\partial L}{\partial
+W^\sigma} = \frac{\partial z}{\partial W^\sigma} \cdot \frac{\partial
+L}{\partial z}, \frac{\partial L}{\partial b^\sigma} = \frac{\partial
+z}{\partial b^\sigma} \cdot \frac{\partial L}{\partial z}\)</span>.</p>
+<p>然后可以做梯度下降更新参数<span class="math inline">\(W^\mu\)</span>、<span class="math inline">\(W^\sigma\)</span>、<span class="math inline">\(b^\mu\)</span>、<span class="math inline">\(b^\sigma\)</span>。</p>
+<h2 id="噪声-dqn">噪声 DQN</h2>
+<p>噪声网络可以用于 DQN。标准的 DQN 记作<span class="math inline">\(Q(s,
+a; w)\)</span>, 其中的<span class="math inline">\(w\)</span>表示参数。把<span class="math inline">\(w\)</span>替换成<span class="math inline">\(\mu +
+\sigma \circ \xi\)</span>, 得到噪声 DQN, 记作：</p>
+<p><span class="math inline">\(\tilde{Q}(s, a, \xi; \mu, \sigma)
+\triangleq Q(s, a; \mu + \sigma \circ \xi)\)</span>.</p>
+<p>其中的<span class="math inline">\(\mu\)</span>和<span class="math inline">\(\sigma\)</span>是参数，一开始随机初始化，然后从经验中学习；而<span class="math inline">\(\xi\)</span>则是随机生成，每个元素都从<span class="math inline">\(\mathcal{N}(0, 1)\)</span>中抽取。噪声 DQN
+的参数数量比标准 DQN 多一倍。</p>
+<h2 id="收集经验">收集经验：</h2>
+<p>DQN 属于异策略 (off-policy)。我们用任意的行为策略 (behavior policy)
+控制智能体，收集经验，事后做经验回放更新参数。在之前章节中，我们用<span class="math inline">\(\epsilon\)</span>-greedy 作为行为策略：</p>
+<p><span class="math inline">\(a_t = \begin{cases} \underset{a \in
+A}{\operatorname{argmax}} Q(s_t, a; w), &amp; \text{以概率 }
+(1-\epsilon); \\ \text{均匀抽取 } A \text{ 中的一个动作}, &amp;
+\text{以概率 } \epsilon. \end{cases}\)</span></p>
+<p><span class="math inline">\(\epsilon\)</span>-greedy
+策略带有一定的随机性，可以让智能体尝试更多动作，探索更多状态。</p>
+<p>噪声 DQN 本身就带有随机性，可以鼓励探索，起到与<span class="math inline">\(\epsilon\)</span>-greedy
+策略相同的作用。我们直接用</p>
+<p><span class="math inline">\(a_t = \underset{a \in
+A}{\operatorname{argmax}} \tilde{Q}(s, a, \xi; \mu, \sigma)\)</span></p>
+<p>作为行为策略，效果比<span class="math inline">\(\epsilon\)</span>-greedy
+更好。每做一个决策，要重新随机生成一个<span class="math inline">\(\xi\)</span>。</p>
+<h2 id="q-学习算法">Q 学习算法:</h2>
+<p>训练的时候，每一轮从经验回放数组中随机抽样出一个四元组，记作<span class="math inline">\((s_j, a_j, r_j,
+s_{j+1})\)</span>。从标准正态分布中做抽样，得到<span class="math inline">\(\xi&#39;\)</span>的每一个元素。计算 TD 目标：</p>
+<p><span class="math inline">\(\widehat{y}_j = r_j + \gamma \cdot \max_a
+\tilde{Q}(s_{j+1}, a, \xi&#39;; \mu, \sigma)\)</span>.</p>
+<p>把损失函数记作：</p>
+<p><span class="math inline">\(L(\mu, \sigma) = \frac{1}{2}
+[\tilde{Q}(s_j, a_j, \xi; \mu, \sigma) - \widehat{y}_j]^2\)</span>,</p>
+<p>其中的<span class="math inline">\(\xi\)</span>也是随机生成的噪声，但是它与<span class="math inline">\(\xi&#39;\)</span>不同。然后做梯度下降更新参数：</p>
+<p><span class="math inline">\(\mu \leftarrow \mu - \alpha_\mu \cdot
+\nabla_\mu L(\mu, \sigma), \sigma \leftarrow \sigma - \alpha_\sigma
+\cdot \nabla_\sigma L(\mu, \sigma)\)</span>.</p>
+<p>公式中的<span class="math inline">\(\alpha_\mu\)</span>和<span class="math inline">\(\alpha_\sigma\)</span>是学习率。这样做梯度下降更新参数，可以让损失函数减小，让噪声
+DQN 的预测更接近 TD 目标。</p>
+<h3 id="做决策">做决策 :</h3>
+<p>做完训练之后，可以用噪声 DQN
+做决策。做决策的时候不再需要噪声，因此可以把参数<span class="math inline">\(\sigma\)</span>设置成全零，只保留参数<span class="math inline">\(\mu\)</span>。这样一来，噪声 DQN 就变成标准的
+DQN:</p>
+<p><span class="math inline">\(\tilde{Q}(s, a, \xi&#39;; \mu, 0) = Q(s,
+a; \mu)\)</span>.</p>
+<p>在训练的时候往 DQN
+的参数中加入噪声，不仅有利于探索，还能增强鲁棒性。鲁棒性的意思是即使参数被扰动，DQN
+也能对动作价值<span class="math inline">\(Q^*\)</span>做出可靠的估计。为什么噪声可以让 DQN
+有更强的鲁棒性呢？</p>
+<p>假设在训练的过程中不加入噪声。把学出的参数记作<span class="math inline">\(\mu\)</span>。当参数严格等于<span class="math inline">\(\mu\)</span>的时候 DQN
+可以对最优动作价值做出较为准确的估计。但是对<span class="math inline">\(\mu\)</span>做较小的扰动，就可能会让 DQN
+的输出偏离很远。所谓“失之毫厘，谬以千里”。</p>
+<p>噪声 DQN 训练的过程中，参数带有噪声：</p>
+<p><span class="math inline">\(w = \mu + \sigma \circ \xi\)</span>.</p>
+<p>训练迫使 DQN 在参数带噪声的情况下最小化 TD 误差，也就是迫使 DQN
+容忍对参数的扰动。训练出的 DQN 具有鲁棒性：参数不严格等于<span class="math inline">\(\mu\)</span>也没关系，只要参数在<span class="math inline">\(\mu\)</span>的邻域内，DQN
+做出的预测都应该比较合理。用噪声 DQN, 不会出现“失之毫厘，谬以千里”。</p>
+<h3 id="训练流程">训练流程</h3>
+<p>实际编程实现 DQN 的时候，应该将本章的四种技巧——优先经验回放、双
+Q学习、对决网络、噪声
+DQN——全部用到。应该用对决网络的神经网络结构，而不是简单的 DQN
+结构。往对决网络中的参数<span class="math inline">\(w\)</span>中加入噪声，得到噪声 DQN, 记作<span class="math inline">\(\tilde{Q}(s, a, \xi; \mu,
+\sigma)\)</span>。训练要用双 Q学习、优先经验回放，而不是原始的 Q
+学习。双 Q学习需要目标网络<span class="math inline">\(\tilde{Q}(s, a,
+\xi; \mu^-, \sigma^-)\)</span>计算 TD 目标。它跟噪声 DQN
+的结构相同，但是参数不同。</p>
+<p>初始化的时候，随机初始化<span class="math inline">\(\mu\)</span>、<span class="math inline">\(\sigma\)</span>,并且把它们赋值给目标网络参数：</p>
+<p><span class="math inline">\(\mu^- \leftarrow \mu. \sigma^- \leftarrow
+\sigma\)</span>.</p>
+<p>然后重复下面的步骤更新参数。把当前的参数记作<span class="math inline">\(\mu_{\text{now}}\)</span>、<span class="math inline">\(\sigma_{\text{now}}\)</span>、<span class="math inline">\(\mu_{\text{now}}^-\)</span>、<span class="math inline">\(\sigma_{\text{now}}^-\)</span>.</p>
+<ol type="1">
+<li>用优先经验回放，从数组中抽取一个四元组，记作<span class="math inline">\((s_j, a_j, r_j, s_{j+1})\)</span>。</li>
+<li>用标准正态分布生成<span class="math inline">\(\xi\)</span>。对噪声
+DQN 做正向传播，得到：</li>
+</ol>
+<p><span class="math inline">\(\widehat{q}_j = \tilde{Q}(s_j, a_j, \xi;
+\mu_{\text{now}}, \sigma_{\text{now}})\)</span>.</p>
+<ol start="3" type="1">
+<li>用噪声 DQN 选出最优动作：</li>
+</ol>
+<p><span class="math inline">\(\tilde{a}_{j+1} = \underset{a \in
+A}{\operatorname{argmax}} \tilde{Q}(s_{j+1}, a, \xi; \mu_{\text{now}},
+\sigma_{\text{now}})\)</span>.</p>
+<ol start="4" type="1">
+<li>用标准正态分布生成<span class="math inline">\(\xi&#39;\)</span>。用目标网络计算价值：</li>
+</ol>
+<p><span class="math inline">\(\widehat{q}_{j+1}^- = \tilde{Q}(s_{j+1},
+\tilde{a}_{j+1}, \xi&#39;; \mu_{\text{now}}^-,
+\sigma_{\text{now}}^-)\)</span>.</p>
+<ol start="5" type="1">
+<li>计算 TD 目标和 TD 误差：</li>
+</ol>
+<p><span class="math inline">\(\widehat{y}_j^- = r_j + \gamma \cdot
+\widehat{q}_{j+1}^-\)</span>和<span class="math inline">\(\delta_j =
+\widehat{q}_j - \widehat{y}_j^-\)</span>.</p>
+<ol start="6" type="1">
+<li>设<span class="math inline">\(\alpha_\mu\)</span>和<span class="math inline">\(\alpha_\sigma\)</span>为学习率。做梯度下降更新噪声
+DQN 的参数：</li>
+</ol>
+<p><span class="math inline">\(\begin{align*}
+\mu_{\text{new}} &amp;\leftarrow \mu_{\text{now}} - \alpha_\mu \cdot
+\delta_j \cdot \nabla_\mu \widetilde{Q}(s_j, a_j, \xi; \mu_{\text{now}},
+\sigma_{\text{now}}), \\
+\sigma_{\text{new}} &amp;\leftarrow \sigma_{\text{now}} - \alpha_\sigma
+\cdot \delta_j \cdot \nabla_\sigma \widetilde{Q}(s_j, a_j, \xi;
+\mu_{\text{now}}, \sigma_{\text{now}}).
+\end{align*}\)</span>.</p>
+<ol start="7" type="1">
+<li>设<span class="math inline">\(\tau \in (0,
+1)\)</span>是需要手动调整的超参数。做加权平均更新目标网络的参数：</li>
+</ol>
+<p><span class="math inline">\(\begin{align*}
+\mu_{\text{new}}^{-} &amp;\leftarrow \tau \cdot \mu_{\text{new}} + (1 -
+\tau) \cdot \mu_{\text{now}}^{-}, \\
+\sigma_{\text{new}}^{-} &amp;\leftarrow \tau \cdot \sigma_{\text{new}} +
+(1 - \tau) \cdot \sigma_{\text{now}}^{-}.
+\end{align*}\)</span>.</p>
+<h1 id="总结">总结</h1>
+<ul>
+<li>经验回放可以用于异策略算法。经验回放有两个好处：打破相邻两条经验的相关性、
+重复利用收集的经验。</li>
+<li>优先经验回放是对经验回放的一种改进。在做经验回放的时候，从经验回放数组中做加权随机抽样，TD
+误差的绝对值大的经验被赋予较大的抽样概率、较小的学习率。</li>
+<li>Q 学习算法会造成 DQN
+高估真实的价值。高估的原因有两个：第一，最大化造成TD
+目标高估真实价值；第二，自举导致高估传播。高估并不是由 DQN
+本身的缺陷造成的，而是由于 Q学习算法不够好。双 Q学习是对 Q
+学习算法的改进，可以有效缓解高估。</li>
+<li>对决网络与 DQN 一样，都是对最优动作价值函数<span class="math inline">\(Q^*\)</span>的近似；两者的唯一区别在于神经网络结构。对决网络由两部分组成：<span class="math inline">\(D(s, a; w^D)\)</span>是对最优优势函数的近似，<span class="math inline">\(V(s;
+w^V)\)</span>是对最优状态价值函数的近似。对决网络的训练与 DQN
+完全相同。</li>
+<li>噪声网络是一种特殊的神经网络结构，神经网络中的参数带有随机噪声。噪声网络可以用于
+DQN
+等多种深度强化学习模型。噪声网络中的噪声可以鼓励探索，让智能体尝试不同的动作，这有利于学到更好的策略。</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/AI/" class="category-chain-item">AI</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI/RL/" class="category-chain-item">RL</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI/RL/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/" class="category-chain-item">DRL-王树森</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/RL/" class="print-no-link">#RL</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>5.3 Dueling Network</div>
+      <div>http://binbo-zappy.github.io/2024/12/04/DRL-王树森/5-3-Dueling-Network/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年12月4日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/6-1-%E5%B8%A6%E5%9F%BA%E7%BA%BF%E7%9A%84%E7%AD%96%E7%95%A5%E6%A2%AF%E5%BA%A6%E6%96%B9%E6%B3%95/" title="6.1 带基线的策略梯度方法">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">6.1 带基线的策略梯度方法</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/5-2-%E9%AB%98%E4%BC%B0%E9%97%AE%E9%A2%98/" title="5.2 高估问题">
+                        <span class="hidden-mobile">5.2 高估问题</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

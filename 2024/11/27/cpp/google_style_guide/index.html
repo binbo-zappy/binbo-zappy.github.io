@@ -1,0 +1,1357 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1.头文件 通常每一个.cc文件都有一个对应的.h文件.也有一些常见例外,如单元测试代码和只包含main()函数的.cc文件 1.1Self-contained头文件 所有头文件要能够自给自足。换言之，用户和重构工具不需要为特别场合而包含额外的头文件。 详言之，一个头文件要有1.2.#define保护，统统包含它所需要的其它头文件，也不要求定义任何特别symbols. 不过有一个例外，即">
+<meta property="og:type" content="article">
+<meta property="og:title" content="google_style_guide">
+<meta property="og:url" content="http://binbo-zappy.github.io/2024/11/27/cpp/google_style_guide/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="1.头文件 通常每一个.cc文件都有一个对应的.h文件.也有一些常见例外,如单元测试代码和只包含main()函数的.cc文件 1.1Self-contained头文件 所有头文件要能够自给自足。换言之，用户和重构工具不需要为特别场合而包含额外的头文件。 详言之，一个头文件要有1.2.#define保护，统统包含它所需要的其它头文件，也不要求定义任何特别symbols. 不过有一个例外，即">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/google-style.jpg">
+<meta property="article:published_time" content="2024-11-27T12:23:25.000Z">
+<meta property="article:modified_time" content="2024-11-27T12:30:52.055Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="c++">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/google-style.jpg">
+  
+  
+  
+  <title>google_style_guide - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="google_style_guide"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-11-27 20:23" pubdate>
+          2024年11月27日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          16k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          132 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">google_style_guide</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="头文件">1.头文件</h2>
+<p>通常每一个.cc文件都有一个对应的.h文件.也有一些常见例外,如单元测试代码和只包含main()函数的.cc文件</p>
+<h3 id="self-contained头文件">1.1Self-contained头文件</h3>
+<p>所有头文件要能够自给自足。换言之，用户和重构工具不需要为特别场合而包含额外的头文件。</p>
+<p>详言之，一个头文件要有1.2.#define保护，统统包含它所需要的其它头文件，也不要求定义任何特别symbols.</p>
+<p>不过有一个例外，即一个文件并不是self-contained的，而是作为文本插入到代码某处。或者，文件内容实际上是其它头文件的特定平台（platform-specific）扩展部分。这些文件就要用.inc文件扩展名。</p>
+<p>如果.h文件声明了一个模板或内联函数，同时也在该文件加以定义。凡是有用到这些的.cc文件，就得统统包含该头文件，否则程序可能会在构建中链接失败。不要把这些定义放到分离的-inl.h文件里（译者注：过去该规范曾提倡把定义放到-inl.h里过）。</p>
+<p>有个例外：如果某函数模板为所有相关模板参数显式实例化，或本身就是某类的一个私有成员，那么它就只能定义在实例化该模板的.cc文件里。</p>
+<h3 id="define保护">1.2define保护</h3>
+<p>所有头文件都应该有#define保护来防止头文件被多重包含,命名格式当是:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">PROJECT</span>&gt;</span>_<span class="hljs-tag">&lt;<span class="hljs-name">PATH</span>&gt;</span>_<span class="hljs-tag">&lt;<span class="hljs-name">FILE</span>&gt;</span>_H_<br></code></pre></td></tr></table></figure>
+<p>为保证唯一性,头文件的命名应该基于所在项目源代码树的全路径</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++">#ifndefFOO_BAR_BAZ_H_<br>#defineFOO_BAR_BAZ_H_<br><br><span class="hljs-meta">#<span class="hljs-keyword">endif</span><span class="hljs-comment">//FOO_BAR_BAZ_H_</span></span><br></code></pre></td></tr></table></figure>
+<h3 id="前置声明">1.3前置声明</h3>
+<p>尽可能地避免使用前置声明。使用#include包含需要的头文件即可。</p>
+<p>所谓「前置声明」（forwarddeclaration）是类、函数和模板的纯粹声明，没伴随着其定义.</p>
+<p>优点：</p>
+<ul>
+<li>前置声明能够节省编译时间，多余的#include会迫使编译器展开更多的文件，处理更多的输入。</li>
+<li>前置声明能够节省不必要的重新编译的时间。#include使代码因为头文件中无关的改动而被重新编译多次。</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>前置声明隐藏了依赖关系，头文件改动时，用户的代码会跳过必要的重新编译过程。</li>
+<li>前置声明可能会被库的后续更改所破坏。前置声明函数或模板有时会妨碍头文件开发者变动其API.例如扩大形参类型，加个自带默认参数的模板形参等等。</li>
+<li>前置声明来自命名空间std::的symbol时，其行为未定义。</li>
+<li>很难判断什么时候该用前置声明，什么时候该用#include。极端情况下，用前置声明代替#include甚至都会暗暗地改变代码的含义：</li>
+<li>前置声明了不少来自头文件的symbol时，就会比单单一行的include冗长。</li>
+<li>仅仅为了能前置声明而重构代码（比如用指针成员代替对象成员）会使代码变得更慢更复杂</li>
+</ul>
+<p>结论：</p>
+<ul>
+<li>尽量避免前置声明那些定义在其他项目中的实体.</li>
+<li>函数：总是使用#include.</li>
+<li>类模板：优先使用#include.</li>
+</ul>
+<p>至于什么时候包含头文件，参见1.5.#include的路径及顺序。</p>
+<h3 id="内联函数">1.4内联函数</h3>
+<p>只有当函数只有10行甚至更少时才将其定义为内联函数.</p>
+<p>定义:当函数被声明为内联函数之后,编译器会将其内联展开,而不是按通常的函数调用机制进行调用.</p>
+<p>优点:只要内联的函数体较小,内联该函数可以令目标代码更加高效.对于存取函数以及其它函数体比较短,性能关键的函数,鼓励使用内联.</p>
+<p>缺点:滥用内联将导致程序变得更慢.内联可能使目标代码量或增或减,这取决于内联函数的大小.内联非常短小的存取函数通常会减少代码大小,但内联一个相当大的函数将戏剧性的增加代码大小.现代处理器由于更好的利用了指令缓存,小巧的代码往往执行更快。</p>
+<p>结论:</p>
+<ul>
+<li><p>一个较为合理的经验准则是,不要内联超过10行的函数.谨慎对待析构函数,析构函数往往比其表面看起来要更长,因为有隐含的成员和基类析构函数被调用!</p></li>
+<li><p>另一个实用的经验准则:内联那些包含循环或switch语句的函数常常是得不偿失(除非在大多数情况下,这些循环或switch语句从不被执行)</p></li>
+</ul>
+<p>有些函数即使声明为内联的也不一定会被编译器内联,这点很重要;比如虚函数和递归函数就不会被正常内联.通常,递归函数不应该声明成内联函数.（YuleFox注:递归调用堆栈的展开并不像循环那么简单,比如递归层数在编译时可能是未知的,大多数编译器都不支持内联递归函数).虚函数内联的主要原因则是想把它的函数体放在类定义内,为了图个方便,抑或是当作文档描述其行为,比如精短的存取函数.</p>
+<h3 id="include的路径及顺序">1.5#include的路径及顺序</h3>
+<p>使用标准的头文件包含顺序可增强可读性,避免隐藏依赖:相关头文件,C库,C++库,其他库的.h,本项目内的.h.</p>
+<p>项目内头文件应按照项目源代码目录树结构排列,避免使用UNIX特殊的快捷目录.(当前目录)或..(上级目录).例如,google-awesome-project/src/base/logging.h应该按如下方式包含</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arduino"><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&quot;base/logging.h&quot;</span></span><br></code></pre></td></tr></table></figure>
+<p>又如,dir/foo.cc或dir/foo_test.cc的主要作用是实现或测试dir2/foo2.h的功能,foo.cc中包含头文件的次序如下:</p>
+<ol type="1">
+<li>dir2/foo2.h(优先位置,详情如下)</li>
+<li>C系统文件</li>
+<li>C++系统文件</li>
+<li>其他库的.h文件</li>
+<li>本项目内.h文件</li>
+</ol>
+<p>这种优先的顺序排序保证当dir2/foo2.h遗漏某些必要的库时，dir/foo.cc或dir/foo_test.cc的构建会立刻中止。因此这一条规则保证维护这些文件的人们首先看到构建中止的消息而不是维护其他包的人们。</p>
+<p>按字母顺序分别对每种类型的头文件进行二次排序是不错的主意。</p>
+<p>您所依赖的符号(symbols)被哪些头文件所定义，您就应该包含（include）哪些头文件，前置声明(forwarddeclarations)情况除外。</p>
+<p>例外：有时，平台特定（system-specific）代码需要条件编译（conditionalincludes），这些代码可以放到其它includes之后。当然，您的平台特定代码也要够简练且独立，比如：</p>
+<h3 id="tips">tips</h3>
+<ol type="1">
+<li>避免多重包含是学编程时最基本的要求;</li>
+<li>前置声明是为了降低编译依赖，防止修改一个头文件引发多米诺效应;</li>
+<li>内联函数的合理使用可提高代码执行效率;</li>
+<li>-inl.h可提高代码可读性(一般用不到吧:D);</li>
+<li>标准化函数参数顺序可以提高可读性和易维护性(对函数参数的堆栈空间有轻微影响,我以前大多是相同类型放在一起);</li>
+<li>包含文件的名称使用.和..虽然方便却易混乱,使用比较完整的项目路径看上去很清晰,很条理,包含文件的次序除了美观之外,最重要的是可以减少隐藏依赖,使每个头文件在“最需要编译”(对应源文件处:D)的地方编译,有人提出库文件放在最后,这样出错先是项目内的文件,头文件都放在对应源文件的最前面,这一点足以保证内部错误的及时发现了</li>
+<li>原来还真有项目用#includes来插入文本，且其文件扩展名.inc看上去也很科学。</li>
+<li>Google已经不再提倡-inl.h用法。</li>
+<li>注意，前置声明的类是不完全类型（incompletetype），我们只能定义指向该类型的指针或引用，或者声明（但不能定义）以不完全类型作为参数或者返回类型的函数。毕竟编译器不知道不完全类型的定义，我们不能创建其类的任何对象，也不能声明成类内部的数据成员。</li>
+<li>类内部的函数一般会自动内联。所以某函数一旦不需要内联，其定义就不要再放在头文件里，而是放到对应的.cc文件里。这样可以保持头文件的类相当精炼，也很好地贯彻了声明与定义分离的原则。</li>
+<li>在#include中插入空行以分割相关头文件,C库,C++库,其他库的.h和本项目内的.h是个好习惯。</li>
+</ol>
+<h2 id="作用域">2.作用域</h2>
+<h3 id="命名空间">2.1命名空间</h3>
+<p>鼓励在.cc文件内使用匿名命名空间或static声明.使用具名的命名空间时,其名称可基于项目名或相对路径.禁止使用using指示（using-directive）。禁止使用内联命名空间（inlinenamespace）。</p>
+<p>定义:命名空间将全局作用域细分为独立的,具名的作用域,可有效防止全局作用域的命名冲突.</p>
+<p>优点:</p>
+<ul>
+<li><p>虽然类已经提供了（可嵌套的）命名轴线(YuleFox注:将命名分割在不同类的作用域内),命名空间在这基础上又封装了一层.</p></li>
+<li><p>举例来说,两个不同项目的全局作用域都有一个类Foo,这样在编译或运行时造成冲突.如果每个项目将代码置于不同命名空间中,project1::Foo和project2::Foo作为不同符号自然不会冲突.</p></li>
+<li><p>内联命名空间会自动把内部的标识符放到外层作用域，比如：</p></li>
+<li><p>```c++ namespaceX{ inlinenamespaceY{ voidfoo(); } //namespaceY }
+//namespaceX <figure class="highlight nestedtext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs nestedtext"><br><span class="hljs-bullet">-</span> <span class="hljs-string">X::Y::foo()与X::foo()彼此可代替。内联命名空间主要用来保持跨版本的ABI兼容性。</span><br><br><span class="hljs-attribute">缺点</span><span class="hljs-punctuation">:</span><br><span class="hljs-punctuation"></span><br><span class="hljs-bullet">-</span> <span class="hljs-string">命名空间具有迷惑性,因为它们使得区分两个相同命名所指代的定义更加困难。</span><br><span class="hljs-bullet">-</span> <span class="hljs-string">内联命名空间很容易令人迷惑，毕竟其内部的成员不再受其声明所在命名空间的限制。内联命名空间只在大型版本控制里有用。</span><br><span class="hljs-bullet">-</span> <span class="hljs-string">有时候不得不多次引用某个定义在许多嵌套命名空间里的实体，使用完整的命名空间会导致代码的冗长。</span><br><span class="hljs-bullet">-</span> <span class="hljs-string">在头文件中使用匿名空间导致违背C++的唯一定义原则(OneDefinitionRule(ODR)).</span><br><br>结论:根据下文将要提到的策略合理使用命名空间.<br><br><span class="hljs-bullet">-</span> <span class="hljs-string">遵守命名空间命名中的规则。</span><br><br><span class="hljs-bullet">-</span> <span class="hljs-string">像之前的几个例子中一样，在命名空间的最后注释出命名空间的名字。</span><br><br><span class="hljs-bullet">-</span> <span class="hljs-string">用命名空间把文件包含,gflags的声明/定义,以及类的前置声明以外的整个源文件封装起来,以区别于其它命名空间:</span><br><br><span class="hljs-bullet">-</span> <span class="hljs-string">```c++</span><br>  <span class="hljs-attribute">//.h文件</span><br><span class="hljs-attribute">  namespacemynamespace&#123;</span><br><span class="hljs-attribute">  //所有声明都置于命名空间中</span><br><span class="hljs-attribute">  //注意不要使用缩进</span><br><span class="hljs-attribute">  classMyClass&#123;</span><br><span class="hljs-attribute">  public</span><span class="hljs-punctuation">:</span><br>  ...<br>  voidFoo();<br>  &#125;;<br>  &#125;//namespacemynamespace<br>  <br></code></pre></td></tr></table></figure></p></li>
+<li><p>```c++ //.cc文件 namespacemynamespace{ //函数定义都置于命名空间中
+voidMyClass::Foo(){ ... } }//namespacemynamespace <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><br>- 更复杂的.cc文件包含更多,更复杂的细节,比如gflags或<span class="hljs-keyword">using</span>声明。<br><br>- ```c++<br>  <span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&quot;a.h&quot;</span></span><br>  <span class="hljs-built_in">DEFINE_FLAG</span>(<span class="hljs-type">bool</span>,someflag,<span class="hljs-literal">false</span>,<span class="hljs-string">&quot;dummyflag&quot;</span>);<br>  namespacea&#123;<br>  ...codefora...<span class="hljs-comment">//左对齐</span><br>  &#125;<span class="hljs-comment">//namespace</span><br></code></pre></td></tr></table></figure></p></li>
+</ul>
+<h3 id="匿名命名空间和静态变量">2.2匿名命名空间和静态变量</h3>
+<ul>
+<li><p>在.cc文件中定义一个不需要被外部引用的变量时，可以将它们放在匿名命名空间或声明为static。但是不要在.h文件中这么做。</p></li>
+<li><p>定义:所有置于匿名命名空间的声明都具有内部链接性，函数和变量可以经由声明为static拥有内部链接性，这意味着你在这个文件中声明的这些标识符都不能在另一个文件中被访问。即使两个文件声明了完全一样名字的标识符，它们所指向的实体实际上是完全不同的。</p></li>
+<li><p>匿名命名空间的声明和具名的格式相同，在最后注释上namespace:</p></li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">namespace</span>&#123;<br>...<br>&#125;<span class="hljs-comment">//namespace</span><br></code></pre></td></tr></table></figure>
+<h3 id="非成员函数静态成员函数和全局函数">2.3非成员函数、静态成员函数和全局函数</h3>
+<ul>
+<li>使用静态成员函数或命名空间内的非成员函数,尽量不要用裸的全局函数.将一系列函数直接置于命名空间中，不要用类的静态方法模拟出命名空间的效果，类的静态方法应当和类的实例或静态数据紧密相关.</li>
+<li>某些情况下,非成员函数和静态成员函数是非常有用的,将非成员函数放在命名空间内可避免污染全局作用域.</li>
+<li>将非成员函数和静态成员函数作为新类的成员或许更有意义,当它们需要访问外部资源或具有重要的依赖关系时更是如此.</li>
+<li>有时,把函数的定义同类的实例脱钩是有益的,甚至是必要的.这样的函数可以被定义成静态成员,或是非成员函数.非成员函数不应依赖于外部变量,应尽量置于某个命名空间内.相比单纯为了封装若干不共享任何静态数据的静态成员函数而创建类,不如使用2.1.命名空间。举例而言，对于头文件myproject/foo_bar.h,应当使用</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c++">namespacemyproject&#123;<br>namespacefoo_bar&#123;<br><span class="hljs-built_in">voidFunction1</span>();<br><span class="hljs-built_in">voidFunction2</span>();<br>&#125;<span class="hljs-comment">//namespacefoo_bar</span><br>&#125;<span class="hljs-comment">//namespacemyproject</span><br><br><span class="hljs-comment">//而不是</span><br>namespacemyproject&#123;<br>classFooBar&#123;<br><span class="hljs-keyword">public</span>:<br><span class="hljs-built_in">staticvoidFunction1</span>();<br><span class="hljs-built_in">staticvoidFunction2</span>();<br>&#125;;<br>&#125;<span class="hljs-comment">//namespacemyproject</span><br><br></code></pre></td></tr></table></figure>
+<h3 id="局部变量">2.4局部变量</h3>
+<ul>
+<li>将函数变量尽可能置于最小作用域内,并在变量声明时进行初始化</li>
+<li>应使用初始化的方式替代声明再赋值</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c++">intj=<span class="hljs-built_in">g</span>();<span class="hljs-comment">//好——初始化时声明</span><br><br>vector&lt;<span class="hljs-type">int</span>&gt;v;<br>v.<span class="hljs-built_in">push_back</span>(<span class="hljs-number">1</span>);<span class="hljs-comment">//用花括号初始化更好</span><br>v.<span class="hljs-built_in">push_back</span>(<span class="hljs-number">2</span>);<br><br>vector&lt;<span class="hljs-type">int</span>&gt;v=&#123;<span class="hljs-number">1</span>,<span class="hljs-number">2</span>&#125;;<span class="hljs-comment">//好——v一开始就初始化</span><br></code></pre></td></tr></table></figure>
+<ul>
+<li><p>属于if,while和for语句的变量应当在这些语句中正常地声明，这样子这些变量的作用域就被限制在这些语句中了</p></li>
+<li><p>Warning:有一个例外,如果变量是一个对象,每次进入作用域都要调用其构造函数,每次退出作用域都要调用其析构函数.这会导致效率降低.</p></li>
+<li><p>在循环作用域外面声明这类变量要高效的多</p></li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++">Foof;<span class="hljs-comment">//构造函数和析构函数只调用1次</span><br><span class="hljs-keyword">for</span>(inti=<span class="hljs-number">0</span>;i&lt;<span class="hljs-number">1000000</span>;++i)&#123;<br>	f.<span class="hljs-built_in">DoSomething</span>(i);<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="静态和全局变量">2.5静态和全局变量</h3>
+<ul>
+<li>禁止定义静态储存周期非POD变量，禁止使用含有副作用的函数初始化POD全局变量，因为多编译单元中的静态变量执行时的构造和析构顺序是未明确的，这将导致代码的不可移植。</li>
+<li>禁止使用类的静态储存周期变量：由于构造和析构函数调用顺序的不确定性，它们会导致难以发现的bug。不过constexpr变量除外，毕竟它们又不涉及动态初始化或析构。</li>
+<li>静态生存周期的对象，即包括了全局变量，静态变量，静态类成员变量和函数静态变量，都必须是原生数据类型(POD:PlainOldData):即int,char和float,以及POD类型的指针、数组和结构体</li>
+<li>静态变量的构造函数、析构函数和初始化的顺序在C++中是只有部分明确的，甚至随着构建变化而变化，导致难以发现的bug.所以除了禁用类类型的全局变量，我们也不允许用函数返回值来初始化POD变量，除非该函数（比如getenv()或getpid()）不涉及任何全局变量。函数作用域里的静态变量除外，毕竟它的初始化顺序是有明确定义的，而且只会在指令执行到它的声明那里才会发生。</li>
+<li>同一个编译单元内是明确的，静态初始化优先于动态初始化，初始化顺序按照声明顺序进行，销毁则逆序。不同的编译单元之间初始化和销毁顺序属于未明确行为</li>
+<li>我们只允许POD类型的静态变量，即完全禁用vector(使用C数组替代)和string(使用constchar[])。</li>
+<li>上文提及的静态变量泛指静态生存周期的对象,包括:全局变量,静态变量,静态类成员变量,以及函数静态变量</li>
+</ul>
+<h3 id="tips-1">2.6Tips</h3>
+<ol type="1">
+<li>cc中的匿名命名空间可避免命名冲突,限定作用域,避免直接使用using关键字污染命名空间;</li>
+<li>嵌套类符合局部使用原则,只是不能在其他头文件中前置声明,尽量不要public;</li>
+<li>尽量不用全局函数和全局变量,考虑作用域和命名空间限制,尽量单独形成编译单元;</li>
+<li>多线程中的全局变量(含静态成员变量)不要使用class类型(含STL容器),避免不明确行为导致的bug.</li>
+<li>作用域的使用,除了考虑名称污染,可读性之外,主要是为降低耦合,提高编译/执行效率.</li>
+<li>注意「using指示（using-directive）」和「using声明（using-declaration）」的区别。</li>
+<li>匿名命名空间说白了就是文件作用域，就像Cstatic声明的作用域一样，后者已经被C++标准提倡弃用。</li>
+<li>局部变量在声明的同时进行显式值初始化，比起隐式初始化再赋值的两步过程要高效，同时也贯彻了计算机体系结构重要的概念「局部性（locality）」。</li>
+<li>注意别在循环犯大量构造和析构的低级错误。</li>
+</ol>
+<h2 id="类">3.类</h2>
+<h3 id="构造函数的职责">3.1构造函数的职责</h3>
+<ul>
+<li><p>不要在构造函数中调用虚函数,也不要在无法报出错误时进行可能失败的初始化.</p></li>
+<li><p>如果在构造函数内调用了自身的虚函数,这类调用是不会重定向到子类的虚函数实现.即使当前没有子类化实现,将来仍是隐患.</p></li>
+<li><p>在没有使程序崩溃(因为并不是一个始终合适的方法)或者使用异常(因为已经被禁用了)等方法的条件下,构造函数很难上报错误</p></li>
+<li><p>如果执行失败,会得到一个初始化失败的对象,这个对象有可能进入不正常的状态,必须使用boolIsValid()或类似这样的机制才能检查出来,然而这是一个十分容易被疏忽的方法.</p></li>
+<li><p>构造函数的地址是无法被取得的,因此,举例来说,由构造函数完成的工作是无法以简单的方式交给其他线程的</p></li>
+</ul>
+<h3 id="隐式类型转换">3.2隐式类型转换</h3>
+<ul>
+<li><p>不要定义隐式类型转换.对于转换运算符和单参数构造函数,请使用explicit关键字</p></li>
+<li><p>explicit关键字可以用于构造函数或(在C++11引入)类型转换运算符,以保证只有当目的类型在调用点被显式写明时才能进行类型转换,例如使用cast</p></li>
+<li><p>不能以一个参数进行调用的构造函数不应当加上explicit.接受一个std::initializer_list作为参数的构造函数也应当省略explicit,以便支持拷贝初始化(例如MyTypem={1,2};)</p></li>
+</ul>
+<h3 id="可拷贝类型和可移动类型">3.3可拷贝类型和可移动类型</h3>
+<ul>
+<li><p>如果你的类型需要,就让它们支持拷贝/移动.否则,就把隐式产生的拷贝和移动函数禁用</p></li>
+<li><p>如果需要就让你的类型可拷贝/可移动.作为一个经验法则,如果对于你的用户来说这个拷贝操作不是一眼就能看出来的,那就不要把类型设置为可拷贝.如果让类型可拷贝,一定要同时给出拷贝构造函数和赋值操作的定义,反之亦然.如果让类型可移动,同时移动操作的效率高于拷贝操作,那么就把移动的两个操作(移动构造函数和赋值操作)也给出定义.如果类型不可拷贝,但是移动操作的正确性对用户显然可见,那么把这个类型设置为只可移动并定义移动的两个操作</p></li>
+<li><p>如果你的类不需要拷贝/移动操作,请显式地通过在public域中使用=delete或其他手段禁用之.</p></li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">//MyClassisneithercopyablenormovable.</span><br><span class="hljs-built_in">MyClass</span>(constMyClass&amp;)=<span class="hljs-keyword">delete</span>;<br>MyClass&amp;<span class="hljs-keyword">operator</span>=(constMyClass&amp;)=<span class="hljs-keyword">delete</span>;<br></code></pre></td></tr></table></figure>
+<h3 id="结构体vs类">3.4结构体vs类</h3>
+<ul>
+<li>仅当只有数据成员时使用struct,其它一概使用class</li>
+</ul>
+<h3 id="继承">3.5继承</h3>
+<ul>
+<li><p>使用组合(YuleFox注:这一点也是GoF在&lt;&gt;里反复强调的)常常比使用继承更合理.如果使用继承的话,定义为public继承</p></li>
+<li><p>当子类继承基类时,子类包含了父基类所有数据及操作的定义.C++实践中,继承主要用于两种场合:实现继承,子类继承父类的实现代码;接口继承,子类仅继承父类的方法名称.</p></li>
+<li><p>必要的话,析构函数声明为virtual.如果你的类有虚函数,则析构函数也应该为虚函数.</p></li>
+<li><p>对于可能被子类访问的成员函数,不要过度使用protected关键字.注意,数据成员都必须是私有的</p></li>
+<li><p>对于重载的虚函数或虚析构函数,使用override,或(较不常用的)final关键字显式地进行标记</p></li>
+</ul>
+<h3 id="多重继承">3.6多重继承</h3>
+<ul>
+<li>真正需要用到多重实现继承的情况少之又少.只在以下情况我们才允许多重继承:最多只有一个基类是非抽象类;其它基类都是以Interface为后缀的纯接口类.</li>
+</ul>
+<h3 id="接口">3.7接口</h3>
+<ul>
+<li>接口是指满足特定条件的类,这些类以Interface为后缀(不强制)</li>
+<li>当一个类满足以下要求时,称之为纯接口:
+<ul>
+<li>只有纯虚函数(”=0”)和静态函数(除了下文提到的析构函数).</li>
+<li>没有非静态数据成员.</li>
+<li>没有定义任何构造函数.如果有,也不能带有参数,并且必须为protected</li>
+<li>如果它是一个子类,也只能从满足上述条件并以Interface为后缀的类继承.</li>
+</ul></li>
+<li>接口类不能被直接实例化,因为它声明了纯虚函数.为确保接口类的所有实现可被正确销毁,必须为之声明虚析构函数</li>
+<li>以Interface为后缀可以提醒其他人不要为该接口类增加函数实现或非静态数据成员.这一点对于多重继承尤其重要.</li>
+<li>只有在满足上述条件时,类才以Interface结尾,但反过来,满足上述需要的类未必一定以Interface结尾.</li>
+</ul>
+<h3 id="运算符重载">3.8运算符重载</h3>
+<ul>
+<li><p>除少数特定环境外,不要重载运算符.也不要创建用户定义字面量</p></li>
+<li><p>C++允许用户通过使用operator关键字对内建运算符进行重载定义,只要其中一个参数是用户定义的类型.operator关键字还允许用户使用operator""定义新的字面运算符,并且定义类型转换函数,例如operatorbool().</p></li>
+</ul>
+<h3 id="存取控制">3.9存取控制</h3>
+<ul>
+<li>将所有数据成员声明为private,除非是staticconst类型成员(遵循常量命名规则).出于技术上的原因,在使用GoogleTest时我们允许测试固件类中的数据成员为protected</li>
+</ul>
+<h3 id="声明顺序">3.10声明顺序</h3>
+<ul>
+<li><p>将相似的声明放在一起,将public部分放在最前</p></li>
+<li><p>类定义一般应以public:开始,后跟protected:,最后是private:.省略空部分</p></li>
+<li><p>在各个部分中,建议将类似的声明放在一起,并且建议以如下的顺序:类型(包括typedef,using和嵌套的结构体与类),常量,工厂函数,构造函数,赋值运算符,析构函数,其它函数,数据成员.</p></li>
+</ul>
+<h3 id="tips-2">tips</h3>
+<ol type="1">
+<li>不在构造函数中做太多逻辑相关的初始化;</li>
+<li>编译器提供的默认构造函数不会对变量进行初始化,如果定义了其他构造函数,编译器不再提供,需要编码者自行提供默认构造函数;</li>
+<li>为避免隐式转换,需将单参数构造函数声明为explicit;</li>
+<li>为避免拷贝构造函数,赋值操作的滥用和编译器自动生成,可将其声明为private且无需实现;</li>
+<li>仅在作为数据集合时使用struct;</li>
+<li>组合&gt;实现继承&gt;接口继承&gt;私有继承,子类重载的虚函数也要声明virtual关键字,虽然编译器允许不这样做;</li>
+<li>避免使用多重继承,使用时,除一个基类含有实现外,其他基类均为纯接口;</li>
+<li>接口类类名以Interface为后缀,除提供带实现的虚析构函数,静态成员函数外,其他均为纯虚函数,不定义非静态数据成员,不提供构造函数,提供的话,声明为protected;</li>
+<li>为降低复杂性,尽量不重载操作符,模板,标准类中使用时提供文档说明;</li>
+<li>存取函数一般内联在头文件中;</li>
+<li>声明次序:public-&gt;protected-&gt;private;</li>
+<li>函数体尽量短小,紧凑,功能单一;</li>
+</ol>
+<h2 id="函数">4.函数</h2>
+<h3 id="输入和输出">4.1输入和输出</h3>
+<p>我们倾向于按值返回，否则按引用返回。避免返回指针，除非它可以为空</p>
+<h3 id="编写简短函数">4.2.编写简短函数</h3>
+<p>我们倾向于编写简短,凝练的函数</p>
+<p>如果函数超过40行,可以思索一下能不能在不影响程序结构的前提下对其进行分割.</p>
+<h3 id="引用参数">4.3.引用参数</h3>
+<p>所有按引用传递的参数必须加上const.</p>
+<h3 id="函数重载">4.4.函数重载</h3>
+<p>若要使用函数重载,则必须能让读者一看调用点就胸有成竹,而不用花心思猜测调用的重载函数到底是哪一种.这一规则也适用于构造函数</p>
+<p>如果重载函数的目的是为了支持不同数量的同一类型参数,则优先考虑使用std::vector以便使用者可以用列表初始化指定参数.</p>
+<h3 id="缺省参数">4.5.缺省参数</h3>
+<p>只允许在非虚函数中使用缺省参数,且必须保证缺省参数的值始终一致.缺省参数与函数重载遵循同样的规则.一般情况下建议使用函数重载,尤其是在缺省函数带来的可读性提升不能弥补下文中所提到的缺点的情况下.</p>
+<h3 id="函数返回类型后置语法">4.6.函数返回类型后置语法</h3>
+<p>只有在常规写法(返回类型前置)不便于书写或不便于阅读时使用返回类型后置语法</p>
+<p>C++11引入了这一新的形式.现在可以在函数名前使用auto关键字,在参数列表之后后置返回类型</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-built_in">autofoo</span>(intx)-&gt;<span class="hljs-type">int</span>;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>后置返回类型为函数作用域.对于像int这样简单的类型,两种写法没有区别.但对于复杂的情况,例如类域中的类型声明或者以函数参数的形式书写的类型,写法的不同会造成区别</li>
+<li>后置返回类型是显式地指定Lambda表达式的返回值的唯一方式.某些情况下,编译器可以自动推导出Lambda表达式的返回类型,但并不是在所有的情况下都能实现.即使编译器能够自动推导,显式地指定返回类型也能让读者更明了</li>
+<li>有时在已经出现了的函数参数列表之后指定返回类型,能够让书写更简单,也更易读,尤其是在返回类型依赖于模板参数时.</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span>&lt;classT,classU&gt;<span class="hljs-built_in">autoadd</span>(Tt,Uu)-&gt;<span class="hljs-keyword">decltype</span>(t+u);<br></code></pre></td></tr></table></figure>
+<h2 id="来自google的奇技">5.来自Google的奇技</h2>
+<h3 id="所有权与智能指针">5.1.所有权与智能指针</h3>
+<p>动态分配出的对象最好有单一且固定的所有主,并通过智能指针传递所有权</p>
+<p>所有权是一种登记／管理动态内存和其它资源的技术.动态分配对象的所有主是一个对象或函数,后者负责确保当前者无用时就自动销毁前者.所有权有时可以共享,此时就由最后一个所有主来负责销毁它.甚至也可以不用共享,在代码中直接把所有权传递给其它对象</p>
+<p>智能指针是一个通过重载*和-&gt;运算符以表现得如指针一样的类</p>
+<p>智能指针类型被用来自动化所有权的登记工作,来确保执行销毁义务到位.</p>
+<p>std::unique_ptr是C++11新推出的一种智能指针类型,用来表示动态分配出的对象的独一无二的所有权;当std::unique_ptr离开作用域时,对象就会被销毁.std::unique_ptr不能被复制,但可以把它移动（move）给新所有主.std::shared_ptr同样表示动态分配对象的所有权,但可以被共享,也可以被复制;对象的所有权由所有复制者共同拥有,最后一个复制者被销毁时,对象也会随着被销毁</p>
+<p>如果必须使用动态分配,那么更倾向于将所有权保持在分配者手中.如果其他地方要使用这个对象,最好传递它的拷贝,或者传递一个不用改变所有权的指针或引用.倾向于使用std::unique_ptr来明确所有权传递</p>
+<h3 id="cpplint">5.2.Cpplint</h3>
+<p>使用cpplint.py检查风格错误</p>
+<p>cpplint.py是一个用来分析源文件,能检查出多种风格错误的工具.它不并完美,甚至还会漏报和误报,但它仍然是一个非常有用的工具.在行尾加//NOLINT,或在上一行加//NOLINTNEXTLINE,可以忽略报错.某些项目会指导你如何使用他们的项目工具运行cpplint.py.如果你参与的项目没有提供,你可以单独下载cpplint.py.</p>
+<h3 id="tips-3">tips：</h3>
+<ol type="1">
+<li>把智能指针当成对象来看待的话,就很好领会它与所指对象之间的关系了.</li>
+<li>原来Rust的Ownership思想是受到了C++智能指针的很大启发啊.</li>
+<li>scoped_ptr和auto_ptr已过时.现在是shared_ptr和uniqued_ptr的天下了.</li>
+<li>按本文来说,似乎除了智能指针,还有其它所有权机制,值得留意.</li>
+<li>ArchLinux用户注意了,AUR有对cpplint打包</li>
+</ol>
+<h2 id="其他c特性">6.其他c++特性</h2>
+<h3 id="引用参数-1">6.1.引用参数</h3>
+<p>所有按引用传递的参数必须加上const.</p>
+<h3 id="右值引用">6.2.右值引用</h3>
+<p>只在定义移动构造函数与移动赋值操作时使用右值引用.不要使用std::forward</p>
+<p>右值引用是一种只能绑定到临时对象的引用的一种,其语法与传统的引用语法相似.例如,voidf(string&amp;&amp;s);声明了一个其参数是一个字符串的右值引用的函数.</p>
+<p>用于定义移动构造函数(使用类的右值引用进行构造的函数)使得移动一个值而非拷贝之成为可能.</p>
+<p>例如,如果v1是一个vector,则autov2(std::move(v1))将很可能不再进行大量的数据复制而只是简单地进行指针操作,在某些情况下这将带来大幅度的性能提升.</p>
+<p>右值引用使得编写通用的函数封装来转发其参数到另外一个函数成为可能,无论其参数是否是临时对象都能正常工作.</p>
+<p>右值引用能实现可移动但不可拷贝的类型,这一特性对那些在拷贝方面没有实际需求,但有时又需要将它们作为函数参数传递或塞入容器的类型很有用.要高效率地使用某些标准库类型,例如std::unique_ptr,std::move是必需的</p>
+<h3 id="函数重载-1">6.3.函数重载</h3>
+<p>若要用好函数重载，最好能让读者一看调用点（callsite）就胸有成竹，不用花心思猜测调用的重载函数到底是哪一种。该规则适用于构造函数。</p>
+<h3 id="缺省参数-1">6.4.缺省参数</h3>
+<p>我们不允许使用缺省函数参数，少数极端情况除外。尽可能改用函数重载。</p>
+<h3 id="变长数组和alloca">6.5.变长数组和alloca()</h3>
+<ul>
+<li>我们不允许使用变长数组和alloca().</li>
+<li>变长数组具有浑然天成的语法.变长数组和alloca()也都很高效.</li>
+<li>变长数组和alloca()不是标准C++的组成部分.更重要的是,它们根据数据大小动态分配堆栈内存,会引起难以发现的内存越界bugs:“在我的机器上运行的好好的,发布后却莫名其妙的挂掉了”</li>
+<li>改用更安全的分配器（allocator），就像std::vector或std::unique_ptr</li>
+</ul>
+<h3 id="友元">6.6.友元</h3>
+<p>我们允许合理的使用友元类及友元函数</p>
+<h3 id="异常">6.7.异常</h3>
+<p>我们不使用C++异常</p>
+<h3 id="运行时类型识别">6.8.运行时类型识别</h3>
+<p>我们禁止使用RTTI.</p>
+<ul>
+<li>RTTI允许程序员在运行时识别C++类对象的类型.它通过使用typeid或者dynamic_cast完成.</li>
+</ul>
+<h3 id="类型转换">6.9.类型转换</h3>
+<ul>
+<li><p>使用C++的类型转换,如static_cast&lt;&gt;().不要使用inty=(int)x或inty=int(x)等转换方式</p></li>
+<li><p>用static_cast替代C风格的值转换,或某个类指针需要明确的向上转换为父类指针时.</p></li>
+<li><p>用const_cast去掉const限定符.</p></li>
+<li><p>用reinterpret_cast指针类型和整型或其它指针之间进行不安全的相互转换.仅在你对所做一切了然于心时使用.</p></li>
+<li><p>至于dynamic_cast参见6.8.运行时类型识别.</p></li>
+</ul>
+<h3 id="流">6.10.流</h3>
+<ul>
+<li><p>流用来替代printf()和scanf().</p></li>
+<li><p>优点:有了流,在打印时不需要关心对象的类型.不用担心格式化字符串与参数列表不匹配(虽然在gcc中使用printf也不存在这个问题).流的构造和析构函数会自动打开和关闭对应的文件.</p></li>
+<li><p>缺点:流使得pread()等功能函数很难执行.如果不使用printf风格的格式化字符串,某些格式化操作(尤其是常用的格式字符串%.*s)用流处理性能是很低的.流不支持字符串操作符重新排序(%1s),而这一点对于软件国际化很有用.</p></li>
+<li><p>结论:不要使用流,除非是日志接口需要.使用printf之类的代替.使用流还有很多利弊,但代码一致性胜过一切.不要在代码中使用流.</p></li>
+</ul>
+<h3 id="前置自增和自减">6.11.前置自增和自减</h3>
+<p>对于迭代器和其他模板对象使用前缀形式(++i)的自增,自减运算符.</p>
+<p>不考虑返回值的话,前置自增(++i)通常要比后置自增(i++)效率更高</p>
+<h3 id="const用法">6.12.const用法</h3>
+<p>我们强烈建议你在任何可能的情况下都要使用const.此外有时改用C++11推出的constexpr更好。</p>
+<p>关键字mutable可以使用,但是在多线程中是不安全的,使用时首先要考虑线程安全.</p>
+<h3 id="constexpr用法">6.13.constexpr用法</h3>
+<ul>
+<li><p>在C++11里，用constexpr来定义真正的常量，或实现常量初始化。</p></li>
+<li><p>变量可以被声明成constexpr以表示它是真正意义上的常量，即在编译时和运行时都不变。函数或构造函数也可以被声明成constexpr,以用来定义constexpr变量。</p></li>
+<li><p>如今constexpr就可以定义浮点式的真·常量，不用再依赖字面值了；也可以定义用户自定义类型上的常量；甚至也可以定义函数调用所返回的常量。</p></li>
+</ul>
+<h3 id="整型">6.14.整型</h3>
+<ul>
+<li><p>C++内建整型中,仅使用int.如果程序中需要不同大小的变量,可以使用中长度精确的整型,如int16_t.</p></li>
+<li><p>使用断言来指出变量为非负数,而不是使用无符号型!</p></li>
+</ul>
+<h3 id="位下的可移植性">6.15.64位下的可移植性</h3>
+<ul>
+<li><p>代码应该对64位和32位系统友好.处理打印,比较,结构体对齐时应切记</p></li>
+<li><p>你要非常小心的对待结构体对齐,尤其是要持久化到磁盘上的结构体(Yang.Y注:持久化-将数据按字节流顺序保存在磁盘文件或数据库中).在64位系统中,任何含有int64_t/uint64_t成员的类/结构体,缺省都以8字节在结尾对齐.如果32位和64位代码要共用持久化的结构体,需要确保两种体系结构下的结构体对齐一致.大多数编译器都允许调整结构体对齐</p></li>
+</ul>
+<h3 id="预处理宏">6.16.预处理宏</h3>
+<ul>
+<li>使用宏时要非常谨慎,尽量以内联函数,枚举和常量代替之</li>
+<li>如果你要宏,尽可能遵守:
+<ul>
+<li>不要在.h文件中定义宏.</li>
+<li>在马上要使用时才进行#define,使用后要立即#undef.</li>
+<li>不要只是对已经存在的宏使用#undef，选择一个不会冲突的名称；</li>
+<li>不要试图使用展开后会导致C++构造不稳定的宏,不然也至少要附上文档说明其行为.</li>
+<li>不要用##处理函数，类和变量的名字。</li>
+</ul></li>
+</ul>
+<h3 id="nullptr和null">6.17.0,nullptr和NULL</h3>
+<p>整数用0,实数用0.0,指针用nullptr或NULL,字符(串)用'\0'.整数用0,实数用0.0,这一点是毫无争议的.对于指针(地址值),到底是用0,NULL还是nullptr.C++11项目用nullptr;C++03项目则用NULL,毕竟它看起来像指针。实际上，一些C++编译器对NULL的定义比较特殊，可以输出有用的警告，特别是sizeof(NULL)就和sizeof(0)不一样。字符(串)用'\0',不仅类型正确而且可读性好。</p>
+<h3 id="sizeof">6.18.sizeof</h3>
+<p>Tip:尽可能用sizeof(varname)代替sizeof(type).</p>
+<p>使用sizeof(varname)是因为当代码中变量类型改变时会自动更新.您或许会用sizeof(type)处理不涉及任何变量的代码，比如处理来自外部或内部的数据格式，这时用变量就不合适了</p>
+<h3 id="auto">6.19.auto</h3>
+<ul>
+<li><p>用auto绕过烦琐的类型名，只要可读性好就继续用，别用在局部变量之外的地方。</p></li>
+<li><p>它涉及到C++鲜为人知的坑：WhyisvectornotaSTLcontainer?）也有大同小异的陷阱</p></li>
+<li><p>auto只能用在局部变量里用。别用在文件作用域变量，命名空间作用域变量和类数据成员里。永远别列表初始化auto变量。</p></li>
+</ul>
+<h3 id="列表初始化">6.20.列表初始化</h3>
+<ul>
+<li><p>你可以用列表初始化。早在C++03里，聚合类型（aggregatetypes）就已经可以被列表初始化了，比如数组和不自带构造函数的结构体：</p></li>
+<li><p>C++11中，该特性得到进一步的推广，任何对象类型都可以被列表初始化</p></li>
+<li><p>千万别直接列表初始化auto变量</p></li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++">autod=&#123;<span class="hljs-number">1.23</span>&#125;;<span class="hljs-comment">//d即是std::initializer_list&lt;double&gt;</span><br>autod=<span class="hljs-type">double</span>&#123;<span class="hljs-number">1.23</span>&#125;;<span class="hljs-comment">//善哉--d即为double,并非std::initializer_list.</span><br></code></pre></td></tr></table></figure>
+<h3 id="lambda表达式">6.21.Lambda表达式</h3>
+<ul>
+<li>适当使用lambda表达式。别用默认lambda捕获，所有捕获都要显式写出来。</li>
+<li>Lambda表达式是创建匿名函数对象的一种简易途径，常用于把函数当参数传，例如：</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++">std::<span class="hljs-built_in">sort</span>(v.<span class="hljs-built_in">begin</span>(),v.<span class="hljs-built_in">end</span>(),[](intx,inty)&#123;<br>	<span class="hljs-built_in">returnWeight</span>(x)&lt;<span class="hljs-built_in">Weight</span>(y);<br>&#125;);<br><br></code></pre></td></tr></table></figure>
+<h3 id="模板编程">6.22.模板编程</h3>
+<ul>
+<li>不要使用复杂的模板编程</li>
+<li>模板编程指的是利用c++模板实例化机制是图灵完备性,可以被用来实现编译时刻的类型判断的一系列编程技巧</li>
+</ul>
+<h3 id="boost库">6.23.Boost库</h3>
+<ul>
+<li>只使用Boost中被认可的库.</li>
+<li>Boost代码质量普遍较高,可移植性好,填补了C++标准库很多空白,如型别的特性,更完善的绑定器,更好的智能指针</li>
+</ul>
+<h3 id="c11">6.24.C++11</h3>
+<ul>
+<li>适当用C++11（前身是C++0x）的库和语言扩展，在贵项目用C++11特性前三思可移植性。</li>
+</ul>
+<h3 id="tips-4">tips</h3>
+<ol type="1">
+<li>实际上，缺省参数会改变函数签名的前提是改变了它接收的参数数量，比如把voida()改成voida(intb=0),开发者改变其代码的初衷也许是，在不改变「代码兼容性」的同时，又提供了可选int参数的余地，然而这终究会破坏函数指针上的兼容性，毕竟函数签名确实变了。</li>
+<li>此外把自带缺省参数的函数地址赋值给指针时，会丢失缺省参数信息。</li>
+<li>我还发现滥用缺省参数会害得读者光只看调用代码的话，会误以为其函数接受的参数数量比实际上还要少。</li>
+<li>friend实际上只对函数／类赋予了对其所在类的访问权限，并不是有效的声明语句。所以除了在头文件类内部写friend函数／类，还要在类作用域之外正式地声明一遍，最后在对应的.cc文件加以定义。</li>
+<li>本风格指南都强调了「友元应该定义在同一文件内，避免代码读者跑到其它文件查找使用该私有成员的类」。那么可以把其声明放在类声明所在的头文件，定义也放在类定义所在的文件。</li>
+<li>由于友元函数／类并不是类的一部分，自然也不会是类可调用的公有接口，于是我主张全集中放在类的尾部，即的数据成员之后，参考声明顺序。</li>
+<li>对使用C++异常处理应具有怎样的态度？非常值得一读。</li>
+<li>注意初始化const对象时，必须在初始化的同时值初始化。</li>
+<li>用断言代替无符号整型类型，深有启发。</li>
+<li>auto在涉及迭代器的循环语句里挺常用。</li>
+<li>ShouldthetrailingreturntypesyntaxstylebecomethedefaultfornewC++11programs?讨论了auto与尾置返回类型一起用的全新编码风格，值得一看。</li>
+</ol>
+<h2 id="命名约定">7.命名约定</h2>
+<h3 id="通用命名规则">7.1.通用命名规则</h3>
+<ul>
+<li>函数命名,变量命名,文件命名要有描述性;少用缩写</li>
+</ul>
+<h3 id="文件命名">7.2.文件命名</h3>
+<ul>
+<li>文件名要全部小写,可以包含下划线(<em>)或连字符(-),依照项目的约定.如果没有约定,那么“</em>”更好</li>
+</ul>
+<h3 id="类型命名">7.3.类型命名</h3>
+<ul>
+<li>类型名称的每个单词首字母均大写,不包含下划线:MyExcitingClass,MyExcitingEnum</li>
+</ul>
+<h3 id="变量命名">7.4.变量命名</h3>
+<ul>
+<li><p>变量(包括函数参数)和数据成员名一律小写,单词之间用下划线连接.类的成员变量以下划线结尾,但结构体的就不用,如:a_local_variable,a_struct_data_member,a_class_data_member_.</p></li>
+<li><p>普通变量命名全小写或者用下划线，不要混合大小写</p></li>
+<li><p>类数据成员，和普通变量名一样，但是要在最后接下划线：stringtable_name_</p></li>
+<li><p>结构体变量，和普通变量名一样</p></li>
+</ul>
+<h3 id="常量命名">7.5.常量命名</h3>
+<ul>
+<li>声明为constexpr或const的变量,或在程序运行期间其值始终保持不变的,命名时以“k”开头,大小写混合</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++">constintkDaysInWeek=<span class="hljs-number">7</span>;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>所有具有静态存储类型的变量(例如静态变量或全局变量,参见存储类型)都应当以此方式命名.对于其他存储类型的变量,如自动变量等,这条规则是可选的.如果不采用这条规则,就按照一般的变量命名规则.</li>
+</ul>
+<h3 id="函数命名">7.6.函数命名</h3>
+<ul>
+<li><p>常规函数使用大小写混合,取值和设值函数则要求与变量名匹配:MyExcitingFunction(),</p></li>
+<li><p>一般来说,函数名的每个单词首字母大写(即“驼峰变量名”或“帕斯卡变量名”),没有下划线.对于首字母缩写的单词,更倾向于将它们视作一个单词进行首字母大写(例如,写作StartRpc()而非StartRPC())</p></li>
+<li><p>同样的命名规则同时适用于类作用域与命名空间作用域的常量</p></li>
+<li><p>取值和设值函数的命名与变量一致.一般来说它们的名称与实际的成员变量对应,但并不强制要求.例如intcount()与voidset_count(intcount).</p></li>
+</ul>
+<h3 id="命名空间命名">7.7.命名空间命名</h3>
+<ul>
+<li>命名空间以小写字母命名.最高级命名空间的名字取决于项目名称.要注意避免嵌套命名空间的名字之间和常见的顶级命名空间的名字之间发生冲突.</li>
+<li>注意不使用缩写作为名称的规则同样适用于命名空间.命名空间中的代码极少需要涉及命名空间的名称,因此没有必要在命名空间中使用缩写</li>
+</ul>
+<h3 id="枚举命名">7.8.枚举命名</h3>
+<ul>
+<li>枚举的命名应当和常量或宏一致:kEnumName或是ENUM_NAME</li>
+<li>单独的枚举值应该优先采用常量的命名方式.但宏方式的命名也可以接受</li>
+</ul>
+<h3 id="宏命名">7.9.宏命名</h3>
+<ul>
+<li>你并不打算使用宏,对吧?如果你一定要用,像这样命名:MY_MACRO_THAT_SCARES_SMALL_CHILDREN</li>
+</ul>
+<h3 id="命名规则的特例">7.10.命名规则的特例</h3>
+<ul>
+<li>如果你命名的实体与已有C/C++实体相似,可参考现有命名策略.</li>
+<li>bigopen():函数名,参照open()的形式</li>
+<li>uint:typedef</li>
+<li>bigpos:struct或class,参照pos的形式</li>
+<li>sparse_hash_map:STL型实体;参照STL命名约定</li>
+<li>LONGLONG_MAX:常量,如同INT_MAX</li>
+</ul>
+<h2 id="注释">8.注释</h2>
+<h3 id="注释风格">8.1.注释风格</h3>
+<p>使用//或/**/,统一就好.</p>
+<h3 id="文件注释">8.2.文件注释</h3>
+<p>在每一个文件开头加入版权公告.文件注释描述了该文件的内容.如果一个文件只声明,或实现,或测试了一个对象,并且这个对象已经在它的声明处进行了详细的注释,那么就没必要再加上文件注释.除此之外的其他文件都需要文件注释.</p>
+<p>法律公告和作者信息</p>
+<p>​
+每个文件都应该包含许可证引用.为项目选择合适的许可证版本.(比如,Apache2.0,BSD,LGPL,GPL)如果你对原始作者的文件做了重大修改,请考虑删除原作者信息.</p>
+<p>文件内容</p>
+<p>​
+如果一个.h文件声明了多个概念,则文件注释应当对文件的内容做一个大致的说明,同时说明各概念之间的联系.一个一到两行的文件注释就足够了,对于每个概念的详细文档应当放在各个概念中,而不是文件注释中.</p>
+<p>不要在.h和.cc之间复制注释,这样的注释偏离了注释的实际意义</p>
+<h3 id="类注释">8.3.类注释</h3>
+<p>每个类的定义都要附带一份注释,描述类的功能和用法,除非它的功能相当明显</p>
+<h3 id="函数注释">8.4.函数注释</h3>
+<p>函数声明处的注释描述函数功能;定义处的注释描述函数实现</p>
+<p>基本上每个函数声明处前都应当加上注释,描述函数的功能和用途.只有在函数的功能简单而明显时才能省略这些注释(例如,简单的取值和设值函数).注释使用叙述式(“Opensthefile”)而非指令式(“Openthefile”);注释只是为了描述函数,而不是命令函数做什么.通常,注释不会描述函数如何工作.那是函数定义部分的事情.</p>
+<p>函数声明处注释的内容:</p>
+<ul>
+<li><p>函数的输入输出.</p></li>
+<li><p>对类成员函数而言:函数调用期间对象是否需要保持引用参数,是否会释放这些参数</p></li>
+<li><p>函数是否分配了必须由调用者释放的空间.</p></li>
+<li><p>参数是否可以为空指针.</p></li>
+<li><p>是否存在函数使用上的性能隐患.</p></li>
+<li><p>如果函数是可重入的,其同步前提是什么?</p></li>
+</ul>
+<h3 id="变量注释">8.5.变量注释</h3>
+<ul>
+<li><p>通常变量名本身足以很好说明变量用途.某些情况下,也需要额外的注释说明</p></li>
+<li><p>类数据成员</p>
+<ul>
+<li>每个类数据成员(也叫实例变量或成员变量)都应该用注释说明用途.如果有非变量的参数(例如特殊值,数据成员之间的关系,生命周期等)不能够用类型与变量名明确表达,则应当加上注释.然而,如果变量类型与变量名已经足以描述一个变量,那么就不再需要加上注释.</li>
+<li>特别地,如果变量可以接受NULL或-1等警戒值,须加以说明</li>
+</ul></li>
+<li><p>全局变量和数据成员一样,所有全局变量也要注释说明含义及用途,以及作为全局变量的原因.</p></li>
+</ul>
+<h3 id="实现注释">8.6.实现注释</h3>
+<p>对于代码中巧妙的,晦涩的,有趣的,重要的地方加以注释.</p>
+<h3 id="标点拼写和语法">8.7.标点,拼写和语法</h3>
+<p>注意标点,拼写和语法;写的好的注释比差的要易读的多.</p>
+<h3 id="todo注释">8.8.TODO注释</h3>
+<p>对那些临时的,短期的解决方案,或已经够好但仍不完美的代码使用TODO注释.</p>
+<p>TODO注释要使用全大写的字符串TODO,在随后的圆括号里写上你的名字,邮件地址,bugID,或其它身份标识和与这一TODO相关的issue.主要目的是让添加注释的人(也是可以请求提供更多细节的人)可根据规范的TODO格式进行查找.添加TODO注释并不意味着你要自己来修正,因此当你加上带有姓名的TODO时,一般都是写上自己的名字.</p>
+<h3 id="弃用注释">8.9.弃用注释</h3>
+<ul>
+<li>通过弃用注释（DEPRECATEDcomments）以标记某接口点已弃用.</li>
+<li>您可以写上包含全大写的DEPRECATED的注释,以标记某接口为弃用状态.注释可以放在接口声明前,或者同一行.</li>
+<li>在DEPRECATED一词后,在括号中留下您的名字,邮箱地址以及其他身份标识.</li>
+<li>弃用注释应当包涵简短而清晰的指引,以帮助其他人修复其调用点.在C++中,你可以将一个弃用函数改造成一个内联函数,这一函数将调用新的接口.</li>
+<li>仅仅标记接口为DEPRECATED并不会让大家不约而同地弃用,您还得亲自主动修正调用点（callsites）,或是找个帮手.</li>
+<li>修正好的代码应该不会再涉及弃用接口点了,着实改用新接口点.如果您不知从何下手,可以找标记弃用注释的当事人一起商量.</li>
+</ul>
+<h3 id="tips-5">tips</h3>
+<ol type="1">
+<li>关于注释风格,很多C++的coders更喜欢行注释,Ccoders或许对块注释依然情有独钟,或者在文件头大段大段的注释时使用块注释;</li>
+<li>文件注释可以炫耀你的成就,也是为了捅了篓子别人可以找你;</li>
+<li>注释要言简意赅,不要拖沓冗余,复杂的东西简单化和简单的东西复杂化都是要被鄙视的</li>
+<li>对于Chinesecoders来说,用英文注释还是用中文注释,itisaproblem,但不管怎样,注释是为了让别人看懂,难道是为了炫耀编程语言之外的你的母语或外语水平吗；</li>
+<li>注释不要太乱,适当的缩进才会让人乐意看.但也没有必要规定注释从第几列开始(我自己写代码的时候总喜欢这样),UNIX/LINUX下还可以约定是使用tab还是space,个人倾向于space;</li>
+<li>TODO很不错,有时候,注释确实是为了标记一些未完成的或完成的不尽如人意的地方,这样一搜索,就知道还有哪些活要干,日志都省了</li>
+</ol>
+<h2 id="格式">9.格式</h2>
+<h3 id="行长度">9.1行长度</h3>
+<ul>
+<li><p>每一行代码字符数不超过80.</p></li>
+<li><p>包含长路径的#include语句可以超出80列</p></li>
+<li><p>头文件保护可以无视该原则.</p></li>
+</ul>
+<h3 id="非ascii字符">9.2非ASCII字符</h3>
+<ul>
+<li><p>尽量不使用非ASCII字符,使用时必须使用UTF-8编码</p></li>
+<li><p>即使是英文,也不应将用户界面的文本硬编码到源代码中,因此非ASCII字符应当很少被用到.特殊情况下可以适当包含此类字符</p></li>
+</ul>
+<h3 id="空格还是制表位">9.3空格还是制表位</h3>
+<ul>
+<li>只使用空格,每次缩进2个空格.</li>
+<li>我们使用空格缩进.不要在代码中使用制表符.你应该设置编辑器将制表符转为空格</li>
+</ul>
+<h3 id="函数声明与定义">9.4函数声明与定义</h3>
+<ul>
+<li><p>返回类型和函数名在同一行,参数也尽量放在同一行,如果放不下就对形参分行,分行方式与函数调用一致.</p></li>
+<li><p>如果同一行文本太多,放不下所有参数:</p></li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++">ReturnTypeClassName::<span class="hljs-built_in">ReallyLongFunctionName</span>(Typepar_name1,Typepar_name2,<br>											Typepar_name3)&#123;<br><span class="hljs-built_in">DoSomething</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c++">ReturnTypeLongClassName::<span class="hljs-built_in">ReallyReallyReallyLongFunctionName</span>(<br>Typepar_name1,	<span class="hljs-comment">//4spaceindent</span><br>	Typepar_name2,<br>	Typepar_name3)&#123;<br><span class="hljs-built_in">DoSomething</span>();	<span class="hljs-comment">//2spaceindent</span><br>...<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<p>注意以下几点:</p>
+<ul>
+<li>使用好的参数名.</li>
+<li>只有在参数未被使用或者其用途非常明显时,才能省略参数名.</li>
+<li>如果返回类型和函数名在一行放不下,分行.</li>
+<li>如果返回类型与函数声明或定义分行了,不要缩进.</li>
+<li>左圆括号总是和函数名在同一行.</li>
+<li>函数名和左圆括号间永远没有空格.</li>
+<li>圆括号与参数间没有空格.</li>
+<li>左大括号总在最后一个参数同一行的末尾处,不另起新行.</li>
+<li>右大括号总是单独位于函数最后一行,或者与左大括号同一行.</li>
+<li>右圆括号和左大括号间总是有一个空格.</li>
+<li>所有形参应尽可能对齐.</li>
+<li>缺省缩进为2个空格.</li>
+<li>换行后的参数保持4个空格的缩进</li>
+</ul>
+<h3 id="lambda表达式-1">9.5.Lambda表达式</h3>
+<p>Lambda表达式对形参和函数体的格式化和其他函数一致;捕获列表同理,表项用逗号隔开</p>
+<p>若用引用捕获,在变量名和&amp;之间不留空格</p>
+<h3 id="函数调用">9.6.函数调用</h3>
+<p>要么一行写完函数调用,要么在圆括号里对参数分行,要么参数另起一行且缩进四格.如果没有其它顾虑的话,尽可能精简行数,比如把多个参数适当地放在同一行里.</p>
+<h3 id="列表初始化格式">9.7.列表初始化格式</h3>
+<p>您平时怎么格式化函数调用,就怎么格式化列表初始化</p>
+<h3 id="条件语句">9.8条件语句</h3>
+<p>倾向于不在圆括号内使用空格.关键字if和else另起一行</p>
+<p>注意所有情况下if和左圆括号间都有个空格.右圆括号和左大括号之间也要有个空格</p>
+<h3 id="循环和开关选择语句">9.9循环和开关选择语句</h3>
+<p>switch语句可以使用大括号分段,以表明cases之间不是连在一起的.在单语句循环里,括号可用可不用.空循环体应使用{}或continue.</p>
+<p>空循环体应使用{}或continue,而不是一个简单的分号</p>
+<h3 id="指针和引用表达式">9.10指针和引用表达式</h3>
+<p>句点或箭头前后不要有空格.指针/地址操作符(*,&amp;)之后不能有空格.</p>
+<h3 id="布尔表达式">9.11布尔表达式</h3>
+<p>如果一个布尔表达式超过标准行宽,断行方式要统一一下</p>
+<p>逻辑与(&amp;&amp;)操作符总位于行尾:</p>
+<h3 id="函数返回值">9.12函数返回值</h3>
+<p>不要在return表达式里加上非必须的圆括号.</p>
+<h3 id="变量及数组初始化">9.13变量及数组初始化</h3>
+<p>用=,()和{}均可</p>
+<h3 id="预处理指令">9.14预处理指令</h3>
+<p>预处理指令不要缩进,从行首开始</p>
+<h3 id="类格式">9.15类格式</h3>
+<p>访问控制块的声明依次序是public:,protected:,private:,每个都缩进1个空格</p>
+<ul>
+<li>所有基类名应在80列限制下尽量与子类名放在同一行.</li>
+<li>关键词public:,protected:,private:要缩进1个空格.</li>
+<li>除第一个关键词(一般是public)外,其他关键词前要空一行.如果类比较小的话也可以不空.</li>
+<li>这些关键词后不要保留空行.</li>
+<li>public放在最前面,然后是protected,最后是private.</li>
+<li>关于声明顺序的规则请参考声明顺序一节</li>
+</ul>
+<h3 id="构造函数初始值列表">9.16构造函数初始值列表</h3>
+<p>构造函数初始化列表放在同一行或按四格缩进并排多行</p>
+<h3 id="命名空间格式化">9.17命名空间格式化</h3>
+<p>命名空间内容不缩进</p>
+<p>命名空间不要增加额外的缩进层次,</p>
+<p>声明嵌套命名空间时,每个命名空间都独立成行.</p>
+<h3 id="水平留白">9.18水平留白</h3>
+<p>水平留白的使用根据在代码中的位置决定.永远不要在行尾添加没意义的留白.</p>
+<p>通用</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-built_in">voidf</span>(boolb)&#123;<span class="hljs-comment">//左大括号前总是有空格.</span><br>...<br>inti=<span class="hljs-number">0</span>;<span class="hljs-comment">//分号前不加空格.</span><br><span class="hljs-comment">//列表初始化中大括号内的空格是可选的.</span><br><span class="hljs-comment">//如果加了空格,那么两边都要加上.</span><br>intx[]=&#123;<span class="hljs-number">0</span>&#125;;<br>intx[]=&#123;<span class="hljs-number">0</span>&#125;;<br><span class="hljs-comment">//继承与初始化列表中的冒号前后恒有空格.</span><br>classFoo:publicBar&#123;<br><span class="hljs-keyword">public</span>:<br><span class="hljs-comment">//对于单行函数的实现,在大括号内加上空格</span><br><span class="hljs-comment">//然后是函数实现</span><br><span class="hljs-built_in">Foo</span>(intb):<span class="hljs-built_in">Bar</span>(),<span class="hljs-built_in">baz_</span>(b)&#123;&#125;<span class="hljs-comment">//大括号里面是空的话,不加空格.</span><br><span class="hljs-built_in">voidReset</span>()&#123;baz_=<span class="hljs-number">0</span>;&#125;<span class="hljs-comment">//用空格把大括号与实现分开.</span><br>...<br></code></pre></td></tr></table></figure>
+<p>循环和条件语句</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">if</span>(b)&#123;<span class="hljs-comment">//if条件语句和循环语句关键字后均有空格.</span><br>&#125;<span class="hljs-keyword">else</span>&#123;<span class="hljs-comment">//else前后有空格.</span><br>&#125;<br><span class="hljs-keyword">while</span>(test)&#123;&#125;<span class="hljs-comment">//圆括号内部不紧邻空格.</span><br><span class="hljs-keyword">switch</span>(i)&#123;<br><span class="hljs-keyword">for</span>(inti=<span class="hljs-number">0</span>;i&lt;<span class="hljs-number">5</span>;++i)&#123;<br><span class="hljs-keyword">switch</span>(i)&#123;<span class="hljs-comment">//循环和条件语句的圆括号里可以与空格紧邻.</span><br><span class="hljs-keyword">if</span>(test)&#123;<span class="hljs-comment">//圆括号,但这很少见.总之要一致.</span><br><span class="hljs-keyword">for</span>(inti=<span class="hljs-number">0</span>;i&lt;<span class="hljs-number">5</span>;++i)&#123;<br><span class="hljs-keyword">for</span>(;i&lt;<span class="hljs-number">5</span>;++i)&#123;<span class="hljs-comment">//循环里内;后恒有空格,;前可以加个空格.</span><br><span class="hljs-keyword">switch</span>(i)&#123;<br>case1:<span class="hljs-comment">//switchcase的冒号前无空格.</span><br>...<br>case2:<span class="hljs-keyword">break</span>;<span class="hljs-comment">//如果冒号有代码,加个空格</span><br></code></pre></td></tr></table></figure>
+<p>操作符</p>
+<ul>
+<li>赋值值运算符前后总是有空格.</li>
+<li>圆括号内部没有紧邻空格</li>
+<li>参数和一元操作符之间不加空格</li>
+</ul>
+<p>模板和转换</p>
+<ul>
+<li><p>尖括号(<and>)不与空格紧邻,&lt;前没有空格,&gt;和(之间也没有</and></p></li>
+<li><div class="sourceCode" id="cb1"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  vector<span class="op">&lt;</span>string<span class="op">&gt;</span>x<span class="op">;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  y<span class="op">=</span><span class="kw">static_cast</span><span class="op">&lt;</span><span class="dt">char</span><span class="op">*&gt;(</span>x<span class="op">);</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">//在类型与指针操作符之间留空格也可以,但要保持一致.</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  vector<span class="op">&lt;</span><span class="dt">char</span> <span class="op">*&gt;</span>x<span class="op">;</span></span></code></pre></div></li>
+</ul>
+<h3 id="垂直留白">9.19垂直留白</h3>
+<p>垂直留白越少越好</p>
+<p>这不仅仅是规则而是原则问题了:不在万不得已,不要使用空行.尤其是:两个函数定义之间的空行不要超过2行,函数体首尾不要留空行,函数体中也不要随意添加空行.</p>
+<p>基本原则是:同一屏可以显示的代码越多,越容易理解程序的控制流.当然,过于密集的代码块和过于疏松的代码块同样难看,这取决于你的判断.但通常是垂直留白越少越好.</p>
+<p>下面的规则可以让加入的空行更有效:</p>
+<ul>
+<li>函数体内开头或结尾的空行可读性微乎其微.</li>
+<li>在多重if-else块里加空行或许有点可读性</li>
+</ul>
+<h3 id="tips-6">tips</h3>
+<ol type="1">
+<li>对于代码格式,因人,系统而异各有优缺点,但同一个项目中遵循同一标准还是有必要的;</li>
+<li>行宽原则上不超过80列,把22寸的显示屏都占完,怎么也说不过去;</li>
+<li>尽量不使用非ASCII字符,如果使用的话,参考UTF-8格式(尤其是UNIX/Linux下,Windows下可以考虑宽字符),尽量不将字符串常量耦合到代码中,比如独立出资源文件,这不仅仅是风格问题了;</li>
+<li>UNIX/Linux下无条件使用空格,MSVC的话使用Tab也无可厚非;</li>
+<li>函数参数,逻辑条件,初始化列表:要么所有参数和函数名放在同一行,要么所有参数并排分行;</li>
+<li>除函数定义的左大括号可以置于行首外,包括函数/类/结构体/枚举声明,各种语句的左大括号置于行尾,所有右大括号独立成行;</li>
+<li>./-&gt;操作符前后不留空格,*/&amp;不要前后都留,一个就可,靠左靠右依各人喜好;</li>
+<li>预处理指令/命名空间不使用额外缩进,类/结构体/枚举/函数/语句使用缩进;</li>
+<li>初始化用=还是()依个人喜好,统一就好;</li>
+<li>return不要加();</li>
+<li>水平/垂直留白不要滥用,怎么易读怎么来.</li>
+<li>关于UNIX/Linux风格为什么要把左大括号置于行尾(.cc文件的函数实现处,左大括号位于行首),我的理解是代码看上去比较简约,想想行首除了函数体被一对大括号封在一起之外,只有右大括号的代码看上去确实也舒服;Windows风格将左大括号置于行首的优点是匹配情况一目了然.</li>
+<li>80行限制事实上有助于避免代码可读性失控,比如超多重嵌套块,超多重函数调用等等.</li>
+<li>Linux上设置好了Locale就几乎一劳永逸设置好所有开发环境的编码,不像奇葩的Windows.</li>
+<li>Google强调有一对if-else时,不论有没有嵌套,都要有大括号.Apple正好有栽过跟头.</li>
+<li>其实我主张指针／地址操作符与变量名紧邻,int<em>a,bvsint</em>a,b,新手会误以为前者的b是int*变量,但后者就不一样了,高下立判.</li>
+<li>在这风格指南里我才刚知道C++原来还有所谓的Alternativeoperatorrepresentations,大概没人用吧.</li>
+<li>注意构造函数初始值列表（ConstructerInitializerList）与列表初始化（InitializerList）是两码事,我就差点混淆了它们的翻译.</li>
+<li>事实上,如果您熟悉英语本身的书写规则,就会发现该风格指南在格式上的规定与英语语法相当一脉相承.比如普通标点符号和单词后面还有文本的话,总会留一个空格;特殊符号与单词之间就不用留了,比如if(true)中的圆括号与true.</li>
+<li>本风格指南没有明确规定void函数里要不要用return语句,不过就Google开源项目leveldb并没有写;此外从Isablankreturnstatementattheendofafunctionwhosreturntypeisvoidnecessary?来看,return;比return;更约定俗成（事实上cpplint会对后者报错,指出分号前有多余的空格）,且可用来提前跳出函数栈.</li>
+</ol>
+<h2 id="规则特例">10.规则特例</h2>
+<ul>
+<li>使用MicrosoftVisualC++进行编译时,将警告级别设置为3或更高,并将所有警告(warnings)当作错误(errors)处理.</li>
+<li>不要使用#pragmaonce;而应该使用Google的头文件保护规则.头文件保护的路径应该相对于项目根目录</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/c/" class="category-chain-item">c++</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/c/google-style/" class="category-chain-item">google_style</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/c/" class="print-no-link">#c++</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>google_style_guide</div>
+      <div>http://binbo-zappy.github.io/2024/11/27/cpp/google_style_guide/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年11月27日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/11/27/cpp-%E5%A4%9A%E7%BA%BF%E7%A8%8B/1-Cpp11-Thead%E7%BA%BF%E7%A8%8B%E5%BA%93%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" title="1. C++11 Thead线程库的基本使用">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">1. C++11 Thead线程库的基本使用</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/11/27/effective-cpp/9-%E6%9D%82%E9%A1%B9%E8%AE%A8%E8%AE%BA/" title="9. 杂项讨论">
+                        <span class="hidden-mobile">9. 杂项讨论</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -19,12 +19,12 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="5.8 TCP的运输连接管理 TCP是面向连接的协议，它基于运输连接来传送TCP报文段。 TCP运输连接的建立和释放是每一次面向连接的通信中必不可少的过程。 TCP运输连接有以下三个阶段： 建立TCP连接 数据传送 释放TCP连接   TCP的运输连接管理就是使运输连接的建立和释放都能正常地进行。   1. TCP的连接建立（三次握手） TCP的连接建立要解决以下三个问题：  使TCP双方能够确知">
+    <meta name="description" content="5.8 TCP的运输连接管理  TCP是面向连接的协议，它基于运输连接来传送TCP报文段。 TCP运输连接的建立和释放是每一次面向连接的通信中必不可少的过程。 TCP运输连接有以下三个阶段：  建立TCP连接 数据传送 释放TCP连接  TCP的运输连接管理就是使运输连接的建立和释放都能正常地进行。   1. TCP的连接建立（三次握手）  TCP的连接建立要解决以下">
 <meta property="og:type" content="article">
 <meta property="og:title" content="5.8 TCP的运输连接管理">
 <meta property="og:url" content="http://binbo-zappy.github.io/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-8-TCP%E7%9A%84%E8%BF%90%E8%BE%93%E8%BF%9E%E6%8E%A5%E7%AE%A1%E7%90%86/index.html">
 <meta property="og:site_name" content="Binbo">
-<meta property="og:description" content="5.8 TCP的运输连接管理 TCP是面向连接的协议，它基于运输连接来传送TCP报文段。 TCP运输连接的建立和释放是每一次面向连接的通信中必不可少的过程。 TCP运输连接有以下三个阶段： 建立TCP连接 数据传送 释放TCP连接   TCP的运输连接管理就是使运输连接的建立和释放都能正常地进行。   1. TCP的连接建立（三次握手） TCP的连接建立要解决以下三个问题：  使TCP双方能够确知">
+<meta property="og:description" content="5.8 TCP的运输连接管理  TCP是面向连接的协议，它基于运输连接来传送TCP报文段。 TCP运输连接的建立和释放是每一次面向连接的通信中必不可少的过程。 TCP运输连接有以下三个阶段：  建立TCP连接 数据传送 释放TCP连接  TCP的运输连接管理就是使运输连接的建立和释放都能正常地进行。   1. TCP的连接建立（三次握手）  TCP的连接建立要解决以下">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/network.jpg">
 <meta property="article:published_time" content="2024-11-18T04:19:08.000Z">
@@ -225,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          580 字
+          581 字
         
       </span>
     
@@ -278,56 +278,62 @@
             
               <div class="markdown-body">
                 
-                <h1 id="5-8-TCP的运输连接管理"><a href="#5-8-TCP的运输连接管理" class="headerlink" title="5.8 TCP的运输连接管理"></a>5.8 TCP的运输连接管理</h1><ul>
+                <h1 id="tcp的运输连接管理">5.8 TCP的运输连接管理</h1>
+<ul>
 <li>TCP是面向连接的协议，它基于运输连接来传送TCP报文段。</li>
 <li>TCP运输连接的建立和释放是每一次面向连接的通信中必不可少的过程。</li>
-<li>TCP运输连接有以下三个阶段：<ul>
+<li>TCP运输连接有以下三个阶段：
+<ul>
 <li>建立TCP连接</li>
 <li>数据传送</li>
 <li>释放TCP连接</li>
-</ul>
-</li>
+</ul></li>
 <li>TCP的运输连接管理就是使运输连接的建立和释放都能正常地进行。</li>
 </ul>
 <p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-8-TCP%E7%9A%84%E8%BF%90%E8%BE%93%E8%BF%9E%E6%8E%A5%E7%AE%A1%E7%90%86/image-20241118150137225.png" srcset="/img/loading.gif" lazyload></p>
-<h2 id="1-TCP的连接建立（三次握手）"><a href="#1-TCP的连接建立（三次握手）" class="headerlink" title="1. TCP的连接建立（三次握手）"></a>1. TCP的连接建立（三次握手）</h2><blockquote>
+<h2 id="tcp的连接建立三次握手">1. TCP的连接建立（三次握手）</h2>
+<blockquote>
 <p>TCP的连接建立要解决以下三个问题：</p>
-<ol>
+<ol type="1">
 <li>使TCP双方能够确知对方的存在</li>
 <li>使TCP双方能够协商一些参数（如最大窗口值、是否使用窗口扩大选项和时间戳选项以及服务质量等）</li>
 <li>使TCP双方能够对运输实体资源（如缓存大小、连接表中的项目等）进行分配。</li>
 </ol>
 </blockquote>
-<ol>
+<ol type="1">
 <li><p>三次握手建立连接的过程</p>
 <blockquote>
 <p>也就是使用三个TCP报文建立连接</p>
 <ul>
-<li>传输控制块<ul>
+<li>传输控制块
+<ul>
 <li>TCP连接表</li>
 <li>指向发送和接收缓存的指针</li>
 <li>指向重传队列的指针</li>
 <li>当前的发送和接收序号</li>
-</ul>
-</li>
+</ul></li>
 </ul>
 </blockquote>
-<p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-8-TCP%E7%9A%84%E8%BF%90%E8%BE%93%E8%BF%9E%E6%8E%A5%E7%AE%A1%E7%90%86/image-20230718175005023.png" srcset="/img/loading.gif" lazyload alt="image-20230718175005023"></p>
-</li>
-<li><p>两报文建立连接会发生以下问题<br><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-8-TCP%E7%9A%84%E8%BF%90%E8%BE%93%E8%BF%9E%E6%8E%A5%E7%AE%A1%E7%90%86/image-20230718175045894.png" srcset="/img/loading.gif" lazyload alt="image-20230718175045894"></p>
-</li>
-<li><p>注意<br>(1)TCP的标准规定，SYN&#x3D;1的报文段不能携带数据，但要消耗掉一个序号。<br>(2)TCP的标准规定，普通的确认报文段如果不携带数据，则不消耗序号。</p>
-</li>
+<figure>
+<img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-8-TCP%E7%9A%84%E8%BF%90%E8%BE%93%E8%BF%9E%E6%8E%A5%E7%AE%A1%E7%90%86/image-20230718175005023.png" srcset="/img/loading.gif" lazyload alt="image-20230718175005023">
+<figcaption aria-hidden="true">image-20230718175005023</figcaption>
+</figure></li>
+<li><p>两报文建立连接会发生以下问题 <img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-8-TCP%E7%9A%84%E8%BF%90%E8%BE%93%E8%BF%9E%E6%8E%A5%E7%AE%A1%E7%90%86/image-20230718175045894.png" srcset="/img/loading.gif" lazyload alt="image-20230718175045894"></p></li>
+<li><p>注意
+(1)TCP的标准规定，SYN=1的报文段不能携带数据，但要消耗掉一个序号。
+(2)TCP的标准规定，普通的确认报文段如果不携带数据，则不消耗序号。</p></li>
 </ol>
-<h2 id="2-TCP的连接释放（四次挥手）"><a href="#2-TCP的连接释放（四次挥手）" class="headerlink" title="2. TCP的连接释放（四次挥手）"></a>2. TCP的连接释放（四次挥手）</h2><ol>
-<li><p>四报文挥手过程<br><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-8-TCP%E7%9A%84%E8%BF%90%E8%BE%93%E8%BF%9E%E6%8E%A5%E7%AE%A1%E7%90%86/image-20230718182458129.png" srcset="/img/loading.gif" lazyload alt="image-20230718182458129"></p>
-</li>
+<h2 id="tcp的连接释放四次挥手">2. TCP的连接释放（四次挥手）</h2>
+<ol type="1">
+<li><p>四报文挥手过程 <img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-8-TCP%E7%9A%84%E8%BF%90%E8%BE%93%E8%BF%9E%E6%8E%A5%E7%AE%A1%E7%90%86/image-20230718182458129.png" srcset="/img/loading.gif" lazyload alt="image-20230718182458129"></p></li>
 <li><p>若不等待2MSL则有可能发生以下情况</p>
 <blockquote>
 <p>最后一个确认报文丢失，导致服务器进程陷入最后确定状态，无法进入关闭状态</p>
 </blockquote>
-<p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-8-TCP%E7%9A%84%E8%BF%90%E8%BE%93%E8%BF%9E%E6%8E%A5%E7%AE%A1%E7%90%86/image-20230718182524772.png" srcset="/img/loading.gif" lazyload alt="image-20230718182524772"></p>
-</li>
+<figure>
+<img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-8-TCP%E7%9A%84%E8%BF%90%E8%BE%93%E8%BF%9E%E6%8E%A5%E7%AE%A1%E7%90%86/image-20230718182524772.png" srcset="/img/loading.gif" lazyload alt="image-20230718182524772">
+<figcaption aria-hidden="true">image-20230718182524772</figcaption>
+</figure></li>
 </ol>
 <p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-8-TCP%E7%9A%84%E8%BF%90%E8%BE%93%E8%BF%9E%E6%8E%A5%E7%AE%A1%E7%90%86/image-20241118153322909.png" srcset="/img/loading.gif" lazyload></p>
 <ul>

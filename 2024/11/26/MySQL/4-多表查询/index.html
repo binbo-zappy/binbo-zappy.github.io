@@ -19,12 +19,12 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="4. 多表查询1. 多表关系 项目开发中，在进行数据库表结构设计时，会根据业务需求及业务模块之间的关系，分析并设计表结构，由于业务之间相互关联，所以各个表结构之间也存在着各种联系，基本上分为三种： 一对多（多对一） 多对多 一对一    1.1 一对多 案例：部门与员工 关系：一个部门对应多个员工，一个员工对应一个部门 实现：在多的一方建立外键，指向一的一方的主键   1.2 多对多 案例：学生与">
+    <meta name="description" content="4. 多表查询 1. 多表关系  项目开发中，在进行数据库表结构设计时，会根据业务需求及业务模块之间的关系，分析并设计表结构，由于业务之间相互关联，所以各个表结构之间也存在着各种联系，基本上分为三种：  一对多（多对一） 多对多 一对一   1.1 一对多  案例：部门与员工 关系：一个部门对应多个员工，一个员工对应一个部门 实现：在多的一方建立外键，指向一的一方的主键">
 <meta property="og:type" content="article">
 <meta property="og:title" content="4. 多表查询">
 <meta property="og:url" content="http://binbo-zappy.github.io/2024/11/26/MySQL/4-%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A2/index.html">
 <meta property="og:site_name" content="Binbo">
-<meta property="og:description" content="4. 多表查询1. 多表关系 项目开发中，在进行数据库表结构设计时，会根据业务需求及业务模块之间的关系，分析并设计表结构，由于业务之间相互关联，所以各个表结构之间也存在着各种联系，基本上分为三种： 一对多（多对一） 多对多 一对一    1.1 一对多 案例：部门与员工 关系：一个部门对应多个员工，一个员工对应一个部门 实现：在多的一方建立外键，指向一的一方的主键   1.2 多对多 案例：学生与">
+<meta property="og:description" content="4. 多表查询 1. 多表关系  项目开发中，在进行数据库表结构设计时，会根据业务需求及业务模块之间的关系，分析并设计表结构，由于业务之间相互关联，所以各个表结构之间也存在着各种联系，基本上分为三种：  一对多（多对一） 多对多 一对一   1.1 一对多  案例：部门与员工 关系：一个部门对应多个员工，一个员工对应一个部门 实现：在多的一方建立外键，指向一的一方的主键">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/MySQL.png">
 <meta property="article:published_time" content="2024-11-26T08:31:54.000Z">
@@ -278,21 +278,25 @@
             
               <div class="markdown-body">
                 
-                <h1 id="4-多表查询"><a href="#4-多表查询" class="headerlink" title="4. 多表查询"></a>4. 多表查询</h1><h2 id="1-多表关系"><a href="#1-多表关系" class="headerlink" title="1. 多表关系"></a>1. 多表关系</h2><ul>
-<li>项目开发中，在进行数据库表结构设计时，会根据业务需求及业务模块之间的关系，分析并设计表结构，由于业务之间相互关联，所以各个表结构之间也存在着各种联系，基本上分为三种：<ul>
+                <h1 id="多表查询">4. 多表查询</h1>
+<h2 id="多表关系">1. 多表关系</h2>
+<ul>
+<li>项目开发中，在进行数据库表结构设计时，会根据业务需求及业务模块之间的关系，分析并设计表结构，由于业务之间相互关联，所以各个表结构之间也存在着各种联系，基本上分为三种：
+<ul>
 <li>一对多（多对一）</li>
 <li>多对多</li>
 <li>一对一</li>
+</ul></li>
 </ul>
-</li>
-</ul>
-<h3 id="1-1-一对多"><a href="#1-1-一对多" class="headerlink" title="1.1 一对多"></a>1.1 一对多</h3><ul>
+<h3 id="一对多">1.1 一对多</h3>
+<ul>
 <li>案例：部门与员工</li>
 <li>关系：一个部门对应多个员工，一个员工对应一个部门</li>
 <li>实现：在多的一方建立外键，指向一的一方的主键</li>
 </ul>
 <p><img src="/2024/11/26/MySQL/4-%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A2/image-20241126210159754.png" srcset="/img/loading.gif" lazyload></p>
-<h3 id="1-2-多对多"><a href="#1-2-多对多" class="headerlink" title="1.2 多对多"></a>1.2 多对多</h3><ul>
+<h3 id="多对多">1.2 多对多</h3>
+<ul>
 <li>案例：学生与课程</li>
 <li>关系：一个学生可以选多门课程，一门课程也可以供多个学生选修</li>
 <li>实现：建立第三张中间表，中间表至少包含两个外键，分别关联两方主键</li>
@@ -302,18 +306,18 @@
 <li>创建三个表</li>
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mysql">constraint fk_courseid foreign key (courseid) references course (id);<br>constraint fk_studentid foreign key (studentid) references student (id);<br></code></pre></td></tr></table></figure>
-
-<h3 id="1-3-一对一"><a href="#1-3-一对一" class="headerlink" title="1.3 一对一"></a>1.3 一对一</h3><ul>
+<h3 id="一对一">1.3 一对一</h3>
+<ul>
 <li>案例：用户与用户详情</li>
 <li>关系：一对一关系，多用于单表拆分，将一张表的基础字段放在一张表中，其他详情字段放在另一张表中，以提升操作效率</li>
 <li>实现：在任意一方加入外键，关联另外一方的主键，并且设置外键为唯一的（UNIQUE）</li>
 </ul>
 <p><img src="/2024/11/26/MySQL/4-%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A2/image-20241126233655365.png" srcset="/img/loading.gif" lazyload></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">constraint fk_userid foreign key (userid) references tb_user(id);<br></code></pre></td></tr></table></figure>
-
-<h2 id="2-查询"><a href="#2-查询" class="headerlink" title="2. 查询"></a>2. 查询</h2><h3 id="2-1-多表查询"><a href="#2-1-多表查询" class="headerlink" title="2.1 多表查询"></a>2.1 多表查询</h3><ul>
-<li><p>从多张表中国查询数据</p>
-</li>
+<h2 id="查询">2. 查询</h2>
+<h3 id="多表查询-1">2.1 多表查询</h3>
+<ul>
+<li><p>从多张表中国查询数据</p></li>
 <li><p>合并查询（笛卡尔积，会展示所有组合结果）：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">select * from employee, dept;<br></code></pre></td></tr></table></figure></li>
 </ul>
@@ -322,94 +326,88 @@
 </blockquote>
 <p>消除无效笛卡尔积，加上条件：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">select * from employee, dept where employee.dept = dept.id;<br></code></pre></td></tr></table></figure>
-
-<h3 id="2-2-分类"><a href="#2-2-分类" class="headerlink" title="2.2 分类"></a>2.2 分类</h3><ul>
-<li>连接查询<ul>
+<h3 id="分类">2.2 分类</h3>
+<ul>
+<li>连接查询
+<ul>
 <li>内连接：相当于查询A、B的交集</li>
-<li>外连接：<ul>
+<li>外连接：
+<ul>
 <li>左外连接：查询左表所有数据，以及两张表交集部分数据</li>
 <li>右外连接：查询右表所有数据，以及两张表交集部分数据</li>
-</ul>
-</li>
-<li>自连接：<ul>
+</ul></li>
+<li>自连接：
+<ul>
 <li>当前表与自身的连接查询，自连接必须使用表别名</li>
-</ul>
-</li>
-</ul>
-</li>
+</ul></li>
+</ul></li>
 <li>子查询</li>
 </ul>
-<h2 id="3-内连接查询"><a href="#3-内连接查询" class="headerlink" title="3. 内连接查询"></a>3. 内连接查询</h2><ul>
-<li>内连接查询的是两张表交集的部分<ul>
+<h2 id="内连接查询">3. 内连接查询</h2>
+<ul>
+<li>内连接查询的是两张表交集的部分
+<ul>
 <li>隐式内连接：</li>
-</ul>
-</li>
+</ul></li>
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT 字段列表 FROM 表1, 表2 WHERE 条件 ...;<br></code></pre></td></tr></table></figure>
-
 <ul>
 <li>显式内连接：</li>
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT 字段列表 FROM 表1 [ INNER ] JOIN 表2 ON 连接条件 ...;<br></code></pre></td></tr></table></figure>
-
 <ul>
 <li>显式性能比隐式高</li>
 </ul>
 <p>例子：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- 创建dept表，并插入数据<br>create table dept(<br>	id int auto_increment comment &#x27;ID&#x27; primary key,<br>	name varchar(50) not null comment &#x27;部门名称&#x27;<br>)comment &#x27;部门表&#x27;;<br><br>INSERT INTO dept (id, name)<br> VALUES (1, &#x27;研发部&#x27;), (2, &#x27;市场部&#x27;),(3, &#x27;财务部&#x27;), (4, &#x27;销售部&#x27;), (5, &#x27;总经办&#x27;), (6, &#x27;人事部&#x27;);<br> <br> -- 创建emp表，并插入数据<br>create table emp(<br>    id int auto_increment comment &#x27;ID&#x27; primary key,<br>    name varchar(50) not null comment &#x27;姓名&#x27;,<br>    age int comment &#x27;年龄&#x27;,<br>    job varchar(20) comment &#x27;职位&#x27;,<br>    salary int comment &#x27;薪资&#x27;,<br>    entrydate date comment &#x27;入职时间&#x27;,<br>    managerid int comment &#x27;直属领导ID&#x27;,<br>    dept_id int comment &#x27;部门ID&#x27;<br>)comment &#x27;员工表&#x27;;-- 添加外键<br>alter table emp add constraint fk_emp_dept_id foreign key (dept_id) references <br>dept(id);<br><br> INSERT INTO emp (id, name, age, job,salary, entrydate, managerid, dept_id)<br> VALUES<br> (1, &#x27;金庸&#x27;, 66, &#x27;总裁&#x27;,20000, &#x27;2000-01-01&#x27;, null,5),<br> (2, &#x27;张无忌&#x27;, 20, &#x27;项目经理&#x27;,12500, &#x27;2005-12-05&#x27;, 1,1),<br> (3, &#x27;杨逍&#x27;, 33, &#x27;开发&#x27;, 8400,&#x27;2000-11-03&#x27;, 2,1),<br> (4, &#x27;韦一笑&#x27;, 48, &#x27;开发&#x27;,11000, &#x27;2002-02-05&#x27;, 2,1),<br> (5, &#x27;常遇春&#x27;, 43, &#x27;开发&#x27;,10500, &#x27;2004-09-07&#x27;, 3,1),<br> (6, &#x27;小昭&#x27;, 19, &#x27;程序员鼓励师&#x27;,6600, &#x27;2004-10-12&#x27;, 2,1),<br> (7, &#x27;灭绝&#x27;, 60, &#x27;财务总监&#x27;,8500, &#x27;2002-09-12&#x27;, 1,3),<br> (8, &#x27;周芷若&#x27;, 19, &#x27;会计&#x27;,48000, &#x27;2006-06-02&#x27;, 7,3),<br> (9, &#x27;丁敏君&#x27;, 23, &#x27;出纳&#x27;,5250, &#x27;2009-05-13&#x27;, 7,3),<br> (10, &#x27;赵敏&#x27;, 20, &#x27;市场部总监&#x27;,12500, &#x27;2004-10-12&#x27;, 1,2),<br> (11, &#x27;鹿杖客&#x27;, 56, &#x27;职员&#x27;,3750, &#x27;2006-10-03&#x27;, 10,2),<br> (12, &#x27;鹤笔翁&#x27;, 19, &#x27;职员&#x27;,3750, &#x27;2007-05-09&#x27;, 10,2),<br> (13, &#x27;方东白&#x27;, 19, &#x27;职员&#x27;,5500, &#x27;2009-02-12&#x27;, 10,2),<br> (14, &#x27;张三丰&#x27;, 88, &#x27;销售总监&#x27;,14000, &#x27;2004-10-12&#x27;, 1,4),<br> (15, &#x27;俞莲舟&#x27;, 38, &#x27;销售&#x27;,4600, &#x27;2004-10-12&#x27;, 14,4),<br> (16, &#x27;宋远桥&#x27;, 40, &#x27;销售&#x27;,4600, &#x27;2004-10-12&#x27;, 14,4),<br> (17, &#x27;陈友谅&#x27;, 42, null,2000, &#x27;2011-10-12&#x27;, 1,null);<br><br></code></pre></td></tr></table></figure>
-
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- 查询员工姓名，及关联的部门的名称<br>-- 隐式<br>select e.name, d.name from emp as e, dept as d where e.dept_id = d.id;<br>-- 显式<br>select e.name, d.name from emp as e inner join dept as d on e.dept_id = d.id;<br></code></pre></td></tr></table></figure>
-
-<h2 id="4-外连接查询"><a href="#4-外连接查询" class="headerlink" title="4. 外连接查询"></a>4. 外连接查询</h2><ul>
-<li>左外连接：<ul>
+<h2 id="外连接查询">4. 外连接查询</h2>
+<ul>
+<li>左外连接：
+<ul>
 <li>查询左表所有数据，以及两张表交集部分数据</li>
 <li>相当于查询表1的所有数据，包含表1和表2交集部分数据</li>
-</ul>
-</li>
+</ul></li>
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT 字段列表 FROM 表1 LEFT [ OUTER ] JOIN 表2 ON 条件 ...;<br></code></pre></td></tr></table></figure>
-
 <ul>
-<li>右外连接：<ul>
+<li>右外连接：
+<ul>
 <li>查询右表所有数据，以及两张表交集部分数据</li>
-</ul>
-</li>
+</ul></li>
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT 字段列表 FROM 表1 RIGHT [ OUTER ] JOIN 表2 ON 条件 ...;<br></code></pre></td></tr></table></figure>
-
 <p>例子：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- 查询emp表的所有数据，和对应的部门信息（左外连接）<br>-- 左<br>select e.*, d.name from emp as e left outer join dept as d on e.dept_id = d.id;<br>-- 2.查询dept表的所有数据，和对应的员工信息（右外连接）<br>select d.name, e.* from dept d left outer join emp e on e.dept_id = d.id;  <br>-- 这条语句与下面的语句效果一样<br>-- 右<br>select d.name, e.* from emp as e right outer join dept as d on e.dept_id = d.id;<br></code></pre></td></tr></table></figure>
-
 <p>左连接可以查询到没有dept的emp，右连接可以查询到没有emp的dept</p>
-<h2 id="5-自连接查询"><a href="#5-自连接查询" class="headerlink" title="5. 自连接查询"></a>5. 自连接查询</h2><ul>
+<h2 id="自连接查询">5. 自连接查询</h2>
+<ul>
 <li>当前表与自身的连接查询，自连接必须使用表别名</li>
 </ul>
 <p>语法：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT 字段列表 FROM 表A 别名A JOIN 表A 别名B ON 条件 ...;<br></code></pre></td></tr></table></figure>
-
 <ul>
 <li>自连接查询，可以是内连接查询，也可以是外连接查询</li>
 </ul>
 <p>例子：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- 查询员工及其所属领导的名字<br>select a.name, b.name from emp a, emp b where a.managerid = b.id;<br>-- 没有领导的也查询出来<br>select a.name, b.name from emp a left join emp b on a.managerid = b.id;<br></code></pre></td></tr></table></figure>
-
-<h2 id="6-联合查询-union-union-all"><a href="#6-联合查询-union-union-all" class="headerlink" title="6. 联合查询 union, union all"></a>6. 联合查询 union, union all</h2><ul>
-<li><p>把多次查询的结果合并，形成一个新的查询集</p>
-</li>
-<li><p>语法：</p>
-</li>
+<h2 id="联合查询-union-union-all">6. 联合查询 union, union all</h2>
+<ul>
+<li><p>把多次查询的结果合并，形成一个新的查询集</p></li>
+<li><p>语法：</p></li>
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT 字段列表 FROM 表A ...<br>UNION [ALL]<br>SELECT 字段列表 FROM 表B ...;<br><br>-- eg:<br>-- 将薪资低于5000的员工，和年龄大于50岁的员工全部查询出来<br>select * from emp where salary &lt; 5000<br>union <br>select * from emp where age &gt; 50;<br></code></pre></td></tr></table></figure>
-
-<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><ul>
+<h3 id="注意事项">注意事项</h3>
+<ul>
 <li>对于联合查询的多张表的列数必须保持一致，字段类型也需要保持一致。</li>
 <li>UNION ALL 会有重复结果，UNION 不会</li>
 <li>联合查询比使用or效率高，不会使索引失效</li>
 </ul>
-<h2 id="7-子查询"><a href="#7-子查询" class="headerlink" title="7. 子查询"></a>7. 子查询</h2><p>SQL语句中嵌套SELECT语句，称谓嵌套查询，又称子查询。</p>
+<h2 id="子查询">7. 子查询</h2>
+<p>SQL语句中嵌套SELECT语句，称谓嵌套查询，又称子查询。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT * FROM t1 WHERE column1 = ( SELECT column1 FROM t2);<br></code></pre></td></tr></table></figure>
-
-<p><strong>子查询外部的语句可以是 INSERT &#x2F; UPDATE &#x2F; DELETE &#x2F; SELECT 的任何一个</strong></p>
+<p><strong>子查询外部的语句可以是 INSERT / UPDATE / DELETE / SELECT
+的任何一个</strong></p>
 <p>根据子查询结果可以分为：</p>
 <ul>
 <li>标量子查询（子查询结果为单个值）</li>
@@ -423,22 +421,19 @@
 <li>FROM 之后</li>
 <li>SELECT 之后</li>
 </ul>
-<h3 id="7-1-标量子查询"><a href="#7-1-标量子查询" class="headerlink" title="7.1 标量子查询"></a>7.1 标量子查询</h3><ul>
-<li><p>子查询返回的结果是单个值（数字、字符串、日期等）。</p>
+<h3 id="标量子查询">7.1 标量子查询</h3>
 <ul>
-<li>常用操作符：&#x3D; &lt; &gt; &gt; &gt;&#x3D; &lt; &lt;&#x3D;</li>
-</ul>
-</li>
-<li><p>例子：</p>
-</li>
+<li>子查询返回的结果是单个值（数字、字符串、日期等）。
+<ul>
+<li>常用操作符：= &lt; &gt; &gt; &gt;= &lt; &lt;=</li>
+</ul></li>
+<li>例子：</li>
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- 查询销售部所有员工<br>select id from dept where name = &#x27;销售部&#x27;;<br>-- 根据销售部部门ID，查询员工信息<br>select * from emp where dept_id = 4;<br>-- 合并（子查询）<br>select * from emp where dept_id = (select id from dept where name = &#x27;销售部&#x27;);<br><br>-- 查询xxx入职之后的员工信息<br>select * from emp where entrydate &gt; (select entrydate from emp where name = &#x27;方东白&#x27;);<br></code></pre></td></tr></table></figure>
-
-<h3 id="7-2-列子查询"><a href="#7-2-列子查询" class="headerlink" title="7.2 列子查询"></a>7.2 列子查询</h3><ul>
-<li><p>返回的结果是一列（可以是多行）。</p>
-</li>
-<li><p>常用操作符：</p>
-</li>
+<h3 id="列子查询">7.2 列子查询</h3>
+<ul>
+<li><p>返回的结果是一列（可以是多行）。</p></li>
+<li><p>常用操作符：</p></li>
 </ul>
 <table>
 <thead>
@@ -447,7 +442,8 @@
 <th>描述</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>IN</td>
 <td>在指定的集合范围内，多选一</td>
 </tr>
@@ -467,34 +463,30 @@
 <td>ALL</td>
 <td>子查询返回列表的所有值都必须满足</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <p>例子：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- 查询销售部和市场部的所有员工信息<br>select * from emp where dept_id in (select id from dept where name = &#x27;销售部&#x27; or name = &#x27;市场部&#x27;);<br>-- 查询比财务部所有人工资都高的员工信息<br>select * from emp where salary &gt; all(select salary from emp where dept_id = (select id from dept where name = &#x27;财务部&#x27;));<br>-- 查询比研发部任意一人工资高的员工信息<br>select * from emp where salary &gt; any (select salary from emp where dept_id = (select id from dept where name = &#x27;研发部&#x27;));<br></code></pre></td></tr></table></figure>
-
-<h3 id="7-3-行子查询"><a href="#7-3-行子查询" class="headerlink" title="7.3 行子查询"></a>7.3 行子查询</h3><ul>
-<li><p>返回的结果是一行（可以是多列）。</p>
+<h3 id="行子查询">7.3 行子查询</h3>
 <ul>
-<li>常用操作符：&#x3D;, &lt;, &gt;, IN, NOT IN</li>
-</ul>
-</li>
-<li><p>例子：</p>
-</li>
+<li>返回的结果是一行（可以是多列）。
+<ul>
+<li>常用操作符：=, &lt;, &gt;, IN, NOT IN</li>
+</ul></li>
+<li>例子：</li>
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- 查询与xxx的薪资及直属领导相同的员工信息<br>select * from emp where (salary, managerid) = (12500, 1);<br>select * from emp where (salary, managerid) = (select salary, managerid from emp where name = &#x27;张无忌&#x27;);<br></code></pre></td></tr></table></figure>
-
-<h3 id="7-4-表子查询"><a href="#7-4-表子查询" class="headerlink" title="7.4 表子查询"></a>7.4 表子查询</h3><ul>
-<li><p>返回的结果是多行多列</p>
+<h3 id="表子查询">7.4 表子查询</h3>
+<ul>
+<li>返回的结果是多行多列
 <ul>
 <li>常用操作符：IN</li>
-</ul>
-</li>
-<li><p>例子：</p>
-</li>
+</ul></li>
+<li>例子：</li>
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- 查询与xxx1，xxx2的职位和薪资相同的员工<br>select * from emp where (job, salary) in (select job, salary from emp where name = &#x27;鹿杖客&#x27; or name = &#x27;宋远桥&#x27;);<br>-- 查询入职日期是2006-01-01之后的员工，及其部门信息<br>select e.*, d.* from (select * from emp where entrydate &gt; &#x27;2006-01-01&#x27;) as e left join dept as d on e.dept_id = d.id;<br></code></pre></td></tr></table></figure>
-
-<h2 id="8-查询案例"><a href="#8-查询案例" class="headerlink" title="8. 查询案例"></a>8. 查询案例</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><code class="hljs mysql"> create table salgrade(<br>     grade int,<br>     losal int,<br>     hisal int<br> ) comment &#x27;薪资等级表&#x27;;<br> insert into salgrade values (1,0,3000);<br> insert into salgrade values (2,3001,5000);<br> insert into salgrade values (3,5001,8000);<br> insert into salgrade values (4,8001,10000);<br> insert into salgrade values (5,10001,15000);<br> insert into salgrade values (6,15001,20000);<br> insert into salgrade values (7,20001,25000);<br> insert into salgrade values (8,25001,30000);<br> <br>-- 查询员工的姓名、年龄、职位、部门信息。<br>select e.name, e.age, e.job, d.name from emp e, dept d where e.dept_id = d.id;<br>-- 查询年龄小于30岁的员工姓名、年龄、职位、部门信息。<br>select e.name, e.age, e.job, d.name from emp e inner join dept d on e.dept_id = d.id where e.age &lt; 30;<br>-- 查询拥有员工的部门ID、部门名称。<br>select distinct d.id, d.name from emp e, dept d where e.dept_id = d.id;<br>-- 查询所有年龄大于40岁的员工，及其归属的部门名称；如果员工没有分配部门，也需要展示出来。<br>select e.*, d.name from emp e left join dept d on e.dept_id = d.id where e.age &gt; 40;<br>-- 查询所有员工的工资等级。<br>select e.*, s.grade from emp e, salgrade s where e.salary between s.losal and s.hisal; <br>-- 查询&quot;研发部”所有员工的信息及工资等级。<br>select e.*, s.grade <br>from emp e, <br>	 dept d, <br>	 salgrade s <br>where e.dept_id = d.id <br>	and e.salary between s.losal and s.hisal <br>	and d.name = &#x27;研发部&#x27;;<br>-- 查询&quot;研发部”员工的平均工资。<br>select avg(e.salary)<br>from emp e,<br>	 dept d<br>where e.dept_id = d.id<br>	and d.name = &#x27;研发部&#x27;;<br>-- 查询工资比&quot;灭绝&quot;高的员工信息。<br>select *<br>from emp<br>where salary &gt; (select salary<br>                from emp<br>                where name = &#x27;灭绝&#x27;);<br>                <br>-- 查询比平均薪资高的员工信息。<br>select * <br>from emp<br>where salary &gt; (select avg(salary)<br>				from emp);<br>				<br>-- 查询低于本部门平均工资的员工信息。<br><br>select * <br>from emp e2<br>where salary &lt; (select avg(e1.salary)<br>                from emp e1<br>                where e1.dept_id = e2.dept_id);<br>-- 查询所有的部门信息，并统计部门的员工人数。<br>select d.id, d.name, (select count(*)<br>					  from emp e<br>					  where e.dept_id = d.id) &#x27;人数&#x27;<br>from dept d;<br><br><br>-- 查询所有学生的选课情况，展示出学生名称，学号，课程名称<br>-- 表：student,course,student_course<br>select s.name, s.no, c.name<br>from student s,<br>	 student_course sc,<br>	 course c<br>where s.id = sc.studentid<br>	and sc.courseid = c.id;<br></code></pre></td></tr></table></figure>
-
+<h2 id="查询案例">8. 查询案例</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><code class="hljs mysql"> create table salgrade(<br>     grade int,<br>     losal int,<br>     hisal int<br> ) comment &#x27;薪资等级表&#x27;;<br> insert into salgrade values (1,0,3000);<br> insert into salgrade values (2,3001,5000);<br> insert into salgrade values (3,5001,8000);<br> insert into salgrade values (4,8001,10000);<br> insert into salgrade values (5,10001,15000);<br> insert into salgrade values (6,15001,20000);<br> insert into salgrade values (7,20001,25000);<br> insert into salgrade values (8,25001,30000);<br> <br>-- 查询员工的姓名、年龄、职位、部门信息。<br>select e.name, e.age, e.job, d.name from emp e, dept d where e.dept_id = d.id;<br>-- 查询年龄小于30岁的员工姓名、年龄、职位、部门信息。<br>select e.name, e.age, e.job, d.name from emp e inner join dept d on e.dept_id = d.id where e.age &lt; 30;<br>-- 查询拥有员工的部门ID、部门名称。<br>select distinct d.id, d.name from emp e, dept d where e.dept_id = d.id;<br>-- 查询所有年龄大于40岁的员工，及其归属的部门名称；如果员工没有分配部门，也需要展示出来。<br>select e.*, d.name from emp e left join dept d on e.dept_id = d.id where e.age &gt; 40;<br>-- 查询所有员工的工资等级。<br>select e.*, s.grade from emp e, salgrade s where e.salary between s.losal and s.hisal; <br>-- 查询&quot;研发部”所有员工的信息及工资等级。<br>select e.*, s.grade <br>from emp e, <br>	 dept d, <br>	 salgrade s <br>where e.dept_id = d.id <br>	and e.salary between s.losal and s.hisal <br>	and d.name = &#x27;研发部&#x27;;<br>-- 查询&quot;研发部”员工的平均工资。<br>select avg(e.salary)<br>from emp e,<br>	 dept d<br>where e.dept_id = d.id<br>	and d.name = &#x27;研发部&#x27;;<br>-- 查询工资比&quot;灭绝&quot;高的员工信息。<br>select *<br>from emp<br>where salary &gt; (select salary<br>                from emp<br>                where name = &#x27;灭绝&#x27;);<br>                <br>-- 查询比平均薪资高的员工信息。<br>select * <br>from emp<br>where salary &gt; (select avg(salary)<br>				from emp);<br>				<br>-- 查询低于本部门平均工资的员工信息。<br><br>select * <br>from emp e2<br>where salary &lt; (select avg(e1.salary)<br>                from emp e1<br>                where e1.dept_id = e2.dept_id);<br>-- 查询所有的部门信息，并统计部门的员工人数。<br>select d.id, d.name, (select count(*)<br>					  from emp e<br>					  where e.dept_id = d.id) &#x27;人数&#x27;<br>from dept d;<br><br><br>-- 查询所有学生的选课情况，展示出学生名称，学号，课程名称<br>-- 表：student,course,student_course<br>select s.name, s.no, c.name<br>from student s,<br>	 student_course sc,<br>	 course c<br>where s.id = sc.studentid<br>	and sc.courseid = c.id;<br></code></pre></td></tr></table></figure>
 
                 
               </div>

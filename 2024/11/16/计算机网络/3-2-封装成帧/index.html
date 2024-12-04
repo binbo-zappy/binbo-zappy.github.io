@@ -19,12 +19,12 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="3.2 封装成帧1. 帧 封装成帧是指数据链路层给上层交付的协议数据单元添加帧头和帧尾使之成为帧。  帧头和帧尾的作用之一就是帧定界.    2. 透明传输 数据链路层对上层交付的传输数据没有任何限制，就好像数据链路层不存在一样。   面向字节的物理链路使用字节填充（或称字符填充）的方法实现透明传输 面向比特的物理链路使用比特填充的方法实现透明传输。 为了提高帧的传输效率，应当使帧的数据部分的长度">
+    <meta name="description" content="3.2 封装成帧 1. 帧  封装成帧是指数据链路层给上层交付的协议数据单元添加帧头和帧尾使之成为帧。 帧头和帧尾的作用之一就是帧定界.    帧  2. 透明传输  数据链路层对上层交付的传输数据没有任何限制，就好像数据链路层不存在一样。   面向字节的物理链路使用字节填充（或称字符填充）的方法实现透明传输 面向比特的物理链路使用比特填充的方法实现透明传输。 为">
 <meta property="og:type" content="article">
 <meta property="og:title" content="3.2 封装成帧">
 <meta property="og:url" content="http://binbo-zappy.github.io/2024/11/16/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/3-2-%E5%B0%81%E8%A3%85%E6%88%90%E5%B8%A7/index.html">
 <meta property="og:site_name" content="Binbo">
-<meta property="og:description" content="3.2 封装成帧1. 帧 封装成帧是指数据链路层给上层交付的协议数据单元添加帧头和帧尾使之成为帧。  帧头和帧尾的作用之一就是帧定界.    2. 透明传输 数据链路层对上层交付的传输数据没有任何限制，就好像数据链路层不存在一样。   面向字节的物理链路使用字节填充（或称字符填充）的方法实现透明传输 面向比特的物理链路使用比特填充的方法实现透明传输。 为了提高帧的传输效率，应当使帧的数据部分的长度">
+<meta property="og:description" content="3.2 封装成帧 1. 帧  封装成帧是指数据链路层给上层交付的协议数据单元添加帧头和帧尾使之成为帧。 帧头和帧尾的作用之一就是帧定界.    帧  2. 透明传输  数据链路层对上层交付的传输数据没有任何限制，就好像数据链路层不存在一样。   面向字节的物理链路使用字节填充（或称字符填充）的方法实现透明传输 面向比特的物理链路使用比特填充的方法实现透明传输。 为">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/network.jpg">
 <meta property="article:published_time" content="2024-11-16T12:10:05.000Z">
@@ -225,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          223 字
+          228 字
         
       </span>
     
@@ -278,24 +278,32 @@
             
               <div class="markdown-body">
                 
-                <h1 id="3-2-封装成帧"><a href="#3-2-封装成帧" class="headerlink" title="3.2 封装成帧"></a>3.2 封装成帧</h1><h2 id="1-帧"><a href="#1-帧" class="headerlink" title="1. 帧"></a>1. 帧</h2><ul>
-<li><p>封装成帧是指数据链路层给上层交付的协议数据单元添加帧头和帧尾使之成为帧。</p>
-</li>
-<li><p>帧头和帧尾的作用之一就是帧定界.</p>
-</li>
+                <h1 id="封装成帧">3.2 封装成帧</h1>
+<h2 id="帧">1. 帧</h2>
+<ul>
+<li><p>封装成帧是指数据链路层给上层交付的协议数据单元添加帧头和帧尾使之成为帧。</p></li>
+<li><p>帧头和帧尾的作用之一就是帧定界.</p></li>
 </ul>
-<p><img src="/2024/11/16/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/3-2-%E5%B0%81%E8%A3%85%E6%88%90%E5%B8%A7/image-20241117092740511.png" srcset="/img/loading.gif" lazyload alt="帧"></p>
-<h2 id="2-透明传输"><a href="#2-透明传输" class="headerlink" title="2. 透明传输"></a>2. 透明传输</h2><ul>
+<figure>
+<img src="/2024/11/16/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/3-2-%E5%B0%81%E8%A3%85%E6%88%90%E5%B8%A7/image-20241117092740511.png" srcset="/img/loading.gif" lazyload alt="帧">
+<figcaption aria-hidden="true">帧</figcaption>
+</figure>
+<h2 id="透明传输">2. 透明传输</h2>
+<ul>
 <li>数据链路层对上层交付的传输数据没有任何限制，就好像数据链路层不存在一样。</li>
 </ul>
-<ol>
+<ol type="1">
 <li>面向字节的物理链路使用字节填充（或称字符填充）的方法实现透明传输</li>
 <li>面向比特的物理链路使用比特填充的方法实现透明传输。</li>
 <li>为了提高帧的传输效率，应当使帧的数据部分的长度尽可能大些。</li>
 </ol>
-<p><img src="/2024/11/16/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/3-2-%E5%B0%81%E8%A3%85%E6%88%90%E5%B8%A7/image-20241117093119688.png" srcset="/img/loading.gif" lazyload alt="透明传输"></p>
+<figure>
+<img src="/2024/11/16/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/3-2-%E5%B0%81%E8%A3%85%E6%88%90%E5%B8%A7/image-20241117093119688.png" srcset="/img/loading.gif" lazyload alt="透明传输">
+<figcaption aria-hidden="true">透明传输</figcaption>
+</figure>
 <ul>
-<li>考虑到差错控制等多种因素，每一种数据链路层协议都规定了帧的数据部分的长度上限，即最大传送单元MTU (Maximum Transfer Unit)</li>
+<li>考虑到差错控制等多种因素，每一种数据链路层协议都规定了帧的数据部分的长度上限，即最大传送单元MTU
+(Maximum Transfer Unit)</li>
 </ul>
 
                 

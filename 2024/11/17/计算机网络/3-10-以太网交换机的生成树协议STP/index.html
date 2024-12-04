@@ -19,12 +19,12 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="3.10 以太网交换机的生成树协议STP 为提高以太网的可靠性，需要添加冗余链路，但添加冗余链路会形成网络环路，网络环路会造成很多问题： 广播风暴 大量消耗网络资源，使得网络无法正常转发其他数据帧：   主机收到重复的广播帧 大量消耗主机资源   交换机的帧交换表震荡（漂移） 某记录在错误的记录之间来回震荡     STP正是为了解决这一问题而出现。 不论交换机之间采用怎样的物理连接，交换机都能够">
+    <meta name="description" content="3.10 以太网交换机的生成树协议STP  为提高以太网的可靠性，需要添加冗余链路，但添加冗余链路会形成网络环路，网络环路会造成很多问题：  广播风暴  大量消耗网络资源，使得网络无法正常转发其他数据帧：  主机收到重复的广播帧  大量消耗主机资源  交换机的帧交换表震荡（漂移）  某记录在错误的记录之间来回震荡   STP正是为了解决这一问题而出现。  不">
 <meta property="og:type" content="article">
 <meta property="og:title" content="3.10 以太网交换机的生成树协议STP">
 <meta property="og:url" content="http://binbo-zappy.github.io/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/3-10-%E4%BB%A5%E5%A4%AA%E7%BD%91%E4%BA%A4%E6%8D%A2%E6%9C%BA%E7%9A%84%E7%94%9F%E6%88%90%E6%A0%91%E5%8D%8F%E8%AE%AESTP/index.html">
 <meta property="og:site_name" content="Binbo">
-<meta property="og:description" content="3.10 以太网交换机的生成树协议STP 为提高以太网的可靠性，需要添加冗余链路，但添加冗余链路会形成网络环路，网络环路会造成很多问题： 广播风暴 大量消耗网络资源，使得网络无法正常转发其他数据帧：   主机收到重复的广播帧 大量消耗主机资源   交换机的帧交换表震荡（漂移） 某记录在错误的记录之间来回震荡     STP正是为了解决这一问题而出现。 不论交换机之间采用怎样的物理连接，交换机都能够">
+<meta property="og:description" content="3.10 以太网交换机的生成树协议STP  为提高以太网的可靠性，需要添加冗余链路，但添加冗余链路会形成网络环路，网络环路会造成很多问题：  广播风暴  大量消耗网络资源，使得网络无法正常转发其他数据帧：  主机收到重复的广播帧  大量消耗主机资源  交换机的帧交换表震荡（漂移）  某记录在错误的记录之间来回震荡   STP正是为了解决这一问题而出现。  不">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/network.jpg">
 <meta property="article:published_time" content="2024-11-17T07:14:53.000Z">
@@ -278,28 +278,30 @@
             
               <div class="markdown-body">
                 
-                <h2 id="3-10-以太网交换机的生成树协议STP"><a href="#3-10-以太网交换机的生成树协议STP" class="headerlink" title="3.10 以太网交换机的生成树协议STP"></a>3.10 以太网交换机的生成树协议STP</h2><ul>
-<li>为提高以太网的可靠性，需要添加冗余链路，但添加冗余链路会形成网络环路，网络环路会造成很多问题：<ul>
-<li>广播风暴<ul>
+                <h2 id="以太网交换机的生成树协议stp">3.10
+以太网交换机的生成树协议STP</h2>
+<ul>
+<li>为提高以太网的可靠性，需要添加冗余链路，但添加冗余链路会形成网络环路，网络环路会造成很多问题：
+<ul>
+<li>广播风暴
+<ul>
 <li>大量消耗网络资源，使得网络无法正常转发其他数据帧：</li>
-</ul>
-</li>
-<li>主机收到重复的广播帧<ul>
+</ul></li>
+<li>主机收到重复的广播帧
+<ul>
 <li>大量消耗主机资源</li>
-</ul>
-</li>
-<li>交换机的帧交换表震荡（漂移）<ul>
+</ul></li>
+<li>交换机的帧交换表震荡（漂移）
+<ul>
 <li>某记录在错误的记录之间来回震荡</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>STP正是为了解决这一问题而出现。<ul>
+</ul></li>
+</ul></li>
+<li>STP正是为了解决这一问题而出现。
+<ul>
 <li>不论交换机之间采用怎样的物理连接，交换机都能够自动计算并构建一个逻辑上没有环路的网络，其逻辑拓扑结构必须是树型的（无逻辑环路）</li>
 <li>最终生成的树型逻辑拓扑要确保连通整个网络。</li>
 <li>当首次连接交换机或网络物理拓扑发生变化时（有可能是人为改变或故障），交换机都将进行生成树的重新计算。</li>
-</ul>
-</li>
+</ul></li>
 </ul>
 
                 

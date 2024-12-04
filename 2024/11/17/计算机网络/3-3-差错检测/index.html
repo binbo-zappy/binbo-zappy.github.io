@@ -19,12 +19,12 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="3.3 差错检测 实际的通信链路都不是理想的，比特在传输过程中可能会产生差错；1可能会变成0，而0也可能变成1。这称为比特差错。  1. 误码率 在一段时间内，传输错误的比特占所传输比特总数的比率称为误码率BER(Bit Error Rate)。  使用差错检测码来检测数据在传输过程中是否产生了比特差错，是数据链路层所要解决的重要问题之一。   2. 奇偶校验 在待发送的数据后面添加1位奇偶校验位">
+    <meta name="description" content="3.3 差错检测  实际的通信链路都不是理想的，比特在传输过程中可能会产生差错；1可能会变成0，而0也可能变成1。这称为比特差错。  1. 误码率  在一段时间内，传输错误的比特占所传输比特总数的比率称为误码率BER(Bit Error Rate)。 使用差错检测码来检测数据在传输过程中是否产生了比特差错，是数据链路层所要解决的重要问题之一。  2. 奇偶校验  在待发送的">
 <meta property="og:type" content="article">
 <meta property="og:title" content="3.3 差错检测">
 <meta property="og:url" content="http://binbo-zappy.github.io/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/3-3-%E5%B7%AE%E9%94%99%E6%A3%80%E6%B5%8B/index.html">
 <meta property="og:site_name" content="Binbo">
-<meta property="og:description" content="3.3 差错检测 实际的通信链路都不是理想的，比特在传输过程中可能会产生差错；1可能会变成0，而0也可能变成1。这称为比特差错。  1. 误码率 在一段时间内，传输错误的比特占所传输比特总数的比率称为误码率BER(Bit Error Rate)。  使用差错检测码来检测数据在传输过程中是否产生了比特差错，是数据链路层所要解决的重要问题之一。   2. 奇偶校验 在待发送的数据后面添加1位奇偶校验位">
+<meta property="og:description" content="3.3 差错检测  实际的通信链路都不是理想的，比特在传输过程中可能会产生差错；1可能会变成0，而0也可能变成1。这称为比特差错。  1. 误码率  在一段时间内，传输错误的比特占所传输比特总数的比率称为误码率BER(Bit Error Rate)。 使用差错检测码来检测数据在传输过程中是否产生了比特差错，是数据链路层所要解决的重要问题之一。  2. 奇偶校验  在待发送的">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/network.jpg">
 <meta property="article:published_time" content="2024-11-17T01:33:51.000Z">
@@ -225,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          579 字
+          585 字
         
       </span>
     
@@ -278,19 +278,21 @@
             
               <div class="markdown-body">
                 
-                <h1 id="3-3-差错检测"><a href="#3-3-差错检测" class="headerlink" title="3.3 差错检测"></a>3.3 差错检测</h1><ul>
+                <h1 id="差错检测">3.3 差错检测</h1>
+<ul>
 <li>实际的通信链路都不是理想的，比特在传输过程中可能会产生差错；1可能会变成0，而0也可能变成1。这称为比特差错。</li>
 </ul>
-<h2 id="1-误码率"><a href="#1-误码率" class="headerlink" title="1. 误码率"></a>1. 误码率</h2><ul>
-<li><p>在一段时间内，传输错误的比特占所传输比特总数的比率称为误码率BER(Bit Error Rate)。</p>
-</li>
-<li><p>使用<strong>差错检测码</strong>来检测数据在传输过程中是否产生了比特差错，是数据链路层所要解决的重要问题之一。</p>
-</li>
+<h2 id="误码率">1. 误码率</h2>
+<ul>
+<li><p>在一段时间内，传输错误的比特占所传输比特总数的比率称为误码率BER(Bit
+Error Rate)。</p></li>
+<li><p>使用<strong>差错检测码</strong>来检测数据在传输过程中是否产生了比特差错，是数据链路层所要解决的重要问题之一。</p></li>
 </ul>
-<h2 id="2-奇偶校验"><a href="#2-奇偶校验" class="headerlink" title="2. 奇偶校验"></a>2. 奇偶校验</h2><ul>
+<h2 id="奇偶校验">2. 奇偶校验</h2>
+<ul>
 <li>在待发送的数据后面添加1位奇偶校验位，使整个数据（包括所添加的校验位在内）中”1”的个数为奇数（奇校验）或偶数（偶校验）。</li>
 </ul>
-<ol>
+<ol type="1">
 <li>如果有奇数个位发生误码，则奇偶性发生变化，可以检查出误码；</li>
 <li>如果有偶数个位发生误码，则奇偶性不发生变化，不能检查出误码</li>
 </ol>
@@ -298,18 +300,26 @@
 <li>缺陷：漏检率较高</li>
 </ul>
 <p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/3-3-%E5%B7%AE%E9%94%99%E6%A3%80%E6%B5%8B/image-20241117100050296.png" srcset="/img/loading.gif" lazyload></p>
-<h2 id="3-循环冗余校验CRC-Cyclic-Redundancy-Check"><a href="#3-循环冗余校验CRC-Cyclic-Redundancy-Check" class="headerlink" title="3. 循环冗余校验CRC(Cyclic Redundancy Check)"></a>3. 循环冗余校验CRC(Cyclic Redundancy Check)</h2><ol>
+<h2 id="循环冗余校验crccyclic-redundancy-check">3.
+循环冗余校验CRC(Cyclic Redundancy Check)</h2>
+<ol type="1">
 <li>收发双方约定好一个生成多项式G(x)</li>
 <li>发送方基于待发送的数据和生成多项式计算出差错检测码（冗余码），将其添加到待传输数据的后面一起传输</li>
 <li>接收方通过生成多项式来计算收到的数据是否产生了误码</li>
 </ol>
-<p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/3-3-%E5%B7%AE%E9%94%99%E6%A3%80%E6%B5%8B/image-20241117100258487.png" srcset="/img/loading.gif" lazyload alt="CRC"></p>
-<p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/3-3-%E5%B7%AE%E9%94%99%E6%A3%80%E6%B5%8B/image-20241117100334787.png" srcset="/img/loading.gif" lazyload alt="生成多项式"></p>
+<figure>
+<img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/3-3-%E5%B7%AE%E9%94%99%E6%A3%80%E6%B5%8B/image-20241117100258487.png" srcset="/img/loading.gif" lazyload alt="CRC">
+<figcaption aria-hidden="true">CRC</figcaption>
+</figure>
+<figure>
+<img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/3-3-%E5%B7%AE%E9%94%99%E6%A3%80%E6%B5%8B/image-20241117100334787.png" srcset="/img/loading.gif" lazyload alt="生成多项式">
+<figcaption aria-hidden="true">生成多项式</figcaption>
+</figure>
 <p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/3-3-%E5%B7%AE%E9%94%99%E6%A3%80%E6%B5%8B/image-20241117100543010.png" srcset="/img/loading.gif" lazyload></p>
 <ul>
 <li><strong>做除法的意思是，做异或运算</strong></li>
 </ul>
-<ol>
+<ol type="1">
 <li>检错码只能检测出帧在传输过程中出现了差错，但并不能定位错误，因此无法纠正错误。</li>
 <li>要想纠正传输中的差错，可以使用冗余信息更多的纠错码进行前向纠错。但纠错码的开销比较大，在计算机网络中较少使用。</li>
 <li>循环冗余校验CRC有很好的检错能力（漏检率非常低），虽然计算比较复杂，但非常易于用硬件实现，因此被广泛应用于数据链路层。</li>

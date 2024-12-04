@@ -1,0 +1,896 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="多步 TD 目标 首先回顾一下 SARSA 算法。给定五元组\((s_t, a_t, r_t, s_{t+1}, a_{t+1})\), SARSA 计算 TD 目标： \(\hat{y}_t &#x3D; r_t + \gamma \cdot q(s_{t+1}, a_{t+1}; \boldsymbol{w}).\) 公式中只用到一个奖励\(r_t\),这样得到的\(\hat{y}_t\)叫做">
+<meta property="og:type" content="article">
+<meta property="og:title" content="4.3 多步 TD目标">
+<meta property="og:url" content="http://binbo-zappy.github.io/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/4-3-%E5%A4%9A%E6%AD%A5-TD%E7%9B%AE%E6%A0%87/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="多步 TD 目标 首先回顾一下 SARSA 算法。给定五元组\((s_t, a_t, r_t, s_{t+1}, a_{t+1})\), SARSA 计算 TD 目标： \(\hat{y}_t &#x3D; r_t + \gamma \cdot q(s_{t+1}, a_{t+1}; \boldsymbol{w}).\) 公式中只用到一个奖励\(r_t\),这样得到的\(\hat{y}_t\)叫做">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/RL-WSS.png">
+<meta property="article:published_time" content="2024-12-04T08:02:49.000Z">
+<meta property="article:modified_time" content="2024-12-04T10:57:38.652Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="RL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/RL-WSS.png">
+  
+  
+  
+  <title>4.3 多步 TD目标 - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="4.3 多步 TD目标"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-12-04 16:02" pubdate>
+          2024年12月4日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          24 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">4.3 多步 TD目标</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="多步-td-目标">多步 TD 目标</h1>
+<p>首先回顾一下 SARSA 算法。给定五元组<span class="math inline">\((s_t,
+a_t, r_t, s_{t+1}, a_{t+1})\)</span>, SARSA 计算 TD 目标：</p>
+<p><span class="math inline">\(\hat{y}_t = r_t + \gamma \cdot q(s_{t+1},
+a_{t+1}; \boldsymbol{w}).\)</span></p>
+<p>公式中只用到一个奖励<span class="math inline">\(r_t\)</span>,这样得到的<span class="math inline">\(\hat{y}_t\)</span>叫做单步 TD 目标。多步 TD
+目标用<span class="math inline">\(m\)</span>个奖励可以视作单步 TD
+目标的推广。下面我们推导多步 TD 目标。</p>
+<h2 id="数学推导">数学推导：</h2>
+<p>设一局游戏的长度为<span class="math inline">\(n\)</span>。根据定义，<span class="math inline">\(t\)</span>时刻的回报<span class="math inline">\(U_t\)</span>是<span class="math inline">\(t\)</span>时刻之后的所有奖励的加权和：</p>
+<p><span class="math inline">\(U_t = R_t + \gamma R_{t+1} + \gamma^2
+R_{t+2} + \cdots + \gamma^{n-t} R_n.\)</span></p>
+<p>同理，<span class="math inline">\(t+m\)</span>时刻的回报可以写成：</p>
+<p><span class="math inline">\(U_{t+m} = R_{t+m} + \gamma R_{t+m+1} +
+\gamma^2 R_{t+m+2} + \cdots + \gamma^{n-t-m} R_n.\)</span></p>
+<p>下面我们推导两个回报的关系。把<span class="math inline">\(U_t\)</span>写成：</p>
+<p><span class="math inline">\(\begin{align*}
+U_{t} &amp;= \left(R_{t} + \gamma R_{t+1} + \cdots + \gamma^{m-1}
+R_{t+m-1}\right) + \left(\gamma^{m} R_{t+m} + \cdots + \gamma^{n-t}
+R_{n}\right) \\
+&amp;= \left(\sum_{i=0}^{m-1} \gamma^{i} R_{t+i}\right) + \gamma^{m}
+\underbrace{\left(R_{t+m} + \gamma R_{t+m+1} + \cdots + \gamma^{n-t-m}
+R_{n}\right)}_{\text{等于} U_{t+m}}.
+\end{align*}\)</span></p>
+<p>因此，回报可以写成这种形式：</p>
+<p><span class="math inline">\(U_t = ( \sum_{i=0}^{m-1} \gamma^i R_{t+i}
+) + \gamma^m U_{t+m}.\)</span></p>
+<p>动作价值函数<span class="math inline">\(Q_\pi(s_t,
+a_t)\)</span>是回报<span class="math inline">\(U_t\)</span>的期望，而<span class="math inline">\(Q_\pi(s_{t+m}, a_{t+m})\)</span>是回报<span class="math inline">\(U_{t+m}\)</span>的期望。利用公式，再按照贝尔曼方程的证明，不难得出下面的定理：</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/4-3-%E5%A4%9A%E6%AD%A5-TD%E7%9B%AE%E6%A0%87/1733200971858-f2d763c8-9406-4c2c-986a-4a5acff344b4.png" srcset="/img/loading.gif" lazyload></p>
+<p>设<span class="math inline">\(R_k\)</span>是<span class="math inline">\(S_k, A_k\)</span>的函数，<span class="math inline">\(\forall k = 1, \cdots, n\)</span>。那么</p>
+<p><span class="math inline">\(\underbrace{Q_\pi(s_t, a_t)}_{U_t
+\text{的期望}} = \mathbb{E} \left[ \left( \sum_{i=0}^{m-1} \gamma^i
+R_{t+i} \right) + \gamma^m \cdot \underbrace{Q_\pi(S_{t+m},
+A_{t+m})}_{U_{t+m} \text{的期望}} \bigg \| S_t = s_t, A_t = a_t
+\right].\)</span></p>
+<p>公式中的期望是关于随机变量<span class="math inline">\(S_{t+1},
+A_{t+1}, \cdots, S_{t+m}, A_{t+m}\)</span>求的。</p>
+<p>注 回报<span class="math inline">\(U_t\)</span>的随机性来自于<span class="math inline">\(t\)</span>到<span class="math inline">\(n\)</span>时刻的状态和动作：</p>
+<p><span class="math inline">\(S_t, A_t, S_{t+1}, A_{t+1}, \cdots,
+S_{t+m}, A_{t+m}, S_{t+m+1}, A_{t+m+1}, \cdots, S_n, A_n.\)</span></p>
+<p>定理中把<span class="math inline">\(S_t = s_t\)</span>和<span class="math inline">\(A_t = a_t\)</span>看做是观测值，用期望消掉<span class="math inline">\(S_{t+1}, A_{t+1}, \cdots, S_{t+m},
+A_{t+m}\)</span>, 而<span class="math inline">\(Q_\pi(S_{t+m},
+A_{t+m})\)</span>则消掉了剩余的随机变量<span class="math inline">\(S_{t+m+1}, A_{t+m+1}, \cdots, S_n,
+A_n\)</span>。</p>
+<h2 id="多步-td目标">多步 TD目标：</h2>
+<p>我们对定理中的期望做蒙特卡洛近似，然后再用价值网络<span class="math inline">\(q(s, a;
+\boldsymbol{w})\)</span>近似动作价值函数<span class="math inline">\(Q_\pi(s, a)\)</span>。具体做法如下：</p>
+<ul>
+<li>在<span class="math inline">\(t\)</span>时刻，价值网络做出预测<span class="math inline">\(\hat{q}_t = q(s_t, a_t; \boldsymbol{w})\)</span>,
+它是对<span class="math inline">\(Q_\pi(s_t, a_t)\)</span>的估计。</li>
+<li>已知当前状态<span class="math inline">\(s_t\)</span>, 用策略<span class="math inline">\(\pi\)</span>控制智能体与环境交互<span class="math inline">\(m\)</span>次，得到轨迹<span class="math inline">\(r_t, s_{t+1}, a_{t+1}, r_{t+1}, \cdots, s_{t+m-1},
+a_{t+m-1}, r_{t+m-1}, s_{t+m}, a_{t+m}\)</span>.</li>
+<li>在<span class="math inline">\(t+m\)</span>时刻，用观测到的轨迹对定理中的期望做蒙特卡洛近似，把近似的结果记作：</li>
+</ul>
+<p><span class="math inline">\(\left(\sum_{i=0}^{m-1} \gamma^i
+r_{t+i}\right) + \gamma^m \cdot Q_\pi(s_{t+m}, a_{t+m}).\)</span></p>
+<ul>
+<li>进一步用<span class="math inline">\(q(s_{t+m}, a_{t+m};
+\boldsymbol{w})\)</span>近似<span class="math inline">\(Q_\pi(s_{t+m},
+a_{t+m})\)</span>, 得到：</li>
+</ul>
+<p><span class="math inline">\(\hat{y}_t \triangleq
+\left(\sum_{i=0}^{m-1} \gamma^i r_{t+i}\right) + \gamma^m \cdot
+q(s_{t+m}, a_{t+m}; \boldsymbol{w}).\)</span></p>
+<p>把<span class="math inline">\(\hat{y}_t\)</span>称作<span class="math inline">\(m\)</span>步TD 目标。</p>
+<p><span class="math inline">\(\hat{q}_t = q(s_t, a_t;
+\boldsymbol{w})\)</span>和<span class="math inline">\(\hat{y}_t\)</span>分别是价值网络在<span class="math inline">\(t\)</span>时刻和<span class="math inline">\(t+m\)</span>时刻做出的预测，两者都是对<span class="math inline">\(Q_\pi(s_t, a_t)\)</span>的估计值。<span class="math inline">\(\hat{q}_t\)</span>是纯粹的预测，而<span class="math inline">\(\hat{y}_t\)</span>则基于<span class="math inline">\(m\)</span>组实际观测，因此<span class="math inline">\(\hat{y}_t\)</span>比<span class="math inline">\(\hat{q}_t\)</span>更可靠。我们鼓励<span class="math inline">\(\hat{q}_t\)</span>接近<span class="math inline">\(\hat{y}_t\)</span>。设损失函数为：</p>
+<p><span class="math inline">\(L(\boldsymbol{w}) \triangleq \frac{1}{2}
+\Big[q(s_t, a_t; \boldsymbol{w}) - \hat{y}_t\Big]^2.\)</span></p>
+<p>做一步梯度下降更新价值网络参数<span class="math inline">\(\boldsymbol{w}\)</span>:</p>
+<p><span class="math inline">\(\boldsymbol{w} \leftarrow \boldsymbol{w}
+- \alpha \cdot (\hat{q}_t - \hat{y}_t) \cdot \nabla_{\boldsymbol{w}}
+q(s_t, a_t; \boldsymbol{w}).\)</span></p>
+<p><strong>训练流程</strong>：</p>
+<p>设当前价值网络的参数为<span class="math inline">\(\boldsymbol{w}_{\text{now}}\)</span>,
+当前策略为<span class="math inline">\(\pi_{\text{now}}\)</span>。执行以下步骤更新价值网络和策略。</p>
+<ol type="1">
+<li>用策略网络<span class="math inline">\(\pi_{\text{now}}\)</span>控制智能体与环境交互，完成一个回合，得到轨迹<span class="math inline">\(s_1, a_1, r_1, s_2, a_2, r_2, \cdots, s_n, a_n,
+r_n\)</span>.</li>
+<li>对于所有的<span class="math inline">\(t = 1, \cdots, n-m\)</span>,
+计算<span class="math inline">\(\hat{q}_t = q(s_t, a_t;
+\boldsymbol{w}_{\text{now}})\)</span>.<br>
+3.对于所有的<span class="math inline">\(t = 1, \cdots,
+n-m\)</span>,计算多步 TD 目标和 TD 误差：</li>
+</ol>
+<p><span class="math inline">\(\hat{y}_t = \sum_{i=0}^{m-1} \gamma^i
+r_{t+i} + \gamma^m \hat{q}_{t+m}, \quad \delta_t = \hat{q}_t -
+\hat{y}_t.\)</span></p>
+<ol start="4" type="1">
+<li>对于所有的<span class="math inline">\(t = 1, \cdots, n-m\)</span>,
+对价值网络<span class="math inline">\(q\)</span>做反向传播，计算<span class="math inline">\(q\)</span>关于<span class="math inline">\(\boldsymbol{w}\)</span>的梯度：<span class="math inline">\(\nabla_{\boldsymbol{w}} q(s_t, a_t;
+\boldsymbol{w}_{\text{now}})\)</span>.</li>
+<li>更新价值网络参数：</li>
+</ol>
+<p><span class="math inline">\(\boldsymbol{w}_{\text{new}} \leftarrow
+\boldsymbol{w}_{\text{now}} - \alpha \cdot \sum_{t=1}^{n-m} \delta_t
+\cdot \nabla_{\boldsymbol{w}} q(s_t, a_t;
+\boldsymbol{w}_{\text{now}}).\)</span></p>
+<ol start="6" type="1">
+<li>用某种算法更新策略函数<span class="math inline">\(\pi\)</span>。该算法与 SARSA 算法无关。</li>
+</ol>
+<h2 id="蒙特卡洛与自举">蒙特卡洛与自举</h2>
+<p>上一节介绍了多步 TD 目标。单步 TD 目标、回报是多步 TD
+目标的两种特例。如下图所示，如果设<span class="math inline">\(m=1\)</span>,那么多步 TD 目标变成单步 TD
+目标。如果设<span class="math inline">\(m=n-t+1\)</span>,那么多步 TD
+目标变成实际观测的回报<span class="math inline">\(u_t\)</span>。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/4-3-%E5%A4%9A%E6%AD%A5-TD%E7%9B%AE%E6%A0%87/1733201036864-2bc98eb5-101c-4e51-b254-dfd667733d36.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="蒙特卡洛">蒙特卡洛</h3>
+<p>训练价值网络<span class="math inline">\(q(s, a;
+\boldsymbol{w})\)</span>的时候，我们可以将一局游戏进行到底，观测到所有的奖励<span class="math inline">\(r_1, \cdots, r_n\)</span>,然后计算回报<span class="math inline">\(u_t = \sum_{i=0}^{n-t} \gamma^i
+r_{t+i}\)</span>。拿<span class="math inline">\(u_t\)</span>作为目标，鼓励价值网络<span class="math inline">\(q(s_t, a_t; \boldsymbol{w})\)</span>接近<span class="math inline">\(u_t\)</span>。定义损失函数：</p>
+<p><span class="math inline">\(L(\boldsymbol{w}) = \frac{1}{2}
+\left[q(s_t, a_t; \boldsymbol{w}) - u_t\right]^2.\)</span></p>
+<p>然后做一次梯度下降更新<span class="math inline">\(\boldsymbol{w}\)</span>:</p>
+<p><span class="math inline">\(\boldsymbol{w} \leftarrow \boldsymbol{w}
+- \alpha \cdot \nabla_{\boldsymbol{w}} L(\boldsymbol{w}),\)</span></p>
+<p>这样可以让价值网络的预测<span class="math inline">\(q(s_t, a_t;
+\boldsymbol{w})\)</span>更接近<span class="math inline">\(u_t\)</span>。这种训练价值网络的方法不是 TD。</p>
+<p>在强化学习中，训练价值网络的时候以<span class="math inline">\(u_t\)</span>作为目标，这种方式被称作“蒙特卡洛”。原因是这样的，动作价值函数可以写作<span class="math inline">\(Q_{\pi}(s_{t}, a_{t}) = \mathbb{E}[U_{t} \mid
+S_{t} = s_{t}, A_{t} = a_{t}].\)</span>, 而我们用实际观测<span class="math inline">\(u_t\)</span>去近似期望，这就是典型的蒙特卡洛近似。</p>
+<p>蒙特卡洛的好处是无偏性：<span class="math inline">\(u_t\)</span>是<span class="math inline">\(Q_\pi(s_t, a_t)\)</span>的无偏估计。由于<span class="math inline">\(u_t\)</span>的无偏性，拿<span class="math inline">\(u_t\)</span>作为目标训练价值网络，得到的价值网络也是无偏的。</p>
+<p>蒙特卡洛的坏处是方差大。随机变量<span class="math inline">\(U_t\)</span>依赖于<span class="math inline">\(S_{t+1}, A_{t+1}, \cdots, S_n,
+A_n\)</span>这些随机变量，其中不确定性很大。观测值<span class="math inline">\(u_t\)</span>虽然是<span class="math inline">\(U_t\)</span>的无偏估计，但可能实际上离<span class="math inline">\(\mathbb{E}\{U_t\}\)</span>很远。</p>
+<p>因此，拿<span class="math inline">\(u_t\)</span>作为目标训练价值网络，收敛会很慢。</p>
+<h3 id="自举">自举</h3>
+<p>在介绍价值学习的自举之前，先解释一下什么叫自举。大家可能经常在强化学习和统计学的文章里见到
+bootstrapping 这个词。它的字面意思是“拔自己的鞋带，把自己举起来”。所以
+bootstrapping 翻译成“自举”,
+即自己把自己举起来。自举听起来很荒谬。即使你“力拔山兮气盖世”,你也没办法拔自己的鞋带，把自己举起来。虽然自举乍看起来不现实，但是在统计和
+机器学习 是可以做到自举的；自举在统计和机器学习里面非常常用。</p>
+<p>在强化学习中，“自举”的意思是“用一个估算去更新同类的估算”,类似于“自己把自己给举起来”。SARSA
+使用的单步 TD 目标定义为：</p>
+<p>SARSA 鼓励<span class="math inline">\(q(s_t, a_t;
+\boldsymbol{w})\)</span>接近<span class="math inline">\(\hat{y}_t\)</span>, 所以定义损失函数：</p>
+<p><span class="math inline">\(L(w) = \frac{1}{2} \left[q(s_t, a_t;
+\boldsymbol{w}) - \hat{y}_t\right]^2.\)</span></p>
+<p>TD 目标<span class="math inline">\(\hat{y}_t\)</span>的一部分是价值网络做出的估计<span class="math inline">\(\gamma \cdot q(s_{t+1}, a_{t+1};
+\boldsymbol{w})\)</span>, 然后 SARSA 让<span class="math inline">\(q(s_t, a_t; \boldsymbol{w})\)</span>去拟合<span class="math inline">\(\hat{y}_t\)</span>。这就是用价值网络自己做出的估计去更新价值网络自己，这属于“自举”。(严格地说，TD
+目标<span class="math inline">\(\hat{y}_t\)</span>中既有自举的成分，也有蒙特卡洛的成分。TD
+目标中的<span class="math inline">\(\gamma \cdot q(s_{t+1}, a_{t+1};
+\boldsymbol{w})\)</span>是自举，因为它拿价值网络自己的估计作为目标。TD
+目标中的<span class="math inline">\(r_t\)</span>是实际观测，它是对<span class="math inline">\(\mathbb{E}[R_t]\)</span>的蒙特卡洛。)</p>
+<p>自举的好处是方差小。单步 TD 目标的随机性只来自于<span class="math inline">\(S_{t+1}, A_{t+1}\)</span>, 而回报<span class="math inline">\(U_t\)</span>的随机性来自于<span class="math inline">\(S_{t+1}, A_{t+1}, \cdots, S_n,
+A_n\)</span>。很显然，单步 TD
+目标的随机性较小，因此方差较小。用自举训练价值网络，收敛比较快。</p>
+<p>自举的坏处是有偏差。价值网络<span class="math inline">\(q(s, a;
+\boldsymbol{w})\)</span>是对动作价值<span class="math inline">\(Q_\pi(s,
+a)\)</span>的近似。最理想的情况下，<span class="math inline">\(q(s, a;
+\boldsymbol{w}) = Q_\pi(s, a), \forall s, a\)</span>。假如碰巧<span class="math inline">\(q(s_{j+1}, a_{j+1};
+\boldsymbol{w})\)</span>低估(或高估)真实价值<span class="math inline">\(Q_\pi(s_{j+1},
+a_{j+1})\)</span>,则会发生下面的情况：</p>
+<p><span class="math inline">\(\begin{align*}
+&amp;\Longrightarrow\quad q(s_{j+1}, a_{j+1}; w) \quad
+\text{低估(或高估)} \quad Q_{\pi}(s_{j+1}, a_{j+1}) \\
+&amp;\Longrightarrow\quad \widehat{y_{j}} \quad \text{低估(或高估)}
+\quad Q_{\pi}(s_{j}, a_{j}) \\
+&amp;\Longrightarrow\quad q(s_{j}, a_{j}; w) \quad \text{低估(或高估)}
+\quad Q_{\pi}(s_{j}, a_{j}).
+\end{align*}\)</span></p>
+<p>也就是说，自举会让偏差从<span class="math inline">\((s_{t+1},
+a_{t+1})\)</span>传播到<span class="math inline">\((s_t,
+a_t)\)</span>。后面详细讨论自举造成的偏差以及解决方案。</p>
+<h3 id="蒙特卡洛和自举的对比">蒙特卡洛和自举的对比</h3>
+<p>在价值学习中，用实际观测的回报<span class="math inline">\(u_t\)</span>作为目标的方法被称为蒙特卡洛，即图 5.5
+中的蓝色的箱型图。</p>
+<p><span class="math inline">\(u_t\)</span>是<span class="math inline">\(Q_\pi(s_t, a_t)\)</span>的无偏估计，即<span class="math inline">\(\mathbb{E}\{U_t\} = Q_\pi(s_t,
+a_t)\)</span>。但是它的方差很大，也就是说实际观测到的<span class="math inline">\(u_t\)</span>可能离<span class="math inline">\(Q_\pi(s_t, a_t)\)</span>很远。</p>
+<p>用单步 TD 目标<span class="math inline">\(\hat{y}_t\)</span>作为目标的方法被称为自举，即图5.5
+中的红色的箱型图。自举的好处在于方差小，<span class="math inline">\(\hat{y}_t\)</span>不会偏离期望太远。但是<span class="math inline">\(\hat{y}_t\)</span>往往是有偏的，
+它的期望往往不等于<span class="math inline">\(Q_\pi(s_t,
+a_t)\)</span>。用自举训练出的价值网络往往有系统性的偏差
+(低估或者高估)。实践中，自举通常比蒙特卡洛收敛更快，这就是为什么训练 DQN
+和价值网络通常用 TD 算法。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/4-3-%E5%A4%9A%E6%AD%A5-TD%E7%9B%AE%E6%A0%87/1733201216510-1e04b391-1f6b-4ffc-84aa-c413475ed842.png" srcset="/img/loading.gif" lazyload></p>
+<p>如图 5.4 所示，多步 TD 目标<span class="math inline">\(\hat{y}_t =
+\left(\sum_{i=0}^{m-1} \gamma^i r_{t+i}\right) + \gamma^m \cdot
+q(s_{t+m}, a_{t+m}; \boldsymbol{w})\)</span>介于蒙特卡洛和自举之间。多步
+TD 目标有很大的蒙特卡洛成分，其中的<span class="math inline">\(\sum_{i=0}^{m-1} \gamma^i
+r_{t+i}\)</span>基于<span class="math inline">\(m\)</span>个实际观测到的奖励。多步 TD
+目标也有自举的成分，其中的<span class="math inline">\(\gamma^m \cdot
+q(s_{t+m}, a_{t+m};
+\boldsymbol{w})\)</span>是用价值网络自己算出来的。如果把<span class="math inline">\(m\)</span>设置得比较好，可以在方差和偏差之间找到好的平衡，使得多步
+TD 目标优于单步 TD 目标，也优于回报<span class="math inline">\(u_t\)</span>。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/AI/" class="category-chain-item">AI</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI/RL/" class="category-chain-item">RL</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI/RL/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/" class="category-chain-item">DRL-王树森</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/RL/" class="print-no-link">#RL</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>4.3 多步 TD目标</div>
+      <div>http://binbo-zappy.github.io/2024/12/04/DRL-王树森/4-3-多步-TD目标/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年12月4日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/5-1-%E7%BB%8F%E9%AA%8C%E5%9B%9E%E6%94%BE/" title="5.1 经验回放">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">5.1 经验回放</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/4-2-Q-learning%E7%AE%97%E6%B3%95/" title="4.2 Q-learning算法">
+                        <span class="hidden-mobile">4.2 Q-learning算法</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

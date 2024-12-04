@@ -1,0 +1,909 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="53. 不要轻忽编译器的警告 123456789class B&#123;public:    virtual void f() const;&#125;class D&#123;    public:    virtual void f();&#125; 希望D::f重新定义virtual函数B::f，B的f 是个const成员函数，而D中未被声明为const  严肃对待编译器发出的警">
+<meta property="og:type" content="article">
+<meta property="og:title" content="9. 杂项讨论">
+<meta property="og:url" content="http://binbo-zappy.github.io/2024/11/27/effective-cpp/9-%E6%9D%82%E9%A1%B9%E8%AE%A8%E8%AE%BA/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="53. 不要轻忽编译器的警告 123456789class B&#123;public:    virtual void f() const;&#125;class D&#123;    public:    virtual void f();&#125; 希望D::f重新定义virtual函数B::f，B的f 是个const成员函数，而D中未被声明为const  严肃对待编译器发出的警">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/effective-cpp.png">
+<meta property="article:published_time" content="2024-11-27T12:17:23.000Z">
+<meta property="article:modified_time" content="2024-11-27T12:21:09.975Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="c++">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/effective-cpp.png">
+  
+  
+  
+  <title>9. 杂项讨论 - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="9. 杂项讨论"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-11-27 20:17" pubdate>
+          2024年11月27日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          14 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">9. 杂项讨论</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="不要轻忽编译器的警告">53. 不要轻忽编译器的警告</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs plain">class B&#123;<br>public:<br>    virtual void f() const;<br>&#125;<br><br>class D&#123;<br>    public:<br>    virtual void f();<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>希望D::f重新定义virtual函数B::f，B的f
+是个const成员函数，而D中未被声明为const</p>
+<ol type="1">
+<li>严肃对待编译器发出的警告信息。</li>
+<li>不要过度依赖编译器的报警能力，不同编译器的警告信息可能不同</li>
+</ol>
+<h2 id="让自己熟悉包括tr1在内的标准程序库">54.
+让自己熟悉包括TR1在内的标准程序库</h2>
+<ol type="1">
+<li><p>TR1表示“Technical Report 1"</p></li>
+<li><p>TR1组件实例</p></li>
+<li><ol type="1">
+<li>智能指针 trl::shared_ptr和tr1::weak_ptr</li>
+</ol></li>
+<li><ol type="1">
+<li><ol type="1">
+<li>前者作用如内置指针，但会记录有多少个tr1::shared_ptrs共同指向同一个对象。这就是引用计数
+reference
+countering。一旦最后一个这样的指针被销毁，也就是一旦某对象的引用次数变成，这个对象会被自动删除。这在非环形数据结构中防止资源泄露很有帮助，</li>
+<li>如果两个或者多个对象内含trl::shared_ptrs并形成环状，这个唤醒会造成每个对象的引用次数都超过0，即使指向这个环形的所有指针都已被销毁</li>
+<li>这就是有trl::weak_ptrs的原因，并不参与引用计数的计算；当最后一个指向对象的trl:shared_ptr被销毁，纵使还有个trl::weak_ptr继续指向同一对象，该对象仍会被删除，该情况下的weak_ptr被自动标示无效</li>
+</ol></li>
+</ol></li>
+<li><p>trl::function</p></li>
+<li><ol type="1">
+<li>表示任何可调用物（任何函数或者函数对象），只要签名符合目标</li>
+<li>假设想注册一个callback函数</li>
+<li>void registerCallback(std::string
+func(int));参数名称func可有可无，可以这样声明void
+registerCallback(std::string (int));std::string
+(int)是函数签名trl::function是上述的函数有可能更富弹性地接受任何可调用五，只要这个可调用五接受一个int或任何可悲转换为int的东西，并返回一个string或这和可被转换为string的东西</li>
+<li>trl::function是个template，以其目标函数的签名为参数</li>
+</ol></li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plain">void registerCallback(std::tr1::function&lt;std::string (int)&gt; func);<br>//只要该可调用物的签名与std::string(int)一致<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li><p>tr1::bind</p></li>
+<li><ol type="1">
+<li>能够做STL绑定器bind1st和bind2nd所做的每一件事，而又更多</li>
+<li>与前任绑定器不同的是，tr1::bind可以和const及non-const成员函数协同运作，可以和by-reference参数协同运作</li>
+<li>不需要特殊协助就可以处理函数指针，所以我们调用tr1::bind之前不必再被什么ptr_fun,men_fun或者mem_fun_ref搞得一团混乱。</li>
+<li>tr1::bind是第二代绑定工具，比前一代好很多</li>
+</ol></li>
+<li><p>彼此互不相干的独立机能：</p></li>
+<li><ol type="1">
+<li>hash tables：</li>
+</ol></li>
+<li><ol type="1">
+<li><ol type="1">
+<li>用来实现sets，multisets，maps和multi-maps</li>
+<li>每个新容器的接口都是其前任对应容器塑模而成</li>
+<li>名称tr1::unordered_set, tr1::unordered_multiset, tr1::unordered_map,
+tr1::unordered_multimap</li>
+<li>这些名字强调他们和set，multiset, map
+或者multimap不同，以hanshu为基础的这些TR1容器内的元素并无任何可预期的次序</li>
+</ol></li>
+</ol></li>
+<li><ol type="1">
+<li>正则表达式</li>
+</ol></li>
+<li><ol type="1">
+<li><ol type="1">
+<li>包括正则表达式为基础的字符串查找和替换，</li>
+<li>或者从某个匹配字符串到另一匹配字符串的注意迭代等</li>
+</ol></li>
+</ol></li>
+<li><ol type="1">
+<li>Tuples（变量组），这是标准程序库中pair template的新一代制品。</li>
+</ol></li>
+<li><ol type="1">
+<li><ol type="1">
+<li>pair只能有两个对象</li>
+<li>tr1::tuple可以持有任意个数的对象。</li>
+</ol></li>
+</ol></li>
+<li><ol type="1">
+<li>tr1::array，本质上是个STL化的数组，即一个支持成员函数如begin和end的数组，不过tr1::array的大小固定，并不适用动态内存</li>
+<li>tr1::mem_fn</li>
+</ol></li>
+<li><ol type="1">
+<li><ol type="1">
+<li>这是个语句构造上与成员函数指针一样的东西</li>
+<li>纳入并扩充了c++98的mem_fun和mem_fun_ref的能力</li>
+</ol></li>
+</ol></li>
+<li><ol type="1">
+<li>tr1::reference_wrapper</li>
+</ol></li>
+<li><ol type="1">
+<li><ol type="1">
+<li>让reference的行为更像对象的设施</li>
+<li>可以造成容器“犹如持有reference”，实际上，容器只能吃有对象或指针</li>
+</ol></li>
+</ol></li>
+<li><ol type="1">
+<li>随机数生成工具，大大超越了rand</li>
+<li>数学特殊函数，包括laguerre多项式，Bessel函数，完全椭圆积分以及更多数学函数</li>
+<li>C99兼容扩充。</li>
+</ol></li>
+<li><ol type="1">
+<li><ol type="1">
+<li>这是一大堆函数和模板，用来将许多新的c99程序库特性带进C++</li>
+</ol></li>
+</ol></li>
+<li><p>更精巧的template编程</p></li>
+<li><ol type="1">
+<li>Type traits</li>
+</ol></li>
+<li><ol type="1">
+<li><ol type="1">
+<li>一组trait classes，用来一同类型的编译期信息</li>
+<li>给予一个类型T，TR1的type
+traits可以指出T是否是个内置类型，是否一同virtual析构函数，是否是个empty
+class，可隐式转换为其他类型U</li>
+<li>也可以显现该给定类型之适当齐位，这对定制型内存分配器而言是关键信息。</li>
+</ol></li>
+</ol></li>
+<li><ol type="1">
+<li>tr1::result_of</li>
+</ol></li>
+<li><ol type="1">
+<li><ol type="1">
+<li>这是个template，用来推导函数调用的返回类型</li>
+<li>在编写templates时，能够refer
+to函数调用动作返回的对象的类型往往很重要，但是该类型有可能以复杂的方式却决于函数的参数类型</li>
+<li>result_of使得”refer to函数返回类型“变得十分容易</li>
+</ol></li>
+</ol></li>
+<li><p>C++标准程序库的主要机能由STL、iostreams、locales组成，并包含C99标准程序库</p></li>
+</ol>
+<h2 id="让自己熟悉boost">55. 让自己熟悉Boost</h2>
+<ol type="1">
+<li><p>字符串与文本处理</p></li>
+<li><ol type="1">
+<li>覆盖具备类型安全的printf-like格式化动作、正则表达式，以及语汇单元切割和解析</li>
+</ol></li>
+<li><p>容器，覆盖”接口与STL相似且大小固定“的数组、大小可变的bitsets以及多维数组</p></li>
+<li><p>函数对象与高级编程</p></li>
+<li><ol type="1">
+<li>覆盖若干被用爱作为TR1机能基础的程序库。其中一个有趣的程序库是Lambda，可以随时随地创建函数对象</li>
+<li></li>
+</ol></li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs plain">using namespace boost::lambda;<br>std::vector&lt;int&gt; v;<br><br>std::for_each(v.begin(),v.end()),<br>    std::cout &lt;&lt; _1 *2 + 10 &lt;&lt; &quot;\n&quot;);<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li><p>泛型编程，覆盖一大组traits classes</p></li>
+<li><p>模板元编程</p></li>
+<li><ol type="1">
+<li>覆盖一个针对编译期assertions而写的程序库，以及Boost
+MPL程序库，提供了极好的东西，其中支持编译器实物诸如types的STL-like数据结构等</li>
+<li></li>
+<li>数学和数值</li>
+</ol></li>
+<li><ol type="1">
+<li><ol type="1">
+<li>包括有理数，八元数和四元数、公约数和少见的多重运算、随机数</li>
+</ol></li>
+</ol></li>
+<li><ol type="1">
+<li>正确性和测试</li>
+</ol></li>
+<li><ol type="1">
+<li><ol type="1">
+<li>覆盖用来将隐式模板接口形式化的程序库，以及针对"测试有限"编程形态而设计的措施</li>
+</ol></li>
+</ol></li>
+<li><ol type="1">
+<li>数据结构</li>
+</ol></li>
+<li><ol type="1">
+<li><ol type="1">
+<li>覆盖类型安全的unions，以及tuple程序库（是TR1同类机能的基础）</li>
+</ol></li>
+</ol></li>
+<li><ol type="1">
+<li>语言见的支持</li>
+</ol></li>
+<li><ol type="1">
+<li><ol type="1">
+<li>包括允许C++和python之间的无缝互操作性</li>
+</ol></li>
+</ol></li>
+<li><ol type="1">
+<li>内存</li>
+</ol></li>
+<li><ol type="1">
+<li><ol type="1">
+<li>覆盖Pool程序库，用来做出高效率而区块大小固定的分配器以及多变化的智能指针，包括（但不仅仅是）TR1智能指针。</li>
+<li>另有一个non-TR1智能指针是scoped_array，是个auto_ptr-like智能指针，用来动态分配数组</li>
+</ol></li>
+</ol></li>
+<li><ol type="1">
+<li>杂项</li>
+</ol></li>
+<li><ol type="1">
+<li><ol type="1">
+<li>包括CRC检验、日期和时间的处理，在文件系统上来回移动等等</li>
+</ol></li>
+</ol></li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plain">typedef boost::mpl::list&lt;float, double, long double&gt; floats;<br>typedef boost::mpl::push_front&lt;floats, int&gt;::type types;<br></code></pre></td></tr></table></figure>
+<p>这样的容器类型常被成为typelists</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/c/" class="category-chain-item">c++</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/c/effective-c/" class="category-chain-item">effective c++</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/c/" class="print-no-link">#c++</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>9. 杂项讨论</div>
+      <div>http://binbo-zappy.github.io/2024/11/27/effective-cpp/9-杂项讨论/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年11月27日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/11/27/cpp/google_style_guide/" title="google_style_guide">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">google_style_guide</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/11/27/effective-cpp/8-%E5%AE%9A%E5%88%B6new%E5%92%8Cdelete/" title="8. 定制new和delete">
+                        <span class="hidden-mobile">8. 定制new和delete</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -19,12 +19,12 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="2. 函数 字符串函数 数值函数 日期函数 流程函数  1. 字符串函数常用函数：    函数 功能    CONCAT(s1, s2, …, sn) 字符串拼接，将s1, s2, …, sn拼接成一个字符串   LOWER(str) 将字符串全部转为小写   UPPER(str) 将字符串全部转为大写   LPAD(str, n, pad) 左填充，用字符串pad对str的左边进行填充，达到n个">
+    <meta name="description" content="2. 函数  字符串函数 数值函数 日期函数 流程函数  1. 字符串函数 常用函数：     函数 功能     CONCAT(s1, s2, …, sn) 字符串拼接，将s1, s2, …, sn拼接成一个字符串   LOWER(str) 将字符串全部转为小写   UPPER(str) 将字符串全部转为大写   LPAD(str,">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2. 函数">
 <meta property="og:url" content="http://binbo-zappy.github.io/2024/11/26/MySQL/2-%E5%87%BD%E6%95%B0/index.html">
 <meta property="og:site_name" content="Binbo">
-<meta property="og:description" content="2. 函数 字符串函数 数值函数 日期函数 流程函数  1. 字符串函数常用函数：    函数 功能    CONCAT(s1, s2, …, sn) 字符串拼接，将s1, s2, …, sn拼接成一个字符串   LOWER(str) 将字符串全部转为小写   UPPER(str) 将字符串全部转为大写   LPAD(str, n, pad) 左填充，用字符串pad对str的左边进行填充，达到n个">
+<meta property="og:description" content="2. 函数  字符串函数 数值函数 日期函数 流程函数  1. 字符串函数 常用函数：     函数 功能     CONCAT(s1, s2, …, sn) 字符串拼接，将s1, s2, …, sn拼接成一个字符串   LOWER(str) 将字符串全部转为小写   UPPER(str) 将字符串全部转为大写   LPAD(str,">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/MySQL.png">
 <meta property="article:published_time" content="2024-11-26T08:31:51.000Z">
@@ -225,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          910 字
+          908 字
         
       </span>
     
@@ -278,21 +278,25 @@
             
               <div class="markdown-body">
                 
-                <h1 id="2-函数"><a href="#2-函数" class="headerlink" title="2. 函数"></a>2. 函数</h1><ul>
+                <h1 id="函数">2. 函数</h1>
+<ul>
 <li>字符串函数</li>
 <li>数值函数</li>
 <li>日期函数</li>
 <li>流程函数</li>
 </ul>
-<h2 id="1-字符串函数"><a href="#1-字符串函数" class="headerlink" title="1. 字符串函数"></a>1. 字符串函数</h2><p>常用函数：</p>
+<h2 id="字符串函数">1. 字符串函数</h2>
+<p>常用函数：</p>
 <table>
+
 <thead>
 <tr>
 <th>函数</th>
 <th>功能</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>CONCAT(s1, s2, …, sn)</td>
 <td>字符串拼接，将s1, s2, …, sn拼接成一个字符串</td>
 </tr>
@@ -324,13 +328,13 @@
 <td>REPLACE(column, source, replace)</td>
 <td>替换字符串</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <p>使用示例：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- 拼接<br>SELECT CONCAT(&#x27;Hello&#x27;, &#x27;World&#x27;);<br>-- 小写<br>SELECT LOWER(&#x27;Hello&#x27;);<br>-- 大写<br>SELECT UPPER(&#x27;Hello&#x27;);<br>-- 左填充<br>SELECT LPAD(&#x27;01&#x27;, 5, &#x27;-&#x27;);<br>-- 右填充<br>SELECT RPAD(&#x27;01&#x27;, 5, &#x27;-&#x27;);<br>-- 去除空格<br>SELECT TRIM(&#x27; Hello World &#x27;);<br>-- 切片（起始索引为1）<br>SELECT SUBSTRING(&#x27;Hello World&#x27;, 1, 5);<br></code></pre></td></tr></table></figure>
-
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mysql"># 由于业务需求变更，企业员工的工号，统一为5位数，目前不足5位数的全部在前面补0。比如：1号员工的工号应该为00001。<br>update emp set workno = lpad(workno, 5, &#x27;0&#x27;);<br></code></pre></td></tr></table></figure>
-
-<h2 id="2-数值函数"><a href="#2-数值函数" class="headerlink" title="2. 数值函数"></a>2. 数值函数</h2><p>常见函数：</p>
+<h2 id="数值函数">2. 数值函数</h2>
+<p>常见函数：</p>
 <table>
 <thead>
 <tr>
@@ -338,7 +342,8 @@
 <th>功能</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>CEIL(x)</td>
 <td>向上取整</td>
 </tr>
@@ -348,7 +353,7 @@
 </tr>
 <tr>
 <td>MOD(x, y)</td>
-<td>返回x&#x2F;y的模</td>
+<td>返回x/y的模</td>
 </tr>
 <tr>
 <td>RAND()</td>
@@ -358,18 +363,21 @@
 <td>ROUND(x, y)</td>
 <td>求参数x的四舍五入值，保留y位小数</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs mysql">select ceil(1.1);<br>select floor(1.9);<br>select mod(3, 2);<br>select rand();<br>select round(2.346, 2);<br><br># 通过数据库的函数，生成一个六位数的随机验证码。<br>select lpad(round(rand()*100000, 0), 6, 0);<br></code></pre></td></tr></table></figure>
-
-<h2 id="3-日期函数"><a href="#3-日期函数" class="headerlink" title="3. 日期函数"></a>3. 日期函数</h2><p>常用函数：</p>
+<h2 id="日期函数">3. 日期函数</h2>
+<p>常用函数：</p>
 <table>
+
 <thead>
 <tr>
 <th>函数</th>
 <th>功能</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>CURDATE()</td>
 <td>返回当前日期</td>
 </tr>
@@ -395,25 +403,28 @@
 </tr>
 <tr>
 <td>DATE_ADD(date, INTERVAL expr type)</td>
-<td>返回一个日期&#x2F;时间值加上一个时间间隔expr后的时间值</td>
+<td>返回一个日期/时间值加上一个时间间隔expr后的时间值</td>
 </tr>
 <tr>
 <td>DATEDIFF(date1, date2)</td>
 <td>返回起始时间date1和结束时间date2之间的天数</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <p>例子：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs mysql">select curdate();<br>select curtime();<br>select now();<br><br>select year(now());<br>select month(now());<br>select day(now());<br><br>-- DATE_ADD<br>SELECT DATE_ADD(NOW(), INTERVAL 70 DAY);<br>select datediff(&#x27;2021-12-01&#x27;,&#x27;2022-12-02&#x27;);<br><br>-- 案例：查询所有员工的入职天数，并根据入职天数倒序排序。<br>select name, datediff(curdate(), entrydate) &#x27;entrydays&#x27; from emp order by entrydays desc;<br></code></pre></td></tr></table></figure>
-
-<h2 id="4-流程函数"><a href="#4-流程函数" class="headerlink" title="4. 流程函数"></a>4. 流程函数</h2><p>常用函数：</p>
+<h2 id="流程函数">4. 流程函数</h2>
+<p>常用函数：</p>
 <table>
+
 <thead>
 <tr>
 <th>函数</th>
 <th>功能</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>IF(value, t, f)</td>
 <td>如果value为true，则返回t，否则返回f</td>
 </tr>
@@ -426,18 +437,14 @@
 <td>如果val1为true，返回res1，… 否则返回default默认值</td>
 </tr>
 <tr>
-<td>CASE [ expr ] WHEN [ val1 ] THEN [ res1 ] … ELSE [ default ] END</td>
+<td>CASE [ expr ] WHEN [ val1 ] THEN [ res1 ] … ELSE [ default ]
+END</td>
 <td>如果expr的值等于val1，返回res1，… 否则返回default默认值</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs mysql">select if(true, &#x27;Ok&#x27;, &#x27;error&#x27;);<br>select ifnull(null,&#x27;default&#x27;);<br>-- <br>select<br>	name,<br>	(case when age &gt; 30 then &#x27;中年&#x27; else &#x27;青年&#x27; end) as &#x27;年纪&#x27;<br>from emp;<br><br>-- 需求：查询mp表的员工姓名和工作地址（北京/上海----&gt;一线城市，其他---&gt;二线城市)<br>select<br>	name,<br>	(case workaddress when &#x27;北京&#x27; then &#x27;一线城市&#x27; when &#x27;上海&#x27; then &#x27;一线城市&#x27; else &#x27;二线城市&#x27; end) as &#x27;工作地址&#x27;<br>from emp;<br><br>--<br><br>CREATE TABLE score(<br>	id int comment &#x27;ID&#x27;,<br>	name VARCHAR(20) comment &#x27;姓名&#x27;,<br>	math int comment &#x27;数学&#x27;,<br>	english int comment &#x27;英语&#x27;,<br>	chinese int comment &#x27;语文&#x27;<br>) comment &#x27;学员成绩表&#x27;;<br><br>insert into score (id, name, math, english, chinese) values (1,&#x27;Tom&#x27;,67,88,95), (2,&#x27;Rose&#x27;,23,66,90), (3,&#x27;Jack&#x27;,56,98,76);<br><br>select <br>	id,<br>	name,<br>	(case when math &gt;= 85 then &#x27;优秀&#x27; when math &gt;= 60 then &#x27;及格&#x27; else &#x27;不及格&#x27; end) &#x27;数学&#x27;,<br>	(case when english &gt;= 85 then &#x27;优秀&#x27; when english &gt;= 60 then &#x27;及格&#x27; else &#x27;不及格&#x27; end) &#x27;英语&#x27;,<br>	(case when chinese &gt;= 85 then &#x27;优秀&#x27; when chinese &gt;= 60 then &#x27;及格&#x27; else &#x27;不及格&#x27; end) &#x27;语文&#x27;	<br>from score;<br></code></pre></td></tr></table></figure>
-
-
-
-
-
-<pre><code class="|">
-</code></pre>
+<p>``` |</p>
 
                 
               </div>

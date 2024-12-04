@@ -1,0 +1,970 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="高估问题及解决方法 Q 学习算法有一个缺陷：用 Q 学习训练出的 DQN 会高估真实的价值，而且高估通常是非均匀的。这个缺陷导致 DQN 的表现很差。高估问题并不是 DQN 模型的缺陷，而是 Q 学习算法的缺陷。 Q 学习产生高估的原因有两个：第一，自举导致偏差的传播；第二，最大化导致 TD 目标高估真实价值。为了缓解高估，需要从导致高估的两个原因下手，改进 Q学习算法。双 Q学习算">
+<meta property="og:type" content="article">
+<meta property="og:title" content="5.2 高估问题">
+<meta property="og:url" content="http://binbo-zappy.github.io/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/5-2-%E9%AB%98%E4%BC%B0%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="高估问题及解决方法 Q 学习算法有一个缺陷：用 Q 学习训练出的 DQN 会高估真实的价值，而且高估通常是非均匀的。这个缺陷导致 DQN 的表现很差。高估问题并不是 DQN 模型的缺陷，而是 Q 学习算法的缺陷。 Q 学习产生高估的原因有两个：第一，自举导致偏差的传播；第二，最大化导致 TD 目标高估真实价值。为了缓解高估，需要从导致高估的两个原因下手，改进 Q学习算法。双 Q学习算">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/RL-WSS.png">
+<meta property="article:published_time" content="2024-12-04T08:02:52.000Z">
+<meta property="article:modified_time" content="2024-12-04T10:59:17.334Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="RL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/RL-WSS.png">
+  
+  
+  
+  <title>5.2 高估问题 - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="5.2 高估问题"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-12-04 16:02" pubdate>
+          2024年12月4日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          31 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">5.2 高估问题</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="高估问题及解决方法">高估问题及解决方法</h1>
+<p>Q 学习算法有一个缺陷：用 Q 学习训练出的 DQN
+会高估真实的价值，而且高估通常是非均匀的。这个缺陷导致 DQN
+的表现很差。高估问题并不是 DQN 模型的缺陷，而是 Q 学习算法的缺陷。</p>
+<p>Q
+学习产生高估的原因有两个：第一，自举导致偏差的传播；第二，最大化导致 TD
+目标高估真实价值。为了缓解高估，需要从导致高估的两个原因下手，改进
+Q学习算法。双 Q学习算法是一种有效的改进，可以大幅缓解高估及其危害。</p>
+<h2 id="自举导致偏差的传播">自举导致偏差的传播</h2>
+<p>在强化学习中，自举意思是“用一个估算去更新同类的估算”,类似于“自己把自己给举起来”。我们在前面的笔记中讨论过
+SARSA 算法中的自举。下面回顾训练 DQN 用的
+Q学习算法，研究其中存在的自举。算法每次从经验回放数组中抽取一个四元组<span class="math inline">\((s_j, a_j, r_j,
+s_{j+1})\)</span>。然后执行以下步骤，对 DQN 的参数做一轮更新：</p>
+<p>1.计算TD目标：</p>
+<p><span class="math inline">\(y_j^{\hat{}} = r_j + \gamma \cdot \max_a
+Q(s_{j+1}, a; w_{\text{now}})\)</span></p>
+<p>2.定义损失函数</p>
+<p><span class="math inline">\(L(w) = \frac{1}{2} [Q(s_j, a_j; w) -
+y_j^{\hat{}}]^2\)</span></p>
+<p>3.把<span class="math inline">\(y_j^{\hat{}}\)</span>看做常数，做一次梯度下降更新参数：</p>
+<p><span class="math inline">\(w_{\text{new}} \leftarrow w_{\text{now}}
+- \alpha \cdot \nabla_w L(w_{\text{now}})\)</span></p>
+<p>第一步中的 TD 目标<span class="math inline">\(y_j^{\hat{}}\)</span>部分基于 DQN
+自己做出的估计。第二步让 DQN 去拟合<span class="math inline">\(y_j^{\hat{}}\)</span>。这就意味着我们用了 DQN
+自己做出的估计去更新 DQN 自己，这属于自举。</p>
+<p>自举对 DQN 的训练有什么影响呢？</p>
+<p><span class="math inline">\(Q(s, a; w)\)</span>是对价值<span class="math inline">\(Q^*(s, a)\)</span>的近似，最理想的情况下，<span class="math inline">\(Q(s, a; w) = Q^*(s, a)\)</span>，<span class="math inline">\(\forall s, a\)</span>。假如碰巧<span class="math inline">\(Q(s_{j+1}, a_{j+1};
+w)\)</span>低估(或高估)真实价值<span class="math inline">\(Q^*(s_{j+1},
+a_{j+1})\)</span>, 则会发生下面的情况：</p>
+<p><span class="math inline">\(\begin{align*}
+Q(s_{j+1}, a_{j+1}; w) &amp; \quad \text{低估(或高估)} \quad
+Q^*(s_{j+1}, a_{j+1}) \\
+\implies \widehat{y}_j &amp; \quad \text{低估(或高估)} \quad Q^*(s_j,
+a_j) \\
+\implies Q(s_j, a_j; w) &amp; \quad \text{低估(或高估)} \quad Q^*(s_j,
+a_j).
+\end{align*}\)</span></p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/5-2-%E9%AB%98%E4%BC%B0%E9%97%AE%E9%A2%98/1733209029314-ef1f00eb-3e4a-4a1e-9444-d06b2426864b.png" srcset="/img/loading.gif" lazyload></p>
+<p>如果<span class="math inline">\(Q(s_{j+1},a_{j+1};\boldsymbol{w})\)</span>是对真实价值<span class="math inline">\(Q_\star(s_{j+1},a_{j+1})\)</span>的低估 (或高估),
+就会导致<span class="math inline">\(Q(s_j,a_j;\boldsymbol{w})\)</span>低估 (或高估)
+价值<span class="math inline">\(Q_\star(s_j,a_j)\)</span>,也就是说低估
+(或高估) 从<span class="math inline">\((s_{j+1},a_{j+1})\)</span>传播到<span class="math inline">\((s_j,a_j)\)</span>, 让更多的价值被低估
+(或高估)。</p>
+<h2 id="最大化导致高估">最大化导致高估</h2>
+<p>首先用数学解释为什么最大化会导致高估。设<span class="math inline">\(x_1, \cdots, x_d\)</span>为任意<span class="math inline">\(d\)</span>个实数。往<span class="math inline">\(x_1, \cdots,
+x_d\)</span>中加入任意均值为零的随机噪声，得到<span class="math inline">\(Z_1, \cdots,
+Z_d\)</span>,它们是随机变量，随机性来源于随机噪声。很容易证明均值为零的随机噪声不会影响均值：</p>
+<p><span class="math inline">\(\mathbb{E}[mean(Z_1, \cdots, Z_d)] =
+mean(x_1, \cdots, x_d)\)</span>.</p>
+<p>用稍微复杂一点的证明，可以得到：</p>
+<p><span class="math inline">\(\mathbb{E}[max(Z_1, \cdots, Z_d)] \geq
+max(x_1, \cdots, x_d)\)</span>.</p>
+<p><span class="math inline">\(E[max(Z1,⋯,Zd)]≥max(x1,⋯,xd).\)</span></p>
+<p>公式中的期望是关于噪声求的。这个不等式意味着先加入均值为零的噪声，然后求最大值，会产生高估。</p>
+<p>假设对于所有的动作<span class="math inline">\(a \in
+A\)</span>和状态<span class="math inline">\(s \in S\)</span>, DQN
+的输出是真实价值<span class="math inline">\(Q^*(s,
+a)\)</span>加上均值为零的随机噪声<span class="math inline">\(\epsilon\)</span>:</p>
+<p><span class="math inline">\(Q(s, a; w) = Q^*(s, a) +
+\epsilon\)</span>.</p>
+<p>显然<span class="math inline">\(Q(s, a; w)\)</span>是对真实价值<span class="math inline">\(Q^*(s,
+a)\)</span>的无偏估计。然而有这个不等式：</p>
+<p><span class="math inline">\(\mathbb{E}_{\epsilon} \left[ \max_{a \in
+\mathcal{A}} Q(s, a; w) \right] \geq \max_{a \in \mathcal{A}}
+Q^{\star}(s, a).\)</span></p>
+<p>公式说明哪怕 DQN 是对真实价值的无偏估计，但是如果求最大化，DQN
+就会高估真实价值。复习一下，TD 目标是这样算出来的：</p>
+<p><span class="math inline">\(\widehat{y}_{j} = r_{j} + \gamma \cdot
+\underbrace{\max_{a \in \mathcal{A}} Q\left(s_{j+1}, a;
+w\right)}_{\text{高估} \max_{a \in \mathcal{A}} Q^{\star}\left(s_{j+1},
+a\right)}.\)</span></p>
+<p>这说明 TD 目标<span class="math inline">\(y_j^{\hat{}}\)</span>通常是对真实价值<span class="math inline">\(Q^*(s_j, a_j)\)</span>的高估。TD 算法鼓励<span class="math inline">\(Q(s_j, a_j; w)\)</span>接近 TD 目标<span class="math inline">\(y_j^{\hat{}}\)</span>, 这会导致<span class="math inline">\(Q(s_j, a_j; w)\)</span>高估真实价值<span class="math inline">\(Q^*(s_j, a_j)\)</span>。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/5-2-%E9%AB%98%E4%BC%B0%E9%97%AE%E9%A2%98/1733209830691-ec5c92c3-4caa-4c33-b0c6-0e84065befa9.png" srcset="/img/loading.gif" lazyload></p>
+<p>即使 DQN 是真实价值<span class="math inline">\(Q^*\)</span>的无偏估计，只要 DQN 不恒等于<span class="math inline">\(Q^*\)</span>, TD 目标就会高估真实价值。TD
+目标是高估，而 Q学习算法鼓励 DQN 预测接近 TD 目标，因此 DQN
+会出现高估。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/5-2-%E9%AB%98%E4%BC%B0%E9%97%AE%E9%A2%98/1733209869899-5b0d912c-5060-4590-8822-43f665b62853.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="高估的危害">高估的危害</h2>
+<p>我们为什么要避免高估？高估真的有害吗？如果高估是均匀的，则高估没有危害；如果高估非均匀，就会有危害。举个例子，动作空间是<span class="math inline">\(A = \{左，右，上\}\)</span>。给定当前状态<span class="math inline">\(s\)</span>, 每个动作有一个真实价值：</p>
+<p><span class="math inline">\(Q^*(s, 左) = 200, Q^*(s, 右) = 100,
+Q^*(s, 上) = 230\)</span>.</p>
+<p>智能体应当选择动作“上”,因为“上”的价值最高。假如高估是均匀的，所有的价值都被高估了100：</p>
+<p><span class="math inline">\(Q(s, 左; w) = 300, Q(s, 右; w) = 200,
+Q(s, 上; w) = 330\)</span>.</p>
+<p>那么动作“上”仍然有最大的价值，智能体会选择“上”。这个例子说明高估本身不是问题，
+只要所有动作价值被同等高估。</p>
+<p>但实践中，所有的动作价值会被同等高估吗？每当取出一个四元组<span class="math inline">\((s, a, r, s&#39;)\)</span>用来更新一次 DQN,
+就很有可能加重 DQN 对<span class="math inline">\(Q^*(s,
+a)\)</span>的高估。对于同一个状态<span class="math inline">\(s\)</span>,
+三种组合<span class="math inline">\((s, 左)\)</span>、<span class="math inline">\((s, 右)\)</span>、<span class="math inline">\((s,
+上)\)</span>出现在经验回放数组中的频率是不同的，所以三种动作被高估的程度是不同的。假如动作价值被高估的程度不同，比如</p>
+<p><span class="math inline">\(Q(s, 左; w) = 280, Q(s, 右; w) = 300,
+Q(s, 上; w) = 260\)</span>,</p>
+<p>那么智能体做出的决策就是向右走，因为“右”的价值貌似最高。但实际上“右”是最差的动作，它的实际价值低于其余两个动作。</p>
+<p>综上所述，用 Q学习算法训练 DQN 总会导致 DQN
+高估真实价值。对于多数的<span class="math inline">\(s \in
+S\)</span>和<span class="math inline">\(a \in A\)</span>,
+有这样的不等式：</p>
+<p><span class="math inline">\(Q(s, a; w) &gt; Q^*(s, a)\)</span>.</p>
+<p>高估本身不是问题，真正的麻烦在于 DQN 的高估往往是非均匀的。如果 DQN
+有非均匀的高估，那么用 DQN
+做出的决策是不可靠的。我们已经分析过导致高估的原因：</p>
+<ul>
+<li>TD 算法属于“自举”,即用 DQN 的估计值去更新 DQN
+自己。自举会导致偏差的传播。如果<span class="math inline">\(Q(s_{j+1},
+a_{j+1}; w)\)</span>是对<span class="math inline">\(Q^*(s_{j+1},
+a_{j+1})\)</span>的高估，那么高估会传播到<span class="math inline">\((s_j, a_j)\)</span>让<span class="math inline">\(Q(s_j, a_j; w)\)</span>高估<span class="math inline">\(Q^*(s_j, a_j)\)</span>。自举导致 DQN
+的高估从一个二元组<span class="math inline">\((s,
+a)\)</span>传播到更多的二元组。</li>
+<li>TD 目标<span class="math inline">\(y_j^{\hat{}}\)</span>中包含一项最大化，这会导致 TD
+目标高估真实价值<span class="math inline">\(Q_*\)</span>。Q 学习算法鼓励
+DQN 的预测接近 TD 目标，因此 DQN 会高估<span class="math inline">\(Q_*\)</span>。</li>
+</ul>
+<p>找到了产生高估的原因，就可以想办法解决问题。想要避免 DQN
+的高估，要么切断自举，要么避免最大化造成高估。注意，高估并不是 DQN
+自身的属性，高估纯粹是算法造成的。想要避免高估，就要用更好的算法替代原始的
+Q 学习算法。</p>
+<h2 id="使用目标网络">使用目标网络</h2>
+<p>上文已经讨论过，切断“自举”可以避免偏差的传播，从而缓解 DQN
+的高估。回顾一下，Q 学习算法这样计算 TD 目标：</p>
+<p><span class="math inline">\(\widehat{y}_j = r_j + \gamma \cdot
+\max_{a \in \mathcal{A}} Q(s_{j+1}, a; w) \,.\)</span></p>
+<p>然后做梯度下降更新<span class="math inline">\(w\)</span>,使得<span class="math inline">\(Q(s_j, a_j; w)\)</span>更接近<span class="math inline">\(y_j^{\hat{}}\)</span>。想要切断自举，可以用另一个神经网络计算
+TD 目标，而不是用 DQN 自己计算 TD 目标。另一个神经网络被称作
+<strong>目标网络 (target network)</strong> 。把目标网络记作：</p>
+<p><span class="math inline">\(Q(s, a; w^-)\)</span>.</p>
+<p>它的神经网络结构与 DQN 完全相同，但是参数<span class="math inline">\(w^-\)</span>不同于<span class="math inline">\(w\)</span>。</p>
+<p>使用目标网络的话，Q
+学习算法用下面的方式实现。每次随机从经验回放数组中取一个四元组，记作<span class="math inline">\((s_j, a_j, r_j, s_{j+1})\)</span>。设 DQN
+和目标网络当前的参数分别为<span class="math inline">\(w_{\text{now}}\)</span>和<span class="math inline">\(\bar{w}_{\text{now}}\)</span>,
+执行下面的步骤对参数做一次更新：</p>
+<p>1.对 DQN 做正向传播，得到：</p>
+<p><span class="math inline">\(q_j^{\hat{}} = Q(s_j, a_j;
+w_{\text{now}})\)</span></p>
+<p>2.对目标网络做正向传播，得到</p>
+<p><span class="math inline">\(q_{j+1}^{-} = \max_a Q(s_{j+1}, a;
+w_{\text{now}}^-)\)</span></p>
+<p>3.计算 TD 目标和 TD 误差：</p>
+<p><span class="math inline">\(y_j^- = r_j + \gamma \cdot
+q_{j+1}^{-}\)</span>和<span class="math inline">\(\delta_j =
+q_j^{\hat{}} - y_j^-\)</span></p>
+<p>4.对 DQN 做反向传播，得到梯度</p>
+<p><span class="math inline">\(\nabla_w Q(s_j, a_j;
+w_{\text{now}})\)</span></p>
+<p>5.做梯度下降更新 DQN 的参数：</p>
+<p><span class="math inline">\(w_{\text{new}} \leftarrow w_{\text{now}}
+- \alpha \cdot \delta_j \cdot \nabla_w Q(s_j, a_j;
+w_{\text{now}})\)</span></p>
+<p>6.设<span class="math inline">\(\tau \in (0,
+1)\)</span>是需要手动调的超参数。做加权平均更新目标网络的参数：</p>
+<p><span class="math inline">\(\bar{w}_{\text{new}} \leftarrow \tau
+\cdot w_{\text{new}} + (1 - \tau) \cdot
+\bar{w}_{\text{now}}\)</span></p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/5-2-%E9%AB%98%E4%BC%B0%E9%97%AE%E9%A2%98/1733210558085-bccc9371-1de2-4bf3-a61a-d99f62c93653.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/5-2-%E9%AB%98%E4%BC%B0%E9%97%AE%E9%A2%98/1733210648273-45d7e502-b270-4f5b-a7a2-925700f52d0d.png" srcset="/img/loading.gif" lazyload></p>
+<p>如图 6.4 (左) 所示，原始的 Q学习算法用 DQN 计算<span class="math inline">\(y_j^{\hat{}}\)</span>,然后拿<span class="math inline">\(y_j^{\hat{}}\)</span>更新 DQN 自己，
+造成自举。如图 6.4(右)所示，可以改用目标网络计算<span class="math inline">\(y_j^{\hat{}}\)</span>,这样就避免了用 DQN
+的估计更新 DQN
+自己，降低自举造成的危害。然而这种方法不能完全避免自举，原因是目标网络的参数仍然与
+DQN 相关。</p>
+<h2 id="双-q-学习算法">双 Q 学习算法</h2>
+<p>造成 DQN 高估的原因不是 DQN 模型本身的缺陷，而是 Q
+学习算法有不足之处：第一，自举造成偏差的传播；第二，最大化造成 TD
+目标的高估。在 Q
+学习算法中使用目标网络，可以缓解自举造成的偏差，但是无助于缓解最大化造成的高估。本小节介绍双
+Q 学习 (double Q learning)
+算法，它在目标网络的基础上做改进，缓解最大化造成的高估。</p>
+<p>注 本小节介绍的双 Q 学习算法在文献中被称作 double DQN, 缩写
+DDQN。本书不采用 DDQN这名字，因为这个名字比较误导。双 Q 学习 (即所谓的
+DDQN) 只是一种 TD 算法而已，它可以把 DQN 训练得更好。双 Q
+学习并没有用区别于 DQN 的模型。本节中的模型只有一个，就是
+DQN。我们讨论的只是训练 DQN 的三种 TD 算法：原始的 Q 学习、 用目标网络的
+Q 学习、双 Q 学习。</p>
+<p>为了解释原始的 Q 学习、用目标网络的 Q 学习、以及双 Q
+学习三者的区别，我们再回顾一下Q 学习算法中的 TD 目标：</p>
+<p><span class="math inline">\(\widehat{y}_j = r_j + \gamma \cdot
+\max_{a \in \mathcal{A}} Q(s_{j+1}, a; w) \,.\)</span></p>
+<p>不妨把最大化拆成两步：</p>
+<p>1.选择——即基于状态<span class="math inline">\(s_{j+1}\)</span>,选出一个动作使得 DQN
+的输出最大化：</p>
+<p><span class="math inline">\(a^{\star} = \underset{a \in
+A}{\operatorname{argmax}} Q(s_{j+1}, a; w)\)</span></p>
+<p>2.求值——即计算<span class="math inline">\((s_{j+1},
+a^{\star})\)</span>的价值，从而算出 TD 目标：</p>
+<p><span class="math inline">\(y_j^{\hat{}} = r_j + Q(s_{j+1},
+a^{\star}; w)\)</span></p>
+<p>以上是原始的 Q 学习算法，选择和求值都用 DQN。上一小节改进了 Q
+学习，选择和求值都用目标网络：</p>
+<p>选择：</p>
+<p><span class="math inline">\(a^- = \underset{a \in
+A}{\operatorname{argmax}} Q(s_{j+1}, a; w^-)\)</span>,</p>
+<p>求值：</p>
+<p><span class="math inline">\(\widetilde{y}_j = r_j + Q(s_{j+1}, a^-;
+w^-)\)</span>.</p>
+<p>本小节介绍双 Q 学习，第一步的选择用 DQN, 第二步的求值用目标网络：</p>
+<p>选择：</p>
+<p><span class="math inline">\(a^{\star} = \underset{a \in
+A}{\operatorname{argmax}} Q(s_{j+1}, a; w)\)</span>,</p>
+<p>求值：</p>
+<p><span class="math inline">\(\widetilde{y}_j = r_j + Q(s_{j+1},
+a^{\star}; w^-)\)</span>.</p>
+<p>为什么双 Q 学习可以缓解最大化造成的高估呢？不难证明出这个不等式：</p>
+<p><span class="math inline">\(\underbrace{Q\left(s_{j+1}, a^{*};
+w^{-}\right)}_{\text{双 Q学习}} \leq \underbrace{\max_{a \in
+\mathcal{A}} Q\left(s_{j+1}, a; w^{-}\right)}_{\text{用目标网络的
+Q学习}}.\)</span>.</p>
+<p>因此，</p>
+<p><span class="math inline">\(\underbrace{\widetilde{y}_{t}}_{\text{双Q学习}}
+\leq
+\underbrace{\widehat{y}_{t}}_{\text{用目标网络的Q学习}}.\)</span></p>
+<p>这个公式说明双 Q 学习得到的 TD 目标更小。也就是说，与用目标网络的 Q
+学习相比，双 Q学习缓解了高估。</p>
+<p>双 Q
+学习算法的流程如下。每次随机从经验回放数组中取出一个四元组，记作<span class="math inline">\((s_j, a_j, r_j, s_{j+1})\)</span>。设 DQN
+和目标网络当前的参数分别为<span class="math inline">\(w_{\text{now}}\)</span>和<span class="math inline">\(w_{\text{now}}^-\)</span>,
+执行下面的步骤对参数做一次更新：</p>
+<p>1.对 DQN 做正向传播，得到：</p>
+<p><span class="math inline">\(q_j^{\hat{}} = Q(s_j, a_j;
+w_{\text{now}})\)</span></p>
+<p>2.选择：</p>
+<p><span class="math inline">\(a^{\star} = \underset{a \in
+A}{\operatorname{argmax}} Q(s_{j+1}, a; w_{\text{now}})\)</span></p>
+<p>3.求值：</p>
+<p><span class="math inline">\(q_{j+1} = Q(s_{j+1}, a^{\star};
+\bar{w}_{\text{now}})\)</span></p>
+<p>4.计算 TD 目标和 TD 误差：</p>
+<p><span class="math inline">\(\widetilde{y}_j = r_j + \gamma \cdot
+q_{j+1}\)</span>和<span class="math inline">\(\delta_j = q_j^{\hat{}} -
+\widetilde{y}_j\)</span></p>
+<p>5.对 DQN 做反向传播，得到梯度</p>
+<p><span class="math inline">\(\nabla_w Q(s_j, a_j;
+w_{\text{now}})\)</span></p>
+<p>6.做梯度下降更新 DQN 的参数：</p>
+<p><span class="math inline">\(w_{\text{new}} \leftarrow w_{\text{now}}
+- \alpha \cdot \delta_j \cdot \nabla_w Q(s_j, a_j;
+w_{\text{now}})\)</span></p>
+<p>7.设<span class="math inline">\(\tau \in (0,
+1)\)</span>是需要手动调整的超参数。做加权平均更新目标网络的参数：</p>
+<p><span class="math inline">\(\bar{w}_{\text{new}} \leftarrow \tau
+\cdot w_{\text{new}} + (1 - \tau) \cdot
+\bar{w}_{\text{now}}\)</span></p>
+<h2 id="总结">总结</h2>
+<p>本节研究了 DQN 的高估问题以及解决方案。DQN 的高估不是 DQN
+模型造成的，不是 DQN 的本质属性。高估只是因为原始 Q 学习算法不好。Q
+学习算法产生高估的原因有两个：第一，自举导致偏差从一个<span class="math inline">\((s,
+a)\)</span>二元组传播到更多的二元组；第二，最大化造成 TD
+目标高估真实价值。</p>
+<p>想要解决高估问题，就要从自举、最大化这两方面下手。本节介绍了两种缓解高估的算法：使用目标网络、双Q
+学习。Q 学习算法与目标网络的结合可以缓解自举造成的偏差。双
+Q学习基于目标网络的想法，进一步将 TD 目标的计算分解成选择和求值两步，
+缓解了最大化造成的高估。图 6.5 总结了本节研究的三种算法。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/5-2-%E9%AB%98%E4%BC%B0%E9%97%AE%E9%A2%98/1733212786643-e1052770-7aba-41fb-9fbc-8c193827c04e.png" srcset="/img/loading.gif" lazyload></p>
+<p>注 如果使用原始 Q
+学习算法，自举和最大化都会造成严重高估。在实践中，应当尽量使用双
+Q学习，它是三种算法中最好的。</p>
+<p>注 如果使用 SARSA 算法 (比如在 actor-critic 中),
+自举的问题依然存在，但是不存在最大化造成高估这一问题。对于 SARSA,
+只需要解决自举问题，所以应当将目标网络应用到 SARSA 。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/AI/" class="category-chain-item">AI</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI/RL/" class="category-chain-item">RL</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI/RL/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/" class="category-chain-item">DRL-王树森</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/RL/" class="print-no-link">#RL</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>5.2 高估问题</div>
+      <div>http://binbo-zappy.github.io/2024/12/04/DRL-王树森/5-2-高估问题/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年12月4日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/5-3-Dueling-Network/" title="5.3 Dueling Network">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">5.3 Dueling Network</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/5-1-%E7%BB%8F%E9%AA%8C%E5%9B%9E%E6%94%BE/" title="5.1 经验回放">
+                        <span class="hidden-mobile">5.1 经验回放</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

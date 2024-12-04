@@ -1,0 +1,1136 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="复习  在学习DQN之前，首先复习一些基础知识。在一局游戏中，把从起始到结束的所有奖励记作：\(R_1, \cdots, R_t, \cdots, R_n\)。 定义折扣率\(\gamma \in [0, 1]\)。折扣回报的定义是：  \(U_t &#x3D; R_t + \gamma \cdot R_{t+1} + \gamma^2 \cdot R_{t+2} + \cdots + \ga">
+<meta property="og:type" content="article">
+<meta property="og:title" content="1.2 value based RL">
+<meta property="og:url" content="http://binbo-zappy.github.io/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-2-Value-based-RL/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="复习  在学习DQN之前，首先复习一些基础知识。在一局游戏中，把从起始到结束的所有奖励记作：\(R_1, \cdots, R_t, \cdots, R_n\)。 定义折扣率\(\gamma \in [0, 1]\)。折扣回报的定义是：  \(U_t &#x3D; R_t + \gamma \cdot R_{t+1} + \gamma^2 \cdot R_{t+2} + \cdots + \ga">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/RL-WSS.png">
+<meta property="article:published_time" content="2024-12-04T08:01:41.000Z">
+<meta property="article:modified_time" content="2024-12-04T10:32:15.109Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="RL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/RL-WSS.png">
+  
+  
+  
+  <title>1.2 value based RL - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="1.2 value based RL"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-12-04 16:01" pubdate>
+          2024年12月4日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          38 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">1.2 value based RL</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="复习">复习</h1>
+<ol type="1">
+<li>在学习DQN之前，首先复习一些基础知识。在一局游戏中，把从起始到结束的所有奖励记作：<span class="math inline">\(R_1, \cdots, R_t, \cdots, R_n\)</span>。</li>
+<li>定义折扣率<span class="math inline">\(\gamma \in [0,
+1]\)</span>。折扣回报的定义是：</li>
+</ol>
+<p><span class="math inline">\(U_t = R_t + \gamma \cdot R_{t+1} +
+\gamma^2 \cdot R_{t+2} + \cdots + \gamma^{n-t} \cdot R_n\)</span>。</p>
+<ol start="3" type="1">
+<li>在游戏尚未结束的<span class="math inline">\(t\)</span>时刻，<span class="math inline">\(U_t\)</span>是一个未知的随机变量，其随机性来自于<span class="math inline">\(t\)</span>时刻之后的所有状态与动作。<strong>动作价值函数</strong>
+的定义是：</li>
+</ol>
+<p><span class="math inline">\(Q_{\pi}(s_t, a_t) = \mathbb{E}[U_t | S_t
+= s_t, A_t = a_t]\)</span>,</p>
+<ul>
+<li>公式中的期望消除了t tt 时刻之后的所有状态<span class="math inline">\(S_{t+1},\cdots,S_n\)</span>与所有动作<span class="math inline">\(A_{t+1},\cdots,A_n\)</span></li>
+</ul>
+<ol start="4" type="1">
+<li>最优动作价值函数用最大化消除策略<span class="math inline">\(\pi\)</span>：<span class="math inline">\(Q^*(s_t,
+a_t) = \max_{\pi} Q_{\pi}(s_t, a_t), \forall s_t \in \mathcal{S}, a_t
+\in \mathcal{A}\)</span>。</li>
+<li>可以这样理解<span class="math inline">\(Q^*\)</span>: 已知<span class="math inline">\(s_t\)</span>和<span class="math inline">\(a_t\)</span>, 不论未来采取什么样的策略<span class="math inline">\(\pi\)</span>, 回报<span class="math inline">\(U_t\)</span>的期望不可能超过<span class="math inline">\(Q^*\)</span>。</li>
+<li>最优动作价值函数的用途：假如我们知道<span class="math inline">\(Q^*\)</span>, 我们就能用它做控制。
+<ol type="1">
+<li>举个例子，超级玛丽游戏中的动作空间是<span class="math inline">\(A =
+\{左，右，上\}\)</span>。</li>
+<li>给定当前状态<span class="math inline">\(s_t\)</span>,
+智能体该执行哪个动作呢？</li>
+<li>假设我们已知<span class="math inline">\(Q^*\)</span>函数，那么我们就让<span class="math inline">\(Q^*\)</span>给三个动作打分，</li>
+<li>比如：<span class="math inline">\(Q^*(s_t, 左) = 370, Q^*(s_t, 右) =
+-21, Q^*(s_t, 上) = 610\)</span>。</li>
+</ol></li>
+<li>这三个值是什么意思呢？ 1.<span class="math inline">\(Q^*(s_t, 左) =
+370\)</span>的意思是：如果现在智能体选择向左走，不论之后采取什么策略<span class="math inline">\(\pi\)</span>, 那么回报<span class="math inline">\(U_t\)</span>的期望最多不会超过 370。
+<ol start="2" type="1">
+<li>同理，其他两个最优动作价值也是回报的期望的上界。</li>
+<li>根据<span class="math inline">\(Q^*\)</span>的评分，智能体应该选择向上跳，因为这样可以最大化回报<span class="math inline">\(U_t\)</span>的期望。</li>
+</ol></li>
+</ol>
+<h1 id="dqn">DQN</h1>
+<ul>
+<li>我们希望知道<span class="math inline">\(Q^*\)</span>,
+因为它就像是先知一般，可以预见未来，在<span class="math inline">\(t\)</span>时刻就预见<span class="math inline">\(t\)</span>到<span class="math inline">\(n\)</span>时刻之间的累计奖励的期望。</li>
+<li>假如我们有<span class="math inline">\(Q^*\)</span>这位先知，我们就遵照先知的指导，最大化未来的累计奖励。</li>
+<li>然而在实践中我们不知道<span class="math inline">\(Q^*\)</span>的函数表达式。是否有可能近似出<span class="math inline">\(Q^*\)</span>这位先知呢？</li>
+<li>对于超级玛丽这样的游戏，学出来一个“先知”并不难。假如让我们重复玩超级玛丽一亿次，那我们就会像先知一样，看到当前状态，就能准确判断出当前最优的动作是什么。</li>
+<li>这说明只要有足够多的“经验”, 就能训练出超级玛丽中的“先知”。</li>
+</ul>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-2-Value-based-RL/1733056273160-335a712a-e5a2-4b64-8301-8eef4e81d266.png" srcset="/img/loading.gif" lazyload></p>
+<ol type="1">
+<li>最优动作价值函数的近似：
+<ol type="1">
+<li>在实践中，近似学习“先知”<span class="math inline">\(Q^*\)</span>最有效的办法是深度Q网络(deep Q
+network, 缩写 DQN), 记作<span class="math inline">\(Q(s, a;
+\boldsymbol{w})\)</span>, 其结构如图所述。</li>
+<li>其中的<span class="math inline">\(\boldsymbol{w}\)</span>表示神经网络中的参数。首先随机初始化<span class="math inline">\(\boldsymbol{w}\)</span>, 随后用“经验”去学习<span class="math inline">\(\boldsymbol{w}\)</span>。</li>
+<li>学习的目标是：对于所有的<span class="math inline">\(s\)</span>和<span class="math inline">\(a\)</span>, DQN 的预测<span class="math inline">\(Q(s, a; \boldsymbol{w})\)</span>尽量接近<span class="math inline">\(Q^*(s,
+a)\)</span>。后面几节的内容都是如何学习<span class="math inline">\(\boldsymbol{w}\)</span>!</li>
+</ol></li>
+</ol>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-2-Value-based-RL/1733057850676-68df9942-0f13-4c49-bbb7-9a1debcb3004.png" srcset="/img/loading.gif" lazyload></p>
+<ol start="2" type="1">
+<li>可以这样理解 DQN 的表达式<span class="math inline">\(Q(s, a;
+\boldsymbol{w})\)</span>。
+<ol type="1">
+<li>DQN 的输出是离散动作空间<span class="math inline">\(A\)</span>上的每个动作的 Q
+值，即给每个动作的评分，分数越高意味着动作越好。</li>
+<li>举个例子，动作空间是<span class="math inline">\(A =
+\{左，右，上\}\)</span>, 那么动作空间的大小等于<span class="math inline">\(|A| = 3\)</span>, 那么 DQN 的输出是 3
+维的向量，记作<span class="math inline">\(\hat{q}\)</span>,
+向量每个元素对应一个动作。</li>
+<li>在图 4.1 中，DQN 的输出是 4.<span class="math inline">\(q^1 = Q(s,
+左; \boldsymbol{w}) = 370, q^2 = Q(s, 右; \boldsymbol{w}) = -21, q^3 =
+Q(s, 上; \boldsymbol{w}) = 610\)</span>。</li>
+</ol></li>
+<li>总结一下，DQN 的输出是<span class="math inline">\(|A|\)</span>维的向量<span class="math inline">\(\hat{q}\)</span>,
+包含所有动作的价值。而我们常用的符号<span class="math inline">\(Q(s, a;
+\boldsymbol{w})\)</span>是标量，是动作<span class="math inline">\(a\)</span>对应的动作价值，是向量<span class="math inline">\(\hat{q}\)</span>中的一个元素。</li>
+<li>用DQN玩游戏：agent每次采取的action是使得Q函数取最大的那个动作，一直玩下去。下图的顺序是从左往右看。</li>
+</ol>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-2-Value-based-RL/1733058037862-263e2333-6531-46b3-a8cd-0d44aec06129.png" srcset="/img/loading.gif" lazyload></p>
+<ol start="5" type="1">
+<li>DQN 的梯度：在训练 DQN 的时候，需要对 DQN 关于神经网络参数<span class="math inline">\(\boldsymbol{w}\)</span>求梯度。用<span class="math inline">\(\nabla_{w} Q(s, a; w) \triangleq \frac{\partial
+Q(s, a; w)}{\partial w}\)</span></li>
+</ol>
+<ul>
+<li>表示函数值<span class="math inline">\(Q(s, a;
+\boldsymbol{w})\)</span>关于参数<span class="math inline">\(\boldsymbol{w}\)</span>的梯度。因为函数值<span class="math inline">\(Q(s, a;
+\boldsymbol{w})\)</span>是一个实数，所以梯度的形状与<span class="math inline">\(\boldsymbol{w}\)</span>完全相同。</li>
+<li>如果<span class="math inline">\(\boldsymbol{w}\)</span>是<span class="math inline">\(d \times 1\)</span>的向量，那么梯度也是<span class="math inline">\(d \times 1\)</span>的向量。如果<span class="math inline">\(\boldsymbol{w}\)</span>是<span class="math inline">\(d_1 \times d_2\)</span>的矩阵，那么梯度也是<span class="math inline">\(d_1 \times d_2\)</span>的矩阵。如果<span class="math inline">\(\boldsymbol{w}\)</span>是<span class="math inline">\(d_1 \times d_2 \times
+d_3\)</span>的张量，那么梯度也是<span class="math inline">\(d_1 \times
+d_2 \times d_3\)</span>的张量。</li>
+</ul>
+<ol start="6" type="1">
+<li>给定观测值<span class="math inline">\(s\)</span>和<span class="math inline">\(a\)</span>, 比如<span class="math inline">\(a =
+左\)</span>, 可以用反向传播计算出梯度<span class="math inline">\(\nabla_{\boldsymbol{w}}Q( s, 左;
+\boldsymbol{w})\)</span>。
+<ol type="1">
+<li>在编程实现的时候，TensorFlow 和PyTorch 可以对 DQN
+输出向量的一个元素(比如<span class="math inline">\(Q( s, 左;
+\boldsymbol{w})\)</span>这个元素) 关于变量<span class="math inline">\(\boldsymbol{w}\)</span>自动求梯度，得到的梯度的形状与<span class="math inline">\(\boldsymbol{w}\)</span>完全相同。</li>
+</ol></li>
+</ol>
+<h2 id="时间差分td算法">时间差分（TD）算法</h2>
+<h3 id="驾车时间预测的例子">驾车时间预测的例子</h3>
+<ol type="1">
+<li>假设我们有一个模型<span class="math inline">\(Q(s, d;
+\boldsymbol{w})\)</span>, 其中<span class="math inline">\(s\)</span>是起点，<span class="math inline">\(d\)</span>是终点，<span class="math inline">\(\boldsymbol{w}\)</span>是参数。
+<ol type="1">
+<li>模型<span class="math inline">\(Q\)</span>可以预测开车出行的时间开销。</li>
+<li>这个模型一开始不准确，甚至是纯随机的。</li>
+<li>但是随着很多人用这个模型，得到更多数据、更多训练，这个模型就会越来越准，会像谷歌地图一样准。</li>
+</ol></li>
+<li>我们该如何训练这个模型呢？
+<ol type="1">
+<li>在用户出发前，用户告诉模型起点<span class="math inline">\(s\)</span>和终点<span class="math inline">\(d\)</span>, 模型做一个预测<span class="math inline">\(\hat{q} = Q(s, d; \boldsymbol{w})\)</span>。</li>
+<li>当用户结束行程的时候，把实际驾车时间<span class="math inline">\(y\)</span>反馈给模型。</li>
+<li>两者之差<span class="math inline">\(\hat{q} -
+y\)</span>反映出模型是高估还是低估了驾驶时间，以此来修正模型，使得模型的估计更准确。</li>
+</ol></li>
+<li>假设我是个用户，我要从北京驾车去上海。从北京出发之前，我让模型做预测，模型告诉我总车程是
+14 小时：</li>
+</ol>
+<p><span class="math inline">\(\hat{q} \triangleq Q(“北京”, “上海”;
+\boldsymbol{w}) = 14\)</span>。</p>
+<ol start="4" type="1">
+<li>当我到达上海，我知道自己花的实际时间是 16
+小时，并将结果反馈给模型；见图 4.2。</li>
+</ol>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-2-Value-based-RL/1733058574342-3aa93422-c020-4430-91d7-f0aebee71156.png" srcset="/img/loading.gif" lazyload></p>
+<ol start="5" type="1">
+<li>可以用梯度下降对模型做一次更新，具体做法如下。把我的这次旅程作为一组训练数据：</li>
+</ol>
+<p><span class="math inline">\(s = “北京”, d = “上海”, \hat{q} = 14, y =
+16\)</span>。</p>
+<ol start="6" type="1">
+<li>我们希望估计值<span class="math inline">\(\hat{q} = Q(s, d;
+\boldsymbol{w})\)</span>尽量接近真实观测到的<span class="math inline">\(y\)</span>, 所以用两者差的平方作为损失函数：</li>
+</ol>
+<p><span class="math inline">\(L(\boldsymbol{w}) = \frac{1}{2} [Q(s, d;
+\boldsymbol{w}) - y]^2\)</span>。</p>
+<ol start="7" type="1">
+<li>用链式法则计算损失函数的梯度，得到：</li>
+</ol>
+<p><span class="math inline">\(\nabla_{\boldsymbol{w}}L(\boldsymbol{w})
+= (\hat{q} - y) \cdot \nabla_{\boldsymbol{w}}Q(s, d;
+\boldsymbol{w})\)</span>。</p>
+<ol start="8" type="1">
+<li>然后做一次梯度下降更新模型参数<span class="math inline">\(\boldsymbol{w}\)</span>：</li>
+</ol>
+<p><span class="math inline">\(\boldsymbol{w} \leftarrow \boldsymbol{w}
+- \alpha \cdot \nabla_{\boldsymbol{w}}L(\boldsymbol{w})\)</span>，</p>
+<ul>
+<li>此处的<span class="math inline">\(\alpha\)</span>是学习率，需要手动调整。在完成一次梯度下降之后，如果再让模型做一次预测，那么模型的预测值</li>
+</ul>
+<p><span class="math inline">\(Q(&quot;北京&quot;, &quot;上海&quot;;
+\boldsymbol{w})\)</span></p>
+<ul>
+<li>会比原先更接近<span class="math inline">\(y = 16\)</span>。</li>
+</ul>
+<h3 id="td算法">TD算法</h3>
+<ul>
+<li>接着上文驾车时间的例子。出发前模型估计全程时间为<span class="math inline">\(\hat{q} =
+14\)</span>小时；模型建议的路线会途径济南。我从北京出发，过了<span class="math inline">\(r =
+4.5\)</span>小时，我到达济南。此时我再让模型做一次预测，模型告诉我</li>
+</ul>
+<p><span class="math inline">\(\hat{q}&#39; \triangleq
+Q(&quot;济南&quot;, &quot;上海&quot;; \boldsymbol{w}) =
+11\)</span>。</p>
+<ul>
+<li>见图 4.3
+的描述。假如此时我的车坏了，必须要在济南修理，我不得不取消此次行程。
+<ul>
+<li>我没有完成旅途，那么我的这组数据是否能帮助训练模型呢？</li>
+<li>其实是可以的，用到的算法叫做 <strong>时间差分 (temporal difference,
+缩写 TD)</strong>。</li>
+</ul></li>
+</ul>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-2-Value-based-RL/1733058721318-ba8539cc-dae0-42cb-833f-5090f4c3f4e4.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>下面解释 TD 算法的原理。
+<ul>
+<li>回顾一下我们已有的数据：模型估计从北京到上海一共需要<span class="math inline">\(\hat{q} = 14\)</span>小时，我实际用了<span class="math inline">\(r = 4.5\)</span>小时到达济南，模型估计还需要<span class="math inline">\(\tilde{q}&#39; =
+11\)</span>小时从济南到上海。</li>
+<li>到达济南时，根据模型最新估计，整个旅程的总时间为：<br>
+<span class="math inline">\(\hat{y} \triangleq r + \hat{q}&#39; = 4.5 +
+11 = 15.5\)</span>。</li>
+</ul></li>
+<li>TD 算法将<span class="math inline">\(\hat{y} = 15.5\)</span>称为
+<strong>TD 目标 (TD target)</strong>, 它比最初的预测<span class="math inline">\(\hat{q} = 14\)</span>更可靠。
+<ul>
+<li>最初的预测<span class="math inline">\(\hat{q} =
+14\)</span>纯粹是估计的，没有任何事实的成分。</li>
+<li>TD 目标<span class="math inline">\(\hat{y} =
+15.5\)</span>也是个估计，但其中有事实的成分：其中的<span class="math inline">\(r = 4.5\)</span>就是实际的观测。</li>
+</ul></li>
+<li>基于以上讨论，我们认为 TD 目标<span class="math inline">\(\hat{y} =
+15.5\)</span>比模型最初的估计值<span class="math inline">\(Q(“北京”,
+“上海”; \boldsymbol{w}) = 14\)</span>更可靠，所以可以用<span class="math inline">\(\hat{y}\)</span>对模型做“修正”。
+<ul>
+<li>我们希望估计值<span class="math inline">\(\hat{q} = Q(s, d;
+\boldsymbol{w})\)</span>尽量接近 TD 目标<span class="math inline">\(\hat{y}\)</span>,
+所以用两者差的平方作为损失函数：<br>
+<span class="math inline">\(L(\boldsymbol{w}) = \frac{1}{2} [Q(“北京”,
+“上海”; \boldsymbol{w}) - \hat{y}]^2\)</span>。</li>
+</ul></li>
+<li>此处把<span class="math inline">\(\hat{y}\)</span>看做常数，尽管它依赖于<span class="math inline">\(\boldsymbol{w}\)</span>。计算损失函数的梯度：</li>
+</ul>
+<p><span class="math inline">\(\nabla_{\boldsymbol{w}}L(\boldsymbol{w})
+= (\hat{q} - \hat{y}) \cdot \nabla_{\boldsymbol{w}}Q(“北京”, “上海”;
+\boldsymbol{w})\)</span>，</p>
+<ul>
+<li>此处的<span class="math inline">\(\delta = \hat{q} - \hat{y} = 14 -
+15.5 = -1.5\)</span>称作 <strong>TD 误差 (TD
+error)</strong>。做一次梯度下降更新模型参数<span class="math inline">\(\boldsymbol{w}\)</span>：<br>
+<span class="math inline">\(\boldsymbol{w} \leftarrow \boldsymbol{w} -
+\alpha \cdot \delta \cdot \nabla_{\boldsymbol{w}}Q(“北京”, “上海”;
+\boldsymbol{w})\)</span>。</li>
+<li>如果你仍然不理解 TD
+算法，那么请换个角度来思考问题。模型估计从北京到上海全程需要<span class="math inline">\(\hat{q} =
+14\)</span>小时，模型还估计从济南到上海需要<span class="math inline">\(\vec{q}&#39; =
+11\)</span>小时。这就相当于模型做了这样的估计：从北京到济南需要的时间为<span class="math inline">\(\hat{q} - \hat{q}&#39; = 14 - 11 =
+3\)</span>。</li>
+<li>而我真实花费<span class="math inline">\(r =
+4.5\)</span>小时从北京到济南。模型的估计与我的真实观测之差为<span class="math inline">\(\delta = 3 - 4.5 = -1.5\)</span>。这就是 TD
+误差！以上分析说明 TD 误差<span class="math inline">\(\delta\)</span>就是模型估计与真实观测之差。TD
+算法的目的是通过更新参数<span class="math inline">\(\boldsymbol{w}\)</span>使得损失<span class="math inline">\(L(\boldsymbol{w}) = \frac{1}{2}
+\delta^2\)</span>减小。</li>
+</ul>
+<h3 id="用td训练dqn">用TD训练DQN</h3>
+<ul>
+<li>TD算法是一种在线学习算法，可以逐步更新值函数，而不需要等到回合结束。</li>
+<li>视频中用到的例子是从纽约到亚特兰大，途径华盛顿，但是道理都是一样的。</li>
+</ul>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-2-Value-based-RL/1733058879180-fb0c4d82-30c6-46fa-90ba-70b1f4fd5c45.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>如何把TD算法用到DQN？和驾车的例子很像，等式左边是 t 时刻的 Q
+的估计，等式右边是一个实际观测值加一项关于 t+1 时刻的 Q 估计。</li>
+</ul>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-2-Value-based-RL/1733058956641-3238eaca-6639-4dc9-bca7-6e7ef5d7960e.png" srcset="/img/loading.gif" lazyload></p>
+<ol type="1">
+<li>等式<span class="math inline">\(U_t = R_t + \gamma \cdot
+U_{t+1}\)</span></li>
+</ol>
+<ul>
+<li>这个等式反映了相邻两个折扣回报之间的关系：t 时刻的折扣回报<span class="math inline">\(U_t\)</span>等于 t 时刻的奖励<span class="math inline">\(R_t\)</span>加上折扣因子<span class="math inline">\(\gamma\)</span>乘以 t+1 时刻的折扣回报<span class="math inline">\(U_{t+1}\)</span>。</li>
+</ul>
+<ol start="2" type="1">
+<li>得来的过程如下：</li>
+</ol>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-2-Value-based-RL/1733059049529-0201225d-62af-4aea-8538-1a7646a506fd.png" srcset="/img/loading.gif" lazyload></p>
+<p><span class="math inline">\(Q(s_t, a_t; \mathbf{w}) \approx
+\mathbb{E}[R_t + \gamma \cdot Q(S_{t+1}, A_{t+1};
+\mathbf{w})]\)</span>。这个公式两边是两个估计（estimate）</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-2-Value-based-RL/1733059063482-983ffd67-cd1d-45e2-8336-c7d95144144e.png" srcset="/img/loading.gif" lazyload></p>
+<ol start="3" type="1">
+<li>左边是 prediction，右边是 TD target。</li>
+</ol>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-2-Value-based-RL/1733059077203-f8091934-1717-4d41-9ad2-c33bfdf701a9.png" srcset="/img/loading.gif" lazyload></p>
+<ol start="4" type="1">
+<li>使用TD算法训练DQN的过程如下图：下图中的 t+1 时刻的 Q 为什么可以写成
+max 的形式？是因为 t+1 时刻的 action<span class="math inline">\(a_{t+1}\)</span>就是选择 t 时刻使得 Q 最大的那个
+action。</li>
+</ol>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-2-Value-based-RL/1733059096305-e0111d8e-c366-485c-b832-f2cc309dafa5.png" srcset="/img/loading.gif" lazyload></p>
+<ol start="5" type="1">
+<li>下面是王树森书中具体的推导过程：</li>
+</ol>
+<ul>
+<li>下面我们推导训练 DQN 的 TD 算法（严格地讲，此处推导的是“Q 学习算法”,
+它属于 TD 算法的一种。本节就称其为 TD 算法）。回忆一下回报的定义<span class="math inline">\(U_t = \sum_{k=t}^n \gamma^{k-t} \cdot
+R_k\)</span>,<span class="math inline">\(U_{t+1} = \sum_{k=t+1}^n
+\gamma^{k-t-1} \cdot R_k\)</span>。由<span class="math inline">\(U_t\)</span>和<span class="math inline">\(U_{t+1}\)</span>的定义可得：</li>
+</ul>
+<p><span class="math inline">\(U_t = R_t + \gamma \cdot \sum_{k=t+1}^n
+\gamma^{k-t-1} \cdot R_k = U_{t+1}\)</span>。</p>
+<ul>
+<li>回忆一下，最优动作价值函数可以写成</li>
+</ul>
+<p><span class="math inline">\(Q^*(s_t, a_t) = \max_{\pi} \mathbb{E}
+[U_t | S_t = s_t, A_t = a_t]\)</span>。</p>
+<ul>
+<li>从公式出发，经过一系列数学推导 ,
+可以得到下面的定理。这个定理是最优贝尔曼方程 (optimal Bellman equations)
+的一种形式。</li>
+</ul>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-2-Value-based-RL/1733059200306-8b0a564c-d901-467a-8802-7891c27ac149.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>最优贝尔曼方程具体公式如下：</li>
+</ul>
+<p><span class="math inline">\(Q^*(s_t, a_t) = \mathbb{E}{S{t+1} \sim
+p(\cdot | s_t, a_t)} [R_t + \gamma \cdot \max_{A \in \mathcal{A}}
+Q^*(S_{t+1}, A) | S_t = s_t, A_t = a_t]\)</span>。</p>
+<ul>
+<li>贝尔曼方程的右边是个期望，我们可以对期望做蒙特卡洛近似。
+<ul>
+<li>当智能体执行动作<span class="math inline">\(a_t\)</span>之后，环境通过状态转移函数<span class="math inline">\(p(s_{t+1} | s_t, a_t)\)</span>计算出新状态<span class="math inline">\(s_{t+1}\)</span>。奖励<span class="math inline">\(R_t\)</span>最多只依赖于<span class="math inline">\(S_t\)</span>,<span class="math inline">\(A_t\)</span>,<span class="math inline">\(S_{t+1}\)</span>。那么当我们观测到<span class="math inline">\(s_t\)</span>,<span class="math inline">\(a_t\)</span>,<span class="math inline">\(s_{t+1}\)</span>时，则奖励<span class="math inline">\(R_t\)</span>也被观测到，记作<span class="math inline">\(r_t\)</span>。有了四元组<span class="math inline">\((s_t, a_t, r_t, s_{t+1})\)</span>,</li>
+<li>我们可以计算出</li>
+</ul></li>
+</ul>
+<p><span class="math inline">\(r_t + \gamma \cdot \max_{a \in
+\mathcal{A}} Q^*(s_{t+1}, a)\)</span>。</p>
+<ul>
+<li>它可以看做是下面这项期望的蒙特卡洛近似：</li>
+</ul>
+<p><span class="math inline">\(\mathbb{E}_{S_{t+1} \sim p(\cdot | s_t,
+a_t)} [R_t + \gamma \cdot \max_{A \in \mathcal{A}} Q^*(S_{t+1}, A) | S_t
+= s_t, A_t = a_t]\)</span>。</p>
+<ul>
+<li>由定理和上述的蒙特卡洛近似可得：</li>
+</ul>
+<p><span class="math inline">\(Q^*(s_t, a_t) \approx r_t + \gamma \cdot
+\max_{a \in \mathcal{A}} Q^*(s_{t+1}, a)\)</span>。</p>
+<ul>
+<li>这是不是很像驾驶时间预测问题？左边的<span class="math inline">\(Q^*(s_t,
+a_t)\)</span>就像是模型预测“北京到上海”的总时间，<span class="math inline">\(r_t\)</span>像是实际观测的“北京到济南”的时间，<span class="math inline">\(\gamma \cdot \max_{a \in \mathcal{A}} Q^*(s_{t+1},
+a)\)</span>相当于模型预测剩余路程“济南到上海”的时间。见图 4.4
+中的类比。</li>
+</ul>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-2-Value-based-RL/1733059350133-4450f049-cc1c-4a70-9dff-cb5bf2cdaf9e.png" srcset="/img/loading.gif" lazyload></p>
+<ol start="6" type="1">
+<li>把公式中的最优动作价值函数<span class="math inline">\(Q^*(s,
+a)\)</span>替换成神经网络<span class="math inline">\(Q(s, a;
+\boldsymbol{w})\)</span>, 得到：<br>
+<span class="math inline">\(Q(s_t, a_t; \boldsymbol{w}) \approx r_t +
+\gamma \cdot \max_{a \in \mathcal{A}} Q(s_{t+1}, a;
+\boldsymbol{w})\)</span>。</li>
+</ol>
+<ul>
+<li>左边的<span class="math inline">\(\hat{q}_t \triangleq Q(s_t, a_t;
+\boldsymbol{w})\)</span>是神经网络在 t
+时刻做出的预测，其中没有任何事实成分。右边的 TD 目标<span class="math inline">\(\hat{y}_t\)</span>是神经网络在 t+1
+时刻做出的预测，它部分基于真实观测到的奖励<span class="math inline">\(r_t\)</span>。 +<span class="math inline">\(\hat{q}_t\)</span>和<span class="math inline">\(\hat{y}_t\)</span>两者都是对最优动作价值<span class="math inline">\(Q^*(s_t, a_t)\)</span>的估计，但是<span class="math inline">\(\hat{y}_t\)</span>部分基于事实，因此比<span class="math inline">\(\hat{q}_t\)</span>更可信。应当鼓励<span class="math inline">\(\hat{q}_t \triangleq Q(s_t, a_t;
+\boldsymbol{w})\)</span>接近<span class="math inline">\(\hat{y}_t\)</span>。定义损失函数：</li>
+</ul>
+<p><span class="math inline">\(L(\boldsymbol{w}) = \frac{1}{2} [Q(s_t,
+a_t; \boldsymbol{w}) - \hat{y}_t]^2\)</span>。</p>
+<ul>
+<li>假装<span class="math inline">\(\hat{y}_t\)</span>是常数（实际上<span class="math inline">\(\hat{y}_t\)</span>依赖于<span class="math inline">\(\boldsymbol{w}\)</span>, 但是我们假装<span class="math inline">\(\hat{y}_t\)</span>是常数）, 计算<span class="math inline">\(L\)</span>关于<span class="math inline">\(\boldsymbol{w}\)</span>的梯度：<br>
+<span class="math inline">\(\nabla_{\boldsymbol{w}}L(\boldsymbol{w}) =
+(\hat{q}_t - \hat{y}_t) \cdot \nabla_{\boldsymbol{w}}Q(s_t, a_t;
+\boldsymbol{w})\)</span>。</li>
+<li>做一步梯度下降，可以让<span class="math inline">\(\hat{q}_t\)</span>更接近<span class="math inline">\(\hat{y}_t\)</span>：<br>
+<span class="math inline">\(\boldsymbol{w} \leftarrow \boldsymbol{w} -
+\alpha \cdot \delta_t \cdot \nabla_{\boldsymbol{w}}Q(s_t, a_t;
+\boldsymbol{w})\)</span>。</li>
+<li>这个公式就是训练 DQN 的 TD 算法。</li>
+<li>总结一下：最优行动价值函数是未知的，DQN算法就是用神经网络近似这个最优行动价值函数。</li>
+</ul>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-2-Value-based-RL/1733059461690-35cc7ae3-b425-4ba0-896a-f163089f497a.png" srcset="/img/loading.gif" lazyload></p>
+<ol start="7" type="1">
+<li>TD算法具体流程如下：</li>
+</ol>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-2-Value-based-RL/1733059475690-f46bbaf8-c631-4638-9333-1e8e418a8123.png" srcset="/img/loading.gif" lazyload></p>
+<ol start="8" type="1">
+<li>书中介绍的训练流程</li>
+</ol>
+<ul>
+<li>首先总结上面的结论。给定一个四元组<span class="math inline">\((s_t,
+a_t, r_t, s_{t+1})\)</span>, 我们可以计算出 DQN 的预测值<span class="math inline">\(\hat{q}_t = Q(s_t, a_t; \boldsymbol{w})\)</span>,
+以及 TD 目标和 TD 误差：<br>
+<span class="math inline">\(\hat{y}_t = r_t + \gamma \cdot \max_{a \in
+\mathcal{A}} Q(s_{t+1}, a; \boldsymbol{w})\)</span>和<span class="math inline">\(\delta_t = \hat{q}_t - \hat{y}_t\)</span>。</li>
+<li>TD 算法用这个公式更新 DQN 的参数：<br>
+<span class="math inline">\(\boldsymbol{w} \leftarrow \boldsymbol{w} -
+\alpha \cdot \delta_t \cdot \nabla_{\boldsymbol{w}}Q(s_t, a_t;
+\boldsymbol{w})\)</span>。</li>
+<li>注意，算法所需数据为四元组<span class="math inline">\((s_t, a_t,
+r_t, s_{t+1})\)</span>, 与控制智能体运动的策略<span class="math inline">\(\pi\)</span>无关。这就意味着可以用任何策略控制智能体与环境交互，同时记录下算法运动轨迹，作为训练数据。因此，DQN
+的训练可以分割成两个独立的部分：收集训练数据、更新参数<span class="math inline">\(\boldsymbol{w}\)</span>。</li>
+</ul>
+<ol start="9" type="1">
+<li><strong>收集训练数据</strong>：</li>
+</ol>
+<ul>
+<li>我们可以用任何策略函数<span class="math inline">\(\pi\)</span>去控制智能体与环境交互，这个<span class="math inline">\(\pi\)</span>就叫做行为策略 (behavior
+policy)。比较常用的是<span class="math inline">\(\epsilon\)</span>-greedy 策略：<br>
+<span class="math inline">\(a_t = \left\{ \begin{array}{ll} \arg\max_a
+Q(s_t, a; \boldsymbol{w}), &amp; \text{以概率 } (1 - \epsilon); \\
+\text{均匀抽取 } A \text{ 中的一个动作}, &amp; \text{以概率 } \epsilon.
+\end{array} \right.\)</span></li>
+<li>把智能体在一局游戏中的轨迹记作：<br>
+<span class="math inline">\(s_1, a_1, r_1, s_2, a_2, r_2, \cdots, s_n,
+a_n, r_n\)</span>。</li>
+<li>把一条轨迹划分成<span class="math inline">\(n\)</span>个<span class="math inline">\((s_t, a_t, r_t,
+s_{t+1})\)</span>这种四元组，存入数组，这个数组叫做经验回放数组 (replay
+buffer)。</li>
+</ul>
+<ol start="10" type="1">
+<li><strong>更新 DQN 参数</strong><span class="math inline">\(\boldsymbol{w}\)</span>：</li>
+</ol>
+<ul>
+<li>随机从经验回放数组中取出一个四元组，记作<span class="math inline">\((s_j, a_j, r_j, s_{j+1})\)</span>。</li>
+<li>设 DQN 当前的参数为<span class="math inline">\(\boldsymbol{w}_{\text{now}}\)</span>,
+执行下面的步骤对参数做一次更新，得到新的参数<span class="math inline">\(\boldsymbol{w}_{\text{new}}\)</span>。
+<ol type="1">
+<li>对 DQN 做正向传播，得到 Q 值：<br>
+<span class="math inline">\(\hat{q}_j = Q(s_j, a_j;
+\boldsymbol{w}_{\text{now}})\)</span>和<span class="math inline">\(\hat{q}_{j+1} = \max_{a \in \mathcal{A}}
+Q(s_{j+1}, a; \boldsymbol{w}_{\text{now}})\)</span>。</li>
+<li>计算 TD 目标和 TD 误差：<br>
+<span class="math inline">\(\hat{y}_j = r_j + \gamma \cdot
+\hat{q}_{j+1}\)</span>和<span class="math inline">\(\delta_j = \hat{q}_j
+- \hat{y}_j\)</span>。</li>
+<li>对 DQN 做反向传播，得到梯度：<br>
+<span class="math inline">\(\boldsymbol{g}_j = \nabla_{\boldsymbol{w}}
+Q(s_j, a_j; \boldsymbol{w}_{\text{now}})\)</span>。</li>
+<li>做梯度下降更新 DQN 的参数：<br>
+<span class="math inline">\(\boldsymbol{w}_{\text{new}} \leftarrow
+\boldsymbol{w}_{\text{now}} - \alpha \cdot \delta_j \cdot
+\boldsymbol{g}_j\)</span>。</li>
+</ol></li>
+</ul>
+<p>智能体收集数据、更新 DQN
+参数这两者可以同时进行。可以在智能体每执行一个动作之后，对<span class="math inline">\(\boldsymbol{w}\)</span>做几次更新。也可以在每完成一<font style="color:rgb(6, 6, 7);">局游戏之后，对
+</font><span class="math inline">\(\boldsymbol{w}\)</span><font style="color:rgb(6, 6, 7);">
+做几次更新。</font></p>
+<h4 id="注意"><font style="color:rgb(6, 6, 7);">注意</font></h4>
+<p><font style="color:rgb(6, 6, 7);">上面介绍用 TD 算法训练 DQN,
+更准确地说，我们用的 TD 算法叫做 Q 学习算法 (Q-learning)。TD
+算法是一大类算法，常见的有 Q 学习和 SARSA。Q
+学习的目的是学到最优动作价值函数 </font><span class="math inline">\(Q^*\)</span><font style="color:rgb(6, 6, 7);">, 而
+SARSA 的目的是学习动作价值函数 </font><span class="math inline">\(Q_{\pi}\)</span><font style="color:rgb(6, 6, 7);">。后面会介绍
+SARSA 算法。</font></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/AI/" class="category-chain-item">AI</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI/RL/" class="category-chain-item">RL</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI/RL/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/" class="category-chain-item">DRL-王树森</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/RL/" class="print-no-link">#RL</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>1.2 value based RL</div>
+      <div>http://binbo-zappy.github.io/2024/12/04/DRL-王树森/1-2-Value-based-RL/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年12月4日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-3-Policy-based-RL/" title="1.3 策略学习">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">1.3 策略学习</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-1-%E6%B7%B1%E5%BA%A6%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/" title="1.1 DRL基础">
+                        <span class="hidden-mobile">1.1 DRL基础</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -19,12 +19,12 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="6.6 电子邮件1. 电子邮件系统 电子邮件系统采用客户&#x2F;服务器方式。三个主要组成构件：用户代理，邮件服务器以及电子邮件所需的协议   用户代理是用户与电子邮件系统的接口，又称为电子邮件客户端软件 邮件服务器是电子邮件系统的基础设施。因特网上所有的SP都有邮件服务器，其功能是发送和接收邮件，同时还要负责维护用户的邮箱。 协议包括邮件发送协议（例如SMTP)和邮件读取协议（例如POP3)。">
+    <meta name="description" content="6.6 电子邮件 1. 电子邮件系统  电子邮件系统采用客户&#x2F;服务器方式。三个主要组成构件：用户代理，邮件服务器以及电子邮件所需的协议   用户代理是用户与电子邮件系统的接口，又称为电子邮件客户端软件 邮件服务器是电子邮件系统的基础设施。因特网上所有的SP都有邮件服务器，其功能是发送和接收邮件，同时还要负责维护用户的邮箱。 协议包括邮件发送协议（例如SMTP)和邮件读取协议（例如P">
 <meta property="og:type" content="article">
 <meta property="og:title" content="6.6 电子邮件">
 <meta property="og:url" content="http://binbo-zappy.github.io/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-6-%E7%94%B5%E5%AD%90%E5%8D%8F%E8%AE%AE/index.html">
 <meta property="og:site_name" content="Binbo">
-<meta property="og:description" content="6.6 电子邮件1. 电子邮件系统 电子邮件系统采用客户&#x2F;服务器方式。三个主要组成构件：用户代理，邮件服务器以及电子邮件所需的协议   用户代理是用户与电子邮件系统的接口，又称为电子邮件客户端软件 邮件服务器是电子邮件系统的基础设施。因特网上所有的SP都有邮件服务器，其功能是发送和接收邮件，同时还要负责维护用户的邮箱。 协议包括邮件发送协议（例如SMTP)和邮件读取协议（例如POP3)。">
+<meta property="og:description" content="6.6 电子邮件 1. 电子邮件系统  电子邮件系统采用客户&#x2F;服务器方式。三个主要组成构件：用户代理，邮件服务器以及电子邮件所需的协议   用户代理是用户与电子邮件系统的接口，又称为电子邮件客户端软件 邮件服务器是电子邮件系统的基础设施。因特网上所有的SP都有邮件服务器，其功能是发送和接收邮件，同时还要负责维护用户的邮箱。 协议包括邮件发送协议（例如SMTP)和邮件读取协议（例如P">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/network.jpg">
 <meta property="article:published_time" content="2024-11-18T09:27:28.000Z">
@@ -225,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          783 字
+          781 字
         
       </span>
     
@@ -278,60 +278,58 @@
             
               <div class="markdown-body">
                 
-                <h1 id="6-6-电子邮件"><a href="#6-6-电子邮件" class="headerlink" title="6.6 电子邮件"></a>6.6 电子邮件</h1><h2 id="1-电子邮件系统"><a href="#1-电子邮件系统" class="headerlink" title="1. 电子邮件系统"></a>1. 电子邮件系统</h2><blockquote>
-<p>电子邮件系统采用客户&#x2F;服务器方式。三个主要组成构件：用户代理，邮件服务器以及电子邮件所需的协议</p>
+                <h1 id="电子邮件">6.6 电子邮件</h1>
+<h2 id="电子邮件系统">1. 电子邮件系统</h2>
+<blockquote>
+<p>电子邮件系统采用客户/服务器方式。三个主要组成构件：用户代理，邮件服务器以及电子邮件所需的协议</p>
 </blockquote>
-<ol>
+<ol type="1">
 <li>用户代理是用户与电子邮件系统的接口，又称为电子邮件客户端软件</li>
 <li>邮件服务器是电子邮件系统的基础设施。因特网上所有的SP都有邮件服务器，其功能是发送和接收邮件，同时还要负责维护用户的邮箱。</li>
 <li>协议包括邮件发送协议（例如SMTP)和邮件读取协议（例如POP3)。</li>
 </ol>
 <p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-6-%E7%94%B5%E5%AD%90%E5%8D%8F%E8%AE%AE/image-20241118190659564.png" srcset="/img/loading.gif" lazyload></p>
-<h2 id="2-简单邮件传送协议SMTP"><a href="#2-简单邮件传送协议SMTP" class="headerlink" title="2. 简单邮件传送协议SMTP"></a>2. 简单邮件传送协议SMTP</h2><ol>
+<h2 id="简单邮件传送协议smtp">2. 简单邮件传送协议SMTP</h2>
+<ol type="1">
 <li><p>基本工作原理</p>
-<p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-6-%E7%94%B5%E5%AD%90%E5%8D%8F%E8%AE%AE/image-20241118191131692.png" srcset="/img/loading.gif" lazyload></p>
-</li>
-<li><p>SMTP协议只能传送ASCII码文本数据，不能传送可执行文件或其他的二进制对象。</p>
-</li>
-<li><p>SMTP不能满足传送多媒体邮件（例如带有图片、音频或视频数据）的需要。并且许多其他非英语国家的文字(例如中文、俄文、甚至带有重音符号的法文或德文)也无法用SMTP传送。</p>
-</li>
+<p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-6-%E7%94%B5%E5%AD%90%E5%8D%8F%E8%AE%AE/image-20241118191131692.png" srcset="/img/loading.gif" lazyload></p></li>
+<li><p>SMTP协议只能传送ASCII码文本数据，不能传送可执行文件或其他的二进制对象。</p></li>
+<li><p>SMTP不能满足传送多媒体邮件（例如带有图片、音频或视频数据）的需要。并且许多其他非英语国家的文字(例如中文、俄文、甚至带有重音符号的法文或德文)也无法用SMTP传送。</p></li>
 <li><p>为解决SMTP传送非ASCII码文本的问题，提出了多用途因特网邮件扩展MIME</p>
-<ol>
+<ol type="1">
 <li>增加了5个新的邮件首部字段，这些字段提供了有关邮件主体的信息。</li>
 <li>定义了许多邮件内容的格式，对多媒体电子邮件的表示方法进行了标准化。</li>
 <li>定义了传送编码，可对任何内容格式进行转换，而不会被邮件系统改变。</li>
-</ol>
-</li>
-<li><p>实际上，MIME不仅仅用于SMTP,也用于后来的同样面向ASCII字符的HTTP。</p>
-</li>
+</ol></li>
+<li><p>实际上，MIME不仅仅用于SMTP,也用于后来的同样面向ASCII字符的HTTP。</p></li>
 </ol>
 <p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-6-%E7%94%B5%E5%AD%90%E5%8D%8F%E8%AE%AE/image-20241118191715497.png" srcset="/img/loading.gif" lazyload></p>
-<h2 id="3-电子邮件的格式"><a href="#3-电子邮件的格式" class="headerlink" title="3. 电子邮件的格式"></a>3. 电子邮件的格式</h2><ul>
+<h2 id="电子邮件的格式">3. 电子邮件的格式</h2>
+<ul>
 <li>一个电子邮件有信封和内容两部分。而内容又由首部和主体两部分构成。</li>
 </ul>
 <p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-6-%E7%94%B5%E5%AD%90%E5%8D%8F%E8%AE%AE/image-20241118191547061.png" srcset="/img/loading.gif" lazyload></p>
-<ol>
+<ol type="1">
 <li>高亮部分为比较重要的部分，为必填项。</li>
 </ol>
-<h2 id="4-邮件读取协议"><a href="#4-邮件读取协议" class="headerlink" title="4. 邮件读取协议"></a>4. 邮件读取协议</h2><ol>
+<h2 id="邮件读取协议">4. 邮件读取协议</h2>
+<ol type="1">
 <li><p>邮局协议POP3</p>
 <blockquote>
 <p>非常简单、功能有限的邮件读取协议。用户只能以下载并删除方式或下载并保留方式从邮件服务器下载邮件到用户方计算机。不允许用户在邮件服务器上管理自己的邮件。</p>
-</blockquote>
-</li>
+</blockquote></li>
 <li><p>因特网邮件访问协议IMAP</p>
 <blockquote>
 <p>功能比POP3强大的邮件读取协议。用户在自己的计算机上就可以操控邮件服务器中的邮箱，就像在本地操控一样，因此IMAP是一个联机协议。</p>
-</blockquote>
-</li>
-<li><p>POP3和IMAP4都采用基于TCP连接的客户&#x2F;服务器方式。</p>
-<ol>
-<li>POP3使用端口110 </li>
+</blockquote></li>
+<li><p>POP3和IMAP4都采用基于TCP连接的客户/服务器方式。</p>
+<ol type="1">
+<li>POP3使用端口110</li>
 <li>IMAP4使用端口143</li>
+</ol></li>
 </ol>
-</li>
-</ol>
-<h2 id="5-基于万维网的电子邮件"><a href="#5-基于万维网的电子邮件" class="headerlink" title="5. 基于万维网的电子邮件"></a>5. 基于万维网的电子邮件</h2><ul>
+<h2 id="基于万维网的电子邮件">5. 基于万维网的电子邮件</h2>
+<ul>
 <li>通过浏览器登录（提供用户名和口令）邮件服务器万维网网站就可以撰写、收发、阅读和管理电子邮件。这种工作模式与IMAP很类似，不同的是用户计算机无需安装专门的用户代理程序，只需要使用通用的万维网浏览器。</li>
 <li>这种工作摸式在用户浏览器与邮件服务器网站之间使用HTTP协议，而邮件服务器之间使用SMTP协议。</li>
 </ul>

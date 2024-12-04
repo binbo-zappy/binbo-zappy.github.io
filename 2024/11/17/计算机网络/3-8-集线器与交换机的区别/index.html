@@ -19,12 +19,12 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="3.8 集线器（HUB）和交换机（SWITCH）的区别 1. 集线器HUB 使用集线器的以太网在逻辑上仍是一个总线网，各站共享总线资源，使用的还是CSMA&#x2F;CD协议： 集线器只工作在物理层，它的每个接口仅简单地转发比特，不进行碰撞检测（由各站的网卡检测）： 集线器一般都有少量的容错能力和网络管理功能。例如，若网络中某个网卡出了故障，不停地发送帧。此时，集线器可以检测到这个问题，在内部断开">
+    <meta name="description" content="3.8 集线器（HUB）和交换机（SWITCH）的区别  1. 集线器HUB  使用集线器的以太网在逻辑上仍是一个总线网，各站共享总线资源，使用的还是CSMA&#x2F;CD协议： 集线器只工作在物理层，它的每个接口仅简单地转发比特，不进行碰撞检测（由各站的网卡检测）：  集线器一般都有少量的容错能力和网络管理功能。例如，若网络中某个网卡出了故障，不停地发送帧。此时，集线器可以检测到这个问题">
 <meta property="og:type" content="article">
 <meta property="og:title" content="3.8 集线器与交换机的区别">
 <meta property="og:url" content="http://binbo-zappy.github.io/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/3-8-%E9%9B%86%E7%BA%BF%E5%99%A8%E4%B8%8E%E4%BA%A4%E6%8D%A2%E6%9C%BA%E7%9A%84%E5%8C%BA%E5%88%AB/index.html">
 <meta property="og:site_name" content="Binbo">
-<meta property="og:description" content="3.8 集线器（HUB）和交换机（SWITCH）的区别 1. 集线器HUB 使用集线器的以太网在逻辑上仍是一个总线网，各站共享总线资源，使用的还是CSMA&#x2F;CD协议： 集线器只工作在物理层，它的每个接口仅简单地转发比特，不进行碰撞检测（由各站的网卡检测）： 集线器一般都有少量的容错能力和网络管理功能。例如，若网络中某个网卡出了故障，不停地发送帧。此时，集线器可以检测到这个问题，在内部断开">
+<meta property="og:description" content="3.8 集线器（HUB）和交换机（SWITCH）的区别  1. 集线器HUB  使用集线器的以太网在逻辑上仍是一个总线网，各站共享总线资源，使用的还是CSMA&#x2F;CD协议： 集线器只工作在物理层，它的每个接口仅简单地转发比特，不进行碰撞检测（由各站的网卡检测）：  集线器一般都有少量的容错能力和网络管理功能。例如，若网络中某个网卡出了故障，不停地发送帧。此时，集线器可以检测到这个问题">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/network.jpg">
 <meta property="article:published_time" content="2024-11-17T07:14:51.000Z">
@@ -225,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          539 字
+          533 字
         
       </span>
     
@@ -278,33 +278,38 @@
             
               <div class="markdown-body">
                 
-                <h1 id="3-8-集线器（HUB）和交换机（SWITCH）的区别"><a href="#3-8-集线器（HUB）和交换机（SWITCH）的区别" class="headerlink" title="3.8 集线器（HUB）和交换机（SWITCH）的区别"></a>3.8 集线器（HUB）和交换机（SWITCH）的区别</h1><p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/3-8-%E9%9B%86%E7%BA%BF%E5%99%A8%E4%B8%8E%E4%BA%A4%E6%8D%A2%E6%9C%BA%E7%9A%84%E5%8C%BA%E5%88%AB/image-20241117174351414.png" srcset="/img/loading.gif" lazyload></p>
-<h2 id="1-集线器HUB"><a href="#1-集线器HUB" class="headerlink" title="1. 集线器HUB"></a>1. 集线器HUB</h2><ol>
-<li>使用集线器的以太网在逻辑上仍是一个总线网，各站共享总线资源，使用的还是CSMA&#x2F;CD协议：</li>
-<li>集线器只工作在物理层，它的每个接口仅简单地转发比特，不进行碰撞检测（由各站的网卡检测）：<ol>
+                <h1 id="集线器hub和交换机switch的区别">3.8
+集线器（HUB）和交换机（SWITCH）的区别</h1>
+<p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/3-8-%E9%9B%86%E7%BA%BF%E5%99%A8%E4%B8%8E%E4%BA%A4%E6%8D%A2%E6%9C%BA%E7%9A%84%E5%8C%BA%E5%88%AB/image-20241117174351414.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="集线器hub">1. 集线器HUB</h2>
+<ol type="1">
+<li>使用集线器的以太网在逻辑上仍是一个总线网，各站共享总线资源，使用的还是CSMA/CD协议：</li>
+<li>集线器只工作在物理层，它的每个接口仅简单地转发比特，不进行碰撞检测（由各站的网卡检测）：
+<ol type="1">
 <li>集线器一般都有少量的容错能力和网络管理功能。例如，若网络中某个网卡出了故障，不停地发送帧。此时，集线器可以检测到这个问题，在内部断开与出故障网卡的连线，使整个以太网仍然能正常工作。</li>
-</ol>
-</li>
+</ol></li>
 <li>使用集线器HUB在物理层扩展以太网</li>
 </ol>
-<h2 id="2-交换机"><a href="#2-交换机" class="headerlink" title="2. 交换机"></a>2. 交换机</h2><blockquote>
+<h2 id="交换机">2. 交换机</h2>
+<blockquote>
 <p>前提：交换机已完成自学习</p>
 </blockquote>
-<ol>
+<ol type="1">
 <li>以太网交换机通常都有多个接口。每个接口都可以直接与一台主机回或另一个以太网交换机相连。一般都工作在全双工方式。</li>
-<li>以太网交换机具有并行性，能同时连通多对接口，使多对主机能同时通信，无碰撞（不使用CSMA&#x2F;CD协议）。</li>
-<li>以太网交换机一般都具有多种速率的接口，例如：10Mb&#x2F;s、100Mb&#x2F;s、1Gb&#x2F;s、10Gb&#x2F;s接口的多种组合。<ol>
+<li>以太网交换机具有并行性，能同时连通多对接口，使多对主机能同时通信，无碰撞（不使用CSMA/CD协议）。</li>
+<li>以太网交换机一般都具有多种速率的接口，例如：10Mb/s、100Mb/s、1Gb/s、10Gb/s接口的多种组合。
+<ol type="1">
 <li>以太网交换机工作在数据链路层（也包括物理层），它收到帧后，在帧交换表中查找帧的目的MAC地址所对应的接口号，然后通过该接口转发帧。</li>
 <li>以太网交换机是一种即插即用设备，其内部的帧交换表是通过自学习算法自动地逐渐建立起来的。</li>
-</ol>
-</li>
-<li>帧的两种转发方式：<ol>
+</ol></li>
+<li>帧的两种转发方式：
+<ol type="1">
 <li>存储转发</li>
 <li>直通交换：采用基于硬件的交叉矩阵（交换时延非常小，但不检查帧是否右差错)</li>
+</ol></li>
 </ol>
-</li>
-</ol>
-<h2 id="3-比较"><a href="#3-比较" class="headerlink" title="3. 比较"></a>3. 比较</h2><ol>
+<h2 id="比较">3. 比较</h2>
+<ol type="1">
 <li>交换机性能远超集线器，而且价格不高，所以市场上集线器已被淘汰</li>
 <li>交换机不会改变源目MAC地址</li>
 <li>交换机全双工传输</li>

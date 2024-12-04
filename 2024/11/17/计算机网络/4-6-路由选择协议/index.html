@@ -19,12 +19,12 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="4.6 路由选择协议1. 路由选择协议 早期RFC文档中，使用“网关”这个词指代路由器，现代使用“路由器”指代路由器，两者为同一设备的不同名称  1.1 静态路由选择 由人工配置的网络路由、默认路由、特定主机路由，黑洞路由等都属于静态路由。 这种人工配置方式简单、开销小，但不能及时适应网络状态（流量、拓扑等）的变化 一般只在小规模网络中采用。  1.2 动态路由选择 路由器通过路由选择协议自动获取">
+    <meta name="description" content="4.6 路由选择协议 1. 路由选择协议  早期RFC文档中，使用“网关”这个词指代路由器，现代使用“路由器”指代路由器，两者为同一设备的不同名称  1.1 静态路由选择  由人工配置的网络路由、默认路由、特定主机路由，黑洞路由等都属于静态路由。 这种人工配置方式简单、开销小，但不能及时适应网络状态（流量、拓扑等）的变化 一般只在小规模网络中采用。  1.2 动态路由选择">
 <meta property="og:type" content="article">
 <meta property="og:title" content="4.6 路由选择协议">
 <meta property="og:url" content="http://binbo-zappy.github.io/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-6-%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%8D%8F%E8%AE%AE/index.html">
 <meta property="og:site_name" content="Binbo">
-<meta property="og:description" content="4.6 路由选择协议1. 路由选择协议 早期RFC文档中，使用“网关”这个词指代路由器，现代使用“路由器”指代路由器，两者为同一设备的不同名称  1.1 静态路由选择 由人工配置的网络路由、默认路由、特定主机路由，黑洞路由等都属于静态路由。 这种人工配置方式简单、开销小，但不能及时适应网络状态（流量、拓扑等）的变化 一般只在小规模网络中采用。  1.2 动态路由选择 路由器通过路由选择协议自动获取">
+<meta property="og:description" content="4.6 路由选择协议 1. 路由选择协议  早期RFC文档中，使用“网关”这个词指代路由器，现代使用“路由器”指代路由器，两者为同一设备的不同名称  1.1 静态路由选择  由人工配置的网络路由、默认路由、特定主机路由，黑洞路由等都属于静态路由。 这种人工配置方式简单、开销小，但不能及时适应网络状态（流量、拓扑等）的变化 一般只在小规模网络中采用。  1.2 动态路由选择">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/network.jpg">
 <meta property="article:published_time" content="2024-11-17T11:56:01.000Z">
@@ -225,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.5k 字
+          2.4k 字
         
       </span>
     
@@ -278,80 +278,91 @@
             
               <div class="markdown-body">
                 
-                <h1 id="4-6-路由选择协议"><a href="#4-6-路由选择协议" class="headerlink" title="4.6 路由选择协议"></a>4.6 路由选择协议</h1><h2 id="1-路由选择协议"><a href="#1-路由选择协议" class="headerlink" title="1. 路由选择协议"></a>1. 路由选择协议</h2><blockquote>
+                <h1 id="路由选择协议">4.6 路由选择协议</h1>
+<h2 id="路由选择协议-1">1. 路由选择协议</h2>
+<blockquote>
 <p>早期RFC文档中，使用“网关”这个词指代路由器，现代使用“路由器”指代路由器，两者为同一设备的不同名称</p>
 </blockquote>
-<h3 id="1-1-静态路由选择"><a href="#1-1-静态路由选择" class="headerlink" title="1.1 静态路由选择"></a>1.1 静态路由选择</h3><ol>
+<h3 id="静态路由选择">1.1 静态路由选择</h3>
+<ol type="1">
 <li>由人工配置的网络路由、默认路由、特定主机路由，黑洞路由等都属于静态路由。</li>
 <li>这种人工配置方式简单、开销小，但不能及时适应网络状态（流量、拓扑等）的变化</li>
 <li>一般只在小规模网络中采用。</li>
 </ol>
-<h3 id="1-2-动态路由选择"><a href="#1-2-动态路由选择" class="headerlink" title="1.2 动态路由选择"></a>1.2 动态路由选择</h3><ol>
+<h3 id="动态路由选择">1.2 动态路由选择</h3>
+<ol type="1">
 <li>路由器通过路由选择协议自动获取路由信息比较复杂、开销比较大，</li>
 <li>能较好地适应网络状态的变化</li>
 <li>适用于大规模网络</li>
 </ol>
-<h3 id="1-3-因特网所采用的路由选择协议的主要特点"><a href="#1-3-因特网所采用的路由选择协议的主要特点" class="headerlink" title="1.3 因特网所采用的路由选择协议的主要特点"></a>1.3 因特网所采用的路由选择协议的主要特点</h3><ol>
-<li>自适应<ol>
+<h3 id="因特网所采用的路由选择协议的主要特点">1.3
+因特网所采用的路由选择协议的主要特点</h3>
+<ol type="1">
+<li>自适应
+<ol type="1">
 <li>动态路由选择，能较好地适应网络状态的变化</li>
-</ol>
-</li>
-<li>分布式<ol>
+</ol></li>
+<li>分布式
+<ol type="1">
 <li>路由器之间交换路由信息</li>
-</ol>
-</li>
-<li>分层次<ol>
+</ol></li>
+<li>分层次
+<ol type="1">
 <li>将整个因特网划分为许多较小的自治系统AS(Autonomous System）</li>
-</ol>
-</li>
+</ol></li>
 </ol>
 <p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-6-%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%8D%8F%E8%AE%AE/image-20241117204127866.png" srcset="/img/loading.gif" lazyload></p>
-<h3 id="1-4-因特网采用分层次的路由选择协议"><a href="#1-4-因特网采用分层次的路由选择协议" class="headerlink" title="1.4 因特网采用分层次的路由选择协议"></a>1.4 因特网采用分层次的路由选择协议</h3><p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-6-%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%8D%8F%E8%AE%AE/image-20241117204721689.png" srcset="/img/loading.gif" lazyload></p>
-<ol>
-<li><p>一般一个ISP负责的所有网络作为一个自治系统</p>
-<ol>
+<h3 id="因特网采用分层次的路由选择协议">1.4
+因特网采用分层次的路由选择协议</h3>
+<p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-6-%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%8D%8F%E8%AE%AE/image-20241117204721689.png" srcset="/img/loading.gif" lazyload></p>
+<ol type="1">
+<li>一般一个ISP负责的所有网络作为一个自治系统
+<ol type="1">
 <li>内部网关协议（IGP）和外部网关协议（EGP）是协议分类的总称，不是具体的协议名</li>
-</ol>
-</li>
-<li><p>路由选择协议</p>
-</li>
+</ol></li>
+<li>路由选择协议</li>
 </ol>
 <p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-6-%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%8D%8F%E8%AE%AE/image-20241117204849446.png" srcset="/img/loading.gif" lazyload></p>
-<ol start="3">
+<ol start="3" type="1">
 <li>路由器的基本结构</li>
 </ol>
 <p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-6-%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%8D%8F%E8%AE%AE/image-20241117204931573.png" srcset="/img/loading.gif" lazyload></p>
-<ol start="4">
+<ol start="4" type="1">
 <li>路由表一般仅包含从目的网络到下一跳的映射</li>
-<li>路由表需要对网络拓扑变化的计算最优化<ol>
+<li>路由表需要对网络拓扑变化的计算最优化
+<ol type="1">
 <li>转发表是从路由表得出的</li>
 <li>转发表的结构应当使查找过程最优化</li>
+</ol></li>
 </ol>
-</li>
-</ol>
-<h2 id="2-路由信息RIP协议工作原理"><a href="#2-路由信息RIP协议工作原理" class="headerlink" title="2. 路由信息RIP协议工作原理"></a>2. 路由信息RIP协议工作原理</h2><ol>
-<li>路由信息协议RIP(Routing Information Protocol)是内部网关协议IGP中最先得到广泛使用的协议之一，其相关标准文档为RFC1058。</li>
+<h2 id="路由信息rip协议工作原理">2. 路由信息RIP协议工作原理</h2>
+<ol type="1">
+<li>路由信息协议RIP(Routing Information
+Protocol)是内部网关协议IGP中最先得到广泛使用的协议之一，其相关标准文档为RFC1058。</li>
 <li>RIP要求自治系统AS内的每一个路由器都要维护从它自己到AS内其他每一个网络的距离记录。这是一组距离，称为“距离向量”。</li>
-<li>RIP使用跳数(Hop Count)作为度量(Metric)来衡量到达目的网络的距离。<ol>
+<li>RIP使用跳数(Hop Count)作为度量(Metric)来衡量到达目的网络的距离。
+<ol type="1">
 <li>路由器到直连网络的距离定义为1。路由器到非直连网络的距离定义为所经过的路由器数加1。</li>
 <li>允许一条路径最多只能包含15个路由器。“距离”等于16时相当于不可达。因此，RIP只适用于小型互联网。</li>
-</ol>
-</li>
+</ol></li>
 <li>RIP认为好的路由就是“距离短”的路由，也就是所通过路由器数量最少的路由</li>
 <li>当到达同一目的网络有多条“距离相等”的路由时，可以进行等价负载均衡</li>
 </ol>
 <p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-6-%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%8D%8F%E8%AE%AE/image-20241117205628647.png" srcset="/img/loading.gif" lazyload></p>
-<h3 id="2-1-特点"><a href="#2-1-特点" class="headerlink" title="2.1 特点"></a>2.1 特点</h3><ol>
+<h3 id="特点">2.1 特点</h3>
+<ol type="1">
 <li>仅和相邻路由器交换信息</li>
 <li>交换的信息是自己的路由表</li>
 <li>周期性交换该信息</li>
 </ol>
-<h3 id="2-2-RP的基本工作流程"><a href="#2-2-RP的基本工作流程" class="headerlink" title="2.2 RP的基本工作流程"></a>2.2 RP的基本工作流程</h3><ol>
+<h3 id="rp的基本工作流程">2.2 RP的基本工作流程</h3>
+<ol type="1">
 <li>路由器刚开始工作时，只知道自己到直连网络的距离为1。</li>
 <li>每个路由器仅和相邻路由器周期性地交换并更新路由信息。</li>
 <li>若干次交换和更新后，每个路由器都知道到达本AS内各网络的最短距离和下一跳地址，称为收敛。</li>
 </ol>
-<h3 id="2-3-更新规则"><a href="#2-3-更新规则" class="headerlink" title="2.3 更新规则"></a>2.3 更新规则</h3><ol>
+<h3 id="更新规则">2.3 更新规则</h3>
+<ol type="1">
 <li>发现了新的网络，添加</li>
 <li>到达目的网络，相同下一跳，最新消息，更新</li>
 <li>到达目的网络，不同下一跳，新路由优势，更新</li>
@@ -365,142 +376,157 @@
 <p>坏消息传播得慢”又称为路由环路或距离无穷计数问题，这是距离向量算法的一个固有问题。</p>
 </blockquote>
 <ul>
-<li>可以采取多种措施减少出现该问题的概率或减小该问题带来的危害。<ul>
+<li>可以采取多种措施减少出现该问题的概率或减小该问题带来的危害。
+<ul>
 <li>限制最大路径距离为15(16表示不可达)</li>
 <li>当路由表发生变化时就立即发送更新报文（即“触发更新”），而不仅是周期性发送</li>
 <li>让路由器记录收到某特定路由信息的接口，而不让同一路由信息再通过此接口向反方向传送（即“水平分割”）</li>
+</ul></li>
 </ul>
-</li>
-</ul>
-<h2 id="3-开放最短路径OSPF协议的工作原理"><a href="#3-开放最短路径OSPF协议的工作原理" class="headerlink" title="3. 开放最短路径OSPF协议的工作原理"></a>3. 开放最短路径OSPF协议的工作原理</h2><h3 id="3-1-OSPF协议"><a href="#3-1-OSPF协议" class="headerlink" title="3.1 OSPF协议"></a>3.1 OSPF协议</h3><ol>
-<li>开放最短路径优先OSPF(Open Shortest Path First),是为克服RIP的缺点在1989年开发出来的。</li>
+<h2 id="开放最短路径ospf协议的工作原理">3.
+开放最短路径OSPF协议的工作原理</h2>
+<h3 id="ospf协议">3.1 OSPF协议</h3>
+<ol type="1">
+<li>开放最短路径优先OSPF(Open Shortest Path
+First),是为克服RIP的缺点在1989年开发出来的。</li>
 <li>“开放”表明OSPF协议不是受某一家厂商控制，而是公开发表的。</li>
 <li>“最短路径优先”是因为使用了Dijkstra提出的最短路径算法SPF。</li>
 <li>OSPF是基于链路状态的，而不像RIP那样是基于距离向量的。</li>
 <li>OSPF采用SPF算法计算路由，从算法上保证了不会产生路由环路。</li>
 <li>OSPF不限制网络规模，更新效率高，收敛速度快。</li>
 </ol>
-<h3 id="3-2-链路"><a href="#3-2-链路" class="headerlink" title="3.2 链路"></a>3.2 链路</h3><ol>
+<h3 id="链路">3.2 链路</h3>
+<ol type="1">
 <li>链路状态是指本路由器都和哪些路由器相邻，以及相应链路的“代价”(cost)。</li>
 <li>“代价”用来表示费用、距离、时延、带宽，等等。这些都由网络管理人员来决定。</li>
 </ol>
 <p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-6-%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%8D%8F%E8%AE%AE/image-20241117211227799.png" srcset="/img/loading.gif" lazyload></p>
-<ol>
-<li>OSPF相邻路由器之间通过交互问候(Hllo)分组，建立和维护邻居关系。<ol>
+<ol type="1">
+<li>OSPF相邻路由器之间通过交互问候(Hllo)分组，建立和维护邻居关系。
+<ol type="1">
 <li>Hello分组封装在IP数据报中，发往组播地址224.0.0.5；</li>
-</ol>
-</li>
+</ol></li>
 </ol>
 <p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-6-%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%8D%8F%E8%AE%AE/image-20241117211306170.png" srcset="/img/loading.gif" lazyload></p>
-<ol start="2">
-<li>发送周期为10秒<ol>
+<ol start="2" type="1">
+<li>发送周期为10秒
+<ol type="1">
 <li>40秒未收到来自邻居路由器的Hlo分组，则认为该邻居路由器不可达。</li>
-</ol>
-</li>
+</ol></li>
 </ol>
 <p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-6-%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%8D%8F%E8%AE%AE/image-20241117211527755.png" srcset="/img/loading.gif" lazyload></p>
-<h3 id="3-3-链路状态通告"><a href="#3-3-链路状态通告" class="headerlink" title="3.3 链路状态通告"></a>3.3 链路状态通告</h3><blockquote>
-<p>使用OSPF的每个路由器都会产生链路状态通告 LSA  (Link State Advertisement)。</p>
+<h3 id="链路状态通告">3.3 链路状态通告</h3>
+<blockquote>
+<p>使用OSPF的每个路由器都会产生链路状态通告 LSA (Link State
+Advertisement)。</p>
 </blockquote>
-<ol>
-<li>LSA中包含以下内容：<ol>
+<ol type="1">
+<li>LSA中包含以下内容：
+<ol type="1">
 <li>直连网络的链路状态信息</li>
 <li>邻居路由器的链路状态信息</li>
-</ol>
-</li>
-<li>LSA被封装在链路状态更新分组LSU中，采用洪泛法发送。<br>使用OSPF的每个路由器都有一个链路状态数据库LSDB，用于存储LSA。</li>
+</ol></li>
+<li>LSA被封装在链路状态更新分组LSU中，采用洪泛法发送。
+使用OSPF的每个路由器都有一个链路状态数据库LSDB，用于存储LSA。</li>
 <li>通过各路由器洪泛发送封装有自己LSA的LSU分组，各路由器的LSDB最终将达到一致。</li>
 <li>使用OSPF的各路由器基于LSDB进行最短路径优先SPF计算，构建出各自到达其他各路由器的最短路径，即构建各自的路由表。</li>
 </ol>
 <p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-6-%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%8D%8F%E8%AE%AE/image-20241117211848406.png" srcset="/img/loading.gif" lazyload></p>
-<h3 id="3-4-OSPF共有五种分组类型"><a href="#3-4-OSPF共有五种分组类型" class="headerlink" title="3.4 OSPF共有五种分组类型"></a>3.4 OSPF共有五种分组类型</h3><ol>
-<li>问候分组（Hello）<ol>
+<h3 id="ospf共有五种分组类型">3.4 OSPF共有五种分组类型</h3>
+<ol type="1">
+<li>问候分组（Hello）
+<ol type="1">
 <li>用来发现和维护邻居路由器的可达性。</li>
-</ol>
-</li>
-<li>数据库描述分组（DD）<ol>
+</ol></li>
+<li>数据库描述分组（DD）
+<ol type="1">
 <li>向邻居路由器给出自己的链路状态数据库中的所有链路状态项目的摘要信息</li>
-</ol>
-</li>
-<li>链路状态请求分组（LSR）<ol>
+</ol></li>
+<li>链路状态请求分组（LSR）
+<ol type="1">
 <li>向邻居路由器请求发送某些链路状态项目的详细信息。</li>
-</ol>
-</li>
-<li>链路状态更新分组（LSU）<ol>
+</ol></li>
+<li>链路状态更新分组（LSU）
+<ol type="1">
 <li>路由器使用这种分组将其链路状态进行洪泛发送，即用洪泛法对全网更新链路状态。</li>
-</ol>
-</li>
-<li>链路确认分组（LSA）<ol>
+</ol></li>
+<li>链路确认分组（LSA）
+<ol type="1">
 <li>这是对链路状态更新分组的确认分组。</li>
-</ol>
-</li>
+</ol></li>
 </ol>
 <p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-6-%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%8D%8F%E8%AE%AE/image-20230717155343654.png" srcset="/img/loading.gif" lazyload></p>
-<h3 id="3-5-OSPF的基本工作过程"><a href="#3-5-OSPF的基本工作过程" class="headerlink" title="3.5 OSPF的基本工作过程"></a>3.5 OSPF的基本工作过程</h3><p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-6-%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%8D%8F%E8%AE%AE/image-20230717155522453.png" srcset="/img/loading.gif" lazyload></p>
-<ol>
-<li>OSPF在多点接入的网络中路由器邻里关系的建立<ol>
-<li>选举指定路由器DR(designated router)和备用的指定路由器BDR(backup designated router)</li>
-<li>所有的非DR&#x2F;BDR只与DR&#x2F;BDR建立邻居关系，即非DR&#x2F;BDR之间通过DR&#x2F;BDR交换信息</li>
-</ol>
-</li>
+<h3 id="ospf的基本工作过程">3.5 OSPF的基本工作过程</h3>
+<p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-6-%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%8D%8F%E8%AE%AE/image-20230717155522453.png" srcset="/img/loading.gif" lazyload></p>
+<ol type="1">
+<li>OSPF在多点接入的网络中路由器邻里关系的建立
+<ol type="1">
+<li>选举指定路由器DR(designated router)和备用的指定路由器BDR(backup
+designated router)</li>
+<li>所有的非DR/BDR只与DR/BDR建立邻居关系，即非DR/BDR之间通过DR/BDR交换信息</li>
+</ol></li>
 </ol>
 <p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-6-%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%8D%8F%E8%AE%AE/image-20230717155708575.png" srcset="/img/loading.gif" lazyload></p>
-<ol start="2">
-<li>为了使OSPF能够用于规模很大的网络，OSPF把一个自治系统再划分为若干个更小的范围，叫做区域(Area)<ol>
+<ol start="2" type="1">
+<li>为了使OSPF能够用于规模很大的网络，OSPF把一个自治系统再划分为若干个更小的范围，叫做区域(Area)
+<ol type="1">
 <li>划分区域的好处就是把利用洪泛法交换链路状体信息的范围局限于每一个区域而不是整个自治系统，这就减少了整个网络上的通信量。</li>
 <li>每个区域不大于200个路由器</li>
-</ol>
-</li>
+</ol></li>
 </ol>
 <p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-6-%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%8D%8F%E8%AE%AE/image-20241117213232150.png" srcset="/img/loading.gif" lazyload></p>
-<h2 id="4-边界网关协议BGP的基本工作原理"><a href="#4-边界网关协议BGP的基本工作原理" class="headerlink" title="4. 边界网关协议BGP的基本工作原理"></a>4. 边界网关协议BGP的基本工作原理</h2><h3 id="4-1-BGP原理"><a href="#4-1-BGP原理" class="headerlink" title="4.1 BGP原理"></a>4.1 BGP原理</h3><ol>
+<h2 id="边界网关协议bgp的基本工作原理">4.
+边界网关协议BGP的基本工作原理</h2>
+<h3 id="bgp原理">4.1 BGP原理</h3>
+<ol type="1">
 <li>BGP只能是力求寻找一条能够到达目的网络且比较好的路由（不能兜圈子），而并非要寻找一条最佳路由</li>
-<li>BGP要解决的问题<ol>
+<li>BGP要解决的问题
+<ol type="1">
 <li>在不同自治系统内，度量路由的“代价”（距离，带宽，费用等)可能不同。因此，对于自治系统之间的路由选择，使用“代价”作为度量来寻找最佳路由是不行的。</li>
 <li>自治系统之间的路由选择必须考虑相关策略（政治，经济，安全等）</li>
+</ol></li>
 </ol>
-</li>
-</ol>
-<h3 id="4-2-交换路由的过程"><a href="#4-2-交换路由的过程" class="headerlink" title="4.2 交换路由的过程"></a>4.2 交换路由的过程</h3><ol>
-<li><p>在配置BGP时，每个自治系统的管理员要选择至少一个路由器作为该自治系统的“BGP发言人”，不同自治系统的BGP发言人要交换路由信息，首先必须建立TCP连接，端口号为179</p>
-</li>
-<li><p>在此TCP连接上交换BGP报文以建立BGP会话</p>
-</li>
+<h3 id="交换路由的过程">4.2 交换路由的过程</h3>
+<ol type="1">
+<li><p>在配置BGP时，每个自治系统的管理员要选择至少一个路由器作为该自治系统的“BGP发言人”，不同自治系统的BGP发言人要交换路由信息，首先必须建立TCP连接，端口号为179</p></li>
+<li><p>在此TCP连接上交换BGP报文以建立BGP会话</p></li>
 <li><p>利用BGP会话交换路由信息（例如，增加新的路由，或撤销过时的路由，以及报告出错的情况等）</p>
 <blockquote>
 <p>使用TCP连接交换路由信息的两个BGP发言人，彼此称为对方的邻站(neighbor)或对等站(peer)</p>
-</blockquote>
-</li>
-<li><p>BGP发言人除了运行BGP外，还必须运行自己所在自治系统所使用的内部网关协议IGP,例如OSPF或RIP。</p>
-</li>
-<li><p>当BGP发言人互相交换了网络可达性的信息后，各BGP发言人就根据所采用的策略从收到的路由信息中找出到达各自治系统的较好的路由。也就是构造出树形结构、不存在回路的自治系统连通图。</p>
-</li>
+</blockquote></li>
+<li><p>BGP发言人除了运行BGP外，还必须运行自己所在自治系统所使用的内部网关协议IGP,例如OSPF或RIP。</p></li>
+<li><p>当BGP发言人互相交换了网络可达性的信息后，各BGP发言人就根据所采用的策略从收到的路由信息中找出到达各自治系统的较好的路由。也就是构造出树形结构、不存在回路的自治系统连通图。</p></li>
 </ol>
-<h3 id="4-3-BGP适用于多级结构的因特网"><a href="#4-3-BGP适用于多级结构的因特网" class="headerlink" title="4.3 BGP适用于多级结构的因特网"></a>4.3 BGP适用于多级结构的因特网</h3><p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-6-%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%8D%8F%E8%AE%AE/image-20241117214100280.png" srcset="/img/loading.gif" lazyload></p>
-<h3 id="4-4-BGP-4四种报文类型"><a href="#4-4-BGP-4四种报文类型" class="headerlink" title="4.4 BGP-4四种报文类型"></a>4.4 BGP-4四种报文类型</h3><table>
+<h3 id="bgp适用于多级结构的因特网">4.3 BGP适用于多级结构的因特网</h3>
+<p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-6-%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%8D%8F%E8%AE%AE/image-20241117214100280.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="bgp-4四种报文类型">4.4 BGP-4四种报文类型</h3>
+<table>
+
 <thead>
 <tr>
-<th align="center">报文</th>
-<th align="left">说明</th>
+<th style="text-align: center;">报文</th>
+<th style="text-align: left;">说明</th>
 </tr>
 </thead>
-<tbody><tr>
-<td align="center">OPEN(打开)报文</td>
-<td align="left">用来与相邻的另一个BGP发言人建立关系，使通信初始化</td>
+<tbody>
+<tr>
+<td style="text-align: center;">OPEN(打开)报文</td>
+<td style="text-align: left;">用来与相邻的另一个BGP发言人建立关系，使通信初始化</td>
 </tr>
 <tr>
-<td align="center">UPDATE(更新)报文</td>
-<td align="left">用来通告某一路由的信息，以及列出要撤销的多条路由</td>
+<td style="text-align: center;">UPDATE(更新)报文</td>
+<td style="text-align: left;">用来通告某一路由的信息，以及列出要撤销的多条路由</td>
 </tr>
 <tr>
-<td align="center">KEEPALIVE(保活)报文</td>
-<td align="left">用来周期性地证实邻站的连通性。</td>
+<td style="text-align: center;">KEEPALIVE(保活)报文</td>
+<td style="text-align: left;">用来周期性地证实邻站的连通性。</td>
 </tr>
 <tr>
-<td align="center">NOTIFICATION(通知)报文</td>
-<td align="left">用来发送检测到的差错。</td>
+<td style="text-align: center;">NOTIFICATION(通知)报文</td>
+<td style="text-align: left;">用来发送检测到的差错。</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-6-%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%8D%8F%E8%AE%AE/image-20241117214318616.png" srcset="/img/loading.gif" lazyload></p>
 
                 

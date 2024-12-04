@@ -225,23 +225,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/1-4-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%BB%93%E6%9E%84/" target="_self">
-          <img src="/imgs/OS.png" srcset="/img/loading.gif" lazyload alt="1.4 操作系统结构">
+        <a href="/2024/11/27/cpp-%E5%A4%9A%E7%BA%BF%E7%A8%8B/2-%E7%BA%BF%E7%A8%8B%E5%87%BD%E6%95%B0%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E6%9C%AA%E5%AE%9A%E4%B9%89%E9%94%99%E8%AF%AF/" target="_self">
+          <img src="/imgs/cpp-threads.jpg" srcset="/img/loading.gif" lazyload alt="2.线程函数中的数据未定义错误">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/1-4-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%BB%93%E6%9E%84/" target="_self">
-          1.4 操作系统结构
+        <a href="/2024/11/27/cpp-%E5%A4%9A%E7%BA%BF%E7%A8%8B/2-%E7%BA%BF%E7%A8%8B%E5%87%BD%E6%95%B0%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E6%9C%AA%E5%AE%9A%E4%B9%89%E9%94%99%E8%AF%AF/" target="_self">
+          2.线程函数中的数据未定义错误
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/1-4-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%BB%93%E6%9E%84/" target="_self">
+      <a class="index-excerpt " href="/2024/11/27/cpp-%E5%A4%9A%E7%BA%BF%E7%A8%8B/2-%E7%BA%BF%E7%A8%8B%E5%87%BD%E6%95%B0%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E6%9C%AA%E5%AE%9A%E4%B9%89%E9%94%99%E8%AF%AF/" target="_self">
         <div>
-          1.4 操作系统体系结构 1. 操作系统的内核  内核是操作系统最基本、最核心的部分 实现操作系统内核功能的那些程序就是内核程序  1.1 大内核 内核中包含了时钟管理、中断处理、原语以及进程管理、存储器管理、设备管理等功能  由于大内核中包含的功能多, CPU只需进行少量的状态切换便可完成应用程序请求的系统调用, 但同时也导致了大内核代码庞大, 不方便管理的问题   1.2 微内核 只包含了与硬
+          \1. 传递临时变量的问题： 12345678910#include &lt;iostream&gt;#include &lt;thread&gt;void foo(int&amp; x) &#123;    x += 1;&#125;int main() &#123;    std::thread t(foo, 1); // 传递临时变量    t.join();    return 0;&#
         </div>
       </a>
 
@@ -249,8 +249,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-19 15:46" pubdate>
-              2024-11-19
+            <time datetime="2024-11-27 21:14" pubdate>
+              2024-11-27
             </time>
           </div>
         
@@ -265,12 +265,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" class="category-chain-item">计算机基础</a>
+  <a href="/categories/c/" class="category-chain-item">c++</a>
   
   
     <span>></span>
     
-  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="category-chain-item">操作系统</a>
+  <a href="/categories/c/c-11-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B/" class="category-chain-item">c++11 多线程编程</a>
   
   
 
@@ -287,7 +287,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">#操作系统</a>
+              <a href="/tags/c/">#c++</a>
             
           </div>
         
@@ -299,23 +299,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/1-3-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83/" target="_self">
-          <img src="/imgs/OS.png" srcset="/img/loading.gif" lazyload alt="1.3 操作系统运行环境">
+        <a href="/2024/11/27/cpp-%E5%A4%9A%E7%BA%BF%E7%A8%8B/1-Cpp11-Thead%E7%BA%BF%E7%A8%8B%E5%BA%93%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" target="_self">
+          <img src="/imgs/cpp-threads.jpg" srcset="/img/loading.gif" lazyload alt="1. C++11 Thead线程库的基本使用">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/1-3-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83/" target="_self">
-          1.3 操作系统运行环境
+        <a href="/2024/11/27/cpp-%E5%A4%9A%E7%BA%BF%E7%A8%8B/1-Cpp11-Thead%E7%BA%BF%E7%A8%8B%E5%BA%93%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" target="_self">
+          1. C++11 Thead线程库的基本使用
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/1-3-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83/" target="_self">
+      <a class="index-excerpt " href="/2024/11/27/cpp-%E5%A4%9A%E7%BA%BF%E7%A8%8B/1-Cpp11-Thead%E7%BA%BF%E7%A8%8B%E5%BA%93%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" target="_self">
         <div>
-          1.3 操作系统运行环境 1. 操作系统的运行机制1.1 程序是如何运行的? 一条高级语言的代码翻译过来可能会对应多条二进制机器指令 程序运行的过程其实是CPU执行一条一条的机器指令的过程 “指令”就是处理机(CPU)能识别、执行的最基本命令    1.2 内核程序 vs 应用程序 应用程序 普通程序员写的程序就是”应用程序”   内核程序 微软、苹果有一帮人负责实现操作系统, 他们写的是”内核程
+          Thread库  创建线程  12345678910111213141516171819202122232425#include &lt;iostream&gt;#include &lt;thread&gt;#include &lt;string&gt;void printHelloworld(std::string msg)&#123;	std::cout &lt;&lt; msg &l
         </div>
       </a>
 
@@ -323,8 +323,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-19 15:00" pubdate>
-              2024-11-19
+            <time datetime="2024-11-27 21:14" pubdate>
+              2024-11-27
             </time>
           </div>
         
@@ -339,12 +339,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" class="category-chain-item">计算机基础</a>
+  <a href="/categories/c/" class="category-chain-item">c++</a>
   
   
     <span>></span>
     
-  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="category-chain-item">操作系统</a>
+  <a href="/categories/c/c-11-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B/" class="category-chain-item">c++11 多线程编程</a>
   
   
 
@@ -361,7 +361,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">#操作系统</a>
+              <a href="/tags/c/">#c++</a>
             
           </div>
         
@@ -373,23 +373,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/1-2-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8F%91%E5%B1%95%E5%8E%86%E7%A8%8B/" target="_self">
-          <img src="/imgs/OS.png" srcset="/img/loading.gif" lazyload alt="1.2 操作系统发展历程">
+        <a href="/2024/11/27/cpp/google_style_guide/" target="_self">
+          <img src="/imgs/google-style.jpg" srcset="/img/loading.gif" lazyload alt="google_style_guide">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/1-2-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8F%91%E5%B1%95%E5%8E%86%E7%A8%8B/" target="_self">
-          1.2 操作系统发展历程
+        <a href="/2024/11/27/cpp/google_style_guide/" target="_self">
+          google_style_guide
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/1-2-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8F%91%E5%B1%95%E5%8E%86%E7%A8%8B/" target="_self">
+      <a class="index-excerpt " href="/2024/11/27/cpp/google_style_guide/" target="_self">
         <div>
-          1.2 操作系统发展历程 1. 手工操作阶段 程序员将程序放入纸带机上(慢) → 计算机读取纸带(慢) → 计算机计算(快) → 输出纸带(慢) → 程序员获取计算结果(慢)  主要缺点:  用户独占全机、人机速度矛盾导致资源利用率低    2. 批处理阶段2.1 单道批处理系统 引入脱机输入&#x2F;输出技术（用外围机+磁带完成），并由监督程序(操作系统雏形)负责控制作业的输入、输出  为什么
+          1.头文件 通常每一个.cc文件都有一个对应的.h文件.也有一些常见例外,如单元测试代码和只包含main()函数的.cc文件 1.1Self-contained头文件 所有头文件要能够自给自足。换言之，用户和重构工具不需要为特别场合而包含额外的头文件。 详言之，一个头文件要有1.2.#define保护，统统包含它所需要的其它头文件，也不要求定义任何特别symbols. 不过有一个例外，即
         </div>
       </a>
 
@@ -397,8 +397,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-19 14:20" pubdate>
-              2024-11-19
+            <time datetime="2024-11-27 20:23" pubdate>
+              2024-11-27
             </time>
           </div>
         
@@ -413,12 +413,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" class="category-chain-item">计算机基础</a>
+  <a href="/categories/c/" class="category-chain-item">c++</a>
   
   
     <span>></span>
     
-  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="category-chain-item">操作系统</a>
+  <a href="/categories/c/google-style/" class="category-chain-item">google_style</a>
   
   
 
@@ -435,7 +435,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">#操作系统</a>
+              <a href="/tags/c/">#c++</a>
             
           </div>
         
@@ -447,23 +447,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/1-1-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/" target="_self">
-          <img src="/imgs/OS.png" srcset="/img/loading.gif" lazyload alt="1.1 操作系统的基本概念">
+        <a href="/2024/11/27/effective-cpp/9-%E6%9D%82%E9%A1%B9%E8%AE%A8%E8%AE%BA/" target="_self">
+          <img src="/imgs/effective-cpp.png" srcset="/img/loading.gif" lazyload alt="9. 杂项讨论">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/1-1-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/" target="_self">
-          1.1 操作系统的基本概念
+        <a href="/2024/11/27/effective-cpp/9-%E6%9D%82%E9%A1%B9%E8%AE%A8%E8%AE%BA/" target="_self">
+          9. 杂项讨论
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/19/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/1-1-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/" target="_self">
+      <a class="index-excerpt " href="/2024/11/27/effective-cpp/9-%E6%9D%82%E9%A1%B9%E8%AE%A8%E8%AE%BA/" target="_self">
         <div>
-          1.1 操作系统的基本概念1. OS概念 1.1 计算机系统的层次结构  用户可以通过调用命令接口的方式以及使用GUI与操作系统进行直接交互 应用程序通过调用程序接口的方式与操作系统进行直接交互  裸机(纯硬件)包括CPU、内存、硬盘、主板等  1.2 操作系统概念 操作系统(Operating System,OS)是指控制和管理整个计算机系统的硬件和软件资源，并合理地组织调度计算机的工作和资源的
+          53. 不要轻忽编译器的警告 123456789class B&#123;public:    virtual void f() const;&#125;class D&#123;    public:    virtual void f();&#125; 希望D::f重新定义virtual函数B::f，B的f 是个const成员函数，而D中未被声明为const  严肃对待编译器发出的警
         </div>
       </a>
 
@@ -471,8 +471,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-19 12:46" pubdate>
-              2024-11-19
+            <time datetime="2024-11-27 20:17" pubdate>
+              2024-11-27
             </time>
           </div>
         
@@ -487,12 +487,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" class="category-chain-item">计算机基础</a>
+  <a href="/categories/c/" class="category-chain-item">c++</a>
   
   
     <span>></span>
     
-  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="category-chain-item">操作系统</a>
+  <a href="/categories/c/effective-c/" class="category-chain-item">effective c++</a>
   
   
 
@@ -509,7 +509,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">#操作系统</a>
+              <a href="/tags/c/">#c++</a>
             
           </div>
         
@@ -521,23 +521,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-7-%E4%B8%87%E7%BB%B4%E7%BD%91WWW/" target="_self">
-          <img src="/imgs/network.jpg" srcset="/img/loading.gif" lazyload alt="6.7 万维网WWW">
+        <a href="/2024/11/27/effective-cpp/8-%E5%AE%9A%E5%88%B6new%E5%92%8Cdelete/" target="_self">
+          <img src="/imgs/effective-cpp.png" srcset="/img/loading.gif" lazyload alt="8. 定制new和delete">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-7-%E4%B8%87%E7%BB%B4%E7%BD%91WWW/" target="_self">
-          6.7 万维网WWW
+        <a href="/2024/11/27/effective-cpp/8-%E5%AE%9A%E5%88%B6new%E5%92%8Cdelete/" target="_self">
+          8. 定制new和delete
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-7-%E4%B8%87%E7%BB%B4%E7%BD%91WWW/" target="_self">
+      <a class="index-excerpt " href="/2024/11/27/effective-cpp/8-%E5%AE%9A%E5%88%B6new%E5%92%8Cdelete/" target="_self">
         <div>
-          6.7 万维网WWW 即 World Wide Web，是一个大规模的、联机式的信息储藏所，是运行在因特网上的一个分布式应用。    统一资源定位符URL  万维网使用统一资源定位符URL来指明因特网上任何种类“资源”的位置。 其一般形式为：&lt;协议&gt;：/∥&lt;主机&gt;：&lt;端口&gt;/&lt;路径&gt;   超文本传输协议HTTP  超文本传输协议 HTTP (Hype
+          49. 了解new-handler的行为  当operator new无法满足某一内存分配需求时，它会抛出异常。以前它会返回一个u1指针，某些旧式编译器目前也还那么做。 当operator new抛出异常以反映一个未获满足的内存需求之前，它会先调用一个客户指定的错误处理函数，一个所谓的new_handler。 为了指定这个“用以处理内存不足”的函数，客户必须调用set new han
         </div>
       </a>
 
@@ -545,8 +545,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-18 17:27" pubdate>
-              2024-11-18
+            <time datetime="2024-11-27 20:17" pubdate>
+              2024-11-27
             </time>
           </div>
         
@@ -561,12 +561,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" class="category-chain-item">计算机基础</a>
+  <a href="/categories/c/" class="category-chain-item">c++</a>
   
   
     <span>></span>
     
-  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="category-chain-item">计算机网络</a>
+  <a href="/categories/c/effective-c/" class="category-chain-item">effective c++</a>
   
   
 
@@ -583,7 +583,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">#计算机网络</a>
+              <a href="/tags/c/">#c++</a>
             
           </div>
         
@@ -595,23 +595,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-6-%E7%94%B5%E5%AD%90%E5%8D%8F%E8%AE%AE/" target="_self">
-          <img src="/imgs/network.jpg" srcset="/img/loading.gif" lazyload alt="6.6 电子邮件">
+        <a href="/2024/11/27/effective-cpp/7-%E6%A8%A1%E6%9D%BF%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/" target="_self">
+          <img src="/imgs/effective-cpp.png" srcset="/img/loading.gif" lazyload alt="7. 模板与泛型编程">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-6-%E7%94%B5%E5%AD%90%E5%8D%8F%E8%AE%AE/" target="_self">
-          6.6 电子邮件
+        <a href="/2024/11/27/effective-cpp/7-%E6%A8%A1%E6%9D%BF%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/" target="_self">
+          7. 模板与泛型编程
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-6-%E7%94%B5%E5%AD%90%E5%8D%8F%E8%AE%AE/" target="_self">
+      <a class="index-excerpt " href="/2024/11/27/effective-cpp/7-%E6%A8%A1%E6%9D%BF%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/" target="_self">
         <div>
-          6.6 电子邮件1. 电子邮件系统 电子邮件系统采用客户&#x2F;服务器方式。三个主要组成构件：用户代理，邮件服务器以及电子邮件所需的协议   用户代理是用户与电子邮件系统的接口，又称为电子邮件客户端软件 邮件服务器是电子邮件系统的基础设施。因特网上所有的SP都有邮件服务器，其功能是发送和接收邮件，同时还要负责维护用户的邮箱。 协议包括邮件发送协议（例如SMTP)和邮件读取协议（例如POP3)。
+          41. 了解隐式接口和编译期多态  面向对象编程世界总以显示接口和运行期多态解决问题 由于w的类型被声明为Widget,所以w必须支持Widget接口。我们可以在源码中找出这个接口（例如在idget的.h文件中），看看它是什么样子，所以我称此为一个显式接口(explicit interface），也就是它在源码中明确可见。 由于Widget的某些成员函数是virtual,w对那些函数的调
         </div>
       </a>
 
@@ -619,8 +619,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-18 17:27" pubdate>
-              2024-11-18
+            <time datetime="2024-11-27 20:17" pubdate>
+              2024-11-27
             </time>
           </div>
         
@@ -635,12 +635,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" class="category-chain-item">计算机基础</a>
+  <a href="/categories/c/" class="category-chain-item">c++</a>
   
   
     <span>></span>
     
-  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="category-chain-item">计算机网络</a>
+  <a href="/categories/c/effective-c/" class="category-chain-item">effective c++</a>
   
   
 
@@ -657,7 +657,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">#计算机网络</a>
+              <a href="/tags/c/">#c++</a>
             
           </div>
         
@@ -669,23 +669,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-5-%E6%96%87%E4%BB%B6%E4%BC%A0%E9%80%81%E5%8D%8F%E8%AE%AEFTP/" target="_self">
-          <img src="/imgs/network.jpg" srcset="/img/loading.gif" lazyload alt="6.5 文件传送协议FTP">
+        <a href="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/" target="_self">
+          <img src="/imgs/effective-cpp.png" srcset="/img/loading.gif" lazyload alt="6. 继承和面向对象设计">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-5-%E6%96%87%E4%BB%B6%E4%BC%A0%E9%80%81%E5%8D%8F%E8%AE%AEFTP/" target="_self">
-          6.5 文件传送协议FTP
+        <a href="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/" target="_self">
+          6. 继承和面向对象设计
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-5-%E6%96%87%E4%BB%B6%E4%BC%A0%E9%80%81%E5%8D%8F%E8%AE%AEFTP/" target="_self">
+      <a class="index-excerpt " href="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/" target="_self">
         <div>
-          6.5 文件传送协议FTP FTP提供交互式的访问，允许客户指明文件的类型与格式（如指明是否使用ASCII码），并允许文件具有存取权限（如访问文件的用户必须经过授权，并输入有效的口令） FTP屏蔽了各计算机系统的细节，因而适合于在异构网络中任意计算机之间传送文件  1. 基本原理  FTP客户和服务器之间要建立以下两个并行的TCP连接 控制连接，在整个会话期间一直保持打开，用于传送FTP相关控制命
+          32. 确定你的public继承塑模出is-a关系  “public继承”意味is-a is-a并非是唯-存在于classes之间的关系。另两个常见的关系是has-a(有一个)和is-implemented-in-terms-of(根据某物实现出)。 “public继承”意味is-a。适用于base classes身上的每一件事情一定也适用于derived classes身上，因为每
         </div>
       </a>
 
@@ -693,8 +693,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-18 16:45" pubdate>
-              2024-11-18
+            <time datetime="2024-11-27 20:17" pubdate>
+              2024-11-27
             </time>
           </div>
         
@@ -709,12 +709,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" class="category-chain-item">计算机基础</a>
+  <a href="/categories/c/" class="category-chain-item">c++</a>
   
   
     <span>></span>
     
-  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="category-chain-item">计算机网络</a>
+  <a href="/categories/c/effective-c/" class="category-chain-item">effective c++</a>
   
   
 
@@ -731,7 +731,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">#计算机网络</a>
+              <a href="/tags/c/">#c++</a>
             
           </div>
         
@@ -743,23 +743,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-4-%E5%9F%9F%E5%90%8D%E7%B3%BB%E7%BB%9FDNS/" target="_self">
-          <img src="/imgs/network.jpg" srcset="/img/loading.gif" lazyload alt="6.4 域名系统DNS">
+        <a href="/2024/11/27/effective-cpp/5-%E5%AE%9E%E7%8E%B0/" target="_self">
+          <img src="/imgs/effective-cpp.png" srcset="/img/loading.gif" lazyload alt="5. 实现">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-4-%E5%9F%9F%E5%90%8D%E7%B3%BB%E7%BB%9FDNS/" target="_self">
-          6.4 域名系统DNS
+        <a href="/2024/11/27/effective-cpp/5-%E5%AE%9E%E7%8E%B0/" target="_self">
+          5. 实现
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-4-%E5%9F%9F%E5%90%8D%E7%B3%BB%E7%BB%9FDNS/" target="_self">
+      <a class="index-excerpt " href="/2024/11/27/effective-cpp/5-%E5%AE%9E%E7%8E%B0/" target="_self">
         <div>
-          6.4 域名系统DNS1. DNS介绍 域名系统DNS是因特网使用的命名系统，用来把便于人们记忆的具有特定含义的主机名（例如www.hust.cn),转换为便于机器处理的IP地址。 因特网是否可以只使用1台DNS服务器？ 这种做法并不可取。因为因特网的规摸很大，这样的域名服务器肯定会因为超负荷而无法正常工作，而且一旦域名服务器出现故障，整个因特网就会瘫痪。 早在1983年，因特网就开始采用层次结构
+          26. 尽可能延后变量定义式的出现时间  当定义了一个变量而其类型带有一个构造函数或析构函数，那么当程序的控制流(control flow)到达这个变量定义式时，你便得承受构造成本；当这个变量离开其作用域时，你便得承受析构成本。即使这个变量最终并未被使用，仍需耗费这些成本，所以你应该尽可能避免这种情形。 这让我们联想起本条款所谓“尽可能延后”的真正意义。你不只应该延后变量的定义，直到非得
         </div>
       </a>
 
@@ -767,8 +767,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-18 16:45" pubdate>
-              2024-11-18
+            <time datetime="2024-11-27 20:17" pubdate>
+              2024-11-27
             </time>
           </div>
         
@@ -783,12 +783,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" class="category-chain-item">计算机基础</a>
+  <a href="/categories/c/" class="category-chain-item">c++</a>
   
   
     <span>></span>
     
-  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="category-chain-item">计算机网络</a>
+  <a href="/categories/c/effective-c/" class="category-chain-item">effective c++</a>
   
   
 
@@ -805,7 +805,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">#计算机网络</a>
+              <a href="/tags/c/">#c++</a>
             
           </div>
         
@@ -817,23 +817,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-3-%E5%8A%A8%E6%80%81%E4%B8%BB%E6%9C%BA%E9%85%8D%E7%BD%AE%E5%8D%8F%E8%AE%AEDHCP/" target="_self">
-          <img src="/imgs/network.jpg" srcset="/img/loading.gif" lazyload alt="6.3 动态主机配置协议DHCP">
+        <a href="/2024/11/27/effective-cpp/4-%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%A3%B0%E6%98%8E/" target="_self">
+          <img src="/imgs/effective-cpp.png" srcset="/img/loading.gif" lazyload alt="4. 设计与声明">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-3-%E5%8A%A8%E6%80%81%E4%B8%BB%E6%9C%BA%E9%85%8D%E7%BD%AE%E5%8D%8F%E8%AE%AEDHCP/" target="_self">
-          6.3 动态主机配置协议DHCP
+        <a href="/2024/11/27/effective-cpp/4-%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%A3%B0%E6%98%8E/" target="_self">
+          4. 设计与声明
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-3-%E5%8A%A8%E6%80%81%E4%B8%BB%E6%9C%BA%E9%85%8D%E7%BD%AE%E5%8D%8F%E8%AE%AEDHCP/" target="_self">
+      <a class="index-excerpt " href="/2024/11/27/effective-cpp/4-%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%A3%B0%E6%98%8E/" target="_self">
         <div>
-          6.3 动态主机配置协议DHCP 动态主机配置协议DHCP(Dynamic Host Configuration Protocol))提供了一种机制，称为即插即用连网。 这种机制允许一台计算机加入新网络时可自动获取P地址等网络配置信息而不用手工参与。   DHCP报文在运输层使用UDP协议封装  DHCP客户使用的UDP端口号为68 DHCP服务器使用的UDP端口号为67   客户端向DHCP服务
+          18. 让接口容易被正确使用，不易被误用 1234class Date&#123;public:    Date(int month, int day, int year);&#125;;  函数接口 可能以错误的次序传递参数，或者传递一个无效的月份或天数 导入简单的外覆类型来区别天数，月份等  1234567891011121314151617struct Day&#123;exp
         </div>
       </a>
 
@@ -841,8 +841,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-18 15:55" pubdate>
-              2024-11-18
+            <time datetime="2024-11-27 20:17" pubdate>
+              2024-11-27
             </time>
           </div>
         
@@ -857,12 +857,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" class="category-chain-item">计算机基础</a>
+  <a href="/categories/c/" class="category-chain-item">c++</a>
   
   
     <span>></span>
     
-  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="category-chain-item">计算机网络</a>
+  <a href="/categories/c/effective-c/" class="category-chain-item">effective c++</a>
   
   
 
@@ -879,7 +879,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">#计算机网络</a>
+              <a href="/tags/c/">#c++</a>
             
           </div>
         
@@ -891,23 +891,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-2-%E5%AE%A2%E6%88%B7%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%96%B9%E5%BC%8F%E5%92%8C%E5%AF%B9%E7%AD%89%E6%96%B9%E5%BC%8F/" target="_self">
-          <img src="/imgs/network.jpg" srcset="/img/loading.gif" lazyload alt="6.2 客户服务器方式和对等方式">
+        <a href="/2024/11/27/effective-cpp/3-%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86/" target="_self">
+          <img src="/imgs/effective-cpp.png" srcset="/img/loading.gif" lazyload alt="3. 资源管理">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-2-%E5%AE%A2%E6%88%B7%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%96%B9%E5%BC%8F%E5%92%8C%E5%AF%B9%E7%AD%89%E6%96%B9%E5%BC%8F/" target="_self">
-          6.2 客户服务器方式和对等方式
+        <a href="/2024/11/27/effective-cpp/3-%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86/" target="_self">
+          3. 资源管理
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/6-2-%E5%AE%A2%E6%88%B7%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%96%B9%E5%BC%8F%E5%92%8C%E5%AF%B9%E7%AD%89%E6%96%B9%E5%BC%8F/" target="_self">
+      <a class="index-excerpt " href="/2024/11/27/effective-cpp/3-%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86/" target="_self">
         <div>
-          6.2 客户&#x2F;服务器方式（C&#x2F;S）和对等方式（P2P方式） 网络应用程序运行在处于网络边缘的不同的端系统上，通过彼此间的通信来共同完成某项任务。 开发一种新的网络应用首先要考虑的问题就是网络应用程序在各种端系统上的组织方式和它们之间的关系。目前流行的主要有以下两种： 客户&#x2F;服务器(Client&#x2F;Server,C&#x2F;S)方式 对等(Peer-to-Pe
+          13. 以对象管理资源 123456void f()&#123;	Investment *pInv = createInvestment();	···	delete pInv;&#125;  可能无法执行delete  在···中过早return 若delete位于某循环中，由于continue或者goto语句过早退出 ···内抛出异常 泄露的不只是内含投资对象的那块内存，还包括那
         </div>
       </a>
 
@@ -915,8 +915,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-18 15:55" pubdate>
-              2024-11-18
+            <time datetime="2024-11-27 20:17" pubdate>
+              2024-11-27
             </time>
           </div>
         
@@ -931,12 +931,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" class="category-chain-item">计算机基础</a>
+  <a href="/categories/c/" class="category-chain-item">c++</a>
   
   
     <span>></span>
     
-  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="category-chain-item">计算机网络</a>
+  <a href="/categories/c/effective-c/" class="category-chain-item">effective c++</a>
   
   
 
@@ -953,7 +953,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">#计算机网络</a>
+              <a href="/tags/c/">#c++</a>
             
           </div>
         
@@ -965,7 +965,7 @@
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/page/3/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/#board">2</a><a class="page-number" href="/page/3/#board">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/#board">5</a><a class="page-number" href="/page/6/#board">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/#board">10</a><a class="extend next" rel="next" href="/page/5/#board"><i class="iconfont icon-arrowright"></i></a>
+      <a class="extend prev" rel="prev" href="/page/3/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/#board">2</a><a class="page-number" href="/page/3/#board">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/#board">5</a><a class="page-number" href="/page/6/#board">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/#board">20</a><a class="extend next" rel="next" href="/page/5/#board"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
 

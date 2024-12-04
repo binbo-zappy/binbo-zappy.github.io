@@ -19,12 +19,12 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="4.7 IP数据报的首部格式    字段 说明    版本 占4比特，表示IP协议的版本。通信双方使用的P协议的版本必须一致。目前广泛使用的IP协议版本号为4（即IPv4)   首部长度 占4比特，表示IP数据报首部的长度。该字段的取值以4字节为单位。最小十进制取值为5，表示P数据报首部只有20字节固定部分；量大十进制取值为15，表示1P数据报首部包含20字节固定部分和最大40字节可变部分。">
+    <meta name="description" content="4.7 IP数据报的首部格式      字段 说明     版本 占4比特，表示IP协议的版本。通信双方使用的P协议的版本必须一致。目前广泛使用的IP协议版本号为4（即IPv4)   首部长度 占4比特，表示IP数据报首部的长度。该字段的取值以4字节为单位。最小十进制取值为5，表示P数据报首部只有20字节固定部分；量大十进制取值为15，表示1P数据报首部包含20字">
 <meta property="og:type" content="article">
 <meta property="og:title" content="4.7 IPv4数据报的首部格式">
 <meta property="og:url" content="http://binbo-zappy.github.io/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-7-IPv4%E6%95%B0%E6%8D%AE%E6%8A%A5%E7%9A%84%E9%A6%96%E9%83%A8%E6%A0%BC%E5%BC%8F/index.html">
 <meta property="og:site_name" content="Binbo">
-<meta property="og:description" content="4.7 IP数据报的首部格式    字段 说明    版本 占4比特，表示IP协议的版本。通信双方使用的P协议的版本必须一致。目前广泛使用的IP协议版本号为4（即IPv4)   首部长度 占4比特，表示IP数据报首部的长度。该字段的取值以4字节为单位。最小十进制取值为5，表示P数据报首部只有20字节固定部分；量大十进制取值为15，表示1P数据报首部包含20字节固定部分和最大40字节可变部分。">
+<meta property="og:description" content="4.7 IP数据报的首部格式      字段 说明     版本 占4比特，表示IP协议的版本。通信双方使用的P协议的版本必须一致。目前广泛使用的IP协议版本号为4（即IPv4)   首部长度 占4比特，表示IP数据报首部的长度。该字段的取值以4字节为单位。最小十进制取值为5，表示P数据报首部只有20字节固定部分；量大十进制取值为15，表示1P数据报首部包含20字">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/network.jpg">
 <meta property="article:published_time" content="2024-11-17T13:45:39.000Z">
@@ -278,15 +278,18 @@
             
               <div class="markdown-body">
                 
-                <h1 id="4-7-IP数据报的首部格式"><a href="#4-7-IP数据报的首部格式" class="headerlink" title="4.7 IP数据报的首部格式"></a>4.7 IP数据报的首部格式</h1><p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-7-IPv4%E6%95%B0%E6%8D%AE%E6%8A%A5%E7%9A%84%E9%A6%96%E9%83%A8%E6%A0%BC%E5%BC%8F/image-20230717175105117.png" srcset="/img/loading.gif" lazyload></p>
+                <h1 id="ip数据报的首部格式">4.7 IP数据报的首部格式</h1>
+<p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-7-IPv4%E6%95%B0%E6%8D%AE%E6%8A%A5%E7%9A%84%E9%A6%96%E9%83%A8%E6%A0%BC%E5%BC%8F/image-20230717175105117.png" srcset="/img/loading.gif" lazyload></p>
 <table>
+
 <thead>
 <tr>
 <th>字段</th>
 <th>说明</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>版本</td>
 <td>占4比特，表示IP协议的版本。<br>通信双方使用的P协议的版本必须一致。<br>目前广泛使用的IP协议版本号为4（即IPv4)<br></td>
 </tr>
@@ -308,7 +311,8 @@
 </tr>
 <tr>
 <td>标志</td>
-<td>占3比特，各比特含义如下：<br>DF位：1表示不允许分片：0表示允许分片；<br>MF位：1表示 后面还有分片：0表示 这是最后一个分片；<br>保留位：必须为0</td>
+<td>占3比特，各比特含义如下：<br>DF位：1表示不允许分片：0表示允许分片；<br>MF位：1表示
+后面还有分片：0表示 这是最后一个分片；<br>保留位：必须为0</td>
 </tr>
 <tr>
 <td>片偏移</td>
@@ -338,8 +342,10 @@
 <td>协议</td>
 <td>占8比特，指明IPV4数据报的数据部分是何种协议数据单元。<br>常用的一些协议和相应的协议字段值如下。<br><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-7-IPv4%E6%95%B0%E6%8D%AE%E6%8A%A5%E7%9A%84%E9%A6%96%E9%83%A8%E6%A0%BC%E5%BC%8F/image-20241117220627692.png" srcset="/img/loading.gif" lazyload alt="image-20241117220627692"></td>
 </tr>
-</tbody></table>
-<h2 id="1-IPV4分片"><a href="#1-IPV4分片" class="headerlink" title="1. IPV4分片"></a>1. IPV4分片</h2><p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-7-IPv4%E6%95%B0%E6%8D%AE%E6%8A%A5%E7%9A%84%E9%A6%96%E9%83%A8%E6%A0%BC%E5%BC%8F/image-20241117215341102.png" srcset="/img/loading.gif" lazyload></p>
+</tbody>
+</table>
+<h2 id="ipv4分片">1. IPV4分片</h2>
+<p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-7-IPv4%E6%95%B0%E6%8D%AE%E6%8A%A5%E7%9A%84%E9%A6%96%E9%83%A8%E6%A0%BC%E5%BC%8F/image-20241117215341102.png" srcset="/img/loading.gif" lazyload></p>
 <p><img src="/2024/11/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/4-7-IPv4%E6%95%B0%E6%8D%AE%E6%8A%A5%E7%9A%84%E9%A6%96%E9%83%A8%E6%A0%BC%E5%BC%8F/image-20241117220158751.png" srcset="/img/loading.gif" lazyload></p>
 
                 

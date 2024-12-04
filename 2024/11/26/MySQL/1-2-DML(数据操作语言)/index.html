@@ -19,12 +19,12 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="1.2 DML（数据操作语言）1. 添加数据 指定字段：  1234INSERT INTO 表名 (字段名1, 字段名2, ...) VALUES (值1, 值2, ...);# eg:insert into employee (id, workno, name, gender, age, idcard, entrydate) values (1, &#x27;1&#x27;, &#x27;Itc">
+    <meta name="description" content="1.2 DML（数据操作语言） 1. 添加数据  指定字段：  1234INSERT INTO 表名 (字段名1, 字段名2, ...) VALUES (值1, 值2, ...);# eg:insert into employee (id, workno, name, gender, age, idcard, entrydate) values (1, &#x27;1&#x27;, &amp;#">
 <meta property="og:type" content="article">
 <meta property="og:title" content="1.2 DML(数据操作语言)">
 <meta property="og:url" content="http://binbo-zappy.github.io/2024/11/26/MySQL/1-2-DML(%E6%95%B0%E6%8D%AE%E6%93%8D%E4%BD%9C%E8%AF%AD%E8%A8%80)/index.html">
 <meta property="og:site_name" content="Binbo">
-<meta property="og:description" content="1.2 DML（数据操作语言）1. 添加数据 指定字段：  1234INSERT INTO 表名 (字段名1, 字段名2, ...) VALUES (值1, 值2, ...);# eg:insert into employee (id, workno, name, gender, age, idcard, entrydate) values (1, &#x27;1&#x27;, &#x27;Itc">
+<meta property="og:description" content="1.2 DML（数据操作语言） 1. 添加数据  指定字段：  1234INSERT INTO 表名 (字段名1, 字段名2, ...) VALUES (值1, 值2, ...);# eg:insert into employee (id, workno, name, gender, age, idcard, entrydate) values (1, &#x27;1&#x27;, &amp;#">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/MySQL.png">
 <meta property="article:published_time" content="2024-11-26T07:52:30.000Z">
@@ -278,35 +278,34 @@
             
               <div class="markdown-body">
                 
-                <h1 id="1-2-DML（数据操作语言）"><a href="#1-2-DML（数据操作语言）" class="headerlink" title="1.2 DML（数据操作语言）"></a>1.2 DML（数据操作语言）</h1><h2 id="1-添加数据"><a href="#1-添加数据" class="headerlink" title="1. 添加数据"></a>1. 添加数据</h2><ol>
+                <h1 id="dml数据操作语言">1.2 DML（数据操作语言）</h1>
+<h2 id="添加数据">1. 添加数据</h2>
+<ol type="1">
 <li>指定字段：</li>
 </ol>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs mysql">INSERT INTO 表名 (字段名1, 字段名2, ...) VALUES (值1, 值2, ...);<br><br># eg:<br>insert into employee (id, workno, name, gender, age, idcard, entrydate) values (1, &#x27;1&#x27;, &#x27;Itcast&#x27;, &#x27;男&#x27;, 10, &#x27;123456789712345678&#x27;, &#x27;2000-01-01&#x27;);<br></code></pre></td></tr></table></figure>
-
-<ol start="2">
+<ol start="2" type="1">
 <li>全部字段：</li>
 </ol>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs mysql">INSERT INTO 表名 VALUES (值1, 值2, ...);<br># eg:<br>insert into employee values (3, &#x27;1&#x27;, &#x27;wj&#x27;, &#x27;男&#x27;, 10, &#x27;123456789713645678&#x27;, &#x27;2001-01-01&#x27;);<br></code></pre></td></tr></table></figure>
-
-<ol start="3">
+<ol start="3" type="1">
 <li>批量添加数据：</li>
 </ol>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs mysql">INSERT INTO 表名 (字段名1, 字段名2, ...) VALUES (值1, 值2, ...), (值1, 值2, ...), (值1, 值2, ...);<br>INSERT INTO 表名 VALUES (值1, 值2, ...), (值1, 值2, ...), (值1, 值2, ...);<br><br># eg:<br>insert into employee values (3, &#x27;1&#x27;, &#x27;wj&#x27;, &#x27;男&#x27;, 10, &#x27;123456789713645678&#x27;, &#x27;2001-01-01&#x27;), (4, &#x27;1&#x27;, &#x27;zj&#x27;, &#x27;男&#x27;, 10, &#x27;123456789713645678&#x27;, &#x27;2001-01-01&#x27;), (5, &#x27;1&#x27;, &#x27;zw&#x27;, &#x27;男&#x27;, 10, &#x27;123456789713645678&#x27;, &#x27;2001-01-01&#x27;);<br></code></pre></td></tr></table></figure>
-
-<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><ul>
+<h3 id="注意事项">注意事项</h3>
+<ul>
 <li>字符串和日期类型数据应该包含在引号中</li>
 <li>插入的数据大小应该在字段的规定范围内</li>
 </ul>
-<h2 id="2-更新和删除数据"><a href="#2-更新和删除数据" class="headerlink" title="2. 更新和删除数据"></a>2. 更新和删除数据</h2><ol>
+<h2 id="更新和删除数据">2. 更新和删除数据</h2>
+<ol type="1">
 <li>修改数据：</li>
 </ol>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs mysql">UPDATE 表名 SET 字段名1 = 值1, 字段名2 = 值2, ... [ WHERE 条件 ];<br># 例：<br>UPDATE employee SET name = &#x27;Jack&#x27; WHERE id = 1;<br></code></pre></td></tr></table></figure>
-
-<ol start="2">
+<ol start="2" type="1">
 <li>删除数据：</li>
 </ol>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs mysql">DELETE FROM 表名 [ WHERE 条件 ];<br># eg:<br>delete from employee where id = 5;<br></code></pre></td></tr></table></figure>
-
 
                 
               </div>

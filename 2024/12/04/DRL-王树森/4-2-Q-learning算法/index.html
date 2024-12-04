@@ -1,0 +1,839 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Q 学习与 SARSA 的对比： Q学习不依赖于\(\pi\), 因此Q学习属于异策略 (off-policy), 可以用经验回放。而 SARSA 依赖于\(\pi\), 因此 SARSA 属于同策略(on-policy), 不能用经验回放。两种算法的对比如图 5.2 所示。 Q学习的目标是学到表格\(\tilde{Q}\), 作为最优动作价值函数\(Q^*\)的近似。因为\(Q^*\)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="4.2 Q-learning算法">
+<meta property="og:url" content="http://binbo-zappy.github.io/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/4-2-Q-learning%E7%AE%97%E6%B3%95/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="Q 学习与 SARSA 的对比： Q学习不依赖于\(\pi\), 因此Q学习属于异策略 (off-policy), 可以用经验回放。而 SARSA 依赖于\(\pi\), 因此 SARSA 属于同策略(on-policy), 不能用经验回放。两种算法的对比如图 5.2 所示。 Q学习的目标是学到表格\(\tilde{Q}\), 作为最优动作价值函数\(Q^*\)的近似。因为\(Q^*\)">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/RL-WSS.png">
+<meta property="article:published_time" content="2024-12-04T08:02:48.000Z">
+<meta property="article:modified_time" content="2024-12-04T10:57:05.151Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="RL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/RL-WSS.png">
+  
+  
+  
+  <title>4.2 Q-learning算法 - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="4.2 Q-learning算法"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-12-04 16:02" pubdate>
+          2024年12月4日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          23 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">4.2 Q-learning算法</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="q-学习与-sarsa-的对比">Q 学习与 SARSA 的对比：</h1>
+<p>Q学习不依赖于<span class="math inline">\(\pi\)</span>,
+因此Q学习属于异策略 (off-policy), 可以用经验回放。而 SARSA 依赖于<span class="math inline">\(\pi\)</span>, 因此 SARSA 属于同策略(on-policy),
+不能用经验回放。两种算法的对比如图 5.2 所示。</p>
+<p>Q学习的目标是学到表格<span class="math inline">\(\tilde{Q}\)</span>,
+作为最优动作价值函数<span class="math inline">\(Q^*\)</span>的近似。因为<span class="math inline">\(Q^*\)</span>与<span class="math inline">\(\pi\)</span>无关，所以在理想情况下，不论收集经验用的行为策略<span class="math inline">\(\pi\)</span>是什么，都不影响
+Q学习得到的最优动作价值函数。因此，Q学习属于异策略(off-policy),允许行为策略区别于目标策略。Q学习允许使用经验回放，可以重复利用过时的经验。</p>
+<p>SARSA 算法的目标是学到表格<span class="math inline">\(q\)</span>,作为动作价值函数<span class="math inline">\(Q_\pi\)</span>的近似。<span class="math inline">\(Q_\pi\)</span>与一个策略<span class="math inline">\(\pi\)</span>相对应，用不同的策略<span class="math inline">\(\pi\)</span>, 对应<span class="math inline">\(Q_\pi\)</span>就会不同。策略<span class="math inline">\(\pi\)</span>越好，<span class="math inline">\(Q_\pi\)</span>的值越大。经验回放数组里的经验<span class="math inline">\((s_j, a_j, r_j,
+s_{j+1})\)</span>是过时的行为策略<span class="math inline">\(\pi_{\text{old}}\)</span>收集到的，与当前策略<span class="math inline">\(\pi_{\text{now}}\)</span>应的价值<span class="math inline">\(Q_{\pi_{\text{now}}}\)</span>对应不上。想要学习<span class="math inline">\(Q_\pi\)</span>的话，必须要用与当前策略<span class="math inline">\(\pi_{\text{now}}\)</span>收集到的经验，而不能用过时的<span class="math inline">\(\pi_{\text{old}}\)</span>收集到的经验。这就是为什么
+SARSA 不能用经验回放的原因。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/4-2-Q-learning%E7%AE%97%E6%B3%95/1733196209962-673cefaf-0128-4011-9ec9-dea4bdd088d8.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="q学习算法">Q学习算法</h1>
+<p>Q学习算法上一节用 TD 算法训练
+DQN（介绍DQN的笔记在这里：深度强化学习（王树森）笔记02）,
+更准确地说，我们用的 TD 算法叫做 Q 学习算法 (Q- learning)。TD
+算法是一大类算法，常见的有 Q 学习和 SARSA。Q
+学习的目的是学到最优动作价值函数<span class="math inline">\(Q^*\)</span>，而 SARSA
+的目的是学习动作价值函数<span class="math inline">\(Q_\pi\)</span>。下一章会介绍 SARSA 算法。</p>
+<p>Q 学习是在 1989 年提出的，而 DQN 则是 2013 年才提出。从 DQN 的名字
+(深度 Q 网络)就能看出 DQN 与 Q 学习的联系。最初的 Q
+学习都是以表格形式出现的。虽然表格形式的 Q
+学习在实践中不常用，但还是建议读者有所了解。</p>
+<h2 id="用表格表示q">用表格表示<span class="math inline">\(Q^*\)</span>:</h2>
+<p>假设状态空间<span class="math inline">\(S\)</span>和动作空间<span class="math inline">\(\mathcal{A}\)</span>都是有限集，即集合中元素数量有限。比如，<span class="math inline">\(S\)</span>中一共有3种状态，<span class="math inline">\(\mathcal{A}\)</span>中一共有4种动作。那么最优动作价值函数<span class="math inline">\(Q^*(s,a)\)</span>可以表示为一个3×4的表格，比如右边的表格。基于当前状态<span class="math inline">\(s_t\)</span>,做决策时使用的公式<span class="math inline">\(a_t = \mathop{\mathrm{argmax}}_{a \in \mathcal{A}}
+Q^*(s_t,a)\)</span>的意思是找到<span class="math inline">\(s_t\)</span>对应的行(3行中的某一行),找到该行最大的价值，返回该元素对应的动作。举个例子，当前状态<span class="math inline">\(s_t\)</span>是第2种状态，那么我们查看第2行，发现该行最大的价值是210,
+对应第4种动作。那么应当执行的动作<span class="math inline">\(a_t\)</span>就是第4种动作。</p>
+<p>该如何通过智能体的轨迹来学习这样一个表格呢？答案是用一个表格<span class="math inline">\(\tilde{Q}\)</span>来近似<span class="math inline">\(Q^*\)</span>。</p>
+<p>首先初始化<span class="math inline">\(\tilde{Q}\)</span>,可以让它是全零的表格。然后用表格形式的
+Q学习算法更新<span class="math inline">\(\tilde{Q}\)</span>,
+每次更新表格的一个元素。最终<span class="math inline">\(\tilde{Q}\)</span>会收敛到<span class="math inline">\(Q^*\)</span>。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/4-2-Q-learning%E7%AE%97%E6%B3%95/1733199888226-65ba1f32-75a4-4ffa-8288-9fa892eebbe9.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="算法推导">算法推导：</h2>
+<p>首先复习一下最优贝尔曼方程：</p>
+<p><span class="math inline">\(Q^*(s_t, a_t) = \mathbb{E}_{S_{t+1} \sim
+p(\cdot|s_t, a_t)} \Big[ R_t + \gamma \cdot \max_{A \in \mathcal{A}}
+Q^*(S_{t+1}, A) \Big| S_t = s_t, A_t = a_t \Big].\)</span></p>
+<p>我们对方程左右两边做近似：</p>
+<ul>
+<li>方程左边的<span class="math inline">\(Q^*(s_t,
+a_t)\)</span>可以近似成<span class="math inline">\(\tilde{Q}(s_t,
+a_t)\)</span>。</li>
+<li>方程右边的期望是关于下一时刻状态<span class="math inline">\(S_{t+1}\)</span>求的。给定当前状态<span class="math inline">\(s_t\)</span>, 智能体执行动作<span class="math inline">\(a_t\)</span>,环境会给出奖励<span class="math inline">\(r_t\)</span>和新的状态<span class="math inline">\(s_{t+1}\)</span>。用观测到的<span class="math inline">\(r_t\)</span>和<span class="math inline">\(s_{t+1}\)</span>对期望做蒙特卡洛近似，得到：<span class="math inline">\(r_t + \gamma \cdot \max_{a \in \mathcal{A}}
+Q^*(s_{t+1}, a)\)</span>.</li>
+<li>进一步把公式中的<span class="math inline">\(Q^*\)</span>近似成<span class="math inline">\(\tilde{Q}\)</span>, 得到</li>
+</ul>
+<p><span class="math inline">\(\widehat{y}_{t} \triangleq r_{t} + \gamma
+\cdot \max_{a \in \mathcal{A}} \widetilde{Q}(s_{t+1}, a).\)</span></p>
+<p>把它称作 TD 目标。它是表格在 t+1时刻对<span class="math inline">\(Q^*(s_t, a_t)\)</span>做出的估计。</p>
+<p><span class="math inline">\(\tilde{Q}(s_t, a_t)\)</span>和<span class="math inline">\(\hat{y}_t\)</span>都是对最优动作价值<span class="math inline">\(Q^*(s_t, a_t)\)</span>的估计。由于<span class="math inline">\(\hat{y}_t\)</span>部分基于真实观测到的奖励<span class="math inline">\(r_t\)</span>,我们认为<span class="math inline">\(\hat{y}_t\)</span>是更可靠的估计，所以鼓励<span class="math inline">\(\tilde{Q}(s_t, a_t)\)</span>更接近<span class="math inline">\(\hat{y}_t\)</span>。更新表格<span class="math inline">\(\tilde{Q}\)</span>中<span class="math inline">\((s_t, a_t)\)</span>位置上的元素：</p>
+<p><span class="math inline">\(\tilde{Q}(s_t, a_t) \leftarrow (1-\alpha)
+\cdot \tilde{Q}(s_t, a_t) + \alpha \cdot \hat{y}_t.\)</span></p>
+<p>这样可以使得<span class="math inline">\(\tilde{Q}(s_t,
+a_t)\)</span>更接近<span class="math inline">\(\hat{y}_t\)</span>。Q
+学习的目的是让<span class="math inline">\(\tilde{Q}\)</span>逐渐趋近于<span class="math inline">\(Q^*\)</span>。</p>
+<h2 id="收集训练数据">收集训练数据：</h2>
+<p>Q学习更新<span class="math inline">\(\tilde{Q}\)</span>的公式不依赖于具体的策略。我们可以用任意策略控制智能体，与环境交互，把得到的轨迹划分成<span class="math inline">\((s_t, a_t, r_t,
+s_{t+1})\)</span>这样的四元组，存入经验回放数组。这个控制智能体的策略叫做行为策略(behavior
+policy), 比较常用的行为策略是<span class="math inline">\(\epsilon\)</span>-greedy:</p>
+<p><span class="math inline">\(a_t = \left\{ \begin{array}{ll}
+\mathrm{argmax}_a \tilde{Q}(s_t, a), &amp; \text{以概率 } (1-\epsilon);
+\\ \text{均匀抽取 } A \text{ 中的一个动作}, &amp; \text{以概率 }
+\epsilon. \end{array} \right.\)</span></p>
+<p>事后用经验回放更新表格<span class="math inline">\(\tilde{Q}\)</span>,
+可以重复利用收集到的四元组。</p>
+<p><strong>经验回放更新表格</strong><span class="math inline">\(\tilde{Q}\)</span>:</p>
+<p>随机从经验回放数组中抽取一个四元组，记作<span class="math inline">\((s_j, a_j, r_j,
+s_{j+1})\)</span>。设当前表格为<span class="math inline">\(\tilde{Q}_{\text{now}}\)</span>。更新表格中<span class="math inline">\((s_j,
+a_j)\)</span>位置上的元素，把更新之后的表格记作<span class="math inline">\(\tilde{Q}_{\text{new}}\)</span>。</p>
+<ol type="1">
+<li>把表格<span class="math inline">\(\tilde{Q}_{\text{now}}\)</span>中第<span class="math inline">\((s_j, a_j)\)</span>位置上的元素记作：<span class="math inline">\(\hat{q}_j = \tilde{Q}_{\text{now}}(s_j,
+a_j)\)</span>.</li>
+<li>查看表格<span class="math inline">\(\tilde{Q}_{\text{now}}\)</span>的第<span class="math inline">\(s_{j+1}\)</span>行，把该行的最大值记作：<span class="math inline">\(\hat{q}_{j+1} = \max_a
+\tilde{Q}_{\text{now}}(s_{j+1}, a)\)</span>.</li>
+<li>计算 TD 目标和 TD 误差：<span class="math inline">\(\hat{y}_j = r_j
++ \gamma \cdot \hat{q}_{j+1}, \quad \delta_j = \hat{q}_j -
+\hat{y}_j\)</span>.</li>
+<li>更新表格中<span class="math inline">\((s_j,
+a_j)\)</span>位置上的元素：<span class="math inline">\(\tilde{Q}_{\text{new}}(s_j, a_j) \leftarrow
+\tilde{Q}_{\text{now}}(s_j, a_j) - \alpha \cdot \delta_j\)</span>.</li>
+</ol>
+<p>收集经验与更新表格<span class="math inline">\(\tilde{Q}\)</span>可以同时进行。每当智能体执行一次动作，我们可以用经验回放对<span class="math inline">\(\tilde{Q}\)</span>做几次更新。也可以每当完成一局游戏，对<span class="math inline">\(\tilde{Q}\)</span>做几次更新。</p>
+<h2 id="同策略-on-policy-与异策略-off-policy">同策略 (On-policy)
+与异策略 (Off-policy)</h2>
+<p>在强化学习中经常会遇到两个专业术语：同策略(on-policy) 和异策略
+(off-policy)。</p>
+<p>为了解释同策略和异策略，我们要从行为策略 (behavior policy) 和目标策略
+(target policy) 讲起。</p>
+<p>在强化学习中，我们让智能体与环境交互，记录下观测到的状态、动作、奖励，用这些经验来学习一个策略函数。在这一过程中，控制智能体与环境交互的策略被称作行为策略。行为策略的作用是收集经验(experience),即观测的状态、动作、奖励。</p>
+<p>强化学习的目的是得到一个策略函数，用这个策略函数来控制智能体。这个策略函数就叫做目标策略。在本章中，目标策略是一个确定性的策略，即用
+DQN 控制智能体：</p>
+<p><span class="math inline">\(a_t :=
+\underset{a}{\operatorname*{argmax}}\: Q(s_t, a;
+\boldsymbol{w}).\)</span></p>
+<p>本章的 Q 学习算法用任意的行为策略收集<span class="math inline">\((s_t, a_t, r_t,
+s_{t+1})\)</span>这样的四元组，然后拿它们训练目标策略，即 DQN。</p>
+<p>行为策略和目标策略可以相同，也可以不同。同策略是指用相同的行为策略和目标策略，后面章节会介绍同策略。异策略是指用不同的行为策略和目标策略，本章的
+DQN 属于异策略。同策略和异策略如图 4.6、4.7 所示。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/4-2-Q-learning%E7%AE%97%E6%B3%95/1733200093902-6f272eca-a75d-4476-b836-45a6e8b417ee.png" srcset="/img/loading.gif" lazyload></p>
+<p>由于DQN
+是异策略，行为策略可以不同于目标策略，可以用任意的行为策略收集经验，<font style="color:rgb(77, 77, 77);">比如最常用的行为策略是
+</font><span class="math inline">\(\epsilon-greedy\)</span><font style="color:rgb(77, 77, 77);">:</font></p>
+<p><span class="math inline">\(a_{t} = \left\{
+  \begin{array}{ll}
+    \operatorname{argmax}_{a} Q(s_{t}, a; w), &amp;
+\text{以概率}(1-\epsilon); \\
+    \text{均匀抽取}\mathcal{A}\text{中的一个动作}, &amp;
+\text{以概率}\epsilon.
+  \end{array}
+\right.\)</span></p>
+<p>让行为策略带有随机性的好处在于能探索更多没见过的状态。在实验中，初始的时候让<span class="math inline">\(\epsilon\)</span>比较大 (比如<span class="math inline">\(\epsilon=0.5)\)</span>; 在训练的过程中，让<span class="math inline">\(\epsilon\)</span>逐渐衰减，在几十万步之后衰减到较小的值(<span class="math inline">\(\epsilon=0.01\)</span>), 此后固定住<span class="math inline">\(\epsilon=0.01\)</span>。</p>
+<p>异策略的好处是可以用行为策略收集经验，把<span class="math inline">\((s_t, a_t, r_t,
+s_{t+1})\)</span>这样的四元组记录到一个数组里，在事后反复利用这些经验去更新目标策略。这个数组被称作经验回放数组(replay
+buffer), 这种训练方式被称作经验回放 (experience
+replay)。注意，经验回放只适用于异策略，不适用于同策略，其原因是收集经验时用的行为策略不同于想要训练出的目标策略。</p>
+<h1 id="总结">总结</h1>
+<p>DQN 是对最优动作价值函数<span class="math inline">\(Q^*\)</span>的近似。DQN 的输入是当前状态<span class="math inline">\(s_t\)</span>, 输出是每个动作的 Q 值。DQN
+要求动作空间<span class="math inline">\(\mathcal{A}\)</span>是离散集合，集合中的元素数量有限。如果动作空间<span class="math inline">\(\mathcal{A}\)</span>的大小是 k,那么 DQN 的输出就是
+k 维向量。DQN 可以用于做决策，智能体执行 Q 值最大的动作。</p>
+<p>TD 算法的目的在于让预测更接近实际观测。以驾车问题为例，如果使用 TD
+算法，无需完成整个旅途就能做梯度下降更新模型。请读者理解并记忆 TD
+目标、TD 误差的定义，它们将出现在所有价值学习的章节中。</p>
+<p>Q 学习算法是 TD 算法的一种，可以用于训练 DQN。Q
+学习算法由最优贝尔曼方程推导出。Q
+学习算法属于异策略，允许使用经验回放。由任意行为策略收集经验，
+存入经验回放数组。事后做经验回放，用 TD 算法更新 DQN 参数。</p>
+<p>如果状态空间<span class="math inline">\(S\)</span>、动作空间<span class="math inline">\(\mathcal{A}\)</span>都是较小的有限离散集合，那么可以用表格形式的Q学习算法学习<span class="math inline">\(Q^*\)</span>。如今表格形式的 Q
+学习已经不常用。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/AI/" class="category-chain-item">AI</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI/RL/" class="category-chain-item">RL</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI/RL/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/" class="category-chain-item">DRL-王树森</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/RL/" class="print-no-link">#RL</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>4.2 Q-learning算法</div>
+      <div>http://binbo-zappy.github.io/2024/12/04/DRL-王树森/4-2-Q-learning算法/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年12月4日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/4-3-%E5%A4%9A%E6%AD%A5-TD%E7%9B%AE%E6%A0%87/" title="4.3 多步 TD目标">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">4.3 多步 TD目标</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/4-1-Sarsa%E7%AE%97%E6%B3%95/" title="4.1 Sarsa算法">
+                        <span class="hidden-mobile">4.1 Sarsa算法</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,902 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="17.1 C++输入和输出概述 17.1.1 流和缓冲区  C++程序把输入和输出看作字节流 streambuf类为缓冲区提供了内存，并提供了用于填充缓冲区、访问缓冲区内容、刷新缓冲区和管理缓冲区内存的类方法 ios base类表示流的一般特征，如是否可读取、是二进制流还是文本流等： ios类基于ios base,其中包括了一个指向streambuf对象的指针成员； ostream">
+<meta property="og:type" content="article">
+<meta property="og:title" content="17. io、file">
+<meta property="og:url" content="http://binbo-zappy.github.io/2024/11/27/cpp-primer-plus/17-io%E3%80%81file/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="17.1 C++输入和输出概述 17.1.1 流和缓冲区  C++程序把输入和输出看作字节流 streambuf类为缓冲区提供了内存，并提供了用于填充缓冲区、访问缓冲区内容、刷新缓冲区和管理缓冲区内存的类方法 ios base类表示流的一般特征，如是否可读取、是二进制流还是文本流等： ios类基于ios base,其中包括了一个指向streambuf对象的指针成员； ostream">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/cpp-primer-plus.jpg">
+<meta property="article:published_time" content="2024-11-27T11:34:46.000Z">
+<meta property="article:modified_time" content="2024-11-27T11:57:29.829Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="c++">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/cpp-primer-plus.jpg">
+  
+  
+  
+  <title>17. io、file - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="17. io、file"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-11-27 19:34" pubdate>
+          2024年11月27日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          19 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">17. io、file</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="c输入和输出概述">17.1 C++输入和输出概述</h2>
+<h3 id="流和缓冲区">17.1.1 流和缓冲区</h3>
+<ul>
+<li>C++程序把输入和输出看作字节流</li>
+<li>streambuf类为缓冲区提供了内存，并提供了用于填充缓冲区、访问缓冲区内容、刷新缓冲区和管理缓冲区内存的类方法</li>
+<li>ios
+base类表示流的一般特征，如是否可读取、是二进制流还是文本流等：</li>
+<li>ios类基于ios base,其中包括了一个指向streambuf对象的指针成员；</li>
+<li>ostream类是从ios类派生而来的，提供了输出方法：</li>
+<li>istream类也是从ios类派生而来的，提供了输入方法：</li>
+<li>iostream类是基于istream和ostream类的，因此继承了输入方法和输出方法。</li>
+</ul>
+<p>C+的iostream类库管理了很多细节。例如，在程序中包含iostream文件将自动创建8个流对象(4个用于窄字符流，4个用于宽字符流)。</p>
+<ul>
+<li>cin对象对应于标准输入流。在默认情况下，这个流被关联到标准输入设备（通常为键盘）。wcin对象与此类似，但处理的是wchar_t类型。</li>
+<li>cout对象与标准输出流相对应。在默认情况下，这个流被关联到标准输出设备（通常为显示器）。wcout对象与此类似，但处理的是wchar_t类型。</li>
+<li>cerr对象与标准错误流相对应，可用于显示错误消息。在默认情况下，这个流被关联到标准输出设备（通常为显示器）。这个流没有被缓冲，这意味着信息将被直接发送给屏幕，而不会等到缓冲区填满或新的换行符。wcerr对象与此类似，但处理的是wchar
+t类型。</li>
+<li>clog对象也对应着标准错误流。在默认情况下，这个流被关联到标准输出设备（通常为显示器）。这个流被缓冲。wclog对象与此类似，但处理的是wchar
+t类型。</li>
+<li>对象代表流——这意味着什么呢？当iostream文件为程序声明一个cout对象时，该对象将包含存储了与输出有关的信息的数据成员，如显示数据时使用的字段宽度、小数位数、显示整数时采用的计数方法以及描述用来处理输出流的缓冲区的streambuf对象的地址。下面的语句通过指向的streambuf对象将字符串“Bjarna
+free”中的字符放到cout管理的缓冲区中：<img src="/2024/11/27/cpp-primer-plus/17-io%E3%80%81file/1705237228595-bdc01ffb-ffa6-4208-8926-60c13c5b6abe.png" srcset="/img/loading.gif" lazyload alt="img"></li>
+</ul>
+<h2 id="使用cout进行输出">17.2 使用cout进行输出</h2>
+<ol type="1">
+<li>不要忘了，C++用指向字符串存储位置的指针来表示字符串。指针的形式可以是char数组名、显式的char指针或用引号括起的字符串。因此，下面所有的cout语句都显示字符串：</li>
+</ol>
+<figure>
+<img src="/2024/11/27/cpp-primer-plus/17-io%E3%80%81file/1705245139233-1b798f50-772f-436a-9f16-88415e2056b4.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<ol type="1">
+<li>对于其他类型的指针，C++将其对应于Vod*,并打印地址的数值表示。如果要获得字符串的地址，则必须将其强制转换为其他类型，如下面的代码片段所示：</li>
+</ol>
+<figure>
+<img src="/2024/11/27/cpp-primer-plus/17-io%E3%80%81file/1705245175479-75b89dd8-fd6c-46c8-8810-34a63958facd.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<ol type="1">
+<li>缓冲区</li>
+</ol>
+<ul>
+<li>缓冲区为512的整数倍，输出到屏幕时，换行符发送到缓冲区将会刷新缓冲区</li>
+<li>输入即将发生时刷新缓冲区</li>
+<li>cout&lt;&lt;flush 刷新</li>
+</ul>
+<ol type="1">
+<li>用cout格式化</li>
+</ol>
+<ul>
+<li><p>计数系统</p></li>
+<li><ul>
+<li>来看如何设置显示整数时使用的计数系统。要控制整数以十进制、十六进制还是八进制显示，可以使用dec、hex和oct控制符。例如，下面的函数调用将cout对象的计数系统格式状态设置为十六进制：hex(cout)以十六进制打印整数值，也可以cout
+&lt;&lt; hex;</li>
+</ul></li>
+<li><p>调整字段宽度</p></li>
+<li><ul>
+<li>widh()方法只影响将显示的下一个项目，然后字段宽度将恢复为默认值。右对齐</li>
+</ul></li>
+<li><p>填充字符</p></li>
+<li><ul>
+<li>cout用空格填充字段中未被使用的部分，可以用fill()成员函数来改变填充字符</li>
+<li>cout.fill('*')</li>
+</ul></li>
+<li><p>设置浮点数的显示精度</p></li>
+<li><ul>
+<li>precision(2)精度设置为2</li>
+</ul></li>
+<li><p>打印末尾的0和小数点</p></li>
+<li><ul>
+<li>ios_base提供了setf()函数</li>
+<li>cout.setf(ios_base::showpoint); cout显示末尾小数点</li>
+</ul></li>
+<li><p>再谈setf</p></li>
+<li><ul>
+<li><figure>
+<img src="/2024/11/27/cpp-primer-plus/17-io%E3%80%81file/1705300561842-d11e82f0-3247-44b3-9d1b-f0bcf7cf2a37.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure></li>
+<li><figure>
+<img src="/2024/11/27/cpp-primer-plus/17-io%E3%80%81file/1705300777494-e65f71b2-8751-47c6-b216-cd25af40e0a6.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure></li>
+<li><figure>
+<img src="/2024/11/27/cpp-primer-plus/17-io%E3%80%81file/1705300787233-3bc3f62d-e9a5-4d70-9dcf-7ef7997eb842.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure></li>
+<li>调用setf()的效果可以通过unsetf()消除，后者的原型如下：</li>
+<li>void unsetf(fmtflags mask);</li>
+<li>其中，mask是位模式。mask中所有的位都设置为1，将使得对应的位被复位。也就是说，setf()将位设置为1，unsetf()将位恢复为0。例如：</li>
+<li>默认模式：cout.setf(0,ios_base:floatfield);</li>
+<li><figure>
+<img src="/2024/11/27/cpp-primer-plus/17-io%E3%80%81file/1705302159803-125ed29f-5cbd-4aee-a679-eb3814c0b266.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure></li>
+</ul></li>
+<li><p>标准控制符</p></li>
+<li><ul>
+<li><figure>
+<img src="/2024/11/27/cpp-primer-plus/17-io%E3%80%81file/1705302361934-b694ca9a-a7a2-4252-ac51-a1e2cf948d18.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure></li>
+<li><figure>
+<img src="/2024/11/27/cpp-primer-plus/17-io%E3%80%81file/1705302453821-2f6354ea-1628-4804-bed9-cc2031c17e3a.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure></li>
+<li><figure>
+<img src="/2024/11/27/cpp-primer-plus/17-io%E3%80%81file/1705302467106-79217348-497f-4fb3-80ac-65d0dff1c7ef.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure></li>
+</ul></li>
+<li><p>头文件iomanip</p></li>
+<li><ul>
+<li>常用setprecision()设置精度 setfill()填充字符 setw()字段宽度</li>
+</ul></li>
+</ul>
+<h2 id="使用cin进行输入">17.3 使用cin进行输入</h2>
+<ul>
+<li><p>可以将hex、oct和dec控制符与cin一起使用，来指定将整数输入解释为十六进制、八进制和十进制格式</p></li>
+<li><ul>
+<li>cin &gt;&gt; hex;</li>
+</ul></li>
+<li><p>cin&gt;&gt;如何检查输入</p></li>
+<li><ul>
+<li><figure>
+<img src="/2024/11/27/cpp-primer-plus/17-io%E3%80%81file/1705303363661-5c9b6cd4-5262-445c-b5fb-a948f7b3b952.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure></li>
+</ul></li>
+<li><p>流状态</p></li>
+<li><ul>
+<li>cin或cout对象包含一个描述流状态(stream state)的数据成员（从ios
+base类那里继承的）。</li>
+<li>流状态（被定义为iostate类型，而iostate是一种bitmask类型）由3个ios
+base元素组成：eofbit、badbit或failbit,其中每个元素都是一位，可以是1（设置）或0（清除)。</li>
+<li>当cin操作到达文件末尾时，它将设置eofbit:</li>
+<li>当cin操作未能读取到预期的字符时，它将设置failbit。I/O失败（如试图读取不可访问的文件或试图写入写保护的磁盘），也可能将failbit设置为1。</li>
+<li>在一些无法诊断的失败破坏流时，badbit元素将被设置（实现没有必要就哪些情况下设置failbit,哪些情况下设置badbit达成一致)。当全部3个状态位都设置为0时，说明一切顺利。</li>
+<li><figure>
+<img src="/2024/11/27/cpp-primer-plus/17-io%E3%80%81file/1705460694934-0372cfe8-71e9-4f33-b615-2da019862aad.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure></li>
+<li>设置状态</li>
+</ul></li>
+<li><ul>
+<li><ul>
+<li>clear（）方法将状态设置为它的参数。clear（）将使用默认参数0，清除三个状态位</li>
+<li>clear(eofbit)状态设置为eofbit，其他两个状态位被清除</li>
+<li>setstate()方法只影响参数中已设置的位，下面的调用将设置eofbit,而不会影响其他位setstate(eofbit);</li>
+</ul></li>
+</ul></li>
+<li><p>getline()函数将对其输入中的定界字符#，而get()函数不会</p></li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-type">const</span> <span class="hljs-type">int</span> Limit = <span class="hljs-number">255</span>;<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-keyword">using</span> std::cout;<br>	<span class="hljs-keyword">using</span> std::cin;<br>	<span class="hljs-keyword">using</span> std::endl;<br>	<span class="hljs-type">char</span> input[Limit];<br><br>	cout &lt;&lt; <span class="hljs-string">&quot;Enter a string for getline() processing:\n&quot;</span>;<br>	cin.<span class="hljs-built_in">getline</span>(input, Limit, <span class="hljs-string">&#x27;#&#x27;</span>);<br>	cout &lt;&lt; <span class="hljs-string">&quot;Here is your input:\n&quot;</span>;<br>	cout &lt;&lt; input &lt;&lt; <span class="hljs-string">&quot;\nDone with pase 1\n&quot;</span>;<br><br>	<span class="hljs-type">char</span> ch;<br>	cin.<span class="hljs-built_in">get</span>(ch);<br>	cout &lt;&lt; <span class="hljs-string">&quot;The next input character is &quot;</span> &lt;&lt; ch &lt;&lt; endl;<br><br>	<span class="hljs-keyword">if</span> (ch != <span class="hljs-string">&#x27;\n&#x27;</span>)<br>	&#123;<br>		cin.<span class="hljs-built_in">ignore</span>(Limit, <span class="hljs-string">&#x27;\n&#x27;</span>);<br>	&#125;<br>	cout &lt;&lt; <span class="hljs-string">&quot;Enter a string for get() processing : \n&quot;</span>;<br>	cin.<span class="hljs-built_in">get</span>(input, Limit, <span class="hljs-string">&#x27;#&#x27;</span>);<br>	cout &lt;&lt; <span class="hljs-string">&quot;Here is your input:\n&quot;</span>;<br>	cout &lt;&lt; input &lt;&lt; <span class="hljs-string">&quot;\nDone with phase 2\n&quot;</span>;<br><br>	cin.<span class="hljs-built_in">get</span>(ch);<br>	cout &lt;&lt; <span class="hljs-string">&quot;The next input chatacter is &quot;</span> &lt;&lt; ch &lt;&lt; endl;<br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure>
+<img src="/2024/11/27/cpp-primer-plus/17-io%E3%80%81file/1705885194777-df6662fd-e5fb-41dd-a8a1-8c2b91f0bc4a.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<figure>
+<img src="/2024/11/27/cpp-primer-plus/17-io%E3%80%81file/1705885164889-75204fbc-874a-4e9c-a0e1-4ca564c490c1.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<ul>
+<li>其他方法</li>
+<li>read()不会在输入后加上空值字符，因此不能将输入转换为字符串。</li>
+<li>peek()函数返回输入中的下一个字符，但不愁去输入流中的字符。也就是说，他能查看下一个字符</li>
+<li>gcount()方法返回最后一个非格式化抽取方法读取的字符数。这意味着字符是由get()、getline()、ignore()或者read()方法读取的，不是由抽取运算符&gt;&gt;读取的，抽取运算符对输入进行格式化，使之与特定的数据类型匹配，速度比strlen（）慢</li>
+<li>putback()函数将一个字符插入到输入字符串中，被插入的字符将是下一条输入语句读取的第一个字符。</li>
+</ul>
+<h2 id="文件输入和输出">17.4 文件输入和输出</h2>
+<h3 id="文件输入">1. 文件输入</h3>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;fstream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br>	string filename;<br><br>	cout &lt;&lt; <span class="hljs-string">&quot;Enter name for new file: &quot;</span>;<br>	cin &gt;&gt; filename;<br><br>	<span class="hljs-function">ofstream <span class="hljs-title">fout</span><span class="hljs-params">(filename.c_str())</span></span>;<br><br>	fout &lt;&lt; <span class="hljs-string">&quot;For your eyes only!\n&quot;</span>;<br>	cout &lt;&lt; <span class="hljs-string">&quot;Enter your secret number: &quot;</span>;<br>	<span class="hljs-type">float</span> secret;<br>	cin &gt;&gt; secret;<br>	fout &lt;&lt; <span class="hljs-string">&quot;Your secret number is &quot;</span> &lt;&lt; secret &lt;&lt; endl;<br>	fout.<span class="hljs-built_in">close</span>();<br><br>	<span class="hljs-function">ifstream <span class="hljs-title">fin</span><span class="hljs-params">(filename.c_str())</span></span>;<br>	cout &lt;&lt; <span class="hljs-string">&quot;Here are the contents of &quot;</span> &lt;&lt; filename &lt;&lt; <span class="hljs-string">&quot;:\n&quot;</span>;<br>	<span class="hljs-type">char</span> ch;<br>	<span class="hljs-keyword">while</span> (fin.<span class="hljs-built_in">get</span>(ch))<br>	&#123;<br>		cout &lt;&lt; ch;<br>	&#125;<br>	cout &lt;&lt; <span class="hljs-string">&quot;Done\n&quot;</span>;<br>	fin.<span class="hljs-built_in">close</span>();<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure>
+<img src="/2024/11/27/cpp-primer-plus/17-io%E3%80%81file/1705886682513-d1edb5d2-2601-41c1-87d3-834a45ae049b.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<h3 id="检查文件是否打开成功">2. 检查文件是否打开成功</h3>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs cpp">fin.<span class="hljs-built_in">open</span>(filename);<br><span class="hljs-keyword">if</span>(fin.<span class="hljs-built_in">fail</span>())<br>&#123;&#125; <br><span class="hljs-keyword">if</span>(!fin)<br>&#123;&#125;<br><span class="hljs-keyword">if</span>(!fin.<span class="hljs-built_in">is_open</span>())<br>&#123;&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="打开多个文件">3. 打开多个文件</h3>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs cpp">ifstream fin;<br>fin.<span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;fat.txt&quot;</span>);<br>fin.<span class="hljs-built_in">close</span>();<br>fin.<span class="hljs-built_in">clear</span>();<br>fin.<span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;rat.txt&quot;</span>);<br>fin.<span class="hljs-built_in">close</span>();<br></code></pre></td></tr></table></figure>
+<h3 id="命令行处理技术">4. 命令行处理技术</h3>
+<p>在UNIX和linux中计算文件包含的字数，命令行输入</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">wc</span> report1 report2 report3 //程序名 后面三个是作为命令行参数传递给程序的文件名<br><span class="hljs-comment">#include &lt;iostream&gt;</span><br><span class="hljs-comment">#include &lt;fstream&gt;</span><br><span class="hljs-comment">#include &lt;cstdlib&gt;</span><br><br>int main(int argc, char* argv[])<br>&#123;<br>	using namespace std;<br>	<span class="hljs-keyword">if</span> (argc == 1)<br>	&#123;<br>		cerr &lt;&lt; <span class="hljs-string">&quot;Usage: &quot;</span> &lt;&lt; <span class="hljs-string">argv[0] &lt;&lt; &quot; filename[s]\n&quot;;</span><br><span class="hljs-string">		exit(EXIT_FAILURE);</span><br><span class="hljs-string">	&#125;</span><br><span class="hljs-string"></span><br><span class="hljs-string">	ifstream fin;</span><br><span class="hljs-string">	long count;</span><br><span class="hljs-string">	long total = 0;</span><br><span class="hljs-string">	char ch;</span><br><span class="hljs-string">	for (int file = 1; file &lt; argc; file++)</span><br><span class="hljs-string">	&#123;</span><br><span class="hljs-string">		fin.open(argv</span>[file]);<br>		<span class="hljs-keyword">if</span> (!fin.is_open())<br>		&#123;<br>			cerr &lt;&lt; <span class="hljs-string">&quot;Could not open &quot;</span> &lt;&lt; <span class="hljs-string">argv[file] &lt;&lt; endl;</span><br><span class="hljs-string">			fin.clear();</span><br><span class="hljs-string">			continue;</span><br><span class="hljs-string">		&#125;</span><br><span class="hljs-string">		count = 0;</span><br><span class="hljs-string">		while (fin.get(ch))</span><br><span class="hljs-string">		&#123;</span><br><span class="hljs-string">			count++;</span><br><span class="hljs-string">		&#125;</span><br><span class="hljs-string">		cout &lt;&lt; count &lt;&lt; &quot; characters in &quot; &lt;&lt; argv</span>[file] &lt;&lt; <span class="hljs-string">endl;</span><br><span class="hljs-string">		total += count;</span><br><span class="hljs-string">		fin.clear();</span><br><span class="hljs-string">		fin.close();</span><br><span class="hljs-string">	&#125;</span><br><span class="hljs-string">	cout &lt;&lt; total &lt;&lt; &quot;characters in all files\n&quot;;</span><br><span class="hljs-string">	return 0;</span><br><span class="hljs-string">&#125;</span><br></code></pre></td></tr></table></figure>
+<h3 id="文件模式">5. 文件模式</h3>
+<figure>
+<img src="/2024/11/27/cpp-primer-plus/17-io%E3%80%81file/1705892409171-9f7f3a78-bc26-4ffb-9c70-c65ab3356b80.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<figure>
+<img src="/2024/11/27/cpp-primer-plus/17-io%E3%80%81file/1705892442856-a6d04e8d-d29f-443c-bdab-b8491fec7b65.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<h3 id="文件随机存取">6. 文件随机存取</h3>
+<p>seekg()</p>
+<p>seekp()</p>
+<p>tellg()</p>
+<p>tellp()</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/c/" class="category-chain-item">c++</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/c/c-primer-plus/" class="category-chain-item">c++ primer plus</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/c/" class="print-no-link">#c++</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>17. io、file</div>
+      <div>http://binbo-zappy.github.io/2024/11/27/cpp-primer-plus/17-io、file/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年11月27日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/11/27/effective-cpp/1-%E8%AE%A9%E8%87%AA%E5%B7%B1%E4%B9%A0%E6%83%AFC++/" title="1. 让自己习惯C++">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">1. 让自己习惯C++</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/11/27/cpp-primer-plus/16-string%E7%B1%BB%E5%92%8C%E6%A0%87%E5%87%86%E6%A8%A1%E6%9D%BF%E5%BA%93/" title="16. string类和标准模板库">
+                        <span class="hidden-mobile">16. string类和标准模板库</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

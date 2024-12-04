@@ -1,0 +1,984 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Actor-Critic方法把价值学习和策略学习结合起来。 Value Network and Policy Network 离散状态下状态价值函数可以写成： \(V_{\pi}(s) &#x3D; \sum_{a} \pi(a|s) \cdot Q_{\pi}(s,a).\) 但是其中策略函数\(\pi(a|s)\)和动作价值函数\(Q_{\pi}(s,a)\)都不知道，可以分别用两个神经网络">
+<meta property="og:type" content="article">
+<meta property="og:title" content="1.4 Actor-Critic Method">
+<meta property="og:url" content="http://binbo-zappy.github.io/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-4-Actor-Critic-Method/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="Actor-Critic方法把价值学习和策略学习结合起来。 Value Network and Policy Network 离散状态下状态价值函数可以写成： \(V_{\pi}(s) &#x3D; \sum_{a} \pi(a|s) \cdot Q_{\pi}(s,a).\) 但是其中策略函数\(\pi(a|s)\)和动作价值函数\(Q_{\pi}(s,a)\)都不知道，可以分别用两个神经网络">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/RL-WSS.png">
+<meta property="article:published_time" content="2024-12-04T08:02:42.000Z">
+<meta property="article:modified_time" content="2024-12-04T10:36:35.198Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="RL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/RL-WSS.png">
+  
+  
+  
+  <title>1.4 Actor-Critic Method - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="1.4 Actor-Critic Method"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-12-04 16:02" pubdate>
+          2024年12月4日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          39 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">1.4 Actor-Critic Method</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>Actor-Critic方法把价值学习和策略学习结合起来。</p>
+<h1 id="value-network-and-policy-network">Value Network and Policy
+Network</h1>
+<p>离散状态下状态价值函数可以写成：</p>
+<p><span class="math inline">\(V_{\pi}(s) = \sum_{a} \pi(a|s) \cdot
+Q_{\pi}(s,a).\)</span></p>
+<p>但是其中策略函数<span class="math inline">\(\pi(a|s)\)</span>和动作价值函数<span class="math inline">\(Q_{\pi}(s,a)\)</span>都不知道，可以分别用两个神经网络进行近似，这两个神经网络分别称为策略网络和价值网络，在表述形式上里面分别添加了一个<span class="math inline">\(\theta\)</span>和<span class="math inline">\(w\)</span>参数，表示的是神经网络的参数。</p>
+<p>策略网络控制agent运动，是actor，相当于是运动员；价值网络不控制agent运动，它负责给agent打分，是critic，相当于裁判。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-4-Actor-Critic-Method/357ab1b7876184230ebc401afea086e2.png" srcset="/img/loading.gif" lazyload></p>
+<p>分别看一下这两个神经网络</p>
+<h2 id="策略网络actor">策略网络actor</h2>
+<p>策略网络actor，它只有一个输入state，输出是所有action的概率分布。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-4-Actor-Critic-Method/ab4ce18b88d15879c28c88521cc23026.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="价值网络critic">价值网络critic</h2>
+<p>价值网络critic，有两个输入，分别是state和action；输出是一个标量，表示的是对actor的打分。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-4-Actor-Critic-Method/dcab05ee32d8fd26d0829cd28943f4b3.png" srcset="/img/loading.gif" lazyload></p>
+<p>同时学习一个策略和一个值函数就是actor-critic方法。</p>
+<h2 id="train-the-neural-networks">Train the Neural Networks</h2>
+<p>训练<span class="math inline">\(\pi\)</span>网络是提高actor的平均分，即让状态价值函数V函数的值更大；让价值网络q来当裁判，给actor的表现打分，更新它的参数<span class="math inline">\(w\)</span>是为了让它打分越来越精准。通过两个网络，让运动员的得分越来越高，裁判的打分越来越精准。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-4-Actor-Critic-Method/79373a6cc0977b9519bccdc95d004948.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>通过以下五个步骤来对<span class="math inline">\(\theta\)</span>和<span class="math inline">\(w\)</span>参数进行更新</li>
+</ul>
+<ol type="1">
+<li>Observe the state<span class="math inline">\(s_t\)</span>.</li>
+<li>Randomly sample action<span class="math inline">\(\alpha_t\)</span>according to<span class="math inline">\(\pi(\cdot|s_t; \theta_t)\)</span>.</li>
+<li>Perform<span class="math inline">\(a_t\)</span>and observe new
+state<span class="math inline">\(s_{t+1}\)</span>and reward<span class="math inline">\(r_t\)</span>.</li>
+<li>Update<span class="math inline">\(w\)</span>(in value network) using
+temporal difference (TD).</li>
+<li>Update<span class="math inline">\(\theta\)</span>(in policy network)
+using policy gradient.</li>
+</ol>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-4-Actor-Critic-Method/c4f09abd96d25ef0d054f54ddea0a703.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="update-value-network-q-using-td">Update value network q using
+TD</h2>
+<p>使用时间差分TD算法更新价值网络q，让裁判打分更准</p>
+<p>损失函数是预测q和target<span class="math inline">\(y_t\)</span>之间差的平方</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-4-Actor-Critic-Method/f752868b84e9554039c20d217c52b74b.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>使用策略梯度算法更新策略网络<span class="math inline">\(\pi\)</span>，让运动员得分更高</li>
+<li>下图中的V是状态价值函数，相当于运动员所有动作的平均分</li>
+<li>策略梯度是状态价值函数V关于<span class="math inline">\(\theta\)</span>的导数</li>
+<li>定义g是<span class="math inline">\(\log \pi\)</span>对<span class="math inline">\(\theta\)</span>的导数乘以q，这里q是裁判的打分</li>
+<li>策略梯度等于对函数g求期望，消掉动作A。</li>
+<li>g函数是策略梯度的无偏估计，用g函数代替策略梯度</li>
+<li>然后使用随机梯度上升算法来更新<span class="math inline">\(\theta\)</span>的值。</li>
+</ul>
+<h2 id="chatgpt补充梯度的概念">ChatGPT：补充梯度的概念</h2>
+<p>在数学和计算机科学中，梯度是一个向量，表示一个多元函数在某一点上的变化率和变化的方向。对于一个具有多个输入变量的函数，梯度给出了该函数对每个输入变量的偏导数。</p>
+<p>考虑一个函数<span class="math inline">\(f(x_1, x_2, \ldots,
+x_n)\)</span>，其梯度记为<span class="math inline">\(\boldsymbol{\nabla}
+f\)</span>或者<span class="math inline">\(\frac{\partial f}{\partial
+\mathbf{x}}\)</span>，其中<span class="math inline">\(\boldsymbol{\nabla}\)</span>是 nabla
+符号，表示梯度运算，<span class="math inline">\(\mathbf{x} = [x_1, x_2,
+\ldots,
+x_n]\)</span>是输入变量的向量。梯度是一个向量，其每个分量是函数对相应输入变量的偏导数。</p>
+<p><span class="math inline">\(\boldsymbol{\nabla} f = \left[
+\frac{\partial f}{\partial x_1}, \frac{\partial f}{\partial x_2},
+\ldots, \frac{\partial f}{\partial x_n} \right]\)</span></p>
+<p>梯度的方向是函数在某一点上变化最快的方向，而梯度的模（长度）表示变化率。如果梯度的模较大，意味着函数在该点的变化较为剧烈。</p>
+<p>在优化问题中，梯度的使用很常见。梯度下降算法就是一种基于梯度的优化方法，通过迭代更新参数，使得目标函数逐渐趋向最小值。梯度上升算法则是类似的优化方法，用于最大化目标函数。</p>
+<p>总的来说，梯度是一个重要的数学概念，特别在优化、机器学习
+和深度学习等领域有广泛的应用。</p>
+<h2 id="整个actor-critic-method的框图">整个Actor-Critic
+Method的框图</h2>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-4-Actor-Critic-Method/1733107575622-b3e5250d-0863-48bd-9405-c11d59319d72.png" srcset="/img/loading.gif" lazyload></p>
+<p>整个算法的流程共有9步，这里是前5步，主要复习以下TD 目标。</p>
+<p><span class="math inline">\(r_t + \gamma \cdot q_{t+1}\)</span>是TD
+target，时间差分算法里面的（TD目标表示了在当前时刻 t的奖励<span class="math inline">\(r_t\)</span>加上未来奖励的折扣。这个目标被用于更新值函数，通过比较当前值函数的估计和这个目标，可以调整值函数的参数以逐渐提高估计的准确性。）</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-4-Actor-Critic-Method/1733107776026-ebb01c65-b6be-4681-bf0f-3844970b84f2.png" srcset="/img/loading.gif" lazyload></p>
+<p>Actor-Critic算法流程：更新价值网络（critic）是梯度下降，更新策略网络（actor）是梯度上升。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-4-Actor-Critic-Method/1733107789868-990f159a-edee-4b7d-a9db-12cdecc2a019.png" srcset="/img/loading.gif" lazyload></p>
+<p>上面第9步中用<span class="math inline">\(q_t\)</span>更新，也可以用<span class="math inline">\(\delta_t\)</span>来更新。两种方法都是对的。</p>
+<h2 id="summary">Summary</h2>
+<h3 id="总结一下actor-critic方法中actor和-critic的作用">总结一下Actor-Critic方法中Actor和
+Critic的作用</h3>
+<p>在训练中，agent是被策略网络控制的，价值网络打分提供反馈；训练后，agent还是被策略网络控制，但此时价值网络（critic）就没用了。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-4-Actor-Critic-Method/1733107801627-a4fccf87-3bf3-4921-a97e-cb88fa7f4113.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="怎样训练两个网络">怎样训练两个网络：</h3>
+<p>策略网络是策略梯度来训练。用
+<strong>梯度上升</strong>，让状态价值函数V的值增加，这就意味着运动员的平均分提高。</p>
+<p>价值网络是用TD算法来训练。TD算法要用到价值网络的预测<span class="math inline">\(q_t\)</span>（价值网络对期望回报的估计）以及TD
+target（也是对期望回报的估计，由于它用到真实的奖励<span class="math inline">\(r_t\)</span>,所以它的估计比<span class="math inline">\(q_t\)</span>更靠谱，<span class="math inline">\(y_t\)</span>作为TD
+target，相当于监督学习中的标签），对损失函数关于价值网络函数的参数<span class="math inline">\(w\)</span>求导得到梯度，然后用
+<strong>梯度下降</strong>，让估计<span class="math inline">\(q_t\)</span>更接近TD target 也就是<span class="math inline">\(y_t\)</span>。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-4-Actor-Critic-Method/1733113503811-82b20e6d-854f-48ca-9f66-2a13d1ce6803.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="为什么用损失函数对w求导chatgpt的回答">为什么用损失函数对<span class="math inline">\(w\)</span>求导？ChatGPT的回答：</h3>
+<p>在机器学习中，使用损失函数对模型参数（例如权重<span class="math inline">\(w\)</span>）求导的目的是通过梯度下降或其他优化算法来更新模型参数，以最小化或最大化损失函数。这是因为损失函数衡量了模型在训练数据上的性能，我们的目标是使模型在训练数据上表现得越好越好。</p>
+<p>考虑一个典型的机器学习问题，其中我们有输入特征 (X) 和对应的目标变量
+(Y)，我们的模型通过一些参数 (w) 进行参数化，表示为<span class="math inline">\(Y = f(X; w)\)</span>。我们的目标是找到最优的参数
+(w)，使得模型预测的 (Y) 与真实的目标 (Y) 之间的差距最小。</p>
+<p>这个差距通常通过损失函数（也叫目标函数）来定义，表示为<span class="math inline">\(L(Y, f(X;
+w))\)</span>。梯度下降的思想是沿着损失函数下降最快的方向更新参数，直至找到使损失最小化的参数。</p>
+<p>为了更新参数，我们需要计算损失函数关于参数 (w)
+的梯度（导数）。梯度是一个向量，其中每个分量表示损失函数关于相应参数的偏导数。通过梯度下降，我们按照梯度的反方向更新参数，使得损失函数逐渐减小。</p>
+<p>具体来说，对于参数 (w)，我们使用链式法则计算损失函数关于 (w)
+的梯度，并使用这个梯度来更新
+(w)。这个过程反复进行，直到达到停止条件（例如达到最大迭代次数或梯度变化很小）。</p>
+<p>总之，使用损失函数对参数 (w)
+求导的目的是优化模型，使其在训练数据上的性能达到最优。</p>
+<h1 id="书">书</h1>
+<p>策略梯度方法用策略梯度<span class="math inline">\(\boldsymbol{\nabla}_{\boldsymbol{\theta}}J(\boldsymbol{\theta})\)</span>更新策略网络参数<span class="math inline">\(\boldsymbol{\theta}\)</span>,
+从而增大目标函数。前面推导出策略梯度<span class="math inline">\(\boldsymbol{\nabla}_{\boldsymbol{\theta}}J(\boldsymbol{\theta})\)</span>的无偏估计，即下面的随机梯度：</p>
+<p><span class="math inline">\(\boldsymbol{g}(s,a;\boldsymbol{\theta})
+\triangleq Q_{\pi}(s,a) \cdot
+\boldsymbol{\nabla}_{\boldsymbol{\theta}}\ln\pi(a\|s;\boldsymbol{\theta}).\)</span></p>
+<p>但是其中的动作价值函数<span class="math inline">\(Q_{\pi}\)</span>是未知的，导致无法直接计算<span class="math inline">\(\boldsymbol{g}(s,a;\boldsymbol{\theta})\)</span>。上一节的
+REINFORCE 用实际观测的回报近似<span class="math inline">\(Q_{\pi}\)</span>, 本节的 actor-critic
+方法用神经网络近似<span class="math inline">\(Q_{\pi}\)</span>。</p>
+<h2 id="价值网络">价值网络</h2>
+<p>Actor-critic 方法用一个神经网络近似动作价值函数<span class="math inline">\(Q_{\pi}(s,a)\)</span>, 这个神经网络叫做“价值网络",
+记为<span class="math inline">\(q(s,a;\boldsymbol{w})\)</span>,其中的<span class="math inline">\(\boldsymbol{w}\)</span>表示神经网络中可训练的参数。价值网络的输入是状态<span class="math inline">\(s\)</span>, 输出是每个动作的价值。动作空间<span class="math inline">\(A\)</span>中有多少种动作，那么价值网络的输出就是多少维的向量，向量每个元素对应一个动作。举个例子，动作空间是<span class="math inline">\(A=\{左，右，上\}\)</span>,</p>
+<p><span class="math inline">\(q(s, 左; w) = 219, \quad q(s, 右; w) =
+-73, \quad q(s, 上; w) = 580.\)</span></p>
+<p>神经网络的结构见图 7.2。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-4-Actor-Critic-Method/1733113794334-099e1ce6-f491-4d03-a070-25a281d5c2d0.png" srcset="/img/loading.gif" lazyload></p>
+<p>虽然价值网络<span class="math inline">\(q(s,a;\boldsymbol{w})\)</span>与之前学的 DQN
+有相同的结构，但是两者的意义不同，训练算法也不同。</p>
+<ul>
+<li>价值网络是对动作价值函数<span class="math inline">\(Q_{\pi}(s,a)\)</span>的近似。而 DQN
+则是对最优动作价值函数<span class="math inline">\(Q^*(s,a)\)</span>的近似。</li>
+<li>对价值网络的训练使用的是 SARSA
+算法，它属于同策略，不能用经验回放。对 DQN的训练使用的是 Q
+学习算法，它属于异策略，可以用经验回放。</li>
+</ul>
+<h2 id="算法推导">算法推导</h2>
+<p>Actor-critic 翻译成“演员一评委”方法。策略网络<span class="math inline">\(\pi(a|s;\boldsymbol{\theta})\)</span>相当于演员，它基于状态<span class="math inline">\(s\)</span>做出动作<span class="math inline">\(a\)</span>。价值网络<span class="math inline">\(q(s,a;\boldsymbol{w})\)</span>相当于评委，它给演员的表现打分，评价在状态<span class="math inline">\(s\)</span>的情况下做出动作<span class="math inline">\(a\)</span>的好坏程度。策略网络(演员)和价值网络(评委)的关系如图7.3所示。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-4-Actor-Critic-Method/1733113845596-bb4a6e86-c013-48f7-ba33-a6eb95462f00.png" srcset="/img/loading.gif" lazyload></p>
+<p>读者可能会对图 7.3 感到不解：为什么不直接把奖励<span class="math inline">\(R\)</span>反馈给策略网络 (演员),而要用价值网络
+(评委) 这样一个中介呢？原因是这样的：策略学习的目标函数<span class="math inline">\(J(\boldsymbol{\theta})\)</span>是回报<span class="math inline">\(U\)</span>的期望，而不是奖励<span class="math inline">\(R\)</span>的期望；注意回报<span class="math inline">\(U\)</span>和奖励<span class="math inline">\(R\)</span>的区别。虽然能观测到当前的奖励<span class="math inline">\(R\)</span>,但是它对策略网络是毫无意义的；训练策略网络(演员)需要的是回报<span class="math inline">\(U\)</span>,而不是奖励<span class="math inline">\(R\)</span>。价值网络 (评委) 能够估算出回报<span class="math inline">\(U\)</span>的期望，因此能帮助训练策略网络
+(演员)。</p>
+<h3 id="训练策略网络-演员">训练策略网络 (演员)</h3>
+<p>策略网络 (演员)
+想要改进自己的演技，但是演员自己不知道什么样的表演才算更好，所以需要价值网络(评委)
+的帮助。在演员做出动作<span class="math inline">\(a\)</span>之后，评委会打一个分数<span class="math inline">\(\hat{q} \triangleq
+q(s,a;\boldsymbol{w})\)</span>,并把分数反馈给演员，帮助演员做出改进。演员利用当前状态<span class="math inline">\(s\)</span>, 自己的动作<span class="math inline">\(a\)</span>, 以及评委的打分<span class="math inline">\(\hat{q}\)</span>,
+计算近似策略梯度，然后更新自己的参数<span class="math inline">\(\boldsymbol{\theta}\)</span>(相当于改变自己的技术)。通过这种方式，演员的表现越来越受评委的好评，于是演员的获得的评分<span class="math inline">\(\hat{q}\)</span>越来越高。</p>
+<p>训练策略网络的基本想法是用策略梯度<span class="math inline">\(\boldsymbol{\nabla}_{\boldsymbol{\theta}}J(\boldsymbol{\theta})\)</span>的近似来更新参数<span class="math inline">\(\boldsymbol{\theta}\)</span>。之前我们推导过策略梯度的无偏估计：</p>
+<p><span class="math inline">\(g(s,a;\theta) \triangleq Q_{\pi}(s,a)
+\cdot \nabla_{\theta} \ln \pi(a \mid s; \theta).\)</span></p>
+<p>价值网络<span class="math inline">\(q(s,a;\boldsymbol{w})\)</span>是对动作价值函数<span class="math inline">\(Q_{\pi}(s,a)\)</span>的近似，所以把上面公式中的<span class="math inline">\(Q_{\pi}\)</span>替换成价值网络，得到近似策略梯度：</p>
+<p><span class="math inline">\(\widehat{g}\left(s,a;\theta\right) \quad
+\triangleq \quad \underbrace{q(s,a;w)}_{\text{评委的打分}} \cdot
+\nabla_{\theta} \ln \pi(a \mid s; \theta).\)</span></p>
+<p>最后做梯度上升更新策略网络的参数：</p>
+<p><span class="math inline">\(\boldsymbol{\theta} \leftarrow
+\boldsymbol{\theta} + \beta \cdot
+\hat{\boldsymbol{g}}(s,a;\boldsymbol{\theta}).\)</span></p>
+<p>注:
+用上述方式更新参数之后，会让评委打出的分数越来越高，原因是这样的。状态价值函数<span class="math inline">\(V_{\pi}(s)\)</span>可以近似成为：</p>
+<p><span class="math inline">\(v(s; \theta) = \mathbb{E}_{A \sim
+\pi(\cdot | s; \theta)} \left[ q(s, A; w) \right].\)</span></p>
+<p>因此可以将<span class="math inline">\(v(s;\boldsymbol{\theta})\)</span>看做评委打分的均值。不难证明，公式
+(7.11) 中定义的近似策略梯度<span class="math inline">\(\hat{\boldsymbol{g}}(s,a;\boldsymbol{\theta})\)</span>的期望等于<span class="math inline">\(v(s;\boldsymbol{\theta})\)</span>关于<span class="math inline">\(\boldsymbol{\theta}\)</span>的梯度：</p>
+<p><span class="math inline">\(\nabla_{\theta v}(s; \theta) =
+\mathbb{E}_{A \sim \pi(\cdot \mid s; \theta)} \left[ \widehat{g}(s, A;
+\theta) \right].\)</span></p>
+<p>因此，用公式 7.12 中的梯度上升更新<span class="math inline">\(\boldsymbol{\theta}\)</span>,会让<span class="math inline">\(v(s;\boldsymbol{\theta})\)</span>变大，也就是让评委打分的均值更高。</p>
+<h3 id="训练价值网络评委">训练价值网络(评委)</h3>
+<p>通过以上分析，我们不难发现上述训练策略网络(演员)的方法不是真正让演员表现更好，只是让演员更迎合评委的喜好而已。因此，评委的水平也很重要，只有当评委的打分<span class="math inline">\(\hat{q}\)</span>真正反映出动作价值<span class="math inline">\(Q_{\pi}\)</span>,演员的水平才能真正提高。初始的时候，价值网络的参数<span class="math inline">\(\boldsymbol{w}\)</span>是随机的，也就是说评委的打分是瞎猜。可以用
+SARSA 算法更新<span class="math inline">\(\boldsymbol{w}\)</span>,提高评委的水平。每次从环境中观测到一个奖励<span class="math inline">\(r\)</span>,把<span class="math inline">\(r\)</span>看做是真相，用<span class="math inline">\(r\)</span>来校准评委的打分<span class="math inline">\(q(s,a;\boldsymbol{w})\)</span>。</p>
+<p>第5.1 节已经推导过 SARSA 算法，现在我们再回顾一下。在<span class="math inline">\(t\)</span>时刻，价值网络输出<span class="math inline">\(\hat{q}_t =
+q(s_t,a_t;\boldsymbol{w})\)</span>,</p>
+<p>它是对动作价值函数<span class="math inline">\(Q_{\pi}(s_t,a_t)\)</span>的估计。在<span class="math inline">\(t+1\)</span>时刻，实际观测到<span class="math inline">\(r_t,s_{t+1},a_{t+1}\)</span>, 于是可以计算 TD
+目标</p>
+<p><span class="math inline">\(\hat{y}_t = r_t + \gamma \cdot
+q(s_{t+1},a_{t+1};\boldsymbol{w})\)</span>,</p>
+<p>它也是对动作价值函数<span class="math inline">\(Q_{\pi}(s_t,a_t)\)</span>的估计。由于<span class="math inline">\(\hat{y}_t\)</span>部分基于实际观测到的奖励<span class="math inline">\(r_t\)</span>,我们认为<span class="math inline">\(\hat{y}_t\)</span>比<span class="math inline">\(q(s_t,a_t;\boldsymbol{w})\)</span>更接近事实真相。所以把<span class="math inline">\(\hat{y}_t\)</span>固定住，鼓励<span class="math inline">\(q(s_t,a_t;\boldsymbol{w})\)</span>去接近<span class="math inline">\(\hat{y}_t\)</span>。</p>
+<p>SARSA 算法具体这样更新价值网络参数<span class="math inline">\(\boldsymbol{w}\)</span>。定义损失函数：</p>
+<p><span class="math inline">\(L(\boldsymbol{w}) \triangleq \frac{1}{2}
+[q(s_t,a_t;\boldsymbol{w}) - \hat{y}_t]^2.\)</span></p>
+<p>设<span class="math inline">\(\hat{q}_t \triangleq
+q(s_t,a_t;\boldsymbol{w})\)</span>。损失函数的梯度是：</p>
+<p><span class="math inline">\(\boldsymbol{\nabla}_{\boldsymbol{w}}L(\boldsymbol{w})
+= (\hat{q}_t - \hat{y}_t) \cdot
+\boldsymbol{\nabla}_{\boldsymbol{w}}q(s_t,a_t;\boldsymbol{w}).\)</span></p>
+<p>做一轮梯度下降更新<span class="math inline">\(\boldsymbol{w}\)</span>:</p>
+<p><span class="math inline">\(\boldsymbol{w} \leftarrow \boldsymbol{w}
+- \alpha \cdot
+\boldsymbol{\nabla}_{\boldsymbol{w}}L(\boldsymbol{w}).\)</span></p>
+<p>这样更新<span class="math inline">\(\boldsymbol{w}\)</span>可以让<span class="math inline">\(q(s_t,a_t;\boldsymbol{w})\)</span>更接近<span class="math inline">\(\hat{y}_t\)</span>。可以这样理解 SARSA:
+用观测到的奖励<span class="math inline">\(r\)</span>来“校准”评委的打分<span class="math inline">\(q(s_t,a_t;\boldsymbol{w})\)</span>。</p>
+<h2 id="训练流程">训练流程</h2>
+<p>下面概括 actor-critic 训练流程。设当前策略网络参数是<span class="math inline">\(\boldsymbol{\theta}_{\text{now}}\)</span>,价值网络参数是<span class="math inline">\(\boldsymbol{w}_{\text{now}}\)</span>。</p>
+<p>执行下面的步骤，将参数更新成<span class="math inline">\(\boldsymbol{\theta}_{\text{new}}\)</span>和<span class="math inline">\(\boldsymbol{w}_{\text{new}}\)</span>:</p>
+<ol type="1">
+<li>观测到当前状态<span class="math inline">\(s_t\)</span>,根据策略网络做决策<span class="math inline">\(a_t \sim \pi(\cdot|s_t;
+\boldsymbol{\theta}_{\text{now}})\)</span>, 并让智能体执行动作<span class="math inline">\(a_t\)</span>。</li>
+<li>从环境中观测到奖励<span class="math inline">\(r_t\)</span>和新的状态<span class="math inline">\(s_{t+1}\)</span>。</li>
+<li>根据策略网络做决策<span class="math inline">\(\tilde{a}_{t+1} \sim
+\pi(\cdot|s_{t+1};
+\boldsymbol{\theta}_{\text{now}})\)</span>,但不让智能体执行动作<span class="math inline">\(\tilde{a}_{t+1}\)</span>。</li>
+<li>让价值网络给<span class="math inline">\((s_t,
+a_t)\)</span>打分：<span class="math inline">\(\hat{q}_t = q(s_t, a_t;
+\boldsymbol{w}_{\text{now}})\)</span>和<span class="math inline">\(\hat{q}_{t+1} = q(s_{t+1}, \tilde{a}_{t+1};
+\boldsymbol{w}_{\text{now}})\)</span>.</li>
+<li>计算 TD 目标和 TD 误差：<span class="math inline">\(\hat{y}_t = r_t
++ \gamma \cdot \hat{q}_{t+1}\)</span>和<span class="math inline">\(\delta_t = \hat{q}_t - \hat{y}_t\)</span>.</li>
+<li>更新价值网络：<span class="math inline">\(\boldsymbol{w}_{\text{new}} \leftarrow
+\boldsymbol{w}_{\text{now}} - \alpha \cdot \delta_t \cdot
+\boldsymbol{\nabla}_{\boldsymbol{w}}q(s_t, a_t;
+\boldsymbol{w}_{\text{now}})\)</span>.</li>
+<li>更新策略网络：<span class="math inline">\(\boldsymbol{\theta}_{\text{new}} \leftarrow
+\boldsymbol{\theta}_{\text{now}} + \beta \cdot \hat{q}_t \cdot
+\boldsymbol{\nabla}_{\boldsymbol{\theta}}\ln\pi(a_t \| s_t;
+\boldsymbol{\theta}_{\text{now}})\)</span>.</li>
+</ol>
+<h2 id="用目标网络改进训练">用目标网络改进训练</h2>
+<p>第 6.2 节讨论了 Q 学习中的自举及其危害，以及用目标网络 (target
+network) 缓解自举造成的偏差。SARSA
+算法中也存在自举一一即用价值网络自己的估值<span class="math inline">\(\hat{q}_{t+1}\)</span>去更新价值网络自己；我们同样可以用目标网络计算
+TD 目标，从而缓解偏差。把目标网络记作<span class="math inline">\(q(s,a;\boldsymbol{w}^-)\)</span>,它的结构与价值网络相同，但是参数不同。使用目标网络计算
+TD 目标，那么 actor-critic 的训练就变成了：</p>
+<ol type="1">
+<li>观测到当前状态<span class="math inline">\(s_t\)</span>,根据策略网络做决策<span class="math inline">\(a_t \sim \pi(\cdot|s_t;
+\boldsymbol{\theta}_{\text{now}})\)</span>, 并让智能体执行动作<span class="math inline">\(a_t\)</span>.</li>
+<li>从环境中观测到奖励<span class="math inline">\(r_t\)</span>和新的状态<span class="math inline">\(s_{t+1}\)</span>.</li>
+<li>根据策略网络做决策<span class="math inline">\(\tilde{a}_{t+1} \sim
+\pi(\cdot|s_{t+1};
+\boldsymbol{\theta}_{\text{now}})\)</span>,但是不让智能体执行动作<span class="math inline">\(\tilde{a}_{t+1}\)</span>.</li>
+<li>让价值网络给<span class="math inline">\((s_t,
+a_t)\)</span>打分：<span class="math inline">\(\hat{q}_t = q(s_t, a_t;
+\boldsymbol{w}_{\text{now}})\)</span>.</li>
+<li>让目标网络给<span class="math inline">\((s_{t+1},
+\tilde{a}_{t+1})\)</span>打分：<span class="math inline">\(\hat{q}_{t+1}^- = q(s_{t+1}, \tilde{a}_{t+1};
+\boldsymbol{w}_{\text{now}}^-)\)</span>.</li>
+<li>计算 TD 目标和 TD 误差：<span class="math inline">\(\hat{y}_t^- =
+r_t + \gamma \cdot \hat{q}_{t+1}^-\)</span>和<span class="math inline">\(\delta_t = \hat{q}_t - \hat{y}_t^-\)</span>.</li>
+<li>更新价值网络：<span class="math inline">\(\boldsymbol{w}_{\text{new}} \leftarrow
+\boldsymbol{w}_{\text{now}} - \alpha \cdot \delta_t \cdot
+\boldsymbol{\nabla}_{\boldsymbol{w}}q(s_t, a_t;
+\boldsymbol{w}_{\text{now}})\)</span>.</li>
+<li>更新策略网络：<span class="math inline">\(\boldsymbol{\theta}_{\text{new}} \leftarrow
+\boldsymbol{\theta}_{\text{now}} + \beta \cdot \hat{q}_t \cdot
+\boldsymbol{\nabla}_{\boldsymbol{\theta}}\ln\pi(a_t \| s_t;
+\boldsymbol{\theta}_{\text{now}})\)</span>.</li>
+<li>设<span class="math inline">\(\tau \in
+(0,1)\)</span>是需要手动调整的超参数。做加权平均更新目标网络的参数：<span class="math inline">\(\boldsymbol{w}_{\text{new}}^- \leftarrow \tau
+\cdot \boldsymbol{w}_{\text{new}} + (1-\tau) \cdot
+\boldsymbol{w}_{\text{now}}^-\)</span>.</li>
+</ol>
+<h2 id="本章总结">本章总结</h2>
+<ul>
+<li>可以用神经网络<span class="math inline">\(\pi(a|s;\boldsymbol{\theta})\)</span>近似策略函数。策略学习的目标函数是<span class="math inline">\(J(\boldsymbol{\theta}) =
+\mathbb{E}_S[V_{\pi}(S)]\)</span>, 它的值越大，意味着策略越好。</li>
+<li>策略梯度指的是<span class="math inline">\(J(\boldsymbol{\theta})\)</span>关于策略参数<span class="math inline">\(\boldsymbol{\theta}\)</span>的梯度。策略梯度定理将策略梯度表示成<span class="math inline">\(\boldsymbol{g}(s,a;\boldsymbol{\theta}) \triangleq
+Q_{\pi}(s,a) \cdot
+\boldsymbol{\nabla}_{\boldsymbol{\theta}}\ln\pi(a|s;\boldsymbol{\theta})\)</span><font style="color:rgb(6, 6, 7);">
+的期望。</font></li>
+<li><font style="color:rgb(6, 6, 7);">REINFORCE
+算法用实际观测的回报<span class="math inline">\(u\)</span>近似
+</font><span class="math inline">\(Q_{\pi}(s,a)\)</span><font style="color:rgb(6, 6, 7);">,
+从而把 </font><span class="math inline">\(\boldsymbol{g}(s,a;\boldsymbol{\theta})\)</span><font style="color:rgb(6, 6, 7);">
+近似成 </font><span class="math inline">\(\tilde{\boldsymbol{g}}(s,a;\boldsymbol{\theta})
+\triangleq u \cdot
+\boldsymbol{\nabla}_{\boldsymbol{\theta}}\ln\pi(a|s;\boldsymbol{\theta})\)</span><font style="color:rgb(6, 6, 7);">.
+REINFORCE 算法做梯度上升更新策略网络：</font><span class="math inline">\(\boldsymbol{\theta} \leftarrow \boldsymbol{\theta}
++ \beta \cdot
+\tilde{\boldsymbol{g}}(s,a;\boldsymbol{\theta})\)</span><font style="color:rgb(6, 6, 7);">
+</font></li>
+<li><font style="color:rgb(6, 6, 7);">Actor-critic 用价值网络
+</font><span class="math inline">\(q(s,a;\boldsymbol{w})\)</span><font style="color:rgb(6, 6, 7);">
+近似 </font><span class="math inline">\(Q_{\pi}(s,a)\)</span><font style="color:rgb(6, 6, 7);">,
+从而把 </font><span class="math inline">\(\boldsymbol{g}(s,a;\boldsymbol{\theta})\)</span><font style="color:rgb(6, 6, 7);">
+近似成 </font><span class="math inline">\(\hat{\boldsymbol{g}}(s,a;\boldsymbol{\theta})
+\triangleq q(s,a;\boldsymbol{w}) \cdot
+\boldsymbol{\nabla}_{\boldsymbol{\theta}}\ln\pi(a|s;\boldsymbol{\theta})\)</span><font style="color:rgb(6, 6, 7);">.
+Actor-critic 用 SARSA 算法更新价值网络<span class="math inline">\(q\)</span>, 用梯度上升更新策略网络 </font><span class="math inline">\(\boldsymbol{\theta} \leftarrow \boldsymbol{\theta}
++ \beta \cdot
+\hat{\boldsymbol{g}}(s,a;\boldsymbol{\theta})\)</span><font style="color:rgb(6, 6, 7);">.</font></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/AI/" class="category-chain-item">AI</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI/RL/" class="category-chain-item">RL</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI/RL/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/" class="category-chain-item">DRL-王树森</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/RL/" class="print-no-link">#RL</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>1.4 Actor-Critic Method</div>
+      <div>http://binbo-zappy.github.io/2024/12/04/DRL-王树森/1-4-Actor-Critic-Method/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年12月4日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/" title="1.5 ALPHAGO">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">1.5 ALPHAGO</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-3-Policy-based-RL/" title="1.3 策略学习">
+                        <span class="hidden-mobile">1.3 策略学习</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -19,12 +19,12 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="5.9 TCP报文段的首部格式 为了实现可靠传输，TCP采用了面向字节流的方式。 但TCP在发送数据时，是从发送缓存取出一部分或全部字节并给其添加一个首部使之成为TCP报文段后进行发送。 一个TCP报文段由首部和数据载荷两部分构成； TCP的全部功能都体现在它首部中各字段的作用。        字段 说明    源端口 占16比特，写入源端口号，用来标识发送该TCP报文段的应用进程   目的端口">
+    <meta name="description" content="5.9 TCP报文段的首部格式  为了实现可靠传输，TCP采用了面向字节流的方式。 但TCP在发送数据时，是从发送缓存取出一部分或全部字节并给其添加一个首部使之成为TCP报文段后进行发送。  一个TCP报文段由首部和数据载荷两部分构成； TCP的全部功能都体现在它首部中各字段的作用。        字段 说明     源端口 占16比特，写入源端口号，用来">
 <meta property="og:type" content="article">
 <meta property="og:title" content="5.9 TCP报文段的首部格式">
 <meta property="og:url" content="http://binbo-zappy.github.io/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-9-TCP%E6%8A%A5%E6%96%87%E6%AE%B5%E7%9A%84%E9%A6%96%E9%83%A8%E6%A0%BC%E5%BC%8F/index.html">
 <meta property="og:site_name" content="Binbo">
-<meta property="og:description" content="5.9 TCP报文段的首部格式 为了实现可靠传输，TCP采用了面向字节流的方式。 但TCP在发送数据时，是从发送缓存取出一部分或全部字节并给其添加一个首部使之成为TCP报文段后进行发送。 一个TCP报文段由首部和数据载荷两部分构成； TCP的全部功能都体现在它首部中各字段的作用。        字段 说明    源端口 占16比特，写入源端口号，用来标识发送该TCP报文段的应用进程   目的端口">
+<meta property="og:description" content="5.9 TCP报文段的首部格式  为了实现可靠传输，TCP采用了面向字节流的方式。 但TCP在发送数据时，是从发送缓存取出一部分或全部字节并给其添加一个首部使之成为TCP报文段后进行发送。  一个TCP报文段由首部和数据载荷两部分构成； TCP的全部功能都体现在它首部中各字段的作用。        字段 说明     源端口 占16比特，写入源端口号，用来">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/network.jpg">
 <meta property="article:published_time" content="2024-11-18T04:19:10.000Z">
@@ -278,23 +278,26 @@
             
               <div class="markdown-body">
                 
-                <h1 id="5-9-TCP报文段的首部格式"><a href="#5-9-TCP报文段的首部格式" class="headerlink" title="5.9 TCP报文段的首部格式"></a>5.9 TCP报文段的首部格式</h1><ul>
+                <h1 id="tcp报文段的首部格式">5.9 TCP报文段的首部格式</h1>
+<ul>
 <li>为了实现可靠传输，TCP采用了面向字节流的方式。</li>
-<li>但TCP在发送数据时，是从发送缓存取出一部分或全部字节并给其添加一个首部使之成为TCP报文段后进行发送。<ul>
+<li>但TCP在发送数据时，是从发送缓存取出一部分或全部字节并给其添加一个首部使之成为TCP报文段后进行发送。
+<ul>
 <li>一个TCP报文段由首部和数据载荷两部分构成；</li>
 <li>TCP的全部功能都体现在它首部中各字段的作用。</li>
-</ul>
-</li>
+</ul></li>
 </ul>
 <p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-9-TCP%E6%8A%A5%E6%96%87%E6%AE%B5%E7%9A%84%E9%A6%96%E9%83%A8%E6%A0%BC%E5%BC%8F/image-20241118153709722.png" srcset="/img/loading.gif" lazyload></p>
 <table>
+
 <thead>
 <tr>
 <th>字段</th>
 <th>说明</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>源端口</td>
 <td>占16比特，写入源端口号，用来标识发送该TCP报文段的应用进程</td>
 </tr>
@@ -304,11 +307,11 @@
 </tr>
 <tr>
 <td>序号</td>
-<td>占32比特，取值范围[0,2^32^-1]，序号增加到最后一个后，下一个序号就又回到0。<br>指出本TCP报文段数据载荷的第一个字节的序号。</td>
+<td>占32比特，取值范围[0,2<sup>32</sup>-1]，序号增加到最后一个后，下一个序号就又回到0。<br>指出本TCP报文段数据载荷的第一个字节的序号。</td>
 </tr>
 <tr>
 <td>确认号</td>
-<td>占32比特，取值范围[0,2^32^-1]，确认号增加到最后一个后，下一个确认号就又回到0。<br>指出期望收到对方下一个TCP报文段的数据载荷的第一个字节的序号，同时也是对之前收到的所有数据的确认。</td>
+<td>占32比特，取值范围[0,2<sup>32</sup>-1]，确认号增加到最后一个后，下一个确认号就又回到0。<br>指出期望收到对方下一个TCP报文段的数据载荷的第一个字节的序号，同时也是对之前收到的所有数据的确认。</td>
 </tr>
 <tr>
 <td>确认标志位ACK</td>
@@ -340,7 +343,7 @@
 </tr>
 <tr>
 <td>复位标志位RST</td>
-<td>用来复位TCP连接。<br>当RST&#x3D;1时，表明TCP连接出现了异常，必须释放连接，然后再重新建立连接。<br>RST置1还用来拒绝一个非法的报文段或拒绝打开一个TCP连接。</td>
+<td>用来复位TCP连接。<br>当RST=1时，表明TCP连接出现了异常，必须释放连接，然后再重新建立连接。<br>RST置1还用来拒绝一个非法的报文段或拒绝打开一个TCP连接。</td>
 </tr>
 <tr>
 <td>推送标志位PSH</td>
@@ -356,20 +359,25 @@
 </tr>
 <tr>
 <td>选项</td>
-<td>1. 最大报文段长度MSS选项：TCP报文段数据载荷部分的最大长度。<br>2. 窗口扩大选项：为了扩大窗口（提高吞吐率）<br>3. 时间戳选项：<br>     a. 用来计算往返时间RTT<br>     b. 用于处理序号超范围的情况，又称为防止序号绕回PAWS。<br>4. 选择确认选项<br>选项的作用是为了扩展TCP报文段首部的功能</td>
+<td>1. 最大报文段长度MSS选项：TCP报文段数据载荷部分的最大长度。<br>2.
+窗口扩大选项：为了扩大窗口（提高吞吐率）<br>3. 时间戳选项：<br> a.
+用来计算往返时间RTT<br> b.
+用于处理序号超范围的情况，又称为防止序号绕回PAWS。<br>4.
+选择确认选项<br>选项的作用是为了扩展TCP报文段首部的功能</td>
 </tr>
 <tr>
 <td>填充</td>
 <td>由于选项的长度可变，因此使用填充来确保报文段首部能被4整除<br>(因为数据偏移字段，也就是首部长度字段，是以4字节为单位的)</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <ul>
-<li>紧急数据：<ul>
+<li>紧急数据：
+<ul>
 <li>当发送方有紧急数据时，可将紧急数据插队到发送缓存的最前面，并立刻封装到一个TCP报文段中进行发送。</li>
 <li>紧急指针会指出本报文段数据载荷部分包含了多长的紧急数据，紧急数据之后是普通数据。</li>
 <li>接收方将紧急数据部分取出，并直接上交应用程序，而不必在接受缓存中排队。</li>
-</ul>
-</li>
+</ul></li>
 </ul>
 
                 

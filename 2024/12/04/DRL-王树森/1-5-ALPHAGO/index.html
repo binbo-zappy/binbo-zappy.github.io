@@ -1,0 +1,1020 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="围棋游戏介绍  High level Ideas 训练包含3步：  用behavior cloning初始化策略网络 用策略梯度训练策略网络 策略网络训练完之后，用它来训练价值网络。  Behavior Cloning ChatGPT介绍什么是Behavior cloning： Behavior cloning（行为克隆）是一种强化学习中的学习方法，其中一个模型（通常是神">
+<meta property="og:type" content="article">
+<meta property="og:title" content="1.5 ALPHAGO">
+<meta property="og:url" content="http://binbo-zappy.github.io/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="围棋游戏介绍  High level Ideas 训练包含3步：  用behavior cloning初始化策略网络 用策略梯度训练策略网络 策略网络训练完之后，用它来训练价值网络。  Behavior Cloning ChatGPT介绍什么是Behavior cloning： Behavior cloning（行为克隆）是一种强化学习中的学习方法，其中一个模型（通常是神">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/RL-WSS.png">
+<meta property="article:published_time" content="2024-12-04T08:02:43.000Z">
+<meta property="article:modified_time" content="2024-12-04T10:47:12.166Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="RL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/RL-WSS.png">
+  
+  
+  
+  <title>1.5 ALPHAGO - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="1.5 ALPHAGO"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-12-04 16:02" pubdate>
+          2024年12月4日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          55 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">1.5 ALPHAGO</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>围棋游戏介绍</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/1733122092352-f6e13ed7-09d6-4188-837a-6e2f22fbc16a.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="high-level-ideas">High level Ideas</h1>
+<p>训练包含3步：</p>
+<ol type="1">
+<li>用behavior cloning初始化策略网络</li>
+<li>用策略梯度训练策略网络</li>
+<li>策略网络训练完之后，用它来训练价值网络。</li>
+</ol>
+<h2 id="behavior-cloning">Behavior Cloning</h2>
+<h3 id="chatgpt介绍什么是behavior-cloning">ChatGPT介绍什么是Behavior
+cloning：</h3>
+<p>Behavior
+cloning（行为克隆）是一种强化学习中的学习方法，其中一个模型（通常是神经网络）被训练来模仿从专家或经验数据中收集的行为，而不是通过试错和奖励信号的方式学习。</p>
+<p>具体来说，Behavior Cloning 的步骤通常包括：</p>
+<ol type="1">
+<li><strong>数据收集：</strong>
+从一个经验丰富的策略（通常是人类专家）中收集行为数据。这些数据包括状态和相应的行为。</li>
+<li><strong>模型训练：</strong>
+使用这些收集到的专家数据来训练一个模型，通常是一个神经网络。模型的目标是学习输入状态与相应的动作之间的映射，以最大程度地模仿专家的行为。</li>
+<li><strong>评估和部署：</strong>
+对训练好的模型进行评估，看它在模仿专家行为方面的表现。如果表现良好，可以将该模型部署到实际环境中，让它执行相似的任务。</li>
+</ol>
+<h3 id="behavior-cloning-1">Behavior Cloning</h3>
+<p>Behavior Cloning
+的优势在于它可以通过直接模仿专家的行为，快速学习复杂的任务，而不需要通过强化学习中的奖励信号进行调整。然而，它的局限性在于如果专家的行为在某些情况下是不完美的，模型也会模仿这些不完美的行为。此外，对于某些复杂的任务，仅仅通过行为克隆可能无法获得鲁棒且高效的策略。</p>
+<h2 id="蒙特卡洛树搜索">蒙特卡洛树搜索</h2>
+<p>执行（真正和人下棋）的时候：用策略网络和价值网络进行蒙特卡洛树搜索（MCTS）</p>
+<h3 id="cahtgpt介绍什么是mcts">CahtGPT介绍什么是MCTS：</h3>
+<p>蒙特卡洛树搜索（Monte Carlo Tree
+Search，MCTS）是一种用于决策树搜索的概率模型，主要用于解决不确定性和部分可观察性问题。它最初是为解决棋类游戏的人工智能问题而提出的，但后来被扩展应用到各种领域。</p>
+<p>MCTS
+的核心思想是通过模拟随机采样的方式来估计每个决策节点的值，从而构建一个搜索树，帮助在决策时找到最优的路径。整个搜索过程包括以下四个阶段：</p>
+<ol type="1">
+<li><strong>选择（Selection）：</strong>
+从树的根节点开始，根据一定的策略选择一个节点，直到达到一个未被完全扩展的节点。</li>
+<li><strong>扩展（Expansion）：</strong>
+对于选择的节点，根据可行的动作扩展一层节点，选择一个未被访问的子节点。</li>
+<li><strong>模拟（Simulation）：</strong>
+从扩展的节点开始，使用随机策略或启发式方法模拟若干步，直到达到某个终止状态，得到一个模拟的结果。</li>
+<li><strong>反向传播（Backpropagation）：</strong>
+将模拟结果反向传播到选择的路径上的所有节点，更新它们的统计信息（例如，访问次数和累积奖励），以帮助更好地估计节点的价值。</li>
+</ol>
+<p>这四个阶段不断迭代执行，直到分配给搜索的计算时间达到预定的限制。最终，根据节点的统计信息选择一个最有希望的决策。</p>
+<p>MCTS 的一个典型应用是在棋类游戏中，如AlphaGo就使用了变种的 MCTS
+算法。然而，MCTS 也可以应用于其他领域，如规划问题和决策问题。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/1733122496590-7c53504c-8501-4f5f-8d4e-4b96a3e4c1cc.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="alphago-zero的状态"><font style="color:rgb(77, 77, 77);">AlphaGo
+zero的状态</font></h2>
+<p><font style="color:rgb(77, 77, 77);">19 x 19 x 17 stack</font></p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/1733122536989-fcca24af-d85a-4c8b-9fbc-232d9354e197.png" srcset="/img/loading.gif" lazyload></p>
+<p>AlphaGo 2016 版本使用 19 × 19 × 48 的张量 (tensor)
+表示一个状态。AlphaGo Zero 使用 19 × 19 × 17
+的张量表示一个状态。本书只解释后者；见图 18.1。下面解释 19 × 19 × 17
+的状态张量的意义。</p>
+<ul>
+<li>张量每个切片(slice)是 19×19 的矩阵，对应 19 × 19 的棋盘。一个 19×19
+的矩阵可以表示棋盘上所有黑子的位置。如果一个位置上有黑子，矩阵对应的元素就是1,
+否则就是 0。同样的道理，用一个 19×19 的矩阵来表示
+当前棋盘上所有白子的位置。</li>
+<li>张量中一共有 17 个这样的矩阵；17 是这样得来的。记录最近8
+步棋盘上黑子的位置，需要 8 个矩阵。同理，还需要 8
+个矩阵记录白子的位置。还另外需要一个矩阵表示该哪一方下棋；如果该下黑子，那么该矩阵元素全部等于1；如果该下白子，
+那么该矩阵的元素全都等于0。</li>
+</ul>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/1733122761265-81b27c27-7dfa-42d4-9a8e-0223a7980ef9.png" srcset="/img/loading.gif" lazyload></p>
+<p>策略网络<span class="math inline">\(\pi(a|s;\boldsymbol{\theta})\)</span>的结构如图
+18.2 所示。策略网络的输入是 19 × 19 × 17 的状态 s 。 策略网络的输出是
+361 维的向量 f , 它的每个元素对应一个动作
+(即在棋盘上一个位置放棋子)。向量 f 所有元素都是正数，而且相加等于
+1。</p>
+<p>AlphaGo 还有一个价值网络<span class="math inline">\(v(s;w)\)</span>,
+它是对状态价值函数<span class="math inline">\(V_\pi(s)\)</span>的近似。价值网络的结构如图 18.3
+所示。价值网络的输入是 19× 19× 17 的状态 s
+。价值网络的输出是一个实数，它的大小评价当前状态 s 的好坏</p>
+<p>策略网络和价值的输入相同，都是状态 s。它们都用多个卷积层把 s
+映射到特征向量。因此可以让策略网络和价值网络共用卷积层。训练策略网络和价值网络的方法在之后解释。</p>
+<h2 id="initialize-policy-network-by-behavior-cloning">Initialize Policy
+Network by Behavior Cloning</h2>
+<p>从人的记录中学习</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/1733123168117-7f8f4d70-03de-4cc1-ae16-118e7f3ade5c.png" srcset="/img/loading.gif" lazyload></p>
+<p>用到的是behavior
+cloning，这不是强化学习，这是模仿学习。模仿学习没有reward。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/1733123416559-2c244024-c94b-4ba4-a7b9-7c78b22248e1.png" srcset="/img/loading.gif" lazyload></p>
+<p>用棋盘上的动作来看behavior
+cloning：就是多分类（361个分类，具体指的是下在棋盘的哪个位置），把人类玩家的动作看作是ground
+truth（真实的标签）</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/1733123482029-b1a7610a-35dd-46ef-86a8-67d308e48e31.png" srcset="/img/loading.gif" lazyload></p>
+<p>但是behavior cloning存在缺陷，它的效果不如强化学习。</p>
+<p>下面是ChatGPT给出的答案：</p>
+<p>是的，行为克隆（Behavior
+Cloning）虽然在某些情境下表现得很好，但也存在一些缺陷和限制：</p>
+<ol type="1">
+<li><strong>数据分布偏差：</strong>
+行为克隆是基于专家示范数据的学习方法，如果专家示范的数据不能充分覆盖所有可能的情况，模型在未见过的情况下可能表现不佳。模型只能复制示范的行为，而不一定能够泛化到未知情况。</li>
+<li><strong>错误传递：</strong>
+如果专家示范中存在错误的决策或不良策略，行为克隆模型也会学到这些错误。模型无法纠正示范数据中的错误，而是简单地复制了这些错误的决策。</li>
+<li><strong>缺乏探索：</strong>
+行为克隆不具备主动探索新的策略的能力。它仅仅复制了专家的行为，而无法在未知环境中进行探索和发现更好的策略。</li>
+<li><strong>分布变化敏感：</strong>
+如果环境的分布发生变化，行为克隆模型可能会失效。它对训练时的数据分布敏感，而无法适应新的分布。</li>
+<li><strong>缺乏理解：</strong>
+行为克隆模型通常是一个黑盒，无法理解其内部决策过程。这在需要解释和理解模型行为的场景中可能是一个问题。</li>
+<li><strong>需要大量专家示范数据：</strong>
+在某些情况下，行为克隆需要大量的专家示范数据才能学到鲁棒的模型。这可能对于一些复杂任务来说是一个挑战，因为获取专家示范数据可能很昂贵或困难。</li>
+</ol>
+<p>为了解决这些问题，研究者们提出了许多改进方法，如结合强化学习和自我对弈来引入探索、使用逆强化学习来更好地理解任务目标等。在实际应用中，选择合适的学习方法取决于具体问题的特性和需求。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/1733123697170-9a9cef05-cb15-44c7-9c23-b3cf751c85c8.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="train-policy-network-using-policy-gradient">Train Policy Network
+Using Policy Gradient</h2>
+<p>具体怎么用强化学习来训练策略网络呢？AlphaGo让两个策略网络进行博弈，一个叫做Player，另一个叫做Opponent。</p>
+<p>Player是agent，它是由策略网络来控制的，用的是策略网络最新的模型参数（每下完一局围棋把胜负作为奖励，靠奖励来更新player的参数）</p>
+<p>Opponent相当于environment，它负责陪玩（player下一步棋，opponent跟着下一步），它也是用策略网络来控制的，但是opponent的参数无需学习，随机从旧的策略网络的参数中随机选择一个即可。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/1733123885302-ccb59f3b-6e07-4248-9d6e-399be3d00311.png" srcset="/img/loading.gif" lazyload></p>
+<p>让“玩家”和“对手”博弈，将一局游戏进行到底，假设走了<span class="math inline">\(n\)</span>步。游戏没结束的时候，奖励全都是零：<span class="math inline">\(r_1 = r_2 = \cdots = r_{n-1} = 0\)</span>.</p>
+<p>游戏结束的时候，如果“玩家”赢了，奖励是<span class="math inline">\(r_n
+= +1\)</span>，那么所有的回报都是 +1:<span class="math inline">\(u_1 =
+u_2 = \cdots = u_n = +1\)</span>.</p>
+<p>如果“玩家”输了，奖励是<span class="math inline">\(r_n =
+-1\)</span>，那么所有的回报都是 -1:<span class="math inline">\(u_1 = u_2
+= \cdots = u_n = -1\)</span>.</p>
+<p>所有<span class="math inline">\(n\)</span>步都用同样的回报，这相当于不区分哪一步棋走得好，哪一步走得烂；只要赢了，
+每一步都被视为“好棋”, 假如输了，每一步都被看成“臭棋”。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/1733123986612-7353bfeb-3860-4610-bdda-18f32a61642a.png" srcset="/img/loading.gif" lazyload></p>
+<p>回顾策略梯度：策略梯度是状态价值函数<span class="math inline">\(V\)</span>关于<span class="math inline">\(\theta\)</span>的导数</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/1733124014380-6ac87f63-62a5-48ba-976f-932a6fa6dd78.png" srcset="/img/loading.gif" lazyload></p>
+<p>两个策略网络玩游戏到终局，得到每个时刻的回报return，然后用近似策略梯度更新策略网络。</p>
+<p>这里只更新策略网络player的参数，无需更新策略网络opponent的参数。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/1733124096680-565c66db-63e4-4c4b-8214-11c3f455daa5.png" srcset="/img/loading.gif" lazyload></p>
+<p>策略网络的方法还不够好，需要用到后面的蒙特卡洛树搜索。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/1733124241034-4ffb9182-f48e-42f0-881e-9f89924b618d.png" srcset="/img/loading.gif" lazyload></p>
+<p>为了介绍蒙特卡洛树搜索，先介绍价值网络。</p>
+<h2 id="train-the-value-network">Train the Value Network</h2>
+<p>这里的价值网络是对状态价值函数<span class="math inline">\(V\)</span>的近似，不是<span class="math inline">\(Q\)</span>的近似</p>
+<p>用神经网络近似状态价值函数，用来评估当前形势的好坏，胜算有多大。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/1733124303703-d7f87ab8-d272-4955-86c1-670dc247fbe3.png" srcset="/img/loading.gif" lazyload></p>
+<p>AlphaGo Zero中让策略网络<span class="math inline">\(\pi\)</span>和价值网络<span class="math inline">\(v\)</span>共享前面的卷积层。</p>
+<p>策略网络的输出是361个概率值，每个值代表一个动作。策略网络的输出说明下一步该如何走动。</p>
+<p>价值网络的输出是1个标量，是对当前状态<span class="math inline">\(s\)</span>的打分，反映出当前状态的胜算有多大。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/1733124405946-902e1d04-7e5b-4c4c-9a78-bd60e380c157.png" srcset="/img/loading.gif" lazyload></p>
+<p>策略网络和价值网络是分别训练的，不是同时训练的。首先训练策略网络<span class="math inline">\(\pi\)</span>，然后训练价值网络<span class="math inline">\(v\)</span>。后者需要前者的帮助。这不算actor-critic方法，因为ac方法是同时训练策略网络和价值网络。</p>
+<p>价值网络是这样训练的：让两个策略网络博弈，每下完一局，更新一次价值网络。价值网络的学习是一个回归问题，让预测值<span class="math inline">\(v\)</span>和观测值<span class="math inline">\(u_t\)</span>尽可能接近，用随机梯度下降更新价值网络的参数。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/1733124957443-ffae2865-d79a-4170-b666-de7a85fa22f5.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="monte-carlo-tree-searchmcst">Monte Carlo Tree Search(MCST)</h2>
+<p>之前训练策略网络和价值网络的目的是帮助蒙特卡洛树搜索</p>
+<p>回忆一下高手下围棋，需要向前看好多步，看看各种可能的结果，然后做决策。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/1733125115904-1045855a-1ab3-4663-98d7-e3b5e5497fa0.png" srcset="/img/loading.gif" lazyload></p>
+<p>搜索未来可能发生的状态，从中选出一个胜算最大的。</p>
+<p>蒙特卡洛树搜索的主要思想：选择一个动作<span class="math inline">\(a\)</span>（按照动作的好坏程度选择，基于策略函数排除不好的动作），然后让策略网络自我博弈一直到游戏结束，看是否胜利，然后根据胜负和价值函数两个因素来给动作<span class="math inline">\(a\)</span>打分。重复上述过程很多次，所以每个动作都有很多分数，选择一个分数最高的动作。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/1733125143034-b79a4a24-22bb-4e6b-b172-4f3211106648.png" srcset="/img/loading.gif" lazyload></p>
+<p>蒙特卡洛树搜索有如下4步：selection，expansion，evaluation，backup</p>
+<p>AlphaGo每下一个棋子，都要把这四步重复很多次。</p>
+<ol type="1">
+<li>selection：player执行动作a，这是假想动作，不会实际执行。</li>
+<li>expansion：opponent也执行一个动作，此时状态更新。这里也是假想动作。使用策略网络作为假想对手，不是真正的实际的对手。</li>
+<li>evaluation：给上述选择的动作a打分，分数有两部分构成：一是价值网络的打分v，另一个是游戏的结果（策略网络自我博弈到游戏结束）获得奖励r。两者的平均值作为分数。</li>
+<li>backup：反向传播，用上述打分来更新动作的分数。</li>
+</ol>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/1733127734885-ee76b526-bdcd-4f77-84e3-08603fbe2bc0.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="第一步选择selection">第一步——选择(Selection)</h3>
+<p>观测棋盘上当前的格局，找出所有空位，然后判断其中哪些位置符合围棋规则；每个符合规则的位置对应一个可行的动作。每一步至少有几十、甚至上百个可行的动作；假如挨个搜索和评估所有可行动作，计算量会大到无法承受。虽然有几十、上百个可行动作，好在只有少数几个动作有较高的胜算。第一步——选择——的目的就是找出胜算较高的动作，只搜索这些好的动作，忽略掉其他的动作。</p>
+<p>如何判断动作<span class="math inline">\(a\)</span>的好坏呢？有两个指标：第一，动作<span class="math inline">\(a\)</span>的胜率；第二，策略网络给动作<span class="math inline">\(a\)</span>的评分（概率值）。用下面这个分值评价<span class="math inline">\(a\)</span>的好坏：</p>
+<p><span class="math inline">\(\mathrm{score}(a) \triangleq Q(a) +
+\frac{\eta}{1+N(a)} \cdot \pi(a|s;\boldsymbol{\theta}).
+\quad{(18.1)}\)</span></p>
+<p>此处的<span class="math inline">\(\eta\)</span>是个需要调的超参数。公式中的<span class="math inline">\(N(a)\)</span>、<span class="math inline">\(Q(a)\)</span>的定义如下：</p>
+<p>+<span class="math inline">\(N(a)\)</span>是动作<span class="math inline">\(a\)</span>已经被访问过的次数。初始的时候，对于所有的<span class="math inline">\(a\)</span>,令<span class="math inline">\(N(a)
+\gets 0\)</span>。动作<span class="math inline">\(a\)</span>每被选中一次，我们就把<span class="math inline">\(N(a)\)</span>加一：<span class="math inline">\(N(a) \gets N(a) + 1\)</span>。 +<span class="math inline">\(Q(a)\)</span>是之前<span class="math inline">\(N(a)\)</span>次模拟算出来的动作价值，主要由胜率和价值函数决定。<span class="math inline">\(Q(a)\)</span>的初始值是 0; 动作<span class="math inline">\(a\)</span>每被选中一次，就会更新一次<span class="math inline">\(Q(a)\)</span>；后面会详解。</p>
+<p>可以这样理解公式 (18.1):</p>
+<ul>
+<li>如果动作<span class="math inline">\(a\)</span>还没被选中过，那么<span class="math inline">\(Q(a)\)</span>和<span class="math inline">\(N(a)\)</span>都等于零，因此可得<span class="math inline">\(\operatorname{score}(a) \propto
+\pi(a|s;\boldsymbol{\theta}),\)</span>也就是说完全由策略网络评价动作<span class="math inline">\(a\)</span>的好坏。</li>
+<li>如果动作<span class="math inline">\(a\)</span>已经被选中过很多次，那么<span class="math inline">\(N(a)\)</span>就很大，导致策略网络在<span class="math inline">\(\operatorname{score}(a)\)</span>中的权重降低。当<span class="math inline">\(N(a)\)</span>很大的时候，有<span class="math inline">\(\operatorname{score}(a) \approx
+Q(a),\)</span>此时主要基于<span class="math inline">\(Q(a)\)</span>判断<span class="math inline">\(a\)</span>的好坏，而策略网络已经无关紧要。</li>
+<li>系数<span class="math inline">\(\frac{1}{1+N(a)}\)</span>的另一个作用是鼓励探索，也就是让被选中次数少的动作有更多的机会被选中。假如两个动作有相近的<span class="math inline">\(Q\)</span>分数和<span class="math inline">\(\pi\)</span>分数，那么被选中次数少的动作的<span class="math inline">\(\operatorname{score}\)</span>会更高。</li>
+</ul>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/1733130349731-608a91d1-3179-4c1f-9149-11481b1ade28.png" srcset="/img/loading.gif" lazyload></p>
+<p>MCTS 根据公式 (18.1) 算出所有动作的分数<span class="math inline">\(\operatorname{score}(a), \forall a\)</span>。MCTS
+选择分数最高的动作。图18.4 的例子中有3
+个可行动作，分数分别为0.4、0.3、0.5。第三个动作分数最高，会被选中，这一轮模拟会执行这个动作。(只是在模拟中执行而已，不是
+AlphaGo 真的走一步棋)。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/1733130359339-30e1e4eb-d9d1-4161-a6b6-881b35dc5599.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="第二步扩展-expansion">第二步——扩展 (Expansion)</h3>
+<p>把第一步选中的动作记作<span class="math inline">\(a_t\)</span>，它只是个假想的动作，只在“模拟器”中执行，而不是
+AlphaGo 真正执行的动作。</p>
+<p>AlphaGo 需要考虑这样一个问题：假如它执行动作<span class="math inline">\(a_t\)</span>，那么对手会执行什么动作呢？对手肯定不会把自己的想法告诉
+AlphaGo, 那么 AlphaGo 只能自己猜测对手的动作。AlphaGo 可以“推已及人”:
+如果 AlphaGo 认为几个动作很好，对手也会这么认为。所以 AlphaGo
+用策略网络模拟对手， 根据策略网络随机抽样一个动作：<span class="math inline">\(a_t&#39; \sim \pi(\cdot|s_t&#39;;
+\boldsymbol{\theta})\)</span>.</p>
+<p>此处的状态<span class="math inline">\(s&#39;\)</span>是站在对手的角度观测到的棋盘上的格局，动作<span class="math inline">\(a_t&#39;\)</span>是 (假想) 对手选择的动作。</p>
+<p>图 18.5 的例子中对手有四种可行动作，AlphaGo
+用策略网络算出每个动作的概率值，然后根据概率值随机抽样一个对手的动作，记作<span class="math inline">\(a_t&#39;\)</span>。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/1733130369357-69dd4530-4e0d-43fc-a40b-740f8410052b.png" srcset="/img/loading.gif" lazyload></p>
+<p>假设根据概率值 0.1,0.3,0.2, 0.4 做随机抽样，选中第二种动作；见图
+18.6。从 AlphaGo 的角度来看，对手的动作就是AlphaGo 新的状态。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/1733130390456-2c790d49-1bd5-4a41-8b57-f476bba3e6e6.png" srcset="/img/loading.gif" lazyload></p>
+<p>AlphaGo
+需要在模拟中跟对手将一局游戏进行下去，所以需要一个模拟器(即环境)。在模拟器中，AlphaGo
+每执行一个动作<span class="math inline">\(a_k\)</span>，模拟器就会返回一个新的状态<span class="math inline">\(s_{k+1}\)</span>。想要搭建一个好的模拟器，关键在于使用正确的状态转移函数<span class="math inline">\(p(s_{k+1}|s_k,a_k);\)</span>。如果状态转移函数与事实偏离太远，那么用模拟器做
+MCTS 是毫无意义的。</p>
+<p>AlphaGo 模拟器利用了围棋游戏的对称性：AlphaGo
+的策略，在对手看来是状态转移函数；对手的策略，在 AlphaGo
+看来是状态转移函数。最理想的情况下，模拟器的状态转移函数是对手的真实策略；然而
+AlphaGo 并不知道对手的真实策略。AlphaGo 退而求其次，用 AlphaGo
+自己训练出的策略网络<span class="math inline">\(\pi\)</span>代替对手的策略，作为模拟器的状态转移函数。</p>
+<p>想要用 MCTS
+做决策，必须要有模拟器，而搭建模拟器的关键在于构造正确的状态转移函数<span class="math inline">\(p(s_{k+1}|s_k,a_k)\)</span>。从搭建模拟器的角度来看，围棋是非常简单的问题：由于围棋的对称性，可以用策略网络作为状态转移函数。但是对于大多数的实际问题，构造状态转移函数是非常困难的。比如机器人、无人车等应用，状态转移的构造需要物理模型，要考虑到力、运动、以及外部世界的干扰。如果物理模型不够准确，导致状态转移函数偏离事实太远，那么
+MCTS 的模拟结果就不可靠。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/1733130412531-447db396-ad87-43a1-ba86-a194aad31cf4.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="第三步一一求值-evaluation">第三步一一求值 (Evaluation)</h3>
+<p>从状态<span class="math inline">\(s_{t+1}\)</span>开始，双方都用策略网络<span class="math inline">\(\pi\)</span>做决策，在模拟器中交替落子，直到分出胜负；见图
+18.7。AlphaGo 基于状态<span class="math inline">\(s_k\)</span>，根据策略网络抽样得到动作</p>
+<p><span class="math inline">\(a_k \sim
+\pi(\cdot|s_k;\boldsymbol{\theta})\)</span>.</p>
+<p>对手基于状态<span class="math inline">\(s_k&#39;\)</span>（从对手角度观测到的棋盘上的格局）,
+根据策略网络抽样得到动作</p>
+<p><span class="math inline">\(a_k&#39; \sim
+\pi(\cdot|s_k&#39;;\boldsymbol{\theta})\)</span>.</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/1733130463388-82373845-cbad-46b5-a09f-8781db9b585f.png" srcset="/img/loading.gif" lazyload></p>
+<p>当这局游戏结束时，可以观测到奖励。如果 AlphaGo 胜利，则<span class="math inline">\(r=+1\)</span>，否则<span class="math inline">\(r=-1\)</span>。</p>
+<p>回顾一下，棋盘上真实的状态是<span class="math inline">\(s_t\)</span>，AlphaGo 在模拟器中执行动作<span class="math inline">\(a_t\)</span>，然后模拟器中的对手执行动作<span class="math inline">\(a_t&#39;\)</span>，带来新的状态<span class="math inline">\(s_{t+1}\)</span>。状态<span class="math inline">\(s_{t+1}\)</span>越好，则这局游戏胜算越大。</p>
+<ul>
+<li>如果 AlphaGo 赢得这局模拟<span class="math inline">\((r=+1)\)</span>，则说明<span class="math inline">\(s_{t+1}\)</span>可能很好；如果输了<span class="math inline">\((r=-1)\)</span>，以反映出<span class="math inline">\(s_{t+1}\)</span>的好坏。</li>
+<li>此外，还可以用价值网络<span class="math inline">\(v\)</span>评价状态<span class="math inline">\(s_{t+1}\)</span>的好坏。价值<span class="math inline">\(v(s_{t+1};w)\)</span>越大，则说明状态<span class="math inline">\(s_{t+1}\)</span>越好。</li>
+</ul>
+<p>奖励<span class="math inline">\(r\)</span>是模拟获得的胜负，是对<span class="math inline">\(s_{t+1}\)</span>很可靠的评价，但是随机性太大。价值网络的评估<span class="math inline">\(v(s_{t+1};w)\)</span>没有<span class="math inline">\(r\)</span>可靠，但是价值网络更稳定、
+随机性小。AlphaGo 的解决方案是把奖励<span class="math inline">\(r\)</span>与价值网络的输出<span class="math inline">\(v(s_{t+1};w)\)</span>取平均，记作：<span class="math inline">\(V(s_{t+1}) \triangleq \frac{r +
+v(s_{t+1};w)}{2},\)</span></p>
+<p>把它记录下来，作为对状态<span class="math inline">\(s_{t+1}\)</span>的评价。</p>
+<p>实际实现的时候，AlphaGo
+还训练了一个更小的神经网络，它做决策更快。MCTS
+在第一步和第二步用大的策略网络，第三步用小的策略网络。读者可能好奇，为什么在且仅在第三步用小的策略网络呢？第三步两个策略网络交替落子，通常要走一两百步，导致第三步成为
+MCTS 的瓶颈。用小的策略网络代替大的策略网络，可以大幅加速 MCTS。</p>
+<p>自己和对方交替做决策下棋的过程称为fast rollout。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/1733130533506-b6a9ef30-2409-4fa1-8598-ece3b9226d29.png" srcset="/img/loading.gif" lazyload></p>
+<p>除了用奖励<span class="math inline">\(r\)</span>来评价状态<span class="math inline">\(s_{t+1}\)</span>,AlphaGo还用价值网络<span class="math inline">\(v\)</span>来评价状态<span class="math inline">\(s_{t+1}\)</span></p>
+<p>两者取平均，作为<span class="math inline">\(s_{t+1}\)</span>的分数。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/1733130551144-a13751f1-6aa7-4001-8800-b4f118dbd3a3.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="第四步一一回溯-backup">第四步一一回溯 (Backup)</h3>
+<p>第三步一一求值——算出了第<span class="math inline">\(t+1\)</span>步某一个状态的价值，记作<span class="math inline">\(V(s_{t+1})\)</span>；每一次模拟都会得出这样一个价值，并且记录下来。模拟会重复很多次，于是第<span class="math inline">\(t+1\)</span>步每一种状态下面可以有多条记录；如图
+18.8 所示。第<span class="math inline">\(t\)</span>步的动作<span class="math inline">\(a_t\)</span>下面有多个可能的状态(子节点),每个状态下面有若干条记录。把<span class="math inline">\(a_t\)</span>下面所有的记录取平均，记作价值<span class="math inline">\(Q(a_t)\)</span>,它可以反映出动作<span class="math inline">\(a_t\)</span>的好坏。</p>
+<p>在图 18.8 中，<span class="math inline">\(a_t\)</span>下面一共有 12
+条记录，<span class="math inline">\(Q(a_t)\)</span>是 12
+条记录的均值。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/1733130576870-15863743-16e0-4a1d-bd75-16e76f98a188.png" srcset="/img/loading.gif" lazyload></p>
+<p>给定棋盘上的真实状态<span class="math inline">\(s_t\)</span>,有多个动作<span class="math inline">\(a\)</span>可供选择。对于所有的<span class="math inline">\(a\)</span>,价值<span class="math inline">\(Q(a)\)</span>的初始值是零。动作<span class="math inline">\(a\)</span>每被选中一次 (成为<span class="math inline">\(a_t\)</span>),它下面就会多一条记录，我们就对<span class="math inline">\(Q(a)\)</span>做一次更新。</p>
+<p>回顾第一步——选择 (Selection): 基于棋盘上真实的状态<span class="math inline">\(s_t\)</span>, MCTS
+需要从可行的动作中选出一个，作为<span class="math inline">\(a_t\)</span>。MCTS 计算每一个动作<span class="math inline">\(a\)</span>的分数：<span class="math inline">\(\mathrm{score}(a) \triangleq Q(a) +
+\frac{\eta}{1+N(a)} \cdot \pi(a|s;\boldsymbol{\theta}), \quad \forall
+a,\)</span></p>
+<p>然后选择分数最高的<span class="math inline">\(a\)</span>。MCTS
+算出的<span class="math inline">\(Q(a)\)</span>的用途就是这里。</p>
+<p>第四步：</p>
+<p>MCTS会重复上述模拟很多次，所以每个状态下都有很多条记录，每个动作<span class="math inline">\(a_t\)</span>下面有很多子节点，所以<span class="math inline">\(a_t\)</span>对应很多记录，将<span class="math inline">\(a_t\)</span>下面的所有记录做平均作为<span class="math inline">\(a_t\)</span>新的价值<span class="math inline">\(Q(a_t)\)</span>。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/1733130656963-4b282a74-cd83-43ec-b817-709acf00ef23.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="decision-making-after-mcts">Decision Making after MCTS</h3>
+<p>MCTS 的决策</p>
+<p>上面讲解了单次模拟的四个步骤，注意，这只是单次模拟而已。MCTS
+想要真正做出一个决策 (即往真正的棋盘上落一个棋子),
+需要做成千上万次模拟。在做了无数次模拟之后，MCTS 做出真正的决策：</p>
+<p><span class="math inline">\(a_t = \operatorname{argmax}_a
+N(a).\)</span></p>
+<p>此时 AlphaGo 才会真正往棋盘上放一个棋子。</p>
+<p>为什么要依据<span class="math inline">\(N(a)\)</span>来做决策呢？在每一次模拟中，MCTS
+找出所有可行的动作<span class="math inline">\(\{a\}\)</span>计算它们的分数<span class="math inline">\(\operatorname{score}(a)\)</span>,然后选择其中分数最高的动作，然后在模拟器里执行。如果某个动作<span class="math inline">\(a\)</span>在模拟中胜率很大，那么它的价值<span class="math inline">\(Q(a)\)</span>就会很大，它的分数<span class="math inline">\(\operatorname{score}(a)\)</span>会很高：
+于是它被选中的几率就大。也就是说如果某个动作<span class="math inline">\(a\)</span>很好，它被选中的次数<span class="math inline">\(N(a)\)</span>就会大。</p>
+<p>观测到棋盘上当前状态<span class="math inline">\(s_t\)</span>, MCTS
+做成千上万次模拟，记录每个动作<span class="math inline">\(a\)</span>被选中的次数<span class="math inline">\(N(a)\)</span>,最终做出决策<span class="math inline">\(a_t = \operatorname{argmax}_a
+N(a)\)</span>。到了下一时刻，状态变成了<span class="math inline">\(s_{t+1}\)</span>, MCTS 把所有动作<span class="math inline">\(a\)</span>的<span class="math inline">\(Q(a)\)</span>、<span class="math inline">\(N(a)\)</span>全都初始化为零，然后从头开始做模拟，而不能利用上一次的结果。</p>
+<p>AlphaGo 下棋非常“暴力”
+每走一步棋之前，它先在“脑海里”模拟几千、几万局、它可以预知它每一种动作带来的后果，对手最有可能做出的反应都在
+AlphaGo 的算计之内。由于计算量差距悬殊，人类面对 AlphaGo
+时不太可能有胜算。这样的比赛对人来说是不公平的；假如李世石下每一颗棋子之前，先跟柯洁模拟一千局，或许李世石的胜算会大于
+AlphaGo。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/1733130752228-209ee0e7-e39e-4c23-8e89-4f6b930908bc.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="mcts-summary">MCTS: Summary</h3>
+<p>MCTS 4步：</p>
+<p>第一，selection，根据动作的分数，选出分数最高的动作。</p>
+<p>第二，expansion，用策略网络来模拟对手的动作，产生新的状态。</p>
+<p>第三，evaluation，通过自我博弈和价值网络这两个途径算出两个分数，记录它们的平均值。</p>
+<p>第四，backup，用第三步算出来的分数来更新这个动作的分数。</p>
+<p>AlphaGo每走一步，都要进行成千上万次模拟。每次模拟都要重复以上四步。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/1733130891555-b108e708-121b-4a9b-9545-0d0bec4965c6.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="summary">Summary</h2>
+<p>AlphaGo的训练分三步：</p>
+<p>第一步：用behavior
+cloning初步训练一个策略网络，这一步训练用的是16万局游戏的棋谱，让策略网络来模仿人类玩家的动作。这一步之后策略网络可以打败业余玩家。</p>
+<p>第二步：用策略梯度进一步训练策略网络，AlphaGo让策略网络做自我博弈，用游戏胜负这个信息来更新策略网络，经过这个步骤，策略网络的能力变得更强。</p>
+<p>第三步：训练一个价值网络，用来评估状态的好坏。这一步让策略网络做自我博弈，用胜负结果作为target，让价值网络来拟合这个target。训练价值网络，实际上就是做回归（regression）。</p>
+<p>虽然可以用策略网络来下棋，但是更好的办法是用蒙特卡洛树搜索。AlphaGo每走一步都要做成千上万次搜索，计算每一个动作的胜算有多大，给每个动作打分，最终AlphaGo会执行分数最高的动作。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/1733130904644-77e53fec-ebb2-4333-8449-d48bff8af9f3.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="alphago-zero">AlphaGo Zero</h1>
+<p>AlphaGo Zero完胜AlphaGo，它俩的区别有两个：</p>
+<ul>
+<li>AlphaGo Zero没有做behavior cloning。</li>
+<li>AlphaGo
+Zero在训练策略网络的时候就用了蒙特卡洛树搜索，让策略网络来模仿搜索做出来的动作。</li>
+</ul>
+<p>AlphaGo是模仿人类玩家，AlphaGo Zero是模仿蒙特卡洛树搜索。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/1733130919135-bc604fa0-963f-42ee-87ff-1277b8be9563.png" srcset="/img/loading.gif" lazyload></p>
+<p>在围棋游戏中，人类经验(behavior cloning)是有害的（或者说 性能
+有限）。</p>
+<p>但是behavior
+cloning还是有用的尤其是物理世界的实体，比如手术机器人、无人驾驶汽车。先学习人类经验再做强化学习。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/1733131079632-0ae0523e-7802-4b2e-89cc-fa5f9ab6bf2f.png" srcset="/img/loading.gif" lazyload></p>
+<p>AlphaGo Zero是如何训练策略网络的：使用MCTS。</p>
+<p><img src="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/1733131200190-b8a7c3e2-516a-40b2-bd06-0ae32cd42fa2.png" srcset="/img/loading.gif" lazyload></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/AI/" class="category-chain-item">AI</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI/RL/" class="category-chain-item">RL</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI/RL/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/" class="category-chain-item">DRL-王树森</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/RL/" class="print-no-link">#RL</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>1.5 ALPHAGO</div>
+      <div>http://binbo-zappy.github.io/2024/12/04/DRL-王树森/1-5-ALPHAGO/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年12月4日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/2-1-%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E4%BC%B0%E8%AE%A1/" title="2.1 蒙特卡洛估计">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">2.1 蒙特卡洛估计</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-4-Actor-Critic-Method/" title="1.4 Actor-Critic Method">
+                        <span class="hidden-mobile">1.4 Actor-Critic Method</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

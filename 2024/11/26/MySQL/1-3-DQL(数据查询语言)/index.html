@@ -19,12 +19,12 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="1.3 DQL（数据查询语言）语法：编写顺序 1234567891011121314SELECT	字段列表FROM	表名字段WHERE	条件列表GROUP BY	分组字段列表HAVING	分组后的条件列表ORDER BY	排序字段列表LIMIT	分页参数  1. 基础查询 查询多个字段：  12SELECT 字段1, 字段2, 字段3, ... FROM 表名;SELECT * FROM 表名;">
+    <meta name="description" content="1.3 DQL（数据查询语言） 语法：编写顺序 1234567891011121314SELECT	字段列表FROM	表名字段WHERE	条件列表GROUP BY	分组字段列表HAVING	分组后的条件列表ORDER BY	排序字段列表LIMIT	分页参数 1. 基础查询  查询多个字段：  12SELECT 字段1, 字段2, 字段3, ... FROM 表名;SELECT * F">
 <meta property="og:type" content="article">
 <meta property="og:title" content="1.3 DQL(数据查询语言)">
 <meta property="og:url" content="http://binbo-zappy.github.io/2024/11/26/MySQL/1-3-DQL(%E6%95%B0%E6%8D%AE%E6%9F%A5%E8%AF%A2%E8%AF%AD%E8%A8%80)/index.html">
 <meta property="og:site_name" content="Binbo">
-<meta property="og:description" content="1.3 DQL（数据查询语言）语法：编写顺序 1234567891011121314SELECT	字段列表FROM	表名字段WHERE	条件列表GROUP BY	分组字段列表HAVING	分组后的条件列表ORDER BY	排序字段列表LIMIT	分页参数  1. 基础查询 查询多个字段：  12SELECT 字段1, 字段2, 字段3, ... FROM 表名;SELECT * FROM 表名;">
+<meta property="og:description" content="1.3 DQL（数据查询语言） 语法：编写顺序 1234567891011121314SELECT	字段列表FROM	表名字段WHERE	条件列表GROUP BY	分组字段列表HAVING	分组后的条件列表ORDER BY	排序字段列表LIMIT	分页参数 1. 基础查询  查询多个字段：  12SELECT 字段1, 字段2, 字段3, ... FROM 表名;SELECT * F">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/MySQL.png">
 <meta property="article:published_time" content="2024-11-26T07:52:32.000Z">
@@ -278,40 +278,36 @@
             
               <div class="markdown-body">
                 
-                <h1 id="1-3-DQL（数据查询语言）"><a href="#1-3-DQL（数据查询语言）" class="headerlink" title="1.3 DQL（数据查询语言）"></a>1.3 DQL（数据查询语言）</h1><p>语法：编写顺序</p>
+                <h1 id="dql数据查询语言">1.3 DQL（数据查询语言）</h1>
+<p>语法：编写顺序</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT<br>	字段列表<br>FROM<br>	表名字段<br>WHERE<br>	条件列表<br>GROUP BY<br>	分组字段列表<br>HAVING<br>	分组后的条件列表<br>ORDER BY<br>	排序字段列表<br>LIMIT<br>	分页参数<br></code></pre></td></tr></table></figure>
-
-<h2 id="1-基础查询"><a href="#1-基础查询" class="headerlink" title="1. 基础查询"></a>1. 基础查询</h2><ol>
+<h2 id="基础查询">1. 基础查询</h2>
+<ol type="1">
 <li>查询多个字段：</li>
 </ol>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT 字段1, 字段2, 字段3, ... FROM 表名;<br>SELECT * FROM 表名;<br></code></pre></td></tr></table></figure>
-
-<ol start="2">
+<ol start="2" type="1">
 <li>设置别名：</li>
 </ol>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT 字段1 [ AS 别名1 ], 字段2 [ AS 别名2 ], 字段3 [ AS 别名3 ], ... FROM 表名;<br>SELECT 字段1 [ 别名1 ], 字段2 [ 别名2 ], 字段3 [ 别名3 ], ... FROM 表名;<br></code></pre></td></tr></table></figure>
-
-<ol start="3">
+<ol start="3" type="1">
 <li>去除重复记录：</li>
 </ol>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT DISTINCT 字段列表 FROM 表名;<br></code></pre></td></tr></table></figure>
-
 <ul>
 <li>新建表</li>
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><code class="hljs mysql">create table emp<br>(<br>    id          int comment &#x27;编号&#x27;,<br>    workno      varchar(10) comment &#x27;工号&#x27;,<br>    name        varchar(10) comment &#x27;姓名&#x27;,<br>    gender      char(1) comment &#x27;性别&#x27;,<br>    age         tinyint unsigned comment &#x27;年龄&#x27;,<br>    idcard      char(18) comment &#x27;身份证号&#x27;,<br>    workaddress varchar(50) comment &#x27;工作地址&#x27;,<br>    entrydate   date comment &#x27;入职时间&#x27;<br>) comment &#x27;员工表&#x27;;<br><br>insert into emp(id, workno, name, gender, age, idcard, workaddress, entrydate)<br>VALUES (1, &#x27;1&#x27;, &#x27;柳岩&#x27;, &#x27;女&#x27;, 20, &#x27;123456789012345678&#x27;, &#x27;北京&#x27;, &#x27;2000-01-01&#x27;),<br>       (2, &#x27;2&#x27;, &#x27;张无忌&#x27;, &#x27;男&#x27;, 18, &#x27;123456789012345670&#x27;, &#x27;北京&#x27;, &#x27;2005-09-01&#x27;),<br>       (3, &#x27;3&#x27;, &#x27;韦一笑&#x27;, &#x27;女&#x27;, 38, &#x27;123456789012345670&#x27;, &#x27;上海&#x27;, &#x27;2005-08-01&#x27;),<br>       (4, &#x27;4&#x27;, &#x27;赵敏&#x27;, &#x27;女&#x27;, 18, &#x27;123456789012345670&#x27;, &#x27;北京&#x27;, &#x27;2009-12-01&#x27;),<br>       (5, &#x27;5&#x27;, &#x27;小昭&#x27;, &#x27;女&#x27;, 16, &#x27;123456789012345678&#x27;, &#x27;上海&#x27;, &#x27;2007-07-01&#x27;),<br>       (6, &#x27;6&#x27;, &#x27;杨逍&#x27;, &#x27;男&#x27;, 28, &#x27;12345678901234567X&#x27;, &#x27;北京&#x27;, &#x27;2006-01-01&#x27;),<br>       (7, &#x27;7&#x27;, &#x27;范瑶&#x27;, &#x27;男&#x27;, 40, &#x27;123456789012345670&#x27;, &#x27;北京&#x27;, &#x27;2005-05-01&#x27;),<br>       (8, &#x27;8&#x27;, &#x27;黛绮丝&#x27;, &#x27;女&#x27;, 38, &#x27;123456789012345670&#x27;, &#x27;天津&#x27;, &#x27;2015-05-01&#x27;),<br>       (9, &#x27;9&#x27;, &#x27;范凉凉&#x27;, &#x27;女&#x27;, 45, &#x27;123456789012345678&#x27;, &#x27;北京&#x27;, &#x27;2010-04-01&#x27;),<br>       (10, &#x27;10&#x27;, &#x27;陈友谅&#x27;, &#x27;男&#x27;, 53, &#x27;123456789012345670&#x27;, &#x27;上海&#x27;, &#x27;2011-01-01&#x27;),<br>       (11, &#x27;11&#x27;, &#x27;张士诚&#x27;, &#x27;男&#x27;, 55, &#x27;123456789012345670&#x27;, &#x27;江苏&#x27;, &#x27;2015-05-01&#x27;),<br>       (12, &#x27;12&#x27;, &#x27;常遇春&#x27;, &#x27;男&#x27;, 32, &#x27;123456789012345670&#x27;, &#x27;北京&#x27;, &#x27;2004-02-01&#x27;),<br>       (13, &#x27;13&#x27;, &#x27;张三丰&#x27;, &#x27;男&#x27;, 88, &#x27;123456789012345678&#x27;, &#x27;江苏&#x27;, &#x27;2020-11-01&#x27;),<br>       (14, &#x27;14&#x27;, &#x27;灭绝&#x27;, &#x27;女&#x27;, 65, &#x27;123456789012345670&#x27;, &#x27;西安&#x27;, &#x27;2019-05-01&#x27;),<br>       (15, &#x27;15&#x27;, &#x27;胡青牛&#x27;, &#x27;男&#x27;, 70, &#x27;12345678901234567X&#x27;, &#x27;西安&#x27;, &#x27;2018-04-01&#x27;),<br>       (16, &#x27;16&#x27;, &#x27;周芷若&#x27;, &#x27;女&#x27;, 18, null, &#x27;北京&#x27;, &#x27;2012-06-01&#x27;);<br><br># 查询返回指定字段数据<br>select name,workno,age from emp;<br># 查询返回所有字段<br>select * from emp;<br># 查询工作地址并起别名<br>select workaddress as &#x27;工作地址&#x27; from emp;<br>select workaddress &#x27;工作地址&#x27; from emp;<br># 查询工作地址并去重<br>select distinct workaddress &#x27;工作地址&#x27; from emp;<br></code></pre></td></tr></table></figure>
-
-<ol start="4">
-<li>转义： &#x2F; 之后的_不作为通配符</li>
+<ol start="4" type="1">
+<li>转义： / 之后的_不作为通配符</li>
 </ol>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT * FROM 表名 WHERE name LIKE &#x27;/_张三&#x27; ESCAPE &#x27;/&#x27;<br></code></pre></td></tr></table></figure>
-
-<h2 id="2-条件查询"><a href="#2-条件查询" class="headerlink" title="2. 条件查询"></a>2. 条件查询</h2><ol>
+<h2 id="条件查询">2. 条件查询</h2>
+<ol type="1">
 <li>语法：</li>
 </ol>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT 字段列表 FROM 表名 WHERE 条件列表;<br></code></pre></td></tr></table></figure>
-
-<ol start="2">
+<ol start="2" type="1">
 <li>条件：</li>
 </ol>
 <table>
@@ -321,12 +317,13 @@
 <th>功能</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>&gt;</td>
 <td>大于</td>
 </tr>
 <tr>
-<td>&gt;&#x3D;</td>
+<td>&gt;=</td>
 <td>大于等于</td>
 </tr>
 <tr>
@@ -334,15 +331,15 @@
 <td>小于</td>
 </tr>
 <tr>
-<td>&lt;&#x3D;</td>
+<td>&lt;=</td>
 <td>小于等于</td>
 </tr>
 <tr>
-<td>&#x3D;</td>
+<td>=</td>
 <td>等于</td>
 </tr>
 <tr>
-<td>&lt;&gt; 或 !&#x3D;</td>
+<td>&lt;&gt; 或 !=</td>
 <td>不等于</td>
 </tr>
 <tr>
@@ -361,7 +358,8 @@
 <td>IS NULL</td>
 <td>是NULL</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <table>
 <thead>
 <tr>
@@ -369,7 +367,8 @@
 <th>功能</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>AND 或 &amp;&amp;</td>
 <td>并且（多个条件同时成立）</td>
 </tr>
@@ -381,17 +380,17 @@
 <td>NOT 或 !</td>
 <td>非，不是</td>
 </tr>
-</tbody></table>
-<ol start="3">
+</tbody>
+</table>
+<ol start="3" type="1">
 <li>例子：</li>
 </ol>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- 年龄等于30<br>select * from emp where age = 30;<br>-- 年龄小于30<br>select * from emp where age &lt; 30;<br>-- 小于等于<br>select * from emp where age &lt;= 30;<br>-- 没有身份证<br>select * from emp where idcard is null or idcard = &#x27;&#x27;;<br>-- 有身份证<br>select * from emp where idcard;<br>select * from emp where idcard is not null;<br>-- 不等于<br>select * from emp where age != 30;<br>-- 年龄在20到30之间<br>select * from emp where age between 20 and 30;<br>select * from emp where age &gt;= 20 and age &lt;= 30;<br>-- 下面语句不报错，但查不到任何信息<br>select * from emp where age between 30 and 20;<br>-- 性别为女且年龄小于30<br>select * from emp where age &lt; 30 and gender = &#x27;女&#x27;;<br>-- 年龄等于25或30或35<br>select * from emp where age = 25 or age = 30 or age = 35;<br>select * from emp where age in (25, 30, 35);<br>-- 姓名为两个字<br>select * from emp where name like &#x27;__&#x27;;<br>-- 身份证最后为X<br>select * from emp where idcard like &#x27;%X&#x27;;<br></code></pre></td></tr></table></figure>
-
-<h2 id="3-聚合查询（聚合函数）"><a href="#3-聚合查询（聚合函数）" class="headerlink" title="3. 聚合查询（聚合函数）"></a>3. 聚合查询（聚合函数）</h2><ol>
-<li><p>将一列数据作为一个整体，进行纵向计算。 null值不参与聚合函数计算</p>
-</li>
-<li><p>常见聚合函数：</p>
-</li>
+<h2 id="聚合查询聚合函数">3. 聚合查询（聚合函数）</h2>
+<ol type="1">
+<li><p>将一列数据作为一个整体，进行纵向计算。
+null值不参与聚合函数计算</p></li>
+<li><p>常见聚合函数：</p></li>
 </ol>
 <table>
 <thead>
@@ -400,7 +399,8 @@
 <th>功能</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>count</td>
 <td>统计数量</td>
 </tr>
@@ -420,42 +420,41 @@
 <td>sum</td>
 <td>求和</td>
 </tr>
-</tbody></table>
-<ol start="3">
+</tbody>
+</table>
+<ol start="3" type="1">
 <li>语法：</li>
 </ol>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT 聚合函数(字段列表) FROM 表名;<br></code></pre></td></tr></table></figure>
-
-<ol start="4">
+<ol start="4" type="1">
 <li>例：</li>
 </ol>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs mysql"># 统计企业员工数量<br>select count(*) from emp;<br># 统计平均年龄<br>select avg(age) from emp;<br># 最大年龄<br>select max(age) from emp;<br># 最小年龄<br>select min(age) from emp;<br># 统计西安地区的年龄之和<br>select sum(age) from emp where workaddress = &#x27;西安&#x27;;<br></code></pre></td></tr></table></figure>
-
-<h2 id="4-分组查询"><a href="#4-分组查询" class="headerlink" title="4. 分组查询"></a>4. 分组查询</h2><ol>
+<h2 id="分组查询">4. 分组查询</h2>
+<ol type="1">
 <li>语法：</li>
 </ol>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT 字段列表 FROM 表名 [ WHERE 条件 ] GROUP BY 分组字段名 [ HAVING 分组后的过滤条件 ];<br></code></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>where 和 having 的区别：<ol>
+<ol start="2" type="1">
+<li>where 和 having 的区别：
+<ol type="1">
 <li>执行时机不同：where是分组之前进行过滤，不满足where条件不参与分组；having是分组后对结果进行过滤。</li>
 <li>判断条件不同：where不能对聚合函数进行判断，而having可以。</li>
-</ol>
-</li>
+</ol></li>
 </ol>
 <p>例子：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- 根据性别分组，统计男性和女性数量（只显示分组数量，不显示哪个是男哪个是女）<br>select count(*) from emp group by gender;<br>-- 根据性别分组，统计男性和女性数量<br>select gender, count(*) from emp group by gender;<br>-- 根据性别分组，统计男性和女性的平均年龄<br>select gender, avg(age) from emp group by gender;<br>-- 年龄小于45，并根据工作地址分组<br>select workaddress, count(*) from emp where age &lt; 45 group by workaddress;<br>-- 年龄小于45，并根据工作地址分组，获取员工数量大于等于3的工作地址<br>select workaddress, count(*) address_count from emp where age &lt; 45 group by workaddress having address_count &gt;= 3;<br></code></pre></td></tr></table></figure>
-
-<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><ul>
+<h3 id="注意事项">注意事项</h3>
+<ul>
 <li>执行顺序：where &gt; 聚合函数 &gt; having</li>
 <li>分组之后，查询的字段一般为聚合函数和分组字段，查询其他字段无任何意义</li>
 </ul>
-<h2 id="5-排序查询"><a href="#5-排序查询" class="headerlink" title="5. 排序查询"></a>5. 排序查询</h2><ol>
+<h2 id="排序查询">5. 排序查询</h2>
+<ol type="1">
 <li>语法：</li>
 </ol>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT 字段列表 FROM 表名 ORDER BY 字段1 排序方式1, 字段2 排序方式2;<br></code></pre></td></tr></table></figure>
-
-<ol start="2">
+<ol start="2" type="1">
 <li>排序方式：</li>
 </ol>
 <ul>
@@ -464,28 +463,30 @@
 </ul>
 <p>例子：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- 根据年龄升序排序<br>SELECT * FROM emp ORDER BY age ASC;<br>SELECT * FROM emp ORDER BY age;<br>-- 两字段排序，根据年龄升序排序，入职时间降序排序<br>SELECT * FROM emp ORDER BY age ASC, entrydate DESC;<br></code></pre></td></tr></table></figure>
-
-<h3 id="注意事项-1"><a href="#注意事项-1" class="headerlink" title="注意事项"></a>注意事项</h3><p>如果是多字段排序，当第一个字段值相同时，才会根据第二个字段进行排序</p>
-<h2 id="6-分页查询"><a href="#6-分页查询" class="headerlink" title="6. 分页查询"></a>6. 分页查询</h2><ol>
+<h3 id="注意事项-1">注意事项</h3>
+<p>如果是多字段排序，当第一个字段值相同时，才会根据第二个字段进行排序</p>
+<h2 id="分页查询">6. 分页查询</h2>
+<ol type="1">
 <li>语法：</li>
 </ol>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT 字段列表 FROM 表名 LIMIT 起始索引, 查询记录数;<br></code></pre></td></tr></table></figure>
-
-<ol start="2">
+<ol start="2" type="1">
 <li>例子：</li>
 </ol>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- 查询第一页数据，展示10条<br>SELECT * FROM emp LIMIT 0, 10;<br>-- 查询第二页<br>SELECT * FROM emp LIMIT 10, 10;<br></code></pre></td></tr></table></figure>
-
-<h3 id="注意事项-2"><a href="#注意事项-2" class="headerlink" title="注意事项"></a>注意事项</h3><ul>
-<li>起始索引从0开始，起始索引 &#x3D; （查询页码 - 1） * 每页显示记录数</li>
+<h3 id="注意事项-2">注意事项</h3>
+<ul>
+<li>起始索引从0开始，起始索引 = （查询页码 - 1） * 每页显示记录数</li>
 <li>分页查询是数据库的方言，不同数据库有不同实现，MySQL是LIMIT</li>
 <li>如果查询的是第一页数据，起始索引可以省略，直接简写 LIMIT 10</li>
 </ul>
-<h2 id="7-DQL执行顺序"><a href="#7-DQL执行顺序" class="headerlink" title="7. DQL执行顺序"></a>7. DQL执行顺序</h2><ul>
-<li>FROM -&gt; WHERE -&gt; GROUP BY -&gt; SELECT -&gt; ORDER BY -&gt; LIMIT</li>
+<h2 id="dql执行顺序">7. DQL执行顺序</h2>
+<ul>
+<li>FROM -&gt; WHERE -&gt; GROUP BY -&gt; SELECT -&gt; ORDER BY -&gt;
+LIMIT</li>
 </ul>
-<h2 id="8-练习"><a href="#8-练习" class="headerlink" title="8. 练习"></a>8. 练习</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs mysql"># 查询年龄为20,21,22,23岁的女性员工信息。<br>select * from emp where gender = &#x27;女&#x27; and age in (20, 21, 22, 23);<br># 查询性别为男，并且年龄在20-40岁（含）以内的姓名为三个字的员工。<br>select * from emp where gender = &#x27;男&#x27; and age between 20 and 40 and name like &#x27;___&#x27;;<br># 统计员工表中，年龄小于60岁的，男性员工和女性员工的人数。<br>select gender, count(*) from emp where age &lt; 60 group by gender;<br># 查询所有年龄小于等于35岁员工的姓名和年龄，并对查询结果按年龄升序排序，如果年龄相同按入职时间降序排序。<br>select name, age from emp where age &lt;= 35 order by age asc , entrydate desc;<br># 查询性别为男，且年龄在20-40岁（含）以内的前5个员工信息，对查询的结果按年龄升序排序，年龄相同按入职时间升序排序。<br>select * from emp where gender = &#x27;男&#x27; and age between 20 and 40 order by age asc, entrydate asc limit 5;<br></code></pre></td></tr></table></figure>
-
+<h2 id="练习">8. 练习</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs mysql"># 查询年龄为20,21,22,23岁的女性员工信息。<br>select * from emp where gender = &#x27;女&#x27; and age in (20, 21, 22, 23);<br># 查询性别为男，并且年龄在20-40岁（含）以内的姓名为三个字的员工。<br>select * from emp where gender = &#x27;男&#x27; and age between 20 and 40 and name like &#x27;___&#x27;;<br># 统计员工表中，年龄小于60岁的，男性员工和女性员工的人数。<br>select gender, count(*) from emp where age &lt; 60 group by gender;<br># 查询所有年龄小于等于35岁员工的姓名和年龄，并对查询结果按年龄升序排序，如果年龄相同按入职时间降序排序。<br>select name, age from emp where age &lt;= 35 order by age asc , entrydate desc;<br># 查询性别为男，且年龄在20-40岁（含）以内的前5个员工信息，对查询的结果按年龄升序排序，年龄相同按入职时间升序排序。<br>select * from emp where gender = &#x27;男&#x27; and age between 20 and 40 order by age asc, entrydate asc limit 5;<br></code></pre></td></tr></table></figure>
 
                 
               </div>

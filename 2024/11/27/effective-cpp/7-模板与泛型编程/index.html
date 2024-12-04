@@ -1,0 +1,968 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="41. 了解隐式接口和编译期多态  面向对象编程世界总以显示接口和运行期多态解决问题 由于w的类型被声明为Widget,所以w必须支持Widget接口。我们可以在源码中找出这个接口（例如在idget的.h文件中），看看它是什么样子，所以我称此为一个显式接口(explicit interface），也就是它在源码中明确可见。 由于Widget的某些成员函数是virtual,w对那些函数的调">
+<meta property="og:type" content="article">
+<meta property="og:title" content="7. 模板与泛型编程">
+<meta property="og:url" content="http://binbo-zappy.github.io/2024/11/27/effective-cpp/7-%E6%A8%A1%E6%9D%BF%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="41. 了解隐式接口和编译期多态  面向对象编程世界总以显示接口和运行期多态解决问题 由于w的类型被声明为Widget,所以w必须支持Widget接口。我们可以在源码中找出这个接口（例如在idget的.h文件中），看看它是什么样子，所以我称此为一个显式接口(explicit interface），也就是它在源码中明确可见。 由于Widget的某些成员函数是virtual,w对那些函数的调">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/effective-cpp.png">
+<meta property="article:published_time" content="2024-11-27T12:17:13.000Z">
+<meta property="article:modified_time" content="2024-11-27T12:20:54.679Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="c++">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/effective-cpp.png">
+  
+  
+  
+  <title>7. 模板与泛型编程 - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="7. 模板与泛型编程"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-11-27 20:17" pubdate>
+          2024年11月27日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          38 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">7. 模板与泛型编程</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="了解隐式接口和编译期多态">41. 了解隐式接口和编译期多态</h2>
+<ol type="1">
+<li>面向对象编程世界总以显示接口和运行期多态解决问题</li>
+<li>由于w的类型被声明为Widget,所以w必须支持Widget接口。我们可以在源码中找出这个接口（例如在idget的.h文件中），看看它是什么样子，所以我称此为一个显式接口(explicit
+interface），也就是它在源码中明确可见。</li>
+<li>由于Widget的某些成员函数是virtual,w对那些函数的调用将表现出运行期多态(runtime
+polymorphism)，也就是说将于运行期根据w的动态类型（见条款37)决定究竞调用哪一个函数。</li>
+<li>纵使你从未用过templates，应该不陌生“运行期多态”和“编译期多态”之间的差异，因为它类似于“哪一个重载函数该被调用”（发生在编译期)和“哪一个virtual函数该被绑定”（发生在运行期）之间的差异。</li>
+<li>通常显式接口由函数的签名式（也就是函数名称、参数类型、返回类型）构成。</li>
+<li>隐式接口就完全不同了。它并不基于函数签名式，而是由有效表达式(valid
+expressions)组成。再次看看doProcessing template一开始的条件：</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">doProcessing</span><span class="hljs-params">(T &amp;w)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">if</span>(w.<span class="hljs-built_in">size</span>()&gt;<span class="hljs-number">20</span>&amp;&amp; w!=someNastyWIdget&#123;<br>        &#125;<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li><p>T(w的类型)的隐式接口看来好像有这些约束：</p></li>
+<li><ol type="1">
+<li>它必须提供一个名为size的成员函数，该函数返回一个整数值。</li>
+<li>它必须支持一个operator!=函数，用来比较两个T对象。这里我们假设someNastywidget的类型为T。</li>
+<li>真要感谢操作符重载(operator
+overloading)带来的可能性，这两个约束都不需要满足</li>
+</ol></li>
+<li><p>classes和templates都支持接口(interfaces)和多态(polymorphism)。</p></li>
+<li><p>对classes而言接口是显式的(explicit),以函数签名为中心。多态则是通过virtual函数发生于运行期。</p></li>
+<li><p>对template参数而言，接口是隐式的(implicit).,奠基于有效表达式。多态则是通过template具现化和函数重载解析(function
+overloading resolution)发生于编译期。</p></li>
+</ol>
+<h2 id="了解typename的双重意义">42. 了解typename的双重意义</h2>
+<ol type="1">
+<li>当我们声明template类型参数，class和typename的意义完全相同</li>
+<li>C++并不总是把class和typename视为等价。有时候你一定得使用typename，为了解其时机，我们必须先谈谈你可以在template内指涉(refer
+to).的两种名称</li>
+<li>template内出现的名称如果相依于某个template参数，称之为从属名称(dependent
+names)。如果从属名称在class内呈嵌套状，我们称它为嵌套从属名称(nested
+dependent name)。</li>
+<li>int是一个并不倚赖任何template参数的名称。这样的名称是谓非从属名称(non-dependent
+names).。</li>
+<li>嵌套从属名称有可能导致解析(parsing)困难。</li>
+<li>如果解析器在template中遭遇一个嵌套从属名称，它便假设这名称不是个类型，除非你告诉它是。所以缺省情况下嵌套从属名称不是类型。</li>
+<li>若要矫正这个形势，我们必须告诉C++说c:const
+iterator是个类型。只要紧临它之前放置关键字typename即可：</li>
+<li>一般性规则很简单：任何时候当你想要在template中指涉一个嵌套从属类型名称，就必须在紧临它的前一个位置放上关键字typename。</li>
+<li>typename只被用来验明嵌套从属类型名称；其他名称不该有它存在。</li>
+</ol>
+<figure>
+<img src="/2024/11/27/effective-cpp/7-%E6%A8%A1%E6%9D%BF%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/1707556429425-d318e2cd-59e8-435d-a4e9-52a7b2da947b.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<ol type="1">
+<li>“typename必须作为嵌套从属类型名称的前缀词”这一规则的例外是，typename不可以出现在base
+classes list内的嵌套从属类型名称之前，也不可在member initialization
+list(成员初值列)中作为base class修饰符.</li>
+</ol>
+<figure>
+<img src="https://cdn.nlark.com/yuque/0/2024/png/35229143/1707556584352-036c9314-8409-40b5-81f6-bb6831b15ed9.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<ol type="1">
+<li>让我们看看最后一个typename例子，那是你将在真实程序中看到的代表性例子。假设我们正在撰写一个function
+template,它接受一个迭代器，而我们打算为该迭代器指涉的对象做一份local复件（副本）temp。我们可以这么写：</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> IterT&gt;</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">workWithIterator</span><span class="hljs-params">(IterT iter)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">typename</span> std::iterator_traits&lt;IterT&gt;::<span class="hljs-function">value_type <span class="hljs-title">temp</span><span class="hljs-params">(*iter)</span></span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li>标准traits
+class（见条款47)的一种运用，相当于说“类型为IterT之对象所指之物的类型"，这个语句声明一个local变量(temp),使用IterT对象所指物的相同类型，并将temp初始化为iter所指物。如果IterT是vector<int>::iterator,temp的类型就是int。如果IterT是list<string>::iterator,temp的类型就是string。由于std:iterator_traits.<IterT>:value
+type是个嵌套从属类型名称(value type被嵌套于iterator
+traits<IterT>之内而IterT是个template参数)，所以我们必须在它之前放置typename。</IterT></IterT></string></int></li>
+<li>声明template参数时，前缀关键字class和typename可互换。</li>
+<li>请使用关键字typename标识嵌套从属类型名称；但不得在base class
+lists(基类列)或member initialization list(成员初值列)内以它作为base
+class修饰符。</li>
+</ol>
+<h2 id="学习处理模板化基类内的名称">43. 学习处理模板化基类内的名称</h2>
+<ol type="1">
+<li>注意class定义式最前头的"template&lt;&gt;”语法象征这既不是template也不是标准class,而是个特化版的MsgSender
+template,在template实参是CompanyZ时被使用。这是所谓的模板全特化(total
+template,specialization)：template
+MsgSender针对类型CompanyZ特化了，而且其特化是全面性的，也就是说一旦类型参数被定义为CompanyZ,再没有其他template参数可供变化。</li>
+</ol>
+<figure>
+<img src="https://cdn.nlark.com/yuque/0/2024/png/35229143/1707557788872-b88bf5fe-ff55-47ab-b2de-89c7aabf83d1.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<ol type="1">
+<li>令C++“不进入templatized base classes观察”的行为失效。</li>
+<li>第一是在base class函数调用动作之前加上 this-&gt;</li>
+</ol>
+<figure>
+<img src="https://cdn.nlark.com/yuque/0/2024/png/35229143/1707558520152-2b05a9ba-7882-4f12-99ac-4428f4c2dabb.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<ol type="1">
+<li>第二是使用using声明式。如果你已读过条款33，这个解法应该会令你感到熟悉。条款33描述using声明式如何将“被掩盖的base
+class名称”带入一个derived
+class作用域内。我们可以这样写下sendClearMsg:</li>
+</ol>
+<figure>
+<img src="https://cdn.nlark.com/yuque/0/2024/png/35229143/1707558218801-2272b813-1508-4dd1-bf00-d3ebf10af457.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<ol type="1">
+<li>第三个做法是，明白指出被调用的函数位于base class内：</li>
+</ol>
+<figure>
+<img src="https://cdn.nlark.com/yuque/0/2024/png/35229143/1707558357624-cd637eca-fa50-485b-981d-5ee66fc4e5f8.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<ol type="1">
+<li>但这往往是最不让人满意的一个解法，因为如果被调用的是virtual函数，上述的明确资格修饰(explicit
+qualification)会关闭“virtual绑定行为”。</li>
+<li>可在derived class templates内通过"this-&gt;"指涉base class
+templates内的成员名称，或藉由一个明白写出的“base
+class资格修饰符”完成。</li>
+</ol>
+<h2 id="将与参数无关的代码抽离templates">44.
+将与参数无关的代码抽离templates</h2>
+<ol type="1">
+<li>Templates是节省时间和避免代码重复的一个奇方妙法。</li>
+<li>如果你不小心，使用templates可能会导致代码膨胀：其二进制码带着重复（或几乎重复）的代码、数据，或两者。其结果有可能源码看起来合身而整齐，但目标码(object
+code)却不是那么回事。</li>
+<li>共性与变性分析(commonality and variability analysis）。</li>
+<li>如果你正在编写某个class,而你明白其中某些部分和另一个class的某些部分相同，你也不会重复这共同的部分。取而代之的是你会把共同部分搬移到新clss去，然后使用继承或复合（见条款32,38,39)，令原先的classes取用这共同特性。而原classes的互异部分（变异部分）仍然留在原位置不动。</li>
+<li>编写templates时，也是做相同的分析，以相同的方式避免重复，但其中有个窍门。在non-template代码中，重复十分明确：你可以“看”到两个函数或两个classes之间有所重复。然而在template代码中，重复是隐晦的：毕竟只存在一份template源码，所以你必须训练自己去感受当template被具现化多次时可能发生的重复。</li>
+<li>Templates生成多个classes和多个函数，所以任何template代码都不该与某个造成膨胀的template参数产生相依关系。</li>
+<li>因非类型模板参数(non-type template
+parameters)而造成的代码膨胀，往往可消除，做法是以函数参数或class成员变量替换template参数。</li>
+<li>因类型参数(type
+parameters)而造成的代码膨胀，往往可降低，做法是让带有完全相同二进制表述(binary
+representations)的具现类型(instantiation types)共享实现码。</li>
+</ol>
+<h2 id="运用成员函数模板接受所有兼容类型">45.
+运用成员函数模板接受所有兼容类型</h2>
+<ol type="1">
+<li>所谓智能指针(Smart
+pointers)是“行为像指针”的对象，并提供指针没有的机能</li>
+<li>例如条款13曾经提及std:auto_ptr和trl:shared
+ptr如何能够被用来在正确时机自动删除heap-based资源。STL容器的迭代器几乎总是智能指针：无疑地你不会奢望使用"+"将一个内置指针从linked
+list的某个节点移到另一个节点，但这在list:iterators身上办得到。</li>
+<li>真实指针做得很好的一件事是，支持隐式转换(implicit
+conversions)。Derived class指针可以隐式转换为base
+class指针，“指向non-const对象”的指针可以转换为“指向cost对象”…等等。</li>
+</ol>
+<figure>
+<img src="https://cdn.nlark.com/yuque/0/2024/png/35229143/1707564816041-88e0ddec-3c52-4448-b23c-16ed9a536175.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<ol type="1">
+<li>但如果想在用户自定的智能指针中模拟上述转换，稍稍有点麻烦</li>
+<li>Templates和泛型编程(Generic Programming)</li>
+<li>为SmartPtr写一个构造函数，而是为它写一个构造模板。这样的模板(templates)是所谓member
+function templates(常简称为nember
+templates),其作用是为class生成函数：</li>
+</ol>
+<figure>
+<img src="https://cdn.nlark.com/yuque/0/2024/png/35229143/1707565419364-bae288b3-bb45-49b0-9116-b0698e6010b7.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<ol type="1">
+<li>以上代码的意思是，对任何类型T和任何类型U,这里可以根据SmartPtr<U>生成一个SmartPtr<T>，因为Smartptr<T>有个构造函数接受个SmartPtr<U>参数。这一类构造函数根据对象u创建对象t(例如根据SmartPtr<U>创建一个SmartPtr<T>),而u和v的类型是同一个template的不同具现体，有时我们称之为泛化(generalized)copy构造函数。</T></U></U></T></T></U></li>
+<li>泛化copy构造函数并未被声明为explicit。那是蓄意的，因为原始指针类型之间的转换（例如从derived
+class指针转为base
+class指针）是隐式转换，无需明白写出转型动作(cst),所以让智能指针仿效这种行径也属合理。在模板化构造函数(templatized
+constructor)中略去explicit就是为了这个目的。</li>
+<li>member function
+templates（成员函数模板)的效用不限于构造函数，它们常扮演的另一个角色是支持赋值操作。</li>
+<li>从某个shared ptr类型隐式转换至另一个shared
+ptr类型是被允许的，但从某个内置指针或从其他智能指针类型进行隐式转换则不被认可（如果是显式转换如cast强制转型动作倒是可以)</li>
+<li>请使用member function
+templates（成员函数模板)生成“可接受所有兼容类型”的函数。</li>
+<li>如果你声明member
+templates用于“泛化copy构造”或“泛化assignment操作”，你还是需要声明正常的copy构造函数和copy
+assignment操作符。</li>
+</ol>
+<h2 id="需要类型转换时请为模板定义非成员函数">46.
+需要类型转换时请为模板定义非成员函数</h2>
+<ol type="1">
+<li>这项技术的一个趣味点是，我们虽然使用friend,却与friend的传统用途“访问class的non-public成分”毫不相千。为了让类型转换可能发生于所有实参身上，我们需要一个non-member函数（条款24)；为了令这个函数被自动具现化，我们需要将它声明在class内部；而在class内部声明non-member函数的唯一办法就是：令它成为一个friend。</li>
+<li>一如条款30所说，定义于class内的函数都暗自成为inline,包括像operator<em>这样的friend函数。你可以将这样的inline声明所带来的冲击最小化，做法是令perator</em>不做任何事情，只调用一个定义于class外部的辅助函数。在本条款的例子中，这样做并没有太大意义，因为operator*已经是个单行函数，但对更复杂的函数而言，那么做也许就有价值。“令friend函数调用辅助函数”的做法的确值得细究一番。</li>
+<li>当我们编写一个class
+template，而它所提供之“与此template相关的”函数支持“所有参数之隐式类型转换”时，请将那些函数定义为“class
+template内部的friend函数”。</li>
+</ol>
+<h2 id="请使用traits-classes表现类型信息">47. 请使用traits
+classes表现类型信息</h2>
+<ol type="1">
+<li>STL主要由“用以表现容器、迭代器和算法”的templates构成，但也覆盖若干工具性templates,其中一个名为advance,.用来将某个迭代器移动某个给定距离：</li>
+</ol>
+<figure>
+<img src="/2024/11/27/effective-cpp/7-%E6%A8%A1%E6%9D%BF%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/1707567010785-05677fc7-3ce9-4fe3-8c08-40846e028338.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<ol type="1">
+<li>random
+access迭代器支持迭代器算术运算，只耗费常量时间，因此如果面对这种迭代器，我们希望运用其优势。</li>
+<li>这种做法首先必须判断iter是否为random
+access迭代器，也就是说需要知道类型IterT是否为random
+access迭代器分类。换句话说我们需要取得类型的某些信息。那就是traits让你得以进行的事：它们允许你在编译期间取得某些类型信息。</li>
+<li>Traits并不是C++关键字或一个预先定义好的构件；它们是一种技术，也是一个C++程序员共同遵守的协议。这个技术的要求之一是，它对内置(built-in)类型和用户自定义(user-defined)类型的表现必须一样好。举个例子，如果上述advance收到的实参是一个指针（例如const
+char*)和一个int,上述advance仍然必须有效运作，那意味traits技术必须也能够施行于内置类型如指针身上。</li>
+<li>“traits必须能够施行于内置类型”意味“类型内的嵌套信息(nesting
+information)”这种东西出局了，因为我们无法将信息嵌套于原始指针内。因此类型的traits信息必须位于类型自身之外。标准技术是把它放进一个template及其或多个特化版本中。这样的templates在标准程序库中有若干个，其中针对迭代器者被命名为iterator_traits:</li>
+</ol>
+<figure>
+<img src="/2024/11/27/effective-cpp/7-%E6%A8%A1%E6%9D%BF%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/1707568377223-8b9c5bf1-0c40-4613-8c3f-147a892e4293.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<ol type="1">
+<li><p>现在，你应该知道如何设计并实现一个traits class了：</p></li>
+<li><ol type="1">
+<li>确认若干你希望将来可取得的类型相关信息。例如对迭代器而言，我们希望将来可取得其分类(category)。</li>
+<li>为该信息选择一个名称（例如iterator_category)。</li>
+<li>提供一个template和一组特化版本（例如稍早说的terator
+traits)，内含你希望支持的类型相关信息。</li>
+</ol></li>
+<li><p>现在我们可以总结如何使用一个traits class了：</p></li>
+<li><ol type="1">
+<li>建立一组重载函数（身份像劳工）或函数模板（例如doAdvance),彼此间的差异只在于各自的t红aits参数。令每个函数实现码与其接受之traits信息相应和。</li>
+<li>建立一个控制函数（身份像工头）或函数模板（例如advance)，它调用上述那些“劳工函数”并传递traits
+class所提供的信息。</li>
+</ol></li>
+<li><p>Traits广泛用于标准程序库。其中当然有上述讨论的iterator
+traits,.除了供应iterator_category还供应另四份迭代器相关信息（其中最有用的是value
+type,见条款42)。此外还有char
+traits用来保存字符类型的相关信息，以及numeric
+limits用来保存数值类型的相关信息，例如某数值类型可表现之最小值和最大值等等；命名为numeric
+limits有点让人惊讶，因为traits
+classes的名称常以"traits”结束，但numeric_limits却没有遵守这种风格。</p></li>
+<li><p>TR1(条款54)导入许多新的traits classes用以提供类型信息，包括is
+fundamental<T>(判断T是否为内置类型)，is
+array<T>(判断T是否为数组类型)，以及is base
+of&lt;T1,T2&gt;(T1和T2相同，抑或r1是T2的base
+class)。总计TR1一共为标准C+添加了50个以上的traits classes。</T></T></p></li>
+<li><p>Traits
+classes使得“类型相关信息”在编译期可用。它们以templates和“templates特化”完成实现。</p></li>
+<li><p>整合重载技术(overloading)后，traits
+classes有可能在编译期对类型执行if...else测试。</p></li>
+</ol>
+<h2 id="认识template元编程">48. 认识template元编程</h2>
+<ol type="1">
+<li><p>TMP有两个伟大的效力。</p></li>
+<li><ol type="1">
+<li>第一，它让某些事情更容易。如果没有它，那些事情将是困难的，甚至不可能的。</li>
+<li>第二，由于template
+metaprograms执行于C++编译期，因此可将工作从运行期转移到编译期。</li>
+</ol></li>
+<li><p>这导致的一个结果是，某些错误原本通常在运行期才能侦测到，现在可在编译期找出来。另一个结果是，使用TMP的C++程序可能在每一方面都更高效：较小的可执行文件、较短的运行期、较少的内存需求。然而将工作从运行期移转至编译期的另一个结果是，编译时间变长了。是的，程序如果使用TMP,其编译时间可能远长于不使用TMP的对应版本。</p></li>
+<li><p>条款47指出，这个typeid-based解法的效率比traits解法低，因为在此方案中，(1)类型测试发生于运行期而非编译期，(2)“运行期类型测试”代码会出现在（或说被连接于)可执行文件中。实际上这个例子正可彰显TMP如何能够比“正常的”C++程序更高效，因为traits解法就是TMP。别忘了，traits引发“编译期发生于类型身上的if.…else计算”。</p></li>
+<li><p>TMP已被证明是个“图灵完全”(Turing-complete)机器，意思是它的威力大到足以计算任何事物。使用TMP你可以声明变量、执行循环、编写及调用函数…但这般构件相对于“正常的”C++对应物看起来很是不同，例如条款47展示的TMP
+if..else条件句是藉由templates和其特化体表现出来。不过那毕竟是汇编语言层级的TMP。针对TMP而设计的程序库（例如Boost's
+MPL,见条款55）提供更高层级的语法一一尽管目前还不足以让你误以为那是“正常的”C++。</p></li>
+<li><p>TMP并没有真正的循环构件，所以循环效果系藉由递归(recursion.)完成。TMP主要是个“函数式语言”(functional
+language),而递归之于这类语言就像电视之于美国通俗文化一样地无法分割。TMP的递归甚至不是正常种类，因为TMP循环并不涉及递归函数调用，而是涉及“递归模板具现化”(recursive
+template instantiation）。</p></li>
+</ol>
+<figure>
+<img src="/2024/11/27/effective-cpp/7-%E6%A8%A1%E6%9D%BF%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/1707571832635-303bc108-4be6-44ec-8d7b-81cdabc631b0.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<ol type="1">
+<li>Template
+metaprogramming(TMP,模板元编程)可将工作由运行期移往编译期，因而得以实现早期错误侦测和更高的执行效率。</li>
+<li>TMP可被用来生成“基于政策选择组合”(based on combinations of policy
+choices.)的客户定制代码，也可用来避免生成对某些特殊类型并不适合的代码。</li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/c/" class="category-chain-item">c++</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/c/effective-c/" class="category-chain-item">effective c++</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/c/" class="print-no-link">#c++</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>7. 模板与泛型编程</div>
+      <div>http://binbo-zappy.github.io/2024/11/27/effective-cpp/7-模板与泛型编程/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年11月27日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/11/27/effective-cpp/8-%E5%AE%9A%E5%88%B6new%E5%92%8Cdelete/" title="8. 定制new和delete">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">8. 定制new和delete</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/" title="6. 继承和面向对象设计">
+                        <span class="hidden-mobile">6. 继承和面向对象设计</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

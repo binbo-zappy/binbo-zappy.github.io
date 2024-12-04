@@ -1,0 +1,925 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="18. 让接口容易被正确使用，不易被误用 1234class Date&#123;public:    Date(int month, int day, int year);&#125;;  函数接口 可能以错误的次序传递参数，或者传递一个无效的月份或天数 导入简单的外覆类型来区别天数，月份等  1234567891011121314151617struct Day&#123;exp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="4. 设计与声明">
+<meta property="og:url" content="http://binbo-zappy.github.io/2024/11/27/effective-cpp/4-%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%A3%B0%E6%98%8E/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="18. 让接口容易被正确使用，不易被误用 1234class Date&#123;public:    Date(int month, int day, int year);&#125;;  函数接口 可能以错误的次序传递参数，或者传递一个无效的月份或天数 导入简单的外覆类型来区别天数，月份等  1234567891011121314151617struct Day&#123;exp">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/effective-cpp.png">
+<meta property="article:published_time" content="2024-11-27T12:17:08.000Z">
+<meta property="article:modified_time" content="2024-11-27T12:20:29.666Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="c++">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/effective-cpp.png">
+  
+  
+  
+  <title>4. 设计与声明 - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="4. 设计与声明"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-11-27 20:17" pubdate>
+          2024年11月27日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          36 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">4. 设计与声明</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="让接口容易被正确使用不易被误用">18.
+让接口容易被正确使用，不易被误用</h2>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Date</span>&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">Date</span>(<span class="hljs-type">int</span> month, <span class="hljs-type">int</span> day, <span class="hljs-type">int</span> year);<br>&#125;;<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li>函数接口 可能以错误的次序传递参数，或者传递一个无效的月份或天数</li>
+<li>导入简单的外覆类型来区别天数，月份等</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Day</span>&#123;<br><span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">Day</span><span class="hljs-params">(<span class="hljs-type">int</span> d)</span></span><br><span class="hljs-function">:val(d)&#123;</span>&#125;<br><span class="hljs-type">int</span> val;<br>&#125;<br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Month</span>&#123;<br><span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">Month</span><span class="hljs-params">(<span class="hljs-type">int</span> m)</span></span><br><span class="hljs-function">:val(m)&#123;</span>&#125;<br><span class="hljs-type">int</span> val;<br>&#125;<br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Year</span>&#123;<br><span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">Year</span><span class="hljs-params">(<span class="hljs-type">int</span> y)</span></span><br><span class="hljs-function">:val(y)&#123;</span>&#125;<br><span class="hljs-type">int</span> val;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li>令Day，Month，Year成为成熟且经充分锻炼的类并封装内部数据，比简单使用structs好</li>
+<li>限制正确的类型的取值，比较安全的方法时预定义所有有效的Months，以函数替换对象，表现某个特定月份，因为non-local
+static对象的初始化次序可能出现问题</li>
+</ol>
+<figure>
+<img src="/2024/11/27/effective-cpp/4-%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%A3%B0%E6%98%8E/1707183478622-e5fdf8f5-23a5-4374-9a5e-78ff04c69f48.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<ol type="1">
+<li>预防客户错误的另一个办法是，限制类型内什么是可做，什么是不能做。常见的限制是加上const。条款3：以const修饰operator*的返回类型可阻止客户因用户自定义类型而犯错</li>
+<li>除非有好理由，否则应该尽量令你的types的行为于内置types一致</li>
+<li>避免无端与内置类型不兼容，真正的理由是为了提供行为一致的接口。STL容器的接口十分一致，这使得它们非常容易被调用</li>
+<li>较佳接口的设计原则是令函数返回一个智能指针，事实上，返回tr1::shared_ptr让接口设计者阻止资源泄露的错误</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cpp">std::<span class="hljs-function">tr1::shared_ptr&lt;Investment&gt; <span class="hljs-title">createInvestment</span><span class="hljs-params">()</span></span>;<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li>假设类设计者期许"从createInvestment取得Investment*指针"的客户将该指针传递给一个名为getRidOfInvestment的函数，而不是直接使用delete。这样一个接口又开启通往另一个客户错误的大门，该错误是"企图使用错误的资源析构机制"，设计者可以设计一个返回将getRidOfInvestment绑定为删除器"的tr1::shared_ptr</li>
+<li>tr1::shared_ptr提供的某个构造函数接受两个实参：一个是被管理的指针，另一个是引用次数变成0时将被调用的删除器。这启发我们创建一个null
+tr1::shared_ptr并以getRidOfInvestment作为删除器</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cpp">std::tr1::shared_ptr&lt;Investment&gt;<span class="hljs-built_in">pInv</span>(<span class="hljs-built_in">static_cast</span>&lt;Investment*&gt;(<span class="hljs-number">0</span>),getRidOfInvestment);<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li>tr1::shared_ptr有一个特别好的性质是，它会自动使用它的“每个指针专属的删除器”，因而消除另一个潜在的客户错误：所谓的“cross-DLL
+problem"。这个问题发生于对象在动态链接程序库DLL中被new创建，却在另一个DLL内被delete销毁，在许多平台上，这一类跨DLL之new/delete成对使用会导致运行期错误。</li>
+<li>好的接口很容易被正确使用，不容易被误用。你应该在你的所有接口中努力达成这些性质。</li>
+<li>“促进正确使用”的办法包括接口的一致性，以及与内置类型的行为兼容。</li>
+<li>“阻止误用”的办法包括建立新类型、限制类型上的操作，束缚对象值，以及消除客户的资源管理责任。</li>
+<li>trl::shared_ptr支持定制型删除器(custom
+deleter)。这可防范DLL问题，可被用来自动解除互斥锁（mutexes;见条款14)等等。</li>
+</ol>
+<h2 id="设计class犹如设计type">19. 设计class犹如设计type</h2>
+<ol type="1">
+<li><p>新type对象应该如何被创建和销毁？（第八章）</p></li>
+<li><p>对象的初始化和对象的赋值该有什么样的差别？（条款四）</p></li>
+<li><p>新type的对象如果被passed by value(以值传递)，意味着什么？
+copy构造函数用来定义一个type的pass-by-value如何实现</p></li>
+<li><p>什么是新type的”合法值“</p></li>
+<li><p>你的新type需要配合某个继承图系吗？</p></li>
+<li><ol type="1">
+<li>如果继承自某些既有的类，就会受到那些类的设计的束缚，特别是他们的函数时virtual或non-virtual的影响（条款34和36）</li>
+<li>如果允许其他类继承你的class，那会影响你所声明的函数，尤其是析构函数是否为virtual（条款7）</li>
+</ol></li>
+<li><p>你的新type需要什么杨的转换</p></li>
+<li><ol type="1">
+<li>如果允许T1隐式转换为T2，就必须在class
+T1内写一个类型转换函数（operator T2）或者在class
+T2内写一个non-explicit-one-argument（可被单一实参调用）的构造函数，如果只允许explicit狗在函数存在，就得写专门负责转换的函数，且不得为类型转换操作符（type
+conversion
+operators）或者non-explicit-one-argument构造函数。（条款15）</li>
+</ol></li>
+<li><p>什么样的操作符和函数对此新type而言时合理的？</p></li>
+<li><ol type="1">
+<li>决定于将为class声明哪些函数，其中某些该是member函数，某些则否（见条款23，24，46）</li>
+</ol></li>
+<li><p>什么样的标准函数应该驳回？</p></li>
+<li><ol type="1">
+<li>那些正是你必须声明为private者（条款6）</li>
+</ol></li>
+<li><p>谁该取用新type的成员</p></li>
+<li><ol type="1">
+<li>决定哪个成员为public，哪个为protected，哪个为private</li>
+<li>决定哪一个类或者函数应该是friends，以及将它们嵌套于另一个之内是否合理</li>
+</ol></li>
+<li><p>什么是新type的”未声明接口“</p></li>
+<li><ol type="1">
+<li>对效率、异常安全性（条款29）以及资源运用（例如多任务锁定和动态内存）提供何种保证，</li>
+</ol></li>
+<li><p>你的新type有多么一般化</p></li>
+<li><ol type="1">
+<li>定义一个新的class template，定义一整个types家族</li>
+</ol></li>
+<li><p>你真的需要一个新type吗</p></li>
+<li><ol type="1">
+<li>如果只是定义新的派生类以便为既有的class添加机能，说不定单纯定义一个或者多个non-member函数或者templates，更能达到目标</li>
+</ol></li>
+</ol>
+<h2 id="宁以pass-by-reference-to-const替换pass-by-value">20.
+宁以pass-by-reference-to-const替换pass-by-value</h2>
+<ol type="1">
+<li>缺省情况下C++以by value方式传递对象至函数</li>
+<li>除非另外指定，否则函数参数都是以实际参数的副本为初值，而调用端所获得的亦是函数返回值的一个副本，这些副本是对象的copy构造函数产出，使得pass-by-value成为费时的操作。</li>
+<li>如何回避所有的构造和析构动作？pass by reference-to-const</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">validateStudent</span><span class="hljs-params">(<span class="hljs-type">const</span> Student&amp; s)</span></span>;<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li>这种传递方式效率高，没有任何构造函数和析构函数被调用，因为没有任何新对象被创建。const是重要的，</li>
+<li>以by
+reference方式传递参数可以避免slicing（对象切割）问题。当一个派生类对象以by
+value方式传递并被视为一个基类对象，基类的copy构造函数会被调用，而造成此对象的行为像个派生类对象的那些特化性质全被切割掉了，仅仅留下一个基类对象，但这几乎不是想要的</li>
+<li>references往往以指针实现出来，因此pass by
+reference意味真正传递的是指针。如果对象属于内置类型（int等），pass by
+value往往比pass by
+reference效率高。对于内置类型而言，有机会采用pass-by-value或pass-by-reference-to-const时，选择pass-by-value并非无道理。</li>
+<li>同时也适用于STL迭代器和函数对象，因为它们习惯上被设计为passed by
+value</li>
+<li>内置类型都相当小，对象小并不意味着其copy构造函数不昂贵。许多对象，包括大多数STL容器，内含的东西只比指针多一些，但复制这种对象却需要承担复制那些指针所指的每一样东西，那将非常昂贵</li>
+<li>小型的用户自定义类型不必然成为pass by value优良候选人</li>
+<li>尽量以pass-by-reference-to-const替换pass by
+value，前者通常高效，并可避免切割问题</li>
+<li>以上规则并不适用内置类型，以及STL的迭代器和函数对象。对他们而言，pass-by-value往往比较适当。</li>
+</ol>
+<h2 id="必须返回对象时别妄想返回其reference">21.必须返回对象时，别妄想返回其reference</h2>
+<ol type="1">
+<li>可能会传递一些references指向其实并不存在的对象</li>
+<li>函数创建新对象的途径：在stack和heap空间创建</li>
+<li>不能返回reference指向的local 对象，</li>
+<li>若在heap内构造一个对象，返回指向的reference，同样有问题，delete该如何调用？</li>
+<li>一个必须返回新对象的函数的正确写法是，让那个函数返回一个新对象</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">inline</span> <span class="hljs-type">const</span> Rational <span class="hljs-keyword">operator</span>* (<span class="hljs-type">const</span> Rational &amp;lhs, <span class="hljs-type">const</span> Rational&amp; rhs)<br>&#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Rational</span>(lhs.n * rhs.n, lhs.d * rhs.d);<br>&#125;<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li>需要承受operator *返回值的构造和析构成本</li>
+<li>当你必须在“返回一个reference和返回一个object”之间抉择时，你的工作时挑出行为正确的那个</li>
+<li>绝不要返回pointer或reference指向一个local
+stack对象，或者返回reference指向一个heap-allocated对象或返回pointer或reference指向一个local
+static对象而有可能同时需要多个这样的对象。条款4已经为“单线程环境中合理返回reference指向一个local
+static对象”提供一个设计实例。</li>
+</ol>
+<h2 id="将成员变量声明为private">22. 将成员变量声明为private</h2>
+<ol type="1">
+<li>如果成员变量不是public，客户唯一能够访问对象的办法就是通过成员函数。如果public接口内的每样东西都是函数，客户就不需要打算访问class成员时迷惑的试着记住是否该使用小括号</li>
+<li>如果通过函数访问成员变量，日后可改以某个计算替换这个成员变量，而class客户一点也不会知道class内部实现已经起了变换</li>
+<li>将成员变量隐藏在函数接口的背后，可以为“所有可能的实现”提供弹性。例如这可以使得成员变量被读或被写时轻松通知其对象、可以验证class的验证条件以及函数的前提和时候状态、可以在多线程环境中执行同步控制等</li>
+<li>封装的重要性。对客户隐藏成员变量，可以确保class的约束条件总是会获得维护</li>
+<li>protected成员变量的论点类似。成员变量的封装性与“成员变量的内容改变时所破坏的代码数量”成反比。</li>
+<li>假设有一个protected成员变量，而我们最终取消了它，所有使用它的派生类都会被破坏，同样缺少封装习惯。</li>
+<li>从封装角度来说，只有两种访问权限：private（提供封装）和其他（不提供封装）</li>
+<li>将成员变量声明为private。这可赋予客户访问数据的一致性，可细微划分访问控制、允诺约束条件获得保证，并提供class作者以充分的实现弹性</li>
+<li>protected并不比public更具封装性。</li>
+</ol>
+<h2 id="宁以non-membernon-friend替换member函数">23.
+宁以non-member、non-friend替换member函数</h2>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">WebBrowser</span>&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clearCache</span><span class="hljs-params">()</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clearHistory</span><span class="hljs-params">()</span></span>;<br>    ```<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clearEverythinng</span><span class="hljs-params">()</span></span>;<br>&#125;;<br><br><span class="hljs-comment">//non-member函数</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clearBrowser</span><span class="hljs-params">(WebBrowser&amp; wb)</span></span><br><span class="hljs-function"></span>&#123;<br>    wb.<span class="hljs-built_in">clearCache</span>();<br>    wb.<span class="hljs-built_in">clearHistory</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li>面向对象守则要求，数据以及操作数据的那些函数应该捆绑在一起，member函数时较好的选择。这是对基于对面向对象真实意义的一个误解。面向对象守则要求数据应该尽可能被封装。</li>
+<li>如果member函数的封装性比non-member低。</li>
+<li>愈多东西被封装，我们改变那些东西的能力就越大，这就是推崇封装的原因，它能使改变事物而只影响有限客户</li>
+<li>能够访问private成员变量的函数只有class的member函数加上friend函数而已</li>
+<li>如果在一个member函数和一个non-member,non-friend函数之间选择，而且两者提供相同机能，那么导致封装性较大的时non-member
+non-friend函数，因为它并不增加“能够访问class内之private成分”的函数变量。</li>
+<li>让clearBrowser成为一个non-member函数并位于WebBrowser所在的同一个namespace内</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">namespace</span> WebBrowserStuff&#123;<br>    <span class="hljs-keyword">class</span> <span class="hljs-title class_">WebBrowser</span>&#123;&#125;;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clearBrowser</span><span class="hljs-params">(WebBrowser&amp; wb)</span></span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li>namespace和classes不同，前者可以跨越多个源码文件而后者不能。</li>
+<li>将所有便利函数放在多个头文件内但隶属同一个命名空间，意味着客户可以轻松扩展这一组便利函数。要做的是添加更多non-member
+non-friend函数到此命名空间</li>
+<li>宁可拿non-member
+non-friend函数替换member函数，这样做可以增加封装性、包裹弹性和机能扩充性</li>
+</ol>
+<h2 id="若所有参数皆需类型转换请为此采用non-member函数">24.
+若所有参数皆需类型转换，请为此采用non-member函数</h2>
+<ol type="1">
+<li>令classes支持隐式转换是个糟糕的主意，最常见的例外就是在建立数值类别时。假设设计一个class用来表现有理数，允许整数“隐式转换”合理。</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Rational</span>&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">Rational</span>(<span class="hljs-type">int</span> num1 = <span class="hljs-number">0</span>, <span class="hljs-type">int</span> num2 = <span class="hljs-number">1</span>);<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">num1</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">num2</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;<br>    <span class="hljs-comment">//const Rational operator* (const Rational&amp; rhs) const;</span><br>&#125;;<br><span class="hljs-type">const</span> Rational <span class="hljs-keyword">operator</span>*(<span class="hljs-type">const</span> Rational&amp; lhs, <span class="hljs-type">const</span> Rational&amp; rhs)<br>&#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Rational</span>(lhs.<span class="hljs-built_in">num1</span>() * rhs.<span class="hljs-built_in">num1</span>(), lhs.<span class="hljs-built_in">num2</span>() * rhs.<span class="hljs-built_in">num2</span>());<br>&#125;<br>Rational result;<br>result = R1 * <span class="hljs-number">2</span>;<br>result = <span class="hljs-number">2</span> * R1;<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li>member函数的反面时non-member函数，而不是friend函数</li>
+<li>如果需要为某个函数的所有参数（包括被this指针所指的那个隐喻参数）进行类型转换，那么这个函数必须是个non-member</li>
+</ol>
+<h2 id="考虑写出一个不抛异常的swap函数">25.
+考虑写出一个不抛异常的swap函数</h2>
+<ol type="1">
+<li>swap函数原来只是STL的一部分，而后成为异常安全性编程的脊柱，以及用来处理自我复制的可能性的一个常见机制。还有非凡的复杂度。</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">namespace</span> std&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;</span><br><span class="hljs-function">    <span class="hljs-type">void</span> <span class="hljs-title">swap</span><span class="hljs-params">(T&amp; a, T&amp; b)</span></span><br><span class="hljs-function">    </span>&#123;<br>        <span class="hljs-function">T <span class="hljs-title">temp</span><span class="hljs-params">(a)</span></span>;<br>        a = b;<br>        b = temp;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li>主要类型T支持copying，缺省的swap实现代码会帮你置换类型T的对象</li>
+<li>声明一个non-member函数调用member函数，</li>
+<li>有些类型，swap的缺省行为会降低速度，如以指针指向一个对象，内含真正数据的类型，这种类型的常见表现形式是所谓的“pimpl手法”。</li>
+<li>只要置换其Pimpl指针，将std::swap针对Widget特化</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">namespace</span> std&#123;<br>    <span class="hljs-keyword">template</span>&lt;&gt;<br>    <span class="hljs-type">void</span> <span class="hljs-built_in">swap</span>&lt;Widget&gt;(Widget&amp; a, Widget&amp; b)<br>    &#123;<br>        <span class="hljs-built_in">swap</span>(a.pImpl, b.pImpl);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li>template&lt;&gt;表示它是std::swap的一个全特化版本，函数名称之后的<Widget>表示这一特化版本系针对“T是Widget”而设计的。一般性的swap
+template施行于Widgets身上便会启用这个版本。通常不能够改变std命名空间内的任何东西，但可以为标准templates制造特化版本，使它专属于我们自己的classes</Widget></li>
+<li>令Widget声明一个名为swap的public成员函数做真正的置换工作，然后将std::swap特化</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Widget</span>&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">swap</span><span class="hljs-params">(Widget&amp; other)</span></span><br><span class="hljs-function">    </span>&#123;<br>        <span class="hljs-keyword">using</span> std::swap;<br>        <span class="hljs-built_in">swap</span>(pImpl, other.pImpl);<br>    &#125;<br>&#125;;<br><br><span class="hljs-keyword">namespace</span> std&#123;<br>    <span class="hljs-keyword">template</span>&lt;&gt;<br>    <span class="hljs-type">void</span> <span class="hljs-built_in">swap</span>&lt;Widget&gt;(Widget&amp; a, Widget&amp; b)<br>    &#123;<br>        a.<span class="hljs-built_in">swap</span>(b);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li>这种做法不只能够通过编译，还与STL容器有一致性，因为所有STL容器都是有提供public
+swap成员函数和std::swap特化版本（用以调用前者）</li>
+<li>C++只允许对class template偏特化(partially specialize)，在function
+template偏特化行不通</li>
+<li>当打算偏特化一个function
+template时，惯常做法是简单为它添加一个重载版本，声明一个non-member
+swap让它调用member swap，但不再将那个non-member
+swap声明为std::swap的特化版本或者重载版本。</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs cpp">namesapce WidgetStuff&#123;<br>    <span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;<br>    <span class="hljs-keyword">class</span> <span class="hljs-title class_">Widget</span>&#123;&#125;;<br>    <br>    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;</span><br><span class="hljs-function">    <span class="hljs-type">void</span> <span class="hljs-title">swap</span><span class="hljs-params">(Widget&lt;T&gt;&amp; a, Widget&lt;T&gt;&amp; b)</span></span><br><span class="hljs-function">    </span>&#123;<br>        a.<span class="hljs-built_in">swap</span>(b);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li><p>C++的名称查找法则确保将找到global作用域T所在之命名空间内的任何T专属的swap。如果T是Widget并位于命名空间WidgetStuff内，编译器会使用“实参取决之查找规则”找出WidgetStuff内的swap。如果没有T专属之swap存在，编译器就使用std内的swap，这得感谢using表达式让std::swap在函数内曝光。即便如此编译器还是比较喜欢std::swap的T专属特化版，而非一般化的那个template，如果已针对T将std::swap特化，特化版会被编译器挑中。</p></li>
+<li><p>首先，如果swap的缺省实现码对你的class或class
+template提供可接受的效率，你不需要额外做任何事。任何尝试置换那种对象的人都会取得缺省版本，而那将有良好的运作。</p></li>
+<li><p>其次，如果swap缺省实现版的效率不足（那几乎总是意味你的class或template使用了某种pimpl手法），试着做以下事情：</p></li>
+<li><ol type="1">
+<li>提供一个public
+swap成员函数，让他高效的置换你的类型的两个对象值，这个函数绝不该抛出异常</li>
+<li>在你的class或template所在的命名空间内提供一个non-member
+swap，并令它调用上述swap成员函数</li>
+<li>如果你正在编写一个class（而非class
+template），为你的class特化std::swap。并令它调用你的swap成员函数</li>
+</ol></li>
+<li><p>最后，如果你调用swap，请确定包含一个using声明式，以便让std::swap在你的函数内曝光可见，然后不加任何namespace修饰符，赤裸裸地调用swap</p></li>
+<li><p>当std::swap对你的类型效率不高时，提供一个swap成员函数，并确定这个函数不抛出异常。</p></li>
+<li><p>如果你提供一个member swap，也该提供一个non-member
+swap用来调用前者。对于classes，（而非templates），也请特化std::swap</p></li>
+<li><p>调用swap时应针对std::swap使用using声明式，然后调用swap并且不带任何“命名空间资格修饰”</p></li>
+<li><p>为“用户定义类型”进行std
+templates全特化是好的，但千万不要尝试在std内加入某些对std而言全新的东西</p></li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/c/" class="category-chain-item">c++</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/c/effective-c/" class="category-chain-item">effective c++</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/c/" class="print-no-link">#c++</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>4. 设计与声明</div>
+      <div>http://binbo-zappy.github.io/2024/11/27/effective-cpp/4-设计与声明/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年11月27日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/11/27/effective-cpp/5-%E5%AE%9E%E7%8E%B0/" title="5. 实现">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">5. 实现</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/11/27/effective-cpp/3-%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86/" title="3. 资源管理">
+                        <span class="hidden-mobile">3. 资源管理</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

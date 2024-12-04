@@ -19,12 +19,12 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="事务原理事务是一组操作的集合，它是一个不可分割的工作单位，事务会把所有的操作作为一个整体一起向系统提交或撤销操作请求，即这些操作要么同时成功，要么同时败。具有ACID四大特征。 原子性，一致性，持久性这三大特性由 redo log 和 undo log 日志来保证的。隔离性 是由锁机制和MVCC保证的。 redo log: 重做日志，记录的是事务提交时数据页的物理修改，是用来实现事务的持久性。该日">
+    <meta name="description" content="事务原理 事务是一组操作的集合，它是一个不可分割的工作单位，事务会把所有的操作作为一个整体一起向系统提交或撤销操作请求，即这些操作要么同时成功，要么同时败。具有ACID四大特征。 原子性，一致性，持久性这三大特性由 redo log 和 undo log 日志来保证的。 隔离性 是由锁机制和MVCC保证的。 redo log: 重做日志，记录的是事务提交时数据页的物理修改，是用来实现事务">
 <meta property="og:type" content="article">
 <meta property="og:title" content="13. MySQL管理">
 <meta property="og:url" content="http://binbo-zappy.github.io/2024/11/27/MySQL/13-MySQL%E7%AE%A1%E7%90%86/index.html">
 <meta property="og:site_name" content="Binbo">
-<meta property="og:description" content="事务原理事务是一组操作的集合，它是一个不可分割的工作单位，事务会把所有的操作作为一个整体一起向系统提交或撤销操作请求，即这些操作要么同时成功，要么同时败。具有ACID四大特征。 原子性，一致性，持久性这三大特性由 redo log 和 undo log 日志来保证的。隔离性 是由锁机制和MVCC保证的。 redo log: 重做日志，记录的是事务提交时数据页的物理修改，是用来实现事务的持久性。该日">
+<meta property="og:description" content="事务原理 事务是一组操作的集合，它是一个不可分割的工作单位，事务会把所有的操作作为一个整体一起向系统提交或撤销操作请求，即这些操作要么同时成功，要么同时败。具有ACID四大特征。 原子性，一致性，持久性这三大特性由 redo log 和 undo log 日志来保证的。 隔离性 是由锁机制和MVCC保证的。 redo log: 重做日志，记录的是事务提交时数据页的物理修改，是用来实现事务">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/MySQL.png">
 <meta property="article:published_time" content="2024-11-27T04:10:57.000Z">
@@ -278,405 +278,464 @@
             
               <div class="markdown-body">
                 
-                <h2 id="事务原理"><a href="#事务原理" class="headerlink" title="事务原理"></a>事务原理</h2><p>事务是一组操作的集合，它是一个不可分割的工作单位，事务会把所有的操作作为一个整体一起向系统提交或撤销操作请求，即这些操作要么同时成功，要么同时败。具有ACID四大特征。</p>
-<p>原子性，一致性，持久性这三大特性由 redo log 和 undo log 日志来保证的。<br>隔离性 是由锁机制和MVCC保证的。</p>
+                <h2 id="事务原理">事务原理</h2>
+<p>事务是一组操作的集合，它是一个不可分割的工作单位，事务会把所有的操作作为一个整体一起向系统提交或撤销操作请求，即这些操作要么同时成功，要么同时败。具有ACID四大特征。</p>
+<p>原子性，一致性，持久性这三大特性由 redo log 和 undo log
+日志来保证的。 隔离性 是由锁机制和MVCC保证的。</p>
 <p>redo log:</p>
-<p>重做日志，记录的是事务提交时数据页的物理修改，是用来实现事务的持久性。<br>该日志文件由两部分组成：重做日志缓冲（redo log buffer）以及重做日志文件（redo log file），前者是在内存中，后者在磁盘中。当事务提交之后会把所有修改信息都存到该日志文件中，用于在刷新脏页到磁盘，发生错误时，进行数据恢复使用。</p>
+<p>重做日志，记录的是事务提交时数据页的物理修改，是用来实现事务的持久性。
+该日志文件由两部分组成：重做日志缓冲（redo log
+buffer）以及重做日志文件（redo log
+file），前者是在内存中，后者在磁盘中。当事务提交之后会把所有修改信息都存到该日志文件中，用于在刷新脏页到磁盘，发生错误时，进行数据恢复使用。</p>
 <blockquote>
-<p>个人理解： 事物每次提交的时候都会将数据刷到redo log中而不是直接将buffer pool中的数据直接刷到磁盘中（ibd文件中），是因为redo log 是顺序写，性能处理的够快，直接刷到ibd中，是随机写，性能慢。所以脏页是在下一次读的时候，或者后台线程采用一定的机制进行刷盘到ibd中。</p>
+<p>个人理解： 事物每次提交的时候都会将数据刷到redo
+log中而不是直接将buffer
+pool中的数据直接刷到磁盘中（ibd文件中），是因为redo log
+是顺序写，性能处理的够快，直接刷到ibd中，是随机写，性能慢。所以脏页是在下一次读的时候，或者后台线程采用一定的机制进行刷盘到ibd中。</p>
 </blockquote>
-<p>undo log:<br>回滚日志，用于记录数据被修改前的信息，作用包含两个：提供回滚和MVCC（多版本并发控制）。<br>undo log和redo log记录物理日志不一样，它是逻辑日志。可以认为当delete一条记录，undo log中会记录一条对应的insert记录，反之亦然，当update一条记录时，它记录一条对应相反的update记录。当执行rollback时，就可以从undo log中的逻辑记录读取到相应的内容并进行回滚。  </p>
+<p>undo log:<br>
+回滚日志，用于记录数据被修改前的信息，作用包含两个：提供回滚和MVCC（多版本并发控制）。
+undo log和redo
+log记录物理日志不一样，它是逻辑日志。可以认为当delete一条记录，undo
+log中会记录一条对应的insert记录，反之亦然，当update一条记录时，它记录一条对应相反的update记录。当执行rollback时，就可以从undo
+log中的逻辑记录读取到相应的内容并进行回滚。</p>
 <blockquote>
-<p>Undo log销毁：undo log在事务执行时产生，事务提交时，并不会立即删除undo log，因为这些日志可能还用于MVCC。<br>Undo log存储：undo log采用段的方式进行管理和记录，存放在前面介绍的rollback segment回滚段中，内部包含1024个undo log segment。</p>
+<p>Undo log销毁：undo
+log在事务执行时产生，事务提交时，并不会立即删除undo
+log，因为这些日志可能还用于MVCC。 Undo log存储：undo
+log采用段的方式进行管理和记录，存放在前面介绍的rollback
+segment回滚段中，内部包含1024个undo log segment。</p>
 </blockquote>
-<h2 id="MVCC"><a href="#MVCC" class="headerlink" title="MVCC"></a>MVCC</h2><h3 id="当前读"><a href="#当前读" class="headerlink" title="当前读:"></a>当前读:</h3><p>读取的是记录的最新版本，读取时还要保证其他并发事务不能修改当前记录，会对读取的记录进行加锁。对于我们日常的操作，如：</p>
+<h2 id="mvcc">MVCC</h2>
+<h3 id="当前读">当前读:</h3>
+<p>读取的是记录的最新版本，读取时还要保证其他并发事务不能修改当前记录，会对读取的记录进行加锁。对于我们日常的操作，如：</p>
 <ul>
-<li>select…lock in share mode（共享锁）。</li>
-<li>select..…for update、update、insert、delete（排他锁）都是一种当前读。</li>
+<li>select...lock in share mode（共享锁）。</li>
+<li>select..…for
+update、update、insert、delete（排他锁）都是一种当前读。</li>
 </ul>
-<h3 id="快照读"><a href="#快照读" class="headerlink" title="快照读:"></a>快照读:</h3><p>简单的select（不加锁）就是快照读，快照读，读取的是记录数据的可见版本，有可能是历史数据，不加锁，是非阻塞读。</p>
+<h3 id="快照读">快照读:</h3>
+<p>简单的select（不加锁）就是快照读，快照读，读取的是记录数据的可见版本，有可能是历史数据，不加锁，是非阻塞读。</p>
 <ul>
 <li>Read Committed：每次select，都生成一个快照读。</li>
 <li>Repeatable Read：开启事务后第一个select语句才是快照读的地方。</li>
 <li>Serializable：快照读会退化为当前读。</li>
 </ul>
-<h3 id="MVCC-1"><a href="#MVCC-1" class="headerlink" title="MVCC:"></a>MVCC:</h3><p>全称Multi-Version Concurrency Control，多版本并发控制。指维护一个数据的多个版本，使得读写操作没有冲突，快照读为MySQL实现MVCC提供了一个非阻塞读功能。MVCC的具体实现，还需要依赖于数据库记录中的三个隐式字段、undo log日志、readView。</p>
-<h4 id="MVCC-实现原理"><a href="#MVCC-实现原理" class="headerlink" title="MVCC 实现原理:"></a>MVCC 实现原理:</h4><p>有三个隐藏的字段:</p>
-<p><img src="/2024/11/27/MySQL/13-MySQL%E7%AE%A1%E7%90%86/MVCC.png" srcset="/img/loading.gif" lazyload alt="images"></p>
+<h3 id="mvcc-1">MVCC:</h3>
+<p>全称Multi-Version Concurrency
+Control，多版本并发控制。指维护一个数据的多个版本，使得读写操作没有冲突，快照读为MySQL实现MVCC提供了一个非阻塞读功能。MVCC的具体实现，还需要依赖于数据库记录中的三个隐式字段、undo
+log日志、readView。</p>
+<h4 id="mvcc-实现原理">MVCC 实现原理:</h4>
+<p>有三个隐藏的字段:</p>
+<figure>
+<img src="/2024/11/27/MySQL/13-MySQL%E7%AE%A1%E7%90%86/MVCC.png" srcset="/img/loading.gif" lazyload alt="images">
+<figcaption aria-hidden="true">images</figcaption>
+</figure>
 <blockquote>
-<p>undo log回滚日志，在insert、update、delete的时候产生的便于数据回滚的日志。<br>当insert的时候，产生的undo log日志只在回滚时需要，在事务提交后，可被立即删除。<br>而update、delete的时候，产生的undo log日志不仅在回滚时需要，在快照读时也需要，不会立即被删除。</p>
+<p>undo
+log回滚日志，在insert、update、delete的时候产生的便于数据回滚的日志。
+当insert的时候，产生的undo
+log日志只在回滚时需要，在事务提交后，可被立即删除。
+而update、delete的时候，产生的undo
+log日志不仅在回滚时需要，在快照读时也需要，不会立即被删除。</p>
 </blockquote>
 <p>undo log 版本链：</p>
-<p>undo log日志会记录原来的版本的数据，因为是通过undo log 日志进行回滚的。</p>
-<p><img src="/2024/11/27/MySQL/13-MySQL%E7%AE%A1%E7%90%86/MVCCList.png" srcset="/img/loading.gif" lazyload alt="images"></p>
-<p>如何确定返回哪一个版本 这是由read view决定返回 undo log 中的哪一个版本。</p>
-<p><img src="/2024/11/27/MySQL/13-MySQL%E7%AE%A1%E7%90%86/readview0.png" srcset="/img/loading.gif" lazyload alt="images"></p>
+<p>undo log日志会记录原来的版本的数据，因为是通过undo log
+日志进行回滚的。</p>
+<figure>
+<img src="/2024/11/27/MySQL/13-MySQL%E7%AE%A1%E7%90%86/MVCCList.png" srcset="/img/loading.gif" lazyload alt="images">
+<figcaption aria-hidden="true">images</figcaption>
+</figure>
+<p>如何确定返回哪一个版本 这是由read view决定返回 undo log
+中的哪一个版本。</p>
+<figure>
+<img src="/2024/11/27/MySQL/13-MySQL%E7%AE%A1%E7%90%86/readview0.png" srcset="/img/loading.gif" lazyload alt="images">
+<figcaption aria-hidden="true">images</figcaption>
+</figure>
 <blockquote>
-<p>RC隔离级别下，在事务中每一次执行快照读时生成ReadView。<br>RR隔离级别下，在事务中第一次执行快照读时生成ReadView，后续会复用。  </p>
+<p>RC隔离级别下，在事务中每一次执行快照读时生成ReadView。<br>
+RR隔离级别下，在事务中第一次执行快照读时生成ReadView，后续会复用。</p>
 </blockquote>
 <blockquote>
-<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Kr4y1i7ru?p=145&spm_id_from=pageDriver&vd_source=bbc04b831b54029788a178a7c2e9ae20">https://www.bilibili.com/video/BV1Kr4y1i7ru?p=145&amp;spm_id_from=pageDriver&amp;vd_source=bbc04b831b54029788a178a7c2e9ae20</a></p>
+<p>https://www.bilibili.com/video/BV1Kr4y1i7ru?p=145&amp;spm_id_from=pageDriver&amp;vd_source=bbc04b831b54029788a178a7c2e9ae20</p>
 </blockquote>
 <p>MVCC 靠 隐藏字段 , undo log 版本链 , read view 实现的。</p>
 <ul>
-<li>原子性-undo log </li>
+<li>原子性-undo log</li>
 <li>持久性-redo log</li>
 <li>一致性-undo log + redo log</li>
 <li>隔离性-锁 + MVCC</li>
 </ul>
-<p><img src="/2024/11/27/MySQL/13-MySQL%E7%AE%A1%E7%90%86/readview.png" srcset="/img/loading.gif" lazyload alt="images"></p>
-<h1 id="权限一览表"><a href="#权限一览表" class="headerlink" title="权限一览表"></a>权限一览表</h1><blockquote>
+<figure>
+<img src="/2024/11/27/MySQL/13-MySQL%E7%AE%A1%E7%90%86/readview.png" srcset="/img/loading.gif" lazyload alt="images">
+<figcaption aria-hidden="true">images</figcaption>
+</figure>
+<h1 id="权限一览表">权限一览表</h1>
+<blockquote>
 <p>具体权限的作用详见<a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html" title="官方文档">官方文档</a></p>
 </blockquote>
 <p>GRANT 和 REVOKE 允许的静态权限</p>
 <table>
+
 <thead>
 <tr>
-<th align="left">Privilege</th>
-<th align="left">Grant Table Column</th>
-<th align="left">Context</th>
+<th style="text-align: left;">Privilege</th>
+<th style="text-align: left;">Grant Table Column</th>
+<th style="text-align: left;">Context</th>
 </tr>
 </thead>
-<tbody><tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_all"><code>ALL [PRIVILEGES]</code></a></td>
-<td align="left">Synonym for “all privileges”</td>
-<td align="left">Server administration</td>
+<tbody>
+<tr>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_all"><code>ALL [PRIVILEGES]</code></a></td>
+<td style="text-align: left;">Synonym for “all privileges”</td>
+<td style="text-align: left;">Server administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_alter"><code>ALTER</code></a></td>
-<td align="left"><code>Alter_priv</code></td>
-<td align="left">Tables</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_alter"><code>ALTER</code></a></td>
+<td style="text-align: left;"><code>Alter_priv</code></td>
+<td style="text-align: left;">Tables</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_alter-routine"><code>ALTER ROUTINE</code></a></td>
-<td align="left"><code>Alter_routine_priv</code></td>
-<td align="left">Stored routines</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_alter-routine"><code>ALTER ROUTINE</code></a></td>
+<td style="text-align: left;"><code>Alter_routine_priv</code></td>
+<td style="text-align: left;">Stored routines</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_create"><code>CREATE</code></a></td>
-<td align="left"><code>Create_priv</code></td>
-<td align="left">Databases, tables, or indexes</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_create"><code>CREATE</code></a></td>
+<td style="text-align: left;"><code>Create_priv</code></td>
+<td style="text-align: left;">Databases, tables, or indexes</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_create-role"><code>CREATE ROLE</code></a></td>
-<td align="left"><code>Create_role_priv</code></td>
-<td align="left">Server administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_create-role"><code>CREATE ROLE</code></a></td>
+<td style="text-align: left;"><code>Create_role_priv</code></td>
+<td style="text-align: left;">Server administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_create-routine"><code>CREATE ROUTINE</code></a></td>
-<td align="left"><code>Create_routine_priv</code></td>
-<td align="left">Stored routines</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_create-routine"><code>CREATE ROUTINE</code></a></td>
+<td style="text-align: left;"><code>Create_routine_priv</code></td>
+<td style="text-align: left;">Stored routines</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_create-tablespace"><code>CREATE TABLESPACE</code></a></td>
-<td align="left"><code>Create_tablespace_priv</code></td>
-<td align="left">Server administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_create-tablespace"><code>CREATE TABLESPACE</code></a></td>
+<td style="text-align: left;"><code>Create_tablespace_priv</code></td>
+<td style="text-align: left;">Server administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_create-temporary-tables"><code>CREATE TEMPORARY TABLES</code></a></td>
-<td align="left"><code>Create_tmp_table_priv</code></td>
-<td align="left">Tables</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_create-temporary-tables"><code>CREATE TEMPORARY TABLES</code></a></td>
+<td style="text-align: left;"><code>Create_tmp_table_priv</code></td>
+<td style="text-align: left;">Tables</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_create-user"><code>CREATE USER</code></a></td>
-<td align="left"><code>Create_user_priv</code></td>
-<td align="left">Server administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_create-user"><code>CREATE USER</code></a></td>
+<td style="text-align: left;"><code>Create_user_priv</code></td>
+<td style="text-align: left;">Server administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_create-view"><code>CREATE VIEW</code></a></td>
-<td align="left"><code>Create_view_priv</code></td>
-<td align="left">Views</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_create-view"><code>CREATE VIEW</code></a></td>
+<td style="text-align: left;"><code>Create_view_priv</code></td>
+<td style="text-align: left;">Views</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_delete"><code>DELETE</code></a></td>
-<td align="left"><code>Delete_priv</code></td>
-<td align="left">Tables</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_delete"><code>DELETE</code></a></td>
+<td style="text-align: left;"><code>Delete_priv</code></td>
+<td style="text-align: left;">Tables</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_drop"><code>DROP</code></a></td>
-<td align="left"><code>Drop_priv</code></td>
-<td align="left">Databases, tables, or views</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_drop"><code>DROP</code></a></td>
+<td style="text-align: left;"><code>Drop_priv</code></td>
+<td style="text-align: left;">Databases, tables, or views</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_drop-role"><code>DROP ROLE</code></a></td>
-<td align="left"><code>Drop_role_priv</code></td>
-<td align="left">Server administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_drop-role"><code>DROP ROLE</code></a></td>
+<td style="text-align: left;"><code>Drop_role_priv</code></td>
+<td style="text-align: left;">Server administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_event"><code>EVENT</code></a></td>
-<td align="left"><code>Event_priv</code></td>
-<td align="left">Databases</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_event"><code>EVENT</code></a></td>
+<td style="text-align: left;"><code>Event_priv</code></td>
+<td style="text-align: left;">Databases</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_execute"><code>EXECUTE</code></a></td>
-<td align="left"><code>Execute_priv</code></td>
-<td align="left">Stored routines</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_execute"><code>EXECUTE</code></a></td>
+<td style="text-align: left;"><code>Execute_priv</code></td>
+<td style="text-align: left;">Stored routines</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_file"><code>FILE</code></a></td>
-<td align="left"><code>File_priv</code></td>
-<td align="left">File access on server host</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_file"><code>FILE</code></a></td>
+<td style="text-align: left;"><code>File_priv</code></td>
+<td style="text-align: left;">File access on server host</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_grant-option"><code>GRANT OPTION</code></a></td>
-<td align="left"><code>Grant_priv</code></td>
-<td align="left">Databases, tables, or stored routines</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_grant-option"><code>GRANT OPTION</code></a></td>
+<td style="text-align: left;"><code>Grant_priv</code></td>
+<td style="text-align: left;">Databases, tables, or stored routines</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_index"><code>INDEX</code></a></td>
-<td align="left"><code>Index_priv</code></td>
-<td align="left">Tables</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_index"><code>INDEX</code></a></td>
+<td style="text-align: left;"><code>Index_priv</code></td>
+<td style="text-align: left;">Tables</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_insert"><code>INSERT</code></a></td>
-<td align="left"><code>Insert_priv</code></td>
-<td align="left">Tables or columns</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_insert"><code>INSERT</code></a></td>
+<td style="text-align: left;"><code>Insert_priv</code></td>
+<td style="text-align: left;">Tables or columns</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_lock-tables"><code>LOCK TABLES</code></a></td>
-<td align="left"><code>Lock_tables_priv</code></td>
-<td align="left">Databases</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_lock-tables"><code>LOCK TABLES</code></a></td>
+<td style="text-align: left;"><code>Lock_tables_priv</code></td>
+<td style="text-align: left;">Databases</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_process"><code>PROCESS</code></a></td>
-<td align="left"><code>Process_priv</code></td>
-<td align="left">Server administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_process"><code>PROCESS</code></a></td>
+<td style="text-align: left;"><code>Process_priv</code></td>
+<td style="text-align: left;">Server administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_proxy"><code>PROXY</code></a></td>
-<td align="left">See <code>proxies_priv</code> table</td>
-<td align="left">Server administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_proxy"><code>PROXY</code></a></td>
+<td style="text-align: left;">See <code>proxies_priv</code> table</td>
+<td style="text-align: left;">Server administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_references"><code>REFERENCES</code></a></td>
-<td align="left"><code>References_priv</code></td>
-<td align="left">Databases or tables</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_references"><code>REFERENCES</code></a></td>
+<td style="text-align: left;"><code>References_priv</code></td>
+<td style="text-align: left;">Databases or tables</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_reload"><code>RELOAD</code></a></td>
-<td align="left"><code>Reload_priv</code></td>
-<td align="left">Server administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_reload"><code>RELOAD</code></a></td>
+<td style="text-align: left;"><code>Reload_priv</code></td>
+<td style="text-align: left;">Server administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_replication-client"><code>REPLICATION CLIENT</code></a></td>
-<td align="left"><code>Repl_client_priv</code></td>
-<td align="left">Server administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_replication-client"><code>REPLICATION CLIENT</code></a></td>
+<td style="text-align: left;"><code>Repl_client_priv</code></td>
+<td style="text-align: left;">Server administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_replication-slave"><code>REPLICATION SLAVE</code></a></td>
-<td align="left"><code>Repl_slave_priv</code></td>
-<td align="left">Server administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_replication-slave"><code>REPLICATION SLAVE</code></a></td>
+<td style="text-align: left;"><code>Repl_slave_priv</code></td>
+<td style="text-align: left;">Server administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_select"><code>SELECT</code></a></td>
-<td align="left"><code>Select_priv</code></td>
-<td align="left">Tables or columns</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_select"><code>SELECT</code></a></td>
+<td style="text-align: left;"><code>Select_priv</code></td>
+<td style="text-align: left;">Tables or columns</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_show-databases"><code>SHOW DATABASES</code></a></td>
-<td align="left"><code>Show_db_priv</code></td>
-<td align="left">Server administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_show-databases"><code>SHOW DATABASES</code></a></td>
+<td style="text-align: left;"><code>Show_db_priv</code></td>
+<td style="text-align: left;">Server administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_show-view"><code>SHOW VIEW</code></a></td>
-<td align="left"><code>Show_view_priv</code></td>
-<td align="left">Views</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_show-view"><code>SHOW VIEW</code></a></td>
+<td style="text-align: left;"><code>Show_view_priv</code></td>
+<td style="text-align: left;">Views</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_shutdown"><code>SHUTDOWN</code></a></td>
-<td align="left"><code>Shutdown_priv</code></td>
-<td align="left">Server administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_shutdown"><code>SHUTDOWN</code></a></td>
+<td style="text-align: left;"><code>Shutdown_priv</code></td>
+<td style="text-align: left;">Server administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_super"><code>SUPER</code></a></td>
-<td align="left"><code>Super_priv</code></td>
-<td align="left">Server administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_super"><code>SUPER</code></a></td>
+<td style="text-align: left;"><code>Super_priv</code></td>
+<td style="text-align: left;">Server administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_trigger"><code>TRIGGER</code></a></td>
-<td align="left"><code>Trigger_priv</code></td>
-<td align="left">Tables</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_trigger"><code>TRIGGER</code></a></td>
+<td style="text-align: left;"><code>Trigger_priv</code></td>
+<td style="text-align: left;">Tables</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_update"><code>UPDATE</code></a></td>
-<td align="left"><code>Update_priv</code></td>
-<td align="left">Tables or columns</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_update"><code>UPDATE</code></a></td>
+<td style="text-align: left;"><code>Update_priv</code></td>
+<td style="text-align: left;">Tables or columns</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_usage"><code>USAGE</code></a></td>
-<td align="left">Synonym for “no privileges”</td>
-<td align="left">Server administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_usage"><code>USAGE</code></a></td>
+<td style="text-align: left;">Synonym for “no privileges”</td>
+<td style="text-align: left;">Server administration</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <p>GRANT 和 REVOKE 允许的动态权限</p>
 <table>
+
 <thead>
 <tr>
-<th align="left">Privilege</th>
-<th align="left">Context</th>
+<th style="text-align: left;">Privilege</th>
+<th style="text-align: left;">Context</th>
 </tr>
 </thead>
-<tbody><tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_application-password-admin"><code>APPLICATION_PASSWORD_ADMIN</code></a></td>
-<td align="left">Dual password administration</td>
+<tbody>
+<tr>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_application-password-admin"><code>APPLICATION_PASSWORD_ADMIN</code></a></td>
+<td style="text-align: left;">Dual password administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_audit-abort-exempt"><code>AUDIT_ABORT_EXEMPT</code></a></td>
-<td align="left">Allow queries blocked by audit log filter</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_audit-abort-exempt"><code>AUDIT_ABORT_EXEMPT</code></a></td>
+<td style="text-align: left;">Allow queries blocked by audit log
+filter</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_audit-admin"><code>AUDIT_ADMIN</code></a></td>
-<td align="left">Audit log administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_audit-admin"><code>AUDIT_ADMIN</code></a></td>
+<td style="text-align: left;">Audit log administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_authentication-policy-admin"><code>AUTHENTICATION_POLICY_ADMIN</code></a></td>
-<td align="left">Authentication administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_authentication-policy-admin"><code>AUTHENTICATION_POLICY_ADMIN</code></a></td>
+<td style="text-align: left;">Authentication administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_backup-admin"><code>BACKUP_ADMIN</code></a></td>
-<td align="left">Backup administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_backup-admin"><code>BACKUP_ADMIN</code></a></td>
+<td style="text-align: left;">Backup administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_binlog-admin"><code>BINLOG_ADMIN</code></a></td>
-<td align="left">Backup and Replication administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_binlog-admin"><code>BINLOG_ADMIN</code></a></td>
+<td style="text-align: left;">Backup and Replication administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_binlog-encryption-admin"><code>BINLOG_ENCRYPTION_ADMIN</code></a></td>
-<td align="left">Backup and Replication administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_binlog-encryption-admin"><code>BINLOG_ENCRYPTION_ADMIN</code></a></td>
+<td style="text-align: left;">Backup and Replication administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_clone-admin"><code>CLONE_ADMIN</code></a></td>
-<td align="left">Clone administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_clone-admin"><code>CLONE_ADMIN</code></a></td>
+<td style="text-align: left;">Clone administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_connection-admin"><code>CONNECTION_ADMIN</code></a></td>
-<td align="left">Server administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_connection-admin"><code>CONNECTION_ADMIN</code></a></td>
+<td style="text-align: left;">Server administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_encryption-key-admin"><code>ENCRYPTION_KEY_ADMIN</code></a></td>
-<td align="left">Server administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_encryption-key-admin"><code>ENCRYPTION_KEY_ADMIN</code></a></td>
+<td style="text-align: left;">Server administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_firewall-admin"><code>FIREWALL_ADMIN</code></a></td>
-<td align="left">Firewall administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_firewall-admin"><code>FIREWALL_ADMIN</code></a></td>
+<td style="text-align: left;">Firewall administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_firewall-exempt"><code>FIREWALL_EXEMPT</code></a></td>
-<td align="left">Firewall administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_firewall-exempt"><code>FIREWALL_EXEMPT</code></a></td>
+<td style="text-align: left;">Firewall administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_firewall-user"><code>FIREWALL_USER</code></a></td>
-<td align="left">Firewall administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_firewall-user"><code>FIREWALL_USER</code></a></td>
+<td style="text-align: left;">Firewall administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_flush-optimizer-costs"><code>FLUSH_OPTIMIZER_COSTS</code></a></td>
-<td align="left">Server administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_flush-optimizer-costs"><code>FLUSH_OPTIMIZER_COSTS</code></a></td>
+<td style="text-align: left;">Server administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_flush-status"><code>FLUSH_STATUS</code></a></td>
-<td align="left">Server administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_flush-status"><code>FLUSH_STATUS</code></a></td>
+<td style="text-align: left;">Server administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_flush-tables"><code>FLUSH_TABLES</code></a></td>
-<td align="left">Server administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_flush-tables"><code>FLUSH_TABLES</code></a></td>
+<td style="text-align: left;">Server administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_flush-user-resources"><code>FLUSH_USER_RESOURCES</code></a></td>
-<td align="left">Server administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_flush-user-resources"><code>FLUSH_USER_RESOURCES</code></a></td>
+<td style="text-align: left;">Server administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_group-replication-admin"><code>GROUP_REPLICATION_ADMIN</code></a></td>
-<td align="left">Replication administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_group-replication-admin"><code>GROUP_REPLICATION_ADMIN</code></a></td>
+<td style="text-align: left;">Replication administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_group-replication-stream"><code>GROUP_REPLICATION_STREAM</code></a></td>
-<td align="left">Replication administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_group-replication-stream"><code>GROUP_REPLICATION_STREAM</code></a></td>
+<td style="text-align: left;">Replication administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_innodb-redo-log-archive"><code>INNODB_REDO_LOG_ARCHIVE</code></a></td>
-<td align="left">Redo log archiving administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_innodb-redo-log-archive"><code>INNODB_REDO_LOG_ARCHIVE</code></a></td>
+<td style="text-align: left;">Redo log archiving administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_ndb-stored-user"><code>NDB_STORED_USER</code></a></td>
-<td align="left">NDB Cluster</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_ndb-stored-user"><code>NDB_STORED_USER</code></a></td>
+<td style="text-align: left;">NDB Cluster</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_passwordless-user-admin"><code>PASSWORDLESS_USER_ADMIN</code></a></td>
-<td align="left">Authentication administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_passwordless-user-admin"><code>PASSWORDLESS_USER_ADMIN</code></a></td>
+<td style="text-align: left;">Authentication administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_persist-ro-variables-admin"><code>PERSIST_RO_VARIABLES_ADMIN</code></a></td>
-<td align="left">Server administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_persist-ro-variables-admin"><code>PERSIST_RO_VARIABLES_ADMIN</code></a></td>
+<td style="text-align: left;">Server administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_replication-applier"><code>REPLICATION_APPLIER</code></a></td>
-<td align="left"><code>PRIVILEGE_CHECKS_USER</code> for a replication channel</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_replication-applier"><code>REPLICATION_APPLIER</code></a></td>
+<td style="text-align: left;"><code>PRIVILEGE_CHECKS_USER</code> for a
+replication channel</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_replication-slave-admin"><code>REPLICATION_SLAVE_ADMIN</code></a></td>
-<td align="left">Replication administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_replication-slave-admin"><code>REPLICATION_SLAVE_ADMIN</code></a></td>
+<td style="text-align: left;">Replication administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_resource-group-admin"><code>RESOURCE_GROUP_ADMIN</code></a></td>
-<td align="left">Resource group administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_resource-group-admin"><code>RESOURCE_GROUP_ADMIN</code></a></td>
+<td style="text-align: left;">Resource group administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_resource-group-user"><code>RESOURCE_GROUP_USER</code></a></td>
-<td align="left">Resource group administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_resource-group-user"><code>RESOURCE_GROUP_USER</code></a></td>
+<td style="text-align: left;">Resource group administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_role-admin"><code>ROLE_ADMIN</code></a></td>
-<td align="left">Server administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_role-admin"><code>ROLE_ADMIN</code></a></td>
+<td style="text-align: left;">Server administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_session-variables-admin"><code>SESSION_VARIABLES_ADMIN</code></a></td>
-<td align="left">Server administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_session-variables-admin"><code>SESSION_VARIABLES_ADMIN</code></a></td>
+<td style="text-align: left;">Server administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_set-user-id"><code>SET_USER_ID</code></a></td>
-<td align="left">Server administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_set-user-id"><code>SET_USER_ID</code></a></td>
+<td style="text-align: left;">Server administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_show-routine"><code>SHOW_ROUTINE</code></a></td>
-<td align="left">Server administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_show-routine"><code>SHOW_ROUTINE</code></a></td>
+<td style="text-align: left;">Server administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_system-user"><code>SYSTEM_USER</code></a></td>
-<td align="left">Server administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_system-user"><code>SYSTEM_USER</code></a></td>
+<td style="text-align: left;">Server administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_system-variables-admin"><code>SYSTEM_VARIABLES_ADMIN</code></a></td>
-<td align="left">Server administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_system-variables-admin"><code>SYSTEM_VARIABLES_ADMIN</code></a></td>
+<td style="text-align: left;">Server administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_table-encryption-admin"><code>TABLE_ENCRYPTION_ADMIN</code></a></td>
-<td align="left">Server administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_table-encryption-admin"><code>TABLE_ENCRYPTION_ADMIN</code></a></td>
+<td style="text-align: left;">Server administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_version-token-admin"><code>VERSION_TOKEN_ADMIN</code></a></td>
-<td align="left">Server administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_version-token-admin"><code>VERSION_TOKEN_ADMIN</code></a></td>
+<td style="text-align: left;">Server administration</td>
 </tr>
 <tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_xa-recover-admin"><code>XA_RECOVER_ADMIN</code></a></td>
-<td align="left">Server administration</td>
+<td style="text-align: left;"><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/privileges-provided.html#priv_xa-recover-admin"><code>XA_RECOVER_ADMIN</code></a></td>
+<td style="text-align: left;">Server administration</td>
 </tr>
-</tbody></table>
-<h1 id="图形化界面工具"><a href="#图形化界面工具" class="headerlink" title="图形化界面工具"></a>图形化界面工具</h1><ul>
-<li>Workbench(免费): <a target="_blank" rel="noopener" href="http://dev.mysql.com/downloads/workbench/">http://dev.mysql.com/downloads/workbench/</a></li>
-<li>navicat(收费，试用版30天): <a target="_blank" rel="noopener" href="https://www.navicat.com/en/download/navicat-for-mysql">https://www.navicat.com/en/download/navicat-for-mysql</a></li>
-<li>Sequel Pro(开源免费，仅支持Mac OS): <a target="_blank" rel="noopener" href="http://www.sequelpro.com/">http://www.sequelpro.com/</a></li>
-<li>HeidiSQL(免费): <a target="_blank" rel="noopener" href="http://www.heidisql.com/">http://www.heidisql.com/</a></li>
-<li>phpMyAdmin(免费): <a target="_blank" rel="noopener" href="https://www.phpmyadmin.net/">https://www.phpmyadmin.net/</a></li>
-<li>SQLyog: <a target="_blank" rel="noopener" href="https://sqlyog.en.softonic.com/">https://sqlyog.en.softonic.com/</a></li>
+</tbody>
+</table>
+<h1 id="图形化界面工具">图形化界面工具</h1>
+<ul>
+<li>Workbench(免费): http://dev.mysql.com/downloads/workbench/</li>
+<li>navicat(收费，试用版30天):
+https://www.navicat.com/en/download/navicat-for-mysql</li>
+<li>Sequel Pro(开源免费，仅支持Mac OS): http://www.sequelpro.com/</li>
+<li>HeidiSQL(免费): http://www.heidisql.com/</li>
+<li>phpMyAdmin(免费): https://www.phpmyadmin.net/</li>
+<li>SQLyog: https://sqlyog.en.softonic.com/</li>
 </ul>
-<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><h1 id="小技巧"><a href="#小技巧" class="headerlink" title="小技巧"></a>小技巧</h1><ol>
+<h1 id="安装">安装</h1>
+<h1 id="小技巧">小技巧</h1>
+<ol type="1">
 <li>在SQL语句之后加上<code>\G</code>会将结果的表格形式转换成行文本形式</li>
 <li>查看Mysql数据库占用空间：</li>
 </ol>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT table_schema &quot;Database Name&quot;<br>     , SUM(data_length + index_length) / (1024 * 1024) &quot;Database Size in MB&quot;<br>FROM information_schema.TABLES<br>GROUP BY table_schema;<br></code></pre></td></tr></table></figure>
-
-<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><blockquote>
-<p><a target="_blank" rel="noopener" href="https://dhc.pythonanywhere.com/entry/share/?key=3ad29aad765a2b98b2b2a745d71bef715507ee9db8adbec98257bac0ad84cbe4#h1-u6743u9650u4E00u89C8u8868">https://dhc.pythonanywhere.com/entry/share/?key=3ad29aad765a2b98b2b2a745d71bef715507ee9db8adbec98257bac0ad84cbe4#h1-u6743u9650u4E00u89C8u8868</a><br>这篇笔记是在别人的基础上完善而来，感谢B站的黑马程序员up主，也感谢路途博客。</p>
+<h1 id="参考文献">参考文献</h1>
+<blockquote>
+<p>https://dhc.pythonanywhere.com/entry/share/?key=3ad29aad765a2b98b2b2a745d71bef715507ee9db8adbec98257bac0ad84cbe4#h1-u6743u9650u4E00u89C8u8868
+这篇笔记是在别人的基础上完善而来，感谢B站的黑马程序员up主，也感谢路途博客。</p>
 </blockquote>
 
                 
@@ -774,6 +833,12 @@
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2024/11/27/leetcode/1-%E6%95%B0%E7%BB%84/" title="1. 数组">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">1. 数组</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">

@@ -19,12 +19,12 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="5.2 运输层端口号，复用，分用1. 端口号 因为因特网上的计算机并不是使用统一的操作系统，不同的操作系统又使用不同格式的进程标识符，为了使运行不同操作系统的计算机的应用进程之间能够进行网络通信，就必须使用统一的方法对TCP&#x2F;IP体系的应用进程进行标识。  TCP&#x2F;IP体系的运输层使用端口号来区分应用层的不同应用进程，端口号使用16比特表示，取值范围 [0,65535]。">
+    <meta name="description" content="5.2 运输层端口号，复用，分用 1. 端口号  因为因特网上的计算机并不是使用统一的操作系统，不同的操作系统又使用不同格式的进程标识符，为了使运行不同操作系统的计算机的应用进程之间能够进行网络通信，就必须使用统一的方法对TCP&#x2F;IP体系的应用进程进行标识。 TCP&#x2F;IP体系的运输层使用端口号来区分应用层的不同应用进程，端口号使用16比特表示，取值范围 [0,65535]。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="5.2 运输层端口号、复用与分用的概念">
 <meta property="og:url" content="http://binbo-zappy.github.io/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-2-%E8%BF%90%E8%BE%93%E5%B1%82%E7%AB%AF%E5%8F%A3%E5%8F%B7-%E5%A4%8D%E7%94%A8%E4%B8%8E%E5%88%86%E7%94%A8%E7%9A%84%E6%A6%82%E5%BF%B5/index.html">
 <meta property="og:site_name" content="Binbo">
-<meta property="og:description" content="5.2 运输层端口号，复用，分用1. 端口号 因为因特网上的计算机并不是使用统一的操作系统，不同的操作系统又使用不同格式的进程标识符，为了使运行不同操作系统的计算机的应用进程之间能够进行网络通信，就必须使用统一的方法对TCP&#x2F;IP体系的应用进程进行标识。  TCP&#x2F;IP体系的运输层使用端口号来区分应用层的不同应用进程，端口号使用16比特表示，取值范围 [0,65535]。">
+<meta property="og:description" content="5.2 运输层端口号，复用，分用 1. 端口号  因为因特网上的计算机并不是使用统一的操作系统，不同的操作系统又使用不同格式的进程标识符，为了使运行不同操作系统的计算机的应用进程之间能够进行网络通信，就必须使用统一的方法对TCP&#x2F;IP体系的应用进程进行标识。 TCP&#x2F;IP体系的运输层使用端口号来区分应用层的不同应用进程，端口号使用16比特表示，取值范围 [0,65535]。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/network.jpg">
 <meta property="article:published_time" content="2024-11-18T03:02:23.000Z">
@@ -225,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          250 字
+          253 字
         
       </span>
     
@@ -278,19 +278,24 @@
             
               <div class="markdown-body">
                 
-                <h1 id="5-2-运输层端口号，复用，分用"><a href="#5-2-运输层端口号，复用，分用" class="headerlink" title="5.2 运输层端口号，复用，分用"></a>5.2 运输层端口号，复用，分用</h1><h2 id="1-端口号"><a href="#1-端口号" class="headerlink" title="1. 端口号"></a>1. 端口号</h2><ol>
-<li><p>因为因特网上的计算机并不是使用统一的操作系统，不同的操作系统又使用不同格式的进程标识符，为了使运行不同操作系统的计算机的应用进程之间能够进行网络通信，就必须使用统一的方法对TCP&#x2F;IP体系的应用进程进行标识。</p>
-</li>
-<li><p>TCP&#x2F;IP体系的运输层使用端口号来区分应用层的不同应用进程，端口号使用16比特表示，取值范围 [0,65535]。</p>
-</li>
+                <h1 id="运输层端口号复用分用">5.2 运输层端口号，复用，分用</h1>
+<h2 id="端口号">1. 端口号</h2>
+<ol type="1">
+<li><p>因为因特网上的计算机并不是使用统一的操作系统，不同的操作系统又使用不同格式的进程标识符，为了使运行不同操作系统的计算机的应用进程之间能够进行网络通信，就必须使用统一的方法对TCP/IP体系的应用进程进行标识。</p></li>
+<li><p>TCP/IP体系的运输层使用端口号来区分应用层的不同应用进程，端口号使用16比特表示，取值范围
+[0,65535]。</p></li>
 </ol>
-<p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-2-%E8%BF%90%E8%BE%93%E5%B1%82%E7%AB%AF%E5%8F%A3%E5%8F%B7-%E5%A4%8D%E7%94%A8%E4%B8%8E%E5%88%86%E7%94%A8%E7%9A%84%E6%A6%82%E5%BF%B5/image-20241118110803598.png" srcset="/img/loading.gif" lazyload alt="端口号的划分"></p>
-<ol start="3">
+<figure>
+<img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-2-%E8%BF%90%E8%BE%93%E5%B1%82%E7%AB%AF%E5%8F%A3%E5%8F%B7-%E5%A4%8D%E7%94%A8%E4%B8%8E%E5%88%86%E7%94%A8%E7%9A%84%E6%A6%82%E5%BF%B5/image-20241118110803598.png" srcset="/img/loading.gif" lazyload alt="端口号的划分">
+<figcaption aria-hidden="true">端口号的划分</figcaption>
+</figure>
+<ol start="3" type="1">
 <li>端口号只具有本地意义，即端口号只是为了标识本计算机应用层中的各进程，在因特网中，不同计算机中的相同端口号是没有联系的。</li>
 </ol>
-<h2 id="2-发送方的复用和接收方的分用"><a href="#2-发送方的复用和接收方的分用" class="headerlink" title="2. 发送方的复用和接收方的分用"></a>2. 发送方的复用和接收方的分用</h2><p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-2-%E8%BF%90%E8%BE%93%E5%B1%82%E7%AB%AF%E5%8F%A3%E5%8F%B7-%E5%A4%8D%E7%94%A8%E4%B8%8E%E5%88%86%E7%94%A8%E7%9A%84%E6%A6%82%E5%BF%B5/image-20241118111045703.png" srcset="/img/loading.gif" lazyload></p>
-<ol>
-<li>TCP&#x2F;IP体系的应用层常用协议所使用运输层的熟知端口号</li>
+<h2 id="发送方的复用和接收方的分用">2. 发送方的复用和接收方的分用</h2>
+<p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-2-%E8%BF%90%E8%BE%93%E5%B1%82%E7%AB%AF%E5%8F%A3%E5%8F%B7-%E5%A4%8D%E7%94%A8%E4%B8%8E%E5%88%86%E7%94%A8%E7%9A%84%E6%A6%82%E5%BF%B5/image-20241118111045703.png" srcset="/img/loading.gif" lazyload></p>
+<ol type="1">
+<li>TCP/IP体系的应用层常用协议所使用运输层的熟知端口号</li>
 </ol>
 <p><img src="/2024/11/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/5-2-%E8%BF%90%E8%BE%93%E5%B1%82%E7%AB%AF%E5%8F%A3%E5%8F%B7-%E5%A4%8D%E7%94%A8%E4%B8%8E%E5%88%86%E7%94%A8%E7%9A%84%E6%A6%82%E5%BF%B5/image-20241118111132310.png" srcset="/img/loading.gif" lazyload></p>
 

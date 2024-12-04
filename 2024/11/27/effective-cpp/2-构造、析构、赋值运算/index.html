@@ -1,0 +1,894 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="5. 了解c++默默编写并调用那些函数  在C++处理之后，empty class（空类）不再是个空类，如果没有声明，编译器就会为它声明一个copy构造函数，一个copy assignment 操作符和一个析构函数，所有这些函数都是public且inline的。 如果声明了一个构造函数，编译器不再为它创建default构造函数 在一个“内含reference成员”的class内支持赋">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2. 构造、析构、赋值运算">
+<meta property="og:url" content="http://binbo-zappy.github.io/2024/11/27/effective-cpp/2-%E6%9E%84%E9%80%A0%E3%80%81%E6%9E%90%E6%9E%84%E3%80%81%E8%B5%8B%E5%80%BC%E8%BF%90%E7%AE%97/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="5. 了解c++默默编写并调用那些函数  在C++处理之后，empty class（空类）不再是个空类，如果没有声明，编译器就会为它声明一个copy构造函数，一个copy assignment 操作符和一个析构函数，所有这些函数都是public且inline的。 如果声明了一个构造函数，编译器不再为它创建default构造函数 在一个“内含reference成员”的class内支持赋">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/effective-cpp.png">
+<meta property="article:published_time" content="2024-11-27T12:17:06.000Z">
+<meta property="article:modified_time" content="2024-11-27T12:19:57.412Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="c++">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/effective-cpp.png">
+  
+  
+  
+  <title>2. 构造、析构、赋值运算 - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="2. 构造、析构、赋值运算"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-11-27 20:17" pubdate>
+          2024年11月27日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          25 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">2. 构造、析构、赋值运算</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="了解c默默编写并调用那些函数">5.
+了解c++默默编写并调用那些函数</h2>
+<ol type="1">
+<li>在C++处理之后，empty
+class（空类）不再是个空类，如果没有声明，编译器就会为它声明一个copy构造函数，一个copy
+assignment 操作符和一个析构函数，所有这些函数都是public且inline的。</li>
+<li>如果声明了一个构造函数，编译器不再为它创建default构造函数</li>
+<li>在一个“内含reference成员”的class内支持赋值操作，必须自己定义copy
+assignment 操作符</li>
+<li>在面对“内含const成员”，编译器处理与上相同</li>
+<li>若某个base class将copy
+assignment操作符声明为private，编译器拒绝为其derived class生成一个copy
+assignment</li>
+</ol>
+<figure>
+<img src="/2024/11/27/effective-cpp/2-%E6%9E%84%E9%80%A0%E3%80%81%E6%9E%90%E6%9E%84%E3%80%81%E8%B5%8B%E5%80%BC%E8%BF%90%E7%AE%97/1706847938047-ed97f39e-ccba-4b41-bc3f-4f77783f656a.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<h2 id="若不想使用编译器自动生成的函数就该明确拒绝">6.
+若不想使用编译器自动生成的函数，就该明确拒绝</h2>
+<ol type="1">
+<li>将成员函数声明为private而且故意不实现他们，被用在c++
+iostream中阻止copying行为，copy构造函数和copy
+assignment操作符都被声明为private且没有定义。</li>
+</ol>
+<figure>
+<img src="/2024/11/27/effective-cpp/2-%E6%9E%84%E9%80%A0%E3%80%81%E6%9E%90%E6%9E%84%E3%80%81%E8%B5%8B%E5%80%BC%E8%BF%90%E7%AE%97/1706848020516-de923da9-e96d-46d1-ac2b-031376e32334.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<ol type="1">
+<li>当客户企图拷贝对象时，连接器报错</li>
+<li>为阻止对象被考不，唯一要做的时继承（私有继承）
+class不再声明拷贝构造函数和copy assignment运算符</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">HomeForSale</span>: <span class="hljs-keyword">private</span> Uncopyable&#123;&#125;; <br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li>为驳回编译器自动提供的机能，可将相应的成员函数声明为private并且不予实现。使用像Uncopyable这样的base
+class也是一种做法。</li>
+</ol>
+<h2 id="为多态基类声明virtual析构函数">7.
+为多态基类声明virtual析构函数</h2>
+<ol type="1">
+<li>当derived class对象经由一个base class指针被删除，而该base
+class带着一个non-virtual析构函数，i结果未有定义，实际执行时通常发生的是对象的derived成分没有被销毁。造成一个诡异的局部销毁现象对象。</li>
+<li>给base class一个virtual析构函数，此后删除derived class对象</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">TimeKeeper</span>&#123;<br>    <span class="hljs-keyword">public</span>:<br>    	<span class="hljs-built_in">TimeKeeper</span>();<br>    	<span class="hljs-keyword">virtual</span> ~<span class="hljs-built_in">TimeKeeper</span>();<br>&#125;;<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li><p>其他的virtual函数，目的是允许derived
+class的实现得以客制化</p></li>
+<li><p>如果class不含virtual函数，通常表示它并不意图被用作一个base
+class。若令其析构函数为virtual，是个馊主意</p></li>
+<li><p>virtual函数的实现细节不重要，重要的是class内含virtual函数，其对象体积会增加；在32位的计算机体系结构中将占用64位（为了存放两个ints）至96位（两个ints加上vptr）</p></li>
+<li><p>心得：只有当class内含至少一个virtual函数，才为它声明virtual析构函数</p></li>
+<li><p>即使class完全不带virtual函数，被非虚析构函数“咬伤”还是存在。</p></li>
+<li><ol type="1">
+<li>例如：标准string不含任何virtual函数，但有时候程序员会错误地把它当作base
+class</li>
+</ol></li>
+<li><p>对任何不带virtual析构函数的class，包括所有STL容器，均禁止派生</p></li>
+<li><p>有时class带一个pure virtual析构函数，可能颇为顺利、</p></li>
+<li><ol type="1">
+<li>纯虚函数导致抽象类，不能被实例化，不能创建对象</li>
+</ol></li>
+<li><p>析构函数的运作方式是，最深层派生的class的析构函数最先被调用，然后其每一个base
+class的析构函数被调用</p></li>
+<li><p>给base class一个virtual析构函数，只适用于带多态性质的base class
+上，这种基类的设计目的是为了用来通过基类接口处理派生类对象。</p></li>
+<li><p>并非所有的基类设计目的都是为了多态，例如标准string和STL容器都不能被设计作为基类使用，更别提多态了</p></li>
+<li><p>某些类设计目的是作为基类使用，但不是为了多态用途，不需要virtual析构函数</p></li>
+</ol>
+<h2 id="别让异常逃离析构函数">8. 别让异常逃离析构函数</h2>
+<ol type="1">
+<li>C++并不禁止析构函数吐出异常，但它不鼓励你这样做，C++析构函数吐出异常，程序可能过早结束或者出现不明确行为</li>
+<li>一个管理数据库管理的类</li>
+</ol>
+<figure>
+<img src="/2024/11/27/effective-cpp/2-%E6%9E%84%E9%80%A0%E3%80%81%E6%9E%90%E6%9E%84%E3%80%81%E8%B5%8B%E5%80%BC%E8%BF%90%E7%AE%97/1706848268744-ae573d2f-2d0f-41ff-88a3-35d1f35485cd.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<ol type="1">
+<li>如果close抛出异常就结束程序，通常通过调用abort完成，如果程序遭遇一个”于析构期间发生的错误“后无法继续执行，”强迫结束程序“是个合理选项，它可以阻止异常从析构函数传播出去，调用abort可以抢先制”不明确行为“于死地</li>
+</ol>
+<figure>
+<img src="/2024/11/27/effective-cpp/2-%E6%9E%84%E9%80%A0%E3%80%81%E6%9E%90%E6%9E%84%E3%80%81%E8%B5%8B%E5%80%BC%E8%BF%90%E7%AE%97/1706848322270-e1d844c6-aef8-4c44-b286-4e9c8719d8ee.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<ol type="1">
+<li><p>吞下因调用close而发生的异常</p></li>
+<li><ol type="1">
+<li>一般来说，将异常吞掉是个坏主意，因为它压制了”某些动作失败“的重要信息</li>
+<li>然而有时吞下异常也比负担”草率结束程序“或”不明确行为带来的风险“好，是一个可行方案，程序能够继续可靠的执行</li>
+</ol></li>
+<li><p>重新设计DEConn接口，使其客户有机会对可能出现的问题作出反应。</p></li>
+<li><ol type="1">
+<li>把调用close的责任从DEConn析构函数手上移到DBConn客户手上</li>
+</ol></li>
+<li><p>tips</p></li>
+<li><ol type="1">
+<li>析构函数绝对不要吐出异常，如果一个被析构函数调用的函数可能抛出异常，析构函数应该捕捉任何异常，然后吞下他们（不传播）或者结束程序。</li>
+<li>如果客户需要对某个操作函数运行期间抛出的异常做出反应，那么class应该提供一个普通函数（而非在析构函数中）执行该操作</li>
+</ol></li>
+</ol>
+<h2 id="绝不在构造和析构过程中调用virtual函数">9.
+绝不在构造和析构过程中调用virtual函数</h2>
+<ol type="1">
+<li>在基类构造期间virtual函数绝对不会下降到派生类阶层，取而代之的是，对象的作为就像隶属基类型一样，非正式的说法：在基类构造期间，virtual函数不是virtual函数</li>
+<li>基类构造函数的执行更早于派生类构造函数，当基类构造函数执行时，派生类的成员变量尚未初始化，如果此期间调用的virtual函数下降到派生类阶层，派生类的函数必然取到local成员变量，而那些成员变量尚未初始化。</li>
+<li>在派生类对象的基类构造期间，对下那个的类型是基类而不是派生类。不只virtual函数会被编译器解析至基类，若使用运行期类型信息（如dynamic_cast
+和typeid），也会把对象视为基类类型</li>
+<li>相同道理也适用于析构函数，一旦派生类析构函数开始执行，对象内的派生类成员变量便呈现未定义值，c++视它们仿佛不在存在。进入基类析构函数后对象就成为一个基类对象，而c++的任何部分包括虚函数，dynamic_casts也这么看待它</li>
+</ol>
+<h2 id="令operator返回一个reference-to-this">10.
+令operator=返回一个reference to *this</h2>
+<ol type="1">
+<li>连锁赋值，赋值操作符必须返回一个reference指向操作符的左侧实参</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function">Widget &amp; <span class="hljs-title">operator</span><span class="hljs-params">()</span></span>=(<span class="hljs-type">const</span> Widget&amp; rhs)<br>&#123;<br><span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<span class="hljs-comment">//返回左侧对象</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li>适用于所有赋值相关运算</li>
+<li>这只是一个协议，并无强制性，但被所有内置类型和STL提供的类型所共同遵守</li>
+</ol>
+<h2 id="令operator中处理自我赋值">11. 令operator=中处理”自我赋值“</h2>
+<ol type="1">
+<li>自我赋值发生在对象被赋值给自己时，看起来有点蠢，但合法</li>
+<li>operator=实现代码</li>
+</ol>
+<figure>
+<img src="/2024/11/27/effective-cpp/2-%E6%9E%84%E9%80%A0%E3%80%81%E6%9E%90%E6%9E%84%E3%80%81%E8%B5%8B%E5%80%BC%E8%BF%90%E7%AE%97/1706848392574-df2d9ec6-d75b-42f1-a3dc-b99e7ac143ba.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<ol type="1">
+<li>潜在的自我赋值</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs cpp">a[i] = a[j]; <span class="hljs-comment">// i==j</span><br>*px = *py; <span class="hljs-comment">//px和py指向同一个东西</span><br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li>这是别名带来的结果，所谓别名就是有一个以上的方法指称某对象。一般而言如果某段代码操作pointers或者references而它们被用来“指向多个相同类型的对象”，就需考虑这些对象是否为同一个。实际上两个对象只要来自同一个继承体系，它们甚至不需声明为相同类型就可鞥造成别名，因为一个基类的引用或指针可以指向一个派生类对象</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Base</span>&#123;&#125;;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Derived</span>:<span class="hljs-keyword">public</span> Base&#123;&#125;;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">doSomething</span><span class="hljs-params">(<span class="hljs-type">const</span> Base&amp; rb, Derived* pd)</span></span>; <span class="hljs-comment">//rb 和*pd可能其实是同一对象</span><br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li>传统做法是由operator=最前面的一个证同测试达到自我赋值的检验目的</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs cpp">Widget&amp; Widget::<span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> Widget&amp; rhs)<br>&#123;<br>    <span class="hljs-keyword">if</span>(<span class="hljs-keyword">this</span> == &amp;rhs) <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br><br>    <span class="hljs-keyword">delete</span> pb;<br>    pb = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Bitmap</span>(*rhs.pb);<br>    <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li>前一版operator=不仅不具备“自我赋值安全性”，也不具备“异常安全性”，存在异常方面的麻烦。如果“new
+Bitmap”导致异常，Widget最终会持有一个指针指向一块被删除的bitmap，这样的指针有害，你无法安全的删除他们，以及无法安全的读取他们</li>
+<li>让operator=具备“异常安全性”会获得“自我赋值安全”的回报，因此对自我赋值的处理态度是倾向不管它，焦点放在实现异常安全性上。本条款只要你注意“许多时候一群精心安排的语句就可以导出一场安全（以及自我赋值安全的代码，再复制pb所指东西之前别删除pb</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs cpp">Widget&amp; Widget::<span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> Widget&amp; rhs)<br>&#123;<br>    Bitmap* pOrig = pb;<br>    pb = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Bitmap</span>(*rhs.pb);<br>    <span class="hljs-keyword">delete</span> pOrig;<br>    <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li><p>这个主题的另一个变奏曲是利用以下事实：</p></li>
+<li><ol type="1">
+<li>某class的copy assignment操作符可能被声明为“以by
+value方式接受实参”</li>
+<li>以by value方式传递东西会造成一份副本</li>
+</ol></li>
+</ol>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs maxima">Widget&amp; Widget::operator=(Widget <span class="hljs-built_in">rhs</span>)  	//<span class="hljs-built_in">rhs</span>是被传对象的一份副本 &#123;										//这里是pass by value    swap(<span class="hljs-built_in">rhs</span>);							//将*this的数据和副本的数据进行互换    <span class="hljs-built_in">return</span> *this; &#125;<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li><ol type="1">
+<li>将copying动作从函数本体内移到函数参数构造阶段可令编译器有时生成更高效的代码</li>
+</ol></li>
+<li>确保当对象自我赋值时operator=有良好行为。其中技术包括比较“来源对象”和“目标对象”的地址、精心周到的语句顺序、以及copy-and-swap</li>
+<li>确定任何函数如果操作一个以上的对象，而其中多个对象是同一个对象时，其行为仍然正确。</li>
+</ol>
+<h2 id="复制对象时勿忘其每一个成分">12. 复制对象时勿忘其每一个成分</h2>
+<ol type="1">
+<li>面向对象系统会将对象的内部封装起来，只留两个函数负责对象拷贝（复制），那便是带着适切名称的copy构造函数和copy
+assignment操作符，成为copying函数</li>
+<li>如果为class添加一个成员变量，必须同时修改copying函数</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">PriorityCustomer</span>: <span class="hljs-keyword">public</span> Customer&#123;&#125;;<br>PriorityCustomer::<span class="hljs-built_in">PriorityCustomoer</span>(cosnt PriorityCustomer&amp; rhs):<span class="hljs-built_in">priority</span>(rhs.priority)<br>&#123;<br>    <span class="hljs-built_in">logCall</span>(<span class="hljs-string">&quot;PriorityCustomer copy constructor&quot;</span>);<br>&#125;<br>PriorityCustomer&amp; PriorityCustomer::<span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> PriorityCustomer&amp; rhs)<br>&#123;<br>    <span class="hljs-built_in">logCall</span>(<span class="hljs-string">&quot;PriorityCustomer copy assignment operator&quot;</span>);<br>    priority = rhs.prioroty;<br>    <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li><p>在进行类继承时，copying函数复制了成员变量副本，但每个PriorityCustomer还内含它所继承的Customer成员变量副本，而那些变量却未被复制，PriorityCustomer的copy构造函数并没有指定实参传给其基类构造函数，（也就是说它在他的成员初值列中没有提到Customer。）因此PriorityCustomer对象的Customer成分会被不带实参之Customer狗仔函数（即default构造函数——必定有一个否则无法通过编译）初始化。default构造函数将针对name和lastTransaction执行缺省的初始化动作。</p></li>
+<li><p>当编写一个copying函数</p></li>
+<li><ol type="1">
+<li>复制所有local成员变量</li>
+<li>调用所有base classes内适当的copying函数</li>
+</ol></li>
+<li><p>令copy
+assignment操作符调用copy构造函数是不合理的，因为这就像试图构造一个已经存在的对象。</p></li>
+<li><p>令copy构造函数调用copy
+assignment操作符同样无意义。构造函数用来初始化新对象，而assignment操作符只施行于已初始化对象身上。</p></li>
+<li><p>如果copy构造函数和copy
+assignment操作符有相近的代码，消除重复代码的做法是，建立一个新的成员函数给两者调用。这样的函数往往是private而且命名为init。这个策略可以安全消除copy构造函数和copy
+assignment操作符之间的代码重复</p></li>
+<li><p>copying函数应该确保复制“对象内的所有成员变量”及“所有基类成分”</p></li>
+<li><p>不要尝试以某个copying函数实现另一个copying函数。应该将共同机能放进第三个函数中，并由两个copying函数共同调用</p></li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/c/" class="category-chain-item">c++</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/c/effective-c/" class="category-chain-item">effective c++</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/c/" class="print-no-link">#c++</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>2. 构造、析构、赋值运算</div>
+      <div>http://binbo-zappy.github.io/2024/11/27/effective-cpp/2-构造、析构、赋值运算/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年11月27日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/11/27/effective-cpp/3-%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86/" title="3. 资源管理">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">3. 资源管理</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/11/27/effective-cpp/1-%E8%AE%A9%E8%87%AA%E5%B7%B1%E4%B9%A0%E6%83%AFC++/" title="1. 让自己习惯C++">
+                        <span class="hidden-mobile">1. 让自己习惯C++</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

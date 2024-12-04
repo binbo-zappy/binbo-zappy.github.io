@@ -19,12 +19,12 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="5.1 I&#x2F;O管理概述1. IO设备的概念和分类1.1 什么是I&#x2F;O设备? “I&#x2F;O“就是”输入&#x2F;输出“(Input&#x2F;Output)  I&#x2F;O设备就是可以将数据输入到计算机, 或者可以接收计算机输出数据的外部设备, 属于计算机中的硬件部件  鼠标、键盘 – 典型的输入型设备 显示器 – 输出型设备 移动硬盘 – 既可输入、又可输出的设备">
+    <meta name="description" content="5.1 I&#x2F;O管理概述 1. IO设备的概念和分类 1.1 什么是I&#x2F;O设备?  &quot;I&#x2F;O&quot;就是&quot;输入&#x2F;输出&quot;(Input&#x2F;Output) I&#x2F;O设备就是可以将数据输入到计算机, 或者可以接收计算机输出数据的外部设备, 属于计算机中的硬件部件  鼠标、键盘 -- 典型的输入型设备 显示器 -- 输出型设备 移动硬盘 -- 既可输入、又可输出的设备  UNIX系统将外部设备抽">
 <meta property="og:type" content="article">
 <meta property="og:title" content="第五章 设备管理-5.1 IO管理概述">
 <meta property="og:url" content="http://binbo-zappy.github.io/2024/11/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/5-1-IO%E7%AE%A1%E7%90%86%E6%A6%82%E8%BF%B0/index.html">
 <meta property="og:site_name" content="Binbo">
-<meta property="og:description" content="5.1 I&#x2F;O管理概述1. IO设备的概念和分类1.1 什么是I&#x2F;O设备? “I&#x2F;O“就是”输入&#x2F;输出“(Input&#x2F;Output)  I&#x2F;O设备就是可以将数据输入到计算机, 或者可以接收计算机输出数据的外部设备, 属于计算机中的硬件部件  鼠标、键盘 – 典型的输入型设备 显示器 – 输出型设备 移动硬盘 – 既可输入、又可输出的设备">
+<meta property="og:description" content="5.1 I&#x2F;O管理概述 1. IO设备的概念和分类 1.1 什么是I&#x2F;O设备?  &quot;I&#x2F;O&quot;就是&quot;输入&#x2F;输出&quot;(Input&#x2F;Output) I&#x2F;O设备就是可以将数据输入到计算机, 或者可以接收计算机输出数据的外部设备, 属于计算机中的硬件部件  鼠标、键盘 -- 典型的输入型设备 显示器 -- 输出型设备 移动硬盘 -- 既可输入、又可输出的设备  UNIX系统将外部设备抽">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/OS.png">
 <meta property="article:published_time" content="2024-11-21T14:24:08.000Z">
@@ -225,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          4.2k 字
+          4.1k 字
         
       </span>
     
@@ -278,394 +278,438 @@
             
               <div class="markdown-body">
                 
-                <h1 id="5-1-I-O管理概述"><a href="#5-1-I-O管理概述" class="headerlink" title="5.1 I&#x2F;O管理概述"></a><strong>5.1 I&#x2F;O管理概述</strong></h1><h3 id="1-IO设备的概念和分类"><a href="#1-IO设备的概念和分类" class="headerlink" title="1. IO设备的概念和分类"></a><strong>1. IO设备的概念和分类</strong></h3><h3 id="1-1-什么是I-O设备"><a href="#1-1-什么是I-O设备" class="headerlink" title="1.1 什么是I&#x2F;O设备?"></a>1.1 <strong>什么是I&#x2F;O设备?</strong></h3><ul>
-<li><p>“<strong>I&#x2F;O</strong>“就是”<strong>输入&#x2F;输出</strong>“(Input&#x2F;Output)</p>
-</li>
-<li><p>I&#x2F;O设备就是可以将数据输入到计算机, 或者可以接收计算机输出数据的外部设备, 属于计算机中的硬件部件</p>
+                <h1 id="io管理概述"><strong>5.1 I/O管理概述</strong></h1>
+<h3 id="io设备的概念和分类"><strong>1. IO设备的概念和分类</strong></h3>
+<h3 id="什么是io设备">1.1 <strong>什么是I/O设备?</strong></h3>
 <ul>
-<li>鼠标、键盘 – 典型的输入型设备</li>
-<li>显示器 – 输出型设备</li>
-<li>移动硬盘 – 既可输入、又可输出的设备</li>
-</ul>
-</li>
-<li><p>UNIX系统将外部设备抽象为一种特殊的文件, 用户可以使用与文件系统相同的方式对外部设备进行操作</p>
+<li><p>"<strong>I/O</strong>"就是"<strong>输入/输出</strong>"(Input/Output)</p></li>
+<li><p>I/O设备就是可以将数据输入到计算机,
+或者可以接收计算机输出数据的外部设备, 属于计算机中的硬件部件</p>
+<ul>
+<li>鼠标、键盘 -- 典型的输入型设备</li>
+<li>显示器 -- 输出型设备</li>
+<li>移动硬盘 -- 既可输入、又可输出的设备</li>
+</ul></li>
+<li><p>UNIX系统将外部设备抽象为一种特殊的文件,
+用户可以使用与文件系统相同的方式对外部设备进行操作</p>
 <ul>
 <li>Write操作: 向外部设备写出数据</li>
 <li>Read操作: 从外部设备读入数据</li>
+</ul></li>
 </ul>
-</li>
+<h3 id="io设备的分类">1.2 <strong>I/O设备的分类</strong></h3>
+<ul>
+<li><strong>按使用特性分类</strong>
+<ul>
+<li>人机交互类外部设备: 数据传输速度慢
+<ul>
+<li>鼠标、键盘、打印机等 -- 用于人机交互</li>
+</ul></li>
+<li>存储设备: 数据传输速度快
+<ul>
+<li>移动硬盘、光盘等 -- 用于数据存储</li>
+</ul></li>
+<li>网络通信设备: 数据传输速度介于上述二者之间
+<ul>
+<li>调制解调器等 -- 用于网络通信</li>
+</ul></li>
+</ul></li>
+<li><strong>按传输速率分类</strong>
+<ul>
+<li>低速设备
+<ul>
+<li>鼠标、键盘等 -- 传输速率为每秒几个到几百字节</li>
+</ul></li>
+<li>中速设备
+<ul>
+<li>激光打印机等 -- 传输速率为每秒数千至上万个字节</li>
+</ul></li>
+<li>高速设备
+<ul>
+<li>磁盘等 -- 传输速率为每秒数千字节至千兆字节的设备</li>
+</ul></li>
+</ul></li>
+<li><strong>按信息交换的单位分类</strong>
+<ul>
+<li><strong>块设备</strong>: 传输速率较高, 可寻址,
+即对它可随机地读/写任一块
+<ul>
+<li>磁盘等 -- <strong>数据传输的基本单位是"块"</strong></li>
+</ul></li>
+<li><strong>字符设备</strong>: 传输速率较慢, 不可寻址,
+在输入/输出时常采用<strong>中断驱动方式</strong>
+<ul>
+<li>鼠标、键盘等 -- <strong>数据传输的基本单位是字符</strong></li>
+<li>中断驱动方式: 一种I/O控制方式</li>
+</ul></li>
+</ul></li>
 </ul>
-<h3 id="1-2-I-O设备的分类"><a href="#1-2-I-O设备的分类" class="headerlink" title="1.2 I&#x2F;O设备的分类"></a>1.2 <strong>I&#x2F;O设备的分类</strong></h3><ul>
-<li><strong>按使用特性分类</strong><ul>
-<li>人机交互类外部设备: 数据传输速度慢<ul>
-<li>鼠标、键盘、打印机等 – 用于人机交互</li>
+<h2 id="io控制器"><strong>2. IO控制器</strong></h2>
+<h3 id="io设备的组成">2.1 <strong>I/O设备的组成</strong></h3>
+<ul>
+<li><strong>机械部件</strong>
+<ul>
+<li>I/O设备的机械部件主要用来执行具体I/O操作</li>
+<li>如我们看得见摸得着的鼠标/键盘的按钮; 显示器的LED屏;
+移动硬盘的磁臂、磁盘盘面</li>
+</ul></li>
+<li><strong>电子部件</strong>(I/O控制器, 又称设备控制器)
+<ul>
+<li>I/O设备的电子部件通常是一块插入主板扩充槽的印刷电路板</li>
+</ul></li>
 </ul>
-</li>
-<li>存储设备: 数据传输速度快<ul>
-<li>移动硬盘、光盘等 – 用于数据存储</li>
-</ul>
-</li>
-<li>网络通信设备: 数据传输速度介于上述二者之间<ul>
-<li>调制解调器等 – 用于网络通信</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><strong>按传输速率分类</strong><ul>
-<li>低速设备<ul>
-<li>鼠标、键盘等 – 传输速率为每秒几个到几百字节</li>
-</ul>
-</li>
-<li>中速设备<ul>
-<li>激光打印机等 – 传输速率为每秒数千至上万个字节</li>
-</ul>
-</li>
-<li>高速设备<ul>
-<li>磁盘等 – 传输速率为每秒数千字节至千兆字节的设备</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><strong>按信息交换的单位分类</strong><ul>
-<li><strong>块设备</strong>: 传输速率较高, 可寻址, 即对它可随机地读&#x2F;写任一块<ul>
-<li>磁盘等 – <strong>数据传输的基本单位是”块”</strong></li>
-</ul>
-</li>
-<li><strong>字符设备</strong>: 传输速率较慢, 不可寻址, 在输入&#x2F;输出时常采用<strong>中断驱动方式</strong><ul>
-<li>鼠标、键盘等 – <strong>数据传输的基本单位是字符</strong></li>
-<li>中断驱动方式: 一种I&#x2F;O控制方式</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="2-IO控制器"><a href="#2-IO控制器" class="headerlink" title="2. IO控制器"></a><strong>2. IO控制器</strong></h2><h3 id="2-1-I-O设备的组成"><a href="#2-1-I-O设备的组成" class="headerlink" title="2.1 I&#x2F;O设备的组成"></a>2.1 <strong>I&#x2F;O设备的组成</strong></h3><ul>
-<li><strong>机械部件</strong><ul>
-<li>I&#x2F;O设备的机械部件主要用来执行具体I&#x2F;O操作</li>
-<li>如我们看得见摸得着的鼠标&#x2F;键盘的按钮; 显示器的LED屏; 移动硬盘的磁臂、磁盘盘面</li>
-</ul>
-</li>
-<li><strong>电子部件</strong>(I&#x2F;O控制器, 又称设备控制器)<ul>
-<li>I&#x2F;O设备的电子部件通常是一块插入主板扩充槽的印刷电路板</li>
-</ul>
-</li>
-</ul>
-<h3 id="2-2-I-O控制器的主要功能"><a href="#2-2-I-O控制器的主要功能" class="headerlink" title="2.2 I&#x2F;O控制器的主要功能"></a>2.2 <strong>I&#x2F;O控制器的主要功能</strong></h3><ul>
-<li><p>CPU无法直接控制I&#x2F;O设备的机械部件, 因此I&#x2F;O设备还要有一个电子部件作为CPU和I&#x2F;O设备部件之间的”中介”, <strong>用于实现CPU对设备的控制</strong></p>
-</li>
-<li><p>这个电子部件就是<strong>I&#x2F;O控制器</strong>, CPU可控制I&#x2F;O控制器, 又由I&#x2F;O控制器来控制设备的机械部件</p>
-</li>
+<h3 id="io控制器的主要功能">2.2
+<strong>I/O控制器的主要功能</strong></h3>
+<ul>
+<li><p>CPU无法直接控制I/O设备的机械部件,
+因此I/O设备还要有一个电子部件作为CPU和I/O设备部件之间的"中介",
+<strong>用于实现CPU对设备的控制</strong></p></li>
+<li><p>这个电子部件就是<strong>I/O控制器</strong>, CPU可控制I/O控制器,
+又由I/O控制器来控制设备的机械部件</p></li>
 <li><p><strong>主要功能</strong>:</p>
 <ul>
-<li>接受和识别CPU发出的命令<ul>
-<li>如CPU发来的read&#x2F;write命令, I&#x2F;O控制器中会有相应的<strong>控制寄存器</strong>来存放命令和参数</li>
-</ul>
-</li>
-<li>向CPU报告设备的状态<ul>
-<li>I&#x2F;O控制器中会有相应的<strong>状态寄存器</strong>用于记录I&#x2F;O设备的当前状态</li>
+<li>接受和识别CPU发出的命令
+<ul>
+<li>如CPU发来的read/write命令,
+I/O控制器中会有相应的<strong>控制寄存器</strong>来存放命令和参数</li>
+</ul></li>
+<li>向CPU报告设备的状态
+<ul>
+<li>I/O控制器中会有相应的<strong>状态寄存器</strong>用于记录I/O设备的当前状态</li>
 <li>如: 1表示空闲, 0表示忙碌</li>
+</ul></li>
+<li>数据交换
+<ul>
+<li>I/O控制器中会设置相应的<strong>数据寄存器</strong>。输出时,
+数据寄存器用于暂存CPU发来的数据, 之后再由控制器传送设备; 输入时,
+数据寄存器用于暂存设备发来的数据, 之后CPU从数据寄存器中取走数据</li>
+</ul></li>
+<li>地址识别
+<ul>
+<li>类似于内存的地址, 为了区分设备控制器中的各个寄存器,
+也需要给各个寄存器设置一个特定的"地址"。I/O控制器通过CPU提供的"地址"来判断CPU要读/写的是哪个寄存器</li>
+</ul></li>
+</ul></li>
 </ul>
-</li>
-<li>数据交换<ul>
-<li>I&#x2F;O控制器中会设置相应的<strong>数据寄存器</strong>。输出时, 数据寄存器用于暂存CPU发来的数据, 之后再由控制器传送设备; 输入时, 数据寄存器用于暂存设备发来的数据, 之后CPU从数据寄存器中取走数据</li>
+<h3 id="io控制器的组成">2.3 <strong>I/O控制器的组成</strong></h3>
+<ul>
+<li>值得注意的小细节:
+<ul>
+<li>一个I/O控制器可能会对应多个设备</li>
+<li>数据寄存器、控制寄存器、状态寄存器可能有多个(如:
+每个控制/状态寄存器对应一个具体的设备), 且这些寄存器都要有相应的地址,
+才能方便CPU操作。有的计算机会让这些寄存器占用内存地址的一部分,
+称为<strong>内存映像I/O</strong>; 另一些计算机则采用I/O专用地址,
+即<strong>寄存器独立编址</strong></li>
+</ul></li>
 </ul>
-</li>
-<li>地址识别<ul>
-<li>类似于内存的地址, 为了区分设备控制器中的各个寄存器, 也需要给各个寄存器设置一个特定的”地址”。I&#x2F;O控制器通过CPU提供的”地址”来判断CPU要读&#x2F;写的是哪个寄存器</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="2-3-I-O控制器的组成"><a href="#2-3-I-O控制器的组成" class="headerlink" title="2.3 I&#x2F;O控制器的组成"></a>2.3 <strong>I&#x2F;O控制器的组成</strong></h3><ul>
-<li>值得注意的小细节:<ul>
-<li>一个I&#x2F;O控制器可能会对应多个设备</li>
-<li>数据寄存器、控制寄存器、状态寄存器可能有多个(如: 每个控制&#x2F;状态寄存器对应一个具体的设备), 且这些寄存器都要有相应的地址, 才能方便CPU操作。有的计算机会让这些寄存器占用内存地址的一部分, 称为<strong>内存映像I&#x2F;O</strong>; 另一些计算机则采用I&#x2F;O专用地址, 即<strong>寄存器独立编址</strong></li>
-</ul>
-</li>
-</ul>
-<h3 id="2-4-两种寄存器编址方式"><a href="#2-4-两种寄存器编址方式" class="headerlink" title="2.4 两种寄存器编址方式"></a>2.4 <strong>两种寄存器编址方式</strong></h3><p><img src="/2024/11/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/5-1-IO%E7%AE%A1%E7%90%86%E6%A6%82%E8%BF%B0/image-20241121222917201.png" srcset="/img/loading.gif" lazyload></p>
-<h2 id="3-IO控制方式"><a href="#3-IO控制方式" class="headerlink" title="3. IO控制方式"></a><strong>3. IO控制方式</strong></h2><ul>
-<li>需要注意的问题:<ul>
-<li>完成一次读&#x2F;写操作的流程</li>
-<li>CPU干预的频率 </li>
+<h3 id="两种寄存器编址方式">2.4 <strong>两种寄存器编址方式</strong></h3>
+<p><img src="/2024/11/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/5-1-IO%E7%AE%A1%E7%90%86%E6%A6%82%E8%BF%B0/image-20241121222917201.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="io控制方式"><strong>3. IO控制方式</strong></h2>
+<ul>
+<li>需要注意的问题:
+<ul>
+<li>完成一次读/写操作的流程</li>
+<li>CPU干预的频率</li>
 <li>数据传送的单位</li>
 <li>数据的流向</li>
 <li>主要缺点和主要优点</li>
+</ul></li>
 </ul>
-</li>
-</ul>
-<h3 id="3-1-程序直接控制方式"><a href="#3-1-程序直接控制方式" class="headerlink" title="3.1 程序直接控制方式"></a>3.1 <strong>程序直接控制方式</strong></h3><ul>
-<li><p>完成一次读&#x2F;写操作的流程(以读操作为例):</p>
+<h3 id="程序直接控制方式">3.1 <strong>程序直接控制方式</strong></h3>
 <ul>
-<li><p>CPU通过控制线向控制器发出读指令, 于是设备启动, 并且状态寄存器设为1(未就绪)</p>
-</li>
-<li><p><strong>轮询</strong>检查控制器的状态(其实就是在不断地执行程序的循环, 若状态位一直是1, 说明设备还没准备好要输入的数据, 于是CPU会不断地轮询)</p>
-</li>
-<li><p>输入设备准备好数据后将数据传给控制器, 并报告自身状态</p>
-</li>
-<li><p>控制器将输入的数据放到数据寄存器中, 并将状态改为0(已就绪)</p>
-</li>
-<li><p>CPU发现设备已就绪, 即可将数据寄存器中的内容读入CPU的寄存器中, 再把CPU寄存器中的内容放入内存</p>
-</li>
-<li><p>若还要继续读入数据, 则CPU继续发出读指令</p>
-</li>
-</ul>
-</li>
+<li><p>完成一次读/写操作的流程(以读操作为例):</p>
+<ul>
+<li><p>CPU通过控制线向控制器发出读指令, 于是设备启动,
+并且状态寄存器设为1(未就绪)</p></li>
+<li><p><strong>轮询</strong>检查控制器的状态(其实就是在不断地执行程序的循环,
+若状态位一直是1, 说明设备还没准备好要输入的数据,
+于是CPU会不断地轮询)</p></li>
+<li><p>输入设备准备好数据后将数据传给控制器, 并报告自身状态</p></li>
+<li><p>控制器将输入的数据放到数据寄存器中,
+并将状态改为0(已就绪)</p></li>
+<li><p>CPU发现设备已就绪, 即可将数据寄存器中的内容读入CPU的寄存器中,
+再把CPU寄存器中的内容放入内存</p></li>
+<li><p>若还要继续读入数据, 则CPU继续发出读指令</p></li>
+</ul></li>
 <li><p>CPU干预的频率</p>
 <ul>
-<li>很频繁, I&#x2F;O操作开始之前、完成之后需要CPU的介入, 并且在等待I&#x2F;O完成的过程中CPU需要不断地轮询检查</li>
-</ul>
-</li>
+<li>很频繁, I/O操作开始之前、完成之后需要CPU的介入,
+并且在等待I/O完成的过程中CPU需要不断地轮询检查</li>
+</ul></li>
 <li><p>数据传送的单元</p>
 <ul>
-<li>每次读&#x2F;写一个<strong>字</strong></li>
-</ul>
-</li>
+<li>每次读/写一个<strong>字</strong></li>
+</ul></li>
 <li><p>数据的流向</p>
 <ul>
-<li><p>读操作(数据输入): I&#x2F;O设备 → CPU(指的是CPU的寄存器) → 内存</p>
-</li>
-<li><p>写操作(数据输出): 内存 → CPU → I&#x2F;O设备</p>
-</li>
-<li><p>每个字的读&#x2F;写都需要CPU的帮助</p>
-</li>
-</ul>
-</li>
+<li><p>读操作(数据输入): I/O设备 → CPU(指的是CPU的寄存器) →
+内存</p></li>
+<li><p>写操作(数据输出): 内存 → CPU → I/O设备</p></li>
+<li><p>每个字的读/写都需要CPU的帮助</p></li>
+</ul></li>
 <li><p>主要缺点和主要优点</p>
 <ul>
-<li><p>优点: 实现简单。在读&#x2F;写指令之后, 加上实现循环检查的一系列指令即可(因此才称为”<strong>程序直接控制方式</strong>“)</p>
-</li>
-<li><p>缺点: CPU和I&#x2F;O设备只能串行工作, CPU需要一直轮询检查, 长期处于”忙等”状态, CPU利用率低</p>
-</li>
+<li><p>优点: 实现简单。在读/写指令之后,
+加上实现循环检查的一系列指令即可(因此才称为"<strong>程序直接控制方式</strong>")</p></li>
+<li><p>缺点: CPU和I/O设备只能串行工作, CPU需要一直轮询检查,
+长期处于"忙等"状态, CPU利用率低</p></li>
+</ul></li>
 </ul>
-</li>
-</ul>
-<h3 id="3-2-中断驱动方式"><a href="#3-2-中断驱动方式" class="headerlink" title="3.2 中断驱动方式"></a>3.2 <strong>中断驱动方式</strong></h3><ul>
-<li><p>完成一次读&#x2F;写操作的流程(以读操作为例):</p>
+<h3 id="中断驱动方式">3.2 <strong>中断驱动方式</strong></h3>
 <ul>
-<li><p>引入<strong>中断</strong>机制。由于I&#x2F;O设备速度很慢, 因此在CPU发出读&#x2F;写命令后, 可将等待I&#x2F;O的进程阻塞, 先切换到别的进程执行</p>
-</li>
-<li><p>当I&#x2F;O完成后, 控制器会向CPU发出一个中断信号, CPU检测到中断信号后, 会保存当前进程的运行环境信息, 转去执行中断处理程序处理该中断</p>
-</li>
-<li><p>处理中断的过程中, CPU从I&#x2F;O控制器读一个字的数据传送到CPU寄存器, 再写入主存</p>
-</li>
-<li><p>接着, CPU恢复等待I&#x2F;O的进程(或其他进程)的运行环境, 然后继续执行</p>
-</li>
-</ul>
-</li>
+<li><p>完成一次读/写操作的流程(以读操作为例):</p>
+<ul>
+<li><p>引入<strong>中断</strong>机制。由于I/O设备速度很慢,
+因此在CPU发出读/写命令后, 可将等待I/O的进程阻塞,
+先切换到别的进程执行</p></li>
+<li><p>当I/O完成后, 控制器会向CPU发出一个中断信号, CPU检测到中断信号后,
+会保存当前进程的运行环境信息, 转去执行中断处理程序处理该中断</p></li>
+<li><p>处理中断的过程中, CPU从I/O控制器读一个字的数据传送到CPU寄存器,
+再写入主存</p></li>
+<li><p>接着, CPU恢复等待I/O的进程(或其他进程)的运行环境,
+然后继续执行</p></li>
+</ul></li>
 <li><p>注意:</p>
 <ul>
-<li><p>CPU会在每个指令周期的末尾检查中断</p>
-</li>
-<li><p>中断处理过程中需要保存、恢复进程的运行环境, 这个过程是需要一定时间开销的。可见, 如果中断发生的频率太高, 也会降低系统性能</p>
-</li>
-</ul>
-</li>
+<li><p>CPU会在每个指令周期的末尾检查中断</p></li>
+<li><p>中断处理过程中需要保存、恢复进程的运行环境,
+这个过程是需要一定时间开销的。可见, 如果中断发生的频率太高,
+也会降低系统性能</p></li>
+</ul></li>
 <li><p>CPU干预的频率</p>
 <ul>
-<li><p>每次I&#x2F;O操作开始之前、完成之后需要CPU的介入</p>
-</li>
-<li><p>等待I&#x2F;O完成的过程中CPU可以切换到别的进程执行</p>
-</li>
-</ul>
-</li>
+<li><p>每次I/O操作开始之前、完成之后需要CPU的介入</p></li>
+<li><p>等待I/O完成的过程中CPU可以切换到别的进程执行</p></li>
+</ul></li>
 <li><p>数据传送的单元</p>
 <ul>
-<li>每次读&#x2F;写一个<strong>字</strong></li>
-</ul>
-</li>
+<li>每次读/写一个<strong>字</strong></li>
+</ul></li>
 <li><p>数据的流向</p>
 <ul>
-<li><p>读操作(数据输入): I&#x2F;O设备 → CPU(指的是CPU的寄存器) → 内存</p>
-</li>
-<li><p>写操作(数据输出): 内存 → CPU → I&#x2F;O设备</p>
-</li>
-</ul>
-</li>
+<li><p>读操作(数据输入): I/O设备 → CPU(指的是CPU的寄存器) →
+内存</p></li>
+<li><p>写操作(数据输出): 内存 → CPU → I/O设备</p></li>
+</ul></li>
 <li><p>主要缺点和主要优点</p>
 <ul>
-<li><p>优点: 与”程序直接控制方式”相比, 在”中断驱动方式”中, I&#x2F;O控制器会通过中断信号主动报告I&#x2F;O已完成, CPU不再需要不停地轮询。CPU和I&#x2F;O设备可并行工作, CPU利用率得到明显提升</p>
-</li>
-<li><p>缺点: 每个字在I&#x2F;O设备与内存之间的传输, 都需要经过CPU, 而频繁的中断处理会消耗较多的CPU时间</p>
-</li>
+<li><p>优点: 与"程序直接控制方式"相比, 在"中断驱动方式"中,
+I/O控制器会通过中断信号主动报告I/O已完成,
+CPU不再需要不停地轮询。CPU和I/O设备可并行工作,
+CPU利用率得到明显提升</p></li>
+<li><p>缺点: 每个字在I/O设备与内存之间的传输, 都需要经过CPU,
+而频繁的中断处理会消耗较多的CPU时间</p></li>
+</ul></li>
 </ul>
-</li>
-</ul>
-<h3 id="3-3-DMA方式-Direct-Memory-Access-直接存储器存取"><a href="#3-3-DMA方式-Direct-Memory-Access-直接存储器存取" class="headerlink" title="3.3 DMA方式(Direct Memory Access, 直接存储器存取)"></a>3.3 <strong>DMA方式(Direct Memory Access, 直接存储器存取)</strong></h3><ul>
-<li><p>完成一次读&#x2F;写操作的流程(以读操作为例):</p>
+<h3 id="dma方式direct-memory-access-直接存储器存取">3.3
+<strong>DMA方式(Direct Memory Access, 直接存储器存取)</strong></h3>
 <ul>
-<li><p>与”中断驱动方式相比”, <strong>DMA方式</strong>(主要用于块设备的I&#x2F;O控制)有这样几个改进:</p>
+<li><p>完成一次读/写操作的流程(以读操作为例):</p>
 <ul>
-<li><p>数据的传送单位是”块”, 不再是一个字、一个字的传送</p>
-</li>
-<li><p>数据的流向是从设备直接放入内存, 或者从内存直接到设备, 不再需要CPU作为”快递小哥”</p>
-</li>
-<li><p>仅在传送一个或多个数据块的开始和结束时, 才需要CPU干预</p>
-</li>
-</ul>
-</li>
-</ul>
-</li>
+<li><p>与"中断驱动方式相比",
+<strong>DMA方式</strong>(主要用于块设备的I/O控制)有这样几个改进:</p>
+<ul>
+<li><p>数据的传送单位是"块", 不再是一个字、一个字的传送</p></li>
+<li><p>数据的流向是从设备直接放入内存, 或者从内存直接到设备,
+不再需要CPU作为"快递小哥"</p></li>
+<li><p>仅在传送一个或多个数据块的开始和结束时, 才需要CPU干预</p></li>
+</ul></li>
+</ul></li>
 <li><p>CPU干预的频率</p>
 <ul>
 <li>仅在传送一个或多个数据块的开始和结束时, 才需要CPU干预</li>
-</ul>
-</li>
+</ul></li>
 <li><p>数据传送的单元</p>
 <ul>
-<li><p>每次读&#x2F;写一个或多个<strong>块</strong></p>
+<li><p>每次读/写一个或多个<strong>块</strong></p>
 <ul>
-<li>注意: 每次读写的只能是连续的多个块, 且这些块读入内存后在内存中也必须是连续的</li>
-</ul>
-</li>
-</ul>
-</li>
+<li>注意: 每次读写的只能是连续的多个块,
+且这些块读入内存后在内存中也必须是连续的</li>
+</ul></li>
+</ul></li>
 <li><p>数据的流向(不再需要经过CPU)</p>
 <ul>
-<li><p>读操作(数据输入): I&#x2F;O设备 → 内存</p>
-</li>
-<li><p>写操作(数据输出): 内存 → I&#x2F;O设备</p>
-</li>
-</ul>
-</li>
+<li><p>读操作(数据输入): I/O设备 → 内存</p></li>
+<li><p>写操作(数据输出): 内存 → I/O设备</p></li>
+</ul></li>
 <li><p>主要缺点和主要优点</p>
 <ul>
-<li><p>优点: 数据传输以”块”为单位, CPU介入频率进一步降低。数据的传输不再需要先经过CPU再写入内存, 数据传输效率进一步增加, CPU和I&#x2F;O设备的并行性得到提升</p>
-</li>
-<li><p>缺点: CPU每发出一条I&#x2F;O指令, 只能读&#x2F;写一个或多个连续的数据块。如果要读&#x2F;写多个离散存储的数据块, 或者要将数据分别写到不同的内存区域时, CPU要分别发出多条I&#x2F;O指令, 进行多次中断处理才能完成</p>
-</li>
+<li><p>优点: 数据传输以"块"为单位,
+CPU介入频率进一步降低。数据的传输不再需要先经过CPU再写入内存,
+数据传输效率进一步增加, CPU和I/O设备的并行性得到提升</p></li>
+<li><p>缺点: CPU每发出一条I/O指令,
+只能读/写一个或多个连续的数据块。如果要读/写多个离散存储的数据块,
+或者要将数据分别写到不同的内存区域时, CPU要分别发出多条I/O指令,
+进行多次中断处理才能完成</p></li>
+</ul></li>
 </ul>
-</li>
-</ul>
-<h3 id="3-4-通道控制方式"><a href="#3-4-通道控制方式" class="headerlink" title="3.4 通道控制方式"></a>3.4 <strong>通道控制方式</strong></h3><ul>
-<li><strong>通道</strong>: 一种硬件, 可以理解为是”弱鸡版的CPU”, 通道可以识别并执行一系列<strong>通道指令</strong><ul>
-<li><p>与CPU相比, 通道可以执行的指令很单一, 并且通道程序是放在主机内存中的, 也就是说通道与CPU共享内存</p>
-</li>
-<li><p>一个通道可以控制多个I&#x2F;O控制器, 一个I&#x2F;O控制器可以控制多个I&#x2F;O设备</p>
-</li>
-</ul>
-</li>
-<li>完成一次读&#x2F;写操作的流程(以读操作为例):</li>
+<h3 id="通道控制方式">3.4 <strong>通道控制方式</strong></h3>
+<ul>
+<li><strong>通道</strong>: 一种硬件, 可以理解为是"弱鸡版的CPU",
+通道可以识别并执行一系列<strong>通道指令</strong>
+<ul>
+<li><p>与CPU相比, 通道可以执行的指令很单一,
+并且通道程序是放在主机内存中的, 也就是说通道与CPU共享内存</p></li>
+<li><p>一个通道可以控制多个I/O控制器,
+一个I/O控制器可以控制多个I/O设备</p></li>
+</ul></li>
+<li>完成一次读/写操作的流程(以读操作为例):</li>
 </ul>
 <p><img src="/2024/11/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/5-1-IO%E7%AE%A1%E7%90%86%E6%A6%82%E8%BF%B0/image-20241122102849425.png" srcset="/img/loading.gif" lazyload></p>
 <ul>
-<li>CPU干预的频率<ul>
-<li>极低, 通道会根据CPU的指示执行相应的通道程序, 只有完成一组数据库的读&#x2F;写后才需要发出中断信号, 请求CPU干预</li>
-</ul>
-</li>
-<li>数据传送的单元<ul>
-<li>每次读&#x2F;写<strong>一组数据块</strong></li>
-</ul>
-</li>
-<li>数据的流向(在通道的控制下进行)<ul>
-<li>读操作(数据输入): I&#x2F;O设备 → 内存</li>
-<li>写操作(数据输出): 内存 → I&#x2F;O设备</li>
-</ul>
-</li>
-<li>主要缺点和主要优点<ul>
-<li>优点: CPU、通道、I&#x2F;O设备可并行工作, 资源利用率很高</li>
+<li>CPU干预的频率
+<ul>
+<li>极低, 通道会根据CPU的指示执行相应的通道程序,
+只有完成一组数据库的读/写后才需要发出中断信号, 请求CPU干预</li>
+</ul></li>
+<li>数据传送的单元
+<ul>
+<li>每次读/写<strong>一组数据块</strong></li>
+</ul></li>
+<li>数据的流向(在通道的控制下进行)
+<ul>
+<li>读操作(数据输入): I/O设备 → 内存</li>
+<li>写操作(数据输出): 内存 → I/O设备</li>
+</ul></li>
+<li>主要缺点和主要优点
+<ul>
+<li>优点: CPU、通道、I/O设备可并行工作, 资源利用率很高</li>
 <li>缺点: 实现复杂, 需要专门的通道硬件支持</li>
+</ul></li>
 </ul>
-</li>
-</ul>
-<h2 id="4-IO软件层次结构"><a href="#4-IO软件层次结构" class="headerlink" title="4. IO软件层次结构"></a><strong>4. IO软件层次结构</strong></h2><h3 id="4-1-用户层软件"><a href="#4-1-用户层软件" class="headerlink" title="4.1 用户层软件"></a>4.1 <strong>用户层软件</strong></h3><ul>
-<li><p>用户层软件实现了与用户交互的接口, 用户可直接使用该层提供的、与I&#x2F;O操作相关的<strong>库函数</strong>对设备进行操作</p>
+<h2 id="io软件层次结构"><strong>4. IO软件层次结构</strong></h2>
+<h3 id="用户层软件">4.1 <strong>用户层软件</strong></h3>
 <ul>
-<li>Eg: printf(“hello, world!”);</li>
-</ul>
-</li>
-<li><p>用户层软件将用户请求翻译成格式化的I&#x2F;O请求, 并通过”系统调用”请求操作系统内核的服务</p>
+<li><p>用户层软件实现了与用户交互的接口,
+用户可直接使用该层提供的、与I/O操作相关的<strong>库函数</strong>对设备进行操作</p>
 <ul>
-<li>Eg: printf(“hello world!”); 会被翻译成等价的write系统调用, 当然, 用户层软件也会在系统调用时填入相应参数</li>
+<li>Eg: printf("hello, world!");</li>
+</ul></li>
+<li><p>用户层软件将用户请求翻译成格式化的I/O请求,
+并通过"系统调用"请求操作系统内核的服务</p>
+<ul>
+<li>Eg: printf("hello world!"); 会被翻译成等价的write系统调用, 当然,
+用户层软件也会在系统调用时填入相应参数</li>
+</ul></li>
+<li><p>Windows操作系统向外提供了一系列系统调用,
+但是由于系统调用的格式严格, 使用麻烦,
+因此在用户层上封装了一系列更方便的库函数接口供用户使用(<strong>WIndows
+API</strong>)</p></li>
 </ul>
-</li>
-<li><p>Windows操作系统向外提供了一系列系统调用, 但是由于系统调用的格式严格, 使用麻烦, 因此在用户层上封装了一系列更方便的库函数接口供用户使用(<strong>WIndows API</strong>)</p>
-</li>
-</ul>
-<h3 id="4-2-设备独立性软件-设备无关性软件"><a href="#4-2-设备独立性软件-设备无关性软件" class="headerlink" title="4.2 设备独立性软件(设备无关性软件)"></a>4.2 <strong>设备独立性软件(设备无关性软件)</strong></h3><ul>
-<li><p>与设备的硬件特性无关的功能几乎都在这一层实现</p>
-</li>
+<h3 id="设备独立性软件设备无关性软件">4.2
+<strong>设备独立性软件(设备无关性软件)</strong></h3>
+<ul>
+<li><p>与设备的硬件特性无关的功能几乎都在这一层实现</p></li>
 <li><p>主要实现功能:</p>
 <ul>
-<li>向上层提供统一的调用接口(如 read&#x2F;write <strong>系统调用</strong>)</li>
-<li>设备的保护<ul>
-<li>原理类似于文件保护, <strong>设备被看做是一种特殊的文件</strong>, 不同用户对各个文件的访问权限是不一样的, 同理, 对设备的访问权限也不一样</li>
-</ul>
-</li>
-<li>差错处理<ul>
+<li>向上层提供统一的调用接口(如 read/write
+<strong>系统调用</strong>)</li>
+<li>设备的保护
+<ul>
+<li>原理类似于文件保护, <strong>设备被看做是一种特殊的文件</strong>,
+不同用户对各个文件的访问权限是不一样的, 同理,
+对设备的访问权限也不一样</li>
+</ul></li>
+<li>差错处理
+<ul>
 <li>设备独立性软件需要对一些设备的错误进行处理</li>
-</ul>
-</li>
+</ul></li>
 <li>设备的分配与回收</li>
-<li>数据缓冲区管理<ul>
+<li>数据缓冲区管理
+<ul>
 <li>可以通过缓冲技术屏蔽设备之间数据交换单位大小和传输速度的差异</li>
+</ul></li>
+<li><strong>建立逻辑设备名到物理设备名的映射关系</strong>;
+根据设备类型选择调用相应的<strong>驱动程序</strong>
+<ul>
+<li>用户或用户层软件发出I/O操作相关的系统调用时,
+需要指明这次要操作的I/O设备的<strong>逻辑设备名</strong>
+<ul>
+<li>Eg: 去学校打印店打印时, 需要选择打印机1/打印机2/打印机3,
+其实这些都是逻辑设备名</li>
+</ul></li>
+<li><strong>设备独立性软件</strong>需要通过"<strong>逻辑设备表(LUT,
+Logical Unit
+Table)</strong>"来确定<strong>逻辑设备</strong>对应的<strong>物理设备</strong>,
+并找到该设备对应的<strong>设备驱动程序</strong></li>
+<li>操作系统可以采用两种方式管理<strong>逻辑设备表(LUT)</strong>:
+<ul>
+<li>第一种方式, <strong>整个系统只设置一张LUT</strong>,
+这就意味着所有用户不能使用相同的逻辑设备名,因此这种方式<strong>只适用于单用户操作系统</strong></li>
+<li>第二种方式, <strong>为每个用户设置一张LUT</strong>,
+各个用户使用的逻辑设备名可以重复, <strong>适用于多用户操作系统</strong>,
+系统会在用户登录时为其建立一个用户管理进程,
+而LUT就存放在用户管理进程的PCB中</li>
+</ul></li>
+<li><strong>为什么不同类型的I/O设备需要有不同的驱动程序处理?</strong>
+<ul>
+<li>各式各样的设备, 外形不同, 其内部的电子部件(I/O控制器)也有可能不同
+<ul>
+<li>如状态寄存器判断是否忙碌的标志位不同, 有的设备用1表示忙碌,
+而有的用0表示忙碌</li>
+</ul></li>
+<li>不同设备的内部硬件特性也不同, 这些特性只有厂家才知道,
+因此厂家须提供与设备相对应的驱动程序, CPU执行驱动程序的指令序列,
+来完成设置设备寄存器、检查设备状态等工作</li>
+</ul></li>
+</ul></li>
+</ul></li>
 </ul>
-</li>
-<li><strong>建立逻辑设备名到物理设备名的映射关系</strong>; 根据设备类型选择调用相应的<strong>驱动程序</strong><ul>
-<li>用户或用户层软件发出I&#x2F;O操作相关的系统调用时, 需要指明这次要操作的I&#x2F;O设备的<strong>逻辑设备名</strong><ul>
-<li>Eg: 去学校打印店打印时, 需要选择打印机1&#x2F;打印机2&#x2F;打印机3, 其实这些都是逻辑设备名</li>
-</ul>
-</li>
-<li><strong>设备独立性软件</strong>需要通过”<strong>逻辑设备表(LUT, Logical Unit Table)</strong>“来确定<strong>逻辑设备</strong>对应的<strong>物理设备</strong>, 并找到该设备对应的<strong>设备驱动程序</strong> </li>
-<li>操作系统可以采用两种方式管理<strong>逻辑设备表(LUT)</strong>:<ul>
-<li>第一种方式, <strong>整个系统只设置一张LUT</strong>, 这就意味着所有用户不能使用相同的逻辑设备名,因此这种方式<strong>只适用于单用户操作系统</strong></li>
-<li>第二种方式, <strong>为每个用户设置一张LUT</strong>, 各个用户使用的逻辑设备名可以重复, <strong>适用于多用户操作系统</strong>, 系统会在用户登录时为其建立一个用户管理进程, 而LUT就存放在用户管理进程的PCB中</li>
-</ul>
-</li>
-<li><strong>为什么不同类型的I&#x2F;O设备需要有不同的驱动程序处理?</strong><ul>
-<li>各式各样的设备, 外形不同, 其内部的电子部件(I&#x2F;O控制器)也有可能不同<ul>
-<li>如状态寄存器判断是否忙碌的标志位不同, 有的设备用1表示忙碌, 而有的用0表示忙碌</li>
-</ul>
-</li>
-<li>不同设备的内部硬件特性也不同, 这些特性只有厂家才知道, 因此厂家须提供与设备相对应的驱动程序, CPU执行驱动程序的指令序列, 来完成设置设备寄存器、检查设备状态等工作</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="4-3-设备驱动程序"><a href="#4-3-设备驱动程序" class="headerlink" title="4.3 设备驱动程序"></a>4.3 <strong>设备驱动程序</strong></h3><ul>
-<li>主要负责<strong>对硬件设备的具体控制</strong>, 将上层发出的一系列命令(如 read&#x2F;write)转化为特定设备”能听得懂”的一系列操作, 包括设置设备寄存器、检查设备状态等<ul>
+<h3 id="设备驱动程序">4.3 <strong>设备驱动程序</strong></h3>
+<ul>
+<li>主要负责<strong>对硬件设备的具体控制</strong>,
+将上层发出的一系列命令(如
+read/write)转化为特定设备"能听得懂"的一系列操作,
+包括设置设备寄存器、检查设备状态等
+<ul>
 <li>注: 驱动程序一般会以一个独立进程的方式存在</li>
+</ul></li>
 </ul>
-</li>
-</ul>
-<h3 id="4-4-中断处理程序"><a href="#4-4-中断处理程序" class="headerlink" title="4.4 中断处理程序"></a>4.4 <strong>中断处理程序</strong></h3><ul>
-<li><p>当I&#x2F;O任务完成时, I&#x2F;O控制器会发送一个<strong>中断信号</strong>, 系统会根据<strong>中断信号类型</strong>找到相应的<strong>中断处理程序</strong>并执行</p>
-</li>
-<li><p>中断处理程序的处理流程如下:</p>
-</li>
+<h3 id="中断处理程序">4.4 <strong>中断处理程序</strong></h3>
+<ul>
+<li><p>当I/O任务完成时, I/O控制器会发送一个<strong>中断信号</strong>,
+系统会根据<strong>中断信号类型</strong>找到相应的<strong>中断处理程序</strong>并执行</p></li>
+<li><p>中断处理程序的处理流程如下:</p></li>
 </ul>
 <p><img src="/2024/11/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/5-1-IO%E7%AE%A1%E7%90%86%E6%A6%82%E8%BF%B0/image-20241122103237525.png" srcset="/img/loading.gif" lazyload></p>
 <ul>
 <li>可见, <strong>中断处理程序也会和硬件直接打交道</strong></li>
 </ul>
-<h3 id="5-输入-输出应用程序接口-驱动程序接口"><a href="#5-输入-输出应用程序接口-驱动程序接口" class="headerlink" title="5. 输入&#x2F;输出应用程序接口&amp;驱动程序接口"></a><strong>5. 输入&#x2F;输出应用程序接口&amp;驱动程序接口</strong></h3><h3 id="5-1-输入-输出应用程序接口"><a href="#5-1-输入-输出应用程序接口" class="headerlink" title="5.1 输入&#x2F;输出应用程序接口"></a>5.1 <strong>输入&#x2F;输出应用程序接口</strong></h3><p><img src="/2024/11/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/5-1-IO%E7%AE%A1%E7%90%86%E6%A6%82%E8%BF%B0/image-20241122103326548.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="输入输出应用程序接口驱动程序接口"><strong>5.
+输入/输出应用程序接口&amp;驱动程序接口</strong></h3>
+<h3 id="输入输出应用程序接口">5.1
+<strong>输入/输出应用程序接口</strong></h3>
+<p><img src="/2024/11/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/5-1-IO%E7%AE%A1%E7%90%86%E6%A6%82%E8%BF%B0/image-20241122103326548.png" srcset="/img/loading.gif" lazyload></p>
 <ul>
 <li>网络设备接口示例:</li>
 </ul>
 <p><img src="/2024/11/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/5-1-IO%E7%AE%A1%E7%90%86%E6%A6%82%E8%BF%B0/image-20241122103351593.png" srcset="/img/loading.gif" lazyload></p>
-<h3 id="5-2-阻塞-非阻塞-I-O"><a href="#5-2-阻塞-非阻塞-I-O" class="headerlink" title="5.2 阻塞&#x2F;非阻塞 I&#x2F;O"></a>5.2 <strong>阻塞&#x2F;非阻塞 I&#x2F;O</strong></h3><ul>
-<li><strong>阻塞I&#x2F;O</strong>: 应用程序发出I&#x2F;O系统调用, <strong>进程需转为阻塞态等待</strong><ul>
-<li>Eg: 字符设备接口 – 从键盘读一个字符(get系统调用)</li>
+<h3 id="阻塞非阻塞-io">5.2 <strong>阻塞/非阻塞 I/O</strong></h3>
+<ul>
+<li><strong>阻塞I/O</strong>: 应用程序发出I/O系统调用,
+<strong>进程需转为阻塞态等待</strong>
+<ul>
+<li>Eg: 字符设备接口 -- 从键盘读一个字符(get系统调用)</li>
+</ul></li>
+<li><strong>非阻塞I/O</strong>: 应用程序发出I/O系统调用,
+系统调用可迅速返回, <strong>进程无需阻塞等待</strong>
+<ul>
+<li>Eg: 块设备接口 -- 往磁盘写数据(write系统调用)</li>
+</ul></li>
 </ul>
-</li>
-<li><strong>非阻塞I&#x2F;O</strong>: 应用程序发出I&#x2F;O系统调用, 系统调用可迅速返回, <strong>进程无需阻塞等待</strong><ul>
-<li>Eg: 块设备接口 – 往磁盘写数据(write系统调用)</li>
-</ul>
-</li>
-</ul>
-<h3 id="5-3-设备驱动程序接口"><a href="#5-3-设备驱动程序接口" class="headerlink" title="5.3 设备驱动程序接口"></a>5.3 <strong>设备驱动程序接口</strong></h3><ul>
-<li><p>若各公司开发的设备驱动程序接口不统一, 则操作系统很难调用设备驱动程序</p>
-</li>
+<h3 id="设备驱动程序接口">5.3 <strong>设备驱动程序接口</strong></h3>
+<ul>
+<li><p>若各公司开发的设备驱动程序接口不统一,
+则操作系统很难调用设备驱动程序</p></li>
 <li><p><strong>统一标准的设备驱动程序接口</strong></p>
 <ul>
-<li>操作系统规定好设备驱动程序的接口标准, 各厂商按要求开发设备驱动程序</li>
-<li>不同的操作系统, 对设备驱动程序接口的标准各不相同, 设备厂商必须根据操作系统的接口要求,开发相应的设备驱动程序, 设备才能被使用</li>
-</ul>
-</li>
+<li>操作系统规定好设备驱动程序的接口标准,
+各厂商按要求开发设备驱动程序</li>
+<li>不同的操作系统, 对设备驱动程序接口的标准各不相同,
+设备厂商必须根据操作系统的接口要求,开发相应的设备驱动程序,
+设备才能被使用</li>
+</ul></li>
 </ul>
 <p><img src="/2024/11/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/5-1-IO%E7%AE%A1%E7%90%86%E6%A6%82%E8%BF%B0/image-20241122103448322.png" srcset="/img/loading.gif" lazyload></p>
 

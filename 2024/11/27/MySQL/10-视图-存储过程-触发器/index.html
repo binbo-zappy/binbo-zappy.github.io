@@ -19,16 +19,16 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="视图视图（View）是一种虚拟存在的表。视图中的数据并不在数据库中实际存在，行和列数据来自定义视图的查询中使用的表，并且是在使用视图时动态生成的。通俗的讲，视图只保存了查询的SQL逻辑，不保存查询结果。所以我们在创建视图的时候，主要的工作就落在创建这条SQL查询语句上。   创建视图CREATE [ OR REPLACE ] VIEW 视图名称[（列名列表）] AS SELECT 语句 [ WIT">
+    <meta name="description" content="1. 视图  视图（View）是一种虚拟存在的表。视图中的数据并不在数据库中实际存在，行和列数据来自定义视图的查询中使用的表，并且是在使用视图时动态生成的。  通俗的讲，视图只保存了查询的SQL逻辑，不保存查询结果。所以我们在创建视图的时候，主要的工作就落在创建这条SQL查询语句上。  1.1 创建视图 1234CREATE [ OR REPLACE ] VIEW 视图名称[（列名列">
 <meta property="og:type" content="article">
 <meta property="og:title" content="10. 视图&#x2F;存储过程&#x2F;触发器">
 <meta property="og:url" content="http://binbo-zappy.github.io/2024/11/27/MySQL/10-%E8%A7%86%E5%9B%BE-%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B-%E8%A7%A6%E5%8F%91%E5%99%A8/index.html">
 <meta property="og:site_name" content="Binbo">
-<meta property="og:description" content="视图视图（View）是一种虚拟存在的表。视图中的数据并不在数据库中实际存在，行和列数据来自定义视图的查询中使用的表，并且是在使用视图时动态生成的。通俗的讲，视图只保存了查询的SQL逻辑，不保存查询结果。所以我们在创建视图的时候，主要的工作就落在创建这条SQL查询语句上。   创建视图CREATE [ OR REPLACE ] VIEW 视图名称[（列名列表）] AS SELECT 语句 [ WIT">
+<meta property="og:description" content="1. 视图  视图（View）是一种虚拟存在的表。视图中的数据并不在数据库中实际存在，行和列数据来自定义视图的查询中使用的表，并且是在使用视图时动态生成的。  通俗的讲，视图只保存了查询的SQL逻辑，不保存查询结果。所以我们在创建视图的时候，主要的工作就落在创建这条SQL查询语句上。  1.1 创建视图 1234CREATE [ OR REPLACE ] VIEW 视图名称[（列名列">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/MySQL.png">
 <meta property="article:published_time" content="2024-11-27T04:10:54.000Z">
-<meta property="article:modified_time" content="2024-11-27T04:29:51.706Z">
+<meta property="article:modified_time" content="2024-12-03T02:47:46.819Z">
 <meta property="article:author" content="Binbo">
 <meta property="article:tag" content="MySQL">
 <meta name="twitter:card" content="summary_large_image">
@@ -225,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.7k 字
+          4.6k 字
         
       </span>
     
@@ -236,7 +236,7 @@
         
         
         
-          15 分钟
+          39 分钟
         
       </span>
     
@@ -278,147 +278,419 @@
             
               <div class="markdown-body">
                 
-                <h2 id="视图"><a href="#视图" class="headerlink" title="视图"></a>视图</h2><p>视图（View）是一种虚拟存在的表。视图中的数据并不在数据库中实际存在，行和列数据来自定义视图的查询中使用的表，并且是在使用视图时动态生成的。<br>通俗的讲，视图只保存了查询的SQL逻辑，不保存查询结果。所以我们在创建视图的时候，主要的工作就落在创建这条SQL查询语句上。  </p>
-<h3 id="创建视图"><a href="#创建视图" class="headerlink" title="创建视图"></a>创建视图</h3><p><code>CREATE [ OR REPLACE ] VIEW 视图名称[（列名列表）] AS SELECT 语句 [ WITH [ CASCADED | LOCAL ] CHECK OPTION ]</code>  </p>
+                <h1 id="视图">1. 视图</h1>
+<ol type="1">
+<li>视图（View）是一种虚拟存在的表。视图中的数据并不在数据库中实际存在，行和列数据来自定义视图的查询中使用的表，并且是在使用视图时动态生成的。<br>
+</li>
+<li>通俗的讲，视图只保存了查询的SQL逻辑，不保存查询结果。所以我们在创建视图的时候，主要的工作就落在创建这条SQL查询语句上。</li>
+</ol>
+<h2 id="创建视图">1.1 创建视图</h2>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> [ <span class="hljs-keyword">OR</span> REPLACE ] <span class="hljs-keyword">VIEW</span> 视图名称[（列名列表）] <span class="hljs-keyword">AS</span> <span class="hljs-keyword">SELECT</span> 语句 [ <span class="hljs-keyword">WITH</span> [ <span class="hljs-keyword">CASCADED</span> <span class="hljs-operator">|</span> <span class="hljs-keyword">LOCAL</span> ] <span class="hljs-keyword">CHECK</span> OPTION ]<br><br><span class="hljs-comment">-- 例子： </span><br><span class="hljs-keyword">create</span> <span class="hljs-keyword">or</span> replace <span class="hljs-keyword">view</span> stu_v1 <span class="hljs-keyword">as</span> <span class="hljs-keyword">select</span> id,name <span class="hljs-keyword">from</span> student <span class="hljs-keyword">where</span> id<span class="hljs-operator">&lt;=</span><span class="hljs-number">10</span>; <br></code></pre></td></tr></table></figure>
+<h2 id="查询视图">1.2 查询视图</h2>
+<ol type="1">
+<li>查看创建视图语句： <code>SHOW CREATE VIEW</code>视图名称；
+<ol type="1">
+<li><code>show create view stu_v_1;</code></li>
+</ol></li>
+<li>查看视图数据：<code>SELECT*FROM</code> 视图名称；</li>
+</ol>
+<h2 id="修改视图">1.3 修改视图</h2>
+<ol type="1">
+<li><p>方式一：<code>CREATE[OR REPLACE] VIEW 视图名称[（列名列表)）] AS SELECT 语句[ WITH[ CASCADED | LOCAL ] CHECK OPTION ]</code></p></li>
+<li><p>方式二：<code>ALTER VIEW 视图名称 [（列名列表)] AS SELECT语句 [WITH [CASCADED | LOCAL] CHECK OPTION]</code></p></li>
+</ol>
+<h2 id="删除视图">1.4 删除视图</h2>
+<ol type="1">
+<li><code>DROP VIEW [IF EXISTS] 视图名称 [视图名称]</code></li>
+</ol>
+<h2 id="视图检查选项">1.5 视图检查选项</h2>
+<ol type="1">
+<li>当使用WITH CHECK QPTION子句创建视图时，
+<ol type="1">
+<li>MySQL会通过视图检查正在更改的每个行，例如插入，更新，删除，以使其符合视图的定义。</li>
+<li>MySQL允许基于另一个视图创建视图，它还会检查依赖视图中的规则以保持一致性。</li>
+<li>为了确定检查的范围，mysql提供了两个选项：CASCADED 和 LOCAL
+，默认值为 CASCADED。</li>
+</ol></li>
+<li>NOTE：如果没有开检查选项就不会进行检查。不同版本是不同含义的，要看版本。</li>
+</ol>
+<h3 id="cascaded">1.5.1 CASCADED</h3>
+<p>级联，一旦选择了这个选项，除了会检查创建视图时候的条件，还会检查所依赖视图的条件。</p>
 <blockquote>
-<p>例子： <code>create or replace view stu_wll as select id,name from student where id&lt;=10;</code></p>
+<p>比如下面的例子：创建stu_V_l 视图，id是小于等于 20的。<br>
+<code>create or replace view stu_V_l as select id,name from student where id &lt;=20;</code>
+再创建 stu_v_2 视图，20 &gt;= id &gt;=10。<br>
+<code>create or replace view stu_v_2 as select id,name from stu_v_1 where id &gt;=10 with cascaded check option;</code>
+再创建 stu_v_3 视图。<br>
+<code>create or replace view stu_v_3 as select id,name from stu_v_2 where id&lt;=15;</code><br>
+这条数据能够成功，stu_v_3 没有开检查选项所以不会 去判断 id
+是否小于等于15, 直接检查 是否满足 stu_v_2。<br>
+<code>insert into stu_v_3 values(17,'Tom');</code></p>
 </blockquote>
-<h3 id="查询视图"><a href="#查询视图" class="headerlink" title="查询视图"></a>查询视图</h3><p>查看创建视图语句： <code>SHOW CREATE VIEW </code>视图名称；  </p>
-<p>查看视图数据：<code>SELECT*FROM </code> 视图名称；<br><code>show create view stu_v_1;</code></p>
-<h3 id="修改视图"><a href="#修改视图" class="headerlink" title="修改视图"></a>修改视图</h3><p>方式一：<code>CREATE[OR REPLACE] VIEW 视图名称[（列名列表)）] AS SELECT 语句[ WITH[ CASCADED | LOCAL ] CHECK OPTION ]</code></p>
-<p>方式二：<code>ALTER VIEW 视图名称 [（列名列表)] AS SELECT语句 [WITH [CASCADED | LOCAL] CHECK OPTION]</code></p>
-<h3 id="删除视图"><a href="#删除视图" class="headerlink" title="删除视图"></a>删除视图</h3><p><code>DROP VIEW [IF EXISTS] 视图名称 [视图名称]</code></p>
-<h3 id="视图检查选项"><a href="#视图检查选项" class="headerlink" title="视图检查选项"></a>视图检查选项</h3><p>当使用WITH CHECK QPTION子句创建视图时，MySQL会通过视图检查正在更改的每个行，例如插入，更新，删除，以使其符合视图的定义。MySQL允许基于另一个视图创建视图，它还会检查依赖视图中的规则以保持一致性。为了确定检查的范围，mysql提供了两个选项：CASCADED 和 LOCAL ，默认值为 CASCADED。</p>
-<p>NOTE：如果没有开检查选项就不会进行检查。不同版本是不同含义的，要看版本。</p>
-<h4 id="CASCADED"><a href="#CASCADED" class="headerlink" title="CASCADED"></a>CASCADED</h4><p><code>级联，一旦选择了这个选项，除了会检查创建视图时候的条件，还会检查所依赖视图的条件。</code></p>
-<blockquote>
-<p>比如下面的例子：创建stu_V_l 视图，id是小于等于 20的。<br><code>create or replace view stu_V_l as select id,name from student where id &lt;=20;</code><br>再创建 stu_v_2 视图，20 &gt;&#x3D; id &gt;&#x3D;10。<br><code>create or replace view stu_v_2 as select id,name from stu_v_1 where id &gt;=10 with cascaded check option;</code><br>再创建 stu_v_3 视图。<br><code>create or replace view stu_v_3 as select id,name from stu_v_2 where id&lt;=15;</code><br>这条数据能够成功，stu_v_3 没有开检查选项所以不会 去判断 id 是否小于等于15, 直接检查 是否满足 stu_v_2。<br><code>insert into stu_v_3 values(17,&#39;Tom&#39;);</code></p>
-</blockquote>
-<h4 id="LOCAL"><a href="#LOCAL" class="headerlink" title="LOCAL"></a>LOCAL</h4><p>本地的条件也会检查，还会向上检查。在向上找的时候，就要看是否上面开了检查选项，如果没开就不检查。和 CASCADED 的区别就是 CASCADED 不管上面开没开检查选项都会进行检查。</p>
-<h3 id="更新及作用"><a href="#更新及作用" class="headerlink" title="更新及作用"></a>更新及作用</h3><p>要使视图可更新，视图中的行与基础表中的行之间必须存在一对一的关系。如果视图包含以下任何一项，则该视图不可更新</p>
-<ol>
+<h3 id="local">1.5.2 LOCAL</h3>
+<p>本地的条件也会检查，还会向上检查。在向上找的时候，就要看是否上面开了检查选项，如果没开就不检查。和
+CASCADED 的区别就是 CASCADED 不管上面开没开检查选项都会进行检查。</p>
+<h2 id="更新及作用">1.6 更新及作用</h2>
+<ol type="1">
+<li>要使视图可更新，视图中的行与基础表中的行之间必须存在一对一的关系。如果视图包含以下任何一项，则该视图不可更新</li>
+</ol>
+<ul>
 <li>聚合函数或窗口函数 ( SUM()、MIN()、MAX()、COUNT() 等 )</li>
 <li>DISTINCT</li>
 <li>GROUP BY</li>
 <li>HAVING</li>
 <li>UNION 或者UNION ALL</li>
+</ul>
+<blockquote>
+<p>例子： 使用了聚合函数，插入会失败。
+<code>create view stu_v_count as select count(*) from student;</code><br>
+<code>insert into stu_v_count values(10);</code></p>
+</blockquote>
+<ol start="2" type="1">
+<li>作用</li>
 </ol>
-<blockquote>
-<p>例子： 使用了聚合函数，插入会失败。<br><code>create view stu_v_count as select count(*) from student;</code><br><code>insert into stu_v_count values(10);</code>  </p>
-</blockquote>
-<p>作用</p>
-<p>视图不仅可以简化用户对数据的理解，也可以简化他们的操作。那些被经常使用的查询可以被定义为视图，从而使得用户不必为以后的操作每次指定全部的条件。 </p>
-<blockquote>
-<p>安全<br>数据库可以授权，但不能授权到数据库特定行和特定的列上。通过视图用户只能查询和修改他们所能见到的数据<br>数据独立<br>视图可帮助用户屏蔽真实表结构变化带来的影响。  </p>
-</blockquote>
-<p>总而言之 类似于给表加上了一个外壳，通过这个外壳访问表的时候，只能按照所设计的方式进行访问与更新。</p>
-<h2 id="存储过程"><a href="#存储过程" class="headerlink" title="存储过程"></a>存储过程</h2><p>存储过程是事先经过编译并存储在数据库中的一段SQL 语句的集合，调用存储过程可以简化应用开发人员的很多工作，减少数据在数据库和应用服务器之间的传输，对于提高数据处理的效率是有好处的。<br>存储过程思想上很简单，就是数据库SQL 语言层面的代码封装与重用。</p>
-<p>特点</p>
-<ol>
+<ul>
+<li><p>视图不仅可以简化用户对数据的理解，也可以简化他们的操作。那些被经常使用的查询可以被定义为视图，从而使得用户不必为以后的操作每次指定全部的条件。</p></li>
+<li><p>安全</p>
+<ul>
+<li>数据库可以授权，但不能授权到数据库特定行和特定的列上。通过视图用户只能查询和修改他们所能见到的数据<br>
+</li>
+</ul></li>
+<li><p>数据独立</p>
+<ul>
+<li>视图可帮助用户屏蔽真实表结构变化带来的影响。</li>
+</ul></li>
+</ul>
+<ol start="3" type="1">
+<li>总而言之
+类似于给表加上了一个外壳，通过这个外壳访问表的时候，只能按照所设计的方式进行访问与更新。</li>
+</ol>
+<h2 id="案例">1.7 案例</h2>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- 为了保证数据库表的安全性，开发人员在操作tbsr表时，只能看到的用户的基本字段，屏薇手机号和邮箱两个字段。</span><br><span class="hljs-keyword">create</span> <span class="hljs-keyword">view</span> tb_user_view <span class="hljs-keyword">as</span> <span class="hljs-keyword">select</span> id, name, profession, age, gender, status, createtime <span class="hljs-keyword">from</span> tb_user;<br><br><span class="hljs-keyword">select</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> tb_user_view;<br><br><span class="hljs-comment">-- 查询每个学生所选修的课程（三张表联查），这个功能在很多的业务中都有使用到，为了简化操作，定义一个视图。</span><br><br><span class="hljs-keyword">create</span> <span class="hljs-keyword">view</span> tb_stu_course_view <span class="hljs-keyword">as</span> <span class="hljs-keyword">select</span> s.name student_name, s.no student_no, c.name course_name <span class="hljs-keyword">from</span> student s, student_course sc, course c <span class="hljs-keyword">where</span> s.id <span class="hljs-operator">=</span> sc.studentid <span class="hljs-keyword">and</span> sc.courseid <span class="hljs-operator">=</span> c.id;<br><br><span class="hljs-keyword">select</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> tb_stu_course_view;<br></code></pre></td></tr></table></figure>
+<h1 id="存储过程">2. 存储过程</h1>
+<ul>
+<li><p>存储过程是事先经过编译并存储在数据库中的一段SQL
+语句的集合，调用存储过程可以简化应用开发人员的很多工作，减少数据在数据库和应用服务器之间的传输，对于提高数据处理的效率是有好处的。</p></li>
+<li><p>存储过程思想上很简单，就是数据库SQL
+语言层面的代码封装与重用。</p></li>
+<li><p>特点</p></li>
+</ul>
+<ol type="1">
 <li>封装</li>
 <li>复用</li>
 <li>可以接收参数，也可以返回数据减少网络交互，效率提升</li>
 </ol>
-<h3 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h3><pre><code class="hljs">CREATE PROCEDURE 存储过程名称( [参数列表] ) 
-
-BEGIN
-
-     SQL 语句 
-
-END;
-</code></pre>
-<p>NOTE: 在命令行中，执行创建存储过程的SQL时，需要通过关键字delimiter 指定SQL语句的结束符。默认是 分号作为结束符。</p>
-<p>delimiter $ ，则 $ 符作为结束符。</p>
-<h3 id="调用"><a href="#调用" class="headerlink" title="调用"></a>调用</h3><p>CALL 名称 ( [参数])</p>
-<h3 id="查看"><a href="#查看" class="headerlink" title="查看"></a>查看</h3><p>查询指定数据库的存储过程及状态信息</p>
-<p><code>SELECT* FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA = &#39;xxx&#39; </code></p>
-<p>存储过程名称；–查询某个存储过程的定义</p>
-<p><code>SHOW CREATE PROCEDURE</code></p>
-<h3 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h3><p><code>DROP PROCEDURE [ IFEXISTS ] 存储过程名称</code></p>
-<h3 id="游标"><a href="#游标" class="headerlink" title="游标"></a>游标</h3><p>游标（CURSOR）是用来存储查询结果集的数据类型，在存储过程和函数中可以使用游标对结果集进行循环的处理。游标的使用包括游标的声明、OPEN、FETCH和CLOSE，其语法分别如下。</p>
+<h2 id="创建">2.1 创建</h2>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">PROCEDURE</span> 存储过程名称( [参数列表] ) <br><br><span class="hljs-keyword">BEGIN</span><br>	 <span class="hljs-keyword">SQL</span> 语句 <br><span class="hljs-keyword">END</span>;<br><span class="hljs-comment">-- eg;</span><br>delimiter $$<br><span class="hljs-keyword">create</span> <span class="hljs-keyword">procedure</span> p1()<br><span class="hljs-keyword">begin</span><br>	<span class="hljs-keyword">select</span> <span class="hljs-built_in">count</span>(<span class="hljs-operator">*</span>) <span class="hljs-keyword">from</span> users;<br><span class="hljs-keyword">end</span>$$<br>delimiter ; <span class="hljs-comment">-- 还原</span><br></code></pre></td></tr></table></figure>
+<p>NOTE: 在命令行中，执行创建存储过程的SQL时，需要通过关键字delimiter
+指定SQL语句的结束符。默认是 分号作为结束符。</p>
+<p>delimiter ，则符作为结束符。</p>
+<h2 id="调用">2.2 调用</h2>
+<p>CALL 名称 ( <a href="#参数">参数</a>)</p>
+<h2 id="查看">2.3 查看</h2>
+<p>查询指定数据库的存储过程及状态信息</p>
+<p><code>SELECT* FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA = 'xxx'</code></p>
+<p>存储过程名称；--查询某个存储过程的定义</p>
+<p><code>SHOW CREATE PROCEDURE 存储过程名称</code></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">select</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> information_schema.routines <span class="hljs-keyword">where</span> routine_schema <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;itheima&#x27;</span>;<br><span class="hljs-keyword">show</span> <span class="hljs-keyword">create</span> <span class="hljs-keyword">procedure</span> p1;<br></code></pre></td></tr></table></figure>
+<h2 id="删除">2.4 删除</h2>
+<p><code>DROP PROCEDURE [ IFEXISTS ] 存储过程名称</code></p>
+<h2 id="变量">2.5 变量</h2>
+<h3 id="系统变量">2.5.1 系统变量</h3>
+<p><strong>系统变量</strong> 是 <code>MySQL</code>
+服务器提供，不是用户定义的，属于服务器层面。分为全局变量（
+<code>GLOBAL</code>）、会话变量（ <code>SESSION</code>）。</p>
+<p><strong>查看系统变量</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">show</span> [SESSION<span class="hljs-operator">|</span><span class="hljs-keyword">GLOBAL</span>] VARIABLES;	<span class="hljs-comment">-- 查看所有系统变量</span><br><span class="hljs-keyword">SHOW</span> [SESSION<span class="hljs-operator">|</span><span class="hljs-keyword">GLOBAL</span>] VARIABLES <span class="hljs-keyword">LIKE</span> <span class="hljs-string">&#x27;...&#x27;</span>;	<span class="hljs-comment">-- 可以通过LIKE模糊匹配方式查找变量</span><br><span class="hljs-keyword">SELECT</span> @@[SESSION<span class="hljs-operator">|</span><span class="hljs-keyword">GLOBAL</span>] 系统变量名;	<span class="hljs-comment">-- 查看指定变量的值</span><br></code></pre></td></tr></table></figure>
+<p><strong>设置系统变量</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SET</span> [SESSION<span class="hljs-operator">|</span><span class="hljs-keyword">GLOBAL</span>] 查看变量名<span class="hljs-operator">=</span>值;<br><span class="hljs-keyword">SET</span> @@[SESSION<span class="hljs-operator">|</span><span class="hljs-keyword">GLOBAL</span>] 系统变量名<span class="hljs-operator">=</span>值;<br></code></pre></td></tr></table></figure>
 <blockquote>
-<p>声明游标：<br><code>DECLARE 游标名称 CURSOR FOR 查询语句</code></p>
+<p><strong>注意：</strong></p>
+<p>如果没有指定 <code>SESSION/GLOBAL</code> ，默认是
+<code>SESSION</code> ，会话变量。</p>
+<p><code>MySQL</code>
+服务重新启动后，所设置的全局变量参数会失效，要想不失效，可以在
+`/etc/my.cnf/ 中配置。</p>
 </blockquote>
+<h3 id="用户定义变量">2.5.2 用户定义变量</h3>
+<p><strong>用户定义变量</strong>
+是用户根据需要自己定义的变量，用户变量不同提前声明，在用的时候直接用"<span class="citation" data-cites="变量名">@变量名</span>"使用就可以。其作用域为当前连接。</p>
+<p><strong>赋值</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SET</span> <span class="hljs-variable">@var_name</span> <span class="hljs-operator">=</span> expr [,<span class="hljs-variable">@var_name</span> <span class="hljs-operator">=</span> expr]...;<br><span class="hljs-keyword">SET</span> <span class="hljs-variable">@var_name</span> :<span class="hljs-operator">=</span> expr [,<span class="hljs-variable">@var_name</span> :<span class="hljs-operator">=</span> expr]...;<br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> <span class="hljs-variable">@var_name</span> :<span class="hljs-operator">=</span> expr [,<span class="hljs-variable">@var_name</span> :<span class="hljs-operator">=</span> expr]...;<br><span class="hljs-keyword">SELECT</span> 字段名 <span class="hljs-keyword">INTO</span> <span class="hljs-variable">@var_name</span> <span class="hljs-keyword">FROM</span> 表名;<br></code></pre></td></tr></table></figure>
+<p><strong>使用</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> <span class="hljs-variable">@var_name</span>;<br></code></pre></td></tr></table></figure>
+<p><strong>案例</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- 赋值</span><br><span class="hljs-keyword">set</span> <span class="hljs-variable">@myname</span> <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;itcast&#x27;</span>;<br><span class="hljs-keyword">set</span> <span class="hljs-variable">@mysqg</span> :<span class="hljs-operator">=</span> <span class="hljs-number">10</span>;<br><span class="hljs-keyword">set</span> <span class="hljs-variable">@mygender</span> :<span class="hljs-operator">=</span> <span class="hljs-string">&#x27;男&#x27;</span>,<span class="hljs-variable">@myhobby</span> :<span class="hljs-operator">=</span> <span class="hljs-string">&#x27;java&#x27;</span>;<br><br><span class="hljs-keyword">select</span> <span class="hljs-variable">@mycolor</span> :<span class="hljs-operator">=</span> <span class="hljs-string">&#x27;red&#x27;</span>;<br><span class="hljs-keyword">select</span> <span class="hljs-built_in">count</span>(<span class="hljs-operator">*</span>) <span class="hljs-keyword">into</span> <span class="hljs-variable">@mycount</span> <span class="hljs-keyword">from</span> tb_user;<br><br><span class="hljs-comment">-- 使用</span><br><span class="hljs-keyword">select</span> <span class="hljs-variable">@myname</span>,<span class="hljs-variable">@myage</span>,<span class="hljs-variable">@mygender</span>,<span class="hljs-variable">@myhobby</span>;<br><br><span class="hljs-keyword">select</span> <span class="hljs-variable">@mycolor</span>,<span class="hljs-variable">@mycount</span>;<br></code></pre></td></tr></table></figure>
 <blockquote>
-<p>打开游标：<br><code>OPEN 游标名称</code></p>
+<p><strong>注意：</strong>
+用户定义的变量无需对其进行声明或初始化，只不过获取到的值为
+<code>NULL</code> 。</p>
 </blockquote>
-<blockquote>
-<p>获取游标记录：<br><code>FETCH 游标名称INTO变量[变量]</code></p>
-</blockquote>
-<p>条件处理程序：<br>条件处理程序（Handler）可以用来定义在流程控制结构执行过程中遇到问题时相应的处理步骤。具体语法为：  </p>
-<blockquote>
-<p>DECLARE handler action HANDLER FOR condition value L condition value]..statement  </p>
-</blockquote>
-<p>handler_action CONTINUE：继续执行当前程序</p>
-<p>EXIT：终止执行当前程序</p>
-<p>condition_value :</p>
-<p><code>SQLSTATE sqlstate_value：状态码，如02000</code></p>
-<p><code>SQLWARNING：所有以01开头的SQLSTATE代码的简写</code></p>
-<p><code>NOT FOUND：所有以02开头的SQLSTATE代码的简写</code></p>
-<p><code>SQLEXCEPTION：所有没有被SQLWARNING或NOT FOUND捕获的SQLSTATE代码的简写</code></p>
-<p>例子：</p>
-<p>NOTE：要先声明普通变量，再申请游标。</p>
-<p>要求：<br><code>根据传入的参数uage，来查询用户表tb_user中，所有的用户年龄小于等于uage的用户姓名（name）和专业（profession），并将用户的姓名和专业插入到所创建的一张新表（id，name，profession）中。</code></p>
-<pre><code class="hljs">create procedure p1l(in uage int)
-
-    begin
-
-        declare uname varchar(100); 
-
-        decLare upro varchar(100);
-
-        declare u_cursor cursor for select name,profession from tb_user where age &lt;= uage; 
-
-        当 条件处理程序的处理的状态码为02000的时候，就会退出。
-        declare exit handler for SQLSTATE &#39;02000&#39;close u_cursor;
-
-        drop table if exists tb_user_pro; 
-
-        create table if not exists tb_user_pro(
-
-        id int primary key auto_increment, 
-
-        name varchar(100), 
-
-        profession varchar(100)
-
-        );
-
-        open u_cursor; 
-
-        while true do 
-
-        fetch u_cursor into uname,Upro; 
-
-        insert into tb_user_pro values(null,uname,Upro); 
-
-        end while;
-
-        close u_cursor; 
-
-    end;
-</code></pre>
-<h2 id="触发器"><a href="#触发器" class="headerlink" title="触发器"></a>触发器</h2><p>介绍<br>触发器是与表有关的数据库对象，指在insert&#x2F;update&#x2F;delete之前或之后，触发并执行触发器中定义的SQL语句集合。触发器的这种特性可以协助应用在数据库端确保数据的完整性，日志记录，数据校验等操作。<br>使用别名OLD和NEW来引用触发器中发生变化的记录内容，这与其他的数据库是相似的。现在触发器还只支持行级触发（比如说 一条语句影响了 5 行 则会被触发 5 次），不支持语句级触发（比如说 一条语句影响了 5 行 则会被触发 1 次）。  </p>
+<h3 id="局部变量">2.5.3 局部变量</h3>
+<p><strong>局部变量</strong>
+是根据需要定义的在局部生效的变量，访问之前，需要 <code>DECLARE</code>
+声明。可用作存储过程内的局部变量和输入参数，局部变量的范围是在其内声明的
+<code>BEGIN ... END</code> 块。</p>
+<p><strong>声明</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">DECLARE</span> 变量名 变量类型 [<span class="hljs-keyword">DEFAULT</span> ...];<br></code></pre></td></tr></table></figure>
+<p>变量类型就是数据库字段类型： <code>INT</code> 、 <code>BIGINT</code>
+、 <code>CHAR</code> 、 <code>VARCHAR</code> 、 <code>DATE</code> 、
+<code>TIME</code> 等</p>
+<p><strong>赋值</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SET</span> 变量名 <span class="hljs-operator">=</span> 值;<br><span class="hljs-keyword">SET</span> 变量名 :<span class="hljs-operator">=</span> 值;<br><span class="hljs-keyword">SELECT</span> 字段名 <span class="hljs-keyword">INTO</span> 变量名 <span class="hljs-keyword">FROM</span> 表名 ...;<br></code></pre></td></tr></table></figure>
+<p><strong>案例</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">create</span> <span class="hljs-keyword">procedure</span> p()<br><span class="hljs-keyword">begin</span><br>	<span class="hljs-keyword">declare</span> stu_count <span class="hljs-type">int</span> <span class="hljs-keyword">default</span> <span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">select</span> <span class="hljs-built_in">count</span>(<span class="hljs-operator">*</span>) <span class="hljs-keyword">into</span> stu_count <span class="hljs-keyword">from</span> student;<br>	<span class="hljs-keyword">select</span> stu_count;<br><span class="hljs-keyword">end</span>;<br><br><span class="hljs-keyword">call</span> p();<br></code></pre></td></tr></table></figure>
+<h2 id="if">2.6 if</h2>
+<p><strong>语法：</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs sql">IF 条件<span class="hljs-number">1</span> <span class="hljs-keyword">THEN</span><br>...<br>ELSEIF 条件<span class="hljs-number">2</span> <span class="hljs-keyword">THEN</span> 	<span class="hljs-comment">-- 可选</span><br>...<br><span class="hljs-keyword">ELSE</span>	 <span class="hljs-comment">-- 可选</span><br>...<br><span class="hljs-keyword">END</span> IF;<br></code></pre></td></tr></table></figure>
+<p><strong>案例</strong></p>
+<p>根据定义的分数 <code>score</code>
+变量，判定当前分数对应的分数等级。</p>
+<ol type="1">
+<li>score &gt;= 85 分，等级为优秀</li>
+<li>score &gt;= 60 分且 score &lt; 85 分，等级为及格。</li>
+<li>score &lt; 60 分，等级为不及格。</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">create</span> <span class="hljs-keyword">procedure</span> p()<br><span class="hljs-keyword">begin</span><br>	<span class="hljs-keyword">declare</span> score <span class="hljs-type">int</span> <span class="hljs-keyword">default</span> <span class="hljs-number">58</span>;<br>	<span class="hljs-keyword">declare</span> <span class="hljs-keyword">result</span> <span class="hljs-type">varchar</span>(<span class="hljs-number">10</span>);<br><br>	if score <span class="hljs-operator">&gt;=</span> <span class="hljs-number">85</span> <span class="hljs-keyword">then</span><br>		<span class="hljs-keyword">set</span> <span class="hljs-keyword">result</span> :<span class="hljs-operator">=</span> <span class="hljs-string">&#x27;优秀&#x27;</span>;<br>	elseif score <span class="hljs-operator">&gt;=</span> <span class="hljs-number">60</span> <span class="hljs-keyword">then</span><br>		<span class="hljs-keyword">set</span> <span class="hljs-keyword">result</span> :<span class="hljs-operator">=</span> <span class="hljs-string">&#x27;及格&#x27;</span>;<br>	<span class="hljs-keyword">else</span><br>		<span class="hljs-keyword">set</span> <span class="hljs-keyword">result</span> :<span class="hljs-operator">=</span> <span class="hljs-string">&#x27;不及格&#x27;</span>;<br>	<span class="hljs-keyword">end</span> if;<br>	<span class="hljs-keyword">select</span> <span class="hljs-keyword">result</span>;<br><span class="hljs-keyword">end</span>;<br><br><span class="hljs-keyword">call</span> p();<br></code></pre></td></tr></table></figure>
+<h3 id="参数">参数</h3>
 <table>
+<thead>
+<tr>
+<th style="text-align: left;">类型</th>
+<th style="text-align: left;">含义</th>
+<th style="text-align: left;">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">IN</td>
+<td style="text-align: left;">该类参数作为输入，也就是需要调用时传入值</td>
+<td style="text-align: left;">默认</td>
+</tr>
+<tr>
+<td style="text-align: left;">OUT</td>
+<td style="text-align: left;">该类参数作为输出，也就是该参数可以作为返回值</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">INOUT</td>
+<td style="text-align: left;">既可以作为输入参数，也可以作为输出参数</td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+<p><strong>用法：</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">PROCEDURE</span> 存储过程名称 ([<span class="hljs-keyword">IN</span><span class="hljs-operator">/</span><span class="hljs-keyword">OUT</span><span class="hljs-operator">/</span><span class="hljs-keyword">INOUT</span> 参数名 参数类型])<br><span class="hljs-keyword">BEGIN</span><br>	<span class="hljs-comment">-- SQL语句</span><br><span class="hljs-keyword">END</span>;<br></code></pre></td></tr></table></figure>
+<p><strong>案例</strong></p>
+<p>（1）根据传入参数 <code>score</code>
+，判定当前分数对应的分数等级，并返回。</p>
+<ol type="1">
+<li>score &gt;= 85 分，等级为优秀</li>
+<li>score &gt;= 60 分且 score &lt; 85 分，等级为及格。</li>
+<li>score &lt; 60 分，等级为不及格。</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">create</span> <span class="hljs-keyword">procedure</span> p(<span class="hljs-keyword">in</span> score <span class="hljs-type">int</span>, <span class="hljs-keyword">out</span> <span class="hljs-keyword">result</span> <span class="hljs-type">varchar</span>(<span class="hljs-number">10</span>))<br><span class="hljs-keyword">begin</span><br>	if score <span class="hljs-operator">&gt;=</span> <span class="hljs-number">85</span> <span class="hljs-keyword">then</span><br>		<span class="hljs-keyword">set</span> <span class="hljs-keyword">result</span> :<span class="hljs-operator">=</span> <span class="hljs-string">&#x27;优秀&#x27;</span>;<br>	elseif score <span class="hljs-operator">&gt;=</span> <span class="hljs-number">60</span> <span class="hljs-keyword">then</span><br>		<span class="hljs-keyword">set</span> <span class="hljs-keyword">result</span> :<span class="hljs-operator">=</span> <span class="hljs-string">&#x27;及格&#x27;</span>;<br>	<span class="hljs-keyword">else</span><br>		<span class="hljs-keyword">set</span> <span class="hljs-keyword">result</span> :<span class="hljs-operator">=</span> <span class="hljs-string">&#x27;不及格&#x27;</span>;<br>	<span class="hljs-keyword">end</span> if;<br>	<span class="hljs-keyword">select</span> <span class="hljs-keyword">result</span>;<br><span class="hljs-keyword">end</span>;<br><br><span class="hljs-keyword">call</span> p(<span class="hljs-number">68</span>, <span class="hljs-variable">@result</span>);<br><span class="hljs-keyword">select</span> <span class="hljs-variable">@result</span>;<br></code></pre></td></tr></table></figure>
+<p>（2）将传入的 200 分制的分数，进行换算，换算成百分制，然后返回。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">create</span> <span class="hljs-keyword">procedure</span> p(<span class="hljs-keyword">inout</span> score <span class="hljs-keyword">double</span>)<br><span class="hljs-keyword">begin</span><br>	<span class="hljs-keyword">set</span> score :<span class="hljs-operator">=</span> score <span class="hljs-operator">*</span> <span class="hljs-number">0.5</span>;<br><span class="hljs-keyword">end</span>;<br><br><span class="hljs-keyword">set</span> <span class="hljs-variable">@score</span> <span class="hljs-operator">=</span> <span class="hljs-number">78</span>;<br><span class="hljs-keyword">call</span> p(<span class="hljs-variable">@score</span>);<br><span class="hljs-keyword">select</span> <span class="hljs-variable">@score</span>;<br></code></pre></td></tr></table></figure>
+<h2 id="case">2.7 case</h2>
+<p><strong>语法一</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CASE</span> case_value<br>	<span class="hljs-keyword">WHEN</span> when_value1 <span class="hljs-keyword">THEN</span> statement_list1<br>	[<span class="hljs-keyword">WHEN</span> when_value2 <span class="hljs-keyword">THEN</span> statement_list2]...<br>	[<span class="hljs-keyword">ELSE</span> statement_list]<br><span class="hljs-keyword">END</span> <span class="hljs-keyword">CASE</span>;<br></code></pre></td></tr></table></figure>
+<p><strong>语法二</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CASE</span><br>	<span class="hljs-keyword">WHEN</span> search_condition1 <span class="hljs-keyword">THEN</span> statement_list1<br>	[<span class="hljs-keyword">WHEN</span> search_condition2 <span class="hljs-keyword">THEN</span> statement_list2]...<br>	[<span class="hljs-keyword">ELSE</span> statement_list]<br><span class="hljs-keyword">END</span> <span class="hljs-keyword">CASE</span>;<br></code></pre></td></tr></table></figure>
+<p><strong>案例</strong></p>
+<p>根据传入的月份，判定月份所属的季节（需求采用 <code>case</code>
+结构）。</p>
+<ol type="1">
+<li>1-3 月份，为第一季度</li>
+<li>4-6 月份，为第二季度</li>
+<li>7-9 月份，为第三季度</li>
+<li>10-12 月份，为第四季度</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">create</span> <span class="hljs-keyword">procedure</span> p(<span class="hljs-keyword">in</span> <span class="hljs-keyword">month</span> <span class="hljs-type">int</span>)<br><span class="hljs-keyword">begin</span><br>	<span class="hljs-keyword">declare</span> <span class="hljs-keyword">result</span> <span class="hljs-type">varchar</span>(<span class="hljs-number">10</span>);<br><br>	<span class="hljs-keyword">case</span><br>		<span class="hljs-keyword">when</span> <span class="hljs-keyword">month</span> <span class="hljs-operator">&gt;=</span> <span class="hljs-number">1</span> <span class="hljs-keyword">and</span> <span class="hljs-keyword">month</span> <span class="hljs-operator">&lt;=</span> <span class="hljs-number">3</span> <span class="hljs-keyword">then</span><br>			<span class="hljs-keyword">set</span> <span class="hljs-keyword">result</span> :<span class="hljs-operator">=</span> <span class="hljs-string">&#x27;第一季度&#x27;</span>;<br>		<span class="hljs-keyword">when</span> <span class="hljs-keyword">month</span> <span class="hljs-operator">&gt;=</span> <span class="hljs-number">4</span> <span class="hljs-keyword">and</span> <span class="hljs-keyword">month</span> <span class="hljs-operator">&lt;=</span> <span class="hljs-number">6</span> <span class="hljs-keyword">then</span><br>			<span class="hljs-keyword">set</span> <span class="hljs-keyword">result</span> :<span class="hljs-operator">=</span> <span class="hljs-string">&#x27;第二季度&#x27;</span>;<br>		<span class="hljs-keyword">when</span> <span class="hljs-keyword">month</span> <span class="hljs-operator">&gt;=</span> <span class="hljs-number">7</span> <span class="hljs-keyword">and</span> <span class="hljs-keyword">month</span> <span class="hljs-operator">&lt;=</span> <span class="hljs-number">9</span> <span class="hljs-keyword">then</span><br>			<span class="hljs-keyword">set</span> <span class="hljs-keyword">result</span> :<span class="hljs-operator">=</span> <span class="hljs-string">&#x27;第三季度&#x27;</span>;<br>		<span class="hljs-keyword">when</span> <span class="hljs-keyword">month</span> <span class="hljs-operator">&gt;=</span> <span class="hljs-number">10</span> <span class="hljs-keyword">and</span> <span class="hljs-keyword">month</span> <span class="hljs-operator">&lt;=</span> <span class="hljs-number">12</span> <span class="hljs-keyword">then</span><br>			<span class="hljs-keyword">set</span> <span class="hljs-keyword">result</span> :<span class="hljs-operator">=</span> <span class="hljs-string">&#x27;第四季度&#x27;</span>;<br>		<span class="hljs-keyword">else</span><br>			<span class="hljs-keyword">set</span> <span class="hljs-keyword">result</span> :<span class="hljs-operator">=</span> <span class="hljs-string">&#x27;非法参数&#x27;</span>;<br>	<span class="hljs-keyword">end</span> <span class="hljs-keyword">case</span>;<br>	<br>	<span class="hljs-keyword">select</span> concat(<span class="hljs-string">&#x27;您输入的月份为：&#x27;</span>,<span class="hljs-keyword">month</span>,<span class="hljs-string">&#x27;，所属的季度为：&#x27;</span>,<span class="hljs-keyword">result</span>);<br><span class="hljs-keyword">end</span>;<br><br><span class="hljs-keyword">call</span> p(<span class="hljs-number">4</span>);<br></code></pre></td></tr></table></figure>
+<h2 id="while">2.8 while</h2>
+<p><code>while</code>
+循环是有条件的循环控制语句。满足条件后，再执行循环体中的
+<code>SQL</code> 语句。具体语法为：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- 先判定条件，如果条件为true，则执行逻辑；否则，不执行逻辑</span><br>WHILE 条件 DO<br>	<span class="hljs-keyword">SQL</span>逻辑...<br><span class="hljs-keyword">END</span> WHILE;<br></code></pre></td></tr></table></figure>
+<p><strong>案例</strong></p>
+<p>计算从 <code>1</code> 累加到 <code>n</code> 的值， <code>n</code>
+为传入的参数值。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">create</span> <span class="hljs-keyword">procedure</span> p(<span class="hljs-keyword">in</span> n <span class="hljs-type">int</span>)<br><span class="hljs-keyword">begin</span><br>	<span class="hljs-keyword">declare</span> total <span class="hljs-type">int</span> <span class="hljs-keyword">default</span> <span class="hljs-number">0</span>;<br>	while n<span class="hljs-operator">&gt;</span><span class="hljs-number">0</span> do<br>		<span class="hljs-keyword">set</span> total :<span class="hljs-operator">=</span> total <span class="hljs-operator">+</span> n;<br>		<span class="hljs-keyword">set</span> n :<span class="hljs-operator">=</span> n <span class="hljs-operator">-</span> <span class="hljs-number">1</span>;<br>	<span class="hljs-keyword">end</span> while;<br>	<br>	<span class="hljs-keyword">select</span> total;<br><span class="hljs-keyword">end</span>;<br><br><span class="hljs-keyword">call</span> p(<span class="hljs-number">10</span>);<br></code></pre></td></tr></table></figure>
+<h2 id="repeat">2.9 repeat</h2>
+<p><code>repeat</code>
+是有条件的循环控制语句，当满足条件的时候退出循环。具体语法为：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- 限制性一次逻辑，然后判定逻辑是否满足，如果满足，则推出。如果不满足，则继续下一次循环</span><br>REPEAT<br>	<span class="hljs-keyword">SQL</span>逻辑...<br>	UNTIL 条件<br><span class="hljs-keyword">END</span> REPEAT;<br></code></pre></td></tr></table></figure>
+<p><strong>案例</strong></p>
+<p>计算从 <code>1</code> 累加到 <code>n</code> 的值， <code>n</code>
+为传入的参数值。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">create</span> <span class="hljs-keyword">procedure</span> p(<span class="hljs-keyword">in</span> n <span class="hljs-type">int</span>)<br><span class="hljs-keyword">begin</span><br>	<span class="hljs-keyword">declare</span> total <span class="hljs-type">int</span> <span class="hljs-keyword">default</span> <span class="hljs-number">0</span>;<br>	<br>	repeat<br>		<span class="hljs-keyword">set</span> total :<span class="hljs-operator">=</span> total <span class="hljs-operator">+</span> n;<br>		<span class="hljs-keyword">set</span> n :<span class="hljs-operator">=</span> n<span class="hljs-number">-1</span>;<br>	until n<span class="hljs-operator">&lt;=</span> <span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">end</span> repeat;<br>	<br>	<span class="hljs-keyword">select</span> total;<br><span class="hljs-keyword">end</span>;<br><br><span class="hljs-keyword">call</span> p(<span class="hljs-number">10</span>);<br></code></pre></td></tr></table></figure>
+<h2 id="loop">2.10 loop</h2>
+<p><code>LOOP</code> 实现简单的循环，如果不在 <code>SQL</code>
+逻辑中增加退出循环的条件，可以用来其来实现简单的死循环。
+<code>LOOP</code> 可以配合一下两个语句使用：</p>
+<ul>
+<li><code>LEAVE</code> ：配合循环使用，退出循环。</li>
+<li><code>ITERATE</code>
+：必须用在循环中，作用是跳过当前循环剩下的语句，直接进入下一次循环。</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sql">[begin_label:] LOOP<br>	<span class="hljs-keyword">SQL</span>逻辑...<br><span class="hljs-keyword">END</span> LOOP [end_label];<br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sql">LEAVE label;	<span class="hljs-comment">-- 退出指定标记的循环体</span><br>ITERATE label;	<span class="hljs-comment">-- 直接进入下一次循环</span><br></code></pre></td></tr></table></figure>
+<p><strong>案例</strong></p>
+<ol type="1">
+<li>计算从 <code>1</code> 累加到 <code>n</code> 的值， <code>n</code>
+为传入的参数值。</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">create</span> <span class="hljs-keyword">procedure</span> p(<span class="hljs-keyword">in</span> n <span class="hljs-type">int</span>)<br><span class="hljs-keyword">begin</span><br>	<span class="hljs-keyword">declare</span> total <span class="hljs-type">int</span> <span class="hljs-keyword">default</span> <span class="hljs-number">0</span>;<br><br>	sum:loop<br>		if n <span class="hljs-operator">&lt;=</span> <span class="hljs-number">0</span> <span class="hljs-keyword">then</span><br>			leave sum;<br>		<span class="hljs-keyword">end</span> if;<br><br>		<span class="hljs-keyword">set</span> total :<span class="hljs-operator">=</span> total <span class="hljs-operator">+</span> n;<br>		<span class="hljs-keyword">set</span> n :<span class="hljs-operator">=</span> n <span class="hljs-operator">-</span> <span class="hljs-number">1</span>;<br>	<span class="hljs-keyword">end</span> loop sum;<br><br>	<span class="hljs-keyword">select</span> total;<br><span class="hljs-keyword">end</span>;<br><br><span class="hljs-keyword">call</span> p(<span class="hljs-number">10</span>);<br></code></pre></td></tr></table></figure>
+<ol type="1">
+<li>计算从 <code>1</code> 到 <code>n</code> 之间的偶数累加的值，
+<code>n</code> 为传入的参数值。</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">create</span> <span class="hljs-keyword">procedure</span> p(<span class="hljs-keyword">in</span> n <span class="hljs-type">int</span>)<br><span class="hljs-keyword">begin</span><br>	<span class="hljs-keyword">declare</span> total <span class="hljs-type">int</span> <span class="hljs-keyword">default</span> <span class="hljs-number">0</span>;<br><br>	sum:loop<br>		if n <span class="hljs-operator">&lt;=</span> <span class="hljs-number">0</span> <span class="hljs-keyword">then</span><br>			leave sum;<br>		<span class="hljs-keyword">end</span> if;<br><br>		if n <span class="hljs-operator">%</span> <span class="hljs-number">2</span> <span class="hljs-operator">=</span> <span class="hljs-number">1</span> <span class="hljs-keyword">then</span><br>			<span class="hljs-keyword">set</span> n :<span class="hljs-operator">=</span> n <span class="hljs-operator">-</span> <span class="hljs-number">1</span>;<br>			iterate sum;<br>		<span class="hljs-keyword">end</span> if;<br><br>		<span class="hljs-keyword">set</span> total :<span class="hljs-operator">=</span> total <span class="hljs-operator">+</span> n;<br>		<span class="hljs-keyword">set</span> n :<span class="hljs-operator">=</span> n <span class="hljs-operator">-</span> <span class="hljs-number">1</span>;<br>	<span class="hljs-keyword">end</span> loop sum;<br><br>	<span class="hljs-keyword">select</span> total;<br><span class="hljs-keyword">end</span>;<br><br><span class="hljs-keyword">call</span> p(<span class="hljs-number">10</span>);<br></code></pre></td></tr></table></figure>
+<h2 id="游标">2.11 游标</h2>
+<p><strong>游标（ <code>CURSOR</code>）</strong>
+是用来存储查询结果集的数据类型，在存储过程和函数中可以使用游标对结果集进行循环的处理。游标的使用包括游标的声明、
+<code>OPEN</code> 、 <code>FETCH</code> 和 <code>CLOSE</code>
+，其语法分别如下。</p>
+<p><strong>声明游标</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">DECLARE</span> 游标名称 <span class="hljs-keyword">CURSOR</span> <span class="hljs-keyword">FOR</span> 查询语句;<br></code></pre></td></tr></table></figure>
+<p><strong>打开游标</strong> <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">OPEN</span> 游标名称;<br></code></pre></td></tr></table></figure></p>
+<p><strong>获取游标记录</strong> <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">FETCH</span> 游标名称 <span class="hljs-keyword">INTO</span> 变量[,变量];<br></code></pre></td></tr></table></figure></p>
+<p><strong>关闭游标</strong> <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CLOSE</span> 游标名称;<br></code></pre></td></tr></table></figure></p>
+<p><strong>案例</strong></p>
+<p>使用游标创建一个存储过程，统计 <code>STUDENT</code> 表年龄大于
+<code>19</code> 的记录的数量，如下为 <code>STUDENT</code>
+表的创建代码：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs sql">DELIMITER $<br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">PROCEDURE</span> PROC_STAT()<br><span class="hljs-keyword">BEGIN</span><br>    # 创建 用于接收游标值的变量<br>    <span class="hljs-keyword">DECLARE</span> ID,AGE,TOTAL <span class="hljs-type">INT</span>;<br>    <span class="hljs-keyword">DECLARE</span> NAME,SEX <span class="hljs-type">CHAR</span>(<span class="hljs-number">10</span>);<br>    # 游标结束的标志<br>    <span class="hljs-keyword">DECLARE</span> DONE <span class="hljs-type">INT</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-number">0</span>;<br>    # 声明游标<br>    <span class="hljs-keyword">DECLARE</span> CUR <span class="hljs-keyword">CURSOR</span> <span class="hljs-keyword">FOR</span> <span class="hljs-keyword">SELECT</span> STUID,STUNAME,STUSEX,STUAGE <span class="hljs-keyword">FROM</span> STUDENT <span class="hljs-keyword">WHERE</span> STUAGE <span class="hljs-operator">&gt;</span> <span class="hljs-number">19</span>;<br>    # 指定游标循环结束时的返回值<br>    <span class="hljs-keyword">DECLARE</span> CONTINUE HANDLER <span class="hljs-keyword">FOR</span> <span class="hljs-keyword">NOT</span> FOUND <span class="hljs-keyword">SET</span> DONE <span class="hljs-operator">=</span> <span class="hljs-number">1</span>;<br>    # 打开游标<br>    <span class="hljs-keyword">OPEN</span> CUR;<br>    # 初始化变量<br>    <span class="hljs-keyword">SET</span> TOTAL <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>    # WHILE 循环<br>    WHILE DONE <span class="hljs-operator">!=</span> <span class="hljs-number">1</span> DO<br>        <span class="hljs-keyword">FETCH</span> CUR <span class="hljs-keyword">INTO</span> ID,NAME,SEX,AGE;<br>          IF DONE <span class="hljs-operator">!=</span> <span class="hljs-number">1</span> <span class="hljs-keyword">THEN</span><br>             <span class="hljs-keyword">SET</span> TOTAL <span class="hljs-operator">=</span> TOTAL <span class="hljs-operator">+</span> <span class="hljs-number">1</span>;<br>          <span class="hljs-keyword">END</span> IF;<br>    <span class="hljs-keyword">END</span> WHILE;<br>    # 关闭游标<br>    <span class="hljs-keyword">CLOSE</span> CUR;<br>    # 输出累计的结果<br>    <span class="hljs-keyword">SELECT</span> TOTAL;<br><span class="hljs-keyword">END</span>$<br>DELIMITER ;<br># 调用存储过程<br><span class="hljs-keyword">CALL</span> PROC_STAT();<br></code></pre></td></tr></table></figure>
+<h2 id="条件处理程序">2.12 条件处理程序</h2>
+<p><strong>条件处理程序（Handler）</strong>
+可以用来定义在流程控制结构执行过程中遇到问题时相应的处理步骤。具体语法为：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">DECLARE</span> handler_action HANDLER <span class="hljs-keyword">FOR</span> condition_value [,condition_value]... statement;<br><br>handler_action<br>	CONTINUE:继续执行当前程序<br>	EXIT:中止执行当前程序<br>condition_value<br>	<span class="hljs-keyword">SQLSTATE</span> sqlstate_value:状态码，如<span class="hljs-number">02000</span>，表示抓取的时候没数据<br>	<span class="hljs-keyword">SQLWARNING</span>:所有以<span class="hljs-number">01</span>开头的<span class="hljs-keyword">SQLSTATE</span>代码的简写<br>	<span class="hljs-keyword">NOT</span> FOUND:所有以<span class="hljs-number">02</span>开头的<span class="hljs-keyword">SQLSTATE</span>代码的简写<br>	<span class="hljs-keyword">SQLEXCEPTION</span>:所有没有被SQLWARNNING或<span class="hljs-keyword">NOT</span> FOUND捕获的<span class="hljs-keyword">SQLSTATE</span>代码的简写<br></code></pre></td></tr></table></figure>
+<p><strong>案例</strong></p>
+<p>根据传入的参数 <code>uage</code> ，来查询用户表 <code>tb_user</code>
+中，所有的用户年龄小于等于 <code>uage</code> 的用户姓名（
+<code>name</code>）和专业（
+<code>profession</code>），并将用户的姓名和专业插入到所创建的一张新表（
+<code>id,name,profession</code>） 中。</p>
+<p>逻辑：</p>
+<ol type="1">
+<li>声明游标，存储查询结果集</li>
+<li>准备：创建表结构</li>
+<li>开启游标</li>
+<li>获取游标中的记录</li>
+<li>插入数据到新表中</li>
+<li>关闭游标</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">create</span> <span class="hljs-keyword">procedure</span> p(<span class="hljs-keyword">in</span> uage <span class="hljs-type">int</span>)<br><span class="hljs-keyword">begin</span><br>	<span class="hljs-comment">-- 需要先声明普通变量，再声明游标，不然会报错</span><br>	<span class="hljs-keyword">declare</span> uname <span class="hljs-type">varchar</span>(<span class="hljs-number">100</span>);<br>	<span class="hljs-keyword">declare</span> upro <span class="hljs-type">varchar</span>(<span class="hljs-number">100</span>);<br>	<span class="hljs-keyword">declare</span> u_cursor <span class="hljs-keyword">cursor</span> <span class="hljs-keyword">for</span> <span class="hljs-keyword">select</span> name,profession <span class="hljs-keyword">from</span> tb_user <span class="hljs-keyword">where</span> age <span class="hljs-operator">&lt;=</span> uage;<br>	<span class="hljs-keyword">declare</span> exit handler <span class="hljs-keyword">for</span> <span class="hljs-keyword">SQLSTATE</span> <span class="hljs-string">&#x27;02000&#x27;</span> <span class="hljs-keyword">close</span> u_cursor;<br><br>	<span class="hljs-keyword">drop</span> <span class="hljs-keyword">table</span> if <span class="hljs-keyword">exists</span> tb_user_pro;<br>	<span class="hljs-keyword">create</span> <span class="hljs-keyword">table</span> if <span class="hljs-keyword">not</span> <span class="hljs-keyword">exists</span> tb_user_pro(<br>    	id <span class="hljs-type">int</span> <span class="hljs-keyword">primary</span> key auto_increment,<br>        name <span class="hljs-type">varchar</span>(<span class="hljs-number">100</span>),<br>        profession <span class="hljs-type">varchar</span>(<span class="hljs-number">100</span>)<br>    );<br><br>    <span class="hljs-keyword">open</span> u_cursor;<br>    while <span class="hljs-literal">true</span> do<br>    	<span class="hljs-keyword">fetch</span> u_cursor <span class="hljs-keyword">into</span> uname,upro;<br>    	<span class="hljs-keyword">insert</span> <span class="hljs-keyword">into</span> tb_user_pro <span class="hljs-keyword">values</span> (<span class="hljs-keyword">null</span>, uname, upro);<br>    <span class="hljs-keyword">end</span> while;<br>    <span class="hljs-keyword">close</span> u_cursor;<br><br><span class="hljs-keyword">end</span>;<br><br><span class="hljs-keyword">call</span> p(<span class="hljs-number">40</span>);<br></code></pre></td></tr></table></figure>
+<h1 id="存储函数">3. 存储函数</h1>
+<p>存储函数是有返回值的存储过程，存储函数的参数只能是 <code>IN</code>
+类型的。具体语法如下：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">FUNCTION</span> 存储函数名称([参数列表])<br><span class="hljs-keyword">RETURNS</span> type [characteristic...]<br><span class="hljs-keyword">BEGIN</span><br>	<span class="hljs-comment">-- SQL语句</span><br>	<span class="hljs-keyword">RETURN</span> ...;<br><span class="hljs-keyword">END</span>;<br></code></pre></td></tr></table></figure>
+<p><code>characteristic</code> 说明：</p>
+<ul>
+<li><code>DETERMINISTIC</code> ：相同的输入参数总是产生相同的结果。</li>
+<li><code>NO SQL</code> ：不包含 <code>SQL</code> 语句。</li>
+<li><code>READS SQL DATA</code>
+：包含读取数据的语句，但不包含写入数据的语句。</li>
+<li><strong>DETERMINISTIC</strong>：
+<ul>
+<li>表示函数的返回值在给定相同的输入参数时总是相同的。也就是说，对于一组特定的输入参数，函数将始终产生相同的输出。</li>
+<li>这个特性对于数据库优化很重要，因为如果一个函数是确定性的，那么在查询计划中，数据库可以缓存这个函数的结果，以提高查询效率。</li>
+<li>如果函数内部涉及到随机数生成或者依赖于外部变化的数据（如当前时间、用户会话变量等），则不应该声明为DETERMINISTIC。</li>
+</ul></li>
+<li><strong>NO SQL</strong>：
+<ul>
+<li>表示函数中不包含任何SQL语句，即函数体中没有对数据库进行任何读写操作。</li>
+<li>声明为NO
+SQL的函数可以安全地在如事务处理等需要确保ACID属性（原子性、一致性、隔离性、持久性）的上下文中使用，因为它们不会影响数据库的数据。</li>
+</ul></li>
+<li><strong>READS SQL DATA</strong>：
+<ul>
+<li>表示函数中包含读取数据的SQL语句，但不包含写入数据的语句。</li>
+<li>这种类型的函数可能会从数据库中读取数据，但不进行任何修改。因此，它们不会影响数据的一致性和完整性。</li>
+<li>声明为READS SQL
+DATA的函数可以在大多数上下文中安全使用，但数据库系统会确保这些函数不会在不允许读取数据的上下文中被调用。</li>
+</ul></li>
+</ul>
+<p><strong>案例</strong></p>
+<p>计算从 <code>1</code> 累加到 <code>n</code> 。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">create</span> <span class="hljs-keyword">function</span> fun1(n <span class="hljs-type">int</span>)<br><span class="hljs-keyword">return</span> <span class="hljs-type">int</span> <span class="hljs-keyword">deterministic</span><br><span class="hljs-keyword">begin</span><br>	<span class="hljs-keyword">declare</span> total <span class="hljs-type">int</span> <span class="hljs-keyword">default</span> <span class="hljs-number">0</span>;<br><br>	while n<span class="hljs-operator">&gt;</span><span class="hljs-number">0</span> do<br>		<span class="hljs-keyword">set</span> total :<span class="hljs-operator">=</span> total <span class="hljs-operator">+</span> n;<br>		<span class="hljs-keyword">set</span> n :<span class="hljs-operator">=</span> n <span class="hljs-operator">-</span> <span class="hljs-number">1</span>;<br>	<span class="hljs-keyword">end</span> while;<br>	<br>	<span class="hljs-keyword">return</span> total;<br><span class="hljs-keyword">end</span>;<br><br><span class="hljs-keyword">select</span> fun1(<span class="hljs-number">50</span>);<br></code></pre></td></tr></table></figure>
+<h1 id="触发器">4. 触发器</h1>
+<h2 id="介绍">4.1 介绍</h2>
+<p>触发器是与表有关的数据库对象，指在 <code>insert/update/delete</code>
+之前或之后，触发并执行触发器中定义的 <code>SQL</code>
+语句集合。触发器的这种特性可以协助应用在数据库端确保数据的完整性，日志记录，数据校验等操作。</p>
+<p>使用别名 <code>OLD</code> 和 <code>NEW</code>
+来引用触发器中发生变化的记录内容，这与其他的数据库是相似的。现在触发器还只支持行级触发，不支持语句级触发。</p>
+<table>
+
 <thead>
 <tr>
 <th>触发器类型</th>
 <th>NEW 和 OLD</th>
 </tr>
 </thead>
-<tbody><tr>
-<td>INSERT</td>
+<tbody>
+<tr>
+<td>INSERT 型触发器</td>
 <td>NEW 表示将要或者已经新增的数据</td>
 </tr>
 <tr>
-<td>UPDATE</td>
-<td>OLD表示修改之前的数据，NEW表示将要或已经修改后的数据</td>
+<td>UPDATE 型触发器</td>
+<td>OLD 表示修改之前的数据，NEW 表示将要或已经修改后的数据</td>
 </tr>
 <tr>
-<td>DELETE</td>
-<td>OLD表示将要或者已经删除的数据</td>
+<td>DELETE 型触发器</td>
+<td>OLD 表示将要或者已经删除的数据</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+<h2 id="语法">4.2 语法</h2>
+<p><strong>创建</strong> <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TRIGGER</span> trigger_name<br>BEFORE<span class="hljs-operator">/</span>AFTER <span class="hljs-keyword">INSERT</span><span class="hljs-operator">/</span><span class="hljs-keyword">UPDATE</span><span class="hljs-operator">/</span><span class="hljs-keyword">DELETE</span><br><span class="hljs-keyword">ON</span> tbl_name <span class="hljs-keyword">FOR</span> <span class="hljs-keyword">EACH</span> <span class="hljs-type">ROW</span>  <span class="hljs-comment">-- 行级触发器</span><br><span class="hljs-keyword">BEGIN</span><br>	trigger_stmt;<br><span class="hljs-keyword">END</span>;<br></code></pre></td></tr></table></figure></p>
+<p><strong>查看</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SHOW</span> TRIGGERS;<br></code></pre></td></tr></table></figure>
+<p><strong>删除</strong> <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">DROP</span> <span class="hljs-keyword">TRIGGER</span> [schema_name.]trigger_name;	<span class="hljs-comment">--如果没有指定schema_name，默认为当前数据库</span><br></code></pre></td></tr></table></figure></p>
+<h2 id="案例-1">4.3 <strong>案例</strong></h2>
+<p>通过触发器记录 <code>tu_user</code>
+表的数据变更日志，将变更日志插入到日志表 <code>user_logs</code>
+中，包含增加、修改和删除。 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- 创建表结构</span><br><span class="hljs-keyword">create</span> <span class="hljs-keyword">table</span> user_logs(<br>  id <span class="hljs-type">int</span>(<span class="hljs-number">11</span>) <span class="hljs-keyword">not</span> <span class="hljs-keyword">null</span> auto_increment,<br>  operation <span class="hljs-type">varchar</span>(<span class="hljs-number">20</span>) <span class="hljs-keyword">not</span> <span class="hljs-keyword">null</span> comment <span class="hljs-string">&#x27;操作类型, insert/update/delete&#x27;</span>,<br>  operate_time datetime <span class="hljs-keyword">not</span> <span class="hljs-keyword">null</span> comment <span class="hljs-string">&#x27;操作时间&#x27;</span>,<br>  operate_id <span class="hljs-type">int</span>(<span class="hljs-number">11</span>) <span class="hljs-keyword">not</span> <span class="hljs-keyword">null</span> comment <span class="hljs-string">&#x27;操作的ID&#x27;</span>,<br>  operate_params <span class="hljs-type">varchar</span>(<span class="hljs-number">500</span>) comment <span class="hljs-string">&#x27;操作参数&#x27;</span>,<br>  <span class="hljs-keyword">primary</span> key(`id`)<br>)engine<span class="hljs-operator">=</span>innodb <span class="hljs-keyword">default</span> charset<span class="hljs-operator">=</span>utf8;<br></code></pre></td></tr></table></figure></p>
+<h3 id="insert-类型触发器"><strong><code>INSERT</code>
+类型触发器：</strong></h3>
+<p><strong>案例1</strong></p>
+<p>编写一个名为 <code>INSERT_S</code> 的触发器，在 <code>S</code> 表执行
+<code>INSERT</code> 语句后被激发，此触发器将新供应商的
+<code>SNO</code>、 <code>SNAME</code>、 <code>STATUS</code>、
+<code>CITY</code> 及执行此操作的用户（ <code>USER</code>）插入
+<code>N_S</code> 表， <code>N_S</code> 表比 <code>S</code>
+表增添操作用户一列。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs sql">delimiter $<br><span class="hljs-keyword">create</span> <span class="hljs-keyword">trigger</span> INSERT_S after <span class="hljs-keyword">insert</span> <span class="hljs-keyword">on</span> S <span class="hljs-keyword">for</span> <span class="hljs-keyword">each</span> <span class="hljs-type">row</span><br><span class="hljs-keyword">begin</span><br>    <span class="hljs-keyword">insert</span> <span class="hljs-keyword">into</span> N_S(SNO,SNAME,STATUS,CITY,<span class="hljs-keyword">USER</span>) <span class="hljs-keyword">VALUES</span>(new.SNO,new.SNAME,new.STATUS,new.CITY,<span class="hljs-keyword">USER</span>());<br><span class="hljs-keyword">end</span>$<br>delimiter ;<br></code></pre></td></tr></table></figure>
+<p><strong>案例2</strong></p>
+<p>编写一个名为 <code>INSERT_SPJ</code> 的触发器，当 <code>SPJ</code>
+表中有插入某条记录时，自动更新表 <code>SPJ_SUMQTY</code> 表。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs sql">delimiter $<br><span class="hljs-keyword">create</span> <span class="hljs-keyword">trigger</span> INSERT_SPJ after <span class="hljs-keyword">insert</span> <span class="hljs-keyword">on</span> SPJ <span class="hljs-keyword">for</span> <span class="hljs-keyword">each</span> <span class="hljs-type">row</span><br><span class="hljs-keyword">begin</span><br>    if <span class="hljs-keyword">exists</span>(<span class="hljs-keyword">select</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> SPJ_SUMQTY <span class="hljs-keyword">as</span> s <span class="hljs-keyword">where</span> s.PNO <span class="hljs-operator">=</span> new.PNO <span class="hljs-keyword">and</span> s.JNO <span class="hljs-operator">=</span> new.JNO) <span class="hljs-keyword">then</span><br>        <span class="hljs-keyword">update</span> SPJ_SUMQTY <span class="hljs-keyword">as</span> s1 <span class="hljs-keyword">set</span> s1.SUMQTY <span class="hljs-operator">=</span> s1.SUMQTY <span class="hljs-operator">+</span> new.QTY <span class="hljs-keyword">where</span> s1.JNO <span class="hljs-operator">=</span> new.JNO <span class="hljs-keyword">and</span> s1.PNO <span class="hljs-operator">=</span> new.PNO;<br>    <span class="hljs-keyword">else</span><br>        <span class="hljs-keyword">insert</span> <span class="hljs-keyword">into</span> SPJ_SUMQTY <span class="hljs-keyword">VALUES</span>(new.JNO, new.PNO, new.QTY);<br>    <span class="hljs-keyword">end</span> if;<br><span class="hljs-keyword">end</span>$<br>delimiter ;<br></code></pre></td></tr></table></figure>
+<p><strong>案例3</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- 插入数据触发器</span><br><span class="hljs-keyword">create</span> <span class="hljs-keyword">trigger</span> tb_user_insert_trigger<br>	after <span class="hljs-keyword">insert</span> <span class="hljs-keyword">on</span> tb_user <span class="hljs-keyword">for</span> <span class="hljs-keyword">each</span> <span class="hljs-type">row</span><br><span class="hljs-keyword">begin</span><br>	<span class="hljs-keyword">insert</span> <span class="hljs-keyword">into</span> user_logs(id, operation, operate_time, operate_id, operate_params) <span class="hljs-keyword">VALUES</span><br>	(<span class="hljs-keyword">null</span>, <span class="hljs-string">&#x27;insert&#x27;</span>, now(), new.id, concat(<span class="hljs-string">&#x27;插入的数据内容为：id=&#x27;</span>,new.id,<span class="hljs-string">&#x27;,name=&#x27;</span>,new.name,<span class="hljs-string">&#x27;,phone=&#x27;</span>,new.phone,<span class="hljs-string">&#x27;,email=&#x27;</span>,new.email,<span class="hljs-string">&#x27;,profession=&#x27;</span>,new.profession));<br><span class="hljs-keyword">end</span>;<br><br><span class="hljs-comment">-- 查看</span><br><span class="hljs-keyword">show</span> triggers;<br><br><span class="hljs-comment">-- 插入数据</span><br><span class="hljs-keyword">insert</span> <span class="hljs-keyword">into</span> tb_user(id, name, phone, email, profession, age, gender, status, createtime)<br><span class="hljs-keyword">VALUES</span> (<span class="hljs-number">25</span>,<span class="hljs-string">&#x27;二皇子&#x27;</span>,<span class="hljs-string">&#x27;18809091212&#x27;</span>,<span class="hljs-string">&#x27;erhuangzi@163.com&#x27;</span>,<span class="hljs-string">&#x27;软件工程&#x27;</span>,<span class="hljs-number">23</span>,<span class="hljs-string">&#x27;1&#x27;</span>,<span class="hljs-string">&#x27;1&#x27;</span>,now());<br><br><span class="hljs-comment">-- 删除</span><br><span class="hljs-keyword">drop</span> <span class="hljs-keyword">trigger</span> tb_user_insert_trigger;<br></code></pre></td></tr></table></figure>
+<h3 id="update-类型触发器"><strong><code>UPDATE</code>
+类型触发器：</strong></h3>
+<p><strong>案例1</strong></p>
+<p>编写一个名为 <code>UPDATE_S</code> 的触发器，检查 <code>S</code> 表的
+<code>STATUS</code> ，只允许 <code>0-100</code> 之间，超过
+<code>100</code> 后，改为 <code>100</code> 。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs sql">delimiter $<br><span class="hljs-keyword">create</span> <span class="hljs-keyword">trigger</span> UPDATE_S before <span class="hljs-keyword">update</span> <span class="hljs-keyword">on</span> S <span class="hljs-keyword">for</span> <span class="hljs-keyword">each</span> <span class="hljs-type">row</span><br><span class="hljs-keyword">begin</span><br>    if new.STATUS <span class="hljs-operator">&gt;</span> <span class="hljs-number">100</span> <span class="hljs-keyword">then</span><br>    <span class="hljs-keyword">set</span> new.STATUS <span class="hljs-operator">=</span> <span class="hljs-number">100</span>;<br>    <span class="hljs-keyword">end</span> if;<br><span class="hljs-keyword">end</span>$<br>delimiter ;<br></code></pre></td></tr></table></figure>
+<p><strong>案例2</strong></p>
+<p>编写一个名为 <code>UPDATE_SPJ</code> 的触发器，当 <code>SPJ</code>
+表中有更新某条记录时，自动更新表 <code>SPJ_SUMQTY</code> 表。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs sql">delimiter $<br><span class="hljs-keyword">create</span> <span class="hljs-keyword">trigger</span> UPDATE_SPJ before <span class="hljs-keyword">update</span> <span class="hljs-keyword">on</span> SPJ <span class="hljs-keyword">for</span> <span class="hljs-keyword">each</span> <span class="hljs-type">row</span><br><span class="hljs-keyword">begin</span><br>    <span class="hljs-keyword">update</span> SPJ_SUMQTY <span class="hljs-keyword">as</span> s1 <span class="hljs-keyword">set</span> s1.SUMQTY <span class="hljs-operator">=</span> s1.SUMQTY <span class="hljs-operator">+</span> new.QTY <span class="hljs-operator">-</span> old.QTY <span class="hljs-keyword">where</span> s1.JNO <span class="hljs-operator">=</span> new.JNO <span class="hljs-keyword">and</span> s1.PNO <span class="hljs-operator">=</span> new.PNO;<br><span class="hljs-keyword">end</span>$<br>delimiter ;<br></code></pre></td></tr></table></figure>
+<p><strong>案例3</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- 修改数据触发器</span><br><span class="hljs-keyword">create</span> <span class="hljs-keyword">trigger</span> tb_user_update_trigger<br>	after <span class="hljs-keyword">update</span> <span class="hljs-keyword">on</span> tb_user <span class="hljs-keyword">for</span> <span class="hljs-keyword">each</span> <span class="hljs-type">row</span><br><span class="hljs-keyword">begin</span><br>	<span class="hljs-keyword">insert</span> <span class="hljs-keyword">into</span> user_logs(id, operation, operate_time, operate_id, operate_params) <span class="hljs-keyword">VALUES</span><br>	(<span class="hljs-keyword">null</span>, <span class="hljs-string">&#x27;update&#x27;</span>, now(), new.id, concat(<span class="hljs-string">&#x27;更新之前的数据：id=&#x27;</span>,new.id,<span class="hljs-string">&#x27;,name=&#x27;</span>,old.name,<span class="hljs-string">&#x27;,phone=&#x27;</span>,old.phone,<span class="hljs-string">&#x27;,email=&#x27;</span>,old.email,<span class="hljs-string">&#x27;,profession=&#x27;</span>,old.profession,<br><span class="hljs-string">&#x27; | 更新之后的数据：id=&#x27;</span>,new.id,<span class="hljs-string">&#x27;,name=&#x27;</span>,new.name,<span class="hljs-string">&#x27;,phone=&#x27;</span>,new.phone,<span class="hljs-string">&#x27;,email=&#x27;</span>,new.email,<span class="hljs-string">&#x27;,profession=&#x27;</span>,new.profession));<br><span class="hljs-keyword">end</span>;<br><br><span class="hljs-comment">-- 查看</span><br><span class="hljs-keyword">show</span> triggers;<br><br><span class="hljs-comment">-- 更新数据</span><br><span class="hljs-keyword">update</span> tb_user <span class="hljs-keyword">set</span> age <span class="hljs-operator">=</span> <span class="hljs-number">32</span> <span class="hljs-keyword">where</span> id <span class="hljs-operator">=</span> <span class="hljs-number">23</span>;<br></code></pre></td></tr></table></figure>
+<h3 id="delete-类型触发器"><strong><code>DELETE</code>
+类型触发器：</strong></h3>
+<p><strong>案例1</strong></p>
+<p>编写一个名为 <code>DELETE_SPJ</code> 的触发器，当 <code>SPJ</code>
+表中有删除某条记录时，自动更新表 <code>SPJ_SUMQTY</code> 表。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs sql">delimiter $<br><span class="hljs-keyword">create</span> <span class="hljs-keyword">trigger</span> DELETE_SPJ after <span class="hljs-keyword">delete</span> <span class="hljs-keyword">on</span> SPJ <span class="hljs-keyword">for</span> <span class="hljs-keyword">each</span> <span class="hljs-type">row</span><br><span class="hljs-keyword">begin</span><br>    <span class="hljs-keyword">update</span> SPJ_SUMQTY <span class="hljs-keyword">as</span> s1 <span class="hljs-keyword">set</span> s1.SUMQTY <span class="hljs-operator">=</span> s1.SUMQTY <span class="hljs-operator">-</span> old.QTY <span class="hljs-keyword">where</span> s1.JNO <span class="hljs-operator">=</span> old.JNO <span class="hljs-keyword">and</span> s1.PNO <span class="hljs-operator">=</span> old.PNO;<br>    <span class="hljs-keyword">delete</span> <span class="hljs-keyword">from</span> SPJ_SUMQTY <span class="hljs-keyword">as</span> s1 <span class="hljs-keyword">where</span> s1.SUMQTY <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br><span class="hljs-keyword">end</span>$<br>delimiter ;<br></code></pre></td></tr></table></figure>
+<p><strong>案例2</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- 删除数据触发器</span><br><span class="hljs-keyword">create</span> <span class="hljs-keyword">trigger</span> tb_user_delete_trigger<br>	after <span class="hljs-keyword">delete</span> <span class="hljs-keyword">on</span> tb_user <span class="hljs-keyword">for</span> <span class="hljs-keyword">each</span> <span class="hljs-type">row</span><br><span class="hljs-keyword">begin</span><br>	<span class="hljs-keyword">insert</span> <span class="hljs-keyword">into</span> user_logs(id, operation, operate_time, operate_id, operate_params) <span class="hljs-keyword">VALUES</span><br>	(<span class="hljs-keyword">null</span>, <span class="hljs-string">&#x27;delete&#x27;</span>, now(), old.id, concat(<span class="hljs-string">&#x27;删除之前的数据：id=&#x27;</span>,old.id,<span class="hljs-string">&#x27;,name=&#x27;</span>,old.name,<span class="hljs-string">&#x27;,phone=&#x27;</span>,old.phone,<span class="hljs-string">&#x27;,email=&#x27;</span>,old.email,<span class="hljs-string">&#x27;,profession=&#x27;</span>,old.profession));<br><span class="hljs-keyword">end</span>;<br><br><span class="hljs-comment">-- 查看</span><br><span class="hljs-keyword">show</span> triggers;<br><br><span class="hljs-comment">-- 更新数据</span><br><span class="hljs-keyword">delete</span> <span class="hljs-keyword">from</span> tb_user <span class="hljs-keyword">where</span> id <span class="hljs-operator">=</span> <span class="hljs-number">25</span>;<br></code></pre></td></tr></table></figure>
 
                 
               </div>

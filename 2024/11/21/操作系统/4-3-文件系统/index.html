@@ -19,12 +19,12 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="4.2 文件系统的结构与虚拟文件系统1. 文件系统的层次结构(了解即可)  用一个例子来辅助记忆文件系统的层次结构： 假设某用户请求删除文件“D:&#x2F;工作目录&#x2F;学生信息.xIsx”的最后100条记录 1. 用户需要通过操作系统提供的接口发出上述请求 – 用户接口 文件的基本操作 章节相关内容   2. 由于用户提供的是文件的存放路径，因此需要操作系统一层一层地查找目录，找到对应的">
+    <meta name="description" content="4.2 文件系统的结构与虚拟文件系统 1. 文件系统的层次结构(了解即可)   用一个例子来辅助记忆文件系统的层次结构：  假设某用户请求删除文件“D:&#x2F;工作目录&#x2F;学生信息.xIsx&quot;的最后100条记录  1. 用户需要通过操作系统提供的接口发出上述请求 -- 用户接口  文件的基本操作 章节相关内容  2. 由于用户提供的是文件的存放路径，因此需要操作系统一层一层">
 <meta property="og:type" content="article">
 <meta property="og:title" content="4.2 文件系统">
 <meta property="og:url" content="http://binbo-zappy.github.io/2024/11/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/4-3-%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/index.html">
 <meta property="og:site_name" content="Binbo">
-<meta property="og:description" content="4.2 文件系统的结构与虚拟文件系统1. 文件系统的层次结构(了解即可)  用一个例子来辅助记忆文件系统的层次结构： 假设某用户请求删除文件“D:&#x2F;工作目录&#x2F;学生信息.xIsx”的最后100条记录 1. 用户需要通过操作系统提供的接口发出上述请求 – 用户接口 文件的基本操作 章节相关内容   2. 由于用户提供的是文件的存放路径，因此需要操作系统一层一层地查找目录，找到对应的">
+<meta property="og:description" content="4.2 文件系统的结构与虚拟文件系统 1. 文件系统的层次结构(了解即可)   用一个例子来辅助记忆文件系统的层次结构：  假设某用户请求删除文件“D:&#x2F;工作目录&#x2F;学生信息.xIsx&quot;的最后100条记录  1. 用户需要通过操作系统提供的接口发出上述请求 -- 用户接口  文件的基本操作 章节相关内容  2. 由于用户提供的是文件的存放路径，因此需要操作系统一层一层">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/OS.png">
 <meta property="article:published_time" content="2024-11-21T14:07:06.000Z">
@@ -278,104 +278,129 @@
             
               <div class="markdown-body">
                 
-                <h1 id="4-2-文件系统的结构与虚拟文件系统"><a href="#4-2-文件系统的结构与虚拟文件系统" class="headerlink" title="4.2 文件系统的结构与虚拟文件系统"></a><strong>4.2 文件系统的结构与虚拟文件系统</strong></h1><h2 id="1-文件系统的层次结构-了解即可"><a href="#1-文件系统的层次结构-了解即可" class="headerlink" title="1. 文件系统的层次结构(了解即可)"></a><strong>1. 文件系统的层次结构(了解即可)</strong></h2><p><img src="/2024/11/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/4-3-%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/image-20241121221253104.png" srcset="/img/loading.gif" lazyload></p>
+                <h1 id="文件系统的结构与虚拟文件系统"><strong>4.2
+文件系统的结构与虚拟文件系统</strong></h1>
+<h2 id="文件系统的层次结构了解即可"><strong>1.
+文件系统的层次结构(了解即可)</strong></h2>
+<p><img src="/2024/11/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/4-3-%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/image-20241121221253104.png" srcset="/img/loading.gif" lazyload></p>
 <ul>
-<li>用一个例子来辅助记忆文件系统的层次结构：<ul>
-<li>假设某用户请求删除文件“D:&#x2F;工作目录&#x2F;学生信息.xIsx”的最后100条记录<ul>
-<li>1. 用户需要通过操作系统提供的接口发出上述请求 – <strong>用户接口</strong><ul>
+<li>用一个例子来辅助记忆文件系统的层次结构：
+<ul>
+<li>假设某用户请求删除文件“D:/工作目录/学生信息.xIsx"的最后100条记录
+<ul>
+<li>1. 用户需要通过操作系统提供的接口发出上述请求 --
+<strong>用户接口</strong>
+<ul>
 <li>文件的基本操作 章节相关内容</li>
-</ul>
-</li>
-<li>2. 由于用户提供的是文件的存放路径，因此需要操作系统一层一层地查找目录，找到对应的目录项 – <strong>文件目录系统</strong><ul>
+</ul></li>
+<li>2.
+由于用户提供的是文件的存放路径，因此需要操作系统一层一层地查找目录，找到对应的目录项
+-- <strong>文件目录系统</strong>
+<ul>
 <li>文件目录 章节相关内容</li>
-</ul>
-</li>
-<li>3. 不同的用户对文件有不同的操作权限，因此为了保证安全，需要检查用户是否有访问权限– <strong>存取控制模块(存取控制验证层)</strong><ul>
+</ul></li>
+<li>3.
+不同的用户对文件有不同的操作权限，因此为了保证安全，需要检查用户是否有访问权限--
+<strong>存取控制模块(存取控制验证层)</strong>
+<ul>
 <li>文件保护 章节相关内容</li>
-</ul>
-</li>
-<li>4. 验证了用户的访问权限之后，需要把用户提供的“记录号”转变为对应的逻辑地址 – <strong>逻辑文件系统与文件信息缓冲区</strong><ul>
+</ul></li>
+<li>4.
+验证了用户的访问权限之后，需要把用户提供的“记录号”转变为对应的逻辑地址
+-- <strong>逻辑文件系统与文件信息缓冲区</strong>
+<ul>
 <li>文件的逻辑结构 章节相关内容</li>
-</ul>
-</li>
-<li>5. 知道了目标记录对应的逻辑地址后，还需要转换成实际的物理地址 – <strong>物理文件系统</strong><ul>
+</ul></li>
+<li>5. 知道了目标记录对应的逻辑地址后，还需要转换成实际的物理地址 --
+<strong>物理文件系统</strong>
+<ul>
 <li>文件的物理结构 章节相关内容</li>
-</ul>
-</li>
-<li>6. 要删除这条记录，必定要对磁盘设备发出请求 – <strong>设备管理程序模块</strong><ul>
+</ul></li>
+<li>6. 要删除这条记录，必定要对磁盘设备发出请求 --
+<strong>设备管理程序模块</strong>
+<ul>
 <li>设备管理 章节相关内容</li>
-</ul>
-</li>
-<li>7. 删除这些记录后，会有一些盘块空闲，因此要将这些空闲盘块回收 – <strong>辅助分配模块</strong><ul>
+</ul></li>
+<li>7. 删除这些记录后，会有一些盘块空闲，因此要将这些空闲盘块回收 --
+<strong>辅助分配模块</strong>
+<ul>
 <li>文件存储空间管理 章节相关内容</li>
+</ul></li>
+</ul></li>
+</ul></li>
 </ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="2-文件系统的全局结构-布局"><a href="#2-文件系统的全局结构-布局" class="headerlink" title="2. 文件系统的全局结构(布局)"></a><strong>2. 文件系统的全局结构(布局)</strong></h2><h3 id="2-1-磁盘出厂到文件系统建立的过程"><a href="#2-1-磁盘出厂到文件系统建立的过程" class="headerlink" title="2.1 磁盘出厂到文件系统建立的过程:"></a>2.1 <strong>磁盘出厂到文件系统建立的过程</strong>:</h3><p>1. <strong>原始磁盘</strong></p>
+<h2 id="文件系统的全局结构布局"><strong>2.
+文件系统的全局结构(布局)</strong></h2>
+<h3 id="磁盘出厂到文件系统建立的过程">2.1
+<strong>磁盘出厂到文件系统建立的过程</strong>:</h3>
+<p>1. <strong>原始磁盘</strong></p>
 <p><img src="/2024/11/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/4-3-%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/image-20241121221040188.png" srcset="/img/loading.gif" lazyload></p>
-<p> 2. <strong>低级格式化(物理格式化)</strong></p>
+<p>2. <strong>低级格式化(物理格式化)</strong></p>
 <ul>
 <li>划分扇区，检测坏扇区，并用备用扇区替换坏扇区</li>
 </ul>
 <p><img src="/2024/11/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/4-3-%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/image-20241121221355176.png" srcset="/img/loading.gif" lazyload></p>
 <p>3. <strong>磁盘分区(分卷，Volume)</strong></p>
 <ul>
-<li>将磁盘分区, 每个分区由若干柱面组成(即分为我们熟悉的 C盘、D盘、E盘)</li>
+<li>将磁盘分区, 每个分区由若干柱面组成(即分为我们熟悉的
+C盘、D盘、E盘)</li>
 </ul>
 <p>4. <strong>逻辑格式化</strong></p>
 <p><img src="/2024/11/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/4-3-%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/image-20241121221453868.png" srcset="/img/loading.gif" lazyload></p>
 <ul>
-<li><p>完成各分区的文件系统初始化</p>
-</li>
-<li><p>i结点区 ：索引结点存放区域</p>
-</li>
-<li><p>注：逻辑格式化后，灰色部分就有实际数据了，白色部分还没有数据</p>
-</li>
+<li><p>完成各分区的文件系统初始化</p></li>
+<li><p>i结点区 ：索引结点存放区域</p></li>
+<li><p>注：逻辑格式化后，灰色部分就有实际数据了，白色部分还没有数据</p></li>
 </ul>
-<h3 id="2-2-文件系统在内存中的结构"><a href="#2-2-文件系统在内存中的结构" class="headerlink" title="2.2 文件系统在内存中的结构"></a>2.2 <strong>文件系统在内存中的结构</strong></h3><p><img src="/2024/11/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/4-3-%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/image-20241121221632779.png" srcset="/img/loading.gif" lazyload></p>
-<h3 id="2-3-open-系统调用打开文件背后的过程"><a href="#2-3-open-系统调用打开文件背后的过程" class="headerlink" title="2.3 open 系统调用打开文件背后的过程"></a>2.3 <strong>open 系统调用打开文件背后的过程</strong></h3><p><img src="/2024/11/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/4-3-%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/image-20241121221732613.png" srcset="/img/loading.gif" lazyload></p>
-<h2 id="3-虚拟文件系统-文件系统挂载-安装"><a href="#3-虚拟文件系统-文件系统挂载-安装" class="headerlink" title="3. 虚拟文件系统&amp;文件系统挂载(安装)"></a><strong>3. 虚拟文件系统&amp;文件系统挂载(安装)</strong></h2><h3 id="3-1-普通的文件系统"><a href="#3-1-普通的文件系统" class="headerlink" title="3.1 普通的文件系统"></a>3.1 <strong>普通的文件系统</strong></h3><ul>
+<h3 id="文件系统在内存中的结构">2.2
+<strong>文件系统在内存中的结构</strong></h3>
+<p><img src="/2024/11/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/4-3-%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/image-20241121221632779.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="open-系统调用打开文件背后的过程">2.3 <strong>open
+系统调用打开文件背后的过程</strong></h3>
+<p><img src="/2024/11/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/4-3-%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/image-20241121221732613.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="虚拟文件系统文件系统挂载安装"><strong>3.
+虚拟文件系统&amp;文件系统挂载(安装)</strong></h2>
+<h3 id="普通的文件系统">3.1 <strong>普通的文件系统</strong></h3>
+<ul>
 <li>不同的存储设备中的文件系统有可能是不同的，提供的系统调用接口也不同</li>
 </ul>
 <p><img src="/2024/11/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/4-3-%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/image-20241121221942018.png" srcset="/img/loading.gif" lazyload></p>
-<h3 id="3-2-虚拟文件系统（VFS）"><a href="#3-2-虚拟文件系统（VFS）" class="headerlink" title="3.2 虚拟文件系统（VFS）"></a>3.2 <strong>虚拟文件系统（VFS）</strong></h3><p><img src="/2024/11/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/4-3-%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/image-20241121222033809.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="虚拟文件系统vfs">3.2 <strong>虚拟文件系统（VFS）</strong></h3>
+<p><img src="/2024/11/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/4-3-%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/image-20241121222033809.png" srcset="/img/loading.gif" lazyload></p>
 <ul>
 <li><p><strong>虚拟文件系统的特点</strong>:</p>
 <ul>
 <li>向上层用户进程提供统一标准的系统调用接口，屏蔽底层具体文件系统的实现差异</li>
-<li><strong>VFS</strong>要求下层的文件系统必须实现某些规定的函数功能，一个新的文件系统想要在某操作系统上被使用，就必须满足该操作系统VFS的要求<ul>
-<li>如：open&#x2F;read&#x2F;write</li>
-</ul>
-</li>
+<li><strong>VFS</strong>要求下层的文件系统必须实现某些规定的函数功能，一个新的文件系统想要在某操作系统上被使用，就必须满足该操作系统VFS的要求
+<ul>
+<li>如：open/read/write</li>
+</ul></li>
 <li>每打开一个文件，<strong>VFS</strong>就在主存中新建一个<strong>vnode</strong>，用统一的数据结构表示文件，无论该文件存储在哪个文件系统</li>
 </ul>
 <p><img src="/2024/11/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/4-3-%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/image-20241121222254313.png" srcset="/img/loading.gif" lazyload></p>
 <ul>
-<li><p>存在的问题：不同的文件系统，表示文件数据结构各不相同。打开文件后，其在内存中的表示就不同 </p>
+<li><p>存在的问题：不同的文件系统，表示文件数据结构各不相同。打开文件后，其在内存中的表示就不同</p>
 <p><img src="/2024/11/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/4-3-%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/image-20241121222313706.png" srcset="/img/loading.gif" lazyload></p>
 <ul>
 <li>注意：<strong>vnode</strong>只存在于主存中，而<strong>inode</strong>既会被调入主存，也会在外存中存储</li>
+</ul></li>
+<li><p>打开文件后，创建<strong>vnode</strong>，并将文件信息复制到vnode中，vnode的功能指针指向具体文件系统的函数功能</p></li>
+</ul></li>
 </ul>
-</li>
-<li><p>打开文件后，创建<strong>vnode</strong>，并将文件信息复制到vnode中，vnode的功能指针指向具体文件系统的函数功能</p>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="3-3-文件系统挂载（mounting）"><a href="#3-3-文件系统挂载（mounting）" class="headerlink" title="3.3 文件系统挂载（mounting）"></a>3.3 <strong>文件系统挂载（mounting）</strong></h3><ul>
-<li>即文件系统安装&#x2F;装载 – 如何将一个文件系统挂载到操作系统中？<ul>
-<li>文件系统挂载要做的事:<ul>
-<li>在<strong>VFS</strong>中注册新挂载的文件系统，<strong>内存中的挂载表（mounting table）</strong>包含每个文件系统的相关信息，包含文件系统类型、容量大小等</li>
+<h3 id="文件系统挂载mounting">3.3
+<strong>文件系统挂载（mounting）</strong></h3>
+<ul>
+<li>即文件系统安装/装载 -- 如何将一个文件系统挂载到操作系统中？
+<ul>
+<li>文件系统挂载要做的事:
+<ul>
+<li>在<strong>VFS</strong>中注册新挂载的文件系统，<strong>内存中的挂载表（mounting
+table）</strong>包含每个文件系统的相关信息，包含文件系统类型、容量大小等</li>
 <li>新挂载的文件系统，要向<strong>VFS</strong>提供一个<strong>函数地址列表</strong></li>
-<li>将新文件系统加到<strong>挂载点</strong>（mount point），也就是将新文件系统挂载在某个父目录下</li>
-</ul>
-</li>
-</ul>
-</li>
+<li>将新文件系统加到<strong>挂载点</strong>（mount
+point），也就是将新文件系统挂载在某个父目录下</li>
+</ul></li>
+</ul></li>
 </ul>
 
                 
