@@ -28,7 +28,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/MySQL.png">
 <meta property="article:published_time" content="2024-11-25T13:37:48.000Z">
-<meta property="article:modified_time" content="2024-11-26T07:50:09.020Z">
+<meta property="article:modified_time" content="2024-12-04T12:21:01.277Z">
 <meta property="article:author" content="Binbo">
 <meta property="article:tag" content="MySQL">
 <meta name="twitter:card" content="summary_large_image">
@@ -304,23 +304,23 @@
 <ol type="1">
 <li>查询所有数据库：</li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SHOW DATABASES;<br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SHOW</span> DATABASES;<br></code></pre></td></tr></table></figure>
 <ol start="2" type="1">
 <li>查询当前数据库：</li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT DATABASE();<br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> DATABASE();<br></code></pre></td></tr></table></figure>
 <ol start="3" type="1">
 <li>创建数据库：</li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs mysql">CREATE DATABASE [ IF NOT EXISTS ] 数据库名 [ DEFAULT CHARSET 字符集] [COLLATE 排序规则 ];<br># eg:<br>create database if not exists itcast;<br>create database itheima default charset utf8mb4;<br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> DATABASE [ IF <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">EXISTS</span> ] 数据库名 [ <span class="hljs-keyword">DEFAULT</span> CHARSET 字符集] [<span class="hljs-keyword">COLLATE</span> 排序规则 ];<br># eg:<br><span class="hljs-keyword">create</span> database if <span class="hljs-keyword">not</span> <span class="hljs-keyword">exists</span> itcast;<br><span class="hljs-keyword">create</span> database itheima <span class="hljs-keyword">default</span> charset utf8mb4;<br></code></pre></td></tr></table></figure>
 <ol start="4" type="1">
 <li>删除数据库：</li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs mysql">DROP DATABASE [ IF EXISTS ] 数据库名<br># eg:<br>drop database if exists test;<br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">DROP</span> DATABASE [ IF <span class="hljs-keyword">EXISTS</span> ] 数据库名<br># eg:<br><span class="hljs-keyword">drop</span> database if <span class="hljs-keyword">exists</span> test;<br></code></pre></td></tr></table></figure>
 <ol start="5" type="1">
 <li>使用数据库：</li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">USE 数据库名;<br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql">USE 数据库名;<br></code></pre></td></tr></table></figure>
 <h4 id="注意事项">注意事项</h4>
 <ul>
 <li>UTF8字符集长度为3字节，有些符号占4字节，所以推荐用utf8mb4字符集</li>
@@ -329,48 +329,48 @@
 <ol type="1">
 <li>查询当前数据库所有表：</li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SHOW TABLES;<br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SHOW</span> TABLES;<br></code></pre></td></tr></table></figure>
 <ol start="2" type="1">
 <li>查询表结构：</li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">DESC 表名;<br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">DESC</span> 表名;<br></code></pre></td></tr></table></figure>
 <ol start="3" type="1">
 <li>查询指定表的建表语句：</li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SHOW CREATE TABLE 表名;<br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SHOW</span> <span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> 表名;<br></code></pre></td></tr></table></figure>
 <ol start="4" type="1">
 <li>创建表：</li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs mysql">CREATE TABLE 表名(<br>	字段1 字段1类型 [COMMENT 字段1注释],<br>	字段2 字段2类型 [COMMENT 字段2注释],<br>	字段3 字段3类型 [COMMENT 字段3注释],<br>	...<br>	字段n 字段n类型 [COMMENT 字段n注释]<br>)[ COMMENT 表注释 ];<br><br># eg:<br>create table tb_user(<br>    id int comment &#x27;编号&#x27;,<br>    name varchar(50) comment &#x27;姓名&#x27;,<br>    age int comment &#x27;年龄&#x27;,<br>    gender varchar(1) comment &#x27;性别&#x27;<br>) comment &#x27;用户表&#x27;;<br><br>create table emp(<br>	id int comment &#x27;编号&#x27;,<br>    workno varchar(10) comment &#x27;工号&#x27;,<br>    name varchar(10) comment &#x27;姓名&#x27;,<br>    gender char(1) comment &#x27;性别&#x27;,<br>    age tinyint unsigned comment &#x27;年龄&#x27;,<br>    idcard char(18) comment &#x27;身份证号&#x27;,<br>    entrydate date comment &#x27;入职时间&#x27;<br>) comment &#x27;员工表&#x27;;<br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> 表名(<br>	字段<span class="hljs-number">1</span> 字段<span class="hljs-number">1</span>类型 [COMMENT 字段<span class="hljs-number">1</span>注释],<br>	字段<span class="hljs-number">2</span> 字段<span class="hljs-number">2</span>类型 [COMMENT 字段<span class="hljs-number">2</span>注释],<br>	字段<span class="hljs-number">3</span> 字段<span class="hljs-number">3</span>类型 [COMMENT 字段<span class="hljs-number">3</span>注释],<br>	...<br>	字段n 字段n类型 [COMMENT 字段n注释]<br>)[ COMMENT 表注释 ];<br><br># eg:<br><span class="hljs-keyword">create</span> <span class="hljs-keyword">table</span> tb_user(<br>    id <span class="hljs-type">int</span> comment <span class="hljs-string">&#x27;编号&#x27;</span>,<br>    name <span class="hljs-type">varchar</span>(<span class="hljs-number">50</span>) comment <span class="hljs-string">&#x27;姓名&#x27;</span>,<br>    age <span class="hljs-type">int</span> comment <span class="hljs-string">&#x27;年龄&#x27;</span>,<br>    gender <span class="hljs-type">varchar</span>(<span class="hljs-number">1</span>) comment <span class="hljs-string">&#x27;性别&#x27;</span><br>) comment <span class="hljs-string">&#x27;用户表&#x27;</span>;<br><br><span class="hljs-keyword">create</span> <span class="hljs-keyword">table</span> emp(<br>	id <span class="hljs-type">int</span> comment <span class="hljs-string">&#x27;编号&#x27;</span>,<br>    workno <span class="hljs-type">varchar</span>(<span class="hljs-number">10</span>) comment <span class="hljs-string">&#x27;工号&#x27;</span>,<br>    name <span class="hljs-type">varchar</span>(<span class="hljs-number">10</span>) comment <span class="hljs-string">&#x27;姓名&#x27;</span>,<br>    gender <span class="hljs-type">char</span>(<span class="hljs-number">1</span>) comment <span class="hljs-string">&#x27;性别&#x27;</span>,<br>    age tinyint unsigned comment <span class="hljs-string">&#x27;年龄&#x27;</span>,<br>    idcard <span class="hljs-type">char</span>(<span class="hljs-number">18</span>) comment <span class="hljs-string">&#x27;身份证号&#x27;</span>,<br>    entrydate <span class="hljs-type">date</span> comment <span class="hljs-string">&#x27;入职时间&#x27;</span><br>) comment <span class="hljs-string">&#x27;员工表&#x27;</span>;<br></code></pre></td></tr></table></figure>
 <p>​ <strong>最后一个字段后面没有逗号</strong></p>
 <ol start="5" type="1">
 <li>添加字段：</li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs mysql">ALTER TABLE 表名 ADD 字段名 类型(长度) [COMMENT 注释] [约束];<br># 例：<br>ALTER TABLE emp ADD nickname varchar(20) COMMENT &#x27;昵称&#x27;;<br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">ALTER</span> <span class="hljs-keyword">TABLE</span> 表名 <span class="hljs-keyword">ADD</span> 字段名 类型(长度) [COMMENT 注释] [约束];<br># 例：<br><span class="hljs-keyword">ALTER</span> <span class="hljs-keyword">TABLE</span> emp <span class="hljs-keyword">ADD</span> nickname <span class="hljs-type">varchar</span>(<span class="hljs-number">20</span>) COMMENT <span class="hljs-string">&#x27;昵称&#x27;</span>;<br></code></pre></td></tr></table></figure>
 <ol start="6" type="1">
 <li>修改数据类型：</li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">ALTER TABLE 表名 MODIFY 字段名 新数据类型(长度);<br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">ALTER</span> <span class="hljs-keyword">TABLE</span> 表名 MODIFY 字段名 新数据类型(长度);<br></code></pre></td></tr></table></figure>
 <ol start="7" type="1">
 <li>修改字段名和字段类型：</li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs mysql">ALTER TABLE 表名 CHANGE 旧字段名 新字段名 类型(长度) [COMMENT 注释] [约束];<br># 例：将emp表的nickname字段修改为username，类型为varchar(30)<br>ALTER TABLE emp CHANGE nickname username varchar(30) COMMENT &#x27;昵称&#x27;;<br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">ALTER</span> <span class="hljs-keyword">TABLE</span> 表名 CHANGE 旧字段名 新字段名 类型(长度) [COMMENT 注释] [约束];<br># 例：将emp表的nickname字段修改为username，类型为<span class="hljs-type">varchar</span>(<span class="hljs-number">30</span>)<br><span class="hljs-keyword">ALTER</span> <span class="hljs-keyword">TABLE</span> emp CHANGE nickname username <span class="hljs-type">varchar</span>(<span class="hljs-number">30</span>) COMMENT <span class="hljs-string">&#x27;昵称&#x27;</span>;<br></code></pre></td></tr></table></figure>
 <ol start="7" type="1">
 <li>删除字段：</li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs mysql">ALTER TABLE 表名 DROP 字段名;<br># eg:<br>alter table emp drop username;<br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">ALTER</span> <span class="hljs-keyword">TABLE</span> 表名 <span class="hljs-keyword">DROP</span> 字段名;<br># eg:<br><span class="hljs-keyword">alter</span> <span class="hljs-keyword">table</span> emp <span class="hljs-keyword">drop</span> username;<br></code></pre></td></tr></table></figure>
 <ol start="8" type="1">
 <li>修改表名：</li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs mysql">ALTER TABLE 表名 RENAME TO 新表名<br># eg:<br>alter table emp rename to employee;<br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">ALTER</span> <span class="hljs-keyword">TABLE</span> 表名 RENAME <span class="hljs-keyword">TO</span> 新表名<br># eg:<br><span class="hljs-keyword">alter</span> <span class="hljs-keyword">table</span> emp rename <span class="hljs-keyword">to</span> employee;<br></code></pre></td></tr></table></figure>
 <ol start="9" type="1">
 <li>删除表：</li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">DROP TABLE [IF EXISTS] 表名;<br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">DROP</span> <span class="hljs-keyword">TABLE</span> [IF <span class="hljs-keyword">EXISTS</span>] 表名;<br></code></pre></td></tr></table></figure>
 <ol start="10" type="1">
 <li>删除表，并重新创建该表：</li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">TRUNCATE TABLE 表名;<br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">TRUNCATE</span> <span class="hljs-keyword">TABLE</span> 表名;<br></code></pre></td></tr></table></figure>
 
                 
               </div>

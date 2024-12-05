@@ -185,7 +185,7 @@
 <div id="banner" class="banner" parallax=true
      style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
-    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.1)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
@@ -604,7 +604,7 @@
       
       <a class="index-excerpt " href="/2024/11/27/MySQL/13-MySQL%E7%AE%A1%E7%90%86/" target="_self">
         <div>
-          事务原理 事务是一组操作的集合，它是一个不可分割的工作单位，事务会把所有的操作作为一个整体一起向系统提交或撤销操作请求，即这些操作要么同时成功，要么同时败。具有ACID四大特征。 原子性，一致性，持久性这三大特性由 redo log 和 undo log 日志来保证的。 隔离性 是由锁机制和MVCC保证的。 redo log: 重做日志，记录的是事务提交时数据页的物理修改，是用来实现事务
+          MySQL管理 系统数据库 MySQL数据库安装完成后，自带了以下四个数据库，具体作用如下：     数据库 含义     mysql 存储 MySQL 服务器正常运行所需要的各种信息（时区、主从、用户、权限等）   information_schema 提供了访问数据库元数据的各种表和视图，包含数据库、表、字段类型及访问权限等   performanc
         </div>
       </a>
 
@@ -678,7 +678,7 @@
       
       <a class="index-excerpt " href="/2024/11/27/MySQL/12-InnoDB%E5%BC%95%E6%93%8E/" target="_self">
         <div>
-          InnoDB 引擎 逻辑存储结构 表空间（ibd文件），一个mysql实例可以对应多个表空间，用于存储记录、索引等数据。 段，分为数据段（Leaf node segment）、索引段（Non-leaf node segment）、回滚段（Rollback segment），InnoDB是索引组织表，数据段就是B+树的叶子节点，索引段即为B+树的非叶子节点。段用来管理多个Extent（区）
+          InnoDB引擎 逻辑存储结构  表空间（ibd文件）：一个MySQL实例可以对应多个表空间，用于存储记录、索引等数据。 段：分为数据段（Leaf node segment）、索引段（Non-leaf node segment）、回滚段（Rollback segment），InnoDB是索引组织表，数据段就是B+树的叶子结点，索引段就是B+树的非叶子结点。段用来当管理多个Extent（
         </div>
       </a>
 

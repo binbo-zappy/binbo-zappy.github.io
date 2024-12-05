@@ -19,16 +19,16 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="InnoDB 引擎 逻辑存储结构 表空间（ibd文件），一个mysql实例可以对应多个表空间，用于存储记录、索引等数据。 段，分为数据段（Leaf node segment）、索引段（Non-leaf node segment）、回滚段（Rollback segment），InnoDB是索引组织表，数据段就是B+树的叶子节点，索引段即为B+树的非叶子节点。段用来管理多个Extent（区）">
+    <meta name="description" content="InnoDB引擎 逻辑存储结构  表空间（ibd文件）：一个MySQL实例可以对应多个表空间，用于存储记录、索引等数据。 段：分为数据段（Leaf node segment）、索引段（Non-leaf node segment）、回滚段（Rollback segment），InnoDB是索引组织表，数据段就是B+树的叶子结点，索引段就是B+树的非叶子结点。段用来当管理多个Extent（">
 <meta property="og:type" content="article">
 <meta property="og:title" content="12. InnoDB引擎">
 <meta property="og:url" content="http://binbo-zappy.github.io/2024/11/27/MySQL/12-InnoDB%E5%BC%95%E6%93%8E/index.html">
 <meta property="og:site_name" content="Binbo">
-<meta property="og:description" content="InnoDB 引擎 逻辑存储结构 表空间（ibd文件），一个mysql实例可以对应多个表空间，用于存储记录、索引等数据。 段，分为数据段（Leaf node segment）、索引段（Non-leaf node segment）、回滚段（Rollback segment），InnoDB是索引组织表，数据段就是B+树的叶子节点，索引段即为B+树的非叶子节点。段用来管理多个Extent（区）">
+<meta property="og:description" content="InnoDB引擎 逻辑存储结构  表空间（ibd文件）：一个MySQL实例可以对应多个表空间，用于存储记录、索引等数据。 段：分为数据段（Leaf node segment）、索引段（Non-leaf node segment）、回滚段（Rollback segment），InnoDB是索引组织表，数据段就是B+树的叶子结点，索引段就是B+树的非叶子结点。段用来当管理多个Extent（">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/MySQL.png">
 <meta property="article:published_time" content="2024-11-27T04:10:56.000Z">
-<meta property="article:modified_time" content="2024-11-27T04:30:34.824Z">
+<meta property="article:modified_time" content="2024-12-05T02:32:34.978Z">
 <meta property="article:author" content="Binbo">
 <meta property="article:tag" content="MySQL">
 <meta name="twitter:card" content="summary_large_image">
@@ -225,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          391 字
+          1.7k 字
         
       </span>
     
@@ -236,7 +236,7 @@
         
         
         
-          4 分钟
+          15 分钟
         
       </span>
     
@@ -278,26 +278,179 @@
             
               <div class="markdown-body">
                 
-                <h2 id="innodb-引擎">InnoDB 引擎</h2>
-<h3 id="逻辑存储结构">逻辑存储结构</h3>
-<p>表空间（ibd文件），一个mysql实例可以对应多个表空间，用于存储记录、索引等数据。</p>
-<p>段，分为数据段（Leaf node segment）、索引段（Non-leaf node
+                <h1 id="innodb引擎">InnoDB引擎</h1>
+<h2 id="逻辑存储结构">逻辑存储结构</h2>
+<ul>
+<li>表空间（ibd文件）：一个MySQL实例可以对应多个表空间，用于存储记录、索引等数据。</li>
+<li>段：分为数据段（Leaf node segment）、索引段（Non-leaf node
 segment）、回滚段（Rollback
-segment），InnoDB是索引组织表，数据段就是B+树的叶子节点，索引段即为B+树的非叶子节点。段用来管理多个Extent（区）。</p>
-<p>区，表空间的单元结构，每个区的大小为1M。默认情况下，InnoDB存储引擎页大小为16K，即一个区中一共有64个连续的页。</p>
-<p>页，是InnoDB存储引擎磁盘管理的最小单元，每个页的大小默认为16KB。为了保证页的连续性，InnoDB存储引擎每从磁盘申请4-5个区。一页包含若干行。</p>
-<p>行，InnoDB存储引擎数据是按进行存放的。</p>
-<h3 id="架构">架构</h3>
-<figure>
-<img src="/2024/11/27/MySQL/12-InnoDB%E5%BC%95%E6%93%8E/artic.png" srcset="/img/loading.gif" lazyload alt="images">
-<figcaption aria-hidden="true">images</figcaption>
-</figure>
-<p>Buffer
-Pool：缓冲池是主内存中的一个区域，里面可以缓存磁盘上经常操作的真实数据，在执行增删改查操作时，先操作缓冲池中的数据（若缓冲池没有数据，则从磁盘加载并缓存），然后再以一定频率刷新到磁盘，从而减少磁盘I0，加快处理速度。</p>
-<p><img src="https://github.com/Buildings-Lei/mysql_note/blob/main/images/artic2.png" srcset="/img/loading.gif" lazyload alt="images"> <img src="https://github.com/Buildings-Lei/mysql_note/blob/main/images/artic3.png" srcset="/img/loading.gif" lazyload alt="images"> <img src="https://github.com/Buildings-Lei/mysql_note/blob/main/images/artic4.png" srcset="/img/loading.gif" lazyload alt="images"> <img src="/2024/11/27/MySQL/12-InnoDB%E5%BC%95%E6%93%8E/artic5.png" srcset="/img/loading.gif" lazyload alt="images"></p>
-<p>磁盘架构： <img src="/2024/11/27/MySQL/12-InnoDB%E5%BC%95%E6%93%8E/artic6.png" srcset="/img/loading.gif" lazyload alt="images"> <img src="/2024/11/27/MySQL/12-InnoDB%E5%BC%95%E6%93%8E/artic7.png" srcset="/img/loading.gif" lazyload alt="images"> <img src="/2024/11/27/MySQL/12-InnoDB%E5%BC%95%E6%93%8E/artic8.png" srcset="/img/loading.gif" lazyload alt="images"></p>
-<p>InnoDB的整个体系结构为：</p>
-<p>当业务操作的时候直接操作的是内存缓冲区，如果缓冲区当中没有数据，则会从磁盘中加载到缓冲区，增删改查都是在缓冲区的，后台线程以一定的速率刷新到磁盘。</p>
+segment），InnoDB是索引组织表，数据段就是B+树的叶子结点，索引段就是B+树的非叶子结点。段用来当管理多个Extent（区）。</li>
+<li>区：表空间的单元结构，每个区的大小为1M。默认情况下，InnoDB存储引擎页大小为16K，即一个区中一共有64个连续的页。</li>
+<li>页：是InnoDB存储引擎磁盘管理的最小单元，每个页的大小默认为16KB。为了保证页的连续性，InnoDB存储引擎每次从磁盘申请4-5个区。</li>
+<li>行：InnoDB存储引擎数据就是按行进行存放的。</li>
+</ul>
+<p><img src="/2024/11/27/MySQL/12-InnoDB%E5%BC%95%E6%93%8E/a4be8ac711730c4b9cbfd7851d05a841.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="架构">架构</h2>
+<p>MySQL5.5版本开始，默认使用InnoDB存储引擎，它擅长事务处理，具有崩溃恢复特性，在日常开发中使用非常广泛。下面是InnoDB架构图，左侧为内存结构，右侧为磁盘结构。</p>
+<p><img src="/2024/11/27/MySQL/12-InnoDB%E5%BC%95%E6%93%8E/154be1df094926cf7a6e96848a49c2f2.png" srcset="/img/loading.gif" lazyload></p>
+<p><strong>内存结构</strong></p>
+<p><img src="/2024/11/27/MySQL/12-InnoDB%E5%BC%95%E6%93%8E/e194374d0695833b5ef9fbbc779146eb.png" srcset="/img/loading.gif" lazyload></p>
+<p>Change
+Buffer:更改缓冲区（针对于非唯一二级索引页），在执行DML语句时，如果这些数据Page没有在Buffer
+Pool中，不会直接操作磁盘，而会将数据变更存在更改缓冲区Change
+Buffer中，在未来数据被读取时，再将数据合并恢复到Buffer
+Poolr中，再将合并后的数据刷新到磁盘中。</p>
+<p>Change Bufferl的意义是什么？
+与聚集索引不同，二级索引通常是非唯一的，并且以相对随机的顺序插入二级索引。同样，删除和更新可能会影响索引树中不相邻的二级索引页，如果每一次都操作磁盘，会造成大量的磁盘O。有了Change
+Buf仟er之后，我们可以在缓冲池中进行合并处理，减少磁盘IO。</p>
+<p><img src="/2024/11/27/MySQL/12-InnoDB%E5%BC%95%E6%93%8E/56d1ef907694171dd3fba8742f95c6e8.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/11/27/MySQL/12-InnoDB%E5%BC%95%E6%93%8E/6a215517c813ad6407777eb757ac43da.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/11/27/MySQL/12-InnoDB%E5%BC%95%E6%93%8E/c111753c5af95905e94829bdc7b98178.png" srcset="/img/loading.gif" lazyload></p>
+<p><strong>磁盘结构</strong></p>
+<p><img src="/2024/11/27/MySQL/12-InnoDB%E5%BC%95%E6%93%8E/5e58c5ac575edf08776d5b439e863855.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/11/27/MySQL/12-InnoDB%E5%BC%95%E6%93%8E/504a5c804f7924bebb3ec0114072f45e.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/11/27/MySQL/12-InnoDB%E5%BC%95%E6%93%8E/dae5c143e5710c2a298cb14a81aa8bd0.png" srcset="/img/loading.gif" lazyload></p>
+<p><strong>后台线程</strong></p>
+<p><img src="/2024/11/27/MySQL/12-InnoDB%E5%BC%95%E6%93%8E/436f8bcfcb6656368431f1193d136070.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="事务原理">事务原理</h2>
+<p><strong>事务</strong></p>
+<p>事务是一组操作的集合，它是一个不可分割的工作单位，事务会把所有的操作作为一个整体一起向系统提交或撤销操作请求，即这些操作要么同时成功，要么同时失败。</p>
+<p><strong>特性</strong></p>
+<ul>
+<li>原子性：事务是不可分割的最小操作单元，要么全部成功，要么全部失败。</li>
+<li>一致性：事务完成时，必须使所有的数据都保持一致状态。</li>
+<li>隔离性：数据库提供的隔离机制，保证事务在不受外部并发操作影响的独立环境下与运行。</li>
+<li>持久性：事务一旦提交或回滚，它对数据库中的数据的改变就是永久的。</li>
+</ul>
+<p><img src="/2024/11/27/MySQL/12-InnoDB%E5%BC%95%E6%93%8E/2743a68525ec8dfd89c0cb1c9687d526.png" srcset="/img/loading.gif" lazyload></p>
+<p><strong>redo log（持久性）</strong></p>
+<p>重做日志，记录的是事务提交时数据页的物理修改，是用来实现事务的永久性。</p>
+<p>该日志文件由两部分组成：重做日志缓冲（redo log
+buffer）以及重做日志文件（redo log
+file），前者是在内存中，后者在磁盘中。当事务提交之后会把所有修改信息都存到该日志文件中，用于在刷新脏页到磁盘，发生错误时，进行数据恢复使用。</p>
+<p><img src="/2024/11/27/MySQL/12-InnoDB%E5%BC%95%E6%93%8E/47311bddaa9c578fecbdca4f9de271b9.png" srcset="/img/loading.gif" lazyload></p>
+<p><strong>undo log（原子性）</strong></p>
+<p>回滚日志，用于记录数据被修改前的信息，作用包含两个：提供回滚和MVCC（多版本并发控制）。</p>
+<p>Undo log和redo
+log记录物理日志不一样，它是逻辑日志。可以认为当delete一条记录时，undo
+log中会记录一条对应的insert记录，反之亦然，当update一条记录时，它记录一条对应相反的update记录。当执行rollback时，就可以从undo
+log中的逻辑记录读取到相应的内容并进行回滚。</p>
+<p>Undo log销毁：Undo
+log在事务执行时产生，事务提交时，并不会立即删除undo
+log，因为这些日志可能还用与MVCC。</p>
+<p>Undo log存储：Undo
+log采用段的方式进行管理和记录，存放在前面介绍的rollback
+segment回滚段中，内部包含1024个undo log segment。</p>
+<h2 id="mvcc"><strong>MVCC</strong></h2>
+<p><strong>基本概念</strong></p>
+<ul>
+<li>当前读</li>
+</ul>
+<p>读取的是记录的最新版本，读取时还要保证其他并发事务不能修改当前记录，会对读取的记录进行加锁。对于我们日常的操作，如：select
+... lock in share mode（共享锁），select ... for
+update、update、insert、delete（排他锁）都是一种当前读。</p>
+<ul>
+<li>快照读</li>
+</ul>
+<p>简单的select（不加锁）就是快照读，读取的是记录数据的可见版本，有可能是历史数据，不加锁，是非阻塞读。</p>
+<ul>
+<li>Read Committed：每次select，都生成一个快照读。</li>
+<li>Repeatable Read：开启事务后第一个select语句才是快照读的地方。</li>
+<li>Serializable：快照读会退化成当前读。</li>
+<li>MVCC</li>
+</ul>
+<p>全称Multi-Version Concurrency
+Control，多版本并发控制。指维护一个数据的多版本，使得读写操作没有冲突，快照读为MySQL实现MVCC提供了一个非阻塞读功能。MVCC的具体实现，还需要依赖于数据库记录中的三个隐式字段、undo
+log日志和readView。</p>
+<p><strong>实现原理</strong></p>
+<ul>
+<li>记录中的隐藏字段</li>
+</ul>
+<table>
+
+<thead>
+<tr>
+<th>隐藏字段</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DB_TRX_ID</td>
+<td>最近修改事务 ID ，记录插入这条记录或最后一次修改该记录的事务 ID</td>
+</tr>
+<tr>
+<td>DB_ROLL_PTR</td>
+<td>回滚指针，指向这条记录的上一个版本，用于配合 undo
+log，指向上一个版本</td>
+</tr>
+<tr>
+<td>DB_ROW_ID</td>
+<td>隐藏主键，如果表结构没有指定主键，将会生成该隐藏字段</td>
+</tr>
+</tbody>
+</table>
+<p><img src="/2024/11/27/MySQL/12-InnoDB%E5%BC%95%E6%93%8E/09c3c6c452d9229f44380fcb330f1e04.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>undo log</li>
+</ul>
+<p>回滚日志，在insert、update、delete的时候产生的便于数据回滚的日志。</p>
+<p>当insert的时候，产生的undo
+log日志只在回滚时需要，在事务提交后，可被立即删除。</p>
+<p>而update、delete的时候，产生的undo
+log日志不仅在回滚时需要，在快照读时也需要，不会立即被删除。</p>
+<p><img src="/2024/11/27/MySQL/12-InnoDB%E5%BC%95%E6%93%8E/5524cc0377798b96956bded8002e068f.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/11/27/MySQL/12-InnoDB%E5%BC%95%E6%93%8E/0f1655bfbdb52e26d7bf6863df8f2661.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>undo log版本链</li>
+</ul>
+<p>不同事物或相同事物对同一条记录进行修改，会导致该记录的undo
+log生成一条记录版本链表，链表的头部是最新的旧记录，链表尾部是最早的旧记录。</p>
+<ul>
+<li>readview</li>
+</ul>
+<p>ReadView（读视图）是快照读SQL执行时MVCC提取数据的依据，记录并维护系统当前活跃的事务（未提交的）id。</p>
+<p>ReadView中包含了四个核心字段：</p>
+<table>
+
+<thead>
+<tr>
+<th>字段</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>m_ids</td>
+<td>当前活跃的事务 ID 集合</td>
+</tr>
+<tr>
+<td>min_trx_id</td>
+<td>最小活跃事务 ID</td>
+</tr>
+<tr>
+<td>max_trx_id</td>
+<td>预分配事务 ID ，当前最大事务 ID+1（因为事务 ID 是自增的）</td>
+</tr>
+<tr>
+<td>creator_trx_id</td>
+<td>ReadView 创建者的事务 ID</td>
+</tr>
+</tbody>
+</table>
+<p>trx_id：代表是当前事务ID。</p>
+<p><img src="/2024/11/27/MySQL/12-InnoDB%E5%BC%95%E6%93%8E/5c172e97eeb3b8673d409dff1ba16e55.png" srcset="/img/loading.gif" lazyload></p>
+<p>不同隔离级别，生成ReadView的时机不同：</p>
+<ul>
+<li>READ COMMITTED：在事务中每一次执行快照读时生成的ReadView。</li>
+<li>REPEATABLE
+READ：仅在事务中第一次执行快照读时生成ReadView，后续复用该ReadView。</li>
+</ul>
+<p>RC隔离级别下，在事务中每一次执行快照读生成ReadView。</p>
+<p><img src="/2024/11/27/MySQL/12-InnoDB%E5%BC%95%E6%93%8E/c316d3409280d2606c10d28531d9a677.png" srcset="/img/loading.gif" lazyload></p>
+<p>RR隔离级别下，仅在事务中第一次执行快照读生成ReadView，后续复用该ReadView。</p>
+<p><img src="/2024/11/27/MySQL/12-InnoDB%E5%BC%95%E6%93%8E/655a74bc2ae1836ebacdea25e0913039.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/11/27/MySQL/12-InnoDB%E5%BC%95%E6%93%8E/d168be0e5ded71955fdfd219d3e0edb0.png" srcset="/img/loading.gif" lazyload></p>
 
                 
               </div>

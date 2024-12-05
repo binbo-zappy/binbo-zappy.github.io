@@ -28,7 +28,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/MySQL.png">
 <meta property="article:published_time" content="2024-11-26T07:52:33.000Z">
-<meta property="article:modified_time" content="2024-11-26T11:25:11.514Z">
+<meta property="article:modified_time" content="2024-12-04T12:22:13.504Z">
 <meta property="article:author" content="Binbo">
 <meta property="article:tag" content="MySQL">
 <meta name="twitter:card" content="summary_large_image">
@@ -285,23 +285,23 @@ Language(数据控制语言)，用来管理数据库用户、控制数据库的�
 <ol type="1">
 <li>查询用户：</li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mysql">USE mysql;<br>SELECT * FROM user;<br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sql">USE mysql;<br><span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> <span class="hljs-keyword">user</span>;<br></code></pre></td></tr></table></figure>
 <ol start="2" type="1">
 <li>创建用户:</li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">CREATE USER &#x27;用户名&#x27;@&#x27;主机名&#x27; IDENTIFIED BY &#x27;密码&#x27;;<br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">USER</span> <span class="hljs-string">&#x27;用户名&#x27;</span>@<span class="hljs-string">&#x27;主机名&#x27;</span> IDENTIFIED <span class="hljs-keyword">BY</span> <span class="hljs-string">&#x27;密码&#x27;</span>;<br></code></pre></td></tr></table></figure>
 <ol start="3" type="1">
 <li>修改用户密码：</li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">ALTER USER &#x27;用户名&#x27;@&#x27;主机名&#x27; IDENTIFIED WITH mysql_native_password BY &#x27;新密码&#x27;;<br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">ALTER</span> <span class="hljs-keyword">USER</span> <span class="hljs-string">&#x27;用户名&#x27;</span>@<span class="hljs-string">&#x27;主机名&#x27;</span> IDENTIFIED <span class="hljs-keyword">WITH</span> mysql_native_password <span class="hljs-keyword">BY</span> <span class="hljs-string">&#x27;新密码&#x27;</span>;<br></code></pre></td></tr></table></figure>
 <ol start="4" type="1">
 <li>删除用户：</li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">DROP USER &#x27;用户名&#x27;@&#x27;主机名&#x27;;<br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">DROP</span> <span class="hljs-keyword">USER</span> <span class="hljs-string">&#x27;用户名&#x27;</span>@<span class="hljs-string">&#x27;主机名&#x27;</span>;<br></code></pre></td></tr></table></figure>
 <ol start="5" type="1">
 <li>例子：</li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- 创建用户test，只能在当前主机localhost访问<br>create user &#x27;test&#x27;@&#x27;localhost&#x27; identified by &#x27;123456&#x27;;<br>-- 创建用户test，能在任意主机访问<br>create user &#x27;test1&#x27;@&#x27;%&#x27; identified by &#x27;123456&#x27;;<br>create user &#x27;test&#x27; identified by &#x27;123456&#x27;;<br>-- 修改密码<br>alter user &#x27;test&#x27;@&#x27;localhost&#x27; identified with mysql_native_password by &#x27;1234&#x27;;<br>-- 删除用户<br>drop user &#x27;test&#x27;@&#x27;localhost&#x27;;<br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- 创建用户test，只能在当前主机localhost访问</span><br><span class="hljs-keyword">create</span> <span class="hljs-keyword">user</span> <span class="hljs-string">&#x27;test&#x27;</span>@<span class="hljs-string">&#x27;localhost&#x27;</span> identified <span class="hljs-keyword">by</span> <span class="hljs-string">&#x27;123456&#x27;</span>;<br><span class="hljs-comment">-- 创建用户test，能在任意主机访问</span><br><span class="hljs-keyword">create</span> <span class="hljs-keyword">user</span> <span class="hljs-string">&#x27;test1&#x27;</span>@<span class="hljs-string">&#x27;%&#x27;</span> identified <span class="hljs-keyword">by</span> <span class="hljs-string">&#x27;123456&#x27;</span>;<br><span class="hljs-keyword">create</span> <span class="hljs-keyword">user</span> <span class="hljs-string">&#x27;test&#x27;</span> identified <span class="hljs-keyword">by</span> <span class="hljs-string">&#x27;123456&#x27;</span>;<br><span class="hljs-comment">-- 修改密码</span><br><span class="hljs-keyword">alter</span> <span class="hljs-keyword">user</span> <span class="hljs-string">&#x27;test&#x27;</span>@<span class="hljs-string">&#x27;localhost&#x27;</span> identified <span class="hljs-keyword">with</span> mysql_native_password <span class="hljs-keyword">by</span> <span class="hljs-string">&#x27;1234&#x27;</span>;<br><span class="hljs-comment">-- 删除用户</span><br><span class="hljs-keyword">drop</span> <span class="hljs-keyword">user</span> <span class="hljs-string">&#x27;test&#x27;</span>@<span class="hljs-string">&#x27;localhost&#x27;</span>;<br></code></pre></td></tr></table></figure>
 <h3 id="注意事项">注意事项</h3>
 <ul>
 <li>主机名可以使用 % 通配</li>
@@ -354,11 +354,11 @@ Language(数据控制语言)，用来管理数据库用户、控制数据库的�
 </table>
 <p>更多权限请看<a href="#%E6%9D%83%E9%99%90%E4%B8%80%E8%A7%88%E8%A1%A8" title="权限一览表">权限一览表</a></p>
 <p>查询权限：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SHOW GRANTS FOR &#x27;用户名&#x27;@&#x27;主机名&#x27;;<br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SHOW</span> GRANTS <span class="hljs-keyword">FOR</span> <span class="hljs-string">&#x27;用户名&#x27;</span>@<span class="hljs-string">&#x27;主机名&#x27;</span>;<br></code></pre></td></tr></table></figure>
 <p>授予权限：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">GRANT 权限列表 ON 数据库名.表名 TO &#x27;用户名&#x27;@&#x27;主机名&#x27;;<br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">GRANT</span> 权限列表 <span class="hljs-keyword">ON</span> 数据库名.表名 <span class="hljs-keyword">TO</span> <span class="hljs-string">&#x27;用户名&#x27;</span>@<span class="hljs-string">&#x27;主机名&#x27;</span>;<br></code></pre></td></tr></table></figure>
 <p>撤销权限：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">REVOKE 权限列表 ON 数据库名.表名 FROM &#x27;用户名&#x27;@&#x27;主机名&#x27;;<br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">REVOKE</span> 权限列表 <span class="hljs-keyword">ON</span> 数据库名.表名 <span class="hljs-keyword">FROM</span> <span class="hljs-string">&#x27;用户名&#x27;</span>@<span class="hljs-string">&#x27;主机名&#x27;</span>;<br></code></pre></td></tr></table></figure>
 <h3 id="注意事项-1">注意事项</h3>
 <ul>
 <li>多个权限用逗号分隔</li>

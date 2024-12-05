@@ -28,7 +28,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/MySQL.png">
 <meta property="article:published_time" content="2024-11-27T04:10:52.000Z">
-<meta property="article:modified_time" content="2024-11-30T12:30:08.638Z">
+<meta property="article:modified_time" content="2024-12-04T12:24:33.570Z">
 <meta property="article:author" content="Binbo">
 <meta property="article:tag" content="MySQL">
 <meta name="twitter:card" content="summary_large_image">
@@ -531,7 +531,7 @@ B-Tree，无论是叶子节点还是非叶子节点，都会保存数据，这�
 </ul>
 <h2 id="思考题">3.1 思考题</h2>
 <p>1. 以下 SQL 语句，哪个执行效率高？为什么？</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs mysql">select * from user where id = 10;<br>select * from user where name = &#x27;Arm&#x27;;<br>-- 备注：id为主键，name字段创建的有索引<br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">select</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> <span class="hljs-keyword">user</span> <span class="hljs-keyword">where</span> id <span class="hljs-operator">=</span> <span class="hljs-number">10</span>;<br><span class="hljs-keyword">select</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> <span class="hljs-keyword">user</span> <span class="hljs-keyword">where</span> name <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;Arm&#x27;</span>;<br><span class="hljs-comment">-- 备注：id为主键，name字段创建的有索引</span><br></code></pre></td></tr></table></figure>
 <p>答：第一条语句，因为第二条需要回表查询，相当于两个步骤。</p>
 <p>2. InnoDB 主键索引的 B+Tree 高度为多少？</p>
 <p>答：假设一行数据大小为1k，一页中可以存储16行这样的数据。InnoDB
@@ -546,22 +546,22 @@ bigint 占用的字节数，n 表示当前节点存储的key的数量，(n + 1)
 <ol type="1">
 <li>创建索引：</li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">CREATE [ UNIQUE | FULLTEXT ] INDEX index_name ON table_name (index_col_name, ...);<br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> [ <span class="hljs-keyword">UNIQUE</span> <span class="hljs-operator">|</span> FULLTEXT ] INDEX index_name <span class="hljs-keyword">ON</span> table_name (index_col_name, ...);<br></code></pre></td></tr></table></figure>
 <ul>
 <li>如果不加 CREATE 后面不加索引类型参数，则创建的是常规索引</li>
 </ul>
 <ol start="2" type="1">
 <li><p>查看索引：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SHOW INDEX FROM table_name;<br></code></pre></td></tr></table></figure></li>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SHOW</span> INDEX <span class="hljs-keyword">FROM</span> table_name;<br></code></pre></td></tr></table></figure></li>
 <li><p>删除索引：</p></li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">DROP INDEX index_name ON table_name;<br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">DROP</span> INDEX index_name <span class="hljs-keyword">ON</span> table_name;<br></code></pre></td></tr></table></figure>
 <p>案例：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- name字段为姓名字段，该字段的值可能会重复，为该字段创建索引<br>create index idx_user_name on users(name);<br>-- phone手机号字段的值非空，且唯一，为该字段创建唯一索引<br>create unique index idx_user_phone on users (phone);<br>-- 为profession, age, status创建联合索引<br>create index idx_user_pro_age_stat on users(profession, age, status);<br>-- 为email建立合适的索引来提升查询效率<br>create index idx_user_email on users(email);<br><br>-- 删除索引  <br>drop index idx_user_email on users;  <br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- name字段为姓名字段，该字段的值可能会重复，为该字段创建索引</span><br><span class="hljs-keyword">create</span> index idx_user_name <span class="hljs-keyword">on</span> users(name);<br><span class="hljs-comment">-- phone手机号字段的值非空，且唯一，为该字段创建唯一索引</span><br><span class="hljs-keyword">create</span> <span class="hljs-keyword">unique</span> index idx_user_phone <span class="hljs-keyword">on</span> users (phone);<br><span class="hljs-comment">-- 为profession, age, status创建联合索引</span><br><span class="hljs-keyword">create</span> index idx_user_pro_age_stat <span class="hljs-keyword">on</span> users(profession, age, status);<br><span class="hljs-comment">-- 为email建立合适的索引来提升查询效率</span><br><span class="hljs-keyword">create</span> index idx_user_email <span class="hljs-keyword">on</span> users(email);<br><br><span class="hljs-comment">-- 删除索引  </span><br><span class="hljs-keyword">drop</span> index idx_user_email <span class="hljs-keyword">on</span> users;  <br></code></pre></td></tr></table></figure>
 <h1 id="性能分析">5. 性能分析</h1>
 <h2 id="查看执行频次">5.1 查看执行频次</h2>
 <p>查看当前数据库的 INSERT, UPDATE, DELETE, SELECT 访问频次：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SHOW GLOBAL STATUS LIKE &#x27;Com_______&#x27;;<br>-- or<br>SHOW SESSION STATUS LIKE &#x27;Com_______&#x27;;<br>-- 例：<br>show global status like &#x27;Com_______&#x27;<br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SHOW</span> <span class="hljs-keyword">GLOBAL</span> STATUS <span class="hljs-keyword">LIKE</span> <span class="hljs-string">&#x27;Com_______&#x27;</span>;<br><span class="hljs-comment">-- or</span><br><span class="hljs-keyword">SHOW</span> SESSION STATUS <span class="hljs-keyword">LIKE</span> <span class="hljs-string">&#x27;Com_______&#x27;</span>;<br><span class="hljs-comment">-- 例：</span><br><span class="hljs-keyword">show</span> <span class="hljs-keyword">global</span> status <span class="hljs-keyword">like</span> <span class="hljs-string">&#x27;Com_______&#x27;</span><br></code></pre></td></tr></table></figure>
 <h2 id="慢查询日志">5.2 慢查询日志</h2>
 <p>慢查询日志记录了所有执行时间超过指定参数（long_query_time，单位：秒，默认10秒）的所有SQL语句的日志。</p>
 <p>MySQL的慢查询日志默认没有开启，需要在MySQL的配置文件（/etc/my.cnf，
@@ -571,28 +571,28 @@ ubuntu在/etc/mysql/mysql.cnf）中配置如下信息：</p>
 <p>如果不在这个文件夹下，可以在mysql数据库里面输入命令 show variables
 like 'slow_query_log_file'; 来查找慢查询日志存放地址</p>
 <p>查看慢查询日志开关状态：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">show variables like &#x27;slow_query_log&#x27;;<br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">show</span> variables <span class="hljs-keyword">like</span> <span class="hljs-string">&#x27;slow_query_log&#x27;</span>;<br></code></pre></td></tr></table></figure>
 <h2 id="profile">5.3 profile</h2>
 <ol type="1">
 <li><p>show profile 能在做SQL优化时帮我们了解时间都耗费在哪里。通过
 have_profiling 参数，能看到当前 MySQL 是否支持 profile 操作：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT @@have_profiling;<br></code></pre></td></tr></table></figure></li>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> @<span class="hljs-variable">@have_profiling</span>;<br></code></pre></td></tr></table></figure></li>
 <li><p>profiling 默认关闭，可以通过set语句在session/global级别开启
 profiling：</p></li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mysql">select @@profilling; -- 查看是否开启<br>SET profiling = 1; -- 手动开启<br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">select</span> @<span class="hljs-variable">@profilling</span>; <span class="hljs-comment">-- 查看是否开启</span><br><span class="hljs-keyword">SET</span> profiling <span class="hljs-operator">=</span> <span class="hljs-number">1</span>; <span class="hljs-comment">-- 手动开启</span><br></code></pre></td></tr></table></figure>
 <ol start="3" type="1">
 <li>查看所有语句的耗时：</li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">show profiles;<br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">show</span> profiles;<br></code></pre></td></tr></table></figure>
 <ol start="4" type="1">
 <li>查看指定query_id的SQL语句各个阶段的耗时：</li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">show profile for query query_id;<br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">show</span> profile <span class="hljs-keyword">for</span> query query_id;<br></code></pre></td></tr></table></figure>
 <ol start="5" type="1">
 <li>查看指定query_id的SQL语句CPU的使用情况</li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">show profile cpu for query query_id;<br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">show</span> profile cpu <span class="hljs-keyword">for</span> query query_id;<br></code></pre></td></tr></table></figure>
 <h2 id="explain">5.4 explain</h2>
 <ol type="1">
 <li>explain执行计划</li>
@@ -603,7 +603,7 @@ SELECT 语句执行过程中表如何连接和连接的顺序。<br>
 </li>
 <li>语法： 直接在select语句之前加上关键字 explain / desc</li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">EXPLAIN SELECT 字段列表 FROM 表名 HWERE 条件;  <br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql">EXPLAIN <span class="hljs-keyword">SELECT</span> 字段列表 <span class="hljs-keyword">FROM</span> 表名 HWERE 条件;  <br></code></pre></td></tr></table></figure>
 <ol start="2" type="1">
 <li>EXPLAIN 各字段含义：</li>
 </ol>
@@ -715,7 +715,7 @@ text等）时，有时候需要索引很长的字符串，这会让索引变得�
 <li><p>前缀长度：可以根据索引的选择性来决定，而选择性是指不重复的索引值（基数）和数据表的记录总数的比值，索引选择性越高则查询效率越高，唯一索引的选择性是1，这是最好的索引选择性，性能也是最好的。</p></li>
 <li><p>求选择性公式：</p></li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mysql">select count(distinct email) / count(*) from tb_user;<br>select count(distinct substring(email, 1, 5)) / count(*) from tb_user;<br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">select</span> <span class="hljs-built_in">count</span>(<span class="hljs-keyword">distinct</span> email) <span class="hljs-operator">/</span> <span class="hljs-built_in">count</span>(<span class="hljs-operator">*</span>) <span class="hljs-keyword">from</span> tb_user;<br><span class="hljs-keyword">select</span> <span class="hljs-built_in">count</span>(<span class="hljs-keyword">distinct</span> <span class="hljs-built_in">substring</span>(email, <span class="hljs-number">1</span>, <span class="hljs-number">5</span>)) <span class="hljs-operator">/</span> <span class="hljs-built_in">count</span>(<span class="hljs-operator">*</span>) <span class="hljs-keyword">from</span> tb_user;<br></code></pre></td></tr></table></figure>
 <ol start="5" type="1">
 <li>前缀索引中是有可能碰到相同的索引的情况的（因为选择性可能不为1），所以使用前缀索引进行查询的时候，mysql
 会有一个回表查询的过程，确定是否为所需数据。如图中的查询到lvbu6之后还要进行回表，回表完再查xiaoy，看到xiaoy是不需要的数据，则停止查下一个。</li>
