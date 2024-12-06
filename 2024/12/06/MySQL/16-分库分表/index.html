@@ -1,0 +1,976 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="3.1 介绍 3.1.1 问题分析  随着互联网及移动互联网的发展，应用系统的数据量也是成指数式增长，若采用单数据库进行数据存储，存在以下性能瓶颈：  IO瓶颈：热点数据太多，数据库缓存不足，产生大量磁盘IO，效率较低。请求数据太多，带宽不够，网络IO瓶颈。 CPU瓶颈：排序、分组、连接查询、聚合统计等SQL会耗费大量的CPU资源，请求数太多，CPU出现瓶颈。  为了解决上述问题，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="16. 分库分表">
+<meta property="og:url" content="http://binbo-zappy.github.io/2024/12/06/MySQL/16-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="3.1 介绍 3.1.1 问题分析  随着互联网及移动互联网的发展，应用系统的数据量也是成指数式增长，若采用单数据库进行数据存储，存在以下性能瓶颈：  IO瓶颈：热点数据太多，数据库缓存不足，产生大量磁盘IO，效率较低。请求数据太多，带宽不够，网络IO瓶颈。 CPU瓶颈：排序、分组、连接查询、聚合统计等SQL会耗费大量的CPU资源，请求数太多，CPU出现瓶颈。  为了解决上述问题，">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/MySQL.png">
+<meta property="article:published_time" content="2024-12-06T09:26:53.000Z">
+<meta property="article:modified_time" content="2024-12-06T09:31:22.532Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="MySQL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/MySQL.png">
+  
+  
+  
+  <title>16. 分库分表 - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="16. 分库分表"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-12-06 17:26" pubdate>
+          2024年12月6日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          28 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">16. 分库分表</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="介绍">3.1 介绍</h1>
+<h2 id="问题分析">3.1.1 问题分析</h2>
+<p><img src="/2024/12/06/MySQL/16-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/1684131667223-1d3c10ec-fcac-4588-a3d8-c4d1ede94535.png" srcset="/img/loading.gif" lazyload alt="image.png">
+随着互联网及移动互联网的发展，应用系统的数据量也是成指数式增长，若采用单数据库进行数据存储，存在以下性能瓶颈：</p>
+<ul>
+<li>IO瓶颈：热点数据太多，数据库缓存不足，产生大量磁盘IO，效率较低。请求数据太多，带宽不够，网络IO瓶颈。</li>
+<li>CPU瓶颈：排序、分组、连接查询、聚合统计等SQL会耗费大量的CPU资源，请求数太多，CPU出现瓶颈。</li>
+</ul>
+<p>为了解决上述问题，我们需要对数据库进行分库分表处理。 <img src="/2024/12/06/MySQL/16-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/1684131731892-2dee07ba-8232-488d-a2ca-d55b2c06b5ab.png" srcset="/img/loading.gif" lazyload alt="image.png">
+分库分表的中心思想都是将数据分散存储，使得单一数据库/表的数据量变小来缓解单一数据库的性能问题，从而达到提升数据库性能的目的。</p>
+<h2 id="拆分策略">3.1.2 拆分策略</h2>
+<p>分库分表的形式，主要是两种：垂直拆分和水平拆分。而拆分的粒度，一般又分为分库和分表，所以组
+成的拆分策略最终如下： <img src="/2024/12/06/MySQL/16-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/1684132373667-566a1876-197e-4dd2-9d8a-bd927fe1d029.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h2 id="垂直拆分">3.1.3 垂直拆分</h2>
+<p><strong>垂直分库</strong> <img src="/2024/12/06/MySQL/16-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/1684132416195-8bc94a86-a2c6-4420-a3e2-6e109d3be242.png" srcset="/img/loading.gif" lazyload alt="image.png">
+垂直分库：以表为依据，根据业务将不同表拆分到不同库中。 特点：</p>
+<ul>
+<li>每个库的表结构都不一样。</li>
+<li>每个库的数据也不一样。</li>
+<li>所有库的并集是全量数据。</li>
+</ul>
+<p><strong>垂直分表</strong> <img src="/2024/12/06/MySQL/16-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/image-20241205155054161.png" srcset="/img/loading.gif" lazyload alt="image-20241205155054161">
+垂直分表：以字段为依据，根据字段属性将不同字段拆分到不同表中。
+特点：</p>
+<ul>
+<li>每个表的结构都不一样。</li>
+<li>每个表的数据也不一样，一般通过一列（主键/外键）关联。</li>
+<li>所有表的并集是全量数据。</li>
+</ul>
+<h2 id="水平拆分">3.1.4 水平拆分</h2>
+<p><strong>水平分库</strong> <img src="/2024/12/06/MySQL/16-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/1684132592195-2e7068d7-37c0-418e-9241-aa2f4703ab69.png" srcset="/img/loading.gif" lazyload alt="image.png">
+水平分库：以字段为依据，按照一定策略，将一个库的数据拆分到多个库中。
+特点：</p>
+<ul>
+<li>每个库的表结构都一样。</li>
+<li>每个库的数据都不一样。</li>
+<li>所有库的并集是全量数据。</li>
+</ul>
+<p><strong>水平分表</strong> <img src="/2024/12/06/MySQL/16-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/1684132634861-37db8e53-f0cf-4ae9-a927-b6a5964528a9.png" srcset="/img/loading.gif" lazyload alt="image.png">
+水平分表：以字段为依据，按照一定策略，将一个表的数据拆分到多个表中。
+特点：</p>
+<ul>
+<li>每个表的表结构都一样。</li>
+<li>每个表的数据都不一样。</li>
+<li>所有表的并集是全量数据。</li>
+</ul>
+<p>在业务系统中，为了缓解磁盘IO及CPU的性能瓶颈，到底是垂直拆分，还是水平拆分；具体是分
+库，还是分表，都需要根据具体的业务需求具体分析。</p>
+<h2 id="实现技术">3.1.5 实现技术</h2>
+<ul>
+<li>shardingJDBC：基于AOP原理，在应用程序中对本地执行的SQL进行拦截，解析、改写、路由处理。需要自行编码配置实现，只支持java语言，性能较高。</li>
+<li>MyCat：数据库分库分表中间件，不用调整代码即可实现分库分表，支持多种语言，性能不及前者。</li>
+<li><figure>
+<img src="/2024/12/06/MySQL/16-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/1684132847430-534e6b0d-2a93-41dd-99d2-fa2f27f724e8.png" srcset="/img/loading.gif" lazyload alt="image.png">
+<figcaption aria-hidden="true">image.png</figcaption>
+</figure></li>
+</ul>
+<h1 id="mycat概述">3.2 Mycat概述</h1>
+<p>Mycat是开源的、活跃的、基于Java语言编写的MySQL数据库中间件。可以像使用mysql一样来使用
+mycat，对于开发人员来说根本感觉不到mycat的存在。
+开发人员只需要连接MyCat即可，而具体底层用到几台数据库，每一台数据库服务器里面存储了什么数
+据，都无需关心。具体的分库分表的策略，只需要在MyCat中配置即可。 <img src="/2024/12/06/MySQL/16-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/1684132892710-d9cace9d-4d62-4127-a62f-533de44556e9.png" srcset="/img/loading.gif" lazyload alt="image.png"> 优势：</p>
+<ul>
+<li>性能可靠稳定</li>
+<li>强大的技术团队</li>
+<li>体系完善</li>
+<li>社区活跃</li>
+</ul>
+<h2 id="安装">3.2.1 安装</h2>
+<p>Mycat是采用java语言开发的开源的数据库中间件，支持Windows和Linux运行环境，下面介绍
+MyCat的Linux中的环境搭建。我们需要在准备好的服务器中安装如下软件。 <img src="/2024/12/06/MySQL/16-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/1684132973833-dfe2d67a-185d-41b4-b5b5-1077714680cf.png" srcset="/img/loading.gif" lazyload alt="image.png"> 安装文档 <a target="_blank" rel="noopener" href="https://www.yuque.com/attachments/yuque/0/2023/pdf/35653686/1684133124805-2bbdf19c-cb4a-436d-8f1e-e36f3558bc05.pdf?_lake_card=%7B%22src%22%3A%22https%3A%2F%2Fwww.yuque.com%2Fattachments%2Fyuque%2F0%2F2023%2Fpdf%2F35653686%2F1684133124805-2bbdf19c-cb4a-436d-8f1e-e36f3558bc05.pdf%22%2C%22name%22%3A%22MyCat%E5%AE%89%E8%A3%85%E6%96%87%E6%A1%A3.pdf%22%2C%22size%22%3A658633%2C%22ext%22%3A%22pdf%22%2C%22source%22%3A%22%22%2C%22status%22%3A%22done%22%2C%22download%22%3Atrue%2C%22taskId%22%3A%22uf569e9fb-0266-4f23-9876-aefec7a3a61%22%2C%22taskType%22%3A%22upload%22%2C%22type%22%3A%22application%2Fpdf%22%2C%22__spacing%22%3A%22both%22%2C%22mode%22%3A%22title%22%2C%22id%22%3A%22JXxrS%22%2C%22margin%22%3A%7B%22top%22%3Atrue%2C%22bottom%22%3Atrue%7D%2C%22card%22%3A%22file%22%7D">MyCat安装文档.pdf</a></p>
+<h2 id="概念介绍">3.2.2 概念介绍</h2>
+<p>在MyCat的整体结构中，分为两个部分：上面的逻辑结构、下面的物理结构。
+<img src="/2024/12/06/MySQL/16-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/1684135201347-bc6c2e6d-0000-46a9-9863-1ebd1d19fbaf.png" srcset="/img/loading.gif" lazyload alt="image.png">
+在MyCat的逻辑结构主要负责逻辑库、逻辑表、分片规则、分片节点等逻辑结构的处理，而具体的数据存储还是在物理结构，也就是数据库服务器中存储的</p>
+<h1 id="mycat入门">3.3 Mycat入门</h1>
+<h2 id="需求">3.3.1 需求</h2>
+<p>由于 tb_order 表中数据量很大，磁盘IO及容量都到达了瓶颈，现在需要对
+tb_order
+表进行数据分片，分为三个数据节点，每一个节点主机位于不同的服务器上,
+具体的结构，参考下图： <img src="/2024/12/06/MySQL/16-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/1684135557698-f316e8a3-4e0c-425d-8bff-9649a91ec2cc.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h2 id="环境准备">3.3.2 环境准备</h2>
+<p><img src="/2024/12/06/MySQL/16-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/1684135730946-32eca814-b222-44a1-a9fc-d74c3e0dce9e.png" srcset="/img/loading.gif" lazyload alt="image.png"> 并且在上述3台数据库中创建数据库 db01</p>
+<h2 id="配置">3.3.3 配置</h2>
+<p><strong>schema.xml</strong>
+在schema.xml中配置逻辑库、逻辑表、数据节点、节点主机等相关信息。具体的配置如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-meta">&lt;?xml version=<span class="hljs-string">&quot;1.0&quot;</span>?&gt;</span><br><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">mycat</span>:schema <span class="hljs-keyword">SYSTEM</span> <span class="hljs-string">&quot;schema.dtd&quot;</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">mycat:schema</span> <span class="hljs-attr">xmlns:mycat</span>=<span class="hljs-string">&quot;http://io.mycat/&quot;</span>&gt;</span><br><br>	<span class="hljs-tag">&lt;<span class="hljs-name">schema</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;DB01&quot;</span> <span class="hljs-attr">checkSQLschema</span>=<span class="hljs-string">&quot;true&quot;</span> <span class="hljs-attr">sqlMaxLimit</span>=<span class="hljs-string">&quot;100&quot;</span>&gt;</span><br>		<span class="hljs-tag">&lt;<span class="hljs-name">table</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;TB_ORDER&quot;</span> <span class="hljs-attr">dataNode</span>=<span class="hljs-string">&quot;dn1,dn2,dn3&quot;</span> <span class="hljs-attr">rule</span>=<span class="hljs-string">&quot;auto-sharding-long&quot;</span> /&gt;</span><br>	<span class="hljs-tag">&lt;/<span class="hljs-name">schema</span>&gt;</span><br> <br>	<span class="hljs-tag">&lt;<span class="hljs-name">dataNode</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;dn1&quot;</span> <span class="hljs-attr">dataHost</span>=<span class="hljs-string">&quot;dhost1&quot;</span> <span class="hljs-attr">database</span>=<span class="hljs-string">&quot;db01&quot;</span> /&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">dataNode</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;dn2&quot;</span> <span class="hljs-attr">dataHost</span>=<span class="hljs-string">&quot;dhost2&quot;</span> <span class="hljs-attr">database</span>=<span class="hljs-string">&quot;db01&quot;</span> /&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">dataNode</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;dn3&quot;</span> <span class="hljs-attr">dataHost</span>=<span class="hljs-string">&quot;dhost3&quot;</span> <span class="hljs-attr">database</span>=<span class="hljs-string">&quot;db01&quot;</span> /&gt;</span><br> <br>	<span class="hljs-tag">&lt;<span class="hljs-name">dataHost</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;dhost1&quot;</span> <span class="hljs-attr">maxCon</span>=<span class="hljs-string">&quot;1000&quot;</span> <span class="hljs-attr">minCon</span>=<span class="hljs-string">&quot;10&quot;</span> <span class="hljs-attr">balance</span>=<span class="hljs-string">&quot;0&quot;</span></span><br><span class="hljs-tag">			  <span class="hljs-attr">writeType</span>=<span class="hljs-string">&quot;0&quot;</span> <span class="hljs-attr">dbType</span>=<span class="hljs-string">&quot;mysql&quot;</span> <span class="hljs-attr">dbDriver</span>=<span class="hljs-string">&quot;jdbc&quot;</span> <span class="hljs-attr">switchType</span>=<span class="hljs-string">&quot;1&quot;</span>  <span class="hljs-attr">slaveThreshold</span>=<span class="hljs-string">&quot;100&quot;</span>&gt;</span><br>		<span class="hljs-tag">&lt;<span class="hljs-name">heartbeat</span>&gt;</span>select user()<span class="hljs-tag">&lt;/<span class="hljs-name">heartbeat</span>&gt;</span><br><br>		<span class="hljs-tag">&lt;<span class="hljs-name">writeHost</span> <span class="hljs-attr">host</span>=<span class="hljs-string">&quot;master&quot;</span> <span class="hljs-attr">url</span>=<span class="hljs-string">&quot;jdbc:mysql://192.168.10.101:3306?useSSL=false<span class="hljs-symbol">&amp;amp;</span>serverTimezone=Asia/Shanghai<span class="hljs-symbol">&amp;amp;</span>characterEncoding=utf8&quot;</span> <span class="hljs-attr">user</span>=<span class="hljs-string">&quot;root&quot;</span> <span class="hljs-attr">password</span>=<span class="hljs-string">&quot;980918&quot;</span> /&gt;</span><br>	<span class="hljs-tag">&lt;/<span class="hljs-name">dataHost</span>&gt;</span><br> <br> 	<span class="hljs-tag">&lt;<span class="hljs-name">dataHost</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;dhost2&quot;</span> <span class="hljs-attr">maxCon</span>=<span class="hljs-string">&quot;1000&quot;</span> <span class="hljs-attr">minCon</span>=<span class="hljs-string">&quot;10&quot;</span> <span class="hljs-attr">balance</span>=<span class="hljs-string">&quot;0&quot;</span></span><br><span class="hljs-tag">			  <span class="hljs-attr">writeType</span>=<span class="hljs-string">&quot;0&quot;</span> <span class="hljs-attr">dbType</span>=<span class="hljs-string">&quot;mysql&quot;</span> <span class="hljs-attr">dbDriver</span>=<span class="hljs-string">&quot;jdbc&quot;</span> <span class="hljs-attr">switchType</span>=<span class="hljs-string">&quot;1&quot;</span>  <span class="hljs-attr">slaveThreshold</span>=<span class="hljs-string">&quot;100&quot;</span>&gt;</span><br>		<span class="hljs-tag">&lt;<span class="hljs-name">heartbeat</span>&gt;</span>select user()<span class="hljs-tag">&lt;/<span class="hljs-name">heartbeat</span>&gt;</span><br><br>		<span class="hljs-tag">&lt;<span class="hljs-name">writeHost</span> <span class="hljs-attr">host</span>=<span class="hljs-string">&quot;master&quot;</span> <span class="hljs-attr">url</span>=<span class="hljs-string">&quot;jdbc:mysql://192.168.10.107:3316?useSSL=false<span class="hljs-symbol">&amp;amp;</span>serverTimezone=Asia/Shanghai<span class="hljs-symbol">&amp;amp;</span>characterEncoding=utf8&quot;</span> <span class="hljs-attr">user</span>=<span class="hljs-string">&quot;root&quot;</span> <span class="hljs-attr">password</span>=<span class="hljs-string">&quot;980918&quot;</span> /&gt;</span><br>	<span class="hljs-tag">&lt;/<span class="hljs-name">dataHost</span>&gt;</span><br> <br> 	<span class="hljs-tag">&lt;<span class="hljs-name">dataHost</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;dhost3&quot;</span> <span class="hljs-attr">maxCon</span>=<span class="hljs-string">&quot;1000&quot;</span> <span class="hljs-attr">minCon</span>=<span class="hljs-string">&quot;10&quot;</span> <span class="hljs-attr">balance</span>=<span class="hljs-string">&quot;0&quot;</span></span><br><span class="hljs-tag">			  <span class="hljs-attr">writeType</span>=<span class="hljs-string">&quot;0&quot;</span> <span class="hljs-attr">dbType</span>=<span class="hljs-string">&quot;mysql&quot;</span> <span class="hljs-attr">dbDriver</span>=<span class="hljs-string">&quot;jdbc&quot;</span> <span class="hljs-attr">switchType</span>=<span class="hljs-string">&quot;1&quot;</span>  <span class="hljs-attr">slaveThreshold</span>=<span class="hljs-string">&quot;100&quot;</span>&gt;</span><br>		<span class="hljs-tag">&lt;<span class="hljs-name">heartbeat</span>&gt;</span>select user()<span class="hljs-tag">&lt;/<span class="hljs-name">heartbeat</span>&gt;</span><br><br>		<span class="hljs-tag">&lt;<span class="hljs-name">writeHost</span> <span class="hljs-attr">host</span>=<span class="hljs-string">&quot;master&quot;</span> <span class="hljs-attr">url</span>=<span class="hljs-string">&quot;jdbc:mysql://192.168.10.108:3306?useSSL=false<span class="hljs-symbol">&amp;amp;</span>serverTimezone=Asia/Shanghai<span class="hljs-symbol">&amp;amp;</span>characterEncoding=utf8&quot;</span> <span class="hljs-attr">user</span>=<span class="hljs-string">&quot;root&quot;</span> <span class="hljs-attr">password</span>=<span class="hljs-string">&quot;980918&quot;</span> /&gt;</span><br>	<span class="hljs-tag">&lt;/<span class="hljs-name">dataHost</span>&gt;</span><br> <br><br><span class="hljs-tag">&lt;/<span class="hljs-name">mycat:schema</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p><strong>server.xml</strong>
+需要在server.xml中配置用户名、密码，以及用户的访问权限信息，具体的配置如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">user</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;root&quot;</span> <span class="hljs-attr">defaultAccount</span>=<span class="hljs-string">&quot;true&quot;</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;password&quot;</span>&gt;</span>980918<span class="hljs-tag">&lt;/<span class="hljs-name">property</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;schemas&quot;</span>&gt;</span>DB01<span class="hljs-tag">&lt;/<span class="hljs-name">property</span>&gt;</span><br>	<br>	<span class="hljs-comment">&lt;!-- 表级 DML 权限设置 --&gt;</span><br>	<span class="hljs-comment">&lt;!-- 		</span><br><span class="hljs-comment">	&lt;privileges check=&quot;false&quot;&gt;</span><br><span class="hljs-comment">		&lt;schema name=&quot;TESTDB&quot; dml=&quot;0110&quot; &gt;</span><br><span class="hljs-comment">			&lt;table name=&quot;tb01&quot; dml=&quot;0000&quot;&gt;&lt;/table&gt;</span><br><span class="hljs-comment">			&lt;table name=&quot;tb02&quot; dml=&quot;1111&quot;&gt;&lt;/table&gt;</span><br><span class="hljs-comment">		&lt;/schema&gt;</span><br><span class="hljs-comment">	&lt;/privileges&gt;		</span><br><span class="hljs-comment">	 --&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">user</span>&gt;</span><br><br><span class="hljs-tag">&lt;<span class="hljs-name">user</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;user&quot;</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;password&quot;</span>&gt;</span>980918<span class="hljs-tag">&lt;/<span class="hljs-name">property</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;schemas&quot;</span>&gt;</span>DB01<span class="hljs-tag">&lt;/<span class="hljs-name">property</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;readOnly&quot;</span>&gt;</span>true<span class="hljs-tag">&lt;/<span class="hljs-name">property</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">user</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p>上述的配置表示，定义了两个用户 root 和 user ，这两个用户都可以访问
+DB01 这个逻辑库，访
+问密码都是123456，但是root用户访问DB01逻辑库，既可以读，又可以写，但是
+user用户访问 DB01逻辑库是只读的。</p>
+<h2 id="测试">3.3.4 测试</h2>
+<p>配置完毕后，先启动涉及到的3台分片服务器，然后启动MyCat服务器。切换到Mycat的安装目录，执
+行如下指令，启动Mycat： 启动：<code>bin/mycat start</code>
+停止：<code>bin/mycat stop</code> Mycat启动之后，占用端口号 8066。
+启动完毕之后，可以查看logs目录下的启动日志，查看Mycat是否启动完成。 <img src="/2024/12/06/MySQL/16-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/1684136813294-5f6c0be2-fee4-4fe0-9e99-0749cf410cbe.png" srcset="/img/loading.gif" lazyload alt="image.png"> 连接Mycat
+<code>mysql -h 192.168.200.210 -P 8066 -uroot -p123456</code>
+我们看到我们是通过MySQL的指令来连接的MyCat，因为MyCat在底层实际上是模拟了MySQL的协议。
+然后就可以在MyCat中来创建表，并往表结构中插入数据，查看数据在MySQL中的分布情况。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> TB_ORDER (<br> id <span class="hljs-type">BIGINT</span>(<span class="hljs-number">20</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>title <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">100</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span> ,<br> <span class="hljs-keyword">PRIMARY</span> KEY (id)<br>) ENGINE<span class="hljs-operator">=</span>INNODB <span class="hljs-keyword">DEFAULT</span> CHARSET<span class="hljs-operator">=</span>utf8 ;<br><br><span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> TB_ORDER(id,title) <span class="hljs-keyword">VALUES</span>(<span class="hljs-number">1</span>,<span class="hljs-string">&#x27;goods1&#x27;</span>);<br><br><span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> TB_ORDER(id,title) <span class="hljs-keyword">VALUES</span>(<span class="hljs-number">2</span>,<span class="hljs-string">&#x27;goods2&#x27;</span>);<br><br><span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> TB_ORDER(id,title) <span class="hljs-keyword">VALUES</span>(<span class="hljs-number">3</span>,<span class="hljs-string">&#x27;goods3&#x27;</span>);<br> <br><span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> TB_ORDER(id,title) <span class="hljs-keyword">VALUES</span>(<span class="hljs-number">1</span>,<span class="hljs-string">&#x27;goods1&#x27;</span>);<br><br><span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> TB_ORDER(id,title) <span class="hljs-keyword">VALUES</span>(<span class="hljs-number">2</span>,<span class="hljs-string">&#x27;goods2&#x27;</span>);<br><br><span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> TB_ORDER(id,title) <span class="hljs-keyword">VALUES</span>(<span class="hljs-number">3</span>,<span class="hljs-string">&#x27;goods3&#x27;</span>);<br><br><span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> TB_ORDER(id,title) <span class="hljs-keyword">VALUES</span>(<span class="hljs-number">5000000</span>,<span class="hljs-string">&#x27;goods5000000&#x27;</span>);<br><br><span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> TB_ORDER(id,title) <span class="hljs-keyword">VALUES</span>(<span class="hljs-number">10000000</span>,<span class="hljs-string">&#x27;goods10000000&#x27;</span>);<br><br><span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> TB_ORDER(id,title) <span class="hljs-keyword">VALUES</span>(<span class="hljs-number">10000001</span>,<span class="hljs-string">&#x27;goods10000001&#x27;</span>);<br><br><span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> TB_ORDER(id,title) <span class="hljs-keyword">VALUES</span>(<span class="hljs-number">15000000</span>,<span class="hljs-string">&#x27;goods15000000&#x27;</span>);<br><br><span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> TB_ORDER(id,title) <span class="hljs-keyword">VALUES</span>(<span class="hljs-number">15000001</span>,<span class="hljs-string">&#x27;goods15000001&#x27;</span>);<br><br></code></pre></td></tr></table></figure>
+<p>经过测试，我们发现，在往 TB_ORDER 表中插入数据时：</p>
+<ul>
+<li>如果id的值在1-500w之间，数据将会存储在第一个分片数据库中。</li>
+<li>如果id的值在500w-1000w之间，数据将会存储在第二个分片数据库中。</li>
+<li>如果id的值在1000w-1500w之间，数据将会存储在第三个分片数据库中。</li>
+<li>如果id的值超出1500w，在插入数据时，将会报错。</li>
+</ul>
+<p>为什么会出现这种现象，数据到底落在哪一个分片服务器到底是如何决定的呢？这是由逻辑表配置时
+的一个参数 rule
+决定的，而这个参数配置的就是分片规则，关于分片规则的配置，在后面的课程中
+会详细讲解。</p>
+<h1 id="mycat配置">3.4 Mycat配置</h1>
+<h2 id="schema.xml">3.4.1 schema.xml</h2>
+<p>schema.xml 作为MyCat中最重要的配置文件之一 ,
+涵盖了MyCat的逻辑库、逻辑表、分片规则、分片节点及数据源的配置。
+主要包含以下三组标签：</p>
+<ul>
+<li>schema标签</li>
+<li>datanode标签</li>
+<li>datahost标签</li>
+</ul>
+<h3 id="schema标签">schema标签</h3>
+<figure>
+<img src="/2024/12/06/MySQL/16-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/1684137759231-a7bc29c6-dec3-47f1-888c-d7df84da7bc0.png" srcset="/img/loading.gif" lazyload alt="image.png">
+<figcaption aria-hidden="true">image.png</figcaption>
+</figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">select</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> DB01.TB_ORDER;<br></code></pre></td></tr></table></figure>
+<figure>
+<img src="/2024/12/06/MySQL/16-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/1684137861277-a26e3734-e211-4161-b1b1-ed873aa38a57.png" srcset="/img/loading.gif" lazyload alt="image.png">
+<figcaption aria-hidden="true">image.png</figcaption>
+</figure>
+<h3 id="datanode标签">datanode标签</h3>
+<figure>
+<img src="/2024/12/06/MySQL/16-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/1684137982668-2fda6b31-4e8e-42d5-abb3-95142400ddc3.png" srcset="/img/loading.gif" lazyload alt="image.png">
+<figcaption aria-hidden="true">image.png</figcaption>
+</figure>
+<h3 id="datahost标签">datahost标签</h3>
+<figure>
+<img src="/2024/12/06/MySQL/16-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/1684137994571-1671956d-0c47-49e7-bf2b-ece556988ae0.png" srcset="/img/loading.gif" lazyload alt="image.png">
+<figcaption aria-hidden="true">image.png</figcaption>
+</figure>
+<h2 id="rule.xml">3.4.2 rule.xml</h2>
+<p>rule.xml中定义所有拆分表的规则, 在使用过程中可以灵活的使用分片算法,
+或者对同一个分片算法使用不同的参数,
+它让分片过程可配置化。主要包含两类标签：tableRule、Function。 <img src="/2024/12/06/MySQL/16-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/1684138272209-2c0ecefd-1aa3-4fe3-a359-83a3feb86d84.png" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h2 id="server.xml">3.4.3 server.xml</h2>
+<p>server.xml配置文件包含了MyCat的系统配置信息，主要有两个重要的标签：system、user。</p>
+<h3 id="system标签">system标签</h3>
+<p><img src="/2024/12/06/MySQL/16-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/1684138341423-96dab3e9-6683-4ba7-b020-cb5303a12f24.png" srcset="/img/loading.gif" lazyload alt="image.png"> <a target="_blank" rel="noopener" href="https://www.yuque.com/attachments/yuque/0/2023/xlsx/35653686/1684138375179-cf299206-5ce7-48b3-b3ee-31d397dfec2f.xlsx?_lake_card=%7B%22src%22%3A%22https%3A%2F%2Fwww.yuque.com%2Fattachments%2Fyuque%2F0%2F2023%2Fxlsx%2F35653686%2F1684138375179-cf299206-5ce7-48b3-b3ee-31d397dfec2f.xlsx%22%2C%22name%22%3A%22server%E7%B3%BB%E7%BB%9F%E9%85%8D%E7%BD%AE%E4%BF%A1%E6%81%AF%E5%90%AB%E4%B9%89.xlsx%22%2C%22size%22%3A12830%2C%22ext%22%3A%22xlsx%22%2C%22source%22%3A%22%22%2C%22status%22%3A%22done%22%2C%22download%22%3Atrue%2C%22taskId%22%3A%22ua156721e-db55-4161-977f-7f8fe83dffb%22%2C%22taskType%22%3A%22upload%22%2C%22type%22%3A%22application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet%22%2C%22__spacing%22%3A%22both%22%2C%22mode%22%3A%22title%22%2C%22id%22%3A%22pDpyr%22%2C%22margin%22%3A%7B%22top%22%3Atrue%2C%22bottom%22%3Atrue%7D%2C%22card%22%3A%22file%22%7D">server系统配置信息含义.xlsx</a></p>
+<h3 id="user标签">user标签</h3>
+<p>配置MyCat中的用户、访问密码，以及用户针对于逻辑库、逻辑表的权限信息，具体的权限描述方式及
+配置说明如下： <img src="/2024/12/06/MySQL/16-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/1684138427556-1a3b1e9d-15e4-4647-a812-6322e756dc86.png" srcset="/img/loading.gif" lazyload alt="image.png"> 在测试权限操作时，我们只需要将 privileges
+标签的注释放开。在 privileges 下的schema
+标签中配置的dml属性配置的是逻辑库的权限。在privileges的schema下的table标签的dml属性
+中配置逻辑表的权限。</p>
+<h1 id="mycat分片">3.5 Mycat分片</h1>
+<p>垂直拆分</p>
+<ul>
+<li>场景
+<ul>
+<li>在业务系统中，涉及以下表结构，但是由于用户与订单每天都会产生大量的数据，单台服务器的数据存储及处理能力是有限的，可以对数据库表进行拆分，原有的数据库表如下。</li>
+</ul></li>
+</ul>
+<p><img src="/2024/12/06/MySQL/16-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/image-20241206145104929.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>配置</li>
+</ul>
+<p><img src="/2024/12/06/MySQL/16-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/image-20241206145332251.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/12/06/MySQL/16-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/image-20241206145600422.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/12/06/MySQL/16-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/image-20241206150752724.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="范围分片">3.5.1 范围分片</h2>
+<p>按照特性的范围区间（比如时间区间、ID 区间）来分配数据，比如 将 id 为
+1~299999 的记录分到第一个库， 300000~599999
+的分到第二个库。范围分片适合需要经常进行范围查找的场景，不太适合随机读写的场景（数据未被分散，容易出现热点数据的问题）。</p>
+<h2 id="取模分片">3.5.2 取模分片</h2>
+<p>根据指定的字段值与节点数量进行求模运算，根据运算结果，来决定该数据属于哪一个分片。指定节点数</p>
+<h2 id="哈希分片">3.5.3 哈希分片</h2>
+<p>求指定 key（比如 id）
+的哈希，然后根据哈希值确定数据应被放置在哪个表中。哈希分片比较适合随机读写的场景，不太适合经常需要范围查询的场景。</p>
+<h2 id="一致性哈希分片">3.5.4 一致性哈希分片</h2>
+<p>一致性哈希分片算法利用哈希环的思想，对数据进行哈希映射，并通过顺时针寻找最近的服务节点来进行数据的存储。</p>
+<h2 id="枚举分片">3.5.5 枚举分片</h2>
+<p>通过在配置文件中配置可能的枚举值，指定数据分布到不同数据节点上，本规则适用于按照省份、性别、状态拆分数据等业务。</p>
+<p><img src="/2024/12/06/MySQL/16-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/image-20241206153405063.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="应用指定规则">3.5.6 应用指定规则</h2>
+<p><img src="/2024/12/06/MySQL/16-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/image-20241206154626699.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/12/06/MySQL/16-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/image-20241206154557898.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/12/06/MySQL/16-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/image-20241206154607306.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="固定分片hash算法">3.5.7 固定分片hash算法</h2>
+<ul>
+<li>该算法类似于十进制的求模运算，但是为二进制的操作，例如，取id的二进制低10位与1111111111进行位&amp;运算。</li>
+</ul>
+<p><img src="/2024/12/06/MySQL/16-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/image-20241206154902270.png" srcset="/img/loading.gif" lazyload></p>
+<p>特点：</p>
+<ul>
+<li>如果是求模，连续的值，分别分配到各个不同的分片；但是此算法会将连续的值可能分配到相同的分片，降低事务处理的难度。</li>
+<li>可以均匀分配，也可以非均匀分配。</li>
+<li>分片字段必须为数字类型。</li>
+</ul>
+<p><img src="/2024/12/06/MySQL/16-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/image-20241206155709235.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/12/06/MySQL/16-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/image-20241206155657731.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/12/06/MySQL/16-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/image-20241206155644282.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="字符串hash解析算法">3.5.8 字符串hash解析算法</h2>
+<p>截取字符串中的指定位置的子字符串，进行hash算法，算出分片。</p>
+<p><img src="/2024/12/06/MySQL/16-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/image-20241206160601441.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/12/06/MySQL/16-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/image-20241206160905946.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="按天分片">3.5.9 按天分片</h2>
+<p><img src="/2024/12/06/MySQL/16-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/image-20241206161250786.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/12/06/MySQL/16-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/image-20241206161324940.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="自然月">3.5.10 自然月</h2>
+<p>使用场景为按照月份来分片，每个自然月为一个分片。</p>
+<p><img src="/2024/12/06/MySQL/16-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/image-20241206161945243.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/12/06/MySQL/16-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/image-20241206162013822.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="mycat管理及监控">3.6 Mycat管理及监控</h1>
+<h2 id="mycat原理">3.6.1 Mycat原理</h2>
+<p><img src="/2024/12/06/MySQL/16-%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8/image-20241206163039878.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="mycat管理">3.6.2 Mycat管理</h2>
+<p>Mycat默认开通2个端口，可以在server.xml中进行修改。</p>
+<ul>
+<li>8066数据访问端口，即进行DML和DDL操作。</li>
+<li>9066数据库管理端口，即mycat服务管理控制功能，用于管理mycat的整个集群状态</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql">mysql <span class="hljs-operator">-</span>h <span class="hljs-number">192.168</span><span class="hljs-number">.200</span><span class="hljs-number">.210</span> <span class="hljs-operator">-</span>P <span class="hljs-number">9066</span> <span class="hljs-operator">-</span>uroot <span class="hljs-operator">-</span>p123456<br></code></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>show @<span class="citation" data-cites="help">@help</span></td>
+<td>查看Mycat管理工具帮助文档</td>
+</tr>
+<tr>
+<td>show @<span class="citation" data-cites="version">@version</span></td>
+<td>查看Mycat的版本</td>
+</tr>
+<tr>
+<td>reload @<span class="citation" data-cites="config">@config</span></td>
+<td>重新加载Mycat的配置文件</td>
+</tr>
+<tr>
+<td>show @<span class="citation" data-cites="datasource">@datasource</span></td>
+<td>查看Mycat的数据源信息</td>
+</tr>
+<tr>
+<td>show @<span class="citation" data-cites="datanode">@datanode</span></td>
+<td>查看MyCat现有的分片节点信息</td>
+</tr>
+<tr>
+<td>show @<span class="citation" data-cites="threadpool">@threadpool</span></td>
+<td>查看Mycat的线程池信息</td>
+</tr>
+<tr>
+<td>show @<span class="citation" data-cites="sql">@sql</span></td>
+<td>查看执行的SQL</td>
+</tr>
+<tr>
+<td>show @<span class="citation" data-cites="sql.sum">@sql.sum</span></td>
+<td>查看执行的SQL统计</td>
+</tr>
+</tbody>
+</table>
+<h2 id="监控">3.6.3 监控</h2>
+<p>mycat-eye</p>
+<p>zookeeper</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/" class="category-chain-item">后端开发</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/MySQL/" class="category-chain-item">MySQL</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/MySQL/" class="print-no-link">#MySQL</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>16. 分库分表</div>
+      <div>http://binbo-zappy.github.io/2024/12/06/MySQL/16-分库分表/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年12月6日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/12/06/MySQL/17-%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB/" title="17. 读写分离">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">17. 读写分离</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/12/06/MySQL/15-%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/" title="15. 主从复制">
+                        <span class="hidden-mobile">15. 主从复制</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
