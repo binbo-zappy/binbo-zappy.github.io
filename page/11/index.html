@@ -225,23 +225,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/27/MySQL/12-InnoDB%E5%BC%95%E6%93%8E/" target="_self">
-          <img src="/imgs/MySQL.png" srcset="/img/loading.gif" lazyload alt="12. InnoDB引擎">
+        <a href="/2024/11/27/mysql_bzbh/27-%E5%85%A8%E7%90%83%E5%8C%96%E5%92%8C%E6%9C%AC%E5%9C%B0%E5%8C%96/" target="_self">
+          <img src="/imgs/mysql_bzbh.png" srcset="/img/loading.gif" lazyload alt="27. 全球化和本地化">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/27/MySQL/12-InnoDB%E5%BC%95%E6%93%8E/" target="_self">
-          12. InnoDB引擎
+        <a href="/2024/11/27/mysql_bzbh/27-%E5%85%A8%E7%90%83%E5%8C%96%E5%92%8C%E6%9C%AC%E5%9C%B0%E5%8C%96/" target="_self">
+          27. 全球化和本地化
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/27/MySQL/12-InnoDB%E5%BC%95%E6%93%8E/" target="_self">
+      <a class="index-excerpt " href="/2024/11/27/mysql_bzbh/27-%E5%85%A8%E7%90%83%E5%8C%96%E5%92%8C%E6%9C%AC%E5%9C%B0%E5%8C%96/" target="_self">
         <div>
-          InnoDB引擎 逻辑存储结构  表空间（ibd文件）：一个MySQL实例可以对应多个表空间，用于存储记录、索引等数据。 段：分为数据段（Leaf node segment）、索引段（Non-leaf node segment）、回滚段（Rollback segment），InnoDB是索引组织表，数据段就是B+树的叶子结点，索引段就是B+树的非叶子结点。段用来当管理多个Extent（
+          1. 全球化和本地化 2. 使用字符集和校对顺序  MySQL支持众多的字符集。为查看所支持的字符集完整列表  show character set; 这条语句显示所有可用的字符集以及每个字符集的描述和默认校对。  为了查看所支持校对的完整列表，使用以下语句  show collation;  通常系统管理在安装时定义一个默认的字符集和校对 在创建数据库时，指定默认的字符
         </div>
       </a>
 
@@ -249,7 +249,7 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-27 12:10" pubdate>
+            <time datetime="2024-11-27 18:06" pubdate>
               2024-11-27
             </time>
           </div>
@@ -270,7 +270,7 @@
   
     <span>></span>
     
-  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/MySQL/" class="category-chain-item">MySQL</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/MySQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" class="category-chain-item">MySQL必知必会</a>
   
   
 
@@ -287,7 +287,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/MySQL/">#MySQL</a>
+              <a href="/tags/MySQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/">#MySQL必知必会</a>
             
           </div>
         
@@ -299,23 +299,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/27/MySQL/11-%E9%94%81/" target="_self">
-          <img src="/imgs/MySQL.png" srcset="/img/loading.gif" lazyload alt="11. 锁">
+        <a href="/2024/11/27/mysql_bzbh/26-%E7%AE%A1%E7%90%86%E4%BA%8B%E5%8A%A1%E5%A4%84%E7%90%86/" target="_self">
+          <img src="/imgs/mysql_bzbh.png" srcset="/img/loading.gif" lazyload alt="26. 管理事务处理">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/27/MySQL/11-%E9%94%81/" target="_self">
-          11. 锁
+        <a href="/2024/11/27/mysql_bzbh/26-%E7%AE%A1%E7%90%86%E4%BA%8B%E5%8A%A1%E5%A4%84%E7%90%86/" target="_self">
+          26. 管理事务处理
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/27/MySQL/11-%E9%94%81/" target="_self">
+      <a class="index-excerpt " href="/2024/11/27/mysql_bzbh/26-%E7%AE%A1%E7%90%86%E4%BA%8B%E5%8A%A1%E5%A4%84%E7%90%86/" target="_self">
         <div>
-          五、锁 1. 概述 介绍 锁是计算机协调多个进程或线程并发访问某一资源的机制。在数据库中，除传统的计算资源（CPU、RAM、I/O）的争用以外，数据也是一种供许多用户共享的资源。如何保证数据并发访问的一致性、有效性是所有数据库必须解决的一个问题，锁冲突也是影响数据库并发访问性能的一个重要因素。从这个角度来说，锁对数据库而言显得尤其重要，也更加复杂。 分类 MySQL中的锁，按照锁的粒度分
+          1. 事务处理  事务处理（transaction processing）可以用来维护数据库的完整性，它保证成批的MySQL操作要么完全执行，要么完全不执行。  2. 控制事务处理  MySQL使用下面的语句来标识事务的开始：  start transaction   2.1. 使用ROLLBACK  MySQL的ROLLBACK命令用来回退（撤销）MySQL语句，请看
         </div>
       </a>
 
@@ -323,7 +323,7 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-27 12:10" pubdate>
+            <time datetime="2024-11-27 18:06" pubdate>
               2024-11-27
             </time>
           </div>
@@ -344,7 +344,7 @@
   
     <span>></span>
     
-  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/MySQL/" class="category-chain-item">MySQL</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/MySQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" class="category-chain-item">MySQL必知必会</a>
   
   
 
@@ -361,7 +361,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/MySQL/">#MySQL</a>
+              <a href="/tags/MySQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/">#MySQL必知必会</a>
             
           </div>
         
@@ -373,23 +373,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/27/MySQL/10-%E8%A7%86%E5%9B%BE-%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B-%E8%A7%A6%E5%8F%91%E5%99%A8/" target="_self">
-          <img src="/imgs/MySQL.png" srcset="/img/loading.gif" lazyload alt="10. 视图/存储过程/触发器">
+        <a href="/2024/11/27/mysql_bzbh/25-%E4%BD%BF%E7%94%A8%E8%A7%A6%E5%8F%91%E5%99%A8/" target="_self">
+          <img src="/imgs/mysql_bzbh.png" srcset="/img/loading.gif" lazyload alt="25. 使用触发器">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/27/MySQL/10-%E8%A7%86%E5%9B%BE-%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B-%E8%A7%A6%E5%8F%91%E5%99%A8/" target="_self">
-          10. 视图/存储过程/触发器
+        <a href="/2024/11/27/mysql_bzbh/25-%E4%BD%BF%E7%94%A8%E8%A7%A6%E5%8F%91%E5%99%A8/" target="_self">
+          25. 使用触发器
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/27/MySQL/10-%E8%A7%86%E5%9B%BE-%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B-%E8%A7%A6%E5%8F%91%E5%99%A8/" target="_self">
+      <a class="index-excerpt " href="/2024/11/27/mysql_bzbh/25-%E4%BD%BF%E7%94%A8%E8%A7%A6%E5%8F%91%E5%99%A8/" target="_self">
         <div>
-          1. 视图  视图（View）是一种虚拟存在的表。视图中的数据并不在数据库中实际存在，行和列数据来自定义视图的查询中使用的表，并且是在使用视图时动态生成的。  通俗的讲，视图只保存了查询的SQL逻辑，不保存查询结果。所以我们在创建视图的时候，主要的工作就落在创建这条SQL查询语句上。  1.1 创建视图 1234CREATE [ OR REPLACE ] VIEW 视图名称[（列名列
+          1. 触发器  触发器是MySQL响应以下任意语句而自动执行的一条MySQL语句  delete; insert; upate   2. 创建触发器  在创建触发器时，需要给出4条信息：  唯一的触发器名 触发器关联的表 触发器应该响应的活动（DELETE、INSERT或UPDATE）； 触发器何时执行（处理之前或之后）  保持每个数据库的触发器名唯一 触发器
         </div>
       </a>
 
@@ -397,7 +397,7 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-27 12:10" pubdate>
+            <time datetime="2024-11-27 18:06" pubdate>
               2024-11-27
             </time>
           </div>
@@ -418,7 +418,7 @@
   
     <span>></span>
     
-  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/MySQL/" class="category-chain-item">MySQL</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/MySQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" class="category-chain-item">MySQL必知必会</a>
   
   
 
@@ -435,7 +435,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/MySQL/">#MySQL</a>
+              <a href="/tags/MySQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/">#MySQL必知必会</a>
             
           </div>
         
@@ -447,23 +447,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/27/MySQL/9-SQL%E4%BC%98%E5%8C%96/" target="_self">
-          <img src="/imgs/MySQL.png" srcset="/img/loading.gif" lazyload alt="9. SQL优化">
+        <a href="/2024/11/27/mysql_bzbh/24-%E4%BD%BF%E7%94%A8%E6%B8%B8%E6%A0%87/" target="_self">
+          <img src="/imgs/mysql_bzbh.png" srcset="/img/loading.gif" lazyload alt="24. 使用游标">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/27/MySQL/9-SQL%E4%BC%98%E5%8C%96/" target="_self">
-          9. SQL优化
+        <a href="/2024/11/27/mysql_bzbh/24-%E4%BD%BF%E7%94%A8%E6%B8%B8%E6%A0%87/" target="_self">
+          24. 使用游标
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/27/MySQL/9-SQL%E4%BC%98%E5%8C%96/" target="_self">
+      <a class="index-excerpt " href="/2024/11/27/mysql_bzbh/24-%E4%BD%BF%E7%94%A8%E6%B8%B8%E6%A0%87/" target="_self">
         <div>
-          1. 插入数据 普通插入：  采用批量插入（一次插入的数据不建议超过1000条，500 - 1000 为宜） 手动提交事务  多条插入语句统一提交  主键顺序插入（主键顺序插入的效率大于乱序插入）  大批量插入：  如果一次性需要插入大批量数据，使用insert语句插入性能较低，此时可以使用MySQL数据库提供的load指令插入。  1234567# 客户端连接服务端时
+          1. 游标  游标（cursor）是一个存储在MySQL服务器上的数据库查询，它不是一条SELECT语句，而是被该语句检索出来的结果集。在存储了游标之后，应用程序可以根据需要滚动或浏览其中的数据。 游标主要用于交互式应用，其中用户需要滚动屏幕上的数据，并对数据进行浏览或做出更改。 只能用于存储过程不像多数DBMS，MySQL游标只能用于存储过程（和函数）  2. 使用游标 2.1.
         </div>
       </a>
 
@@ -471,7 +471,7 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-27 12:10" pubdate>
+            <time datetime="2024-11-27 18:06" pubdate>
               2024-11-27
             </time>
           </div>
@@ -492,7 +492,7 @@
   
     <span>></span>
     
-  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/MySQL/" class="category-chain-item">MySQL</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/MySQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" class="category-chain-item">MySQL必知必会</a>
   
   
 
@@ -509,7 +509,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/MySQL/">#MySQL</a>
+              <a href="/tags/MySQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/">#MySQL必知必会</a>
             
           </div>
         
@@ -521,23 +521,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/27/MySQL/8-%E7%B4%A2%E5%BC%95/" target="_self">
-          <img src="/imgs/MySQL.png" srcset="/img/loading.gif" lazyload alt="8. 索引">
+        <a href="/2024/11/27/mysql_bzbh/23-%E4%BD%BF%E7%94%A8%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" target="_self">
+          <img src="/imgs/mysql_bzbh.png" srcset="/img/loading.gif" lazyload alt="23. 使用存储过程">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/27/MySQL/8-%E7%B4%A2%E5%BC%95/" target="_self">
-          8. 索引
+        <a href="/2024/11/27/mysql_bzbh/23-%E4%BD%BF%E7%94%A8%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" target="_self">
+          23. 使用存储过程
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/27/MySQL/8-%E7%B4%A2%E5%BC%95/" target="_self">
+      <a class="index-excerpt " href="/2024/11/27/mysql_bzbh/23-%E4%BD%BF%E7%94%A8%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" target="_self">
         <div>
-          1. 索引概述  索引是帮助 MySQL 高效获取数据的数据结构（有序）。在数据之外，数据库系统还维护着满足特定查找算法的数据结构，这些数据结构以某种方式引用（指向）数据，这样就可以在这些数据结构上实现高级查询算法，这种数据结构就是索引。 优点：   提高数据检索效率，降低数据库的IO成本  通过索引列对数据进行排序，降低数据排序的成本，降低CPU的消耗   缺点：
+          1. 存储过程  存储过程简单来说，就是为以后的使用而保存的一条或多条MySQL语句的集合。可将其视为批文件，虽然它们的作用不仅限于批处理  2. 为什么要使用存储过程  使用存储过程有3个主要的好处，即简单、安全、高性能。显然，它们都很重要  3. 使用存储过程 3.1. 执行存储过程  MySQL称存储过程的执行为调用，因此MySQL执行存储过程的语句为CALL。
         </div>
       </a>
 
@@ -545,7 +545,7 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-27 12:10" pubdate>
+            <time datetime="2024-11-27 18:06" pubdate>
               2024-11-27
             </time>
           </div>
@@ -566,7 +566,7 @@
   
     <span>></span>
     
-  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/MySQL/" class="category-chain-item">MySQL</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/MySQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" class="category-chain-item">MySQL必知必会</a>
   
   
 
@@ -583,7 +583,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/MySQL/">#MySQL</a>
+              <a href="/tags/MySQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/">#MySQL必知必会</a>
             
           </div>
         
@@ -595,23 +595,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/27/MySQL/7-%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E/" target="_self">
-          <img src="/imgs/MySQL.png" srcset="/img/loading.gif" lazyload alt="进阶篇 - 7. 存储引擎">
+        <a href="/2024/11/27/mysql_bzbh/22-%E4%BD%BF%E7%94%A8%E8%A7%86%E5%9B%BE/" target="_self">
+          <img src="/imgs/mysql_bzbh.png" srcset="/img/loading.gif" lazyload alt="22. 使用视图">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/27/MySQL/7-%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E/" target="_self">
-          进阶篇 - 7. 存储引擎
+        <a href="/2024/11/27/mysql_bzbh/22-%E4%BD%BF%E7%94%A8%E8%A7%86%E5%9B%BE/" target="_self">
+          22. 使用视图
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/27/MySQL/7-%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E/" target="_self">
+      <a class="index-excerpt " href="/2024/11/27/mysql_bzbh/22-%E4%BD%BF%E7%94%A8%E8%A7%86%E5%9B%BE/" target="_self">
         <div>
-          存储引擎 1. MySQL体系结构：   连接层  最上层是一些客户端和链接服务，主要完成一些类似于连接处理、授权认证、及相关的安全方案。服务器也会为安全接入的每个客户端验证它所具有的操作权限。  服务层  第二层架构主要完成大多数的核心服务功能，如SQL接口，并完成缓存的查询，SQL的分析和优化，部分内置函数的执行。所有跨存储引擎的功能也在这一层实现，如过程、函数等。
+          1. 视图  视图是虚拟的表。与包含数据的表不一样，视图只包含使用时动态检索数据的查询。 为了创建视图，必须具有足够的访问权限。这些限制通常由数据库管理人员授予 ORDER BY可以用在视图中，但如果从该视图检索数据SELECT中也含有ORDER BY，那么该视图中的ORDER BY将被覆盖。  2. 使用视图  视图用CREATE VIEW语句来创建。 使用SHOW CREA
         </div>
       </a>
 
@@ -619,7 +619,7 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-27 12:07" pubdate>
+            <time datetime="2024-11-27 18:06" pubdate>
               2024-11-27
             </time>
           </div>
@@ -640,7 +640,7 @@
   
     <span>></span>
     
-  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/MySQL/" class="category-chain-item">MySQL</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/MySQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" class="category-chain-item">MySQL必知必会</a>
   
   
 
@@ -657,7 +657,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/MySQL/">#MySQL</a>
+              <a href="/tags/MySQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/">#MySQL必知必会</a>
             
           </div>
         
@@ -669,23 +669,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/26/MySQL/6-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" target="_self">
-          <img src="/imgs/MySQL.png" srcset="/img/loading.gif" lazyload alt="6. 数据类型">
+        <a href="/2024/11/27/mysql_bzbh/21-%E5%88%9B%E5%BB%BA%E5%92%8C%E6%93%8D%E7%BA%B5%E8%A1%A8/" target="_self">
+          <img src="/imgs/mysql_bzbh.png" srcset="/img/loading.gif" lazyload alt="21. 创建和操纵表">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/26/MySQL/6-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" target="_self">
-          6. 数据类型
+        <a href="/2024/11/27/mysql_bzbh/21-%E5%88%9B%E5%BB%BA%E5%92%8C%E6%93%8D%E7%BA%B5%E8%A1%A8/" target="_self">
+          21. 创建和操纵表
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/26/MySQL/6-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" target="_self">
+      <a class="index-excerpt " href="/2024/11/27/mysql_bzbh/21-%E5%88%9B%E5%BB%BA%E5%92%8C%E6%93%8D%E7%BA%B5%E8%A1%A8/" target="_self">
         <div>
-          6. 数据类型 1. 整型    类型名称 取值范围 大小     TINYINT -128〜127 1个字节   SMALLINT -32768〜32767 2个宇节   MEDIUMINT -8388608〜8388607 3个字节   INT (INTEGHR) -2147483648〜2147483647 4个字节   BIG
+          1. 创建表 1.1. 表创建基础  利用CREATE TABLE创建表，必须给出下列信息  新表的名字，在关键字CREATE TABLE之后给出 表列的名字和定义，用逗号分隔   img  表的主键可以在创建表时用PRIMARY KEY关键字指定。 在创建新表时，指定的表名必须不存在，否则将出错。 在创建新表时，指定的表名必须不存在，否则将出错。   1.2. 使
         </div>
       </a>
 
@@ -693,8 +693,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-26 17:30" pubdate>
-              2024-11-26
+            <time datetime="2024-11-27 18:06" pubdate>
+              2024-11-27
             </time>
           </div>
         
@@ -714,7 +714,7 @@
   
     <span>></span>
     
-  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/MySQL/" class="category-chain-item">MySQL</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/MySQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" class="category-chain-item">MySQL必知必会</a>
   
   
 
@@ -731,7 +731,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/MySQL/">#MySQL</a>
+              <a href="/tags/MySQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/">#MySQL必知必会</a>
             
           </div>
         
@@ -743,23 +743,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/26/MySQL/5-%E4%BA%8B%E5%8A%A1/" target="_self">
-          <img src="/imgs/MySQL.png" srcset="/img/loading.gif" lazyload alt="5. 事务">
+        <a href="/2024/11/27/mysql_bzbh/20-%E6%9B%B4%E6%96%B0%E5%92%8C%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE/" target="_self">
+          <img src="/imgs/mysql_bzbh.png" srcset="/img/loading.gif" lazyload alt="20. 更新和删除数据">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/26/MySQL/5-%E4%BA%8B%E5%8A%A1/" target="_self">
-          5. 事务
+        <a href="/2024/11/27/mysql_bzbh/20-%E6%9B%B4%E6%96%B0%E5%92%8C%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE/" target="_self">
+          20. 更新和删除数据
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/26/MySQL/5-%E4%BA%8B%E5%8A%A1/" target="_self">
+      <a class="index-excerpt " href="/2024/11/27/mysql_bzbh/20-%E6%9B%B4%E6%96%B0%E5%92%8C%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE/" target="_self">
         <div>
-          5. 事务  事务是一组操作的集合，事务会把所有操作作为一个整体一起向系统提交或撤销操作请求，即这些操作要么同时成功，要么同时失败。  5.1 基本操作： 1234567891011121314151617181920212223242526272829303132create table account(	id int auto_increment primary key commen
+          1. 更新数据  为了更新（修改）表中的数据，可使用UPDATE语句。 不要省略WHERE子句在使用UPDATE时一定要注意细心。因为稍不注意，就会更新表中所有行 UPDATE语句由3部分组成，分别是：  要更新的表； 列名和它们的新值； 确定要更新行的过滤条件    img  UPDATE语句总是以要更新的表的名字开始。在此例子中，要更新的表的名字为customers
         </div>
       </a>
 
@@ -767,8 +767,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-26 16:31" pubdate>
-              2024-11-26
+            <time datetime="2024-11-27 18:06" pubdate>
+              2024-11-27
             </time>
           </div>
         
@@ -788,7 +788,7 @@
   
     <span>></span>
     
-  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/MySQL/" class="category-chain-item">MySQL</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/MySQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" class="category-chain-item">MySQL必知必会</a>
   
   
 
@@ -805,7 +805,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/MySQL/">#MySQL</a>
+              <a href="/tags/MySQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/">#MySQL必知必会</a>
             
           </div>
         
@@ -817,23 +817,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/26/MySQL/4-%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A2/" target="_self">
-          <img src="/imgs/MySQL.png" srcset="/img/loading.gif" lazyload alt="4. 多表查询">
+        <a href="/2024/11/27/mysql_bzbh/19-%E6%8F%92%E5%85%A5%E6%95%B0%E6%8D%AE/" target="_self">
+          <img src="/imgs/mysql_bzbh.png" srcset="/img/loading.gif" lazyload alt="19. 插入数据">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/26/MySQL/4-%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A2/" target="_self">
-          4. 多表查询
+        <a href="/2024/11/27/mysql_bzbh/19-%E6%8F%92%E5%85%A5%E6%95%B0%E6%8D%AE/" target="_self">
+          19. 插入数据
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/26/MySQL/4-%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A2/" target="_self">
+      <a class="index-excerpt " href="/2024/11/27/mysql_bzbh/19-%E6%8F%92%E5%85%A5%E6%95%B0%E6%8D%AE/" target="_self">
         <div>
-          4. 多表查询 1. 多表关系  项目开发中，在进行数据库表结构设计时，会根据业务需求及业务模块之间的关系，分析并设计表结构，由于业务之间相互关联，所以各个表结构之间也存在着各种联系，基本上分为三种：  一对多（多对一） 多对多 一对一   1.1 一对多  案例：部门与员工 关系：一个部门对应多个员工，一个员工对应一个部门 实现：在多的一方建立外键，指向一的一方的主键
+          1. 数据插入 INSERT是用来插入（或添加）行到数据库表的。 2. 插入完整的行   img  编写INSERT语句的更安全（不过更烦琐）的方法如下   img    img  因为提供了列名，VALUES必须以其指定的次序匹配指定的列名，不一定按各个列出现在实际表中的次序。其优点是，即使表的结构改变，此INSERT语句仍然能正确工作。你会发现cust_id的N
         </div>
       </a>
 
@@ -841,8 +841,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-26 16:31" pubdate>
-              2024-11-26
+            <time datetime="2024-11-27 18:06" pubdate>
+              2024-11-27
             </time>
           </div>
         
@@ -862,7 +862,7 @@
   
     <span>></span>
     
-  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/MySQL/" class="category-chain-item">MySQL</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/MySQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" class="category-chain-item">MySQL必知必会</a>
   
   
 
@@ -879,7 +879,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/MySQL/">#MySQL</a>
+              <a href="/tags/MySQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/">#MySQL必知必会</a>
             
           </div>
         
@@ -891,23 +891,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/26/MySQL/3-%E7%BA%A6%E6%9D%9F/" target="_self">
-          <img src="/imgs/MySQL.png" srcset="/img/loading.gif" lazyload alt="3. 约束">
+        <a href="/2024/11/27/mysql_bzbh/18-%E5%85%A8%E6%96%87%E6%9C%AC%E6%90%9C%E7%B4%A2/" target="_self">
+          <img src="/imgs/mysql_bzbh.png" srcset="/img/loading.gif" lazyload alt="18. 全文本搜索">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/26/MySQL/3-%E7%BA%A6%E6%9D%9F/" target="_self">
-          3. 约束
+        <a href="/2024/11/27/mysql_bzbh/18-%E5%85%A8%E6%96%87%E6%9C%AC%E6%90%9C%E7%B4%A2/" target="_self">
+          18. 全文本搜索
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/26/MySQL/3-%E7%BA%A6%E6%9D%9F/" target="_self">
+      <a class="index-excerpt " href="/2024/11/27/mysql_bzbh/18-%E5%85%A8%E6%96%87%E6%9C%AC%E6%90%9C%E7%B4%A2/" target="_self">
         <div>
-          3. 约束  概念：约束是作用于表中字段上的规则，用于限制存储在表中的数据。 目的：保证数据库中数据的正确、有效性和完整性。 分类：      约束 描述 关键字     非空约束 限制该字段的数据不能为null NOT NULL   唯一约束 保证该字段的所有数据都是唯一、不重复的 UNIQUE   主键约束 主键是一行数据的唯一标识，要求
+          1. 理解全文本搜索 2. 使用全文本搜索  为了进行全文本搜索，必须索引被搜索的列，而且要随着数据的改变不断地重新索引。在对表列进行适当设计后，MySQL会自动进行所有的索引和重新索引。  2.1. 启用全文本搜索支持  一般在创建表时启用全文本搜索。 CREATE TABLE语句（第21章中介绍）接受FULLTEXT子句，它给出被索引列的一个逗号分隔的列表   img
         </div>
       </a>
 
@@ -915,8 +915,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-26 16:31" pubdate>
-              2024-11-26
+            <time datetime="2024-11-27 18:06" pubdate>
+              2024-11-27
             </time>
           </div>
         
@@ -936,7 +936,7 @@
   
     <span>></span>
     
-  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/MySQL/" class="category-chain-item">MySQL</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/MySQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" class="category-chain-item">MySQL必知必会</a>
   
   
 
@@ -953,7 +953,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/MySQL/">#MySQL</a>
+              <a href="/tags/MySQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/">#MySQL必知必会</a>
             
           </div>
         
@@ -965,7 +965,7 @@
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/page/10/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/#board">9</a><a class="page-number" href="/page/10/#board">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/#board">12</a><a class="page-number" href="/page/13/#board">13</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/#board">20</a><a class="extend next" rel="next" href="/page/12/#board"><i class="iconfont icon-arrowright"></i></a>
+      <a class="extend prev" rel="prev" href="/page/10/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/#board">9</a><a class="page-number" href="/page/10/#board">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/#board">12</a><a class="page-number" href="/page/13/#board">13</a><span class="space">&hellip;</span><a class="page-number" href="/page/23/#board">23</a><a class="extend next" rel="next" href="/page/12/#board"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
 

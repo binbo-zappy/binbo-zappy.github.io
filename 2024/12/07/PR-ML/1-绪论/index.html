@@ -1,0 +1,785 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="智能识别系统的组成：  1.信息获取（数据采集）：  对信号、图像、数值表(数据)的采集。 即：要用计算机可以运算的符号来表示所研究的对象。如图像：测量、采样、量化等。  2.预处理：  减小或消除模式获取过程中的噪声、干扰、提高SN; 加强有用信息，进行复原等，如减小数据图像模糊及几何失真，提高清晰度； 非线性模式转化成线性模式。 这个环节的内容及方法很多：如滤波、变">
+<meta property="og:type" content="article">
+<meta property="og:title" content="1. 绪论">
+<meta property="og:url" content="http://binbo-zappy.github.io/2024/12/07/PR-ML/1-%E7%BB%AA%E8%AE%BA/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="智能识别系统的组成：  1.信息获取（数据采集）：  对信号、图像、数值表(数据)的采集。 即：要用计算机可以运算的符号来表示所研究的对象。如图像：测量、采样、量化等。  2.预处理：  减小或消除模式获取过程中的噪声、干扰、提高SN; 加强有用信息，进行复原等，如减小数据图像模糊及几何失真，提高清晰度； 非线性模式转化成线性模式。 这个环节的内容及方法很多：如滤波、变">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/pr-ml.jpg">
+<meta property="article:published_time" content="2024-12-07T04:58:02.000Z">
+<meta property="article:modified_time" content="2024-12-07T04:59:40.024Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="ML">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/pr-ml.jpg">
+  
+  
+  
+  <title>1. 绪论 - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="1. 绪论"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-12-07 12:58" pubdate>
+          2024年12月7日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          848 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          8 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">1. 绪论</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p><img src="/2024/12/07/PR-ML/1-%E7%BB%AA%E8%AE%BA/1703913032049-847ee94d-93a4-41a5-b278-92a19f537d29.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="智能识别系统的组成">智能识别系统的组成：</h2>
+<p><img src="/2024/12/07/PR-ML/1-%E7%BB%AA%E8%AE%BA/1701571936566-b1fb59ad-d79a-4c1b-813b-38eb8de2eff1.png" srcset="/img/loading.gif" lazyload></p>
+<p>1.信息获取（数据采集）：</p>
+<ul>
+<li>对<strong>信号、图像、数值表(数据)</strong>的采集。</li>
+<li>即：要用计算机可以运算的符号来表示所研究的对象。如图像：<strong>测量、采样、量化</strong>等。</li>
+</ul>
+<p>2.预处理：</p>
+<ul>
+<li>减小或消除模式获取过程中的噪声、干扰、提高SN;</li>
+<li>加强有用信息，进行复原等，如减小数据图像模糊及几何失真，提高清晰度；</li>
+<li>非线性模式转化成线性模式。</li>
+<li>这个环节的内容及方法很多：如滤波、变换、编码、标准化等</li>
+</ul>
+<p>3.特征选择和变换</p>
+<ul>
+<li>以某种<strong>判决规则</strong>为准则，选取有效的特征，即为<strong>特征选择。</strong></li>
+<li>采用某种<strong>变换</strong>对特征空间的压缩，称<strong>为特征变换</strong>。</li>
+<li><img src="/2024/12/07/PR-ML/1-%E7%BB%AA%E8%AE%BA/1701572163877-a341fb09-320b-49c1-ac1b-a7571b80a690.png" srcset="/img/loading.gif" lazyload></li>
+</ul>
+<p>4.分类器设计</p>
+<ul>
+<li>分类器设计就是所谓的<strong>学习训练过程</strong>。</li>
+<li>用一定数量的样本确定某种判别准则，通过反复输入、修正，<strong>直到分类错误率不超过给定值为止</strong>(或错误率最小，或损失最小)，完成学习过程。</li>
+<li>训练学习方法：
+<ul>
+<li><strong>监督学习、无监督学习</strong>（无先验知识，甚至类别数也未知)，半监督学习。</li>
+</ul></li>
+<li>性能评估：采用<strong>交叉验证</strong>等方法评估训练模型的性能</li>
+</ul>
+<p>5.分类决策</p>
+<ul>
+<li>按<strong>分类判别准则</strong>，将被识别模式进行分类判决，输出分类结果</li>
+</ul>
+<h2 id="归纳偏好">归纳偏好</h2>
+<p>学习过程中<strong>对某种类型假设的偏好</strong>称作归纳偏好</p>
+<ul>
+<li>归纳偏好可看作学习算法自身在一个可能很庞大的假设空间中对假设进行选择的启发式或“价值观”</li>
+<li>“<strong>奥卡姆剃刀</strong>”是一种常用的、自然科学研究中最基本的原则，即“若有多个假设与观察一致，选<strong>最简单</strong>的那个”</li>
+<li>具体的现实问题中，学习算法本身所做的假设是否成立，也即<strong>算法的归纳偏好是否与问题本身匹配</strong>，大多数时候直接决定了算法能否取得好的性能</li>
+</ul>
+<h2 id="基本概念">基本概念</h2>
+<ul>
+<li>模式：对象的<strong>组成成分</strong>或<strong>影响因素</strong>间存在的一条<strong>规律性</strong>关系。</li>
+<li>模式类（模型）：具有某些<strong>共同特征的模式</strong>的集合</li>
+<li>模式识别：研究一种<strong>自动技术</strong>，依靠这种技术，机器将<strong>自动（或人尽量少的干涉）</strong>把待识别模式分配到各自的模式类中去</li>
+<li>学习：从<strong>数据中学得模型</strong>的过程</li>
+<li>样本（示例）：一个具体的<strong>研究（客观）对象</strong>。如患者，某人写的一个汉字，一幅图片等。</li>
+<li>特征（属性）：能描述<strong>模式特性</strong>的量。通常用一个矢量<img src="/2024/12/07/PR-ML/1-%E7%BB%AA%E8%AE%BA/1701572774910-0567c044-6497-45d3-b272-2bc0617f6045.png" srcset="/img/loading.gif" lazyload>表示，称之为<strong>特征矢量</strong>，记为<img src="/2024/12/07/PR-ML/1-%E7%BB%AA%E8%AE%BA/1701572810100-f778c9bc-6c7f-4620-bb53-23dd47a31fed.png" srcset="/img/loading.gif" lazyload></li>
+</ul>
+<h2 id="随机矢量的描述">随机矢量的描述</h2>
+<p>在模式识别过程中，要对许多具体对象进行测量，以获得许多次观测值。每次观测值不一定相同，所以对许多对象而言，各个特征分量都是随机变量，即<strong>许多对象的特征向量在n维空间中呈随机性分布</strong>，称为<strong>随机矢量</strong>。</p>
+<p>(一)随机矢量的分布函数：</p>
+<p><img src="/2024/12/07/PR-ML/1-%E7%BB%AA%E8%AE%BA/1701573000621-33a7e818-c7c8-42d9-bed3-af67c8a0d6dd.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/12/07/PR-ML/1-%E7%BB%AA%E8%AE%BA/1701573235972-ecadd41f-6700-430c-9b6d-4580853e0737.png" srcset="/img/loading.gif" lazyload></p>
+<p>(二)随机矢量的数字特征：</p>
+<p><img src="/2024/12/07/PR-ML/1-%E7%BB%AA%E8%AE%BA/1701573320476-addf517b-d5ef-4802-9964-05d44122e144.png" srcset="/img/loading.gif" lazyload></p>
+<p>⑵ 条件期望</p>
+<p><img src="/2024/12/07/PR-ML/1-%E7%BB%AA%E8%AE%BA/1701573369880-6a75fbb7-5997-489e-b35d-d255d4faf27d.png" srcset="/img/loading.gif" lazyload></p>
+<p>⑶ 协方差矩阵</p>
+<p><img src="/2024/12/07/PR-ML/1-%E7%BB%AA%E8%AE%BA/1701573729163-68a1f0b6-8b32-4290-a4c5-0943dc6a9fe2.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/12/07/PR-ML/1-%E7%BB%AA%E8%AE%BA/1701573796171-f9130d31-6e72-4065-b90e-18bb88aeedd8.png" srcset="/img/loading.gif" lazyload></p>
+<p>(4)自相关矩阵</p>
+<p><img src="/2024/12/07/PR-ML/1-%E7%BB%AA%E8%AE%BA/1701574074582-b1ea4435-3bb9-4db9-95e0-bf5869450658.png" srcset="/img/loading.gif" lazyload></p>
+<ol start="5" type="1">
+<li>相关系数</li>
+</ol>
+<p><img src="/2024/12/07/PR-ML/1-%E7%BB%AA%E8%AE%BA/1701574139149-fd358de8-5c43-438a-b759-4b4cfe6e4f87.png" srcset="/img/loading.gif" lazyload></p>
+<p>一维正态分布</p>
+<p><img src="/2024/12/07/PR-ML/1-%E7%BB%AA%E8%AE%BA/1704100109817-e9a6908f-6eea-4ac8-b7fb-bca232651af6.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/12/07/PR-ML/1-%E7%BB%AA%E8%AE%BA/1704100146196-5d511052-b8d4-4618-9f6b-99702c13a3ac.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/12/07/PR-ML/1-%E7%BB%AA%E8%AE%BA/1704100242672-7ea0b4ba-119d-47e8-9be8-71641e494300.png" srcset="/img/loading.gif" lazyload></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/AI/" class="category-chain-item">AI</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI/ML/" class="category-chain-item">ML</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI/ML/PR-ML/" class="category-chain-item">PR &amp; ML</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/ML/" class="print-no-link">#ML</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>1. 绪论</div>
+      <div>http://binbo-zappy.github.io/2024/12/07/PR-ML/1-绪论/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年12月7日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/12/07/PR-ML/2-%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB%E5%99%A8/" title="2. 贝叶斯分类器">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">2. 贝叶斯分类器</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/12/06/MySQL/17-%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB/" title="17. 读写分离">
+                        <span class="hidden-mobile">17. 读写分离</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

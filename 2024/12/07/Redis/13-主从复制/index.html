@@ -1,0 +1,1057 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="互联网三高架构 互联网“三高”架构：  高并发 高性能 高可用  大数据时代的“3V”：  海量（Volume） 多样（Variety） 实时（Velocity）  可用性：（全年的秒数 - 当年宕机停用的秒数）&#x2F; 全年的秒数 * 100%。 高可用：业界高可用性目标5个9（即99.999%)，即服务器年宕机时长低于315秒，约5.25分钟。 为了避免单点Redis服">
+<meta property="og:type" content="article">
+<meta property="og:title" content="13. 主从复制">
+<meta property="og:url" content="http://binbo-zappy.github.io/2024/12/07/Redis/13-%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="互联网三高架构 互联网“三高”架构：  高并发 高性能 高可用  大数据时代的“3V”：  海量（Volume） 多样（Variety） 实时（Velocity）  可用性：（全年的秒数 - 当年宕机停用的秒数）&#x2F; 全年的秒数 * 100%。 高可用：业界高可用性目标5个9（即99.999%)，即服务器年宕机时长低于315秒，约5.25分钟。 为了避免单点Redis服">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/redis.jpg">
+<meta property="article:published_time" content="2024-12-07T06:22:35.000Z">
+<meta property="article:modified_time" content="2024-12-07T06:52:19.365Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="Redis">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/redis.jpg">
+  
+  
+  
+  <title>13. 主从复制 - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="13. 主从复制"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-12-07 14:22" pubdate>
+          2024年12月7日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          34 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">13. 主从复制</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="互联网三高架构">互联网三高架构</h1>
+<p>互联网“三高”架构：</p>
+<ul>
+<li>高并发</li>
+<li>高性能</li>
+<li>高可用</li>
+</ul>
+<p>大数据时代的“3V”：</p>
+<ul>
+<li>海量（Volume）</li>
+<li>多样（Variety）</li>
+<li>实时（Velocity）</li>
+</ul>
+<p>可用性：<code>（全年的秒数 - 当年宕机停用的秒数）/ 全年的秒数 * 100%</code>。</p>
+<p>高可用：业界高可用性目标5个9（即99.999%)，即服务器年宕机时长低于315秒，约5.25分钟。</p>
+<p>为了避免单点Redis服务器故障，准备多台服务器，互相连通。将数据复制多个副本保存在不同的服务器上，连接在一起，并保证数据是同步的。即使有其中一台服务器宕机，其他服务器依然可以继续提供服务，实现Redis的高可用，同时实现数据冗余备份。</p>
+<h1 id="主从复制">主从复制</h1>
+<p>主从复制即 将master中的数据及时、有效的复制到slave中。</p>
+<p>特征：一个master可以拥有多个slave，一个slave只对应一个master。</p>
+<p>职责：</p>
+<ul>
+<li>master
+<ul>
+<li>写数据</li>
+<li>执行写操作时，将出现变化的数据自动同步到slave</li>
+<li>读数据（可忽略）</li>
+</ul></li>
+<li>slave
+<ul>
+<li>读数据</li>
+<li>写数据（禁止）</li>
+</ul></li>
+</ul>
+<p>作用：</p>
+<ul>
+<li>读写分离：master写、slave读，提高服务器的读写负载能力。</li>
+<li>负载均衡：基于主从结构，配合读写分离，由slave分担master负载，并根据需求的变化，改变slave的数量，通过多个从节点分担数据读取负载，大大提高Redis服务器并发量与数据吞吐量。</li>
+<li>故障恢复：当master出现问题时，由slave提供服务，实现快速的故障恢复。</li>
+<li>数据冗余：实现数据热备份，是持久化之外的一种数据冗余方式。</li>
+<li>高可用基石：基于主从复制，构建哨兵模式与集群，实现Redis的高可用方案</li>
+</ul>
+<h1 id="工作流程">工作流程</h1>
+<p>大致分为3个阶段：</p>
+<ol type="1">
+<li>建立连接阶段（即准备阶段）</li>
+<li>数据同步阶段</li>
+<li>命令传播阶段</li>
+</ol>
+<h2 id="建立连接阶段">建立连接阶段</h2>
+<p>步骤：</p>
+<ol type="1">
+<li>设置master的地址和端口，保存master信息</li>
+<li>建立socket连接</li>
+<li>发送ping指令（定时器任务）</li>
+<li>身份验证</li>
+<li>发送slave端口信息</li>
+<li>主从连接成功</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs plain">slave-&gt;master: 发送指令：slaveof ip port<br>master-&gt;slave: 接收到指令，响应给slave<br>note left of slave: 保存master的IP与端口 \n masterhost \n masterport<br>note left of slave: 根据保存的信息,\n 创建连接master的socket <br>slave-&gt;master: 周期性发送指令：ping<br>master-&gt;slave: 响应pong<br>note right of master: 验证授权<br>slave-&gt;master: 发送指令：replconf listening-port &lt;port-number&gt;<br>note right of master: 保存slave的端口号<br></code></pre></td></tr></table></figure>
+<p>最终状态：</p>
+<p>slave端：保存master的地址和端口</p>
+<p>master端：保存slave的端口</p>
+<p>总体：slave和master之间创建了socket连接</p>
+<p>主从连接（slave连接master）方式：</p>
+<ul>
+<li>方式一：客户端发送命令</li>
+</ul>
+<blockquote>
+<p>启动slave服务器之后，在slave服务器的客户端使用slaveof指令</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">slaveof &lt;masterip&gt; &lt;masterport&gt;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>方式二：启动服务器时，添加参数</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">redis-server --slaveof &lt;masterip&gt; &lt;masterport&gt;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>方式三：服务器配置</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">slaveof &lt;masterip&gt; &lt;masterport&gt;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>slave系统信息
+<ul>
+<li>master_link_down_since_seconds</li>
+<li>masterhost</li>
+<li>masterport</li>
+</ul></li>
+<li>master系统信息
+<ul>
+<li>slave_listening_port(多个)</li>
+</ul></li>
+</ul>
+<p>主从断开连接：</p>
+<ul>
+<li>在从机客户端发送指令：</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">slaveof no one<br></code></pre></td></tr></table></figure>
+<p>授权访问：</p>
+<p>master服务器设置密码：</p>
+<ul>
+<li>master配置文件设置密码</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">requirepass &lt;password&gt;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>master客户端发送命令设置密码</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">config set requirepass &lt;password&gt;<br>config get requirepass<br></code></pre></td></tr></table></figure>
+<p>slave访问带有密码的master：</p>
+<ul>
+<li>slave客户端发送命名设置密码</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">auth &lt;password&gt;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>slave配置文件设置密码</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">masterauth &lt;password&gt;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>启动客户端设置密码</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">redis-cli -a &lt;password&gt;<br></code></pre></td></tr></table></figure>
+<h2 id="数据同步阶段">数据同步阶段</h2>
+<p>在slave初次连接master后，复制master中所有数据到slave。</p>
+<p>将slave的数据库状态更新成master当前的数据库状态。</p>
+<p>步骤：</p>
+<ol type="1">
+<li>请求同步数据</li>
+<li>创建RDB同步数据</li>
+<li>恢复RDB同步数据</li>
+</ol>
+<blockquote>
+<p>以上称为全量复制。</p>
+</blockquote>
+<ol start="4" type="1">
+<li>请求部分同步数据</li>
+<li>恢复部分同步数据</li>
+</ol>
+<blockquote>
+<p>在slave连接master时，master将自己的数据创建RDB快照给slave。在这个过程中，master可能会收到其他的数据操作指令，master会创建一个复制积压缓冲区，保存这些不在RDB快照中的操作。最后将复制积压缓冲区内容发给slave，slave使用aof的方式将最后的部分同步数据进行恢复。这个操作称为部分复制。</p>
+</blockquote>
+<ol start="6" type="1">
+<li>数据同步工作完成</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs plain">slave-&gt;master: 发送指令：psync2<br>note right of master: 执行bgsave，\n使用RDB同步数据<br>note right of master: 第一个slave连接时,\n 创建复制积压缓冲区。\n(复制积压缓冲区作用：存储在slave连接过程中\nmaster接收到的数据操作指令)<br>master-&gt;slave: 生成RDB文件，通过socket发送给slave<br>note left of slave: 接收RDB,清空数据，\n 执行RDB文件恢复过程<br>slave-&gt;master: 发送命令告知RDB恢复已经完成<br>master-&gt;slave: 发送复制积压缓冲区信息<br>note left of slave: 接收复制积压缓冲区内的数据操作指令，\n 执行bgrewriteaof恢复数据<br></code></pre></td></tr></table></figure>
+<p>最终状态：</p>
+<p>slave端：具有master端全部数据，包含RDB过程中接收的数据。</p>
+<p>master端：保存slave当前数据同步的位置。</p>
+<p>总体：之间完成数据克隆</p>
+<p>master端注意事项：</p>
+<ul>
+<li>如果master数据量巨大，数据同步阶段应避开流量高峰期，避免造成master阻塞，影响业务正常执行。</li>
+<li>复制缓冲区大小设定不合理，会导致数据溢出。如果进行全量复制周期太长，进行部分复制时发现数据已经存在丢失的情况，必须进行第二次全量复制，致使slave陷入死循环状态。<br>
+通过配置项修改master的复制缓冲区大小：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">repl-backlog-size 1mb<br></code></pre></td></tr></table></figure>
+<ul>
+<li>master单机内存占用主机内存的比例不应过大，建议使用50% - 70%
+的内存，留下30%-50%的内存用于执行bgsave命令和创建复制缓冲区</li>
+</ul>
+<p>slave端注意事项：</p>
+<ul>
+<li>为避免slave全量复制、部分复制时服务器响应阻塞或数据不同步，建议关闭此期间的对外服务。<br>
+通过配置项修改：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">slave-serve-stale-data yes|no<br></code></pre></td></tr></table></figure>
+<ul>
+<li>数据同步阶段，master发送给slave信息可以理解master是slave的一个客户端，主动向slave发送命令</li>
+<li>多个slave同时对master请求数据同步，master发送的RDB文件增多，会对master带宽造成巨大冲击，因此数据同步需要根据业务需求，适量错峰。</li>
+<li>slave过多时，建议调整拓扑结构，由一主多从结构变为树状结构，中间的节点既是master，也是slave。注意使用树状结构时，由于层级深度，导致深度越高的slave与最顶层master间数据同步延迟较大，数据一致性变差，应谨慎选择。</li>
+</ul>
+<h2 id="命令传播阶段">命令传播阶段</h2>
+<p>当master数据库状态被修改后，导致主从服务器数据库状态不一致，此时需要让主从数据同步到一致的状态，同步的动作称为命令传播。</p>
+<p>master将接收到的数据变更命令发送给slave，slave接收命令后执行命令。</p>
+<p>命令传播阶段的部分复制：</p>
+<ul>
+<li>命令传播阶段出现了断网现象
+<ul>
+<li>网络闪断闪连</li>
+</ul></li>
+</ul>
+<blockquote>
+<p>忽略，无需处理</p>
+</blockquote>
+<pre><code class="hljs">-  短时间网络中断 </code></pre>
+<blockquote>
+<p>部分复制</p>
+</blockquote>
+<pre><code class="hljs">-  长时间网络中断 </code></pre>
+<blockquote>
+<p>全量复制</p>
+</blockquote>
+<h1 id="部分复制">部分复制</h1>
+<p>部分复制的三个核心要素：</p>
+<ul>
+<li>服务器的运行id（run id）</li>
+<li>主服务器的复制积压缓冲区</li>
+<li>主从服务器的复制偏移量</li>
+</ul>
+<p>服务器运行ID：</p>
+<ul>
+<li>概念：服务运行ID是每一台服务器每次运行的身份识别码，一台服务器多次运行可以生成多个运行id</li>
+<li>组成：运行id由40 位字符组成，是一个随机的十六进制字符</li>
+<li>作用：运行id被用于在服务器间进行传输，识别身份。如果想两次操作均对同一台服务器进行，必须每次操作携带对应的运行id，用于对方识别</li>
+<li>实现方式：运行id在每台服务器启动时自动生成的，master在首次连接slave时，会将自己的运行id发送给slave，slave保存此id，通过<code>info server</code>命令可以查看节点的run
+id</li>
+</ul>
+<p>复制缓冲区：</p>
+<ul>
+<li>概念：复制缓冲区，又称复制积压缓冲区，是一个先进先出（FIFO）的队列，用于存储服务器执行过的命令，每次传播命令，master都会将传播的命令记录下来，并存储在复制缓冲区。</li>
+<li>组成：
+<ul>
+<li>偏移量</li>
+</ul></li>
+</ul>
+<blockquote>
+<p>每个字节的索引位置。</p>
+<p>后续可以根据偏移量知道下一个应发送命令</p>
+</blockquote>
+<pre><code class="hljs">-  字节值 </code></pre>
+<blockquote>
+<p>存储的实际内容。Redis将数据指令拆分成逐个字节进行存储。</p>
+<p>例如；<code>set name lisi</code>，</p>
+<p>先转换成AOF格式：</p>
+<p>然后将换行转换成<code>\r\n</code>，按字节存储。</p>
+<p>例如：</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs plain">$3   # set三个字母的长度<br>set<br>$4  # name四个字母的长度<br>name<br>$4  # lisi四个字母的长度<br>lisi<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs plain">偏移量9001位置：$<br>偏移量9002位置：3<br>偏移量9003位置：s<br>偏移量9004位置：e<br>偏移量9005位置：t<br>偏移量9006位置：\r<br>偏移量9007位置：\n<br>偏移量9008位置：$<br>偏移量9009位置：4<br>偏移量9010位置：n<br>偏移量9011位置：a<br>.......<br></code></pre></td></tr></table></figure>
+<ul>
+<li>工作原理：每个slave记录当前传播的offset偏移量，master也会记录每个slave传播的offset（防止网络原因slave和master不一致），通过offset偏移量区分不同的slave当前数据传播的差异。</li>
+<li>复制缓冲区默认存储空间大小是1M，由于存储空间大小是固定的，当入队元素的数量大于队列长度时，最先入队的元素会被弹出，而新元素会被放入队列。</li>
+<li>由来：每台服务器启动时，如果开启有AOF活被连接成为master节点，即创建复制缓冲区。</li>
+<li>作用：保存master收到的所有指令（仅影响数据变更的指令，例如set、select）</li>
+<li>数据来源：当master接收到主客户端的指令时，除了将指令执行，会将该指令存储到缓冲区中。</li>
+</ul>
+<p>主从服务器复制偏移量（offset）：</p>
+<ul>
+<li>概念：一个数字，描述复制缓冲区中的指令字节位置</li>
+<li>分类：
+<ul>
+<li>master复制偏移量：记录发送给所有slave的指令字节对应的位置（多个）</li>
+<li>slave复制偏移量：记录slave接收master发送过来的指令字节对应的位置（一个）</li>
+</ul></li>
+<li>数据来源：
+<ul>
+<li>master端：发送一次记录一次</li>
+<li>slave端：接收一次记录一次</li>
+</ul></li>
+<li>作用：同步信息，比对master与slave的差异，当slave断线后，恢复数据使用。</li>
+</ul>
+<p>数据同步流程（详细版）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs plain">slave-&gt;master: 发送指令： psync2 &lt;runid&gt; &lt;offset&gt; \n 第一次发送时不知道runid和offset，所以\n第一次发送的指令为：psync2 ? -1<br>note right of master: 执行bgsave生成RDB文件，\n 记录当前的复制偏移量offset \n 期间接收新的客户端命令，offset发生变化<br>master-&gt;slave: 发送 +FULLRESYNC runid offset \n 通过socket发送RDB文件给slave<br>note left of slave: 收到 +FULLSYNC \n 保存master的runid和offset \n 清空当前全部数据\n 通过socket接收RDB文件，恢复RDB数据<br>slave-&gt;master: 发送指令：psync2 runid offset<br>note right of master: 接收命令，\n判定runid是否匹配，\n判定offset是否在复制缓冲区中。<br>note right of master: 如果runid或offset有一个不满足条件,\n则执行全量复制;<br>note right of master: 如果runid和offset校验通过，\n且slave的offset和master当前offset相同，\n则忽略<br>note right of master: 如果runid和offset校验通过，\n但slave的offset和master的offset不同，\n则进行部分复制<br>master-&gt;slave: 发送 +CONTINUE &lt;master当前的offset&gt; \n 通过socket发送复制缓冲区中\n从slave的offset到master的offset\n之间的数据<br>note left of slave: 收到 +CONTINUE \n保存master的offset，\n接收信息后，执行bgrewriteaof，\n恢复数据<br></code></pre></td></tr></table></figure>
+<h1 id="心跳机制">心跳机制</h1>
+<p>进入命令传播阶段时候，master与slave之间需要进行信息交换，使用心跳机制进行维护，实现双方连接保持在线。</p>
+<p>master心跳：</p>
+<ul>
+<li>指令：<code>ping</code></li>
+<li>周期：由 repl-ping-slave-period 决定，默认10秒</li>
+<li>作用：判断slave是否在线</li>
+<li>查询：INFO replication</li>
+</ul>
+<blockquote>
+<p>获取slave最后一次连接时间间隔，lag项维持在0或1视为正常</p>
+</blockquote>
+<p>slave心跳任务：</p>
+<ul>
+<li>指令：<code>replconf ack &#123;offset&#125;</code></li>
+<li>周期：1秒</li>
+<li>作用1：汇报slave自己的复制偏移量，获取罪行的数据变更指令</li>
+<li>作用2：判断master是否在线</li>
+</ul>
+<p>注意事项：</p>
+<ul>
+<li>当slave多数掉线，或延迟过高时，master为保障数据稳定性，将拒绝所有信息同步操作<br>
+相关配置：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plain">min-slaves-to-write 2<br>min-slaves-max-lag 8<br></code></pre></td></tr></table></figure>
+<p>slave数量少于2个，或者所有slave的延迟都大于10秒时，强制关闭master写功能，停止数据同步</p>
+<ul>
+<li>slave数量由slave发送 <code>replconf ack</code> 命令做确认</li>
+<li>slave延迟由slave发送<code>replconf ack</code>命令做确认</li>
+</ul>
+<p>命令传播阶段工作流程（完整版）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs plain">slave-&gt;master: 发送指令：replconf ack &lt;slave保存的offset&gt; \n(数据同步阶段此处发送的是: pysnc2指令)<br>note right of master: 接收命令，\n判定offset是否在复制缓冲区中。<br>note right of master: 如果offset不在缓冲区,\n则执行全量复制;<br>note right of master: 如果offset在缓冲区，\n且slave的offset和master当前offset相同，\n则忽略<br>note right of master: 如果offset在缓冲区，\n但slave的offset和master的offset不同，\n则进行部分复制<br>master-&gt;slave: 发送 +CONTINUE &lt;master当前的offset&gt; \n 通过socket发送复制缓冲区中\n从slave的offset到master的offset\n之间的数据<br>note left of slave: 收到 +CONTINUE \n保存master的offset，\n接收信息后，执行bgrewriteaof，\n恢复数据<br></code></pre></td></tr></table></figure>
+<h1 id="主从复制常见问题">主从复制常见问题</h1>
+<h2 id="频繁的全量复制">频繁的全量复制</h2>
+<p>全量复制问题1：</p>
+<p>伴随着系统的运行，master的数据量会越来越大，一旦master重启，runid将发生变化，会导致全部slave的全量复制操作。</p>
+<p>内部优化调整方案：（不需要调整）</p>
+<ol type="1">
+<li>Master内部创建 master_replid
+变量，使用runid相同的策略生成，长度41位，并发送给所有slave</li>
+<li>在master关闭时执行命令 <code>shutdown save</code>，进行 RDB
+持久化，将runid与offset保存到RDB文件中
+<ul>
+<li>repl-id repl-offset</li>
+<li>通过redis-check-rdb命令（linux命令，不是在redis-cli客户端执行）可以查看该信息</li>
+</ul></li>
+<li>master重启后加载RDB文件，恢复数据<br>
+重启后，将RDB文件中保存的 repl-id 与 repl-offset 加载到内存中
+<ul>
+<li>master_repl_id=repl  master_repl_offset=repl-offset</li>
+<li>通过info命令可以查看该信息</li>
+</ul></li>
+</ol>
+<p>作用：本机保存上次runid，重启后恢复该值，使所有slave认为还是之前的master</p>
+<p>全量复制问题2：</p>
+<p>现象：网络环境不佳，出现网络中断，slave不提供服务。</p>
+<p>原因：复制缓冲区过小，断网后slave的offset越界，触发全量复制</p>
+<p>最终结果：slave反复进行全量复制</p>
+<p>解决方案：修改复制缓冲区大小</p>
+<p>建议设置如下：</p>
+<ol type="1">
+<li>测算从master到slave的重连平均时长second</li>
+<li>获取master平均每秒产生写命令数据总量 write_size_per_second</li>
+<li><code>最优复制缓冲区空间 = 2 * second * write_size_per_second</code></li>
+</ol>
+<h2 id="频繁的网络中断">频繁的网络中断</h2>
+<p>网络中断问题1：</p>
+<p>现象：master的cpu占用过高，或者slave频繁断开连接</p>
+<p>原因：</p>
+<ul>
+<li>slave每1秒发送 <code>replconf ack</code> 命令到master</li>
+<li>当slave接收到了慢查询（<code>keys *</code>、<code>hgetall</code>等），会大量占用cpu性能</li>
+<li>master每1秒调用复制定时函数<code>replicationCron()</code>，比对slave发现长时间没有进行响应</li>
+</ul>
+<p>最终结果：master各种资源（输出缓冲区、带宽、连接等）被严重占用</p>
+<p>解决方案：通过设置合理的超时时间，确认是否释放slave。</p>
+<p>对应的配置：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">repl-timeout<br></code></pre></td></tr></table></figure>
+<p>该参数定义了超时时间的阈值（默认60秒），超过该值，释放slave。</p>
+<p>网络中断问题2：</p>
+<p>现象：slave与master连接断开</p>
+<p>原因：</p>
+<ul>
+<li>master发送ping指令频度较低</li>
+<li>master设定超时时间较短</li>
+<li>ping指令在网络中存在丢包</li>
+</ul>
+<p>解决方案：提高ping指令发送的频度</p>
+<p>对应的配置项：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">repl-ping-slave-period<br></code></pre></td></tr></table></figure>
+<p>超时时间repl-time的时间至少是ping指令频度的5到10倍，否则slave很容易判定超时</p>
+<h2 id="数据不一致">数据不一致</h2>
+<p>现象：多个slave获取相同数据不同步</p>
+<p>原因：网络信息不同步，数据发送有延迟</p>
+<p>解决方案：</p>
+<ul>
+<li>优化主从间的网络环境，通常放置在同一个机房部署，如使用阿里云等云服务器时要注意此现象</li>
+<li>监控主从节点延迟（通过offset判断），如果slave延迟过大，暂时屏蔽程序对该slave的数据访问<br>
+对应配置：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">slave-serve-stale-data yes|no<br></code></pre></td></tr></table></figure>
+<p>开启后仅响应info、slaveof等少数命令（慎用，除非对数据一致性要求很高）</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/" class="category-chain-item">后端开发</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Redis/" class="category-chain-item">Redis</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Redis/" class="print-no-link">#Redis</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>13. 主从复制</div>
+      <div>http://binbo-zappy.github.io/2024/12/07/Redis/13-主从复制/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年12月7日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/12/07/Redis/14-%E5%93%A8%E5%85%B5/" title="14. 哨兵">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">14. 哨兵</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/12/07/Redis/12-%E9%AB%98%E7%BA%A7%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" title="12. 高级数据类型">
+                        <span class="hidden-mobile">12. 高级数据类型</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

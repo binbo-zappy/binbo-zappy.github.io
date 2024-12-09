@@ -1,0 +1,789 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="集群架构 集群就是使用网络将若干台计算机连通起来，并提供统一的管理方式，使其对外呈现单机的服务效果。 作用：  分散单台服务器的访问压力，实现负载均衡 分散单台服务器的存储压力，实现可扩展性 降低单台服务器宕机带来的业务灾难  集群架构的数据存储设计： 先将 key 通过CRC16(key)%16384进行计算，得到的数用来确定这个key在集群中哪台计算机的存储空间位置。 r">
+<meta property="og:type" content="article">
+<meta property="og:title" content="15. 集群">
+<meta property="og:url" content="http://binbo-zappy.github.io/2024/12/07/Redis/15-%E9%9B%86%E7%BE%A4/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="集群架构 集群就是使用网络将若干台计算机连通起来，并提供统一的管理方式，使其对外呈现单机的服务效果。 作用：  分散单台服务器的访问压力，实现负载均衡 分散单台服务器的存储压力，实现可扩展性 降低单台服务器宕机带来的业务灾难  集群架构的数据存储设计： 先将 key 通过CRC16(key)%16384进行计算，得到的数用来确定这个key在集群中哪台计算机的存储空间位置。 r">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/redis.jpg">
+<meta property="article:published_time" content="2024-12-07T06:22:38.000Z">
+<meta property="article:modified_time" content="2024-12-07T06:55:59.101Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="Redis">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/redis.jpg">
+  
+  
+  
+  <title>15. 集群 - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="15. 集群"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-12-07 14:22" pubdate>
+          2024年12月7日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          12 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">15. 集群</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="集群架构">集群架构</h1>
+<p>集群就是使用网络将若干台计算机连通起来，并提供统一的管理方式，使其对外呈现单机的服务效果。</p>
+<p>作用：</p>
+<ul>
+<li>分散单台服务器的访问压力，实现负载均衡</li>
+<li>分散单台服务器的存储压力，实现可扩展性</li>
+<li>降低单台服务器宕机带来的业务灾难</li>
+</ul>
+<p>集群架构的数据存储设计：<br>
+先将 key
+通过<code>CRC16(key)%16384</code>进行计算，得到的数用来确定这个key在集群中哪台计算机的存储空间位置。</p>
+<p>redis会将所有的存储空间计划切割成16384份（每份代表的是一个存储空间，不是一个key的保存空间，一个存储空间内可以放若干个key），每台主机保存若干个存储空间。</p>
+<p>将key按照计算出的结果放到对应的存储空间。</p>
+<p>这个存储空间称为“槽”(slot)。</p>
+<p>扩展新的机器：将原来每台服务器上的槽拿出来一部分，放到扩新增加的服务器上。增加了可扩展性。</p>
+<p>如果移除一台服务器，则将该服务器上的槽返还现有的服务器中。</p>
+<p>集群架构的内部通讯设计：</p>
+<p>各个服务器之间会进行互联，每台服务器都会记录其他所有服务器上的槽编号，便于后续查找。</p>
+<p>客户端如果向A服务器发出一个key，经过<code>CRC16(key)%16384</code>运算后得出其所在的槽。如果该key对应的槽就在A服务器上，则直接返回。如果未命中，则通过A服务器上记录的其他服务器槽编号，可以得知该key所在的服务器、这样可以保证最多两次即可命中。</p>
+<h1 id="集群开启示例">集群开启示例</h1>
+<p>编辑配置文件：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs plain">port 6379<br>daemonize no<br>dir /home/redis/data<br>dbfilename dump-6379.rdb<br>rdbcompression yes<br>rdbchecksum yes<br>save 10 2<br>appendonly yes<br>appendfsync always<br>appendfilename appendonly-6379.aof<br>bind 127.0.0.1<br>databases 16<br># 不需要再在配置文件中指定对应的master<br># 增加关于集群的配置<br># 使能集群<br>cluster-enabled yes<br># 集群自动生成的节点配置文件<br>cluster-config-file nodes-6379.conf<br># 节点超时下线时长<br>cluster-node-timeout 10000<br></code></pre></td></tr></table></figure>
+<p>旧版本Redis启动集群使用的 <code>src/redis-trib.rb</code>，这是一个
+ruby 脚本，需要先安装ruby：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">--replicas 后面的第一个数字表示：一个master对应几个slave。</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">再往后列出所有的服务器的ip、端口号。redis会自动将前面的几个设置为master，后面的设置为slave。</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">后面列出的ip、端口号的数量，要和--replilcas后的slave/master比例 对应起来。</span><br>./redis-trib.rb create --replicas 1 127.0.0.1:6379<br></code></pre></td></tr></table></figure>
+<p>redis 5.0之后需要使用redis-cli命令进行替换：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">redis-cli --cluster create 127.0.0.1:6379 127.0.0.1:6380 127.0.0.1:6381 127.0.0.1:6382 127.0.0.1:6383 127.0.0.1:6384 --cluster-replicas 1<br></code></pre></td></tr></table></figure>
+<p>启动之后，便会根据配置文件配置的路径、node文件名在对应文件夹下生成对应的node节点文件。此时的node节点文件内只保存本Redis服务器的信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs plain">[redis@mycentos7 data]$ cat nodes-6379.conf <br>ddd8d8c57f7919aac742845b0a2ee8aa46f8daf0 :0@0 myself,master - 0 0 0 connected<br>vars currentEpoch 0 lastVoteEpoch 0<br></code></pre></td></tr></table></figure>
+<p>Redis自动分析出几台服务器扮演的主/从角色后，会提示：<code>Can I set the above configuration? (type 'yes' to accept):</code></p>
+<p>输入<code>yes</code>之后，会将这些主从角色信息、所有的节点信息都保存进node节点文件中。例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs plain">[redis@mycentos7 data]$ cat nodes-6379.conf <br>cafbf4c76fecdc705569eb4d1a841ddaa5a247e3 127.0.0.1:6381@16381 master - 0 1611830119789 3 connected 10923-16383<br>ddd8d8c57f7919aac742845b0a2ee8aa46f8daf0 127.0.0.1:6379@16379 myself,master - 0 1611830117000 1 connected 0-5460<br>c5e86db426ff6597eb6a6e37176ca5a760d34443 127.0.0.1:6380@16380 master - 0 1611830118771 2 connected 5461-10922<br>d48006559e8fdbfaafcbb2b7670e5527f50866ab 127.0.0.1:6383@16383 slave c5e86db426ff6597eb6a6e37176ca5a760d34443 0 1611830116000 2 connected<br>fa4f94fea01550d3c5368632d1a937a0d497f8e3 127.0.0.1:6382@16382 slave ddd8d8c57f7919aac742845b0a2ee8aa46f8daf0 0 1611830119000 1 connected<br>cad69dd5aa16eb6420b51b67f68dd4d04154cef5 127.0.0.1:6384@16384 slave cafbf4c76fecdc705569eb4d1a841ddaa5a247e3 0 1611830118000 3 connected<br>vars currentEpoch 6 lastVoteEpoch 0<br></code></pre></td></tr></table></figure>
+<h1 id="相关配置项">相关配置项</h1>
+<ul>
+<li>设置加入cluster，成为其中的节点</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">cluster-enabled yes|no<br></code></pre></td></tr></table></figure>
+<ul>
+<li>cluster配置文件名，该文件属于自动生成，仅用于快速查找文件并查询文件内容</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">cluster-config-file &lt;filename&gt;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>节点服务响应超时时间，用于判定该节点是否下线或切换为从节点</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">cluster-node-timeout &lt;milliseconds&gt;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>master连接的slave最小数量</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">cluster-migration-barrier &lt;count&gt;<br></code></pre></td></tr></table></figure>
+<h1 id="设置和获取数据">设置和获取数据</h1>
+<p>如果直接使用
+<code>redis-cli</code>开启客户端，使用<code>set name zhangsan</code>设置数据时，可能会因为该key对应的槽不在当前客户端连接的master上而报错：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs plain">[redis@mycentos7 ~]$ redis-cli<br>127.0.0.1:6379&gt; set name zhangsan<br># 错误，请移至位于6380端口的5798号槽进行操作<br>(error) MOVED 5798 127.0.0.1:6380<br></code></pre></td></tr></table></figure>
+<p>为避免这种情况，可以使用专门的参数 <code>-c</code>
+开启集群客户端：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">redis-cli -c<br></code></pre></td></tr></table></figure>
+<p>这样，集群便会自动将该Key重定向到对应的服务器上的槽中：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs plain">[redis@mycentos7 ~]$ redis-cli -c<br>127.0.0.1:6379&gt; set name zhangsan<br>-&gt; Redirected to slot [5798] located at 127.0.0.1:6380<br>OK<br></code></pre></td></tr></table></figure>
+<p>可以使用redis的<code>cluster nodes</code>指令查看节点信息：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs shell">127.0.0.1:6380&gt; cluster nodes<br>c5e86db426ff6597eb6a6e37176ca5a760d34443 127.0.0.1:6380@16380 myself,master - 0 1611883770000 2 connected 5461-10922<br>ddd8d8c57f7919aac742845b0a2ee8aa46f8daf0 127.0.0.1:6379@16379 master - 0 1611883769000 1 connected 0-5460<br>cafbf4c76fecdc705569eb4d1a841ddaa5a247e3 127.0.0.1:6381@16381 master - 0 1611883770213 3 connected 10923-16383<br>fa4f94fea01550d3c5368632d1a937a0d497f8e3 127.0.0.1:6382@16382 slave ddd8d8c57f7919aac742845b0a2ee8aa46f8daf0 0 1611883770000 1 connected<br>d48006559e8fdbfaafcbb2b7670e5527f50866ab 127.0.0.1:6383@16383 slave c5e86db426ff6597eb6a6e37176ca5a760d34443 0 1611883769191 2 connected<br>cad69dd5aa16eb6420b51b67f68dd4d04154cef5 127.0.0.1:6384@16384 slave cafbf4c76fecdc705569eb4d1a841ddaa5a247e3 0 1611883771234 3 connected<br></code></pre></td></tr></table></figure>
+<h1 id="客户端cluster节点相关命令">客户端Cluster节点相关命令</h1>
+<ul>
+<li>查看集群节点信息</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">cluster nodes<br></code></pre></td></tr></table></figure>
+<ul>
+<li>进入一个从节点redis，切换其主节点</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">cluster replicate &lt;master-id&gt;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>发现一个新节点，新增主节点</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">cluster meet ip:port<br></code></pre></td></tr></table></figure>
+<ul>
+<li>忽略一个没有slot的节点</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">cluster forget &lt;id&gt;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>手动故障转移</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">cluster failover<br></code></pre></td></tr></table></figure>
+<h1 id="主从下线和主从切换">主从下线和主从切换</h1>
+<p>当一台slave服务器下线后，其对应的master会将其标记为下线状态，并通知集群内其他所有服务器。等该slave服务再次上线后，其对应的master会重新进行数据同步，将其标记为上线状态，并通知集群内其他服务器删除该slave的下线状态。</p>
+<p>当一台master服务器下线后，其对应的slave会连续的发起请求，经过<code>cluster-node-timeout</code>时长之后，slave会将自己设置成master。当原来的master再次上线后，会被设置成slave。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/" class="category-chain-item">后端开发</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Redis/" class="category-chain-item">Redis</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Redis/" class="print-no-link">#Redis</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>15. 集群</div>
+      <div>http://binbo-zappy.github.io/2024/12/07/Redis/15-集群/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年12月7日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/12/07/Redis/16-%E4%BC%81%E4%B8%9A%E7%BA%A7%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" title="16. 企业级解决方案">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">16. 企业级解决方案</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/12/07/Redis/14-%E5%93%A8%E5%85%B5/" title="14. 哨兵">
+                        <span class="hidden-mobile">14. 哨兵</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

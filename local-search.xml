@@ -4,6 +4,1221 @@
   
   
   <entry>
+    <title>16. CIG重量级监控</title>
+    <link href="/2024/12/07/docker/16-CIG%E9%87%8D%E9%87%8F%E7%BA%A7%E7%9B%91%E6%8E%A7/"/>
+    <url>/2024/12/07/docker/16-CIG%E9%87%8D%E9%87%8F%E7%BA%A7%E7%9B%91%E6%8E%A7/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>容器</category>
+      
+      <category>Docker</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Docker</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>15. Portainer轻量级图形化监控</title>
+    <link href="/2024/12/07/docker/15-Portainer%E8%BD%BB%E9%87%8F%E7%BA%A7%E5%9B%BE%E5%BD%A2%E5%8C%96%E7%9B%91%E6%8E%A7/"/>
+    <url>/2024/12/07/docker/15-Portainer%E8%BD%BB%E9%87%8F%E7%BA%A7%E5%9B%BE%E5%BD%A2%E5%8C%96%E7%9B%91%E6%8E%A7/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>容器</category>
+      
+      <category>Docker</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Docker</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>14. Docker-compose容器编排</title>
+    <link href="/2024/12/07/docker/14-Docker-compose%E5%AE%B9%E5%99%A8%E7%BC%96%E6%8E%92/"/>
+    <url>/2024/12/07/docker/14-Docker-compose%E5%AE%B9%E5%99%A8%E7%BC%96%E6%8E%92/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>容器</category>
+      
+      <category>Docker</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Docker</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>13. Docker网络</title>
+    <link href="/2024/12/07/docker/13-Docker%E7%BD%91%E7%BB%9C/"/>
+    <url>/2024/12/07/docker/13-Docker%E7%BD%91%E7%BB%9C/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>容器</category>
+      
+      <category>Docker</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Docker</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>12. Docker发布微服务</title>
+    <link href="/2024/12/07/docker/12-Docker%E5%8F%91%E5%B8%83%E5%BE%AE%E6%9C%8D%E5%8A%A1/"/>
+    <url>/2024/12/07/docker/12-Docker%E5%8F%91%E5%B8%83%E5%BE%AE%E6%9C%8D%E5%8A%A1/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>容器</category>
+      
+      <category>Docker</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Docker</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>11. Dockerfile</title>
+    <link href="/2024/12/07/docker/11-Dockerfile/"/>
+    <url>/2024/12/07/docker/11-Dockerfile/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>容器</category>
+      
+      <category>Docker</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Docker</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>10. Docker安装Redis</title>
+    <link href="/2024/12/07/docker/10-Docker%E5%AE%89%E8%A3%85Redis/"/>
+    <url>/2024/12/07/docker/10-Docker%E5%AE%89%E8%A3%85Redis/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>容器</category>
+      
+      <category>Docker</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Docker</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>9. Docker安装Mysql</title>
+    <link href="/2024/12/07/docker/9-Docker%E5%AE%89%E8%A3%85Mysql/"/>
+    <url>/2024/12/07/docker/9-Docker%E5%AE%89%E8%A3%85Mysql/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>容器</category>
+      
+      <category>Docker</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Docker</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>8. Registry搭建docker私仓</title>
+    <link href="/2024/12/07/docker/8-Registry%E6%90%AD%E5%BB%BAdocker%E7%A7%81%E4%BB%93/"/>
+    <url>/2024/12/07/docker/8-Registry%E6%90%AD%E5%BB%BAdocker%E7%A7%81%E4%BB%93/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>容器</category>
+      
+      <category>Docker</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Docker</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>7. nexus搭建docker私仓</title>
+    <link href="/2024/12/07/docker/7-nexusi%E6%90%AD%E5%BB%BAdocker%E7%A7%81%E4%BB%93/"/>
+    <url>/2024/12/07/docker/7-nexusi%E6%90%AD%E5%BB%BAdocker%E7%A7%81%E4%BB%93/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>容器</category>
+      
+      <category>Docker</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Docker</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>6. Docker镜像</title>
+    <link href="/2024/12/07/docker/6-Docker%E9%95%9C%E5%83%8F/"/>
+    <url>/2024/12/07/docker/6-Docker%E9%95%9C%E5%83%8F/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>容器</category>
+      
+      <category>Docker</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Docker</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>5. 容器命令</title>
+    <link href="/2024/12/07/docker/5-%E5%AE%B9%E5%99%A8%E5%91%BD%E4%BB%A4/"/>
+    <url>/2024/12/07/docker/5-%E5%AE%B9%E5%99%A8%E5%91%BD%E4%BB%A4/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>容器</category>
+      
+      <category>Docker</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Docker</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>4. Docker常用命令</title>
+    <link href="/2024/12/07/docker/4-Docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"/>
+    <url>/2024/12/07/docker/4-Docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>容器</category>
+      
+      <category>Docker</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Docker</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>3. Docker下载加速</title>
+    <link href="/2024/12/07/docker/3-Docker%E4%B8%8B%E8%BD%BD%E5%8A%A0%E9%80%9F/"/>
+    <url>/2024/12/07/docker/3-Docker%E4%B8%8B%E8%BD%BD%E5%8A%A0%E9%80%9F/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>容器</category>
+      
+      <category>Docker</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Docker</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>2. Docker安装</title>
+    <link href="/2024/12/07/docker/2-Docker%E5%AE%89%E8%A3%85/"/>
+    <url>/2024/12/07/docker/2-Docker%E5%AE%89%E8%A3%85/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>容器</category>
+      
+      <category>Docker</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Docker</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>1. Docker概述</title>
+    <link href="/2024/12/07/docker/1-Docker%E6%A6%82%E8%BF%B0/"/>
+    <url>/2024/12/07/docker/1-Docker%E6%A6%82%E8%BF%B0/</url>
+    
+    <content type="html"><![CDATA[<h1 id="docker简介">Docker简介</h1><p>Docker是基于Go语言实现的云开源项目。</p><p>Docker的主要目标是：<code>Build, Ship and Run Any App, Anywhere</code>，也就是通过对应用组件的封装、分发、部署、运行等生命周期的管理，使用户的APP及其运行环境能做到<strong>一次镜像,处处运行</strong>。</p><h1 id="传统虚拟机和容器">传统虚拟机和容器</h1><p>传统虚拟机（virtual machine）：</p><p>传统虚拟机技术基于安装在主操作系统上的虚拟机管理系统（如VirtualBox、VMware等），创建虚拟机（虚拟出各种硬件），在虚拟机上安装从操作系统，在从操作系统中安装部署各种应用。</p><p>缺点：资源占用多、冗余步骤多、启动慢</p><p>Linux容器（Linux Container，简称LXC）：</p><p>Linux容器是与系统其他部分分隔开的一系列进程，从另一个镜像运行，并由该镜像提供支持进程所需的全部文件。容器提供的镜像包含了应用的所有依赖项，因而在从开发到测试再到生产的整个过程中，它都具有可移植性和一致性。</p><p>Linux容器不是模拟一个完整的操作系统，而是对进程进行隔离。有了容器，就可以将软件运行所需的所有资源打包到一个隔离的容器中。容器与虚拟机不同，不需要捆绑一整套操作系统，只需要软件工作所需的库资源和设置。系统因此而变得高效轻量并保证部署在任何环境中的软件都能始终如一的运行。</p><p><img src="/2024/12/07/docker/1-Docker%E6%A6%82%E8%BF%B0/1652093324480-073374a2-4ce3-4a56-932b-5a73329736a2.jpeg"></p><p>对比：</p><table><thead><tr><th>特性</th><th>容器</th><th>虚拟机</th></tr></thead><tbody><tr><td>启动</td><td>秒级</td><td>分钟级</td></tr><tr><td>大小</td><td>一般为Mb</td><td>一般为Gb</td></tr><tr><td>速度</td><td>接近原生</td><td>比较慢</td></tr><tr><td>系统支持数量</td><td>单机支持上千个容器</td><td>一般几十个</td></tr></tbody></table><h1 id="docker运行速度快的原因">Docker运行速度快的原因</h1><p>Docker有比虚拟机更少的抽象层：</p><p>由于Docker不需要Hypervisor（虚拟机）实现硬件资源虚拟化，运行在Docker容器上的程序直接使用的都是实际物理机的硬件资源，因此在CPU、内存利用率上docker有明显优势。</p><p>Docker利用的是宿主机的内核，而不需要加载操作系统OS内核：</p><p>当新建一个容器时，Docker不需要和虚拟机一样重新加载一个操作系统内核。进而避免引寻、加载操作系统内核返回等比较耗时耗资源的过程。当新建一个虚拟机时，虚拟机软件需要加载OS，返回新建过程是分钟级别的。而Docker由于直接利用宿主机的操作系统，则省略了返回过程，因此新建一个docker容器只需要几秒钟。</p><p>Docker容器的本质就是一个进程。</p><h1 id="docker软件">Docker软件</h1><p>Docker并非一个通用的容器工具，它依赖于已经存在并运行的Linux内核环境。（在Windows上安装Docker时需要依赖WLS，也即Windows下的Linux子系统）。</p><p>Docker实质上是在已经运行的Linux下制造了一个隔离的文件环境，因此它执行的效率几乎等同于所部署的Linux主机。</p><p>Docker的基本组成部分：</p><ul><li>镜像（image）</li><li>容器（container）</li><li>仓库（repository）</li></ul><h2 id="docker镜像">Docker镜像</h2><p>Docker镜像就是一个只读的模板。镜像可以用来创建Docker容器，一个镜像可以创建多个容器。</p><h2 id="docker容器">Docker容器</h2><p>Docker利用容器独立运行的一个或一组应用，应用程序或服务运行在容器里面，容器就类似于一个虚拟化的运行环境，容器是用镜像创建的运行实例。</p><h2 id="docker仓库">Docker仓库</h2><p>Docker仓库是集中存放镜像文件的场所。</p><p>仓库分为公开仓库和私有仓库两种。</p><p>最大的公开仓库是Docker官方的Docker Hub：<a href="https://hub.docker.com/">https://hub.docker.com/</a></p><h1 id="docker架构">Docker架构</h1><p>Docker是一个 C/S（Client-Server）结构的系统，后端是一个松耦合架构，众多模块各司其职。</p><p>Docker守护进程运行在主机上，然后通过Socket连接从客户端访问，守护进程从容器接收命令并管理运行在主机上的容器。</p><p><img src="/2024/12/07/docker/1-Docker%E6%A6%82%E8%BF%B0/1652093339897-20255a0a-e981-43e3-9e9e-654b8da3b2c8.svg"></p><p>Docker运行的基本流程为：</p><ol type="1"><li>用户是使用Docker Client 与 Docker Daemon建立通信，并发送请求给后者</li><li>Docker Daemon 作为 Docker 架构的主体部分，首先提供 Docker Server的功能使其可以接收 Docker Client 的请求</li><li>Docker Engine 执行 Docker 内部的一系列工作，每一项工作都是以一个 Job的形式存在</li><li>Job 的运行过程中，当需要容器镜像时，则从 Docker Registry中下载镜像，并通过镜像管理驱动 Graph Driver 将下载镜像以 Graph的形式存储</li><li>当需要为 Docker 创建网络环境时，通过网络管理驱动 Network driver创建并配置 Docker 容器网络环境</li><li>当需要限制 Docker 容器运行资源或执行用户指令等操作时，则通过 Execdriver 来完成</li><li>Libcontainer 是一项独立的容器管理包，Network driver 以及 Exec driver都是通过 Libcontainer 来实现具体对容器进行的操作</li></ol><p><img src="/2024/12/07/docker/1-Docker%E6%A6%82%E8%BF%B0/1652093347909-4fcf65d1-da12-47cb-9a2f-0c4528d7e4c9.png"></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>容器</category>
+      
+      <category>Docker</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Docker</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>16. 企业级解决方案</title>
+    <link href="/2024/12/07/Redis/16-%E4%BC%81%E4%B8%9A%E7%BA%A7%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/"/>
+    <url>/2024/12/07/Redis/16-%E4%BC%81%E4%B8%9A%E7%BA%A7%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/</url>
+    
+    <content type="html"><![CDATA[<h1 id="缓存预热">缓存预热</h1><p>现象：服务器启动后快速宕机</p><p>问题排查：</p><ul><li>请求数量较高</li><li>主从之间数据吞吐量较大，数据同步操作频度较高</li></ul><p>解决方案：</p><p>前置准备工作：</p><ol type="1"><li>日常例行统计数据访问记录，统计访问频度较高的热点数据</li><li>利用LRU数据删除策略，构建数据留存队列。例如：storm与kafka配合</li></ol><p>准备工作：</p><ol type="1"><li>将统计结果中的数据分类，根据级别，redis优先加载级别较高的热点数据</li><li>利用分布式多服务器同时进行数据读取，提速数据加载过程</li></ol><p>实施：</p><ol type="1"><li>使用脚本程序固定触发数据预热过程</li><li>如果条件允许，使用CDN（内容分发网络）效果更好</li></ol><p>总结：</p><p>缓存预热就是系统启动前，提前将相关的缓存数据直接加载到缓存系统。避免在用户请求的时候，先查询数据库，然后再将数据缓存的问题。用户直接查询事先被预热的缓存数据。</p><h1 id="缓存雪崩">缓存雪崩</h1><p>现象：数据库服务器崩溃</p><ol type="1"><li>系统平稳运行过程中，忽然数据库连接量激增</li><li>应用服务器无法及时处理请求</li><li>大量408/500错误页面出现</li><li>客户反复刷新页面获取数据</li><li>数据库崩溃</li><li>应用服务器崩溃</li><li>重启应用服务器无效</li><li>Redis服务器崩溃</li><li>Redis集群崩溃</li><li>重启数据库后再次被瞬间流量放倒</li></ol><p>问题排查：</p><ol type="1"><li>在一个较短的时间内，缓存中较多的key集中过期</li><li>此周期内请求访问过期的数据，redis未命中，redis向数据库获取数据</li><li>数据库同时接收到大量的请求无法及时处理</li><li>Redis大量请求被积压，开始出现超时现象</li><li>数据库流量激增，数据库崩溃</li><li>重启后仍面对花奴才能中无数据可用</li><li>Redis服务器资源被严重占用，Redis服务器崩溃</li><li>Redis集群呈现崩塌，集群瓦解</li><li>应用服务器无法及时得到数据响应请求，来自客户端的请求数量越来越多，应用服务器崩溃</li><li>应用服务器、Redis、数据库全部重启，效果不理想</li></ol><p>解决方案（原理上）：</p><ol type="1"><li>更多的页面静态化处理</li><li>构建多级缓存架构：Nginx缓存 + Redis缓存 + Ehcache缓存</li><li>检测数据库严重耗时业务进行优化：对数据的瓶颈排查，例如超时查询、耗时较高事务等</li><li>灾难预警机制，监控Redis服务器性能指标：CPU占用、CPU使用率、内存容量、查询平均响应时间、线程数</li><li>限流、降级：短时间范围内牺牲一些客户体验，限制一部分请求访问，降低应用服务器压力，待业务低速运转后再逐步放开访问</li></ol><p>解决方案（实施上）：</p><ol type="1"><li>LRU与LFU切换</li><li>数据有效期策略调整<ul><li>根据业务数据有效期进行分类错峰</li><li>过期时间使用 <code>固定时间 + 随机值</code>的形式，稀释集中到期的key的数量</li></ul></li><li>超热数据使用永久key</li><li>定期维护（自动+人工）：对即将过期数据做访问量分析，确认是否延时，配合访问量统计，做热点数据的延时</li><li>加锁（慎用）</li></ol><p>总结：</p><p>缓存雪崩就是瞬间过期数据量太大，导致对数据库服务器造成压力。如果能够有效避免过期时间集中，可以有效解决雪崩现象的出现（约40%），配合其他策略一起使用，并监控服务器的运行数据，根据运行记录做快速调整。</p><h1 id="缓存击穿">缓存击穿</h1><p>现象：数据库服务崩溃</p><ol type="1"><li>系统平稳运行过程中</li><li>数据库连接量瞬间激增</li><li>Redis服务器没有大量key过期</li><li>Redis内存平稳，无波动</li><li>Redis服务器CPU正常</li><li>数据库崩溃</li></ol><p>问题排查：</p><ol type="1"><li>Redis中某个key过期，该key访问量巨大</li><li>多个数据请求从服务器直接压到Redis后，均未命中</li><li>Redis在短时间内发起了大量对数据库中同一数据的访问</li></ol><p>问题分析：</p><ul><li>单个key高热数据</li><li>key过期</li></ul><p>解决方案：</p><ol type="1"><li>预先设定<br>以电商为例，每个商家根据店铺等级，指定若干款主打商品，在购物节期间，加大此类信息key的过期时长<br>注意：购物节不仅仅指当天，以及后续若干天，访问峰值呈现逐渐降低的趋势</li><li>现场调整<br>监控访问量，对自然流量激增的数据延长过期时间或设置为永久key</li><li>后台刷新数据<br>启动定时任务，高峰期来临之前，刷新数据有效期，确保不丢失</li><li>二级缓存<br>设置不同的失效时间，保障不会被同时淘汰就行</li><li>加锁<br>分布式锁，防止被击穿，但是要注意也是性能瓶颈，慎用。</li></ol><p>总结：</p><p>缓存击穿就是单个高热数据过期的瞬间，数据访问量较大，未命中Redis后，发起了大量对同一数据的数据库访问，导致对数据库服务器造成压力。应对策略应该在业务数据分析与预防方面进行，配合运行监控测试与及时调整策略，毕竟单个key的过期监控难度较高，配合雪崩处理策略即可。</p><h1 id="缓存穿透">缓存穿透</h1><p>现象：数据库服务器崩溃</p><ol type="1"><li>系统平稳运行过程中</li><li>应用服务器流量随时间增量较大</li><li>Redis服务器命中率随时间逐步降低</li><li>Redis内存平稳，内存无压力</li><li>Redis服务器CPU占用激增</li><li>数据库服务器压力激增</li><li>数据库崩溃</li></ol><p>问题排查：</p><ol type="1"><li>Redis中大面积出现未命中</li><li>出现非正常URL访问</li></ol><p>问题分析：</p><ul><li>获取的数据在数据库中也不存在，数据库查询未得到对应数据</li><li>Redis获取到null数据未进行持久化，直接返回</li><li>下次此类数据到达，重复上述过程</li><li>出现黑客攻击服务器</li></ul><p>解决方案：</p><ol type="1"><li>缓存null：对查询结果为Null的数据进行缓存（长期使用，定期清理），设定短时限，例如30-60秒，最高5分钟</li><li>白名单策略<ul><li>提前预热各种分类数据id对应的bitmaps， id作为bitmaps的offset，相当于设置了数据白名单。当加载正常数据时，放行，加载异常数据时直接拦截（效率偏低）</li><li>使用布隆过滤器（缓存穿透的情况下，布隆过滤器的命中问题可以忽略）</li></ul></li><li>实时监控<br>实时监控Redis命中率（业务正常范围内，通常会有一个波动值）与null数据的占比<ul><li>非活动时段波动：通常检测3-5倍，超过5倍纳入重点排查对象</li><li>活动时段波动：通常检测10-50倍，超过50倍纳入重点排查对象</li></ul></li></ol><p>根据倍数不同，启动不同的排查流程。然后使用黑名单进行防控（运营）</p><ol start="4" type="1"><li>key加密<br>问题出现后，临时启动防灾业务key，对key进行业务层传输加密服务，设定校验程序，过来的key校验。<br>例如每天随机分配60个加密串，挑选2到3个，混淆到页面数据id中，发现访问key不满足规则，驳回数据访问。</li></ol><p>总结：</p><p>缓存击穿访问了不存在的数据，跳过了合法数据的Redis数据缓存阶段，每次访问数据库，导致对数据库服务器造成压力。通常此类数据的出现量是一个较低的值，当出现此类情况以毒攻毒，并及时报警。应对策略应该在临时预案防范方面多做文章。</p><p>无论是黑名单还是白名单，都是对整体系统的压力，警报解除后尽快移除。</p><h1 id="性能指标监控">性能指标监控</h1><h2 id="监控指标">监控指标</h2><ul><li>性能指标：Performance</li><li>内存指标：Memory</li><li>基本活动指标：Basic activity</li><li>持久性指标：Persistence</li><li>错误指标：Error</li></ul><h2 id="性能指标">性能指标</h2><table><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>latency</td><td>Redis响应一个请求的时间</td></tr><tr><td>instantaneous_ops_per_sec</td><td>平均每秒处理请求总数</td></tr><tr><td>hit rate (calculated)</td><td>缓存命中率（计算出来的）</td></tr></tbody></table><h2 id="内存指标">内存指标</h2><table><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>used_memory</td><td>已使用内存</td></tr><tr><td>mem_fragmentation_ratio</td><td>内存碎片率</td></tr><tr><td>evicted_keys</td><td>由于最大内存限制被移除的key的数量</td></tr><tr><td>blocked_clients</td><td>由于BLPOP，BRPOP，BRPOPPUSH而阻塞的客户端</td></tr></tbody></table><h2 id="基本活动指标">基本活动指标</h2><table><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>connected_clients</td><td>客户端连接数</td></tr><tr><td>connected_slaves</td><td>Slave数量</td></tr><tr><td>master_last_io_seconds_ago</td><td>最近一次主从交互之后的秒数</td></tr><tr><td>keyspace</td><td>数据库中的key值总数</td></tr></tbody></table><h2 id="持久性指标">持久性指标</h2><table><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>rdb_last_save_time</td><td>最后一次持久化保存到磁盘的时间戳</td></tr><tr><td>rdb_changes_since_last_save</td><td>自最后一次持久化以来数据库的更改数</td></tr></tbody></table><h2 id="错误指标">错误指标</h2><table><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>rejected_connections</td><td>由于达到maxclient限制而被拒绝的连接数</td></tr><tr><td>keyspace_misses</td><td>Key值查找失败（没有命中）次数</td></tr><tr><td>master_link_down_since_seconds</td><td>主从断开的持续时间（以秒为单位）</td></tr></tbody></table><h1 id="性能监控方式">性能监控方式</h1><ul><li>工具<ul><li>Cloud Insight Redis</li><li>Prometheus</li><li>Redis-stat</li><li>Redis-faina</li><li>RedisLive</li><li>zabbix</li></ul></li><li>命令<ul><li>benchmark</li><li>redis cli<ul><li>monitor</li><li>slowlog</li></ul></li></ul></li></ul><p>benchmark</p><ul><li>命令格式</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">redis-benchmark [-h] [-p] [-c] [-n &lt;request&gt;] [-k]<br></code></pre></td></tr></table></figure><ul><li>示例1</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">50个连接，10000次请求对应的性能</span><br>redis-benchmark<br></code></pre></td></tr></table></figure><ul><li>示例2</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">100个连接，5000次请求对应的性能</span><br>redis-benchmark -c 100 -n 5000<br></code></pre></td></tr></table></figure><p>benchmark参数说明</p><table><thead><tr><th>序号</th><th>选项</th><th>描述</th><th>默认值</th></tr></thead><tbody><tr><td>1</td><td>-h</td><td>指定服务器主机名</td><td>127.0.0.1</td></tr><tr><td>2</td><td>-p</td><td>指定服务器端口号</td><td>6379</td></tr><tr><td>3</td><td>-s</td><td>指定服务器socket</td><td></td></tr><tr><td>4</td><td>-c</td><td>指定并发连接数</td><td>50</td></tr><tr><td>5</td><td>-n</td><td>指定请求数</td><td>10000</td></tr><tr><td>6</td><td>-d</td><td>以字节的形式指定 set/get 值的数据大小</td><td>2</td></tr><tr><td>7</td><td>-k</td><td>1：keep alive 0：reconnect</td><td>1</td></tr><tr><td>8</td><td>-r</td><td>set/get/incr 使用随机key，sadd使用随机值</td><td></td></tr><tr><td>9</td><td>-P</td><td>通过管道传输<code>&lt;numreq&gt;</code><br>请求</td><td>1</td></tr><tr><td>10</td><td>-q</td><td>强制退出redis，仅显示 query/sec 值</td><td></td></tr><tr><td>11</td><td>--csv</td><td>以csv格式输出</td><td></td></tr><tr><td>12</td><td>-l</td><td>生成循环，永久性测试</td><td></td></tr><tr><td>13</td><td>-t</td><td>仅运行以逗号分隔的测试命令列表</td><td></td></tr><tr><td>14</td><td>-l</td><td>Idle模式，仅打开N个 idle 连接并等待</td><td></td></tr></tbody></table><p>monitor命令(redis-cli客户端指令)</p><ul><li>命令格式</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">打印服务器调试信息</span><br>monitor<br></code></pre></td></tr></table></figure><p>slowlog命令</p><ul><li>命令格式</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">slowlog [operator]<br></code></pre></td></tr></table></figure><pre><code class="hljs">- get：获取慢查询日志- len：获取慢查询日志条目数- reset：重置慢查询日志</code></pre><ul><li>相关配置</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plain">slowlog-log-slower-than 1000 # 设置慢查询的时间下线，单位：微秒<br>slowlog-max-len 100 # 设置慢查询命令对应的日志显示长度, 单位：命令数<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>Redis</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Redis</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>15. 集群</title>
+    <link href="/2024/12/07/Redis/15-%E9%9B%86%E7%BE%A4/"/>
+    <url>/2024/12/07/Redis/15-%E9%9B%86%E7%BE%A4/</url>
+    
+    <content type="html"><![CDATA[<h1 id="集群架构">集群架构</h1><p>集群就是使用网络将若干台计算机连通起来，并提供统一的管理方式，使其对外呈现单机的服务效果。</p><p>作用：</p><ul><li>分散单台服务器的访问压力，实现负载均衡</li><li>分散单台服务器的存储压力，实现可扩展性</li><li>降低单台服务器宕机带来的业务灾难</li></ul><p>集群架构的数据存储设计：<br>先将 key通过<code>CRC16(key)%16384</code>进行计算，得到的数用来确定这个key在集群中哪台计算机的存储空间位置。</p><p>redis会将所有的存储空间计划切割成16384份（每份代表的是一个存储空间，不是一个key的保存空间，一个存储空间内可以放若干个key），每台主机保存若干个存储空间。</p><p>将key按照计算出的结果放到对应的存储空间。</p><p>这个存储空间称为“槽”(slot)。</p><p>扩展新的机器：将原来每台服务器上的槽拿出来一部分，放到扩新增加的服务器上。增加了可扩展性。</p><p>如果移除一台服务器，则将该服务器上的槽返还现有的服务器中。</p><p>集群架构的内部通讯设计：</p><p>各个服务器之间会进行互联，每台服务器都会记录其他所有服务器上的槽编号，便于后续查找。</p><p>客户端如果向A服务器发出一个key，经过<code>CRC16(key)%16384</code>运算后得出其所在的槽。如果该key对应的槽就在A服务器上，则直接返回。如果未命中，则通过A服务器上记录的其他服务器槽编号，可以得知该key所在的服务器、这样可以保证最多两次即可命中。</p><h1 id="集群开启示例">集群开启示例</h1><p>编辑配置文件：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs plain">port 6379<br>daemonize no<br>dir /home/redis/data<br>dbfilename dump-6379.rdb<br>rdbcompression yes<br>rdbchecksum yes<br>save 10 2<br>appendonly yes<br>appendfsync always<br>appendfilename appendonly-6379.aof<br>bind 127.0.0.1<br>databases 16<br># 不需要再在配置文件中指定对应的master<br># 增加关于集群的配置<br># 使能集群<br>cluster-enabled yes<br># 集群自动生成的节点配置文件<br>cluster-config-file nodes-6379.conf<br># 节点超时下线时长<br>cluster-node-timeout 10000<br></code></pre></td></tr></table></figure><p>旧版本Redis启动集群使用的 <code>src/redis-trib.rb</code>，这是一个ruby 脚本，需要先安装ruby：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">--replicas 后面的第一个数字表示：一个master对应几个slave。</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">再往后列出所有的服务器的ip、端口号。redis会自动将前面的几个设置为master，后面的设置为slave。</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">后面列出的ip、端口号的数量，要和--replilcas后的slave/master比例 对应起来。</span><br>./redis-trib.rb create --replicas 1 127.0.0.1:6379<br></code></pre></td></tr></table></figure><p>redis 5.0之后需要使用redis-cli命令进行替换：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">redis-cli --cluster create 127.0.0.1:6379 127.0.0.1:6380 127.0.0.1:6381 127.0.0.1:6382 127.0.0.1:6383 127.0.0.1:6384 --cluster-replicas 1<br></code></pre></td></tr></table></figure><p>启动之后，便会根据配置文件配置的路径、node文件名在对应文件夹下生成对应的node节点文件。此时的node节点文件内只保存本Redis服务器的信息：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs plain">[redis@mycentos7 data]$ cat nodes-6379.conf <br>ddd8d8c57f7919aac742845b0a2ee8aa46f8daf0 :0@0 myself,master - 0 0 0 connected<br>vars currentEpoch 0 lastVoteEpoch 0<br></code></pre></td></tr></table></figure><p>Redis自动分析出几台服务器扮演的主/从角色后，会提示：<code>Can I set the above configuration? (type 'yes' to accept):</code></p><p>输入<code>yes</code>之后，会将这些主从角色信息、所有的节点信息都保存进node节点文件中。例如：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs plain">[redis@mycentos7 data]$ cat nodes-6379.conf <br>cafbf4c76fecdc705569eb4d1a841ddaa5a247e3 127.0.0.1:6381@16381 master - 0 1611830119789 3 connected 10923-16383<br>ddd8d8c57f7919aac742845b0a2ee8aa46f8daf0 127.0.0.1:6379@16379 myself,master - 0 1611830117000 1 connected 0-5460<br>c5e86db426ff6597eb6a6e37176ca5a760d34443 127.0.0.1:6380@16380 master - 0 1611830118771 2 connected 5461-10922<br>d48006559e8fdbfaafcbb2b7670e5527f50866ab 127.0.0.1:6383@16383 slave c5e86db426ff6597eb6a6e37176ca5a760d34443 0 1611830116000 2 connected<br>fa4f94fea01550d3c5368632d1a937a0d497f8e3 127.0.0.1:6382@16382 slave ddd8d8c57f7919aac742845b0a2ee8aa46f8daf0 0 1611830119000 1 connected<br>cad69dd5aa16eb6420b51b67f68dd4d04154cef5 127.0.0.1:6384@16384 slave cafbf4c76fecdc705569eb4d1a841ddaa5a247e3 0 1611830118000 3 connected<br>vars currentEpoch 6 lastVoteEpoch 0<br></code></pre></td></tr></table></figure><h1 id="相关配置项">相关配置项</h1><ul><li>设置加入cluster，成为其中的节点</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">cluster-enabled yes|no<br></code></pre></td></tr></table></figure><ul><li>cluster配置文件名，该文件属于自动生成，仅用于快速查找文件并查询文件内容</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">cluster-config-file &lt;filename&gt;<br></code></pre></td></tr></table></figure><ul><li>节点服务响应超时时间，用于判定该节点是否下线或切换为从节点</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">cluster-node-timeout &lt;milliseconds&gt;<br></code></pre></td></tr></table></figure><ul><li>master连接的slave最小数量</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">cluster-migration-barrier &lt;count&gt;<br></code></pre></td></tr></table></figure><h1 id="设置和获取数据">设置和获取数据</h1><p>如果直接使用<code>redis-cli</code>开启客户端，使用<code>set name zhangsan</code>设置数据时，可能会因为该key对应的槽不在当前客户端连接的master上而报错：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs plain">[redis@mycentos7 ~]$ redis-cli<br>127.0.0.1:6379&gt; set name zhangsan<br># 错误，请移至位于6380端口的5798号槽进行操作<br>(error) MOVED 5798 127.0.0.1:6380<br></code></pre></td></tr></table></figure><p>为避免这种情况，可以使用专门的参数 <code>-c</code>开启集群客户端：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">redis-cli -c<br></code></pre></td></tr></table></figure><p>这样，集群便会自动将该Key重定向到对应的服务器上的槽中：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs plain">[redis@mycentos7 ~]$ redis-cli -c<br>127.0.0.1:6379&gt; set name zhangsan<br>-&gt; Redirected to slot [5798] located at 127.0.0.1:6380<br>OK<br></code></pre></td></tr></table></figure><p>可以使用redis的<code>cluster nodes</code>指令查看节点信息：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs shell">127.0.0.1:6380&gt; cluster nodes<br>c5e86db426ff6597eb6a6e37176ca5a760d34443 127.0.0.1:6380@16380 myself,master - 0 1611883770000 2 connected 5461-10922<br>ddd8d8c57f7919aac742845b0a2ee8aa46f8daf0 127.0.0.1:6379@16379 master - 0 1611883769000 1 connected 0-5460<br>cafbf4c76fecdc705569eb4d1a841ddaa5a247e3 127.0.0.1:6381@16381 master - 0 1611883770213 3 connected 10923-16383<br>fa4f94fea01550d3c5368632d1a937a0d497f8e3 127.0.0.1:6382@16382 slave ddd8d8c57f7919aac742845b0a2ee8aa46f8daf0 0 1611883770000 1 connected<br>d48006559e8fdbfaafcbb2b7670e5527f50866ab 127.0.0.1:6383@16383 slave c5e86db426ff6597eb6a6e37176ca5a760d34443 0 1611883769191 2 connected<br>cad69dd5aa16eb6420b51b67f68dd4d04154cef5 127.0.0.1:6384@16384 slave cafbf4c76fecdc705569eb4d1a841ddaa5a247e3 0 1611883771234 3 connected<br></code></pre></td></tr></table></figure><h1 id="客户端cluster节点相关命令">客户端Cluster节点相关命令</h1><ul><li>查看集群节点信息</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">cluster nodes<br></code></pre></td></tr></table></figure><ul><li>进入一个从节点redis，切换其主节点</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">cluster replicate &lt;master-id&gt;<br></code></pre></td></tr></table></figure><ul><li>发现一个新节点，新增主节点</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">cluster meet ip:port<br></code></pre></td></tr></table></figure><ul><li>忽略一个没有slot的节点</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">cluster forget &lt;id&gt;<br></code></pre></td></tr></table></figure><ul><li>手动故障转移</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">cluster failover<br></code></pre></td></tr></table></figure><h1 id="主从下线和主从切换">主从下线和主从切换</h1><p>当一台slave服务器下线后，其对应的master会将其标记为下线状态，并通知集群内其他所有服务器。等该slave服务再次上线后，其对应的master会重新进行数据同步，将其标记为上线状态，并通知集群内其他服务器删除该slave的下线状态。</p><p>当一台master服务器下线后，其对应的slave会连续的发起请求，经过<code>cluster-node-timeout</code>时长之后，slave会将自己设置成master。当原来的master再次上线后，会被设置成slave。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>Redis</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Redis</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>14. 哨兵</title>
+    <link href="/2024/12/07/Redis/14-%E5%93%A8%E5%85%B5/"/>
+    <url>/2024/12/07/Redis/14-%E5%93%A8%E5%85%B5/</url>
+    
+    <content type="html"><![CDATA[<h1 id="master宕机">master宕机</h1><p>如果主从模式下的master宕机，一般处理流程：</p><ol type="1"><li>将宕机的master下线</li><li>找一个slave作为master</li><li>通知所有的slave连接新的master</li><li>启动新的master与slave</li><li><code>全量复制*N + 部分复制*N</code></li></ol><p>出现的问题：</p><ul><li>谁来确认master宕机了</li><li>选新的master如何选？</li><li>修改配置后，原来的master恢复了怎么办？</li></ul><h1 id="哨兵">哨兵</h1><p>哨兵（sentinel）是一个分布式系统，用于对主从结构中的每台服务器进行监控，当出现故障时通过投票机制选择新的master并将所有slave连接到新的master。</p><p>作用：</p><ul><li>监控</li></ul><blockquote><p>不断的检查master和slave是否正常运行。</p><p>master存活检测、master与slave运行情况检测</p></blockquote><ul><li>通知（提醒）</li></ul><blockquote><p>当被监控的服务器出现问题时，向其他（哨兵间，客户端）发送通知</p></blockquote><ul><li>自动故障转移</li></ul><blockquote><p>断开master与slave连接，选取一个slave作为master，将其他slave连接到新的master，并告知客户端新的服务器地址。</p></blockquote><p>哨兵也是一台redis服务器，只是不提供数据服务。</p><p>通常哨兵配置数量为单数。</p><h1 id="哨兵搭建示例">哨兵搭建示例</h1><p>配置哨兵（参考 sentinel.conf 配置文件）</p><p>编写配置文件sentinel-端口号.conf：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs plain">port 26379<br>daemonize no<br>pidfile /var/run/redis-sentinel.pid<br>logfile &quot;&quot;<br>dir /tmp<br># sentinel monitor [自定义的名称] 监控的master的ip和端口 判断master宕机的哨兵数量<br># 如果有2台哨兵认为master宕机了，master就下线<br>sentinel monitor mymaster 127.0.0.1 6379 2<br># master判定宕机的未响应时长（单位毫秒）<br>sentinel down-after-milliseconds mymaster 30000<br># 新的master上来之后，进行数据同步时，一次多少个数据开始同步<br>sentinel parallel-syncs mymaster 1<br># 多久未同步完成算作超时（单位毫秒）<br>sentinel failover-timeout mymaster 180000<br>sentinel deny-scripts-reconfig yes<br></code></pre></td></tr></table></figure><p>启动哨兵：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">redis-sentinel sentinel-端口号.conf<br></code></pre></td></tr></table></figure><p>使用客户端连接时，依然是<code>redis-cli</code>启动客户端，但是不允许使用<code>set</code>、<code>get</code>等指令。</p><p>哨兵启动之后，刚刚编写的配置文件会被自动重写一部分，例如变为：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs plain">port 26379<br>daemonize yes<br>pidfile &quot;/var/run/redis-sentinel.pid&quot;<br>logfile &quot;26379.log&quot;<br>dir &quot;/home/redis/data&quot;<br>sentinel myid d957acd3913031c3bec970b13f9a2cc446230d25<br>sentinel deny-scripts-reconfig yes<br>sentinel monitor mymaster 127.0.0.1 6379 2<br>sentinel config-epoch mymaster 0<br>sentinel leader-epoch mymaster 0<br># Generated by CONFIG REWRITE<br>protected-mode no<br>maxclients 4064<br>user default on nopass ~* +@all<br>sentinel known-replica mymaster 127.0.0.1 6381<br>sentinel known-replica mymaster 127.0.0.1 6380<br>sentinel known-sentinel mymaster 127.0.0.1 26380 5b8d465eba4e61f72f245cc12d32d4c45b812ae5<br>sentinel known-sentinel mymaster 127.0.0.1 26381 8812ba72638e42fbbc1a9af8a8a2e1716e223011<br>sentinel current-epoch 0<br></code></pre></td></tr></table></figure><h1 id="工作原理">工作原理</h1><p>三个阶段：</p><ul><li>监控</li></ul><blockquote><p>同步信息</p></blockquote><ul><li>通知</li></ul><blockquote><p>保持连通</p></blockquote><ul><li>故障转移</li></ul><blockquote><p>发现问题</p><p>选择竞选负责人</p><p>优选新的master</p><p>新master上任，其他slave切换master，原master改为slave</p></blockquote><h2 id="监控阶段">监控阶段</h2><p>同步各个节点的状态信息</p><ul><li>通过ping指令获取各个sentinel的状态（是否在线）</li><li>通过info指令获取master的状态<ul><li>master的属性：runid、role:master</li><li>各个slave的详细信息</li></ul></li><li>通过info获取所有slave的状态（根据master中的slave信息）<ul><li>slave的属性：runid、role:slave、master_host、master_port、offset.....</li></ul></li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs plain">sentinel[1]-&gt;master: 发送指令：info \n 获取master状态<br>sentinel[1]-&gt;master: 建立cmd连接<br>note right of master: master记录的信息：\n master信息\nslaves信息\n当前master连接的sentinels<br>note left of sentinel[1]: sentinel[1]记录的信息：\nmaster信息\nslaves信息\n当前master连接的sentinels<br>note left of sentinel[1]: sentinel[1]向slaves发送info指令，\n获取slaves状态<br># 此时又增加了一台哨兵 sentinel[2]<br>sentinel[2]-&gt;master: 发送指令：info<br>sentinel[2]-&gt;master: 建立cmd连接<br>note right of master: master更新记录的信息：\n当前master连接的sentinels<br>note right of sentinel[2]: sentinel[2]记录的信息：\nmaster信息\nslaves信息\n当前master连接的sentinels<br>note right of sentinel[2]: sentinel[2]向slaves发送info指令，\n获取slaves状态<br>sentinel[2]-&gt;sentinel[1]: 建立通道：publish / subscribe \n用于哨兵间数据同步<br>sentinel[1]-&gt;sentinel[2]: 发送指令：ping \n获取各个sentinel状态<br></code></pre></td></tr></table></figure><h2 id="通知阶段">通知阶段</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs plain">sentinel[1]-&gt;master/slaves: publish sentnel: hello<br>master/slaves-&gt;sentinel[1]: 返回状态信息<br>note left of sentinel[1]: 在哨兵间的publish/subscribe网络中\n发布master/slaves的状态信息<br></code></pre></td></tr></table></figure><h2 id="故障转移阶段">故障转移阶段</h2><p>确认master下线流程：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs plain">sentinel[1]-&gt;master: 发送hello指令无响应<br>sentinel[1]-&gt;master: 连续发送hello指令<br>note left of sentinel[1]: sentinel[1]将master标记为：SRI_S_DOWN \n S_DOWN：主观下线<br>sentinel[1]-&gt;sentinel[2]: 通过哨兵间的发布/订阅通道\n向其他哨兵传播master下线信息\n SENTINEL is-master-down-by-addr\n服务器host，port，发起方，状态....<br>sentinel[2]-&gt;master: 向master连续发送hello指令<br>sentinel[2]-&gt;sentinel[1]: sentinel[2]通过哨兵间发布/订阅通道\n确认master下线信息<br>note right of sentinel[2]: 超过一定数量的哨兵认为master下线\n（数量在哨兵配置文件配置）\nmaster被标记为：SRI_O_DOWN\nO_DOWN：客观下线<br></code></pre></td></tr></table></figure><p>投票选择哨兵间的leader：</p><p>每个哨兵向哨兵间发布/订阅通道内发送信息：</p><p>SENTINEL is-master-down-by-addr ....</p><ul><li>下线的master的ip</li><li>下线的master的端口号</li><li>哨兵自己参与哨兵leader竞选的次数</li><li>哨兵自己的runid</li></ul><p>每一个哨兵作为参选者，同时也是投票者，每个哨兵有一票。哨兵根据自己接收到其他哨兵发送信息的先后顺序，把自己的票投给对应的哨兵。最终汇总得票结果，选出哨兵leader。如果第一轮没有选出来leader，再进行一轮投票，直至得出哨兵leader。每增加一轮，哨兵的参与竞选次数会增加1。</p><p>哨兵leader 从slave服务器里列表中挑选备用master转正，选择的原则：</p><ol type="1"><li>备选的slave需要是在线的</li><li>给slave不停发送hello消息，淘汰掉响应慢的</li><li>淘汰与原master断开时间久的</li><li>优先原则<ul><li>比较优先级</li><li>比较数据同步的offset</li><li>选择runid比较小的</li></ul></li></ol><p>哨兵leader发送指令告知新的master：</p><ul><li>向新的master发送<code>slaveof no one</code> 指令</li><li>向其他slave发送<code>slaveof 新master的ip 端口号</code></li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>Redis</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Redis</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>13. 主从复制</title>
+    <link href="/2024/12/07/Redis/13-%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/"/>
+    <url>/2024/12/07/Redis/13-%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/</url>
+    
+    <content type="html"><![CDATA[<h1 id="互联网三高架构">互联网三高架构</h1><p>互联网“三高”架构：</p><ul><li>高并发</li><li>高性能</li><li>高可用</li></ul><p>大数据时代的“3V”：</p><ul><li>海量（Volume）</li><li>多样（Variety）</li><li>实时（Velocity）</li></ul><p>可用性：<code>（全年的秒数 - 当年宕机停用的秒数）/ 全年的秒数 * 100%</code>。</p><p>高可用：业界高可用性目标5个9（即99.999%)，即服务器年宕机时长低于315秒，约5.25分钟。</p><p>为了避免单点Redis服务器故障，准备多台服务器，互相连通。将数据复制多个副本保存在不同的服务器上，连接在一起，并保证数据是同步的。即使有其中一台服务器宕机，其他服务器依然可以继续提供服务，实现Redis的高可用，同时实现数据冗余备份。</p><h1 id="主从复制">主从复制</h1><p>主从复制即 将master中的数据及时、有效的复制到slave中。</p><p>特征：一个master可以拥有多个slave，一个slave只对应一个master。</p><p>职责：</p><ul><li>master<ul><li>写数据</li><li>执行写操作时，将出现变化的数据自动同步到slave</li><li>读数据（可忽略）</li></ul></li><li>slave<ul><li>读数据</li><li>写数据（禁止）</li></ul></li></ul><p>作用：</p><ul><li>读写分离：master写、slave读，提高服务器的读写负载能力。</li><li>负载均衡：基于主从结构，配合读写分离，由slave分担master负载，并根据需求的变化，改变slave的数量，通过多个从节点分担数据读取负载，大大提高Redis服务器并发量与数据吞吐量。</li><li>故障恢复：当master出现问题时，由slave提供服务，实现快速的故障恢复。</li><li>数据冗余：实现数据热备份，是持久化之外的一种数据冗余方式。</li><li>高可用基石：基于主从复制，构建哨兵模式与集群，实现Redis的高可用方案</li></ul><h1 id="工作流程">工作流程</h1><p>大致分为3个阶段：</p><ol type="1"><li>建立连接阶段（即准备阶段）</li><li>数据同步阶段</li><li>命令传播阶段</li></ol><h2 id="建立连接阶段">建立连接阶段</h2><p>步骤：</p><ol type="1"><li>设置master的地址和端口，保存master信息</li><li>建立socket连接</li><li>发送ping指令（定时器任务）</li><li>身份验证</li><li>发送slave端口信息</li><li>主从连接成功</li></ol><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs plain">slave-&gt;master: 发送指令：slaveof ip port<br>master-&gt;slave: 接收到指令，响应给slave<br>note left of slave: 保存master的IP与端口 \n masterhost \n masterport<br>note left of slave: 根据保存的信息,\n 创建连接master的socket <br>slave-&gt;master: 周期性发送指令：ping<br>master-&gt;slave: 响应pong<br>note right of master: 验证授权<br>slave-&gt;master: 发送指令：replconf listening-port &lt;port-number&gt;<br>note right of master: 保存slave的端口号<br></code></pre></td></tr></table></figure><p>最终状态：</p><p>slave端：保存master的地址和端口</p><p>master端：保存slave的端口</p><p>总体：slave和master之间创建了socket连接</p><p>主从连接（slave连接master）方式：</p><ul><li>方式一：客户端发送命令</li></ul><blockquote><p>启动slave服务器之后，在slave服务器的客户端使用slaveof指令</p></blockquote><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">slaveof &lt;masterip&gt; &lt;masterport&gt;<br></code></pre></td></tr></table></figure><ul><li>方式二：启动服务器时，添加参数</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">redis-server --slaveof &lt;masterip&gt; &lt;masterport&gt;<br></code></pre></td></tr></table></figure><ul><li>方式三：服务器配置</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">slaveof &lt;masterip&gt; &lt;masterport&gt;<br></code></pre></td></tr></table></figure><ul><li>slave系统信息<ul><li>master_link_down_since_seconds</li><li>masterhost</li><li>masterport</li></ul></li><li>master系统信息<ul><li>slave_listening_port(多个)</li></ul></li></ul><p>主从断开连接：</p><ul><li>在从机客户端发送指令：</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">slaveof no one<br></code></pre></td></tr></table></figure><p>授权访问：</p><p>master服务器设置密码：</p><ul><li>master配置文件设置密码</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">requirepass &lt;password&gt;<br></code></pre></td></tr></table></figure><ul><li>master客户端发送命令设置密码</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">config set requirepass &lt;password&gt;<br>config get requirepass<br></code></pre></td></tr></table></figure><p>slave访问带有密码的master：</p><ul><li>slave客户端发送命名设置密码</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">auth &lt;password&gt;<br></code></pre></td></tr></table></figure><ul><li>slave配置文件设置密码</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">masterauth &lt;password&gt;<br></code></pre></td></tr></table></figure><ul><li>启动客户端设置密码</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">redis-cli -a &lt;password&gt;<br></code></pre></td></tr></table></figure><h2 id="数据同步阶段">数据同步阶段</h2><p>在slave初次连接master后，复制master中所有数据到slave。</p><p>将slave的数据库状态更新成master当前的数据库状态。</p><p>步骤：</p><ol type="1"><li>请求同步数据</li><li>创建RDB同步数据</li><li>恢复RDB同步数据</li></ol><blockquote><p>以上称为全量复制。</p></blockquote><ol start="4" type="1"><li>请求部分同步数据</li><li>恢复部分同步数据</li></ol><blockquote><p>在slave连接master时，master将自己的数据创建RDB快照给slave。在这个过程中，master可能会收到其他的数据操作指令，master会创建一个复制积压缓冲区，保存这些不在RDB快照中的操作。最后将复制积压缓冲区内容发给slave，slave使用aof的方式将最后的部分同步数据进行恢复。这个操作称为部分复制。</p></blockquote><ol start="6" type="1"><li>数据同步工作完成</li></ol><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs plain">slave-&gt;master: 发送指令：psync2<br>note right of master: 执行bgsave，\n使用RDB同步数据<br>note right of master: 第一个slave连接时,\n 创建复制积压缓冲区。\n(复制积压缓冲区作用：存储在slave连接过程中\nmaster接收到的数据操作指令)<br>master-&gt;slave: 生成RDB文件，通过socket发送给slave<br>note left of slave: 接收RDB,清空数据，\n 执行RDB文件恢复过程<br>slave-&gt;master: 发送命令告知RDB恢复已经完成<br>master-&gt;slave: 发送复制积压缓冲区信息<br>note left of slave: 接收复制积压缓冲区内的数据操作指令，\n 执行bgrewriteaof恢复数据<br></code></pre></td></tr></table></figure><p>最终状态：</p><p>slave端：具有master端全部数据，包含RDB过程中接收的数据。</p><p>master端：保存slave当前数据同步的位置。</p><p>总体：之间完成数据克隆</p><p>master端注意事项：</p><ul><li>如果master数据量巨大，数据同步阶段应避开流量高峰期，避免造成master阻塞，影响业务正常执行。</li><li>复制缓冲区大小设定不合理，会导致数据溢出。如果进行全量复制周期太长，进行部分复制时发现数据已经存在丢失的情况，必须进行第二次全量复制，致使slave陷入死循环状态。<br>通过配置项修改master的复制缓冲区大小：</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">repl-backlog-size 1mb<br></code></pre></td></tr></table></figure><ul><li>master单机内存占用主机内存的比例不应过大，建议使用50% - 70%的内存，留下30%-50%的内存用于执行bgsave命令和创建复制缓冲区</li></ul><p>slave端注意事项：</p><ul><li>为避免slave全量复制、部分复制时服务器响应阻塞或数据不同步，建议关闭此期间的对外服务。<br>通过配置项修改：</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">slave-serve-stale-data yes|no<br></code></pre></td></tr></table></figure><ul><li>数据同步阶段，master发送给slave信息可以理解master是slave的一个客户端，主动向slave发送命令</li><li>多个slave同时对master请求数据同步，master发送的RDB文件增多，会对master带宽造成巨大冲击，因此数据同步需要根据业务需求，适量错峰。</li><li>slave过多时，建议调整拓扑结构，由一主多从结构变为树状结构，中间的节点既是master，也是slave。注意使用树状结构时，由于层级深度，导致深度越高的slave与最顶层master间数据同步延迟较大，数据一致性变差，应谨慎选择。</li></ul><h2 id="命令传播阶段">命令传播阶段</h2><p>当master数据库状态被修改后，导致主从服务器数据库状态不一致，此时需要让主从数据同步到一致的状态，同步的动作称为命令传播。</p><p>master将接收到的数据变更命令发送给slave，slave接收命令后执行命令。</p><p>命令传播阶段的部分复制：</p><ul><li>命令传播阶段出现了断网现象<ul><li>网络闪断闪连</li></ul></li></ul><blockquote><p>忽略，无需处理</p></blockquote><pre><code class="hljs">-  短时间网络中断 </code></pre><blockquote><p>部分复制</p></blockquote><pre><code class="hljs">-  长时间网络中断 </code></pre><blockquote><p>全量复制</p></blockquote><h1 id="部分复制">部分复制</h1><p>部分复制的三个核心要素：</p><ul><li>服务器的运行id（run id）</li><li>主服务器的复制积压缓冲区</li><li>主从服务器的复制偏移量</li></ul><p>服务器运行ID：</p><ul><li>概念：服务运行ID是每一台服务器每次运行的身份识别码，一台服务器多次运行可以生成多个运行id</li><li>组成：运行id由40 位字符组成，是一个随机的十六进制字符</li><li>作用：运行id被用于在服务器间进行传输，识别身份。如果想两次操作均对同一台服务器进行，必须每次操作携带对应的运行id，用于对方识别</li><li>实现方式：运行id在每台服务器启动时自动生成的，master在首次连接slave时，会将自己的运行id发送给slave，slave保存此id，通过<code>info server</code>命令可以查看节点的runid</li></ul><p>复制缓冲区：</p><ul><li>概念：复制缓冲区，又称复制积压缓冲区，是一个先进先出（FIFO）的队列，用于存储服务器执行过的命令，每次传播命令，master都会将传播的命令记录下来，并存储在复制缓冲区。</li><li>组成：<ul><li>偏移量</li></ul></li></ul><blockquote><p>每个字节的索引位置。</p><p>后续可以根据偏移量知道下一个应发送命令</p></blockquote><pre><code class="hljs">-  字节值 </code></pre><blockquote><p>存储的实际内容。Redis将数据指令拆分成逐个字节进行存储。</p><p>例如；<code>set name lisi</code>，</p><p>先转换成AOF格式：</p><p>然后将换行转换成<code>\r\n</code>，按字节存储。</p><p>例如：</p></blockquote><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs plain">$3   # set三个字母的长度<br>set<br>$4  # name四个字母的长度<br>name<br>$4  # lisi四个字母的长度<br>lisi<br></code></pre></td></tr></table></figure><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs plain">偏移量9001位置：$<br>偏移量9002位置：3<br>偏移量9003位置：s<br>偏移量9004位置：e<br>偏移量9005位置：t<br>偏移量9006位置：\r<br>偏移量9007位置：\n<br>偏移量9008位置：$<br>偏移量9009位置：4<br>偏移量9010位置：n<br>偏移量9011位置：a<br>.......<br></code></pre></td></tr></table></figure><ul><li>工作原理：每个slave记录当前传播的offset偏移量，master也会记录每个slave传播的offset（防止网络原因slave和master不一致），通过offset偏移量区分不同的slave当前数据传播的差异。</li><li>复制缓冲区默认存储空间大小是1M，由于存储空间大小是固定的，当入队元素的数量大于队列长度时，最先入队的元素会被弹出，而新元素会被放入队列。</li><li>由来：每台服务器启动时，如果开启有AOF活被连接成为master节点，即创建复制缓冲区。</li><li>作用：保存master收到的所有指令（仅影响数据变更的指令，例如set、select）</li><li>数据来源：当master接收到主客户端的指令时，除了将指令执行，会将该指令存储到缓冲区中。</li></ul><p>主从服务器复制偏移量（offset）：</p><ul><li>概念：一个数字，描述复制缓冲区中的指令字节位置</li><li>分类：<ul><li>master复制偏移量：记录发送给所有slave的指令字节对应的位置（多个）</li><li>slave复制偏移量：记录slave接收master发送过来的指令字节对应的位置（一个）</li></ul></li><li>数据来源：<ul><li>master端：发送一次记录一次</li><li>slave端：接收一次记录一次</li></ul></li><li>作用：同步信息，比对master与slave的差异，当slave断线后，恢复数据使用。</li></ul><p>数据同步流程（详细版）：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs plain">slave-&gt;master: 发送指令： psync2 &lt;runid&gt; &lt;offset&gt; \n 第一次发送时不知道runid和offset，所以\n第一次发送的指令为：psync2 ? -1<br>note right of master: 执行bgsave生成RDB文件，\n 记录当前的复制偏移量offset \n 期间接收新的客户端命令，offset发生变化<br>master-&gt;slave: 发送 +FULLRESYNC runid offset \n 通过socket发送RDB文件给slave<br>note left of slave: 收到 +FULLSYNC \n 保存master的runid和offset \n 清空当前全部数据\n 通过socket接收RDB文件，恢复RDB数据<br>slave-&gt;master: 发送指令：psync2 runid offset<br>note right of master: 接收命令，\n判定runid是否匹配，\n判定offset是否在复制缓冲区中。<br>note right of master: 如果runid或offset有一个不满足条件,\n则执行全量复制;<br>note right of master: 如果runid和offset校验通过，\n且slave的offset和master当前offset相同，\n则忽略<br>note right of master: 如果runid和offset校验通过，\n但slave的offset和master的offset不同，\n则进行部分复制<br>master-&gt;slave: 发送 +CONTINUE &lt;master当前的offset&gt; \n 通过socket发送复制缓冲区中\n从slave的offset到master的offset\n之间的数据<br>note left of slave: 收到 +CONTINUE \n保存master的offset，\n接收信息后，执行bgrewriteaof，\n恢复数据<br></code></pre></td></tr></table></figure><h1 id="心跳机制">心跳机制</h1><p>进入命令传播阶段时候，master与slave之间需要进行信息交换，使用心跳机制进行维护，实现双方连接保持在线。</p><p>master心跳：</p><ul><li>指令：<code>ping</code></li><li>周期：由 repl-ping-slave-period 决定，默认10秒</li><li>作用：判断slave是否在线</li><li>查询：INFO replication</li></ul><blockquote><p>获取slave最后一次连接时间间隔，lag项维持在0或1视为正常</p></blockquote><p>slave心跳任务：</p><ul><li>指令：<code>replconf ack &#123;offset&#125;</code></li><li>周期：1秒</li><li>作用1：汇报slave自己的复制偏移量，获取罪行的数据变更指令</li><li>作用2：判断master是否在线</li></ul><p>注意事项：</p><ul><li>当slave多数掉线，或延迟过高时，master为保障数据稳定性，将拒绝所有信息同步操作<br>相关配置：</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plain">min-slaves-to-write 2<br>min-slaves-max-lag 8<br></code></pre></td></tr></table></figure><p>slave数量少于2个，或者所有slave的延迟都大于10秒时，强制关闭master写功能，停止数据同步</p><ul><li>slave数量由slave发送 <code>replconf ack</code> 命令做确认</li><li>slave延迟由slave发送<code>replconf ack</code>命令做确认</li></ul><p>命令传播阶段工作流程（完整版）：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs plain">slave-&gt;master: 发送指令：replconf ack &lt;slave保存的offset&gt; \n(数据同步阶段此处发送的是: pysnc2指令)<br>note right of master: 接收命令，\n判定offset是否在复制缓冲区中。<br>note right of master: 如果offset不在缓冲区,\n则执行全量复制;<br>note right of master: 如果offset在缓冲区，\n且slave的offset和master当前offset相同，\n则忽略<br>note right of master: 如果offset在缓冲区，\n但slave的offset和master的offset不同，\n则进行部分复制<br>master-&gt;slave: 发送 +CONTINUE &lt;master当前的offset&gt; \n 通过socket发送复制缓冲区中\n从slave的offset到master的offset\n之间的数据<br>note left of slave: 收到 +CONTINUE \n保存master的offset，\n接收信息后，执行bgrewriteaof，\n恢复数据<br></code></pre></td></tr></table></figure><h1 id="主从复制常见问题">主从复制常见问题</h1><h2 id="频繁的全量复制">频繁的全量复制</h2><p>全量复制问题1：</p><p>伴随着系统的运行，master的数据量会越来越大，一旦master重启，runid将发生变化，会导致全部slave的全量复制操作。</p><p>内部优化调整方案：（不需要调整）</p><ol type="1"><li>Master内部创建 master_replid变量，使用runid相同的策略生成，长度41位，并发送给所有slave</li><li>在master关闭时执行命令 <code>shutdown save</code>，进行 RDB持久化，将runid与offset保存到RDB文件中<ul><li>repl-id repl-offset</li><li>通过redis-check-rdb命令（linux命令，不是在redis-cli客户端执行）可以查看该信息</li></ul></li><li>master重启后加载RDB文件，恢复数据<br>重启后，将RDB文件中保存的 repl-id 与 repl-offset 加载到内存中<ul><li>master_repl_id=repl  master_repl_offset=repl-offset</li><li>通过info命令可以查看该信息</li></ul></li></ol><p>作用：本机保存上次runid，重启后恢复该值，使所有slave认为还是之前的master</p><p>全量复制问题2：</p><p>现象：网络环境不佳，出现网络中断，slave不提供服务。</p><p>原因：复制缓冲区过小，断网后slave的offset越界，触发全量复制</p><p>最终结果：slave反复进行全量复制</p><p>解决方案：修改复制缓冲区大小</p><p>建议设置如下：</p><ol type="1"><li>测算从master到slave的重连平均时长second</li><li>获取master平均每秒产生写命令数据总量 write_size_per_second</li><li><code>最优复制缓冲区空间 = 2 * second * write_size_per_second</code></li></ol><h2 id="频繁的网络中断">频繁的网络中断</h2><p>网络中断问题1：</p><p>现象：master的cpu占用过高，或者slave频繁断开连接</p><p>原因：</p><ul><li>slave每1秒发送 <code>replconf ack</code> 命令到master</li><li>当slave接收到了慢查询（<code>keys *</code>、<code>hgetall</code>等），会大量占用cpu性能</li><li>master每1秒调用复制定时函数<code>replicationCron()</code>，比对slave发现长时间没有进行响应</li></ul><p>最终结果：master各种资源（输出缓冲区、带宽、连接等）被严重占用</p><p>解决方案：通过设置合理的超时时间，确认是否释放slave。</p><p>对应的配置：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">repl-timeout<br></code></pre></td></tr></table></figure><p>该参数定义了超时时间的阈值（默认60秒），超过该值，释放slave。</p><p>网络中断问题2：</p><p>现象：slave与master连接断开</p><p>原因：</p><ul><li>master发送ping指令频度较低</li><li>master设定超时时间较短</li><li>ping指令在网络中存在丢包</li></ul><p>解决方案：提高ping指令发送的频度</p><p>对应的配置项：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">repl-ping-slave-period<br></code></pre></td></tr></table></figure><p>超时时间repl-time的时间至少是ping指令频度的5到10倍，否则slave很容易判定超时</p><h2 id="数据不一致">数据不一致</h2><p>现象：多个slave获取相同数据不同步</p><p>原因：网络信息不同步，数据发送有延迟</p><p>解决方案：</p><ul><li>优化主从间的网络环境，通常放置在同一个机房部署，如使用阿里云等云服务器时要注意此现象</li><li>监控主从节点延迟（通过offset判断），如果slave延迟过大，暂时屏蔽程序对该slave的数据访问<br>对应配置：</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">slave-serve-stale-data yes|no<br></code></pre></td></tr></table></figure><p>开启后仅响应info、slaveof等少数命令（慎用，除非对数据一致性要求很高）</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>Redis</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Redis</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>12. 高级数据类型</title>
+    <link href="/2024/12/07/Redis/12-%E9%AB%98%E7%BA%A7%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/"/>
+    <url>/2024/12/07/Redis/12-%E9%AB%98%E7%BA%A7%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/</url>
+    
+    <content type="html"><![CDATA[<h1 id="bitmaps">Bitmaps</h1><p>按位操作。</p><p>基础操作：</p><ul><li>获取指定Kye对应偏移量上的bit值</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">getbit key offset<br></code></pre></td></tr></table></figure><ul><li>设置指定key对应偏移量上的bit值，value只能是1或0</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">setbit key offset value<br></code></pre></td></tr></table></figure><p>扩展操作：</p><ul><li>对指定key按位进行交、并、非、异或操作，并将结果保存到destKey中</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">bitop op destKey key1 [key2 ...]<br></code></pre></td></tr></table></figure><p>op选项：</p><pre><code class="hljs">- and：交- or：并- not ：非- xor：异或</code></pre><ul><li>统计指定key中1的数量</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">bitcount key [start end]<br></code></pre></td></tr></table></figure><h1 id="hyperloglog">HyperLogLog</h1><p>统计不重复的数据数量。</p><p>基数：数据集不重复的元素个数</p><p>HyperLogLog是用来做基数统计的，运用了LogLog算法</p><p>基本操作：</p><ul><li>添加数据</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">pfadd key element [element ...]<br></code></pre></td></tr></table></figure><ul><li>统计数据</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">pfcount key [key ...]<br></code></pre></td></tr></table></figure><ul><li>合并数据</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">pfmerge destKey sourceKey [sourceKey ...]<br></code></pre></td></tr></table></figure><p>HyperLogLog用于进行基数统计，不是集合，不保存数据，只记录数量而不是具体数据。</p><p>核心是技术估算算法，最终数值存在一定误差。</p><p>误差范围：技术估计的结果是一个带有 0.81% 标准错误的近似值。</p><p>耗费空间极小，每个hyperloglog key占用了12K的内存用于标记基数。</p><p>pfadd命令不是一次性分配12K内存使用，会随着基数的增加而内存逐渐增大。</p><p>pfmerge命令合并后占用的存储空间为12K，无论合并之前数据量多少。</p><h1 id="geo">GEO</h1><p>计算地图上两个地理坐标点距离（按照经纬度算的水平二维位置距离，不计算高度）。</p><p>基本操作：</p><ul><li>添加坐标点</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">geoadd key longitude latitude member [longitude latitude memeber...]<br></code></pre></td></tr></table></figure><ul><li>获取坐标点</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">geopos key memebr [member ...]<br></code></pre></td></tr></table></figure><ul><li>计算坐标点距离</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">geodist key member1 member2 [unit]<br></code></pre></td></tr></table></figure><ul><li>根据坐标求范围内的数据</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">georadius key longitude latitude radius m|km|ft|mi [widthcoord] [withdist] [withhash] [count count]<br></code></pre></td></tr></table></figure><ul><li>根据点求范围内数据</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">georadiusbymembers key member radius m|km|ft|mi [withcoord] [withdist] [withhash] [count count]<br></code></pre></td></tr></table></figure><ul><li>获取指定点对应的坐标hash</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">geohash key member [member ...]<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>Redis</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Redis</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>11. 服务器配置</title>
+    <link href="/2024/12/07/Redis/11-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE/"/>
+    <url>/2024/12/07/Redis/11-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE/</url>
+    
+    <content type="html"><![CDATA[<h1 id="服务器基础配置">服务器基础配置</h1><p>单位：</p><p>Redis的单位大小写不敏感。</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs plain"># 1k =&gt; 1000 bytes<br># 1kb =&gt; 1024 bytes<br># 1m =&gt; 1000000 bytes<br># 1mb =&gt; 1024*1024 bytes<br># 1g =&gt; 1000000000 bytes<br># 1gb =&gt; 1024*1024*1024 bytes<br></code></pre></td></tr></table></figure><p>网络配置：</p><ul><li>绑定主机地址</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">bind 127.0.0.1<br></code></pre></td></tr></table></figure><ul><li>设置服务器端口号</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">port 6379<br></code></pre></td></tr></table></figure><ul><li>设置tcp的backlog</li></ul><blockquote><p>backlog其实是一个连接队列。</p><p>backlog队列总和 = 未完成三次握手队列 + 已经完成三次握手队列。</p><p>在高并发环境下，需要一个高backlog值来避免慢客户端连接问题。注意Linux内核会将这个值减小到/proc/sys/net/core/somaxconn的值，所以需要确认增大somaxconn和tcp_max_syn_backlog两个值来达到想要的效果</p></blockquote><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">tcp-backlog 511<br></code></pre></td></tr></table></figure><ul><li>客户端闲置等待最大时长，达到最大值后关闭连接。如需关闭该功能，设置为0</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">timeout 0<br></code></pre></td></tr></table></figure><ul><li>设置tcp-keepalive</li></ul><blockquote><p>单位为秒，如果设置为0，则不会进行Keepalive检测，建议设置成60</p></blockquote><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">tcp-keepalive 300<br></code></pre></td></tr></table></figure><p>服务器端设定：</p><ul><li>设置服务器以守护进程的方式运行</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">daemonize yes|no<br></code></pre></td></tr></table></figure><p>当以守护进程方式启动时，Redis将会生成一个pid文件。pid文件路径配置：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">pidfile /var/run/redis_6379.pid<br></code></pre></td></tr></table></figure><ul><li>设置数据库数量</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">databases 16<br></code></pre></td></tr></table></figure><p>日志配置：</p><ul><li>设置服务器以指定日志记录级别<br>默认为verbose。开发期可以设置为verbose，生产环境配置为notice，简化日志输出</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">loglevel debug|verbose|notice|warning<br></code></pre></td></tr></table></figure><ul><li>日志文件名</li></ul><blockquote><p>如果设置为空字符串，Redis将会使用标准输出流输出日志。</p><p>如果使用的守护进程方式启动，标准输出流将被发送到 /dev/null</p></blockquote><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">logfile &quot;&quot;<br></code></pre></td></tr></table></figure><ul><li>是否将日志输出到syslog中</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">syslog-enabled no<br></code></pre></td></tr></table></figure><ul><li>指定syslog里的日志标志</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">syslog-ident redis<br></code></pre></td></tr></table></figure><ul><li>指定syslog设备，值可以是USER或者 LOCAL0-LOCAL7</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">syslog-facility local0<br></code></pre></td></tr></table></figure><p>对客户端配置：</p><ul><li>设置同一时间最大客户端连接数，默认无限制。当客户端连接到达上限，Redis会关闭新的连接</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">maxclients 10000<br></code></pre></td></tr></table></figure><p>多服务器快捷配置：</p><ul><li>导入并加载指定配置文件信息，用于快速创建redis公共配置较多的redis实例配置文件，便于维护</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">include /path/server-端口号.conf<br></code></pre></td></tr></table></figure><p>安全配置：</p><ul><li>配置密码</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">requirepass 密码<br></code></pre></td></tr></table></figure><ul><li>使用auth指令登录</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">auth 密码<br></code></pre></td></tr></table></figure><p>在redis-cli客户端获取配置信息：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">config get 对应配置<br></code></pre></td></tr></table></figure><p>例如：<code>config get dir</code></p><p>设置配置：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">config set 配置项 value<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>Redis</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Redis</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>10. 删除策略</title>
+    <link href="/2024/12/07/Redis/10-%E5%88%A0%E9%99%A4%E7%AD%96%E7%95%A5/"/>
+    <url>/2024/12/07/Redis/10-%E5%88%A0%E9%99%A4%E7%AD%96%E7%95%A5/</url>
+    
+    <content type="html"><![CDATA[<h1 id="redis中的数据特征">Redis中的数据特征</h1><p>Redis是一种内存级数据库，所有数据均存放在内存中，内存中的数据可以通过TTL指令获取其状态。</p><ul><li>XX：具有时效性的数据</li><li>-1 ：永久有效的数据</li><li>-2 ：已经过期的数据，或被删除的数据，或未定义的数据</li></ul><p>Redis的数据删除策略：</p><ul><li>定时删除</li><li>惰性删除</li><li>定期删除</li></ul><p>删除策略的目的：在内存占用与CPU占用之间寻求平衡（删除不及时会占用大量内存，删除过于频繁又会增加CPU负担）。</p><p>时效性数据的存储机构：</p><p>expire、expireat、pexpire、pexpireat都可以设置时效性数据，使用这些命令后，redis会先取到设置了时效性的key 对应的value所在内存地址。</p><p>redis的每一个数据库中都有一块expires空间专门存储时效性数据，将value的内存地址作为key，将设置的时间作为value存储在expires空间内。</p><h1 id="定时删除">定时删除</h1><p>创建一个定时器，当key设置有过期时间，且过期时间到达时，由定时器任务立即执行对键的删除操作。</p><p>优点：节约内存，到时就删除，快速释放掉不必要的内存占用。</p><p>缺点：CPU压力大，无论CPU此时负载量多高，均占用内存，会影响redis服务器响应时间和指令吞吐量。</p><h1 id="惰性删除">惰性删除</h1><p>数据到达过期时间，不作处理，等下次访问该数据时删除。</p><p>优点：节约CPU性能，发现必须删除的时候才删除</p><p>缺点：内存压力大，出现长期占用内存的数据</p><h1 id="定期删除">定期删除</h1><ol type="1"><li>Redis启动服务器初始化时，读取配置server.hz的值，默认为10；</li><li>每秒执行 server.hz 次的<code>serverCron()</code>轮询；</li><li><code>serverCron()</code>中调用<code>databasesCron()</code>对每一个数据库的expires轮询；</li><li><code>databasesCron()</code>调用<code>activeExpireCycle()</code>对expires空间进行检查；</li><li><code>activeExpireCycle()</code>对redis中每个数据库的expires空间逐一进行检测，每次执行250ms/server.hz</li><li>对某个expires空间检查时，随机挑选W个key检测<br>如果key超时，删除key。<br>如果一个轮次中删除的key的数量 &gt; W<em>25%，则循环该过程。<br>如果当前轮次中删除的key的数量 &lt;=W</em>25%，检查下一个expires空间，每个数据库的expires都检查一遍<br>W的取值 = ACTIVE_EXPIRE_CYCLE_LOOKUPS_PER_LOOP属性值</li><li>参数 current_db 用于记录<code>activeExpireCycle()</code>进入哪个expires空间执行</li><li>如果<code>activeExpireCycle()</code>执行时间到期，下次从current_db继续向下执行</li></ol><p>定期删除是周期性轮询redis库中的时效性数据，采用随机抽取的策略，利用过期数据占比的方式控制删除频度。</p><p>特点：</p><ul><li>cpu性能占用设置有峰值，检测频度可自定义设置。</li><li>内存压力不是很大，长期占用内存的冷数据会被持续清理</li></ul><p>Redis使用的是 定时删除 + 定期删除</p><h1 id="逐出算法">逐出算法</h1><p>Redis使用内存存储数据，在执行每一个命令前，会调用<code>freeMemoryIfNeeded()</code>检测内存是否充足。如果内存不满足新加入数据的最低存储要求，Redis要临时删除一些数据为当前指令清理存储空间（数据淘汰，也称为数据逐出）。清理数据的策略称为逐出算法。</p><p>逐出数据的过程不是100%能够清理出足够的可使用的内存空间，如果不成功则反复执行。当对所有数据尝试完毕后，如果不能达到内存清理的要求，将出现错误信息。</p><p>影响数据逐出的相关配置：</p><ul><li>最大可使用内存（配置）</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">maxmemory<br></code></pre></td></tr></table></figure><p>作用：占用物理内存的比例，默认值为0，表示不限制。生产环境中根据需求设定，通常设置在50%以上。</p><ul><li>每次选取待删除数据的个数</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">maxmemory-samples<br></code></pre></td></tr></table></figure><p>选取数据是并不会全库扫描。全库扫描会导致严重的性能消耗，降低读写性能。因此采用随机获取数据的方式作为待检测删除数据。</p><ul><li>逐出算法策略</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">maxmemory-policy<br></code></pre></td></tr></table></figure><p>达到最大内存后的，对被挑选出来的数据进行删除的策略</p><p>逐出算法策略（maxmemory-policy）可以配置的选项：</p><ul><li>检测易失数据（可能会过期的数据集server.db[i].expires）<ul><li>volatile-lru</li></ul></li></ul><blockquote><p>（Least RecentlyUsed）挑选最近最少使用的数据淘汰（离现在最久未使用的数据）</p><p>建议配置</p></blockquote><pre><code class="hljs">-  volatile-lfu </code></pre><blockquote><p>（Least Frequently Used）挑选最近使用次数最少的数据淘汰</p></blockquote><pre><code class="hljs">-  volatile-ttl </code></pre><blockquote><p>挑选将要过期的数据淘汰</p></blockquote><pre><code class="hljs">-  volatile-random </code></pre><blockquote><p>任意选择数据淘汰</p></blockquote><ul><li>检测全库数据（所有数据集 server.db[i].dict）<ul><li>allkeys-lru</li></ul></li></ul><blockquote><p>挑选最近最少使用的数据淘汰</p></blockquote><pre><code class="hljs">-  allkeys-lfu </code></pre><blockquote><p>挑选最近使用次数最少的数据淘汰</p></blockquote><pre><code class="hljs">-  allkeys-random </code></pre><blockquote><p>任意选择数据淘汰</p></blockquote><ul><li>放弃数据驱逐<ul><li>no-enviction</li></ul></li></ul><blockquote><p>禁止驱逐数据（redis 4.0 的默认策略），会引发错误 OOM（Out OfMemory）</p></blockquote><p>可以使用 <code>info</code> 命令输出监控信息，查询缓存 hit（命中） 和miss 的次数，根据业务需求调优redis配置</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>Redis</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Redis</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>09. 事务</title>
+    <link href="/2024/12/07/Redis/09-%E4%BA%8B%E5%8A%A1/"/>
+    <url>/2024/12/07/Redis/09-%E4%BA%8B%E5%8A%A1/</url>
+    
+    <content type="html"><![CDATA[<h1 id="redis事务">Redis事务</h1><p>Redis事务就是一个命令执行的队列，将一系列预定义命令包装成一个整体（一个队列）。当执行时，一次性按照添加顺序依次执行，中间不会被打断或者干扰。</p><p>一个队列中，一次性、顺序性、排他性的执行一系列命令。</p><p>基本操作：</p><ul><li>开启事务</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">multi<br></code></pre></td></tr></table></figure><p>设定事务的开始位置，执行此指令后，后续的所有指令均加入到事务中。</p><ul><li>执行事务</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">exec<br></code></pre></td></tr></table></figure><p>设置事务的结束位置，同时执行事务。与 <code>multi</code>成对出现、成对使用。</p><ul><li>取消事务</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">discard<br></code></pre></td></tr></table></figure><p>终止当前事务的定义，发生在multi之后。</p><p>使用<code>multi</code>加入事务的命令暂时进入到任务队列中，并没有立即执行，只有执行exec命令才开始执行。如果使用了discard，便销毁该任务队列。</p><p>注意事项：</p><ul><li>如果命令输入时语法书写有误，例如<code>seta name zhangsan</code>，则整体事务中所有命令均不会执行（包括哪些语法正确的命令也不会执行）</li><li>如果命令格式正确，但是无法正确的执行，例如对list进行incr操作。此时事务能够对正确的命令进行执行，对运行错误的命令不会执行。已经执行完毕的命令对应的数据不会自动回滚，需要程序员自己在代码中实现回滚。</li></ul><h1 id="锁">锁</h1><p>对key添加监视锁，在执行exec前如果key发生了变化，终止事务执行：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">watch key1 [key2 ...]<br></code></pre></td></tr></table></figure><p>注意：watch命令必须在multi之前使用，watch和multi中间可以进行其他命令操作。不可以在multi开启事务后再watch。</p><p>watch只对下一个multi有效。</p><p>取消对所有key的监视：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">unwatch<br></code></pre></td></tr></table></figure><h1 id="分布式锁">分布式锁</h1><p>使用string的 setnx 设置一个key用作公共锁：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">setnx lock-key value<br></code></pre></td></tr></table></figure><p>利用string类型的 setnx命令的返回值特征，有值则返回设置失败，无值则返回设置成功。</p><ul><li>对于设置成功的，拥有控制权，进行下一步的具体业务操作</li><li>对于设置失败的，不具有控制权，排队或者等待。</li></ul><p>操作完毕，使用 <code>del</code> 释放锁。</p><p>该方案是一种设计概念，依赖规范保障，具有风险性。</p><p>为防止死锁（例如某个服务器设置上分布式锁之后宕机，但是没有del掉这个锁标志），可以进行一些改良：</p><p>使用expire为锁key添加时间限定，到时间不释放则放弃锁：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">expire lock-key second<br>pexire lock-key milliseconds<br></code></pre></td></tr></table></figure><p>由于操作通常都是微秒或毫秒级，因此该锁定时间不宜设置过大。</p><p>例如：</p><ul><li>测试百万次最长执行时间对应命令的最大耗时，测试百万次网络延迟平均耗时</li><li>锁时间设定推荐：最大耗时x120% + 平均网络延迟x110%</li><li>如果业务最大耗时远大于网络平均延迟（例如2个数量级），取其中单个耗时较长的即可。</li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>Redis</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Redis</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>08. 持久化</title>
+    <link href="/2024/12/07/Redis/08-%E6%8C%81%E4%B9%85%E5%8C%96/"/>
+    <url>/2024/12/07/Redis/08-%E6%8C%81%E4%B9%85%E5%8C%96/</url>
+    
+    <content type="html"><![CDATA[<h1 id="持久化">持久化</h1><p>利用永久性存储介质将数据进行保存，在特定的时间将保存的数据进行恢复的工作机制称为持久化。</p><p>目的：防止数据意外丢失，确保数据安全性</p><p>持久化过程保存的内容：</p><ul><li>将当前数据状态进行保存，快照形式，存储数据结果，存储格式简单，关注点在数据</li></ul><blockquote><p>对应Redis的RDB</p></blockquote><ul><li>将数据的操作过程进行保存，日志形式，存储操作过程，存储格式复杂，关注点在数据的操作过程。</li></ul><blockquote><p>对应Redis的AOF</p></blockquote><h1 id="rdb">RDB</h1><h2 id="save命令">save命令</h2><p>启动方式：save命令</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">save<br></code></pre></td></tr></table></figure><p>作用：手动执行一次保存操作，会生成或更新持久化文件夹内的dump.rdb文件</p><p>save指令的执行会阻塞当前Redis服务器，直到当前RDB过程完成为止，有可能会造成长时间阻塞，线上环境不建议使用。</p><h2 id="相关配置">相关配置</h2><p>save指令相关配置：</p><ul><li>dbfilename dump.rdb</li></ul><blockquote><p>说明：设置本地数据库文件名，默认值为 dump.rdb</p><p>经验：通常设置为 dump-端口号.rbd</p></blockquote><ul><li>dir</li></ul><blockquote><p>说明：设置存储 .rdb 文件的路径</p><p>经验：通常设置成存储空间较大的目录中，目录名称通常为data</p></blockquote><ul><li>rdbcompression yes</li></ul><blockquote><p>说明：设置存储至本地数据库时是否压缩数据，默认为yes，采用LZF压缩</p><p>经验：通常默认为开启状态，如果设置为no，可以节省cpu时间，但是会使存储的文件变大</p></blockquote><ul><li>rdbchecksum yes</li></ul><blockquote><p>说明：设置是否进行RDB文件格式校验，该校验过程在写文件和读文件过程均进行</p><p>经验：通常默认为开启状态，如果设置为0，可以节约读写性过程约10%时间消耗，是存储一定的数据损坏风险</p></blockquote><p>修改后的配置文件如下：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs plain">port 6379<br>daemonize yes<br>logfile &quot;6379.log&quot;<br>dir /home/redis/data<br>dbfilename dump-6379.rdb<br>rdbcompression yes<br>rdbchecksum yes<br></code></pre></td></tr></table></figure><h2 id="bgsave指令">bgsave指令</h2><p>命令：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">bgsave<br></code></pre></td></tr></table></figure><p>作用：手动启动后台保存操作，但是不会立即执行，会在合适的时间进行执行，防止因为保存操作造成Redis的长时间阻塞。</p><p>bgsave命令是针对save阻塞问题做的优化。Redis内部所有涉及到RDB操作都采用bgsave的方式，save命令可以放弃使用。</p><p>bgsave后台执行工作原理：</p><pre><code class=" mermaid">graph LR A[&quot;控制台&quot;] --&gt;|1.发送指令| B[&quot;Redis服务器&quot;] B --&gt;|2.返回消息| A B --&gt;|2.调用fork函数生成子进程| C[&quot;子进程&quot;] C --&gt;|4.返回消息| B C --&gt;|3.创建rdb文件| D[&quot;.rdb文件&quot;]</code></pre><p>bgsave的特殊配置：</p><ul><li>stop-writes-on-bgsave-error yes</li></ul><blockquote><p>说明：后台存储过程中如果出现错误现象，是否停止保存操作</p><p>经验：通常默认为开启状态</p></blockquote><p>和save对比：</p><table><thead><tr><th>方式</th><th>save</th><th>bgsave</th></tr></thead><tbody><tr><td>读写</td><td>同步</td><td>异步</td></tr><tr><td>阻塞客户端指令</td><td>是</td><td>否</td></tr><tr><td>额外内存消耗</td><td>否</td><td>是</td></tr><tr><td>启动新进程</td><td>否</td><td>是</td></tr></tbody></table><h2 id="自动保存">自动保存</h2><p>在配置文件中加入配置：</p><p>save second changes</p><p>作用：满足限定时间范围内key的变化数量达到指定数量即进行持久化</p><p>参数</p><ul><li>second</li></ul><blockquote><p>监控时间范围</p></blockquote><ul><li>changes</li></ul><blockquote><p>监控key的变化量</p><p>增删改都算做变化</p></blockquote><p>位置：在conf文件中进行配置。</p><p>save配置要根据实际业务情况进行设置，频度过高或过低都会出现性能问题，结果可能是灾难性的。</p><p>save配置中对于second与changes设置通常具有互补对应关系（一个值大一个值小），尽量不要设置成包含关系。</p><p>save配置启动后执行的是bgsave操作</p><h2 id="rdb其他启动方式">RDB其他启动方式</h2><ul><li>全量复制</li><li>服务器运行过程中重启</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">debug reload<br></code></pre></td></tr></table></figure><ul><li>关闭服务器时指定保存数据</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">shutdown save<br></code></pre></td></tr></table></figure><h2 id="优缺点">优缺点</h2><p>优点：</p><ul><li>RDB是一个紧凑压缩的二进制文件，存储效率较高</li><li>RDB内部存储的是redis在某个时间点的数据快照，非常适合用于数据备份，全量复制等场景</li><li>RDB恢复数据的速度要比AOF快很多</li><li>应用：服务器中每X小时执行bgsave备份，并将RDB文件拷贝到远程机器中，用于灾难恢复。</li></ul><p>缺点：</p><ul><li>RDB方式无论是执行指令还是利用配置，无法做到实时持久化，具有较大的可能性丢失数据</li><li>bgsave指令每次运行要执行fork操作创建子进程，要牺牲掉一些性能</li><li>Redis的众多版本中未进行RDB文件格式的版本统一，有可能出现各版本服务之间数格式无法兼容的现象。</li></ul><h1 id="aof">AOF</h1><h2 id="概述">概述</h2><p>RDB存储的弊端：</p><ul><li>存储数据量较大，效率较低</li></ul><blockquote><p>基于快照思想，每次读写都是全部数据，当数据量巨大时，效率非常低。</p></blockquote><ul><li>大数据量下的IO性能较低</li><li>基于fork创建子进程，内存产生额外消耗</li><li>宕机带来的数据丢失风险</li></ul><p>解决思路：</p><ul><li>不写全数据，仅记录部分数据</li><li>改记录数据为记录操作过程</li><li>对所有操作均记录，排除丢失数据的风险</li></ul><p>AOF（Append OnlyFile）持久化：以独立日志的方式记录每次写命令，重启时再重新执行AOF文件中命令，达到恢复数据的目的。与RDB相比可以简单描述为改记录数据为记录数据产生的过程。</p><p>AOF的主要作用是解决了数据持久化的实时性，目前已经是Redis持久化的主流方式。</p><p>AOF写数据过程：</p><pre><code class=" mermaid">graph LR A[&quot;控制台写命令（set name zhangsan)&quot;] --&gt; B[&quot;Redis服务器&quot;] B --&gt;|AOF刷新缓存区| C[&quot;AOF写命令缓存区&quot;] C --&gt;|将命令同步到AOF文件| D[&quot;.aof文件&quot;]</code></pre><h2 id="写数据策略">写数据策略</h2><p>AOF写数据三种策略：（appendfsync）</p><ul><li>always（每次）</li></ul><blockquote><p>每次写入操作均同步到AOF文件中，数据零误差，性能较低，不建议使用</p></blockquote><ul><li>everysec（每秒）</li></ul><blockquote><p>每秒将缓冲区的指令同步到AOF文件中，数据准确性较高，性能较高。建议使用，也是默认配置</p><p>在系统突然宕机的情况下丢失1秒内的数据</p></blockquote><ul><li>no（系统控制）</li></ul><blockquote><p>有操作系统控制每次同步化到AOF文件的周期，整体不可控</p></blockquote><h2 id="配置">配置</h2><p>开启AOF：</p><p>配置：<code>appendonly yes|no</code></p><p>作用：是否开启AOF持久化功能，默认为不开启状态。</p><p>配置：<code>appendfsync always|everysec|no</code></p><p>作用：AOF写数据策略</p><p>配置：<code>appendfilename filename</code></p><p>作用：AOF持久化文件名，默认文件名为 appendonly.aof，建议配置为appendonly-端口号.aof</p><p>配置：<code>dir</code></p><p>作用：AOF持久化文件保存路径，与RDB持久化文件保持一致即可</p><h2 id="重写">重写</h2><p>随着命令不断写入AOF，文件会越来越大，为了解决这个问题，Redis引入了AOF重写机制压缩文件体积。AOF文件重写是将Redis进程内的数据转化为写命令同步到新AOF文件的过程。简单说就是将对同一个数据的若干个命令执行结果转化成最终结果数据对应的指令进行记录。</p><p>例如：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">set age 18<br>set age 20<br>set age 22<br></code></pre></td></tr></table></figure><p>最终重写为：<code>set age 22</code>。</p><p>重写规则：</p><ul><li>进程内已超时的数据不再写入文件</li><li>忽略无效指令，重写时使用进程内数据直接生成，这样新的AOF文件只保留最终数据的写入命令</li><li>对同一数据的多条写命令合并为一条命令</li></ul><blockquote><p>如：<code>lpush list1 a</code>、<code>lpush list1 b</code>、<code>lpush list1 c</code>，合并为：<code>lpush list1 a b c</code></p><p>为防止数据量过大造成客户端缓冲区溢出，对list、set、hash、zset等类型，每条指令最多写入64个元素。</p></blockquote><p>重写方式：</p><ul><li>手动重写（指令）</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">bgrewriteaof<br></code></pre></td></tr></table></figure><ul><li>自动重写（配置）</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plain">auto-aof-rewrite-min-size size<br>auto-aof-rewrite-percentage percentage<br></code></pre></td></tr></table></figure><p>自动重写：</p><ul><li>自动重写触发条件设置</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plain">auto-aof-rewrite-min-size size<br>auto-aof-rewrite-percentage percent<br></code></pre></td></tr></table></figure><ul><li>自动重写触发比对参数（运行指令 info Persistence获取具体信息）</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plain">aof_current_size<br>aof_base_size<br></code></pre></td></tr></table></figure><ul><li>自动重写触发条件</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs plain">aof_current_size &gt; auto-aof-rewrite-min-size<br><br>((aof_current_size - aof_base_size) / aof_base_size) &gt;= auto-aof-rewrite-percentage<br></code></pre></td></tr></table></figure><h2 id="和rdb比较">和RDB比较</h2><table><thead><tr><th>持久化方式</th><th>RDB</th><th>AOF</th></tr></thead><tbody><tr><td>占用存储空间</td><td>小（数据级：压缩）</td><td>大（指令级：重写）</td></tr><tr><td>存储速度</td><td>慢</td><td>快</td></tr><tr><td>恢复速度</td><td>快</td><td>慢</td></tr><tr><td>数据安全性</td><td>会丢失数据</td><td>依据策略决定</td></tr><tr><td>资源消耗</td><td>高/重量级</td><td>低/轻量级</td></tr><tr><td>启动优先级</td><td>低</td><td>高</td></tr></tbody></table><p>选择：</p><ul><li>对数据非常敏感，建议使用默认的AOF持久化方案<ul><li>AOF持久化策略使用everysecond，每秒钟fsync一次。该策略redis仍可以保持很好的处理性能，当出现问题时，最多丢失0-1秒内的数据</li><li>注意：AOF文件存储体积较大，且恢复速度较慢</li></ul></li><li>数据呈现阶段有效性，建议使用RDB持久化方案<ul><li>数据可以良好的做到阶段内无丢失（该阶段是开发者或者运维人员手工维护的），且恢复速度较快，阶段点数据恢复通常采用RDB方案</li><li>注意：使用RDB实现紧凑的数据持久化会使Redis降的很低</li></ul></li><li>综合比对<ul><li>RDB与AOF 的选择实际上是在做一种权衡，每种都有利有弊</li><li>如不能承受数分钟以内的数据丢失，对业务数据非常敏感，选用AOF</li><li>如能承受数分钟以内的数据丢失，且追求大数据集的恢复速度，选用RDB</li><li>灾难恢复选用RDB</li><li>双保险策略，同时开启RDB和AOF，重启后，Redis优先使用AOF来恢复数据，降低丢失数据的量。</li></ul></li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>Redis</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Redis</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>07. Linux操作Redis</title>
+    <link href="/2024/12/07/Redis/07-Linux%E6%93%8D%E4%BD%9CRedis/"/>
+    <url>/2024/12/07/Redis/07-Linux%E6%93%8D%E4%BD%9CRedis/</url>
+    
+    <content type="html"><![CDATA[<h1 id="centos7安装redis">CentOS7安装Redis</h1><ol type="1"><li>Redis官网下载源码包：<a href="https://download.redis.io/releases/redis-6.0.10.tar.gz">redis-6.0.10.tar.gz</a></li><li>上传至服务器，解压</li></ol><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">tar -xvf redis-6.0.10.tar.gz<br></code></pre></td></tr></table></figure><ol start="3" type="1"><li>安装GCC相关</li></ol><blockquote><p>redis源码需要使用gcc进行编译</p></blockquote><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs shell">yum install cpp<br>yum install binutils<br>yum install glibc<br>yum install glibc-kernheaders<br>yum install glibc-common<br>yum install glibc-devel<br>yum install gcc<br>yum install make<br></code></pre></td></tr></table></figure><ol start="4" type="1"><li>升级GCC</li></ol><blockquote><p>CentOS7默认安装的gcc版本是4.8.5，不满足redis的编译要求（GCC版本5以上），需要进行升级</p></blockquote><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">yum -y install centos-release-scl<br>yum -y install devtoolset-9-gcc devtoolset-9-gcc-c++ devtoolset-9-binutils<br></code></pre></td></tr></table></figure><ol start="5" type="1"><li>使用gcc9进行编译</li></ol><blockquote><p>scl enable只对当前屏幕有效，新开窗口需要重新执行该命令</p></blockquote><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">scl enable devtoolset-9 bash<br></code></pre></td></tr></table></figure><ol start="6" type="1"><li>编译并安装</li></ol><blockquote><p>进入redis的解压目录，里面带有Makefile文件，可以使用make命令进行编译</p></blockquote><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">编译</span><br>make<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">编译并安装(redis解压的Makefile文件配置了install参数)</span><br>make install<br></code></pre></td></tr></table></figure><p>如果有提示jemalloc的错，有可能是第一次安装失败时候出现了垃圾文件，执行命令进行清理：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">make distclean<br></code></pre></td></tr></table></figure><h1 id="redis启动和连接">Redis启动和连接</h1><p>正常启动：</p><p>服务端：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">redis-server<br></code></pre></td></tr></table></figure><p>客户端：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">redis-cli<br></code></pre></td></tr></table></figure><p>指定端口启动；</p><p>服务端：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">port参数两个短横</span><br>redis-server --port 端口号<br></code></pre></td></tr></table></figure><p>客户端：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">p参数一个短横</span><br>redis-cli -p 端口号<br>redis-cli -h ip地址<br></code></pre></td></tr></table></figure><p>指定配置文件启动：</p><p>Redis解压目录带有一个配置文件：redis.conf</p><p>摘出其中有用的部分（去掉注释、空行），复制到一个新的配置文件中：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">cat redis.conf | grep -v &quot;#&quot; | grep -v &quot;^$&quot; &gt; redis-6379.conf<br></code></pre></td></tr></table></figure><p>编辑配置文件，修改为以下内容：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs plain"># 指定启动的端口号<br>port 6379<br># 以后台守护进程方式启动，日志将不再打印到命令窗口中<br>daemonize yes<br># 日志文件<br>logfile &quot;6379.log&quot;<br># 日志文件、持久化文件等所在路径<br>dir /home/redis/data<br></code></pre></td></tr></table></figure><p>以配置文件启动：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">redis-server redis-6379.conf<br></code></pre></td></tr></table></figure><p>可以启动多个配置文件、多个服务：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">redis-server redis-6379.conf<br>redis-server redis-6380.conf<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>Redis</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Redis</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>06. Jedis</title>
+    <link href="/2024/12/07/Redis/06-Jedis/"/>
+    <url>/2024/12/07/Redis/06-Jedis/</url>
+    
+    <content type="html"><![CDATA[<p>Java语言连接Redis服务的工具：</p><ul><li>Jedis</li><li>SpringData Redis</li><li>Lettuce</li></ul><h1 id="jedis操作redis">Jedis操作Redis</h1><ol type="1"><li>引入对应的依赖</li></ol><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>redis.clients<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>jedis<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>3.3.0<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure><ol start="2" type="1"><li>编写程序</li></ol><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Test</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">testJedis</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-comment">// 1.连接reids</span><br>    <span class="hljs-type">Jedis</span> <span class="hljs-variable">jedis</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Jedis</span>(<span class="hljs-string">&quot;127.0.0.1&quot;</span>, <span class="hljs-number">6379</span>);<br><br>    <span class="hljs-comment">// 2.操作redis</span><br>    <span class="hljs-comment">// jedis的方法名和reids对应的命令名完全一样</span><br>    jedis.set(<span class="hljs-string">&quot;name&quot;</span>, <span class="hljs-string">&quot;zhangsan&quot;</span>);<br>    <span class="hljs-type">String</span> <span class="hljs-variable">name</span> <span class="hljs-operator">=</span> jedis.get(<span class="hljs-string">&quot;name&quot;</span>);<br>    System.out.println(name);<br><br>    <span class="hljs-comment">// 3.关闭连接</span><br>    jedis.close();<br>&#125;<br></code></pre></td></tr></table></figure><h1 id="使用jedis连接池">使用Jedis连接池</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-type">JedisPool</span> <span class="hljs-variable">jp</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br><br><span class="hljs-keyword">static</span> &#123;<br>    <span class="hljs-type">JedisPoolConfig</span> <span class="hljs-variable">jpc</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">JedisPoolConfig</span>();<br>    jpc.setMaxTotal(<span class="hljs-number">30</span>);<br>    jpc.setMaxIdle(<span class="hljs-number">10</span>);<br>    <span class="hljs-type">String</span> <span class="hljs-variable">host</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;127.0.0.1&quot;</span>;<br>    <span class="hljs-type">int</span> <span class="hljs-variable">port</span> <span class="hljs-operator">=</span> <span class="hljs-number">6379</span>;<br>    jp = <span class="hljs-keyword">new</span> <span class="hljs-title class_">JedisPool</span>(jpc, host, port);<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Jedis <span class="hljs-title function_">getJedis</span><span class="hljs-params">()</span> &#123;    <br>    <span class="hljs-keyword">return</span> jp.getResource();<br>&#125;<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>Redis</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Redis</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>05. 通用指定</title>
+    <link href="/2024/12/07/Redis/05-%E9%80%9A%E7%94%A8%E6%8C%87%E5%AE%9A/"/>
+    <url>/2024/12/07/Redis/05-%E9%80%9A%E7%94%A8%E6%8C%87%E5%AE%9A/</url>
+    
+    <content type="html"><![CDATA[<h1 id="key通用操作">Key通用操作</h1><p>Key 是一个字符串，通过key获取redis中保存的数据。</p><p>基本操作：</p><ul><li>获取当前数据库的key数量</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">dbsize<br></code></pre></td></tr></table></figure><ul><li>删除指定key</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">del key<br></code></pre></td></tr></table></figure><ul><li>获取key是否存在</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">exists key<br></code></pre></td></tr></table></figure><ul><li>获取key对应值的类型</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">type key<br></code></pre></td></tr></table></figure><p>扩展操作（时效性控制）</p><ul><li>为指定key设置有效期</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell">expire key seconds<br>pexpire key milliseconds<br>expireat key timestamp<br>pexpireat key milliseconds-timestap<br></code></pre></td></tr></table></figure><ul><li>获取key的有效时间</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">ttl key  # 查看还有多久过期（Time To Live）。永久有效的key返回值为-1，已经失效的key返回值为-2，带有时效性的返回剩余时长<br>pttl key<br></code></pre></td></tr></table></figure><ul><li>切换key从时效性转换为永久性</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">persist key<br></code></pre></td></tr></table></figure><ul><li>查询key</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">keys pattern<br></code></pre></td></tr></table></figure><p>pattern的模式规则：<br><code>*</code>：匹配任意数量的任意符号<br><code>?</code>：匹配一个任意符号<br><code>[]</code>：匹配一个指定符号</p><blockquote><p>例如：<code>keys u[st]er:1</code> ，查询所有以 u 开头，以 er:1结尾，中间包含一个字母 s 或 t 。</p></blockquote><ul><li>为key改名</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">rename key newkey  # 如果redis已经存在newkey，则会覆盖原来的newkey里面的值<br>renamenx key newkey # redis不存在newkey时才允许进行重命名<br></code></pre></td></tr></table></figure><ul><li>对所有key排序<br>排序对象是list、set、sorted_set</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sort<br></code></pre></td></tr></table></figure><ul><li>其他key通用操作</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">help @generic<br></code></pre></td></tr></table></figure><h1 id="数据库通用操作">数据库通用操作</h1><p>db基本操作：</p><ul><li>切换数据库<br>0到15数据库，默认为数据库0</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">select [dbid]<br></code></pre></td></tr></table></figure><ul><li>其他操作</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">quit # 退出客户端<br>ping # 测试服务器是否连通<br>echo message<br></code></pre></td></tr></table></figure><ul><li>数据移动到其他数据库</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">move key db<br></code></pre></td></tr></table></figure><ul><li>数据清除操作</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">flushdb # 清除当前数据库数据<br>flushall # 清除所有数据库数据<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>Redis</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Redis</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>04. 数据类型</title>
+    <link href="/2024/12/07/Redis/04-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/"/>
+    <url>/2024/12/07/Redis/04-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/</url>
+    
+    <content type="html"><![CDATA[<h1 id="redis数据类型">Redis数据类型</h1><p>5种常用数据类型：</p><ul><li>string</li></ul><blockquote><p>类比java的String</p></blockquote><ul><li>hash</li></ul><blockquote><p>类比java的HashMap</p></blockquote><ul><li>list</li></ul><blockquote><p>类比java的 LinkedList</p></blockquote><ul><li>set</li></ul><blockquote><p>类比Java的 HashSet</p></blockquote><ul><li>sorted_set</li></ul><blockquote><p>也称Zset，类比java的 TreeSet</p></blockquote><p>redis数据存储格式：</p><p>redis自身是一个Map，其中所有的数据都是采用 key:value的形式存储。所有的 key 都是字符串， value 的存储可以分多种数据类型。</p><h1 id="string类型">string类型</h1><p>存储的数据：单个数据，最简单的数据存储类型，也是最常用的数据存储类型</p><p>存储数据的格式：一个存储空间保存一个数据</p><p>存储内容：通常使用字符串，如果字符串以整数的形式展示，可以作为数据操作使用。</p><p>string类型是二进制安全的，意思是redis的string可以包含任何数据，比如图片或者序列化的对象。</p><p>基本操作：</p><ul><li>添加/修改数据</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">set key value<br></code></pre></td></tr></table></figure><ul><li>获取数据</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">get key<br></code></pre></td></tr></table></figure><ul><li>删除数据</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">del key<br></code></pre></td></tr></table></figure><blockquote><p>如果删除成功，会返回以下信息：</p></blockquote><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plain">127.0.0.1:6379&gt; del age<br>(integer) 1<br></code></pre></td></tr></table></figure><blockquote><p>如果删除失败（例如删除不存在的key），会返回以下信息：</p></blockquote><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plain">127.0.0.1:6379&gt; del age<br>(integer) 0<br></code></pre></td></tr></table></figure><ul><li>添加/修改多个数据</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">mset key1 value1 key2 value2 ...<br></code></pre></td></tr></table></figure><ul><li>获取多个数据</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">mget key1 key2 ....<br></code></pre></td></tr></table></figure><ul><li>获取数据字符个数（字符串长度）</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">strlen key<br></code></pre></td></tr></table></figure><ul><li>追加信息到原始信息后部<br>如果原始信息存在则追加，否则新建。</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">append key value<br></code></pre></td></tr></table></figure><blockquote><p>append命令返回的结果是value的字符串长度</p></blockquote><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plain">127.0.0.1:6379&gt;append mn 100<br>(integer) 3<br></code></pre></td></tr></table></figure><p>扩展操作：</p><ul><li>设置数值数据增加范围的值（可以为负数）</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">incr key<br>incrby key increment<br>incrbyfloat key increment<br></code></pre></td></tr></table></figure><ul><li>设置数值数据减少指定范围的值</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">decr key<br>decrby key increment<br></code></pre></td></tr></table></figure><ul><li>设置数据具有指定的生命周期</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">setex key seconds value  # set with expire<br>psetex key milliseconds value<br></code></pre></td></tr></table></figure><blockquote><p>如果使用 <code>setex name zhangsan 10</code>设置name为10秒有效期，然后又执行了 <code>set name lisi</code>，此时将不再有10秒有效期的限制</p></blockquote><ul><li>获取截取指定区间的字符串</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">getrange key start end<br></code></pre></td></tr></table></figure><ul><li>从指定位置设置字符串</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">setrange key offset value<br></code></pre></td></tr></table></figure><ul><li>key不存在时才设置</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">setnx key value # set if not exist<br></code></pre></td></tr></table></figure><ul><li>多个Key都不存在时才设置</li></ul><blockquote><p>当key1 、key2、key3都不存在时才能设置成功</p></blockquote><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">msetnx key1 value1 [key2 value2 key3 value3....]<br></code></pre></td></tr></table></figure><p>string作为数值操作：</p><ul><li>string在redis内部存储默认就是一个字符串，当遇到增减类操作incr、decr时会转成数值型进行计算</li><li>redis所有的操作都是原子性的，采用单线程处理所有业务，命令是一个一个执行的，因此无需考虑并发带来的数据影响</li><li>注意：按数值进行操作的数据，如果原始数据不能转换成数值，或超越了redis数值上限，将报错</li></ul><blockquote><p>9223372036854775807 （对应 java中的long型最大值，Long.MAX_VALUE）</p></blockquote><ul><li>数据未获取到时：(nil) 表示null</li><li>数据最大存储量：512M</li></ul><p>redis可以用于控制数据库表主键，为数据库表主键提供生成策略，保障数据库表的主键唯一性。此方案适用于所有数据库，且支持数据库集群。</p><p>redis可以应用于各种结构性和非结构型高热度数据访问加速</p><p>redis中的key命名惯例为冒号分隔，例如：</p><p>key = <code>customer:id:2010010200001:name</code>, value =<code>张三</code></p><p>key = <code>customer:id:202001010004</code> , value =<code>&#123;"name", "zhangsan", "age" : 10&#125;</code></p><h1 id="hash类型">hash类型</h1><p>新的存储需求：对一系列存储的数据进行编组，方便管理，典型应用存储对象信息</p><p>需要的存储结构：一个存储空间保存多个键值对数据</p><p>hash结构：</p><p>一个 key 对应 hash 存储空间， 一个hash存储空间内又可存多个 field -value 键值对。</p><p>hash结构优化：</p><ul><li>如果field数量较少，存储结构优化为类数组结构</li><li>如果field数量较多，存储结构使用HashMap结构</li></ul><p>基本操作：</p><ul><li>添加/修改数据</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">hset key field value<br></code></pre></td></tr></table></figure><ul><li>获取数据</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">hget key field<br>hgetall key<br></code></pre></td></tr></table></figure><ul><li>删除数据</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">hdel key field1 [field2]<br></code></pre></td></tr></table></figure><ul><li>添加/修改多个数据</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">hmset key field1 value1 field2 value2 ....<br></code></pre></td></tr></table></figure><ul><li>获取多个数据</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">hmget key field1 field2 ...<br></code></pre></td></tr></table></figure><ul><li>获取哈希表中字段的数量</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">hlen key<br></code></pre></td></tr></table></figure><ul><li>获取哈希表中是否存在指定的字段</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">hexists key field<br></code></pre></td></tr></table></figure><ul><li>key下存在指定的字段，则不操作，不存在则创建</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">hsetnx key field value<br></code></pre></td></tr></table></figure><p>扩展操作：</p><ul><li>获取哈希表中所有的字段名或字段值</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">hkeys key  # 获取该key下所有的field名<br>hvals key  # 获取该key下所以的value（不会去除重复项）<br></code></pre></td></tr></table></figure><ul><li>设置指定字段的数量数据增加指定返回的值</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">hincrby key field increment<br>hincrbyfloat key field increment<br></code></pre></td></tr></table></figure><p>hash类型数据操作的注意事项：</p><ul><li>hash类型下的value只能存储字符串，不允许存储其他数据类型，不存在嵌套现象。如果数据未获取到，对象的值为空（nil）</li><li>每个hash可以存储 2^32 -1 个键值对</li><li>hash类型十分贴近对象的数据存储形式，并且可以灵活添加删除对象属性。但hash设计初衷不是为了存储大量对象而设计的，不可以滥用，更不可以将hash作为对象列表使用。</li><li>hgetall操作可以获取全部属性，如果内部field过多，遍历整体数据效率就会很低，有可能成为数据访问瓶颈。</li></ul><h1 id="list类型">list类型</h1><p>数据存储需求：存储多个数据，并对数据进入存储空间的顺序进行区分。</p><p>需要的存储结构：一个存储空间保存多个数据，且通过数据可以体现进入顺序</p><p>list类型：保存多个数据，底层使用双向链表存储结构实现。</p><p>基本操作：</p><ul><li>添加/修改数据</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">lpush key value1 [value2] ...  # 向左边插入<br>rpush key value1 [value2] ...  # 向右边插入<br></code></pre></td></tr></table></figure><ul><li>获取数据</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">lrange key start stop # 从左边读指定范围，从start到stop的索引位置<br>lindex key index # 获取指定索引位置的元素<br>llen key  # 获取长度<br></code></pre></td></tr></table></figure><ul><li>获取并移除数据</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">lpop key  # 从左边移出<br>rpop key # 从右边移出<br></code></pre></td></tr></table></figure><p>扩展操作：</p><ul><li>规定时间内获取并移除数据<br>如果当前指定的key有值则直接取出，如果没有值则等待一段时间，一旦有值插入立即取出，如果超出指定时间则退出。</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">blpop key1 [key2] timeout<br>brpop key1 [key2] timeout<br></code></pre></td></tr></table></figure><ul><li>移除指定数据<br>list存储的内容可以重复，要指定移除多少个指定值</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">lrem key count value<br></code></pre></td></tr></table></figure><ul><li>截取指定范围的值后再赋值给key</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">ltrim key start end<br></code></pre></td></tr></table></figure><p>redis应用于具有操作先后顺序的数据控制</p><p>list注意事项：</p><ul><li>list中保存的数据都是string类型的，数据总容量是有限的，最多 2^32 -1个元素</li><li>list具有索引的概念，但是操作数据时通常以队列的形式进行入队出队操作，或以栈的形式进行入栈出栈操作</li><li>获取全部操作数据结束索引设置为-1，例如（<code>lrange mylist 0 -1</code>）</li><li>list可以对数据进行分页操作，通常第一页的信息来自list，第2页及更多的信息通过数据库的形式加载</li></ul><h1 id="set类型">set类型</h1><p>存储需求：存储大量的数据，在查询方面提供更高的效率。</p><p>存储结构：能够保存大量的数据，高效的内存存储机制，便于查询。</p><p>set类型：与hash存储结构完全相同，用value仅保存字段名，不保存字段值，并且value不允许重复。</p><p>基本操作：</p><ul><li>添加数据</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sadd key member1 [member2]<br></code></pre></td></tr></table></figure><ul><li>获取全部数据</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">smembers key<br></code></pre></td></tr></table></figure><ul><li>删除数据</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">srem key member1 [member2]<br></code></pre></td></tr></table></figure><ul><li>获取集合数据总量</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">scard key<br></code></pre></td></tr></table></figure><ul><li>判断集合中是否包含指定数据</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sismember key member<br></code></pre></td></tr></table></figure><p>扩展操作：</p><ul><li>随机获取集合中指定数量的数据</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">srandmember key [count]<br></code></pre></td></tr></table></figure><ul><li>随机获取集合中的某个数据并将该数据移出集合</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">spop key<br></code></pre></td></tr></table></figure><ul><li>求两个集合的交、并、差集</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">sinter key1 [key2]  # 交集<br>sunion key1 [key2]  # 并集<br>sdiff key1 [key2]  # 差集（带方向）<br></code></pre></td></tr></table></figure><ul><li>求两个集合的交、并、差集并存储到指定集合中</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">sinterstore destination key1 [key2]<br>sunionstore destination key1 [key2]<br>sdiffstore destination key1 [key2]<br></code></pre></td></tr></table></figure><ul><li>将指定数据从原始集合中移动到目标集合中</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">smove source destination member<br></code></pre></td></tr></table></figure><p>set类型数据操作的注意事项：</p><ul><li>set类型不允许数据重复，如果添加的数据在set中已经存在，将只保留一份</li><li>set虽然与hash的存储结构相同，但是无法启用hash中存储值的空间</li></ul><p>redis可以应用于同类型不重复数据的合并操作。</p><p>reids可以应用于同类型数据的快速去重。</p><p>redis可以应用于基于黑名单、白名单设定的服务控制。</p><h1 id="sorted_set类型">sorted_set类型</h1><p>存储需求：数据排序有利于数据的有效展示，需要提供一种可以根据自身特征进行排序的方式。</p><p>存储结构：新的存储模型，可以保存可排序的数据。</p><p>sorted_set类型：在set的存储结构基础上添加可排序的列（score）</p><p>score是一个double类型的分数，Redis正是通过分数来为集合中的成员进行从小到大的排序。</p><p>sorted_set的成员是唯一的，但是score是可以重复的。</p><p>sorted_set也叫做ZSet。</p><p>基本操作：</p><ul><li>添加数据</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">zadd key score1 member1 [score2 memeber2]<br></code></pre></td></tr></table></figure><ul><li>获取数据</li></ul><blockquote><p>获取全部数据：<code>zrange key 0 -1</code> ，或者<code>zrevrange key 0 -1</code></p></blockquote><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">zrange key start stop [WITHSCORES]  # 加上WITHSCORES参数后，可以把score也一起返回<br>zrevrange key start stop [WITHSCORES]  # 倒序查看<br></code></pre></td></tr></table></figure><ul><li>删除数据</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">zrem key member [member ...]<br></code></pre></td></tr></table></figure><ul><li>按条件获取数据</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">zrangebyscore key min max [WITHSCORES] [LIMIT]<br>zrevrangebyscore key max min [WITHSCORES]<br></code></pre></td></tr></table></figure><p>左括号表示不包含，例如：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">zrangebyscore zset01 60 (90  # 大于等于60，小于90<br></code></pre></td></tr></table></figure><p>limit可以限制返回的结果</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">zrangebyscore zset01 60 (90 limit 开始的下标 截取的个数<br></code></pre></td></tr></table></figure><ul><li>条件删除数据</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">zremrangebyrank key start stop<br>zremrangebyscore key min max<br></code></pre></td></tr></table></figure><ul><li>获取集合数据总量</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">zcard key<br>zcount key min max<br></code></pre></td></tr></table></figure><ul><li>集合交、并操作</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">zinterstore destination numkeys key [key ...]<br>zunionstore destination numkeys key [key ...]<br></code></pre></td></tr></table></figure><p>注意：</p><ul><li>min与max用于限定搜索查询的条件</li><li>start与stop用于限定查询的范围，作用于索引，表示开始和结束索引</li><li>offset与count用于限定查询范围，作用于查询结果，表示开始位置和数据总量</li></ul><p>扩展操作：</p><ul><li>获取数据对应的索引（排名）</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">zrank key member<br>zrevrank key member<br></code></pre></td></tr></table></figure><ul><li>score值获取与修改</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">zscore key member<br>zincrby key increment member<br></code></pre></td></tr></table></figure><p>redis可以用于计数器组合排序功能对应的排名</p><p>注意事项</p><ul><li>score保存的数据存储空间是64位，如果是整数范围是 -9007199254740992 ~9007199254740992</li><li>score保存的数据也可以是双精度的double值，基于双精度浮点数的特征，可能会丢失精度，使用时要慎重</li><li>sorted_set底层存储还是基于set结构的，因此数据不能重复，如果重复添加相同的数据，score值将被反复覆盖，保留最后一次修改的结果。</li></ul><p>获取当前redis系统时间：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">time<br></code></pre></td></tr></table></figure><p>redis可以应用于定时任务执行顺序管理或任务过期管理。</p><p>redis可以应用于带有权重的即时任务/消息队列执行管理</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>Redis</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Redis</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>03. 基本操作</title>
+    <link href="/2024/12/07/Redis/03-%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/"/>
+    <url>/2024/12/07/Redis/03-%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/</url>
+    
+    <content type="html"><![CDATA[<h1 id="常用命令">常用命令</h1><h2 id="测试是否连通">测试是否连通</h2><p>功能：测试客户端是否连上了redis服务</p><p>命令格式：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">ping<br></code></pre></td></tr></table></figure><p>成功时响应：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">PONG<br></code></pre></td></tr></table></figure><h2 id="信息添加">信息添加</h2><p>功能：设置 key, value数据</p><p>命令格式：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">set key value<br></code></pre></td></tr></table></figure><p>示例：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">set name zhangsan<br></code></pre></td></tr></table></figure><h2 id="信息查询">信息查询</h2><p>功能：根据key查询对应的value，如果不存在，返回空（nil）</p><p>命令格式：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">get key<br></code></pre></td></tr></table></figure><p>示例：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">get name<br></code></pre></td></tr></table></figure><h2 id="清除屏幕信息">清除屏幕信息</h2><p>功能：清空屏幕</p><p>命令：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">clear<br></code></pre></td></tr></table></figure><h2 id="帮助">帮助</h2><p>功能：获取帮助信息</p><p>命令格式：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plain">help 命令名<br>help @组名<br></code></pre></td></tr></table></figure><p>帮助信息的展示格式：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs plain">GET KEY   # 命令格式<br>summary: Get the value of a key  # 功能描述<br>since：1.0.0  # 出现的版本<br>group：string # 所属群组<br></code></pre></td></tr></table></figure><p>命令及所属组在：/src/server.c 文件中定义</p><h2 id="退出客户端">退出客户端</h2><p>功能：退出客户端</p><p>命令格式：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs plain">quit<br>exit<br>&lt;ESC&gt;<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>Redis</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Redis</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>02. Redis简介</title>
+    <link href="/2024/12/07/Redis/02-Redis%E7%AE%80%E4%BB%8B/"/>
+    <url>/2024/12/07/Redis/02-Redis%E7%AE%80%E4%BB%8B/</url>
+    
+    <content type="html"><![CDATA[<h1 id="redis简介">Redis简介</h1><p>Redis：(Remote Dictionary Server的每个单词前两个字母），是用C语言开发的一个开源高性能键值对（Key-Value）数据库。</p><p>遵守BSD协议，完全开源免费，基于内存运行，并支持持久化。也称为数据结构服务器。</p><p>特征：</p><ul><li>数据间没有必然的关联关系</li><li>内部采用单线程机制进行工作</li><li>高性能</li><li>多数据类型支持<ul><li>字符串类型</li></ul></li></ul><blockquote><p>string</p></blockquote><pre><code class="hljs">-  列表类型 </code></pre><blockquote><p>list</p></blockquote><pre><code class="hljs">-  散列类型 </code></pre><blockquote><p>hash</p></blockquote><pre><code class="hljs">-  集合类型 </code></pre><blockquote><p>set</p></blockquote><pre><code class="hljs">-  有序集合类型 </code></pre><blockquote><p>sorted_set</p></blockquote><ul><li>持久化支持，可以进行数据灾难恢复</li><li>支持数据的备份，即master-slave模式的数据备份</li></ul><p>应用：</p><ul><li>为热点数据加速查询，如热点商品、新闻、资讯、推广等高访问量信息</li><li>任务队列，如秒杀、抢购、购票排队</li><li>即时信息查询，如排行榜、网站访问统计等</li><li>时效性信息控制，如验证码、投票控制</li><li>分布式数据共享，如分布式集群架构中的session分离</li><li>消息队列</li><li>分布式锁</li></ul><p>Redis是单进程模型来处理客户端的请求。对读写等事件的响应是通过对epoll函数的包装来做到的。</p><blockquote><p>Epoll是Linux内核为处理大批量文件描述符而做了改进的epoll，是Linux下多路复用IO接口select/poll的增强版本，它能显著提高程序在大量并发连接中只有少量活跃的情况下的系统CPU使用率。</p></blockquote><p>Redis的实际处理速度完全依靠主进程的执行效率。</p><p>Redis默认是16个数据库，类似数组下标，从0开始，初始默认使用0号数据库。可以用<code>select</code>命令切换数据库。</p><p>Redis默认端口号是6379，对应到手机数字键盘上是字母：MERZ。</p><blockquote><p>merz取自意大利歌女AlessiaMerz的名字。Redis作者认为Merz愚蠢可笑，就造了一个梗叫"merz"表示愚蠢。</p></blockquote><h1 id="下载和安装">下载和安装</h1><h2 id="windows版">windows版</h2><p>下载地址：github上的 microsoftarchive下的redis：<a href="https://github.com/microsoftarchive/redis"><strong>microsoftarchive/redis</strong></a></p><p>下载zip压缩包，直接解压就可以运行。</p><p>解压后的文件作用：</p><ul><li>redis-server.exe</li></ul><blockquote><p>服务器启动命令</p></blockquote><ul><li>redis-cli.exe</li></ul><blockquote><p>命令行客户端</p></blockquote><ul><li>redis.windows.conf</li></ul><blockquote><p>redis核心配置文件</p></blockquote><ul><li>redis-benchmark.exe</li></ul><blockquote><p>性能测试工具</p></blockquote><ul><li>redis-check-aof.exe</li></ul><blockquote><p>AOF文件修复工具</p></blockquote><ul><li>redis-check-dump.exe</li></ul><blockquote><p>RDB文件检查工具（快照持久化文件）</p></blockquote>]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>Redis</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Redis</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>01. NoSql简介</title>
+    <link href="/2024/12/07/Redis/01-NoSql%E7%AE%80%E4%BB%8B/"/>
+    <url>/2024/12/07/Redis/01-NoSql%E7%AE%80%E4%BB%8B/</url>
+    
+    <content type="html"><![CDATA[<h1 id="nosql简介">NoSql简介</h1><p>关系型数据库：</p><ul><li>性能瓶颈：磁盘IO性能低下</li><li>扩展瓶颈：数据关系复杂，扩展性差，不便于大规模集群。</li></ul><p>解决思路：</p><ul><li>降低磁盘IO次数，越低越好。</li></ul><blockquote><p>使用内存存储</p></blockquote><ul><li>尽量去除数据间的关系，越简单越好</li></ul><blockquote><p>不存储关系，仅存储数据</p></blockquote><p>NoSql ： 即 Not-Only SQL（泛指非关系型数据库），作为关系型数据库的补充。</p><p>作用：应对基于海量用户和海量数据前提下的数据处理问题。</p><p>特征：</p><ul><li>可扩容，可伸缩</li><li>大数据量下高性能</li><li>灵活的数据模型</li><li>高可用</li></ul><p>NoSql数据库的产生就是为了解决大规模数据集合多重数据种类带来的挑战，尤其是大数据应用难题，包括超大规模的存储。</p><p>这些类型的数据存储不需要固定的模式，无需多余操作就可以横向扩展。</p><p>常见的NoSql数据库：</p><ul><li>Redis</li><li>memcache</li><li>HBase</li><li>MongoDB</li></ul><p>常见的电商解决方案：</p><ul><li>商品基本信息（名称、价格、厂商），存放在关系型数据库中，例如MySQL</li><li>商品附加信息（描述、详情、评论），访问量较高，存放在 MongoDB 中</li><li>图片信息，存储在分布式文件系统中，例如 FastDFS</li><li>搜索关键字，存放在全文检索中，例如 ES、Lucene、Solr</li><li>热点信息（高频、波段性），存放在缓存中，例如Redis、Memcache、Tair</li></ul><p>NoSQL数据库主要分类：</p><table style="width:100%;"><thead><tr><th>分类</th><th>Examples</th><th>典型应用场景</th><th>数据模型</th><th>优点</th><th>缺点</th></tr></thead><tbody><tr><td>键值(key-value)</td><td>Tokyo Cabinet/Tyrant， Redis, Voldmort, Oracle BDB</td><td>内容缓存，主要用于处理大量数据的高访问负载，也用于一些日志系统等</td><td>key指向value的键值对，通常用hash table来实现</td><td>查找速度快</td><td>数据无结构化，通常只被当做字符串或二进制数据</td></tr><tr><td>列存储数据库</td><td>Cassandra, Hbase, Riak</td><td>分布式的文件系统</td><td>以列簇式存储，将同一列数据存在一起</td><td>查找速度快，可扩展性强，更容易进行分布式扩展</td><td>功能相对局限</td></tr><tr><td>文档型数据库</td><td>CouchDB, MongoDB</td><td>Web应用（与key-value类似，value是结构化的，不同的是数据库能够了解value的内容）</td><td>key-value对应的键值对，value为结构化数据</td><td>数据结构要求不严格，表结构可变，不需要像关系型数据库一样预先定义表结构</td><td>查询性能不高，而且缺乏统一的查询语法</td></tr><tr><td>图数据库（Graph）</td><td>Neo4J, InfoGrid, Infinite Graph</td><td>社交网络，推荐系统等。专注于构建关系图谱</td><td>图结构</td><td>利用图结构相关算法。比如最短路径寻址，N度关系查找等</td><td>很多时候需要对整个图做计算才能得出需要的信息，而且这种结构不太好做分布式的集群方案</td></tr></tbody></table><p>BSON：BSON是一种类json的一种二进制形式的存储格式，简称BinaryJSON。它和JSON一样，支持内嵌的文档对象和数组对象。</p><p>MongoDB：是一个基于分布式文件存储的数据库。由C++编写，旨在为WEB应用提供可扩展的高性能数据存储解决方案。MongoDB是一个介于关系型数据库和非关系数据库之间的产品，是非关系数据库当中功能最丰富、最像关系数据库的。</p><p>传统的RDBMS（关系型数据库）的事务的ACID：原子性（Atomicity）、一致性（Consistency）、独立性（Isolation）、持久性（Durability）。</p><p>CAP理论：强一致性（Consisitency）、可用性（Availabity）、分区容错性（Partitiontolerance）。</p><p>CAP理论的核心是：一个分布式系统不可能同时很好的满足一致性、可用性和分区容错性这三个需求，最多只能较好的满足两个。</p><p>因此，根据CAP原理，将NoSQL数据库分成了满足CA原则、满足CP原则、满足AP原则三个大类。</p><p>对于分布式系统。一定要满足分区容错性。</p><ul><li>CA</li></ul><blockquote><p>单点集群，满足一致性、可用性的系统，通常在可扩展性上不太强大。</p><p>例如：RDBMS</p></blockquote><ul><li>CP</li></ul><blockquote><p>满足一致性、分区容忍性的系统，通常性能不是特别高。</p><p>例如：MongoDB、Hbase、Redis</p></blockquote><ul><li>AP</li></ul><blockquote><p>满足可用性。分区容忍性的系统，通常可能对一致性要求低一些。</p><p>例如：CouchDB、Cassandra、DynamoDB</p></blockquote><p>对于传统关系型数据库，主要满足CA。</p><p>对于NoSQL数据库，分区容忍性是必须实现的，剩下的在一致性和可用性之间取舍。</p><p>BASE：基本可用（Basically Available）、软状态（Softstate）、最终一致（Eventually consistent）。</p><p>BASE是为了解决关系数据库强一致性引起的问题而引起的可用性降低而提出的解决方案。</p><p>它的思想是通过让系统放松对某一时刻数据强一致性的要求，来换取系统整体伸缩性和性能上改观。为什么这么说呢，缘由就在于大型系统往往由于地域分布和极高性能的要求，不可能采用分布式事务来完成这些指标，要想获得这些指标，我们必须采用另外一种方式来完成，这里BASE就是解决这个问题的办法。</p><p>CAP + BASE示例：电商活动高峰期，为了满足订单等实时性，可以暂时让每个用户看到的订单总数稍有偏差，牺牲强一致性。等高峰期过去之后，最终还是要达到一致性。</p><p>分布式和集群</p><p>分布式系统（Distributedsystem）：由多态计算机和通信的软件组件通过计算机网路连接（本地网络或广域网）组成。分布式系统是建立在网络之上的软件系统。正式因为软件的特性，所以分布式系统具有高度的内聚性和透明性。因此，网络和分布式系统之间的区别更多的在于高层软件（特别是操作系统），而不是硬件。分布式系统可以应用在不同的平台上，如：PC、工作站、局域网、广域网等。</p><p>分布式：不同的多台服务器上部署不同的服务器模块（工程），他们之间通过RPC/RMI之间通信和调用，对外提供服务和组内协作。</p><p>集群：不同的多态服务器上面部署相同的服务模块，通过分布式调度软件进行统一的调度，对外提供服务和访问。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>Redis</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Redis</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>12. 强化学习</title>
+    <link href="/2024/12/07/PR-ML/12-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/"/>
+    <url>/2024/12/07/PR-ML/12-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/</url>
+    
+    <content type="html"><![CDATA[<ol type="1"><li>强化学习应用<ol type="1"><li>两个应用</li></ol></li><li><font style="color:#DF2A3F;">强化学习常用什么过程描述</font><ol type="1"><li>马尔科夫性是什么</li></ol></li><li>强化学习问题基本设置<ol type="1"><li>机器所处环境E</li><li>状态空间：是机器感知到的环境的描述</li><li>机器能采取的行为空间A</li><li>策略(policy)π：X→A(或π：X×A→R)</li><li>潜在的状态转移(概率)函数Ｐ：X×X×A→R</li><li>潜在的奖赏(reward)函数Ｒ：X×X×A→R或Ｒ：X×X→R</li><li>强化学习对应四元组<ol type="1"><li>E=&lt;X,A,P,R&gt;</li></ol></li><li>目标<ol type="1"><li><font style="color:#DF2A3F;">机器通过在环境中不断尝试从而学到一个策略π，使得长期执行该策略后得到的累积奖赏最大</font></li></ol></li></ol></li><li>强化学习vs监督学习<ol type="1"><li>监督学习：给有标记样本</li><li>强化学习：没有标记样本，通过执行动作之后反馈的奖赏来学习，强化学习在某种意义上可以认为是具有“延迟标记信息”的监督学习</li></ol></li><li>K-摇臂赌博机<ol type="1"><li>特点<ol type="1"><li>只有一个状态，K个动作</li><li>每个摇臂的奖赏服从某个期望未知的分布</li><li>执行有限次动作</li><li>最大化累积奖赏</li></ol></li><li>探索-利用(Exploration-Exploitation)<ol type="1"><li>探索：估计不同摇臂的优劣(奖赏期望的大小)</li><li>利用：选择当前最优的摇臂</li></ol></li><li>在探索与利用之间进行折中<ol type="1"><li>e-贪心<ol type="1"><li>以e的概率探索：均匀随机选择一个摇臂</li><li>以1-e的概率利用：选择当前平均奖赏最高的摇臂</li></ol></li><li>Softmax</li></ol></li></ol></li><li>有模型学习(model-basedlearning)<ol type="1"><li>E=&lt;X,A,P,R&gt;<ol type="1"><li>X,A,P,R均已知</li><li>方便起见，假设状态空间和动作空间均有限</li></ol></li><li><font style="color:#DF2A3F;">强化学习的目标：找到使累积奖赏最大的策略π</font></li><li>策略评估：使用某策略所带来的累积奖赏<img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703981515300-cf7c1206-92a2-4c1c-9569-4f13b5dfb180.png"></li><li>给定π，值函数的计算：值函数具有简单的递归形式<ol type="1"><li>Bellman等式</li></ol></li><li>状态-动作值函数与状态值函数可以相互计算</li><li>贝尔曼方程<ol type="1"><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703981648075-7e285667-d4de-4880-acdc-491d7182a85a.png"><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703981680887-4920a237-c032-4da4-951a-0de053729910.png"></li><li>当前状态与下一状态价值函数之间的递归关系</li></ol></li><li>策略评估<ol type="1"><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703981802560-14ceb442-0641-4a52-a48c-c8e5a1de0598.png"></li><li>在模型已知时，对任意策略估计出有该策略带来的期望累积奖励——策略评估</li></ol></li><li>策略评估：使用某策略所带来的期望累积奖赏；</li><li>策略改进：将非最优策略改进为最优策略<ol type="1"><li>非最优策略的改进方式：将策略选择的动作改为当前最优的动作</li></ol></li><li>策略迭代(policyiteration)：求解最优策略的方法<ol type="1"><li>随机策略作为初始策略策略评估+策略改进+策略评估+策略改进+……直到策略收敛</li><li>策略迭代算法的缺点：每次改进策略后都要重新评估策略，导致耗时</li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703982176074-33a48030-8c24-4439-a72b-5f94dccff3c1.png"></li></ol></li><li>值迭代<ol type="1"><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703982230635-4afb458c-8eee-4c27-a495-f146709bcb1d.png"></li></ol></li><li>有模型学习小结<ol type="1"><li>强化学习任务可归结为基于动态规划的寻优问题</li><li>与监督学习不同，这里并未涉及到泛化能力，而是为每一个状态找到最好的动作</li></ol></li></ol></li><li>免模型学习(model-freelearning)：更加符合实际情况<ol type="1"><li>情况<ol type="1"><li>转移概率，奖赏函数未知</li><li>甚至环境中的状态数目也未知</li><li>假定状态空间有限</li></ol></li><li>免模型学习所面临的困难<ol type="1"><li>策略无法评估</li><li>无法通过状态值函数计算状态-动作值函数</li><li>机器只能从一个起始状态开始探索环境</li></ol></li><li>解决困难的办法<ol type="1"><li>多次采样</li><li>直接估计每一对状态-动作的值函数</li><li>在探索过程中逐渐发现各个状态</li></ol></li><li>蒙特卡罗强化学习：采样轨迹，用样本均值近似期望<ol type="1"><li>策略评估：蒙特卡罗法<ol type="1"><li>从某状态出发，执行某策略</li><li>对轨迹中出现的每对状态-动作，记录其后的奖赏之和</li><li>采样多条轨迹，每个状态-动作对的累积奖赏取平均<img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703982461291-a50ed993-4513-46f7-9452-57a5c6e4092a.png"></li></ol></li><li>策略改进：换入当前最优动作</li><li>蒙特卡罗强化学习可能遇到的问题：轨迹的单一性<ol type="1"><li>解决问题的办法<ol type="1"><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703982538314-4722b41b-5846-4770-9a79-b8eb999ffebb.png"></li><li>同策略蒙特卡罗强化学习算法<ol type="1"><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703982580369-98a74fac-bcd9-44aa-8bbe-fb6f24cc8a24.png"></li></ol></li><li>异策略蒙特卡罗强化学习算法<ol type="1"><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703982618153-80fc6d80-2e02-4c77-9db5-199743ae6094.png"></li></ol></li></ol></li></ol></li><li>蒙特卡罗强化学习的缺点：低效<ol type="1"><li>求平均时以“批处理式”进行</li><li>在一个完整的采样轨迹完成后才对状态-动作值函数进行更新</li></ol></li><li>克服缺点的办法：时序差分(temporaldifference，TD)学习</li></ol></li><li>时序差分学习<ol type="1"><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703982696771-30826fd8-5a0b-4cab-a20d-b629259c3b3c.png"></li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703982727550-ebccde81-5b15-4bb2-830e-fe340ea6d210.png"></li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703982744263-87c0f194-11d4-49ed-8549-8bb3797eba00.png"></li></ol></li></ol></li><li>深度强化学习<ol type="1"><li>AlphaGo</li></ol></li><li>强化学习应用<ol type="1"><li>AlphaGo</li><li>体彩世界杯</li></ol></li><li><font style="color:#DF2A3F;">强化学习常用马尔可夫决策过程(MDP,MarkovDecisionProcess）描述</font><ol type="1"><li>马尔科夫性：当前时刻的状态仅与前一时刻的状态和动作有关，与其他时刻的状态和动作条件独立</li></ol></li><li>强化学习问题基本设置<ol type="1"><li>机器所处环境E<ol type="1"><li>例如在种西瓜任务中,环境是西瓜生长的自然世界</li></ol></li><li>状态空间：是机器感知到的环境的描述<ol type="1"><li>瓜苗长势的描述</li></ol></li><li>机器能采取的行为空间A<ol type="1"><li>浇水施肥等</li></ol></li><li>策略(policy)π：X→A(或π：X×A→R)<ol type="1"><li>根据瓜苗状态是缺水时，返回动作浇水</li></ol></li><li>潜在的状态转移(概率)函数Ｐ：X×X×A→R<ol type="1"><li>瓜苗当前状态缺水，选择动作浇水，有一定概率恢复健康，也有一定概率无法恢复</li><li><font style="color:#DF2A3F;">从一个状态到下一个状态的转移，要么为确定性转移过程，要么随机性转移过程</font></li></ol></li><li>潜在的奖赏(reward)函数Ｒ：X×X×A→R或Ｒ：X×X→R<ol type="1"><li>瓜苗健康对应奖赏+1，瓜苗凋零对应奖赏-10</li></ol></li><li>强化学习对应四元组<ol type="1"><li>E=&lt;X,A,P,R&gt;</li></ol></li><li>目标<ol type="1"><li><font style="color:#DF2A3F;">机器通过在环境中不断尝试从而学到一个策略π，使得长期执行该策略后得到的累积奖赏最大</font></li></ol></li></ol></li><li>强化学习vs监督学习<ol type="1"><li>监督学习：给有标记样本</li><li>强化学习：没有标记样本，通过执行动作之后反馈的奖赏来学习，强化学习在某种意义上可以认为是具有“延迟标记信息”的监督学习</li></ol></li><li>K-摇臂赌博机<ol type="1"><li>特点<ol type="1"><li>只有一个状态，K个动作</li><li>每个摇臂的奖赏服从某个期望未知的分布</li><li>执行有限次动作</li><li>最大化累积奖赏</li></ol></li><li>探索-利用(Exploration-Exploitation)<ol type="1"><li>探索：估计不同摇臂的优劣(奖赏期望的大小)</li><li>利用：选择当前最优的摇臂</li></ol></li><li>在探索与利用之间进行折中<ol type="1"><li>e-贪心<ol type="1"><li>以e的概率探索：均匀随机选择一个摇臂</li><li>以1-e的概率利用：选择当前平均奖赏最高的摇臂</li></ol></li><li>Softmax<ol type="1"><li>基于当前已知的摇臂平均奖赏来对探索与利用折中</li><li>若某个摇臂当前的平均奖赏越大，则它被选择的概率越高,概率分配使用Boltzmann分布：<img src="/2024/12/07/PR-ML/12-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/1703981239439-1e6b1754-2560-4c34-ab93-32572506ecea.png"></li></ol></li><li>两种算法都有一个折中参数<img src="/2024/12/07/PR-ML/12-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/1703981314299-1a4909dc-091b-4b02-a2f9-845ac044886c.png">，算法性能孰好孰坏取决于具体应用问题</li></ol></li></ol></li><li>有模型学习(model-basedlearning)<ol type="1"><li>E=&lt;X,A,P,R&gt;<ol type="1"><li>X,A,P,R均已知</li><li>方便起见，假设状态空间和动作空间均有限</li></ol></li><li><font style="color:#DF2A3F;">强化学习的目标：找到使累积奖赏最大的策略π</font></li><li>策略评估：使用某策略所带来的累积奖赏<img src="/2024/12/07/PR-ML/12-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/1703981515300-cf7c1206-92a2-4c1c-9569-4f13b5dfb180.png"></li><li>给定π，值函数的计算：值函数具有简单的递归形式<ol type="1"><li>Bellman等式</li></ol></li><li>状态-动作值函数与状态值函数可以相互计算</li><li>贝尔曼方程<ol type="1"><li><img src="/2024/12/07/PR-ML/12-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/1703981648075-7e285667-d4de-4880-acdc-491d7182a85a.png"><img src="/2024/12/07/PR-ML/12-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/1703981680887-4920a237-c032-4da4-951a-0de053729910.png"></li><li>当前状态与下一状态价值函数之间的递归关系</li></ol></li><li>策略评估<ol type="1"><li><img src="/2024/12/07/PR-ML/12-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/1703981802560-14ceb442-0641-4a52-a48c-c8e5a1de0598.png"></li><li>在模型已知时，对任意策略估计出有该策略带来的期望累积奖励——策略评估</li></ol></li><li>策略评估：使用某策略所带来的期望累积奖赏；</li><li>策略改进：将非最优策略改进为最优策略<ol type="1"><li>非最优策略的改进方式：将策略选择的动作改为当前最优的动作</li></ol></li><li>策略迭代(policyiteration)：求解最优策略的方法<ol type="1"><li>随机策略作为初始策略策略评估+策略改进+策略评估+策略改进+……直到策略收敛</li><li>策略迭代算法的缺点：每次改进策略后都要重新评估策略，导致耗时</li><li><img src="/2024/12/07/PR-ML/12-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/1703982176074-33a48030-8c24-4439-a72b-5f94dccff3c1.png"></li></ol></li><li>值迭代<ol type="1"><li><img src="/2024/12/07/PR-ML/12-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/1703982230635-4afb458c-8eee-4c27-a495-f146709bcb1d.png"></li></ol></li><li>有模型学习小结<ol type="1"><li>强化学习任务可归结为基于动态规划的寻优问题</li><li>与监督学习不同，这里并未涉及到泛化能力，而是为每一个状态找到最好的动作</li></ol></li></ol></li><li>免模型学习(model-freelearning)：更加符合实际情况<ol type="1"><li>情况<ol type="1"><li>转移概率，奖赏函数未知</li><li>甚至环境中的状态数目也未知</li><li>假定状态空间有限</li></ol></li><li>免模型学习所面临的困难<ol type="1"><li>策略无法评估</li><li>无法通过状态值函数计算状态-动作值函数</li><li>机器只能从一个起始状态开始探索环境</li></ol></li><li>解决困难的办法<ol type="1"><li>多次采样</li><li>直接估计每一对状态-动作的值函数</li><li>在探索过程中逐渐发现各个状态</li></ol></li><li>蒙特卡罗强化学习：采样轨迹，用样本均值近似期望<ol type="1"><li>策略评估：蒙特卡罗法<ol type="1"><li>从某状态出发，执行某策略</li><li>对轨迹中出现的每对状态-动作，记录其后的奖赏之和</li><li>采样多条轨迹，每个状态-动作对的累积奖赏取平均<img src="/2024/12/07/PR-ML/12-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/1703982461291-a50ed993-4513-46f7-9452-57a5c6e4092a.png"></li></ol></li><li>策略改进：换入当前最优动作</li><li>蒙特卡罗强化学习可能遇到的问题：轨迹的单一性<ol type="1"><li>解决问题的办法<ol type="1"><li><img src="/2024/12/07/PR-ML/12-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/1703982538314-4722b41b-5846-4770-9a79-b8eb999ffebb.png"></li><li>同策略蒙特卡罗强化学习算法<ol type="1"><li><img src="/2024/12/07/PR-ML/12-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/1703982580369-98a74fac-bcd9-44aa-8bbe-fb6f24cc8a24.png"></li></ol></li><li>异策略蒙特卡罗强化学习算法<ol type="1"><li><img src="/2024/12/07/PR-ML/12-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/1703982618153-80fc6d80-2e02-4c77-9db5-199743ae6094.png"></li></ol></li></ol></li></ol></li><li>蒙特卡罗强化学习的缺点：低效<ol type="1"><li>求平均时以“批处理式”进行</li><li>在一个完整的采样轨迹完成后才对状态-动作值函数进行更新</li></ol></li><li>克服缺点的办法：时序差分(temporaldifference，TD)学习</li></ol></li><li>时序差分学习<ol type="1"><li><img src="/2024/12/07/PR-ML/12-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/1703982696771-30826fd8-5a0b-4cab-a20d-b629259c3b3c.png"></li><li><img src="/2024/12/07/PR-ML/12-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/1703982727550-ebccde81-5b15-4bb2-830e-fe340ea6d210.png"></li><li><img src="/2024/12/07/PR-ML/12-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/1703982744263-87c0f194-11d4-49ed-8549-8bb3797eba00.png"></li></ol></li></ol></li><li>深度强化学习<ol type="1"><li>AlphaGo</li></ol></li></ol>]]></content>
+    
+    
+    <categories>
+      
+      <category>AI</category>
+      
+      <category>ML</category>
+      
+      <category>PR &amp; ML</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>ML</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>11. 深度学习</title>
+    <link href="/2024/12/07/PR-ML/11-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
+    <url>/2024/12/07/PR-ML/11-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/</url>
+    
+    <content type="html"><![CDATA[<ol type="1"><li>神经网络<ol type="1"><li>神经网络是由具有适应性的简单单元组成的广泛并行互联的网络,它的组织能够模拟生物神经系统对真实世界物体所作出的反应</li><li>机器学习中的神经网络通常是指“神经网络学习”或者机器学习与神经网络两个学科的交叉部分</li></ol></li><li>神经元模型<ol type="1"><li>M-P神经元模型<ol type="1"><li>输入：来自其他个神经元传递过来的输入信号</li><li>处理：输入信号通过带权重的连接进行传递,神经元接受到总输入值将与神经元的阈值进行比较</li><li>输出：通过激活函数的处理以得到输出</li></ol></li><li>激活函数<ol type="1"><li>阶跃函数</li><li>Sigmoid函数</li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703983235226-909d2021-b65a-470b-8512-8e2e8e5ea180.png"></li><li>理想激活函数是阶跃函数,0表示抑制神经元而1表示激活神经元</li><li>阶跃函数具有不连续、不光滑等不好的性质,常用的是Sigmoid函数</li></ol></li></ol></li><li>感知机<ol type="1"><li>感知机由两层神经元组成,输入层接受外界输入信号传递给输出层,输出层是M-P神经元（阈值逻辑单元）</li><li>感知机能够容易地实现逻辑与、或、非运算</li><li>感知机学习<ol type="1"><li>给定训练数据集,权重w与阈值θ可以通过学习得到</li><li>感知机学习规则<ol type="1"><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703983384363-4d1d5e90-60b1-4728-a2d4-14c3934d5100.png"></li></ol></li></ol></li><li>感知机求解与、或、非问题和异或问题<ol type="1"><li>若两类模式线性可分,则感知机的学习过程一定会收敛；否则感知机的学习过程将会发生震荡</li><li><font style="color:#DF2A3F;">单层感知机的学习能力非常有限,只能解决线性可分问题</font></li><li>事实上,与、或、非问题是线性可分的,因此感知机学习过程能够求得适当的权值向量.而异或问题不是线性可分的,感知机学习不能求得合适解</li></ol></li></ol></li><li>多层感知机<ol type="1"><li>解决异或问题的两层感知机<ol type="1"><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703983616018-29888694-847b-45da-b972-f3ba0439788b.png"></li></ol></li><li>输出层与输入层之间的一层神经元,被称之为隐层或隐含层,隐含层和输出层神经元都是具有激活函数的功能神经元</li><li>多层前馈神经网络<ol type="1"><li>定义：每层神经元与下一层神经元全互联,神经元之间不存在同层连接也不存在跨层连接</li><li>前馈：输入层接受外界输入,隐含层与输出层神经元对信号进行加工,最终结果由输出层神经元输出</li><li>学习：根据训练数据来调整神经元之间的“连接权”以及每个功能神经元的“阈值”</li><li>多层网络：包含隐层的网络</li></ol></li></ol></li><li>误差逆传播算法<ol type="1"><li>误差逆传播算法（ErrorBackPropagation,简称BP）是最成功的训练多层前馈神经网络的学习算法.</li><li>BP算法基于梯度下降策略,以目标的负梯度方向对参数进行调整.对误差Ek,给定学习率n,学习率n∈(0,1)控制着算法每一轮迭代中的更新步长,若太长则让容易震荡,太小则收敛速度又会过慢</li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703983973386-d1f6b130-9700-4fee-98f5-3b4486bb69f1.png"></li><li>标准BP算法<ol type="1"><li>每次针对单个训练样例更新权值与阈值.</li><li>参数更新频繁,不同样例可能抵消,需要多次迭代.</li></ol></li><li>累计BP算法<ol type="1"><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703984030847-b871251f-6267-4069-a757-3665a59fe9fa.png"></li></ol></li><li>但在很多任务中,累计误差下降到一定程度后,进一步下降会非常缓慢,这时标准BP算法往往会获得较好的解,尤其当训练集非常大时效果更明显.</li><li>多层前馈网络表示能力<ol type="1"><li>只需要一个包含足够多神经元的隐层,多层前馈神经网络就能以任意精度逼近任意复杂度的连续函数</li></ol></li><li>多层前馈网络局限<ol type="1"><li>神经网络由于强大的表示能力,经常遭遇过拟合，表现为：训练误差持续降低,但测试误差却可能上升</li><li>如何设置隐层神经元的个数仍然是个未决问题，实际应用中通常使用“试错法”调整</li></ol></li><li>缓解过拟合的策略<ol type="1"><li>早停：在训练过程中,若训练误差降低,但验证误差升高,则停止训练</li><li>正则化：在误差目标函数中增加一项描述网络复杂程度的部分,例如连接权值与阈值的平方和</li></ol></li></ol></li><li>全局最小与局部最小<ol type="1"><li>“跳出”局部最小的策略<ol type="1"><li>基于梯度的搜索是使用最为广泛的参数寻优方法。如果误差函数仅有一个局部极小,那么此时找到的局部极小就是全局最小；然而,如果误差函数具有多个局部极小,则不能保证找到的解是全局最小。在现实任务中,通常采用以下策略“跳出”局部极小,从而进一步达到全局最小。</li><li>多组不同的初始参数优化神经网络,选取误差最小的解作为最终参数；</li><li>模拟退火技术[AartsandKorst,1989]每一步都以一定的概率接受比当前解更差的结果,从而有助于跳出局部极小；</li><li>随机梯度下降与标准梯度下降法精确计算梯度不同,随机梯度下降法在计算梯度时加入了随机因素；</li><li>遗传算法[Goldberg,1989]遗传算法也常用来训练神经网络以更好地逼近全局极小</li></ol></li></ol></li><li>深度学习<ol type="1"><li>深度学习模型<ol type="1"><li>典型的深度学习模型就是很深层的神经网络</li><li>模型复杂度<ol type="1"><li>增加隐层神经元的数目(模型宽度)</li><li>增加隐层数目（模型深度）</li><li>从增加模型复杂度的角度看,增加隐层的数目比增加隐层神经元的数目更有效，这是因为增加隐层数不仅增加拥有激活函数的神经元数目，还增加了激活函数嵌套的层数</li></ol></li><li>复杂模型难点<ol type="1"><li>多隐层网络难以直接用经典算法（例如标准BP算法）进行训练,因为误差在多隐层内逆传播时,往往会”发散”而不能收敛到稳定状态.</li></ol></li></ol></li><li>卷积神经网络CNN<ol type="1"><li>卷积神经网络<ol type="1"><li>卷积层：每个卷积层包含多个特征映射,每个特征映射是一个由多个神经元构成的“平面”,通过一种卷积滤波器提取的一种特征；</li><li>采样层（Pooling层）：亦称“汇合层”,其作用是基于局部相关性原理进行亚采样,从而在减少数据量的同时保留有用信息；</li><li>连接层：每个神经元被全连接到输出层每个神经元,本质就是传统的神经网络,其目的是通过连接层和输出层的连接完成识别任务。</li></ol></li></ol></li><li>卷积神经网络激活函数<ol type="1"><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703984523805-ecbc049f-1735-44df-827e-40af131c70c9.png"></li></ol></li><li>卷积神经网络训练<ol type="1"><li>CNN可以用BP进行训练,但在训练中,无论是卷积层还是采样层,每一组神经元都是用相同的连接权,从而大幅减少了需要训练的参数数目</li></ol></li><li>复杂模型训练方法<ol type="1"><li>权共享<ol type="1"><li>一组神经元使用相同的连接权值</li><li>权共享策略在卷积神经网络(CNN)中发挥了重要作用</li></ol></li><li>卷积神经网络<ol type="1"><li>结构：CNN复合多个卷积层和采样层对输入信号进行加工,然后在连接层实现与输出目标之间的映射</li></ol></li></ol></li><li>深度复杂模型训练方法<ol type="1"><li>预训练+微调<ol type="1"><li>预训练：逐层训练是多隐层网络训练的有效手段,每次训练一层隐层结点,训练时将上一层隐层结点的输出作为输入,而本层隐结点的输出作为下一层隐结点的输入,这称为”预训练”；</li><li>微调：在预训练全部完成后,再对整个网络进行微调训练；微调一般使用BP算法。</li><li>例子：深度信念网络<ol type="1"><li>结构：每一层都是一个受限Boltzmann机</li><li>训练方法：无监督预训练+BP微调</li></ol></li><li>分析<ol type="1"><li>预训练+微调的做法可以视为将大量参数分组,对每组先找到局部看起来比较好的设置,然后再基于这些局部较优的结果联合起来进行全局寻优.</li></ol></li></ol></li></ol></li></ol></li><li>其他常见深度神经网络<ol type="1"><li>RNN循环神经网络<ol type="1"><li>隐层循环</li></ol></li><li>LSTM长短时记忆模型<ol type="1"><li>RNN有梯度消失的问题</li><li>很难处理长序列的数据</li><li>LSTM由三个门来控制神经元状态，分别为忘记门、输入门和输出门<ol type="1"><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703984828152-14ecca85-92e0-4784-8085-01ded5625b91.png"></li></ol></li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703984842532-ec097488-6444-4486-8441-b25e38bc3707.png"></li></ol></li><li>自编码器</li><li>限制性玻尔兹曼机<ol type="1"><li>能量模型<ol type="1"><li>神经网络中有一类模型为网络定义一个“能量”,能量最小化时网络达到理想状态,而网络的训练就是在最小化这个能量函数</li></ol></li><li>Boltzmann机<ol type="1"><li>Boltzmann机就是一种基于能量的模型</li><li>结构：显层与隐层<ol type="1"><li>显层：数据的输入输出</li><li>隐层：数据的内在表达</li></ol></li><li>神经元<ol type="1"><li>布尔型,即只能取0和1两种状态,其中1表示激活,0表示抑制</li></ol></li><li>网络中的神经元以任意不依赖于输入值的顺序进行更新,则网络最终将达到Boltzmann分布,此时状态向量出现的概率将仅由其能量与所有可能状态向量的能量确定：<img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703985000493-5987c9c2-c7d0-4516-b7a5-32b5ba8608f4.png"></li><li>Boltzmann机训练<ol type="1"><li>将每个训练样本视为一个状态向量,使其出现的概率尽可能大</li><li>标准的Boltzmann机是一个全连接图,训练网络的复杂度很高,这使其难以用于解决现实任务</li><li>现实中常用受限Boltzmann机,简称RBM，RBM仅保留显层与隐层之间的连接,从而将Boltzmann机结构有完全图简化为二部图</li></ol></li></ol></li><li>受限Boltzmann机<ol type="1"><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703985091168-b000bf11-2326-4003-acd2-96e97261f06f.png"></li></ol></li></ol></li><li>深度信念网络</li><li>生成模型<ol type="1"><li>VAE</li><li>GAN</li></ol></li></ol></li><li>梯度计算<ol type="1"><li>数值梯度：近似，慢，容易计算；</li><li>解析梯度：准确，快，但是易于出错；</li><li>实际：通常采用解析梯度来计算，但是利用数值梯度做执行检查，被称为Gradientcheck</li></ol></li><li>梯度消失与梯度爆炸</li><li>残差结构<ol type="1"><li>ResNet</li><li>比CNN更容易训练，残差块使用了跳跃连接，可以缓解在深度神经网络中增加深度带来的梯度消失问题。<img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703985200955-afa9df3c-1b00-42e7-8a10-3695249f916e.png"></li></ol></li><li>Batchsize+BatchNormalization</li><li>正则化<ol type="1"><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703985240132-407271b6-b11e-474d-ada6-0e6dc9956dab.png"></li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703985258742-dfc18ed1-d989-44b2-828b-1b0b70f3e2dc.png"></li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703985284504-a0c03406-470a-49b8-ae0e-263e42c70f42.png"></li></ol></li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703985308240-44ce28c7-1a42-4d49-8233-107d7c956f44.png"><br></li><li>训练多久<ol type="1"><li>当模型在验证集上精度下降时，停止训练；</li><li>或者训练很长的时间，但一直保存每步的训练结果，跟踪模型的训练过程<img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703985363637-9ade2311-5e92-4ec9-a3e1-40609a0627b8.png"></li></ol></li><li>理解深度学习<ol type="1"><li>“特征工程”VS“特征学习”或者“表示学习”<ol type="1"><li>特征工程由人类专家根据现实任务来设计,特征提取与识别是单独的两个阶段<ol type="1"><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703985419163-9f266d9a-ba6a-4283-9817-6bde565d6941.png"></li></ol></li><li>特征学习通过深度学习技术自动产生有益于分类的特征,是一个端到端的学习框架。<ol type="1"><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703985433127-08b797cd-1c68-45f6-892d-a201b516688e.png"></li></ol></li></ol></li><li>函数拟合<ol type="1"><li>只需要一个包含足够多神经元的隐层,多层前馈神经网络就能以任意精度逼近任意复杂度的连续函数</li></ol></li></ol></li></ol>]]></content>
+    
+    
+    <categories>
+      
+      <category>AI</category>
+      
+      <category>ML</category>
+      
+      <category>PR &amp; ML</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>ML</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>10. 集成学习</title>
+    <link href="/2024/12/07/PR-ML/10-%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/"/>
+    <url>/2024/12/07/PR-ML/10-%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/</url>
+    
+    <content type="html"><![CDATA[<ol type="1"><li>个体与集成<ol type="1"><li><font style="color:#DF2A3F;">集成学习(ensemblelearning)通过构建并结合多个学习器来提升性能</font></li><li>集成个体应：好而不同</li><li>假设基分类器的错误率相互独立，则由Hoeffding不等式可得集成的错误率为：<img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703989821315-63314fd8-ca54-4a94-9f01-e6a60635761c.png"></li><li>上式显示，在一定条件下，随着集成分类器数目的增加，集成的错误率将指数级下降，最终趋向于0</li><li>分析<ol type="1"><li>上面的分析有一个关键假设：基学习器的误差相互独立</li><li>现实任务中，个体学习器是为解决同一个问题训练出来的，显然不可能互相独立</li><li>事实上，个体学习器的“准确性”和“多样性”本身就存在冲突</li><li>如何产生“好而不同”的个体学习器是集成学习研究的核心</li><li>集成学习大致可分为两大类</li></ol></li></ol></li><li>Boosting<ol type="1"><li>个体学习器存在强依赖关系</li><li>串行生成</li><li>每次调整训练数据的样本分布</li><li>Boosting族算法最著名的代表是AdaBoost<ol type="1"><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703990169473-49551828-1a70-4fa0-adc7-1d2552c3428b.png"></li><li>基学习器的线性组合</li><li>达到了贝叶斯最优错误率，说明指数损失函数是分类任务原来0/1损失函数的一致替代函数。</li><li>数据分布的学习<ol type="1"><li>重赋权法：在训练的每一轮中，根据样本分布为每个训练样本重新赋予一个权重。</li><li>重采样法：在训练的每一轮中，根据样本分布对训练集重新采样，再用重采样而得的样本集对基学习器进行训练。</li></ol></li><li>重启动，避免训练过程过早停止</li><li>从偏差-方差的角度：降低偏差，可对泛化性能相当弱的学习器构造出很强的集成</li></ol></li></ol></li><li>Bagging与随机森林<ol type="1"><li>个体学习器不存在强依赖关系：欲得到泛化性能强的集成，集成中的个体学习器应尽可能相互独立，但“独立”在现实中无法做到，可以设法使基学习器尽可能具有较大的差异。例如产生若干个不同的子集，再从每个数据子集中训练出一个基学习器；</li><li>但如果每个子集完全不一样，则每个基学习器只用到一小部分数据训练，又无法保证个体学习器的性能。</li><li>并行化生成<ol type="1"><li>自助采样法——Bagging</li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703990343138-9d86f58c-8703-4274-985c-69c69a6a6188.png"></li><li>特点<ol type="1"><li>时间复杂度低<ol type="1"><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703990404390-d401131f-1def-4688-99ae-24ee12990a07.png"></li></ol></li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703990422414-a71eb40f-f569-4369-a2fb-6a28289c15be.png"></li></ol></li><li>自助采样法--自助法<ol type="1"><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703990684055-3443c3dc-cfd4-4c1e-ad72-ecc6e673aebd.png"></li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703990715727-bd61ae96-18b2-49ba-94cc-1e8510fc7b16.png"></li></ol></li><li>评估方法<ol type="1"><li>留出法<ol type="1"><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703990792305-b435d0a4-2f9e-40cb-b788-81065ef7f36f.png"></li></ol></li><li>交叉验证法<ol type="1"><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703990831975-da3d608b-faa1-4bd4-abb3-8c6a9fbaa48b.png"></li></ol></li><li>留一法<ol type="1"><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703990872153-0021dcf3-552a-4324-8835-a8a1c06eb647.png"></li></ol></li></ol></li><li>bagging实验<ol type="1"><li>从偏差-方差的角度：降低方差，在不剪枝的决策树、神经网络等易受样本影响的学习器上效果更好<br></li></ol></li><li>随机森林<ol type="1"><li>随机森林(RandomForest，简称RF)是Bagging的一个扩展变种，以决策树为基础，进一步在决策树的训练过程中引入了随机属性选择。</li><li>采样的随机性：训练集的划分；</li><li>属性选择的随机性：在随机选择的k个属性集合中，依次选择最优属性进行划分，k为随机性的引入程度</li><li>随机森林的优点<ol type="1"><li>RF简单，容易实现，计算开销小；在很多现实任务中展现出强大的性能，被誉为代表集成学习水平的方法。</li><li>RF中的基学习器的多样性不仅来自于样本的扰动，还来自属性的扰动，使得最终集成的泛化性能可以通过个体学习器之间的差异度增加而进一步提升。</li><li>随着个体学习器数目的增加，随机森林通常可以收敛到更低的泛化误差；训练效率常常优于其他Bagging方法。</li></ol></li></ol></li></ol></li></ol></li><li>结合策略<ol type="1"><li>平均法<ol type="1"><li>简单平均法</li><li>加权平均法</li><li>特点<ol type="1"><li>简单平均法是加权平均法的特例</li><li>加权平均法在二十世纪五十年代被广泛使用</li><li>集成学习中的各种结合方法都可以看成是加权平均法的变种或特例</li><li>加权平均法可认为是集成学习研究的基本出发点</li><li>加权平均法未必一定优于简单平均法</li></ol></li></ol></li><li>投票法<ol type="1"><li>绝对多数投票法</li><li>相对多数投票法</li><li>加权投票法</li></ol></li><li>学习法<ol type="1"><li>Stacking是学习法的典型代表<ol type="1"><li>从初始数据集训练出初级学习器，然后生成一个新数据集用于训练次级学习器，初级学习器的输出被当成样例输入特征，而初级样本的标记仍当做样例的标记。</li><li>多响应线性回归(MLR)作为次级学习器的学习算法，效果较好</li></ol></li><li>K折交叉验证/留一法，学习T个初级学习器</li></ol></li></ol></li><li>误差-分歧分解<ol type="1"><li>分歧项代表了个体学习器在样本回上的不一致性，即在一定程度上反映了个体学习器的多样性，<ol type="1"><li>个体和集成<img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703991548117-08f0eace-c868-41c7-ba2f-34ab52229522.png"></li></ol></li><li>个体学习器准确率越高，多样性越大，则集成越好。</li><li>多样性度量(diversitymeasure)用于度量集成中个体学习器的多样性</li><li>对于二分类问题，分类器ℎ�与ℎ�的预测结果联立表(contingencytable)为<ol type="1"><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703991610747-ad899da1-3378-4d5c-9884-c336ec1ccfb3.png"></li><li>常见的多样性度量<ol type="1"><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703991626705-299eefd9-b651-4dd8-ba49-e0e158b2c008.png"></li><li>Q统计量</li><li>K统计量</li></ol></li></ol></li></ol></li><li>多样性增强<ol type="1"><li>常见的增强个体学习器多样性的方法<ol type="1"><li>数据样本扰动</li><li>输入属性扰动</li><li>输出表示扰动</li><li>算法参数扰动<ol type="1"><li>基学习法一般都有参数需要设置，例如神经网络的隐层神经元数，初始连接权值，通过随机设置不同的参数，往往可产生差别较大的个体学习器；</li><li>负相关法：显式的通过正则化项来强制个体神经网络使用不同的参数；</li><li>不同的多样性增强机制同时使用：例如随机森林中同时使用数据样本扰动和输入属性扰动</li></ol></li></ol></li><li>数据样本扰动通常是基于采样法<ol type="1"><li>Bagging中的自助采样法</li><li>Adaboost中的序列采样</li><li>数据样本扰动对“不稳定基学习器”很有效</li></ol></li><li>对数据样本扰动敏感的基学习器(不稳定基学习器)<ol type="1"><li>决策树</li><li>神经网络等</li></ol></li><li>对数据样本扰动不敏感的基学习器(稳定基学习器)<ol type="1"><li>线性学习器，支持向量机，朴素贝叶斯，k近邻等</li></ol></li><li>输出表示扰动<ol type="1"><li>将输出表示进行操控以增强多样性；</li><li>翻转法(FlippingOutput)：随机改变一些训练样本的标记；</li><li>输出调剂法(OutputSmearing)：对输出表示进行转换，例如将分类输出转化为回归输出后构建个体分类器；</li><li>ECOC法：利用纠错输出码将多类任务拆解为一系列二分类任务来训练基学习器；</li></ol></li></ol></li></ol>]]></content>
+    
+    
+    <categories>
+      
+      <category>AI</category>
+      
+      <category>ML</category>
+      
+      <category>PR &amp; ML</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>ML</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>9. 非监督学习</title>
+    <link href="/2024/12/07/PR-ML/9-%E9%9D%9E%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/"/>
+    <url>/2024/12/07/PR-ML/9-%E9%9D%9E%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/</url>
+    
+    <content type="html"><![CDATA[<ol type="1"><li>非监督学习<ol type="1"><li>监督学习<ol type="1"><li>根据一些给定的已知类别标号的样本，训练某种学习机器，使其能够对未知类别的样本进行分类</li></ol></li><li>非监督学习<ol type="1"><li>事先并不知道任何样本的类别标号，希望通过某种算法把一组未知类别的样本划分成若干类别。也称为聚类问题</li></ol></li></ol></li><li>聚类分析<ol type="1"><li>基本思想<ol type="1"><li>相似的归为一类。</li><li>模式相似性的度量。</li><li>无监督分类算法。</li></ol></li><li>特征量的类型<ol type="1"><li>物理量：重量、长度、速度</li><li>次序量：等级、技能、学识</li><li>名义量：性别、状态、种类</li></ol></li></ol></li><li>聚类过程遵循的基本步骤<ol type="1"><li>特征选择</li><li>近邻测度</li><li>聚类准则</li><li>聚类算法</li><li>结果判定</li></ol></li><li>模式相似性测度<ol type="1"><li>用于描述各模式之间特征的相似程度<ol type="1"><li>距离测度<ol type="1"><li>欧氏距离</li><li>绝对值距离</li><li>马氏距离<ol type="1"><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703985926609-a444a0d0-5688-4d94-90e7-a71020e2bdb5.png"></li><li>马氏距离对一切非奇异线性变换都是不变的，这说明它不受特征量纲选择的影响，并且是平移不变的。上面的V的含义是这个矢量集的协方差阵的统计量，故马氏距离加入了对特征的相关性的考虑。</li></ol></li></ol></li><li>相似测度<ol type="1"><li>角度相似系数(夹角余弦<ol type="1"><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703985975830-98b24117-0da3-42c0-8e9e-4cf914460e1a.png"></li><li>坐标系的旋转和尺度的缩放是不变的,但对一般的线形变换和坐标系的平移不具有不变性</li></ol></li><li>相关系数<ol type="1"><li>它实际上是数据中心化后的矢量夹角余弦。</li></ol></li></ol></li><li>匹配测度</li></ol></li></ol></li><li>类<ol type="1"><li>类的定义<ol type="1"><li>类的定义有很多种，类的划分具有人为规定性，这反映在定义的选取及参数的选择上。一个分类结果的优劣最后只能根据实际来评价。</li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703986074357-1b72ab74-7241-4fce-ad31-d84ce45c2d00.png"></li></ol></li><li>类间距离测度方法<ol type="1"><li>最近距离法<img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703986642695-29bb18e4-cd01-4860-b9c9-a18d9653c6df.png"></li><li>最远距离法<img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703986661898-94b626db-d45b-41fc-bbfc-527696b7e112.png"></li><li>平均距离法<img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703986676846-57b7e72e-a9eb-4319-933e-78f9e84ae85c.png"></li></ol></li><li>聚类的准则函数<ol type="1"><li><font style="color:#DF2A3F;">判别分类结果好坏的一般标准：类内距离小，类间距离大。</font></li><li>类内距离准则<ol type="1"><li>c类mj为均值矢量</li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703986794276-08f65686-b2fc-4fa2-94b0-17937dee14c3.png"></li></ol></li><li>类间距离准则<ol type="1"><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703986853670-28bd52b9-e4b7-4574-ad35-04c292714baf.png"></li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703986875242-e73f3e9a-d633-472d-82ee-23a2a955fff1.png"></li></ol></li><li>基于类内距离类间距离的准则函数<br></li></ol></li></ol></li><li>聚类算法<ol type="1"><li>基于数据的方法<ol type="1"><li>不尝试估计概率密度函数，直接从数据出发进行聚类</li><li>分类<ol type="1"><li>按最小距离原则简单聚类方法<ol type="1"><li>针对具体问题确定相似性阈值，将模式到各聚类中心间的距离与阈值比较，当大于阈值时该模式就作为另一类的类心，小于阈值时按最小距离原则将其分划到某一类中。</li><li>这类算法运行中模式的类别及类的中心一旦确定将不会改变。</li></ol></li><li>按最小距离原则进行两类合并的方法<ol type="1"><li>首先视各模式自成一类类合并成一类,,然后将距离最小的两不断地重复这个过程，直到成为两类为止。</li><li>这类算法运行中，类心不断地修正，但模式类别一旦指定后就不再改变，就是模式一旦划为一类后就不再被划分开，这类算法也称为分级聚类法。</li></ol></li><li>依据准则函数动态聚类方法<ol type="1"><li>设定一些分类的控制参数，定义一个能表征聚类结果优劣的准则函数，聚类过程就是使准则函数取极值的优化过程。</li><li>算法运行中，类心不断地修正，各模式的类别的指定也不断地更改。这类方法有C-均值法，ISODATA法等。</li></ol></li></ol></li><li>类别分离的间接方法<ol type="1"><li>动态聚类方法<ol type="1"><li>聚类分析中，较普遍采用的方法</li></ol></li><li>过程：<ol type="1"><li>选择某种样本相似性度量（例如距离度量）</li><li>确定适当的聚类准则函数（评价聚类结果质量）</li><li>在初始分类基础上，用迭代算法，逐步优化聚类结果，使准则函数达极值（达最优聚类结果）</li></ol></li><li>存在两个问题：<ol type="1"><li>选代表点数目等于类别数目c。若c未知，则聚类过程中形成的类型数目是一个值得研究的问题</li><li>如何将所有样本分到以代表点为初始聚合中心的范围内，形成初始划分，即如何选取初始问题，是算法的另一关键问题</li></ol></li><li>C-均值算法（基于误差平方和准则Je）<ol type="1"><li>优点：算法简单，实际中表现出色，是一种主要聚类方法</li><li>用样本间的距离作为相似性度量</li><li>用各类样本与类均值间的平方误差和作为聚类准则</li><li>基本思想：<ol type="1"><li>取定c类，选取c个初始聚类中心，即代表点。按最小距离原则将各样本分配到离代表点最近的类中，不断重新计算类中心，调整各样本类别，最终使聚类准则函数Je最小。</li><li>算法步骤<ol type="1"><li>任选取c个初始聚类中心（代表点）m1,m2,...,mc</li><li>计算每个样本与聚类中心（代表点）的距离，按最小距离原则将样本逐个归入相应一类，即<img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703987507093-79514f05-ea8e-4d75-bcb9-f4d36cf47c0d.png"></li><li>重新计算各类中心<ol type="1"><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703987534985-21997450-1f01-4d91-8b4b-931ff6487db4.png"></li><li>这一步是采取平均的方法来计算调整后的各类中心，且定为c类，故称为C-均值法。</li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703987644952-7d2925ec-7a3f-45ee-a12a-717489791ef1.png"></li></ol></li><li>调整分类<ol type="1"><li>依据准则函数调整每个聚类中的每个样本。是否调整，由下式决定</li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703987713833-02b90b0e-0ab1-46cb-808f-13652d84c729.png"></li></ol></li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703987765168-9c3b9bdc-d668-4e80-9d50-3be23b633aef.png"></li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703987798204-ac84069b-aa4e-4486-8772-d49432e7cff3.png"></li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703987811128-94e3c73f-da9e-4d56-af58-3b4ab8eb2a61.png"></li></ol></li><li>若c未知，令c=1，2，3，...相应使用c-均值算法，则有Je随c增加而单调减小</li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703987891777-9b0dfc3c-0c7a-4230-aeff-67c76123517b.png"><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703987907861-a486f2c0-897a-412a-9c76-68c7914e6198.png"></li></ol></li></ol></li><li>ISODATA算法（迭代自组织数据分析算法）<ol type="1"><li>与C-均值算法的相似之处：聚类中心都是通过样本均值的迭代运算来决定</li><li>与C-均值算法的区别：C-均值算法每次修改各类样本均值，计算太繁。ISODATA算法改为每次把全部样本都调整完毕后，才重新计算样本的均值</li><li>C均值：ISODATA和合并逐个：样本修正法成批样本修正法，还增加了类的分裂合并功能。</li><li>步骤<ol type="1"><li>设定初始聚类中心mi</li><li>将所有样本分给最近的聚类</li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703988074124-d559a990-6fae-474a-a8a7-92751cac5ff7.png"></li><li>修正各聚类中心值</li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703988138058-2387c2cd-e92a-4fa0-a627-2ab906afb06b.png"></li><li>计算所有样本对其相应聚类中心的总平均距离</li><li>判别分裂、合并及迭代运算等步骤<ol type="1"><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703988214159-336ce114-be3f-404a-894a-017b7fdb748e.png"></li></ol></li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703988534324-d50a8e29-079e-4d4a-9dbc-b6d8ada93415.png"></li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703988550334-9fbf190d-63dd-4478-8b2c-6d5c1c199531.png"></li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703988580800-9c280432-f359-409a-b150-5cc8dd11d500.png"></li></ol></li></ol></li></ol></li></ol></li><li>分级聚类方法<ol type="1"><li>先把所有样本各自视作一类，逐级聚合类，“聚合法”。（合并成一agglomerative</li><li>先把所有样本视作一类本一类，“分解法），逐级分解为每一样”。（分裂divisive）</li><li>n个混合样本，级聚合，∴先分为每级只把n类，依据相似性最大相似性大小，逐的两类聚合成一类形成一棵完整的树</li><li>关键问题：<ol type="1"><li>如何选取类间相似性度量</li><li>聚合过程应停留在哪一级决定最后聚合成几类<ol type="1"><li>若事先已知类型数目c,则应停留在n-c+1级上</li><li>若预先给定类间距离阈值D0,当类间距离大于阈值，则终止聚类过程</li><li>若c、D0均不知，先完成n→1全部聚类过程，然后根据类间相似性等，获取适当的聚类级作为最佳结果。</li></ol></li></ol></li></ol></li><li>基于模型的方法<ol type="1"><li>估计样本的概率密度函数</li><li>基于模型的方法：单峰子集分离法<ol type="1"><li>基本假定：各类样本的分布是单峰的，根据总体分布中的单峰来划分子集</li><li>样本在整个特征空间中呈现两个分布高峰。</li><li>如果从分布的谷点将此特征空间划分为两个区则对应每个区域，样本分布就只有一个峰值这些区域被称为单峰区域。</li><li>每个单峰区域看作一个不同的决策域。落在同一单峰区域的待分类样本就被划分成同一类，称为单峰子类</li></ol></li><li>混合模型<ol type="1"><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703989363811-2b112c3a-dbfb-4da7-9c82-1d3db790f35c.png"></li></ol></li><li>高斯混合模型<ol type="1"><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703989400944-f84d4d8a-93eb-4313-96dd-43f5fa5f581f.png"></li></ol></li><li>混合模型参数估计<ol type="1"><li>困难：<ol type="1"><li>已知一个数据集，包含未知类别标号的样本但知道它们是从若干个服从不同分布的聚类中独立抽取出来的</li><li>要根据这些样本同时估计出各个聚类的概率密度函数.</li></ol></li><li>非监督参数估计<ol type="1"><li>非监督极大似然估计<ol type="1"><li>理论上可解，但实际求解相当复杂</li></ol></li><li>GMM参数估计<ol type="1"><li>注意问题：<ol type="1"><li>1.点集的数据结构</li><li>2.样本的数量</li><li>3.所采用的距离度量和相似性度量</li><li>4.聚类准则</li><li>5.聚类数</li><li>6.样本各分量之间的尺度比例</li></ol></li></ol></li><li>E-M算法<ol type="1"><li>步骤：</li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703989588358-e2f69fe3-d2ad-41d8-90bf-4a5df18435ab.png"></li><li>1.初始化分布参数2.重复直到收敛</li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703989646174-dbee4fd9-a09d-406c-a206-73f76e8339ae.png"></li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703989657376-63c9e4fc-b1d1-4c9b-a5c7-0521502d7e77.png"></li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703989672134-df461dbc-507e-472d-b48f-8c06be3ce93a.png"></li><li></li></ol></li></ol></li></ol></li></ol></li></ol></li></ol>]]></content>
+    
+    
+    <categories>
+      
+      <category>AI</category>
+      
+      <category>ML</category>
+      
+      <category>PR &amp; ML</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>ML</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>8. SVM</title>
+    <link href="/2024/12/07/PR-ML/8-SVM/"/>
+    <url>/2024/12/07/PR-ML/8-SVM/</url>
+    
+    <content type="html"><![CDATA[<ol type="1"><li>将训练样本分开的超平面可能有很多,哪一个好呢?<ol type="1"><li>应选择”正中间”,容忍性好,鲁棒性高,泛化能力最强</li></ol></li><li>超平面方程<img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703991900223-9f16fbd9-cc47-4f63-8bd5-97432929ddfd.png"><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703991915422-cd3f3ab1-ebde-405b-9cbf-72bef355e08d.png"></li><li>svm基本型<ol type="1"><li>最大间隔:寻找参数w和b,使得γ最大.</li></ol></li><li>解的稀疏性<ol type="1"><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703992018245-3e7af13c-3c19-459e-8018-fc9665a4b0fc.png"></li><li><font style="color:#DF2A3F;">支持向量机解的稀疏性:训练完成后,大部分的训练样本都不需保留,最终模型仅与支持向量有关.</font></li></ol></li><li>核函数<ol type="1"><li>难以知道显式的核映射函数基本想法：不显式地设计核映射,而是设计核函数</li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703992106391-4619dcdc-87b7-421f-9b1d-3ab311973629.png"></li><li>只要一个对称函数所对应的核矩阵半正定,则它就能作为核函数来使用</li><li>对于一个半正定核矩阵，总能找到一个与之对应的核映射；每一个核函数都隐式的定义了一个再生核希尔伯特空间的特征空间。</li><li>常用核函数<ol type="1"><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703992302798-cd00f637-7c0e-402e-8543-f3ea50d61f11.png"></li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703992340433-3407881f-45ca-4da1-9e98-347664960727.png"></li></ol></li></ol></li><li>软间隔<ol type="1"><li>现实中,很难确定合适的核函数使得训练样本在特征空间中线性可分;同时一个线性可分的结果也很难断定是否有过拟合造成的.</li><li>引入”软间隔”的概念,允许支持向量机在一些样本上不满足约束</li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703992427189-9e248e4a-dc07-488d-be9f-c35e3e605199.png"></li><li>0/1损失函数<ol type="1"><li>基本想法：最大化间隔的同时,让不满足约束的样本应尽可能少</li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703992462151-50e9c1ea-6c37-44d5-8532-add25f1a1f8e.png"></li><li>存在的问题：0/1损失函数非凸、非连续,不易优化！</li></ol></li><li>替代损失函数数学性质较好,一般是0/1损失函数的上界</li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703992506344-2f92cf5f-23b9-4f2f-acd7-a12f2182d24a.png"></li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703992643592-b07c24ca-7e75-4845-b361-2b3873f097d2.png"></li><li>根据KKT条件可推得最终模型仅与支持向量有关,也即hinge损失函数依然保持了支持向量机解的稀疏性</li><li>正则化<ol type="1"><li>结构风险,描述模型的某些性质（超平面的间隔大小）</li><li>经验风险,描述模型与训练数据的契合程度，即训练集上的误差</li><li>通过替换上面两个部分,可以得到许多其他学习模型<ol type="1"><li>对数几率回归(LogisticRegression)</li><li>最小绝对收缩选择算子(LASSO</li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703992708694-4ce0a5bb-2477-42de-a4e3-025ca6447fd1.png"></li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703992730256-f637a6f0-1386-45fc-bd11-d42b856246e8.png"></li></ol></li></ol></li><li>软间隔支持向量机+对率损失<ol type="1"><li>如果用对率损失函数来替代0/1损失函数，几乎就得到对率回归模型。</li><li>主要优势在于输出具有自然概率意义，即给出预测标记的同时也给出了概率；</li><li>如果用于多分类任务；SVM则需要进一步推广；</li><li>对率损失函数是光滑的单调递减函数，不能导出类似支持向量的概念；</li><li>对率回归的解依赖于更多的训练样本，其预测开销更大；</li></ol></li></ol></li><li>SVM回归<ol type="1"><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703992816265-b03f84f6-eb25-4a2d-8a15-cc61fa96538f.png"></li><li>损失函数<ol type="1"><li>落入中间间隔带的样本不计算损失,即被认为是预测正确，从而使得模型获得稀疏性.</li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703993032662-34aeefa7-05df-4a3d-8467-edd888013398.png"></li><li>间隔带两侧的松弛程度可有所不同</li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703993065058-a17e6f6f-1e48-4124-b2b4-005505f5e4b4.png"></li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703993083218-978f8ce6-8e9c-446a-be24-6716de6a6ce8.png"></li></ol></li></ol></li><li>核方法<ol type="1"><li>无论是支持向量机还是支持向量回归,学得的模型总可以表示成核函数的线性组合</li><li>支持向量机的”最大间隔”思想</li><li>对偶问题及其解的稀疏性</li><li>通过向高维空间映射解决线性不可分的问题</li><li>引入”软间隔”缓解特征空间中线性不可分的问题</li><li>将支持向量的思想应用到回归问题上得到支持向量回归</li><li>将核方法推广到其他学习模型</li></ol></li></ol>]]></content>
+    
+    
+    <categories>
+      
+      <category>AI</category>
+      
+      <category>ML</category>
+      
+      <category>PR &amp; ML</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>ML</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>7. 决策树</title>
+    <link href="/2024/12/07/PR-ML/7-%E5%86%B3%E7%AD%96%E6%A0%91/"/>
+    <url>/2024/12/07/PR-ML/7-%E5%86%B3%E7%AD%96%E6%A0%91/</url>
+    
+    <content type="html"><![CDATA[<ol type="1"><li>决策树<ol type="1"><li>基于树结构来进行预测</li><li>决策过程中提出的每个判定问题都是对某个属性的“测试”</li><li>决策过程的最终结论对应了我们所希望的判定结果</li><li>每个测试的结果或是导出最终结论，或者导出进一步的判定问题，其考虑范围是在上次决策结果的限定范围之内</li><li>从根结点到每个叶结点的路径对应了一个判定测试序列</li><li><font style="color:#DF2A3F;">决策树学习的目的:为了产生一棵泛化能力强，即处理未见示例能力强的决策树</font></li></ol></li><li>基本算法<ol type="1"><li>当前结点包含的样本全部属于同一类别</li><li>当前属性集为空，或所有样本在所有属性上取值相同</li><li>当前结点包含的样本集合为空</li></ol></li><li>划分选择<ol type="1"><li><font style="color:#DF2A3F;">决策树学习的关键在于如何选择最优划分属性</font>。一般而言，随着划分过程不断进行，<font style="color:#DF2A3F;">我们希望决策树的分支结点所包含的样本尽可能属于同一类别，即结点的“纯度”(purity)越来越高</font></li><li>集合属于同一类别的纯度；属性划分集合属于同一类别的纯度</li><li>经典的属性划分方法：<ol type="1"><li>信息增益<ol type="1"><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703993422314-0a6df2a6-10d5-467a-8da8-4bad6011ccfa.png"></li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703993438274-45da96e5-6d57-40c7-be8f-1c9ab894f299.png"></li><li>存在的问题<ol type="1"><li>若把“编号”也作为一个候选划分属性，则其信息增益一般远大于其他属性。显然，这样的决策树不具有泛化能力，无法对新样本进行有效预测</li><li><font style="color:#DF2A3F;">信息增益对可取值数目较多的属性有所偏好</font></li></ol></li></ol></li><li>增益率<ol type="1"><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703993580339-e2671f4a-bf87-4d66-95ac-2761cb28ee34.png"></li></ol></li><li>基尼指数<ol type="1"><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703993624311-5baf3d62-8760-497f-90f2-b2a31393c439.png"></li></ol></li></ol></li></ol></li><li>剪枝处理<ol type="1"><li>为什么剪枝<ol type="1"><li><font style="color:#DF2A3F;">“剪枝”是决策树学习算法对付“过拟合”的主要手段</font></li><li>可通过“剪枝”来一定程度避免因决策分支过多，以致于把训练集自身的一些特点当做所有数据都具有的一般性质而导致的过拟合</li></ol></li><li>剪枝的基本策略<ol type="1"><li>预剪枝</li><li>后剪枝</li></ol></li><li><font style="color:#DF2A3F;">判断决策树泛化性能是否提升的方法</font><ol type="1"><li><font style="color:#DF2A3F;">留出法：预留一部分数据用作“验证集”以进行性能评估</font></li></ol></li><li>预剪枝<ol type="1"><li>决策树生成过程中，对每个结点在划分前先进行估计，若当前结点的划分不能带来决策树泛化性能提升，则停止划分并将当前结点记为叶结点，其类别标记为训练样例数最多的类别；</li><li>针对上述数据集，基于信息增益准则，选取属性“脐部”划分训练集。分别计算划分前（即直接将该结点作为叶结点）及划分后的验证集精度，判断是否需要划分。若划分后能提高验证集精度，则划分，对划分后的属性，执行同样判断；否则，不划分。</li><li><font style="color:#DF2A3F;">预剪枝的优缺点</font><ol type="1"><li>优点<ol type="1"><li>降低过拟合风险</li><li>显著减少训练时间和测试时间开销</li></ol></li><li>缺点<ol type="1"><li>欠拟合风险：有些分支的当前划分虽然不能提升泛化性能，但在其基础上进行的后续划分却有可能导致性能显著提高。预剪枝基于“贪心”本质禁止这些分支展开，带来了欠拟合风险</li></ol></li></ol></li></ol></li><li>后剪枝<ol type="1"><li>先从训练集生成一棵完整的决策树，然后自底向上的对非叶结点进行考察，若将该结点对应的子树替换为叶结点能带来决策树泛化性能提升，则将该子树替换为叶结点</li><li><font style="color:#DF2A3F;">后剪枝的优缺点</font><ol type="1"><li>优点<ol type="1"><li>后剪枝比预剪枝保留了更多的分支，欠拟合风险小，泛化性能往往优于预剪枝决策树</li></ol></li><li>缺点<ol type="1"><li>训练时间开销大：后剪枝过程是在生成完全决策树之后进行的，需要自底向上对所有非叶结点逐一考察</li></ol></li></ol></li></ol></li></ol></li><li>连续与缺失值一连续值处理<ol type="1"><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703993860465-a4cc59dc-3f80-4317-8254-a211c4f00c01.png"></li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703993897067-b0b1a19e-5eae-4949-a64f-ae561f0a5479.png"></li><li>与离散属性不同，若当前结点划分属性为连续属性，该属性还可作为其后代结点的划分属性</li><li>不完整样本，即样本的属性值缺失<ol type="1"><li>仅使用无缺失的样本进行学习?</li><li>对数据信息极大的浪费</li></ol></li><li>缺失值处理<ol type="1"><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703993967497-b5a61536-0f47-416b-b523-cdbc2df091fa.png"></li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703993985245-134d9b80-5536-462a-8b37-2dce72ef62db.png"></li><li>根据无缺失样本所占比例来打折<br></li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703993998706-e82214eb-e945-4f03-ae2d-1483fa701f4d.png"></li></ol></li></ol></li><li>多变量决策树<ol type="1"><li>单变量决策树分类边界:轴平行</li><li>多变量决策树<br></li><li>随机森林<ol type="1"><li>建立多个决策树，通过多棵树的投票来进行决策；</li><li>采用自助法（自举重）采样，得到多个样本集为每个样本集构造一个决策树，得到多棵决策树；</li><li>对多棵决策树的输出进行投票，以得票最多的类作为随机森林的决策，</li><li>被认为是一种集成学习方法。</li></ol></li></ol></li><li>homemessage 1. 属性划分选择 2. 剪枝处理（预剪枝，后剪枝） 3.属性连续值和缺失值的处理 4. 单变量决策树到多变量决策树</li></ol>]]></content>
+    
+    
+    <categories>
+      
+      <category>AI</category>
+      
+      <category>ML</category>
+      
+      <category>PR &amp; ML</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>ML</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>6. 线性分类器</title>
+    <link href="/2024/12/07/PR-ML/6-%E7%BA%BF%E6%80%A7%E5%88%86%E7%B1%BB%E5%99%A8/"/>
+    <url>/2024/12/07/PR-ML/6-%E7%BA%BF%E6%80%A7%E5%88%86%E7%B1%BB%E5%99%A8/</url>
+    
+    <content type="html"><![CDATA[<ol type="1"><li>机器学习<ol type="1"><li>“假设用P来评估计算机程序在某任务类T上的性能，若一个程序通过利用经验E在T中任务上获得了性能改善，列则我们就说关于T和P,该程序对E进行了学习”</li><li>机器学习致力于研究如何通过计算的手段，利用经验来改善系统自身的性能，从而在计算机上从数据中产生“模型”，用于对新的情况给出判断</li><li>应用<ol type="1"><li>Learningtoclassifytextdocuments</li><li>Learningtodetectobjectsinimages</li><li>LearningtoPredictEmergencyC-Sections</li></ol></li><li>预测目标<ol type="1"><li>分类：离散值<ol type="1"><li>二分类</li><li>多分类</li></ol></li><li>回归：连续值</li><li>聚类：无标记信息</li></ol></li><li>由于标记信息<ol type="1"><li>监督学习：分类、回归</li><li>无监督学习：聚类</li><li>半监督学习：两者结合</li></ol></li></ol></li><li>泛化能力<ol type="1"><li>机器学习的目标是使得学到的模型能很好的适用于“新样本”,而不仅仅是训练集合，我们称模型适用于新样本的能力为泛化(generalization)能力。</li><li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1704005694509-93aaa60c-b9e8-417d-82b3-e2e5c249fe32.png">独立同分布</li></ol></li><li>归纳偏好<ol type="1"><li>归纳偏好可看作学习算法自身在一个可能很庞大的假设空间中对假设进行选择的启发式或“价值观”.</li><li>“奥卡姆剃刀”是一种常用的、自然科学研究中最基本的原则，即“若有多个假设与观察一致，选最简单的那个”.</li><li>具体的现实问题中，学习算法本身所做的假设是否成立，也即算法的归纳偏好是否与问题本身匹配，大多数时候直接决定了算法能否取得好的性能.</li><li>学习过程中对某种类型假设的偏好称作归纳偏好<br></li><li>总误差与学习算法无关！</li></ol></li></ol>]]></content>
+    
+    
+    <categories>
+      
+      <category>AI</category>
+      
+      <category>ML</category>
+      
+      <category>PR &amp; ML</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>ML</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>4. 特征选择</title>
+    <link href="/2024/12/07/PR-ML/4-%E7%89%B9%E5%BE%81%E9%80%89%E6%8B%A9/"/>
+    <url>/2024/12/07/PR-ML/4-%E7%89%B9%E5%BE%81%E9%80%89%E6%8B%A9/</url>
+    
+    <content type="html"><![CDATA[<ol type="1"><li>通常在得到实际对象的若干具体特征之后，再由这些原始特征产生出对分类识别最有效、数目最少的特征，这就是特征提取与选择的任务<ol type="1"><li>目的是使在最小维数特征空间中异类模式点相距较远（类间距离较大），而同类模式点相距较近（类内距离较小）</li></ol></li><li>特征选择与提取的任务：<ol type="1"><li>选出最有代表性的特征，实现特征空间维数的压缩，用最少的特征达到所要求的分类识别正确率。</li><li>存在困难<ol type="1"><li>获得的特征测量值不多。实现方法及经济上的限制等提供的分类信息是否足够，是否能获得较好的分类效果</li><li>获得的测量值太多。特征维数灾难</li></ol></li></ol></li><li>如何去掉冗余特征,如何保证分类识别精度的前提下，减少特征维数，提高分类器运算效率和准确度</li><li>特征选择与提取的两个基本途径<ol type="1"><li>直接选择法<ol type="1"><li>统计检验法、分支定界法、遗传算法</li></ol></li><li>变换法<ol type="1"><li>基于可分性判据的特征选择、基于误判概率的特征选择、离散K-L变换法(DKLT)、基于决策界的特征选择</li><li>基于类的概率密度函数的可分性判据</li><li>基于熵的可分性判据</li></ol></li></ol></li><li>预处理<ol type="1"><li>数据归一化</li><li>剔除离群值(outlier)</li><li>缺失数据处理</li></ol></li><li>最优搜索法<ol type="1"><li>分支定界法</li></ol></li></ol>]]></content>
+    
+    
+    <categories>
+      
+      <category>AI</category>
+      
+      <category>ML</category>
+      
+      <category>PR &amp; ML</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>ML</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>3. 模型评估与选择</title>
+    <link href="/2024/12/07/PR-ML/3-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0%E4%B8%8E%E9%80%89%E6%8B%A9/"/>
+    <url>/2024/12/07/PR-ML/3-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0%E4%B8%8E%E9%80%89%E6%8B%A9/</url>
+    
+    <content type="html"><![CDATA[<p><img src="/2024/12/07/PR-ML/3-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0%E4%B8%8E%E9%80%89%E6%8B%A9/1704104275645-ae83eb1d-2aa6-44f3-9495-2f80d6273c5d.png"></p><p><img src="/2024/12/07/PR-ML/3-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0%E4%B8%8E%E9%80%89%E6%8B%A9/1704104285344-81b01d2e-a4e6-4b68-976f-c3cf3f9ea527.png"></p><p><img src="/2024/12/07/PR-ML/3-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0%E4%B8%8E%E9%80%89%E6%8B%A9/1704104294421-ef8303c7-da6f-4a40-817b-0486d20561ba.png"></p><p><img src="/2024/12/07/PR-ML/3-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0%E4%B8%8E%E9%80%89%E6%8B%A9/1704104316742-518ffd2b-2293-4385-bfea-4ee6ee3b795e.png"></p><p><img src="/2024/12/07/PR-ML/3-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0%E4%B8%8E%E9%80%89%E6%8B%A9/1704104329899-4736ca94-9e3e-495c-846a-2c80138897e1.png"></p><p><img src="/2024/12/07/PR-ML/3-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0%E4%B8%8E%E9%80%89%E6%8B%A9/1704104338921-ec46bebb-2d39-462d-9040-a9db43f4a4c9.png"></p><p><img src="/2024/12/07/PR-ML/3-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0%E4%B8%8E%E9%80%89%E6%8B%A9/1704104346256-9b5a8682-ea30-4c68-a3bc-b55e59142d84.png"></p><p><img src="/2024/12/07/PR-ML/3-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0%E4%B8%8E%E9%80%89%E6%8B%A9/1704104355646-6dc8b2cb-d77d-45da-9cec-fdf8b9428d9d.png"></p><p><img src="/2024/12/07/PR-ML/3-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0%E4%B8%8E%E9%80%89%E6%8B%A9/1704104375262-a41629e6-bb0e-483b-a5b1-9ed00e07f61c.png"></p><p><img src="/2024/12/07/PR-ML/3-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0%E4%B8%8E%E9%80%89%E6%8B%A9/1704104390026-1b3742cf-b743-4b5c-9244-b3315f4c4a82.png"></p><p><img src="/2024/12/07/PR-ML/3-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0%E4%B8%8E%E9%80%89%E6%8B%A9/1704104396432-4229f3b8-528d-4dd9-bff7-860a2713a217.png"></p><p><img src="/2024/12/07/PR-ML/3-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0%E4%B8%8E%E9%80%89%E6%8B%A9/1704104409063-eab13c30-516f-488c-9b22-a5ab4ebb25fb.png"></p><p><img src="/2024/12/07/PR-ML/3-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0%E4%B8%8E%E9%80%89%E6%8B%A9/1704104462011-3aac4126-8a0b-4ec4-9dcf-2f4bb41ccb3d.png"></p><p><img src="/2024/12/07/PR-ML/3-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0%E4%B8%8E%E9%80%89%E6%8B%A9/1704104478573-17303a80-eb58-4130-892b-00bc0aaceaf1.png"></p><p><img src="/2024/12/07/PR-ML/3-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0%E4%B8%8E%E9%80%89%E6%8B%A9/1704104508003-1738f440-6520-458d-8d13-da43bc37eefc.png"></p><p><img src="/2024/12/07/PR-ML/3-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0%E4%B8%8E%E9%80%89%E6%8B%A9/1704104527106-5d56cdd6-1f93-432a-85f0-5630cbba018e.png"></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>AI</category>
+      
+      <category>ML</category>
+      
+      <category>PR &amp; ML</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>ML</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>2. 贝叶斯分类器</title>
+    <link href="/2024/12/07/PR-ML/2-%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB%E5%99%A8/"/>
+    <url>/2024/12/07/PR-ML/2-%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB%E5%99%A8/</url>
+    
+    <content type="html"><![CDATA[<ol type="1"><li>采用贝叶斯决策理论分类的前提：<ol type="1"><li>目标（事物）的观察值是随机的，服从一定的概率分布。</li><li>即：模式不是一个确定向量，而是一个随机向量。</li></ol></li><li>用贝叶斯决策理论分类的要求：<img src="https://cdn.nlark.com/yuque/0/2024/png/35229143/1704100452756-b1cc3f81-0bf8-4c2c-98d0-28eb5994f9e0.png"><ol type="1"><li>各类别总体概率分布是已知的</li><li>决策分类的类别一定，例：有C类</li></ol></li></ol><p><img src="/2024/12/07/PR-ML/2-%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB%E5%99%A8/1704103082532-54e864ec-100d-4cea-b5fc-a37d156ca03c.png"></p><p><img src="/2024/12/07/PR-ML/2-%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB%E5%99%A8/1704102729892-92dfc030-dd12-44b5-93ae-1037fb341f7c.png"></p><p><img src="/2024/12/07/PR-ML/2-%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB%E5%99%A8/1704102786264-f9d6a164-b1f3-4a52-91ae-5131967c264d.png"></p><p><img src="/2024/12/07/PR-ML/2-%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB%E5%99%A8/1704103181498-1b128033-32a5-4798-96b5-0c7cd993c48e.png"></p><p><img src="/2024/12/07/PR-ML/2-%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB%E5%99%A8/1704103598175-ac8b51b7-7d79-4ca6-9808-e46a27208b36.png"><img src="/2024/12/07/PR-ML/2-%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB%E5%99%A8/1704103753365-67a4d050-0232-43c0-94ce-39ef9a0bbbcf.png"></p><p><img src="/2024/12/07/PR-ML/2-%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB%E5%99%A8/1704103806617-83268800-8eb7-4e60-ba0b-879109cf69e7.png"></p><p><img src="/2024/12/07/PR-ML/2-%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB%E5%99%A8/1704103919864-8ff17589-75d6-4e5f-b826-7b271c188062.png"></p><p><img src="/2024/12/07/PR-ML/2-%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB%E5%99%A8/1704103937303-458900b4-5dc9-4ef8-be84-5cfdea609962.png"></p><p><img src="/2024/12/07/PR-ML/2-%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB%E5%99%A8/1704103963053-4db62972-6c06-43ae-b726-65ab4b76e07b.png"></p><p><img src="/2024/12/07/PR-ML/2-%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB%E5%99%A8/1704104018805-dd26773e-9521-48dc-9b30-6c77af8da43b.png"></p><p><img src="/2024/12/07/PR-ML/2-%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB%E5%99%A8/1704104042606-00397034-1c3a-4a19-b64a-b3d63ba82d31.png"></p><p><img src="/2024/12/07/PR-ML/2-%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB%E5%99%A8/1704104055574-46e35028-9508-43ad-b1b9-8e16620b2aca.png"></p><p><img src="/2024/12/07/PR-ML/2-%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB%E5%99%A8/1704104069850-928e71b9-eda5-428b-8929-5e48538aaac6.png"></p><p><img src="/2024/12/07/PR-ML/2-%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB%E5%99%A8/1704104086349-86ea3699-c004-4429-84de-255060370fbc.png"></p><p><img src="/2024/12/07/PR-ML/2-%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB%E5%99%A8/1704104108389-ca407756-70eb-4840-b6a8-64ded6adb36f.png"></p><p><img src="/2024/12/07/PR-ML/2-%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB%E5%99%A8/1704104138093-5666ca99-a0f4-4c4d-8ae8-b8b5174e2416.png"></p><p><img src="/2024/12/07/PR-ML/2-%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB%E5%99%A8/1704104161307-99908719-eb8d-431d-8484-5d3deab0a46d.png"></p><p><img src="/2024/12/07/PR-ML/2-%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB%E5%99%A8/1704104181733-9dad63df-a8d3-41ed-93b6-2ef0bb8932f3.png"></p><p><img src="/2024/12/07/PR-ML/2-%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB%E5%99%A8/1704104213264-6e0a1063-0ede-49b5-87b3-28e9f8409184.png"></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>AI</category>
+      
+      <category>ML</category>
+      
+      <category>PR &amp; ML</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>ML</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>1. 绪论</title>
+    <link href="/2024/12/07/PR-ML/1-%E7%BB%AA%E8%AE%BA/"/>
+    <url>/2024/12/07/PR-ML/1-%E7%BB%AA%E8%AE%BA/</url>
+    
+    <content type="html"><![CDATA[<p><img src="/2024/12/07/PR-ML/1-%E7%BB%AA%E8%AE%BA/1703913032049-847ee94d-93a4-41a5-b278-92a19f537d29.png"></p><h2 id="智能识别系统的组成">智能识别系统的组成：</h2><p><img src="/2024/12/07/PR-ML/1-%E7%BB%AA%E8%AE%BA/1701571936566-b1fb59ad-d79a-4c1b-813b-38eb8de2eff1.png"></p><p>1.信息获取（数据采集）：</p><ul><li>对<strong>信号、图像、数值表(数据)</strong>的采集。</li><li>即：要用计算机可以运算的符号来表示所研究的对象。如图像：<strong>测量、采样、量化</strong>等。</li></ul><p>2.预处理：</p><ul><li>减小或消除模式获取过程中的噪声、干扰、提高SN;</li><li>加强有用信息，进行复原等，如减小数据图像模糊及几何失真，提高清晰度；</li><li>非线性模式转化成线性模式。</li><li>这个环节的内容及方法很多：如滤波、变换、编码、标准化等</li></ul><p>3.特征选择和变换</p><ul><li>以某种<strong>判决规则</strong>为准则，选取有效的特征，即为<strong>特征选择。</strong></li><li>采用某种<strong>变换</strong>对特征空间的压缩，称<strong>为特征变换</strong>。</li><li><img src="/2024/12/07/PR-ML/1-%E7%BB%AA%E8%AE%BA/1701572163877-a341fb09-320b-49c1-ac1b-a7571b80a690.png"></li></ul><p>4.分类器设计</p><ul><li>分类器设计就是所谓的<strong>学习训练过程</strong>。</li><li>用一定数量的样本确定某种判别准则，通过反复输入、修正，<strong>直到分类错误率不超过给定值为止</strong>(或错误率最小，或损失最小)，完成学习过程。</li><li>训练学习方法：<ul><li><strong>监督学习、无监督学习</strong>（无先验知识，甚至类别数也未知)，半监督学习。</li></ul></li><li>性能评估：采用<strong>交叉验证</strong>等方法评估训练模型的性能</li></ul><p>5.分类决策</p><ul><li>按<strong>分类判别准则</strong>，将被识别模式进行分类判决，输出分类结果</li></ul><h2 id="归纳偏好">归纳偏好</h2><p>学习过程中<strong>对某种类型假设的偏好</strong>称作归纳偏好</p><ul><li>归纳偏好可看作学习算法自身在一个可能很庞大的假设空间中对假设进行选择的启发式或“价值观”</li><li>“<strong>奥卡姆剃刀</strong>”是一种常用的、自然科学研究中最基本的原则，即“若有多个假设与观察一致，选<strong>最简单</strong>的那个”</li><li>具体的现实问题中，学习算法本身所做的假设是否成立，也即<strong>算法的归纳偏好是否与问题本身匹配</strong>，大多数时候直接决定了算法能否取得好的性能</li></ul><h2 id="基本概念">基本概念</h2><ul><li>模式：对象的<strong>组成成分</strong>或<strong>影响因素</strong>间存在的一条<strong>规律性</strong>关系。</li><li>模式类（模型）：具有某些<strong>共同特征的模式</strong>的集合</li><li>模式识别：研究一种<strong>自动技术</strong>，依靠这种技术，机器将<strong>自动（或人尽量少的干涉）</strong>把待识别模式分配到各自的模式类中去</li><li>学习：从<strong>数据中学得模型</strong>的过程</li><li>样本（示例）：一个具体的<strong>研究（客观）对象</strong>。如患者，某人写的一个汉字，一幅图片等。</li><li>特征（属性）：能描述<strong>模式特性</strong>的量。通常用一个矢量<img src="/2024/12/07/PR-ML/1-%E7%BB%AA%E8%AE%BA/1701572774910-0567c044-6497-45d3-b272-2bc0617f6045.png">表示，称之为<strong>特征矢量</strong>，记为<img src="/2024/12/07/PR-ML/1-%E7%BB%AA%E8%AE%BA/1701572810100-f778c9bc-6c7f-4620-bb53-23dd47a31fed.png"></li></ul><h2 id="随机矢量的描述">随机矢量的描述</h2><p>在模式识别过程中，要对许多具体对象进行测量，以获得许多次观测值。每次观测值不一定相同，所以对许多对象而言，各个特征分量都是随机变量，即<strong>许多对象的特征向量在n维空间中呈随机性分布</strong>，称为<strong>随机矢量</strong>。</p><p>(一)随机矢量的分布函数：</p><p><img src="/2024/12/07/PR-ML/1-%E7%BB%AA%E8%AE%BA/1701573000621-33a7e818-c7c8-42d9-bed3-af67c8a0d6dd.png"></p><p><img src="/2024/12/07/PR-ML/1-%E7%BB%AA%E8%AE%BA/1701573235972-ecadd41f-6700-430c-9b6d-4580853e0737.png"></p><p>(二)随机矢量的数字特征：</p><p><img src="/2024/12/07/PR-ML/1-%E7%BB%AA%E8%AE%BA/1701573320476-addf517b-d5ef-4802-9964-05d44122e144.png"></p><p>⑵ 条件期望</p><p><img src="/2024/12/07/PR-ML/1-%E7%BB%AA%E8%AE%BA/1701573369880-6a75fbb7-5997-489e-b35d-d255d4faf27d.png"></p><p>⑶ 协方差矩阵</p><p><img src="/2024/12/07/PR-ML/1-%E7%BB%AA%E8%AE%BA/1701573729163-68a1f0b6-8b32-4290-a4c5-0943dc6a9fe2.png"></p><p><img src="/2024/12/07/PR-ML/1-%E7%BB%AA%E8%AE%BA/1701573796171-f9130d31-6e72-4065-b90e-18bb88aeedd8.png"></p><p>(4)自相关矩阵</p><p><img src="/2024/12/07/PR-ML/1-%E7%BB%AA%E8%AE%BA/1701574074582-b1ea4435-3bb9-4db9-95e0-bf5869450658.png"></p><ol start="5" type="1"><li>相关系数</li></ol><p><img src="/2024/12/07/PR-ML/1-%E7%BB%AA%E8%AE%BA/1701574139149-fd358de8-5c43-438a-b759-4b4cfe6e4f87.png"></p><p>一维正态分布</p><p><img src="/2024/12/07/PR-ML/1-%E7%BB%AA%E8%AE%BA/1704100109817-e9a6908f-6eea-4ac8-b7fb-bca232651af6.png"></p><p><img src="/2024/12/07/PR-ML/1-%E7%BB%AA%E8%AE%BA/1704100146196-5d511052-b8d4-4618-9f6b-99702c13a3ac.png"></p><p><img src="/2024/12/07/PR-ML/1-%E7%BB%AA%E8%AE%BA/1704100242672-7ea0b4ba-119d-47e8-9be8-71641e494300.png"></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>AI</category>
+      
+      <category>ML</category>
+      
+      <category>PR &amp; ML</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>ML</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>17. 读写分离</title>
     <link href="/2024/12/06/MySQL/17-%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB/"/>
     <url>/2024/12/06/MySQL/17-%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB/</url>
@@ -5006,6 +6221,8 @@
       
       <category>ML</category>
       
+      <category>ML-吴恩达</category>
+      
     </categories>
     
     
@@ -5032,6 +6249,8 @@
       <category>AI</category>
       
       <category>ML</category>
+      
+      <category>ML-吴恩达</category>
       
     </categories>
     
@@ -5060,6 +6279,8 @@
       
       <category>ML</category>
       
+      <category>ML-吴恩达</category>
+      
     </categories>
     
     
@@ -5086,6 +6307,8 @@
       <category>AI</category>
       
       <category>ML</category>
+      
+      <category>ML-吴恩达</category>
       
     </categories>
     
@@ -5114,6 +6337,8 @@
       
       <category>ML</category>
       
+      <category>ML-吴恩达</category>
+      
     </categories>
     
     
@@ -5140,6 +6365,8 @@
       <category>AI</category>
       
       <category>ML</category>
+      
+      <category>ML-吴恩达</category>
       
     </categories>
     
@@ -5168,6 +6395,8 @@
       
       <category>ML</category>
       
+      <category>ML-吴恩达</category>
+      
     </categories>
     
     
@@ -5194,6 +6423,8 @@
       <category>AI</category>
       
       <category>ML</category>
+      
+      <category>ML-吴恩达</category>
       
     </categories>
     

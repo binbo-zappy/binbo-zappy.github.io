@@ -1,0 +1,823 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="master宕机 如果主从模式下的master宕机，一般处理流程：  将宕机的master下线 找一个slave作为master 通知所有的slave连接新的master 启动新的master与slave 全量复制*N + 部分复制*N  出现的问题：  谁来确认master宕机了 选新的master如何选？ 修改配置后，原来的master恢复了怎么办？  哨兵 哨">
+<meta property="og:type" content="article">
+<meta property="og:title" content="14. 哨兵">
+<meta property="og:url" content="http://binbo-zappy.github.io/2024/12/07/Redis/14-%E5%93%A8%E5%85%B5/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="master宕机 如果主从模式下的master宕机，一般处理流程：  将宕机的master下线 找一个slave作为master 通知所有的slave连接新的master 启动新的master与slave 全量复制*N + 部分复制*N  出现的问题：  谁来确认master宕机了 选新的master如何选？ 修改配置后，原来的master恢复了怎么办？  哨兵 哨">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/redis.jpg">
+<meta property="article:published_time" content="2024-12-07T06:22:37.000Z">
+<meta property="article:modified_time" content="2024-12-07T06:54:10.113Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="Redis">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/redis.jpg">
+  
+  
+  
+  <title>14. 哨兵 - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="14. 哨兵"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-12-07 14:22" pubdate>
+          2024年12月7日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          12 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">14. 哨兵</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="master宕机">master宕机</h1>
+<p>如果主从模式下的master宕机，一般处理流程：</p>
+<ol type="1">
+<li>将宕机的master下线</li>
+<li>找一个slave作为master</li>
+<li>通知所有的slave连接新的master</li>
+<li>启动新的master与slave</li>
+<li><code>全量复制*N + 部分复制*N</code></li>
+</ol>
+<p>出现的问题：</p>
+<ul>
+<li>谁来确认master宕机了</li>
+<li>选新的master如何选？</li>
+<li>修改配置后，原来的master恢复了怎么办？</li>
+</ul>
+<h1 id="哨兵">哨兵</h1>
+<p>哨兵（sentinel）是一个分布式系统，用于对主从结构中的每台服务器进行监控，当出现故障时通过投票机制选择新的master并将所有slave连接到新的master。</p>
+<p>作用：</p>
+<ul>
+<li>监控</li>
+</ul>
+<blockquote>
+<p>不断的检查master和slave是否正常运行。</p>
+<p>master存活检测、master与slave运行情况检测</p>
+</blockquote>
+<ul>
+<li>通知（提醒）</li>
+</ul>
+<blockquote>
+<p>当被监控的服务器出现问题时，向其他（哨兵间，客户端）发送通知</p>
+</blockquote>
+<ul>
+<li>自动故障转移</li>
+</ul>
+<blockquote>
+<p>断开master与slave连接，选取一个slave作为master，将其他slave连接到新的master，并告知客户端新的服务器地址。</p>
+</blockquote>
+<p>哨兵也是一台redis服务器，只是不提供数据服务。</p>
+<p>通常哨兵配置数量为单数。</p>
+<h1 id="哨兵搭建示例">哨兵搭建示例</h1>
+<p>配置哨兵（参考 sentinel.conf 配置文件）</p>
+<p>编写配置文件sentinel-端口号.conf：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs plain">port 26379<br>daemonize no<br>pidfile /var/run/redis-sentinel.pid<br>logfile &quot;&quot;<br>dir /tmp<br># sentinel monitor [自定义的名称] 监控的master的ip和端口 判断master宕机的哨兵数量<br># 如果有2台哨兵认为master宕机了，master就下线<br>sentinel monitor mymaster 127.0.0.1 6379 2<br># master判定宕机的未响应时长（单位毫秒）<br>sentinel down-after-milliseconds mymaster 30000<br># 新的master上来之后，进行数据同步时，一次多少个数据开始同步<br>sentinel parallel-syncs mymaster 1<br># 多久未同步完成算作超时（单位毫秒）<br>sentinel failover-timeout mymaster 180000<br>sentinel deny-scripts-reconfig yes<br></code></pre></td></tr></table></figure>
+<p>启动哨兵：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">redis-sentinel sentinel-端口号.conf<br></code></pre></td></tr></table></figure>
+<p>使用客户端连接时，依然是<code>redis-cli</code>启动客户端，但是不允许使用<code>set</code>、<code>get</code>等指令。</p>
+<p>哨兵启动之后，刚刚编写的配置文件会被自动重写一部分，例如变为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs plain">port 26379<br>daemonize yes<br>pidfile &quot;/var/run/redis-sentinel.pid&quot;<br>logfile &quot;26379.log&quot;<br>dir &quot;/home/redis/data&quot;<br>sentinel myid d957acd3913031c3bec970b13f9a2cc446230d25<br>sentinel deny-scripts-reconfig yes<br>sentinel monitor mymaster 127.0.0.1 6379 2<br>sentinel config-epoch mymaster 0<br>sentinel leader-epoch mymaster 0<br># Generated by CONFIG REWRITE<br>protected-mode no<br>maxclients 4064<br>user default on nopass ~* +@all<br>sentinel known-replica mymaster 127.0.0.1 6381<br>sentinel known-replica mymaster 127.0.0.1 6380<br>sentinel known-sentinel mymaster 127.0.0.1 26380 5b8d465eba4e61f72f245cc12d32d4c45b812ae5<br>sentinel known-sentinel mymaster 127.0.0.1 26381 8812ba72638e42fbbc1a9af8a8a2e1716e223011<br>sentinel current-epoch 0<br></code></pre></td></tr></table></figure>
+<h1 id="工作原理">工作原理</h1>
+<p>三个阶段：</p>
+<ul>
+<li>监控</li>
+</ul>
+<blockquote>
+<p>同步信息</p>
+</blockquote>
+<ul>
+<li>通知</li>
+</ul>
+<blockquote>
+<p>保持连通</p>
+</blockquote>
+<ul>
+<li>故障转移</li>
+</ul>
+<blockquote>
+<p>发现问题</p>
+<p>选择竞选负责人</p>
+<p>优选新的master</p>
+<p>新master上任，其他slave切换master，原master改为slave</p>
+</blockquote>
+<h2 id="监控阶段">监控阶段</h2>
+<p>同步各个节点的状态信息</p>
+<ul>
+<li>通过ping指令获取各个sentinel的状态（是否在线）</li>
+<li>通过info指令获取master的状态
+<ul>
+<li>master的属性：runid、role:master</li>
+<li>各个slave的详细信息</li>
+</ul></li>
+<li>通过info获取所有slave的状态（根据master中的slave信息）
+<ul>
+<li>slave的属性：runid、role:slave、master_host、master_port、offset.....</li>
+</ul></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs plain">sentinel[1]-&gt;master: 发送指令：info \n 获取master状态<br>sentinel[1]-&gt;master: 建立cmd连接<br>note right of master: master记录的信息：\n master信息\nslaves信息\n当前master连接的sentinels<br>note left of sentinel[1]: sentinel[1]记录的信息：\nmaster信息\nslaves信息\n当前master连接的sentinels<br>note left of sentinel[1]: sentinel[1]向slaves发送info指令，\n获取slaves状态<br># 此时又增加了一台哨兵 sentinel[2]<br>sentinel[2]-&gt;master: 发送指令：info<br>sentinel[2]-&gt;master: 建立cmd连接<br>note right of master: master更新记录的信息：\n当前master连接的sentinels<br>note right of sentinel[2]: sentinel[2]记录的信息：\nmaster信息\nslaves信息\n当前master连接的sentinels<br>note right of sentinel[2]: sentinel[2]向slaves发送info指令，\n获取slaves状态<br>sentinel[2]-&gt;sentinel[1]: 建立通道：publish / subscribe \n用于哨兵间数据同步<br>sentinel[1]-&gt;sentinel[2]: 发送指令：ping \n获取各个sentinel状态<br></code></pre></td></tr></table></figure>
+<h2 id="通知阶段">通知阶段</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs plain">sentinel[1]-&gt;master/slaves: publish sentnel: hello<br>master/slaves-&gt;sentinel[1]: 返回状态信息<br>note left of sentinel[1]: 在哨兵间的publish/subscribe网络中\n发布master/slaves的状态信息<br></code></pre></td></tr></table></figure>
+<h2 id="故障转移阶段">故障转移阶段</h2>
+<p>确认master下线流程：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs plain">sentinel[1]-&gt;master: 发送hello指令无响应<br>sentinel[1]-&gt;master: 连续发送hello指令<br>note left of sentinel[1]: sentinel[1]将master标记为：SRI_S_DOWN \n S_DOWN：主观下线<br>sentinel[1]-&gt;sentinel[2]: 通过哨兵间的发布/订阅通道\n向其他哨兵传播master下线信息\n SENTINEL is-master-down-by-addr\n服务器host，port，发起方，状态....<br>sentinel[2]-&gt;master: 向master连续发送hello指令<br>sentinel[2]-&gt;sentinel[1]: sentinel[2]通过哨兵间发布/订阅通道\n确认master下线信息<br>note right of sentinel[2]: 超过一定数量的哨兵认为master下线\n（数量在哨兵配置文件配置）\nmaster被标记为：SRI_O_DOWN\nO_DOWN：客观下线<br></code></pre></td></tr></table></figure>
+<p>投票选择哨兵间的leader：</p>
+<p>每个哨兵向哨兵间发布/订阅通道内发送信息：</p>
+<p>SENTINEL is-master-down-by-addr ....</p>
+<ul>
+<li>下线的master的ip</li>
+<li>下线的master的端口号</li>
+<li>哨兵自己参与哨兵leader竞选的次数</li>
+<li>哨兵自己的runid</li>
+</ul>
+<p>每一个哨兵作为参选者，同时也是投票者，每个哨兵有一票。哨兵根据自己接收到其他哨兵发送信息的先后顺序，把自己的票投给对应的哨兵。最终汇总得票结果，选出哨兵leader。如果第一轮没有选出来leader，再进行一轮投票，直至得出哨兵leader。每增加一轮，哨兵的参与竞选次数会增加1。</p>
+<p>哨兵leader 从slave服务器里列表中挑选备用master转正，选择的原则：</p>
+<ol type="1">
+<li>备选的slave需要是在线的</li>
+<li>给slave不停发送hello消息，淘汰掉响应慢的</li>
+<li>淘汰与原master断开时间久的</li>
+<li>优先原则
+<ul>
+<li>比较优先级</li>
+<li>比较数据同步的offset</li>
+<li>选择runid比较小的</li>
+</ul></li>
+</ol>
+<p>哨兵leader发送指令告知新的master：</p>
+<ul>
+<li>向新的master发送<code>slaveof no one</code> 指令</li>
+<li>向其他slave发送<code>slaveof 新master的ip 端口号</code></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/" class="category-chain-item">后端开发</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Redis/" class="category-chain-item">Redis</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Redis/" class="print-no-link">#Redis</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>14. 哨兵</div>
+      <div>http://binbo-zappy.github.io/2024/12/07/Redis/14-哨兵/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年12月7日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/12/07/Redis/15-%E9%9B%86%E7%BE%A4/" title="15. 集群">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">15. 集群</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/12/07/Redis/13-%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/" title="13. 主从复制">
+                        <span class="hidden-mobile">13. 主从复制</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

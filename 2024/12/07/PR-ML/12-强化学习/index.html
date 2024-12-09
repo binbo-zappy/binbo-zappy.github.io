@@ -1,0 +1,1061 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="强化学习应用  两个应用  强化学习常用什么过程描述  马尔科夫性是什么  强化学习问题基本设置  机器所处环境E 状态空间：是机器感知到的环境的描述 机器能采取的行为空间A 策略(policy)π：X→A(或π：X×A→R) 潜在的状态转移(概率)函数Ｐ：X×X×A→R 潜在的奖赏(reward)函数Ｒ：X×X×A→R或Ｒ：X×X→R 强化学习对应四元组">
+<meta property="og:type" content="article">
+<meta property="og:title" content="12. 强化学习">
+<meta property="og:url" content="http://binbo-zappy.github.io/2024/12/07/PR-ML/12-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="强化学习应用  两个应用  强化学习常用什么过程描述  马尔科夫性是什么  强化学习问题基本设置  机器所处环境E 状态空间：是机器感知到的环境的描述 机器能采取的行为空间A 策略(policy)π：X→A(或π：X×A→R) 潜在的状态转移(概率)函数Ｐ：X×X×A→R 潜在的奖赏(reward)函数Ｒ：X×X×A→R或Ｒ：X×X→R 强化学习对应四元组">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/pr-ml.jpg">
+<meta property="article:published_time" content="2024-12-07T04:58:17.000Z">
+<meta property="article:modified_time" content="2024-12-07T05:02:52.990Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="ML">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/pr-ml.jpg">
+  
+  
+  
+  <title>12. 强化学习 - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="12. 强化学习"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-12-07 12:58" pubdate>
+          2024年12月7日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          22 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">12. 强化学习</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <ol type="1">
+<li>强化学习应用
+<ol type="1">
+<li>两个应用</li>
+</ol></li>
+<li><font style="color:#DF2A3F;">强化学习常用什么过程描述</font>
+<ol type="1">
+<li>马尔科夫性是什么</li>
+</ol></li>
+<li>强化学习问题基本设置
+<ol type="1">
+<li>机器所处环境E</li>
+<li>状态空间：是机器感知到的环境的描述</li>
+<li>机器能采取的行为空间A</li>
+<li>策略(policy)π：X→A(或π：X×A→R)</li>
+<li>潜在的状态转移(概率)函数Ｐ：X×X×A→R</li>
+<li>潜在的奖赏(reward)函数Ｒ：X×X×A→R或Ｒ：X×X→R</li>
+<li>强化学习对应四元组
+<ol type="1">
+<li>E=&lt;X,A,P,R&gt;</li>
+</ol></li>
+<li>目标
+<ol type="1">
+<li><font style="color:#DF2A3F;">机器通过在环境中不断尝试从而学到一个策略π，使得长期执行该策略后得到的累积奖赏最大</font></li>
+</ol></li>
+</ol></li>
+<li>强化学习vs监督学习
+<ol type="1">
+<li>监督学习：给有标记样本</li>
+<li>强化学习：没有标记样本，通过执行动作之后反馈的奖赏来学习，强化学习在某种意义上可以认为是具有“延迟标记信息”的监督学习</li>
+</ol></li>
+<li>K-摇臂赌博机
+<ol type="1">
+<li>特点
+<ol type="1">
+<li>只有一个状态，K个动作</li>
+<li>每个摇臂的奖赏服从某个期望未知的分布</li>
+<li>执行有限次动作</li>
+<li>最大化累积奖赏</li>
+</ol></li>
+<li>探索-利用(Exploration-Exploitation)
+<ol type="1">
+<li>探索：估计不同摇臂的优劣(奖赏期望的大小)</li>
+<li>利用：选择当前最优的摇臂</li>
+</ol></li>
+<li>在探索与利用之间进行折中
+<ol type="1">
+<li>e-贪心
+<ol type="1">
+<li>以e的概率探索：均匀随机选择一个摇臂</li>
+<li>以1-e的概率利用：选择当前平均奖赏最高的摇臂</li>
+</ol></li>
+<li>Softmax</li>
+</ol></li>
+</ol></li>
+<li>有模型学习(model-basedlearning)
+<ol type="1">
+<li>E=&lt;X,A,P,R&gt;
+<ol type="1">
+<li>X,A,P,R均已知</li>
+<li>方便起见，假设状态空间和动作空间均有限</li>
+</ol></li>
+<li><font style="color:#DF2A3F;">强化学习的目标：找到使累积奖赏最大的策略π</font></li>
+<li>策略评估：使用某策略所带来的累积奖赏<img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703981515300-cf7c1206-92a2-4c1c-9569-4f13b5dfb180.png" srcset="/img/loading.gif" lazyload></li>
+<li>给定π，值函数的计算：值函数具有简单的递归形式
+<ol type="1">
+<li>Bellman等式</li>
+</ol></li>
+<li>状态-动作值函数与状态值函数可以相互计算</li>
+<li>贝尔曼方程
+<ol type="1">
+<li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703981648075-7e285667-d4de-4880-acdc-491d7182a85a.png" srcset="/img/loading.gif" lazyload><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703981680887-4920a237-c032-4da4-951a-0de053729910.png" srcset="/img/loading.gif" lazyload></li>
+<li>当前状态与下一状态价值函数之间的递归关系</li>
+</ol></li>
+<li>策略评估
+<ol type="1">
+<li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703981802560-14ceb442-0641-4a52-a48c-c8e5a1de0598.png" srcset="/img/loading.gif" lazyload></li>
+<li>在模型已知时，对任意策略估计出有该策略带来的期望累积奖励——策略评估</li>
+</ol></li>
+<li>策略评估：使用某策略所带来的期望累积奖赏；</li>
+<li>策略改进：将非最优策略改进为最优策略
+<ol type="1">
+<li>非最优策略的改进方式：将策略选择的动作改为当前最优的动作</li>
+</ol></li>
+<li>策略迭代(policyiteration)：求解最优策略的方法
+<ol type="1">
+<li>随机策略作为初始策略策略评估+策略改进+策略评估+策略改进+……直到策略收敛</li>
+<li>策略迭代算法的缺点：每次改进策略后都要重新评估策略，导致耗时</li>
+<li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703982176074-33a48030-8c24-4439-a72b-5f94dccff3c1.png" srcset="/img/loading.gif" lazyload></li>
+</ol></li>
+<li>值迭代
+<ol type="1">
+<li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703982230635-4afb458c-8eee-4c27-a495-f146709bcb1d.png" srcset="/img/loading.gif" lazyload></li>
+</ol></li>
+<li>有模型学习小结
+<ol type="1">
+<li>强化学习任务可归结为基于动态规划的寻优问题</li>
+<li>与监督学习不同，这里并未涉及到泛化能力，而是为每一个状态找到最好的动作</li>
+</ol></li>
+</ol></li>
+<li>免模型学习(model-freelearning)：更加符合实际情况
+<ol type="1">
+<li>情况
+<ol type="1">
+<li>转移概率，奖赏函数未知</li>
+<li>甚至环境中的状态数目也未知</li>
+<li>假定状态空间有限</li>
+</ol></li>
+<li>免模型学习所面临的困难
+<ol type="1">
+<li>策略无法评估</li>
+<li>无法通过状态值函数计算状态-动作值函数</li>
+<li>机器只能从一个起始状态开始探索环境</li>
+</ol></li>
+<li>解决困难的办法
+<ol type="1">
+<li>多次采样</li>
+<li>直接估计每一对状态-动作的值函数</li>
+<li>在探索过程中逐渐发现各个状态</li>
+</ol></li>
+<li>蒙特卡罗强化学习：采样轨迹，用样本均值近似期望
+<ol type="1">
+<li>策略评估：蒙特卡罗法
+<ol type="1">
+<li>从某状态出发，执行某策略</li>
+<li>对轨迹中出现的每对状态-动作，记录其后的奖赏之和</li>
+<li>采样多条轨迹，每个状态-动作对的累积奖赏取平均<img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703982461291-a50ed993-4513-46f7-9452-57a5c6e4092a.png" srcset="/img/loading.gif" lazyload></li>
+</ol></li>
+<li>策略改进：换入当前最优动作</li>
+<li>蒙特卡罗强化学习可能遇到的问题：轨迹的单一性
+<ol type="1">
+<li>解决问题的办法
+<ol type="1">
+<li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703982538314-4722b41b-5846-4770-9a79-b8eb999ffebb.png" srcset="/img/loading.gif" lazyload></li>
+<li>同策略蒙特卡罗强化学习算法
+<ol type="1">
+<li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703982580369-98a74fac-bcd9-44aa-8bbe-fb6f24cc8a24.png" srcset="/img/loading.gif" lazyload></li>
+</ol></li>
+<li>异策略蒙特卡罗强化学习算法
+<ol type="1">
+<li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703982618153-80fc6d80-2e02-4c77-9db5-199743ae6094.png" srcset="/img/loading.gif" lazyload></li>
+</ol></li>
+</ol></li>
+</ol></li>
+<li>蒙特卡罗强化学习的缺点：低效
+<ol type="1">
+<li>求平均时以“批处理式”进行</li>
+<li>在一个完整的采样轨迹完成后才对状态-动作值函数进行更新</li>
+</ol></li>
+<li>克服缺点的办法：时序差分(temporaldifference，TD)学习</li>
+</ol></li>
+<li>时序差分学习
+<ol type="1">
+<li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703982696771-30826fd8-5a0b-4cab-a20d-b629259c3b3c.png" srcset="/img/loading.gif" lazyload></li>
+<li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703982727550-ebccde81-5b15-4bb2-830e-fe340ea6d210.png" srcset="/img/loading.gif" lazyload></li>
+<li><img src="https://cdn.nlark.com/yuque/0/2023/png/35229143/1703982744263-87c0f194-11d4-49ed-8549-8bb3797eba00.png" srcset="/img/loading.gif" lazyload></li>
+</ol></li>
+</ol></li>
+<li>深度强化学习
+<ol type="1">
+<li>AlphaGo</li>
+</ol></li>
+<li>强化学习应用
+<ol type="1">
+<li>AlphaGo</li>
+<li>体彩世界杯</li>
+</ol></li>
+<li><font style="color:#DF2A3F;">强化学习常用马尔可夫决策过程(MDP,MarkovDecisionProcess）描述</font>
+<ol type="1">
+<li>马尔科夫性：当前时刻的状态仅与前一时刻的状态和动作有关，与其他时刻的状态和动作条件独立</li>
+</ol></li>
+<li>强化学习问题基本设置
+<ol type="1">
+<li>机器所处环境E
+<ol type="1">
+<li>例如在种西瓜任务中,环境是西瓜生长的自然世界</li>
+</ol></li>
+<li>状态空间：是机器感知到的环境的描述
+<ol type="1">
+<li>瓜苗长势的描述</li>
+</ol></li>
+<li>机器能采取的行为空间A
+<ol type="1">
+<li>浇水施肥等</li>
+</ol></li>
+<li>策略(policy)π：X→A(或π：X×A→R)
+<ol type="1">
+<li>根据瓜苗状态是缺水时，返回动作浇水</li>
+</ol></li>
+<li>潜在的状态转移(概率)函数Ｐ：X×X×A→R
+<ol type="1">
+<li>瓜苗当前状态缺水，选择动作浇水，有一定概率恢复健康，也有一定概率无法恢复</li>
+<li><font style="color:#DF2A3F;">从一个状态到下一个状态的转移，要么为确定性转移过程，要么随机性转移过程</font></li>
+</ol></li>
+<li>潜在的奖赏(reward)函数Ｒ：X×X×A→R或Ｒ：X×X→R
+<ol type="1">
+<li>瓜苗健康对应奖赏+1，瓜苗凋零对应奖赏-10</li>
+</ol></li>
+<li>强化学习对应四元组
+<ol type="1">
+<li>E=&lt;X,A,P,R&gt;</li>
+</ol></li>
+<li>目标
+<ol type="1">
+<li><font style="color:#DF2A3F;">机器通过在环境中不断尝试从而学到一个策略π，使得长期执行该策略后得到的累积奖赏最大</font></li>
+</ol></li>
+</ol></li>
+<li>强化学习vs监督学习
+<ol type="1">
+<li>监督学习：给有标记样本</li>
+<li>强化学习：没有标记样本，通过执行动作之后反馈的奖赏来学习，强化学习在某种意义上可以认为是具有“延迟标记信息”的监督学习</li>
+</ol></li>
+<li>K-摇臂赌博机
+<ol type="1">
+<li>特点
+<ol type="1">
+<li>只有一个状态，K个动作</li>
+<li>每个摇臂的奖赏服从某个期望未知的分布</li>
+<li>执行有限次动作</li>
+<li>最大化累积奖赏</li>
+</ol></li>
+<li>探索-利用(Exploration-Exploitation)
+<ol type="1">
+<li>探索：估计不同摇臂的优劣(奖赏期望的大小)</li>
+<li>利用：选择当前最优的摇臂</li>
+</ol></li>
+<li>在探索与利用之间进行折中
+<ol type="1">
+<li>e-贪心
+<ol type="1">
+<li>以e的概率探索：均匀随机选择一个摇臂</li>
+<li>以1-e的概率利用：选择当前平均奖赏最高的摇臂</li>
+</ol></li>
+<li>Softmax
+<ol type="1">
+<li>基于当前已知的摇臂平均奖赏来对探索与利用折中</li>
+<li>若某个摇臂当前的平均奖赏越大，则它被选择的概率越高,概率分配使用Boltzmann分布：<img src="/2024/12/07/PR-ML/12-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/1703981239439-1e6b1754-2560-4c34-ab93-32572506ecea.png" srcset="/img/loading.gif" lazyload></li>
+</ol></li>
+<li>两种算法都有一个折中参数<img src="/2024/12/07/PR-ML/12-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/1703981314299-1a4909dc-091b-4b02-a2f9-845ac044886c.png" srcset="/img/loading.gif" lazyload>，算法性能孰好孰坏取决于具体应用问题</li>
+</ol></li>
+</ol></li>
+<li>有模型学习(model-basedlearning)
+<ol type="1">
+<li>E=&lt;X,A,P,R&gt;
+<ol type="1">
+<li>X,A,P,R均已知</li>
+<li>方便起见，假设状态空间和动作空间均有限</li>
+</ol></li>
+<li><font style="color:#DF2A3F;">强化学习的目标：找到使累积奖赏最大的策略π</font></li>
+<li>策略评估：使用某策略所带来的累积奖赏<img src="/2024/12/07/PR-ML/12-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/1703981515300-cf7c1206-92a2-4c1c-9569-4f13b5dfb180.png" srcset="/img/loading.gif" lazyload></li>
+<li>给定π，值函数的计算：值函数具有简单的递归形式
+<ol type="1">
+<li>Bellman等式</li>
+</ol></li>
+<li>状态-动作值函数与状态值函数可以相互计算</li>
+<li>贝尔曼方程
+<ol type="1">
+<li><img src="/2024/12/07/PR-ML/12-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/1703981648075-7e285667-d4de-4880-acdc-491d7182a85a.png" srcset="/img/loading.gif" lazyload><img src="/2024/12/07/PR-ML/12-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/1703981680887-4920a237-c032-4da4-951a-0de053729910.png" srcset="/img/loading.gif" lazyload></li>
+<li>当前状态与下一状态价值函数之间的递归关系</li>
+</ol></li>
+<li>策略评估
+<ol type="1">
+<li><img src="/2024/12/07/PR-ML/12-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/1703981802560-14ceb442-0641-4a52-a48c-c8e5a1de0598.png" srcset="/img/loading.gif" lazyload></li>
+<li>在模型已知时，对任意策略估计出有该策略带来的期望累积奖励——策略评估</li>
+</ol></li>
+<li>策略评估：使用某策略所带来的期望累积奖赏；</li>
+<li>策略改进：将非最优策略改进为最优策略
+<ol type="1">
+<li>非最优策略的改进方式：将策略选择的动作改为当前最优的动作</li>
+</ol></li>
+<li>策略迭代(policyiteration)：求解最优策略的方法
+<ol type="1">
+<li>随机策略作为初始策略策略评估+策略改进+策略评估+策略改进+……直到策略收敛</li>
+<li>策略迭代算法的缺点：每次改进策略后都要重新评估策略，导致耗时</li>
+<li><img src="/2024/12/07/PR-ML/12-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/1703982176074-33a48030-8c24-4439-a72b-5f94dccff3c1.png" srcset="/img/loading.gif" lazyload></li>
+</ol></li>
+<li>值迭代
+<ol type="1">
+<li><img src="/2024/12/07/PR-ML/12-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/1703982230635-4afb458c-8eee-4c27-a495-f146709bcb1d.png" srcset="/img/loading.gif" lazyload></li>
+</ol></li>
+<li>有模型学习小结
+<ol type="1">
+<li>强化学习任务可归结为基于动态规划的寻优问题</li>
+<li>与监督学习不同，这里并未涉及到泛化能力，而是为每一个状态找到最好的动作</li>
+</ol></li>
+</ol></li>
+<li>免模型学习(model-freelearning)：更加符合实际情况
+<ol type="1">
+<li>情况
+<ol type="1">
+<li>转移概率，奖赏函数未知</li>
+<li>甚至环境中的状态数目也未知</li>
+<li>假定状态空间有限</li>
+</ol></li>
+<li>免模型学习所面临的困难
+<ol type="1">
+<li>策略无法评估</li>
+<li>无法通过状态值函数计算状态-动作值函数</li>
+<li>机器只能从一个起始状态开始探索环境</li>
+</ol></li>
+<li>解决困难的办法
+<ol type="1">
+<li>多次采样</li>
+<li>直接估计每一对状态-动作的值函数</li>
+<li>在探索过程中逐渐发现各个状态</li>
+</ol></li>
+<li>蒙特卡罗强化学习：采样轨迹，用样本均值近似期望
+<ol type="1">
+<li>策略评估：蒙特卡罗法
+<ol type="1">
+<li>从某状态出发，执行某策略</li>
+<li>对轨迹中出现的每对状态-动作，记录其后的奖赏之和</li>
+<li>采样多条轨迹，每个状态-动作对的累积奖赏取平均<img src="/2024/12/07/PR-ML/12-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/1703982461291-a50ed993-4513-46f7-9452-57a5c6e4092a.png" srcset="/img/loading.gif" lazyload></li>
+</ol></li>
+<li>策略改进：换入当前最优动作</li>
+<li>蒙特卡罗强化学习可能遇到的问题：轨迹的单一性
+<ol type="1">
+<li>解决问题的办法
+<ol type="1">
+<li><img src="/2024/12/07/PR-ML/12-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/1703982538314-4722b41b-5846-4770-9a79-b8eb999ffebb.png" srcset="/img/loading.gif" lazyload></li>
+<li>同策略蒙特卡罗强化学习算法
+<ol type="1">
+<li><img src="/2024/12/07/PR-ML/12-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/1703982580369-98a74fac-bcd9-44aa-8bbe-fb6f24cc8a24.png" srcset="/img/loading.gif" lazyload></li>
+</ol></li>
+<li>异策略蒙特卡罗强化学习算法
+<ol type="1">
+<li><img src="/2024/12/07/PR-ML/12-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/1703982618153-80fc6d80-2e02-4c77-9db5-199743ae6094.png" srcset="/img/loading.gif" lazyload></li>
+</ol></li>
+</ol></li>
+</ol></li>
+<li>蒙特卡罗强化学习的缺点：低效
+<ol type="1">
+<li>求平均时以“批处理式”进行</li>
+<li>在一个完整的采样轨迹完成后才对状态-动作值函数进行更新</li>
+</ol></li>
+<li>克服缺点的办法：时序差分(temporaldifference，TD)学习</li>
+</ol></li>
+<li>时序差分学习
+<ol type="1">
+<li><img src="/2024/12/07/PR-ML/12-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/1703982696771-30826fd8-5a0b-4cab-a20d-b629259c3b3c.png" srcset="/img/loading.gif" lazyload></li>
+<li><img src="/2024/12/07/PR-ML/12-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/1703982727550-ebccde81-5b15-4bb2-830e-fe340ea6d210.png" srcset="/img/loading.gif" lazyload></li>
+<li><img src="/2024/12/07/PR-ML/12-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/1703982744263-87c0f194-11d4-49ed-8549-8bb3797eba00.png" srcset="/img/loading.gif" lazyload></li>
+</ol></li>
+</ol></li>
+<li>深度强化学习
+<ol type="1">
+<li>AlphaGo</li>
+</ol></li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/AI/" class="category-chain-item">AI</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI/ML/" class="category-chain-item">ML</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI/ML/PR-ML/" class="category-chain-item">PR &amp; ML</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/ML/" class="print-no-link">#ML</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>12. 强化学习</div>
+      <div>http://binbo-zappy.github.io/2024/12/07/PR-ML/12-强化学习/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年12月7日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/12/07/Redis/01-NoSql%E7%AE%80%E4%BB%8B/" title="01. NoSql简介">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">01. NoSql简介</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/12/07/PR-ML/11-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" title="11. 深度学习">
+                        <span class="hidden-mobile">11. 深度学习</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

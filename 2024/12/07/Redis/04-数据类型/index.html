@@ -1,0 +1,1072 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Redis数据类型 5种常用数据类型：  string   类比java的String   hash   类比java的HashMap   list   类比java的 LinkedList   set   类比Java的 HashSet   sorted_set   也称Zset，类比java的 TreeSet  redis数据存储">
+<meta property="og:type" content="article">
+<meta property="og:title" content="04. 数据类型">
+<meta property="og:url" content="http://binbo-zappy.github.io/2024/12/07/Redis/04-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="Redis数据类型 5种常用数据类型：  string   类比java的String   hash   类比java的HashMap   list   类比java的 LinkedList   set   类比Java的 HashSet   sorted_set   也称Zset，类比java的 TreeSet  redis数据存储">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/redis.jpg">
+<meta property="article:published_time" content="2024-12-07T06:22:23.000Z">
+<meta property="article:modified_time" content="2024-12-07T06:34:00.662Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="Redis">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/redis.jpg">
+  
+  
+  
+  <title>04. 数据类型 - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="04. 数据类型"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-12-07 14:22" pubdate>
+          2024年12月7日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          22 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">04. 数据类型</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="redis数据类型">Redis数据类型</h1>
+<p>5种常用数据类型：</p>
+<ul>
+<li>string</li>
+</ul>
+<blockquote>
+<p>类比java的String</p>
+</blockquote>
+<ul>
+<li>hash</li>
+</ul>
+<blockquote>
+<p>类比java的HashMap</p>
+</blockquote>
+<ul>
+<li>list</li>
+</ul>
+<blockquote>
+<p>类比java的 LinkedList</p>
+</blockquote>
+<ul>
+<li>set</li>
+</ul>
+<blockquote>
+<p>类比Java的 HashSet</p>
+</blockquote>
+<ul>
+<li>sorted_set</li>
+</ul>
+<blockquote>
+<p>也称Zset，类比java的 TreeSet</p>
+</blockquote>
+<p>redis数据存储格式：</p>
+<p>redis自身是一个Map，其中所有的数据都是采用 key:value
+的形式存储。所有的 key 都是字符串， value 的存储可以分多种数据类型。</p>
+<h1 id="string类型">string类型</h1>
+<p>存储的数据：单个数据，最简单的数据存储类型，也是最常用的数据存储类型</p>
+<p>存储数据的格式：一个存储空间保存一个数据</p>
+<p>存储内容：通常使用字符串，如果字符串以整数的形式展示，可以作为数据操作使用。</p>
+<p>string类型是二进制安全的，意思是redis的string可以包含任何数据，比如图片或者序列化的对象。</p>
+<p>基本操作：</p>
+<ul>
+<li>添加/修改数据</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">set key value<br></code></pre></td></tr></table></figure>
+<ul>
+<li>获取数据</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">get key<br></code></pre></td></tr></table></figure>
+<ul>
+<li>删除数据</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">del key<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>如果删除成功，会返回以下信息：</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plain">127.0.0.1:6379&gt; del age<br>(integer) 1<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>如果删除失败（例如删除不存在的key），会返回以下信息：</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plain">127.0.0.1:6379&gt; del age<br>(integer) 0<br></code></pre></td></tr></table></figure>
+<ul>
+<li>添加/修改多个数据</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">mset key1 value1 key2 value2 ...<br></code></pre></td></tr></table></figure>
+<ul>
+<li>获取多个数据</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">mget key1 key2 ....<br></code></pre></td></tr></table></figure>
+<ul>
+<li>获取数据字符个数（字符串长度）</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">strlen key<br></code></pre></td></tr></table></figure>
+<ul>
+<li>追加信息到原始信息后部<br>
+如果原始信息存在则追加，否则新建。</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">append key value<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>append命令返回的结果是value的字符串长度</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plain">127.0.0.1:6379&gt;append mn 100<br>(integer) 3<br></code></pre></td></tr></table></figure>
+<p>扩展操作：</p>
+<ul>
+<li>设置数值数据增加范围的值（可以为负数）</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">incr key<br>incrby key increment<br>incrbyfloat key increment<br></code></pre></td></tr></table></figure>
+<ul>
+<li>设置数值数据减少指定范围的值</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">decr key<br>decrby key increment<br></code></pre></td></tr></table></figure>
+<ul>
+<li>设置数据具有指定的生命周期</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">setex key seconds value  # set with expire<br>psetex key milliseconds value<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>如果使用 <code>setex name zhangsan 10</code>
+设置name为10秒有效期，然后又执行了 <code>set name lisi</code>
+，此时将不再有10秒有效期的限制</p>
+</blockquote>
+<ul>
+<li>获取截取指定区间的字符串</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">getrange key start end<br></code></pre></td></tr></table></figure>
+<ul>
+<li>从指定位置设置字符串</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">setrange key offset value<br></code></pre></td></tr></table></figure>
+<ul>
+<li>key不存在时才设置</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">setnx key value # set if not exist<br></code></pre></td></tr></table></figure>
+<ul>
+<li>多个Key都不存在时才设置</li>
+</ul>
+<blockquote>
+<p>当key1 、key2、key3都不存在时才能设置成功</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">msetnx key1 value1 [key2 value2 key3 value3....]<br></code></pre></td></tr></table></figure>
+<p>string作为数值操作：</p>
+<ul>
+<li>string在redis内部存储默认就是一个字符串，当遇到增减类操作
+incr、decr时会转成数值型进行计算</li>
+<li>redis所有的操作都是原子性的，采用单线程处理所有业务，命令是一个一个执行的，因此无需考虑并发带来的数据影响</li>
+<li>注意：按数值进行操作的数据，如果原始数据不能转换成数值，或超越了redis数值上限，将报错</li>
+</ul>
+<blockquote>
+<p>9223372036854775807 （对应 java中的long型最大值，Long.MAX_VALUE）</p>
+</blockquote>
+<ul>
+<li>数据未获取到时：(nil) 表示null</li>
+<li>数据最大存储量：512M</li>
+</ul>
+<p>redis可以用于控制数据库表主键，为数据库表主键提供生成策略，保障数据库表的主键唯一性。此方案适用于所有数据库，且支持数据库集群。</p>
+<p>redis可以应用于各种结构性和非结构型高热度数据访问加速</p>
+<p>redis中的key命名惯例为冒号分隔，例如：</p>
+<p>key = <code>customer:id:2010010200001:name</code>, value =
+<code>张三</code></p>
+<p>key = <code>customer:id:202001010004</code> , value =
+<code>&#123;"name", "zhangsan", "age" : 10&#125;</code></p>
+<h1 id="hash类型">hash类型</h1>
+<p>新的存储需求：对一系列存储的数据进行编组，方便管理，典型应用存储对象信息</p>
+<p>需要的存储结构：一个存储空间保存多个键值对数据</p>
+<p>hash结构：</p>
+<p>一个 key 对应 hash 存储空间， 一个hash存储空间内又可存多个 field -
+value 键值对。</p>
+<p>hash结构优化：</p>
+<ul>
+<li>如果field数量较少，存储结构优化为类数组结构</li>
+<li>如果field数量较多，存储结构使用HashMap结构</li>
+</ul>
+<p>基本操作：</p>
+<ul>
+<li>添加/修改数据</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">hset key field value<br></code></pre></td></tr></table></figure>
+<ul>
+<li>获取数据</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">hget key field<br>hgetall key<br></code></pre></td></tr></table></figure>
+<ul>
+<li>删除数据</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">hdel key field1 [field2]<br></code></pre></td></tr></table></figure>
+<ul>
+<li>添加/修改多个数据</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">hmset key field1 value1 field2 value2 ....<br></code></pre></td></tr></table></figure>
+<ul>
+<li>获取多个数据</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">hmget key field1 field2 ...<br></code></pre></td></tr></table></figure>
+<ul>
+<li>获取哈希表中字段的数量</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">hlen key<br></code></pre></td></tr></table></figure>
+<ul>
+<li>获取哈希表中是否存在指定的字段</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">hexists key field<br></code></pre></td></tr></table></figure>
+<ul>
+<li>key下存在指定的字段，则不操作，不存在则创建</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">hsetnx key field value<br></code></pre></td></tr></table></figure>
+<p>扩展操作：</p>
+<ul>
+<li>获取哈希表中所有的字段名或字段值</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">hkeys key  # 获取该key下所有的field名<br>hvals key  # 获取该key下所以的value（不会去除重复项）<br></code></pre></td></tr></table></figure>
+<ul>
+<li>设置指定字段的数量数据增加指定返回的值</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">hincrby key field increment<br>hincrbyfloat key field increment<br></code></pre></td></tr></table></figure>
+<p>hash类型数据操作的注意事项：</p>
+<ul>
+<li>hash类型下的value只能存储字符串，不允许存储其他数据类型，不存在嵌套现象。如果数据未获取到，对象的值为空（nil）</li>
+<li>每个hash可以存储 2^32 -1 个键值对</li>
+<li>hash类型十分贴近对象的数据存储形式，并且可以灵活添加删除对象属性。但hash设计初衷不是为了存储大量对象而设计的，不可以滥用，更不可以将hash作为对象列表使用。</li>
+<li>hgetall操作可以获取全部属性，如果内部field过多，遍历整体数据效率就会很低，有可能成为数据访问瓶颈。</li>
+</ul>
+<h1 id="list类型">list类型</h1>
+<p>数据存储需求：存储多个数据，并对数据进入存储空间的顺序进行区分。</p>
+<p>需要的存储结构：一个存储空间保存多个数据，且通过数据可以体现进入顺序</p>
+<p>list类型：保存多个数据，底层使用双向链表存储结构实现。</p>
+<p>基本操作：</p>
+<ul>
+<li>添加/修改数据</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">lpush key value1 [value2] ...  # 向左边插入<br>rpush key value1 [value2] ...  # 向右边插入<br></code></pre></td></tr></table></figure>
+<ul>
+<li>获取数据</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">lrange key start stop # 从左边读指定范围，从start到stop的索引位置<br>lindex key index # 获取指定索引位置的元素<br>llen key  # 获取长度<br></code></pre></td></tr></table></figure>
+<ul>
+<li>获取并移除数据</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">lpop key  # 从左边移出<br>rpop key # 从右边移出<br></code></pre></td></tr></table></figure>
+<p>扩展操作：</p>
+<ul>
+<li>规定时间内获取并移除数据<br>
+如果当前指定的key有值则直接取出，如果没有值则等待一段时间，一旦有值插入立即取出，如果超出指定时间则退出。</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">blpop key1 [key2] timeout<br>brpop key1 [key2] timeout<br></code></pre></td></tr></table></figure>
+<ul>
+<li>移除指定数据<br>
+list存储的内容可以重复，要指定移除多少个指定值</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">lrem key count value<br></code></pre></td></tr></table></figure>
+<ul>
+<li>截取指定范围的值后再赋值给key</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">ltrim key start end<br></code></pre></td></tr></table></figure>
+<p>redis应用于具有操作先后顺序的数据控制</p>
+<p>list注意事项：</p>
+<ul>
+<li>list中保存的数据都是string类型的，数据总容量是有限的，最多 2^32 -1
+个元素</li>
+<li>list具有索引的概念，但是操作数据时通常以队列的形式进行入队出队操作，或以栈的形式进行入栈出栈操作</li>
+<li>获取全部操作数据结束索引设置为
+-1，例如（<code>lrange mylist 0 -1</code>）</li>
+<li>list可以对数据进行分页操作，通常第一页的信息来自list，第2页及更多的信息通过数据库的形式加载</li>
+</ul>
+<h1 id="set类型">set类型</h1>
+<p>存储需求：存储大量的数据，在查询方面提供更高的效率。</p>
+<p>存储结构：能够保存大量的数据，高效的内存存储机制，便于查询。</p>
+<p>set类型：与hash存储结构完全相同，用value仅保存字段名，不保存字段值，并且value不允许重复。</p>
+<p>基本操作：</p>
+<ul>
+<li>添加数据</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sadd key member1 [member2]<br></code></pre></td></tr></table></figure>
+<ul>
+<li>获取全部数据</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">smembers key<br></code></pre></td></tr></table></figure>
+<ul>
+<li>删除数据</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">srem key member1 [member2]<br></code></pre></td></tr></table></figure>
+<ul>
+<li>获取集合数据总量</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">scard key<br></code></pre></td></tr></table></figure>
+<ul>
+<li>判断集合中是否包含指定数据</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sismember key member<br></code></pre></td></tr></table></figure>
+<p>扩展操作：</p>
+<ul>
+<li>随机获取集合中指定数量的数据</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">srandmember key [count]<br></code></pre></td></tr></table></figure>
+<ul>
+<li>随机获取集合中的某个数据并将该数据移出集合</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">spop key<br></code></pre></td></tr></table></figure>
+<ul>
+<li>求两个集合的交、并、差集</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">sinter key1 [key2]  # 交集<br>sunion key1 [key2]  # 并集<br>sdiff key1 [key2]  # 差集（带方向）<br></code></pre></td></tr></table></figure>
+<ul>
+<li>求两个集合的交、并、差集并存储到指定集合中</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">sinterstore destination key1 [key2]<br>sunionstore destination key1 [key2]<br>sdiffstore destination key1 [key2]<br></code></pre></td></tr></table></figure>
+<ul>
+<li>将指定数据从原始集合中移动到目标集合中</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">smove source destination member<br></code></pre></td></tr></table></figure>
+<p>set类型数据操作的注意事项：</p>
+<ul>
+<li>set类型不允许数据重复，如果添加的数据在set中已经存在，将只保留一份</li>
+<li>set虽然与hash的存储结构相同，但是无法启用hash中存储值的空间</li>
+</ul>
+<p>redis可以应用于同类型不重复数据的合并操作。</p>
+<p>reids可以应用于同类型数据的快速去重。</p>
+<p>redis可以应用于基于黑名单、白名单设定的服务控制。</p>
+<h1 id="sorted_set类型">sorted_set类型</h1>
+<p>存储需求：数据排序有利于数据的有效展示，需要提供一种可以根据自身特征进行排序的方式。</p>
+<p>存储结构：新的存储模型，可以保存可排序的数据。</p>
+<p>sorted_set类型：在set的存储结构基础上添加可排序的列（score）</p>
+<p>score是一个double类型的分数，Redis正是通过分数来为集合中的成员进行从小到大的排序。</p>
+<p>sorted_set的成员是唯一的，但是score是可以重复的。</p>
+<p>sorted_set也叫做ZSet。</p>
+<p>基本操作：</p>
+<ul>
+<li>添加数据</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">zadd key score1 member1 [score2 memeber2]<br></code></pre></td></tr></table></figure>
+<ul>
+<li>获取数据</li>
+</ul>
+<blockquote>
+<p>获取全部数据：<code>zrange key 0 -1</code> ，或者
+<code>zrevrange key 0 -1</code></p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">zrange key start stop [WITHSCORES]  # 加上WITHSCORES参数后，可以把score也一起返回<br>zrevrange key start stop [WITHSCORES]  # 倒序查看<br></code></pre></td></tr></table></figure>
+<ul>
+<li>删除数据</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">zrem key member [member ...]<br></code></pre></td></tr></table></figure>
+<ul>
+<li>按条件获取数据</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">zrangebyscore key min max [WITHSCORES] [LIMIT]<br>zrevrangebyscore key max min [WITHSCORES]<br></code></pre></td></tr></table></figure>
+<p>左括号表示不包含，例如：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">zrangebyscore zset01 60 (90  # 大于等于60，小于90<br></code></pre></td></tr></table></figure>
+<p>limit可以限制返回的结果</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">zrangebyscore zset01 60 (90 limit 开始的下标 截取的个数<br></code></pre></td></tr></table></figure>
+<ul>
+<li>条件删除数据</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">zremrangebyrank key start stop<br>zremrangebyscore key min max<br></code></pre></td></tr></table></figure>
+<ul>
+<li>获取集合数据总量</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">zcard key<br>zcount key min max<br></code></pre></td></tr></table></figure>
+<ul>
+<li>集合交、并操作</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">zinterstore destination numkeys key [key ...]<br>zunionstore destination numkeys key [key ...]<br></code></pre></td></tr></table></figure>
+<p>注意：</p>
+<ul>
+<li>min与max用于限定搜索查询的条件</li>
+<li>start与stop用于限定查询的范围，作用于索引，表示开始和结束索引</li>
+<li>offset与count用于限定查询范围，作用于查询结果，表示开始位置和数据总量</li>
+</ul>
+<p>扩展操作：</p>
+<ul>
+<li>获取数据对应的索引（排名）</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">zrank key member<br>zrevrank key member<br></code></pre></td></tr></table></figure>
+<ul>
+<li>score值获取与修改</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">zscore key member<br>zincrby key increment member<br></code></pre></td></tr></table></figure>
+<p>redis可以用于计数器组合排序功能对应的排名</p>
+<p>注意事项</p>
+<ul>
+<li>score保存的数据存储空间是64位，如果是整数范围是 -9007199254740992 ~
+9007199254740992</li>
+<li>score保存的数据也可以是双精度的double值，基于双精度浮点数的特征，可能会丢失精度，使用时要慎重</li>
+<li>sorted_set底层存储还是基于set结构的，因此数据不能重复，如果重复添加相同的数据，score值将被反复覆盖，保留最后一次修改的结果。</li>
+</ul>
+<p>获取当前redis系统时间：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">time<br></code></pre></td></tr></table></figure>
+<p>redis可以应用于定时任务执行顺序管理或任务过期管理。</p>
+<p>redis可以应用于带有权重的即时任务/消息队列执行管理</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/" class="category-chain-item">后端开发</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Redis/" class="category-chain-item">Redis</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Redis/" class="print-no-link">#Redis</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>04. 数据类型</div>
+      <div>http://binbo-zappy.github.io/2024/12/07/Redis/04-数据类型/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年12月7日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/12/07/Redis/05-%E9%80%9A%E7%94%A8%E6%8C%87%E5%AE%9A/" title="05. 通用指定">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">05. 通用指定</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/12/07/Redis/03-%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" title="03. 基本操作">
+                        <span class="hidden-mobile">03. 基本操作</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
