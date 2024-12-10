@@ -19,14 +19,16 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta property="og:type" content="article">
+    <meta name="description" content="1. CentOS安装Docker 参考官网：https:&#x2F;&#x2F;docs.docker.com&#x2F;engine&#x2F;install&#x2F;centos&#x2F; 1.1 卸载旧版本 如果之前安装过Docker，需要先卸载旧版本： 12345678sudo yum remove docker \                  docker-client \                  docker-cl">
+<meta property="og:type" content="article">
 <meta property="og:title" content="2. Docker安装">
 <meta property="og:url" content="http://binbo-zappy.github.io/2024/12/07/docker/2-Docker%E5%AE%89%E8%A3%85/index.html">
 <meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="1. CentOS安装Docker 参考官网：https:&#x2F;&#x2F;docs.docker.com&#x2F;engine&#x2F;install&#x2F;centos&#x2F; 1.1 卸载旧版本 如果之前安装过Docker，需要先卸载旧版本： 12345678sudo yum remove docker \                  docker-client \                  docker-cl">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/docker.jpg">
 <meta property="article:published_time" content="2024-12-07T07:23:56.000Z">
-<meta property="article:modified_time" content="2024-12-07T07:23:56.942Z">
+<meta property="article:modified_time" content="2024-12-10T06:37:44.731Z">
 <meta property="article:author" content="Binbo">
 <meta property="article:tag" content="Docker">
 <meta name="twitter:card" content="summary_large_image">
@@ -223,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          0 字
+          1.1k 字
         
       </span>
     
@@ -234,7 +236,7 @@
         
         
         
-          1 分钟
+          10 分钟
         
       </span>
     
@@ -276,7 +278,116 @@
             
               <div class="markdown-body">
                 
-                
+                <h1 id="centos安装docker">1. CentOS安装Docker</h1>
+<p>参考官网：<a target="_blank" rel="noopener" href="https://docs.docker.com/engine/install/centos/">https://docs.docker.com/engine/install/centos/</a></p>
+<h2 id="卸载旧版本">1.1 卸载旧版本</h2>
+<p>如果之前安装过Docker，需要先卸载旧版本：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo yum remove docker \<br>                  docker-client \<br>                  docker-client-latest \<br>                  docker-common \<br>                  docker-latest \<br>                  docker-latest-logrotate \<br>                  docker-logrotate \<br>                  docker-engine<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>旧版本的Docker引擎包可能叫做：<code>docker</code>、<code>docker-engine</code>。</p>
+<p>新版本的Docker引擎包叫做：<code>docker-ce</code></p>
+</blockquote>
+<h2 id="yum安装gcc相关">1.2 yum安装gcc相关</h2>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sh"><span class="hljs-built_in">sudo</span> yum -y install gcc<br><span class="hljs-built_in">sudo</span> yum -y install gcc-c++<br></code></pre></td></tr></table></figure>
+<h2 id="配置yum资源库">1.3 配置yum资源库</h2>
+<p>安装<code>yum-config-manager</code>：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">yum-util提供yum-config-manager功能</span> <br>sudo yum install -y yum-utils<br></code></pre></td></tr></table></figure>
+<p>配置docker的资源库地址：</p>
+<p>官方地址：（比较慢，不推荐）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">在yum资源库中添加docker资源库</span><br>sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo<br></code></pre></td></tr></table></figure>
+<p>阿里云镜像地址：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo yum-config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>阿里云官网提供了很多资源镜像，镜像地址：<code>https://mirrors.aliyun.com</code>，进入之后可以选择自己需要的资源进行配置</p>
+</blockquote>
+<p>创建缓存（可选）：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">yum makecache fast<br></code></pre></td></tr></table></figure>
+<h2 id="安装docker引擎">1.4 安装Docker引擎</h2>
+<p>安装最新版本的Docker引擎、Docker客户端：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">docker-ce是Docker引擎，docker-ce-cli是客户端</span><br>sudo yum install docker-ce docker-ce-cli containerd.io docker-compose-plugin<br></code></pre></td></tr></table></figure>
+<p>此时，默认安装的docker引擎、客户端都是最新版本。</p>
+<p>如果要安装指定版本：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">查询版本列表</span><br>yum list docker-ce --showduplicates | sort -r<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">指定版本安装17.09.0.ce版</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash"><span class="hljs-built_in">sudo</span> yum install docker-ce-&lt;VERSION_STRING&gt; docker-ce-cli-&lt;VERSION_STRING&gt; containerd.io docker-compose-plugin</span><br>sudo yum install docker-ce-17.09.0.ce docker-ce-cli-17.09.0.ce containerd.io docker-compose-plugin<br></code></pre></td></tr></table></figure>
+<h2 id="启动docker引擎">1.5 启动docker引擎</h2>
+<p>如果没有启动Docker引擎，那么执行
+<code>docker version</code>查看版本号时，只能看到
+<code>Client: Docker Engine</code>（Docker引擎客户端）的版本号。</p>
+<p>启动Docker引擎：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">新版本的Docker就是一个系统服务，可以直接使用启动系统服务方式启动</span><br>systemctl start docker<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">此时查看docker版本，可以看到Server: Docker Engine（Docker引擎）版本号</span><br>docker version<br></code></pre></td></tr></table></figure>
+<h1 id="卸载docker">2. 卸载Docker</h1>
+<p>卸载Docker步骤：</p>
+<ol type="1">
+<li>关闭服务</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">systemctl stop docker<br></code></pre></td></tr></table></figure>
+<p>使用<code>yum</code>删除docker引擎</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo yum remove docker-ce docker-ce-cli containerd.io<br></code></pre></td></tr></table></figure>
+<p>删除镜像、容器、卷、自定义配置等文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo rm -rf /var/lib/docker<br>sudo rm -rf /var/lib/containerd<br></code></pre></td></tr></table></figure>
+<h1 id="运行helloworld测试">3. 运行HelloWorld测试</h1>
+<p>运行HelloWorld：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker run hello-world<br></code></pre></td></tr></table></figure>
+<p>如果报错，那么看此网页解决问题。<a target="_blank" rel="noopener" href="https://www.cnblogs.com/gnuorg/p/18570325">Docker/DockerHub
+国内镜像源/加速列表（12月3日更新-长期维护） - gnuorg - 博客园</a></p>
+<p>将网址替换为可用的镜像地址，谢谢喵！</p>
+<h1 id="ubuntu安装docker">4. Ubuntu安装Docker</h1>
+<h2 id="卸载旧版本-1">卸载旧版本</h2>
+<p>卸载旧版本Docker（如果已经安装）：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo apt-get remove docker docker-engine docker.io containerd runc<br></code></pre></td></tr></table></figure>
+<h2 id="安装依赖">安装依赖</h2>
+<p>安装必要的依赖：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo apt-get update<br>sudo apt-get install apt-transport-https ca-certificates curl gnupg lsb-release<br></code></pre></td></tr></table></figure>
+<h2 id="添加docker软件源">添加docker软件源</h2>
+<p>官网源：(不推荐，可能会连不上报错)</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">导入源仓库的 GPG key</span><br>curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">将 Docker APT 软件源添加到你的系统</span><br>sudo add-apt-repository &quot;deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable&quot;<br></code></pre></td></tr></table></figure>
+<p>阿里云源（推荐）：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">添加Docker GPG密钥</span><br>curl -fsSL https://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">添加Docker软件源信息</span><br>echo &quot;deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release -cs) stable&quot; | sudo tee /etc/apt/sources.list.d/docker.list &gt; /dev/null<br></code></pre></td></tr></table></figure>
+<h2 id="安装docker">安装docker</h2>
+<p>更新软件源并安装Docker：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo apt-get update<br>sudo apt-get install docker-ce docker-ce-cli containerd.io<br></code></pre></td></tr></table></figure>
+<h2 id="启动并测试docker">启动并测试Docker</h2>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo systemctl start docker<br>sudo docker run hello-world<br></code></pre></td></tr></table></figure>
+<h1 id="离线安装">离线安装</h1>
+<h2 id="下载安装">下载安装</h2>
+<p>从docker官网（或者国内镜像站）下载对应linux版本的安装包，例如<a target="_blank" rel="noopener" href="https://mirrors.ustc.edu.cn/docker-ce/linux/static/stable/x86_64/docker-27.0.3.tgz">docker-27.0.3.tgz</a>。</p>
+<p>将安装包上传到服务器，解压：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">tar -zxvf docker-27.0.3.tgz<br></code></pre></td></tr></table></figure>
+<p>解压出来的文件的所有者可能不是root，修改为root用户：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">chown -R root:root docker/<br></code></pre></td></tr></table></figure>
+<p>将解压的文件移动到<code>/usr/bin</code>下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">\cp -f docker/* /usr/bin<br></code></pre></td></tr></table></figure>
+<p>启动测试：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">dockerd<br></code></pre></td></tr></table></figure>
+<h2 id="配置成系统服务">配置成系统服务</h2>
+<p>将docker添加到systemd：</p>
+<blockquote>
+<p>编辑文件<code>/usr/lib/systemd/system/docker.service</code>。</p>
+<p>文件内容参考：<a target="_blank" rel="noopener" href="https://github.com/docker-archive/docker-ce/blob/master/components/engine/contrib/init/systemd/docker.service">github的docker-ce官方文档</a></p>
+</blockquote>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs properties"><span class="hljs-attr">[Unit]</span><br><span class="hljs-attr">Description</span>=<span class="hljs-string">Docker Application Container Engine</span><br><span class="hljs-attr">Documentation</span>=<span class="hljs-string">https://docs.docker.com</span><br><span class="hljs-attr">After</span>=<span class="hljs-string">network-online.target docker.socket firewalld.service </span><br><span class="hljs-attr">Wants</span>=<span class="hljs-string">network-online.target </span><br><span class="hljs-attr">Requires</span>=<span class="hljs-string">docker.socket</span><br><br><span class="hljs-attr">[Service]</span><br><span class="hljs-attr">Type</span>=<span class="hljs-string">notify</span><br><span class="hljs-attr">ExecStart</span>=<span class="hljs-string">/usr/bin/dockerd</span><br><span class="hljs-attr">ExecReload</span>=<span class="hljs-string">/bin/kill -s HUP $MAINPID</span><br><span class="hljs-attr">TimeoutStartSec</span>=<span class="hljs-string">0</span><br><span class="hljs-attr">RestartSec</span>=<span class="hljs-string">2</span><br><span class="hljs-attr">Restart</span>=<span class="hljs-string">always</span><br><br><span class="hljs-attr">StartLimitBurst</span>=<span class="hljs-string">3</span><br><span class="hljs-attr">StartLimitInterval</span>=<span class="hljs-string">60s</span><br><span class="hljs-attr">LimitNOFILE</span>=<span class="hljs-string">infinity</span><br><span class="hljs-attr">LimitNPROC</span>=<span class="hljs-string">infinity</span><br><span class="hljs-attr">LimitCORE</span>=<span class="hljs-string">infinity</span><br><br><span class="hljs-attr">TasksMax</span>=<span class="hljs-string">infinity</span><br><br><span class="hljs-attr">Delegate</span>=<span class="hljs-string">yes</span><br><br><span class="hljs-attr">KillMode</span>=<span class="hljs-string">process</span><br><span class="hljs-attr">OOMScoreAdjust</span>=<span class="hljs-string">-500</span><br><br><span class="hljs-attr">[Install]</span><br><span class="hljs-attr">WantedBy</span>=<span class="hljs-string">multi-user.target</span><br></code></pre></td></tr></table></figure>
+<p>为<code>docker.service</code>添加执行权限：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">chmod +x /usr/lib/systemd/system/docker.service<br></code></pre></td></tr></table></figure>
+<h2 id="配置docker">配置docker</h2>
+<p>创建<code>docker</code>组：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">groupadd docker<br></code></pre></td></tr></table></figure>
+<p>编辑<code>daemon.json</code>配置文件：</p>
+<blockquote>
+<p>文件：<code>/etc/docker/daemon.json</code></p>
+</blockquote>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-comment">// 还可以在这个文件中配置加速器、镜像仓库地址等</span><br>    <span class="hljs-attr">&quot;insecure-registries&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>        <span class="hljs-comment">// 配置不验证https证书、允许http连接</span><br>        <span class="hljs-string">&quot;192.168.xxx.xxx:8088&quot;</span><br>    <span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;data-root&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;/data/docker&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;log-driver&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;json-file&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;log-opts&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;max-size&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;200m&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;max-file&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;3&quot;</span><br>    <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+<p>重载配置：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">systemctl daemon-reload<br></code></pre></td></tr></table></figure>
+<h2 id="启动docker并设置开机自启">启动docker并设置开机自启</h2>
+<p>启动docker：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">systemctl start docker<br></code></pre></td></tr></table></figure>
+<p>设置开机自启：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">systemctl enable docker<br></code></pre></td></tr></table></figure>
+<p>检验：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker version<br></code></pre></td></tr></table></figure>
+<h2 id="配置命令自动补全">配置命令自动补全</h2>
+<p>从docker的github官方仓库获取命令补全的文件：<a target="_blank" rel="noopener" href="https://github.com/docker-archive/docker-ce/blob/master/components/cli/contrib/completion/bash/docker">docker</a></p>
+<p>将该文件放到<code>/usr/share/bash-completion/completions</code>，启用该文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">source /usr/share/bash-completion/completions/docker<br></code></pre></td></tr></table></figure>
 
                 
               </div>

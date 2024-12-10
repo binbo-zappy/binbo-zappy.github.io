@@ -19,14 +19,16 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta property="og:type" content="article">
+    <meta name="description" content="1. 新建启动容器 1docker run [OPTIONS] IMAGE [COMMAND] [ARG...] 常用的参数：  --name：为容器指定一个名称 -d：后台运行容器并返回容器ID，也即启动守护式容器 -i：以交互模式（interactive）运行容器，通常与-t同时使用 -t：为容器重新分配一个伪输入终端（tty），通常与-i同时使用。也即启动交互式容器（前台有伪终">
+<meta property="og:type" content="article">
 <meta property="og:title" content="5. 容器命令">
 <meta property="og:url" content="http://binbo-zappy.github.io/2024/12/07/docker/5-%E5%AE%B9%E5%99%A8%E5%91%BD%E4%BB%A4/index.html">
 <meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="1. 新建启动容器 1docker run [OPTIONS] IMAGE [COMMAND] [ARG...] 常用的参数：  --name：为容器指定一个名称 -d：后台运行容器并返回容器ID，也即启动守护式容器 -i：以交互模式（interactive）运行容器，通常与-t同时使用 -t：为容器重新分配一个伪输入终端（tty），通常与-i同时使用。也即启动交互式容器（前台有伪终">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/docker.jpg">
 <meta property="article:published_time" content="2024-12-07T07:24:01.000Z">
-<meta property="article:modified_time" content="2024-12-07T07:24:01.234Z">
+<meta property="article:modified_time" content="2024-12-10T11:34:50.898Z">
 <meta property="article:author" content="Binbo">
 <meta property="article:tag" content="Docker">
 <meta name="twitter:card" content="summary_large_image">
@@ -223,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          0 字
+          1.8k 字
         
       </span>
     
@@ -234,7 +236,7 @@
         
         
         
-          1 分钟
+          16 分钟
         
       </span>
     
@@ -276,7 +278,179 @@
             
               <div class="markdown-body">
                 
-                
+                <h1 id="新建启动容器">1. 新建启动容器</h1>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker run [OPTIONS] IMAGE [COMMAND] [ARG...]<br></code></pre></td></tr></table></figure>
+<p>常用的参数：</p>
+<ul>
+<li><code>--name</code>：为容器指定一个名称</li>
+<li><code>-d</code>：后台运行容器并返回容器ID，也即启动守护式容器</li>
+<li><code>-i</code>：以交互模式（interactive）运行容器，通常与<code>-t</code>同时使用</li>
+<li><code>-t</code>：为容器重新分配一个伪输入终端（tty），通常与<code>-i</code>同时使用。也即启动交互式容器（前台有伪终端，等待交互）</li>
+<li><code>-e</code>：为容器添加环境变量</li>
+<li><code>-P</code>：随机端口映射。将容器内暴露的所有端口映射到宿主机随机端口</li>
+<li><code>-p</code>：指定端口映射</li>
+</ul>
+<p><code>-p</code>指定端口映射的几种不同形式：</p>
+<ul>
+<li><code>-p hostPort:containerPort</code>：端口映射，例如<code>-p 8080:80</code></li>
+<li><code>-p ip:hostPort:containerPort</code>：配置监听地址，例如
+<code>-p 10.0.0.1:8080:80</code></li>
+<li><code>-p ip::containerPort</code>：随机分配端口，例如
+<code>-p 10.0.0.1::80</code></li>
+<li><code>-p hostPort1:containerPort1 -p hostPort2:containerPort2</code>：指定多个端口映射，例如<code>-p 8080:80 -p 8888:3306</code></li>
+</ul>
+<h2 id="启动交互式容器">1.1 启动交互式容器</h2>
+<p>以交互方式启动ubuntu镜像</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">-i 交互模式</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">-t 分配一个伪输入终端<span class="hljs-built_in">tty</span></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">ubuntu 镜像名称</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">/bin/bash（或者bash） shell交互的接口</span><br>docker run -it ubuntu /bin/bash<br>docker run -it --name=myu1 ubuntu /bin/bash<br></code></pre></td></tr></table></figure>
+<p>退出交互模式：</p>
+<p>方式1：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">在交互shell中<span class="hljs-built_in">exit</span>即可退回宿主机</span><br>exit;<br></code></pre></td></tr></table></figure>
+<p>方式2：使用快捷键<code>ctrl</code> + <code>P</code> +
+<code>Q</code></p>
+<p>方式1 退出后，容器会停止；</p>
+<p>方式2 退出后容器依然正在运行。</p>
+<h2 id="启动守护式容器">1.2 启动守护式容器</h2>
+<p>大部分情况下，我们系统docker容器服务时在后台运行的，可以通过<code>-d</code>指定容器的后台运行模式：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker run -d 容器名<br></code></pre></td></tr></table></figure>
+<p>注意事项：</p>
+<p>如果使用<code>docker run -d ubuntu</code>尝试启动守护式的ubuntu，会发现容器启动后就自动退出了。</p>
+<p>因为Docker容器如果在后台运行，就必须要有一个前台进程。容器运行的命令如果不是那些一直挂起的命令（例如<code>top</code>、<code>tail</code>），就会自动退出。</p>
+<h1 id="列出正在运行的容器">2. 列出正在运行的容器</h1>
+<p>列出所有正在运行的容器：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker ps [OPTIONS]<br></code></pre></td></tr></table></figure>
+<p>常用参数：</p>
+<ul>
+<li><code>-a</code>：列出当前所有正在运行的容器+历史上运行过的容器</li>
+<li><code>-l</code>：显示最近创建的容器</li>
+<li><code>-n</code>：显示最近n个创建的容器</li>
+<li><code>-q</code>：静默模式，只显示容器编号</li>
+</ul>
+<h1 id="容器其他启停操作">3. 容器其他启停操作</h1>
+<h2 id="启动已经停止的容器">3.1 启动已经停止的容器</h2>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker start 容器ID或容器名<br><br>docker start -i id<br></code></pre></td></tr></table></figure>
+<h2 id="重启容器">3.2 重启容器</h2>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker restart 容器ID或容器名<br></code></pre></td></tr></table></figure>
+<h2 id="停止容器">3.3 停止容器</h2>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker stop 容器ID或容器名<br></code></pre></td></tr></table></figure>
+<h2 id="强制停止容器">3.4 强制停止容器</h2>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker kill 容器ID或容器名<br></code></pre></td></tr></table></figure>
+<h1 id="删除容器">4. 删除容器</h1>
+<p>删除已经停止的容器：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker rm 容器ID或容器名<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>删除容器是 <code>docker rm</code>，删除镜像是
+<code>docker rmi</code>，注意区分。</p>
+</blockquote>
+<p>强制删除正在运行的容器：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker rm -f 容器ID或容器名<br></code></pre></td></tr></table></figure>
+<p>一次删除多个容器实例：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker rm -f $&#123;docker ps -a -q&#125;<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">或者</span><br>docker ps -a -q | xargs docker rm<br></code></pre></td></tr></table></figure>
+<h1 id="查看容器日志">5.查看容器日志</h1>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker logs 容器ID或容器名<br></code></pre></td></tr></table></figure>
+<h1 id="查看容器内运行的进程">6. 查看容器内运行的进程</h1>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker top 容器ID或容器名<br></code></pre></td></tr></table></figure>
+<h1 id="查看容器内部细节">7. 查看容器内部细节</h1>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker inspect 容器ID或容器名<br></code></pre></td></tr></table></figure>
+<h1 id="进入正在运行的容器">8. 进入正在运行的容器</h1>
+<p>进入正在运行的容器，并以命令行交互：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker exec -it 容器ID bashShell<br><br>docker exec -it 9b04f2cf4fc4 /bin/bash<br></code></pre></td></tr></table></figure>
+<p>重新进入：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker attach 容器ID<br></code></pre></td></tr></table></figure>
+<p><code>docker exec</code> 和 <code>docker attach</code> 区别：</p>
+<ul>
+<li><code>attach</code>直接进入容器启动命令的终端，不会启动新的进程，用<code>exit</code>退出会导致容器的停止</li>
+<li><code>exec</code>是在容器中打开新的终端，并且可以启动新的进程，用<code>exit</code>退出不会导致容器的停止</li>
+</ul>
+<p>如果有多个终端，都对同一个容器执行了
+<code>docker attach</code>，就会出现类似投屏显示的效果。一个终端中输入输出的内容，在其他终端上也会同步的显示。</p>
+<h1 id="容器和宿主机文件拷贝">9. 容器和宿主机文件拷贝</h1>
+<p>容器内文件拷贝到宿主机：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker cp 容器ID:容器内路径 目的主机路径<br></code></pre></td></tr></table></figure>
+<p>宿主机文件拷贝到容器中：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker cp 主机路径 容器ID:容器内路径<br></code></pre></td></tr></table></figure>
+<h1 id="导入和导出容器">10. 导入和导出容器</h1>
+<p><code>export</code>：导出容器的内容流作为一个tar归档文件（对应<code>import</code>命令）；</p>
+<p><code>import</code>：从tar包中的内容创建一个新的文件系统再导入为镜像（对应<code>export</code>命令）；</p>
+<p>示例：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">导出</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">docker <span class="hljs-built_in">export</span> 容器ID &gt; tar文件名</span><br>docker export abc &gt; aaa.tar<br><span class="hljs-meta prompt_"># </span><span class="language-bash">eg</span><br>docker export 9b04f2cf4fc4 &gt; abc.tar<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">导入</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash"><span class="hljs-built_in">cat</span> tar文件 | docker import - 自定义镜像用户/自定义镜像名:自定义镜像版本号</span><br>cat aaa.tar | docker import - test/mytest:1.0.1<br><span class="hljs-meta prompt_"># </span><span class="language-bash">查看镜像</span><br>docker images<br></code></pre></td></tr></table></figure>
+<h1 id="将容器生成新镜像">11. 将容器生成新镜像</h1>
+<p><code>docker commit</code>提交容器副本使之成为一个新的镜像。</p>
+<blockquote>
+<p>docker 启动一个镜像容器后，
+可以在里面执行一些命令操作，然后使用<code>docker commit</code>将新的这个容器快照生成一个镜像。</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker commit -m=&quot;提交的描述信息&quot; -a=&quot;作者&quot; 容器ID 要创建的目标镜像名:[tag]<br></code></pre></td></tr></table></figure>
+<p>Docker挂载主机目录，可能会出现报错：<code>cannot open directory .: Perission denied</code>。</p>
+<p>解决方案：在命令中加入参数 <code>--privileged=true</code>。</p>
+<p>CentOS7安全模块比之前系统版本加强，不安全的会先禁止，目录挂载的情况被默认为不安全的行为，在SELinux里面挂载目录被禁止掉了。如果要开启，一般使用
+<code>--privileged=true</code>，扩大容器的权限解决挂载没有权限的问题。也即使用该参数，容器内的root才拥有真正的root权限，否则容器内的root只是外部的一个普通用户权限。</p>
+<h1 id="本地镜像发布到阿里云">12. 本地镜像发布到阿里云</h1>
+<ul>
+<li>创建仓库镜像
+<ul>
+<li>选择控制台，进入容器镜像服务</li>
+<li>选择个人实例</li>
+<li>命名空间</li>
+<li>仓库名称</li>
+<li>进入管理界面获得脚本</li>
+<li>将镜像推送到阿里云</li>
+</ul></li>
+</ul>
+<h1 id="私人仓库">13. 私人仓库</h1>
+<ol type="1">
+<li>拉取仓库</li>
+</ol>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">docker pull registry<br></code></pre></td></tr></table></figure>
+<ol start="2" type="1">
+<li>生成容器</li>
+</ol>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">docker run -d -p 5000:5000 -v /zzyyuse/myregistry/:/tmp/registry --privileged=<span class="hljs-literal">true</span> registry<br></code></pre></td></tr></table></figure>
+<ol start="3" type="1">
+<li>curl验证私服库上有什么镜像</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">curl -XGET http://localhost:5000/v2/_catalog<br><br></code></pre></td></tr></table></figure>
+<ol start="4" type="1">
+<li>修改符合私服tag格式</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">docker tag bobo/vimubu:1.3 192.168.226.137:5000/myubu:1.3<br></code></pre></td></tr></table></figure>
+<ol start="5" type="1">
+<li>修改daemon.json,添加，使其支持http</li>
+</ol>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-attr">&quot;insecure-registries&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">[</span><span class="hljs-string">&quot;192.168.226.137:5000&quot;</span><span class="hljs-punctuation">]</span><br></code></pre></td></tr></table></figure>
+<ol start="6" type="1">
+<li>push到本地私服库</li>
+</ol>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">docker push 192.168.226.137:5000/myubu:1.3<br></code></pre></td></tr></table></figure>
+<ol start="7" type="1">
+<li>curl验证私服库上有什么镜像</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">curl -XGET http://localhost:5000/v2/_catalog<br></code></pre></td></tr></table></figure>
+<ol start="8" type="1">
+<li>pull本地</li>
+</ol>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sh">docker pull localhost:5000/myubu:1.3<br>docker pull 192.168.226.137:5000/myubu:1.3<br><br></code></pre></td></tr></table></figure>
+<h1 id="容器数据卷">14. 容器数据卷</h1>
+<p>卷就是目录或文件，存在于一个或多个容器中，由docker挂载到容器，但不属于联合文件系统，因此能够绕过UnionFS，提供一些用于持续存储或共享数据。</p>
+<p>特性：卷设计的目的就是数据的持久化，完全独立于容器的生存周期，因此Docker不会在容器删除时删除其挂载的数据卷。</p>
+<p>特点：</p>
+<ul>
+<li>数据卷可以在容器之间共享或重用数据</li>
+<li>卷中的更改可以直接实施生效</li>
+<li>数据卷中的更改不会包含在镜像的更新中</li>
+<li>数据卷的生命周期一直持续到没有容器使用它为止</li>
+</ul>
+<p>运行一个带有容器卷存储功能的容器实例：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker run -it --privileged=true -v 宿主机绝对路径目录:容器内目录[rw | ro] 镜像名<br></code></pre></td></tr></table></figure>
+<p>可以使用<code>docker inspect</code>查看容器绑定的数据卷。</p>
+<p>权限：</p>
+<ul>
+<li><code>rw</code>：读写</li>
+<li><code>ro</code>：只读。如果宿主机写入内容，可以同步给容器内，容器内可以读取。</li>
+</ul>
+<p>容器卷的继承：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">启动一个容器</span><br>docker run -it --privileged=true /tmp/test:/tmp/docker --name u1 ubuntu /bin/bash<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">使用 --volumes-from 继承 u1的容器卷映射配置</span><br>docker run -it --privileged=true --volumes-from u1 --name u2 ubuntu<br></code></pre></td></tr></table></figure>
+<h1 id="所有命令示意图">15. 所有命令示意图</h1>
+<p><img src="/2024/12/07/docker/5-%E5%AE%B9%E5%99%A8%E5%91%BD%E4%BB%A4/1652093386636-41aec8f5-bd52-4a99-8c3c-daa61c1d78a5.png" srcset="/img/loading.gif" lazyload></p>
 
                 
               </div>

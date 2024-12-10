@@ -19,14 +19,16 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta property="og:type" content="article">
+    <meta name="description" content="1. 镜像 镜像是一种轻量级、可执行的独立软件包，它包含运行某个软件所需的所有内容，我们把应用程序和配置依赖打包好行程一个可交付的运行环境（包括代码、运行时需要的库、环境变量和配置文件等），这个打包好的运行环境就是image镜像文件。 2. Docker 镜像加载原理 2.1 联合文件系统 Docker 中的文件存储驱动叫做 storage driver。 Docker 最早支持的sto">
+<meta property="og:type" content="article">
 <meta property="og:title" content="6. Docker镜像">
 <meta property="og:url" content="http://binbo-zappy.github.io/2024/12/07/docker/6-Docker%E9%95%9C%E5%83%8F/index.html">
 <meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="1. 镜像 镜像是一种轻量级、可执行的独立软件包，它包含运行某个软件所需的所有内容，我们把应用程序和配置依赖打包好行程一个可交付的运行环境（包括代码、运行时需要的库、环境变量和配置文件等），这个打包好的运行环境就是image镜像文件。 2. Docker 镜像加载原理 2.1 联合文件系统 Docker 中的文件存储驱动叫做 storage driver。 Docker 最早支持的sto">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/docker.jpg">
 <meta property="article:published_time" content="2024-12-07T07:24:02.000Z">
-<meta property="article:modified_time" content="2024-12-07T07:24:02.637Z">
+<meta property="article:modified_time" content="2024-12-10T09:06:19.035Z">
 <meta property="article:author" content="Binbo">
 <meta property="article:tag" content="Docker">
 <meta name="twitter:card" content="summary_large_image">
@@ -223,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          0 字
+          861 字
         
       </span>
     
@@ -234,7 +236,7 @@
         
         
         
-          1 分钟
+          8 分钟
         
       </span>
     
@@ -276,7 +278,47 @@
             
               <div class="markdown-body">
                 
-                
+                <h1 id="镜像">1. 镜像</h1>
+<p>镜像是一种轻量级、可执行的独立软件包，它包含运行某个软件所需的所有内容，我们把应用程序和配置依赖打包好行程一个可交付的运行环境（包括代码、运行时需要的库、环境变量和配置文件等），这个打包好的运行环境就是image镜像文件。</p>
+<h1 id="docker-镜像加载原理">2. Docker 镜像加载原理</h1>
+<h2 id="联合文件系统">2.1 联合文件系统</h2>
+<p>Docker 中的文件存储驱动叫做 storage driver。</p>
+<p>Docker 最早支持的stotage driver是
+AUFS，它实际上由一层一层的文件系统组成，这种层级的文件系统叫UnionFS。</p>
+<p>联合文件系统（UnionFS）：Union
+文件系统，是一种分层、轻量级并且高性能的文件系统，它支持对文件系统的修改作为一次提交来一层层的叠加，同时可以将不同目录挂载到同一个虚拟文件系统下（unite
+serveral directories into a single virtual filesystem）。</p>
+<p>Union文件系统是Docker镜像的基础。镜像可以通过分层来进行集成，基于基础镜像可以制作具体的应用镜像。</p>
+<p>特性：一次同时加载多个文件系统，但从外面看起来，只能看到一个文件系统，联合加载会把各层文件系统叠加起来，这样最终的文件系统会包含所有底层的文件和目录。</p>
+<p>后来出现的docker版本中，除了AUFS，还支持OverlayFS、Btrfs、Device
+Mapper、VFS、ZFS等storage driver。</p>
+<h2 id="bootfs和rootfs">2.2 bootfs和rootfs</h2>
+<p>bootfs（boot file system）主要包含 bootloader 和
+kernel，bootloader主要是引导加载
+kernel，Linux刚启动时会加载bootfs文件系统。</p>
+<p>在Docker镜像的最底层是引导文件系统bootfs。这一层与我们典型的Linux/Unix系统是一样的，包含boot加载器和内核。当boot加载完成之后整个内核就都在内存中了，此时内存的使用权已经由
+bootfs 转交给内核，此时系统也会卸载 bootfs。</p>
+<p>rootfs（root file system），在bootfs之上，包含的就是典型Linux系统中的
+<code>/dev</code>、<code>/proc</code>、<code>/bin</code>、<code>/etc</code>等标准目录和文件。rootfs就是各种不同的操作系统发行版，比如Ubuntu、CentOS等。</p>
+<p>docker镜像底层层次：</p>
+<p><img src="/2024/12/07/docker/6-Docker%E9%95%9C%E5%83%8F/1652093445038-27095471-f01f-4978-a28f-d8e2df893dab.jpeg" srcset="/img/loading.gif" lazyload></p>
+<p>对于一个精简的OS，rootfs可以很小，只需要包括最基本的命令、工具和程序库就可以了，因为底层直接使用Host的Kernel，自己只需要提供rootfs就可以。所以，对于不同的Linux发行版，bootfs基本是一致的，rootfs会有差别，不同的发行版可以共用bootfs。</p>
+<p>有差别的rootfs：</p>
+<p><img src="/2024/12/07/docker/6-Docker%E9%95%9C%E5%83%8F/1652093452907-392b879e-1f7b-478a-97ae-7c37cb9669b3.jpeg" srcset="/img/loading.gif" lazyload></p>
+<h2 id="镜像分层">2.3 镜像分层</h2>
+<p>Docker支持扩展现有镜像，创建新的镜像。新镜像是从base镜像一层一层叠加生成的。</p>
+<p>例如：</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-comment"># Version: 0.0.1</span><br><span class="hljs-keyword">FROM</span> debian  <span class="hljs-comment"># 直接在debain base镜像上构建</span><br><span class="hljs-keyword">MAINTAINER</span> mylinux<br><span class="hljs-keyword">RUN</span><span class="language-bash"> apt-get update &amp;&amp; apt-get install -y emacs <span class="hljs-comment"># 安装emacs</span></span><br><span class="hljs-keyword">RUN</span><span class="language-bash"> apt-get install -y apache2 <span class="hljs-comment"># 安装apache2</span></span><br><span class="hljs-keyword">CMD</span><span class="language-bash"> [<span class="hljs-string">&quot;/bin/bash&quot;</span>] <span class="hljs-comment"># 容器启动时运行bash</span></span><br></code></pre></td></tr></table></figure>
+<p>镜像创建过程：</p>
+<p><img src="/2024/12/07/docker/6-Docker%E9%95%9C%E5%83%8F/1652093459380-335e0f0e-1213-47d9-a17b-f49734699ef2.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="镜像分层的优势">3. 镜像分层的优势</h1>
+<p>镜像分层的一个最大好处就是共享资源，方便复制迁移，方便复用。</p>
+<h1 id="容器层">4. 容器层</h1>
+<p>当容器启动时，一个新的<strong>可写层</strong>将被加载到镜像的顶部，这一层通常被称为<code>容器层</code>，容器层之下的都叫<code>镜像层</code>。</p>
+<p>所有对容器的改动，无论添加、删除、还是修改文件都只会发生在容器层中。</p>
+<p>只有容器层是可写的，容器层下面的所有镜像层都是只读的。</p>
+<p>如图：</p>
+<p><img src="/2024/12/07/docker/6-Docker%E9%95%9C%E5%83%8F/1652093466220-a1c70673-7ca7-4025-9432-d89152439000.jpeg" srcset="/img/loading.gif" lazyload></p>
 
                 
               </div>

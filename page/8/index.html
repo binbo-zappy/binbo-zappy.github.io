@@ -225,6 +225,376 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2024/11/27/cpp/google_style_guide/" target="_self">
+          <img src="/imgs/google-style.jpg" srcset="/img/loading.gif" lazyload alt="google_style_guide">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/11/27/cpp/google_style_guide/" target="_self">
+          google_style_guide
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt " href="/2024/11/27/cpp/google_style_guide/" target="_self">
+        <div>
+          1.头文件 通常每一个.cc文件都有一个对应的.h文件.也有一些常见例外,如单元测试代码和只包含main()函数的.cc文件 1.1Self-contained头文件 所有头文件要能够自给自足。换言之，用户和重构工具不需要为特别场合而包含额外的头文件。 详言之，一个头文件要有1.2.#define保护，统统包含它所需要的其它头文件，也不要求定义任何特别symbols. 不过有一个例外，即
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-11-27 20:23" pubdate>
+              2024-11-27
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/c/" class="category-chain-item">c++</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/c/google-style/" class="category-chain-item">google_style</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/c/">#c++</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2024/11/27/effective-cpp/9-%E6%9D%82%E9%A1%B9%E8%AE%A8%E8%AE%BA/" target="_self">
+          <img src="/imgs/effective-cpp.png" srcset="/img/loading.gif" lazyload alt="9. 杂项讨论">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/11/27/effective-cpp/9-%E6%9D%82%E9%A1%B9%E8%AE%A8%E8%AE%BA/" target="_self">
+          9. 杂项讨论
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt " href="/2024/11/27/effective-cpp/9-%E6%9D%82%E9%A1%B9%E8%AE%A8%E8%AE%BA/" target="_self">
+        <div>
+          53. 不要轻忽编译器的警告 123456789class B&#123;public:    virtual void f() const;&#125;class D&#123;    public:    virtual void f();&#125; 希望D::f重新定义virtual函数B::f，B的f 是个const成员函数，而D中未被声明为const  严肃对待编译器发出的警
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-11-27 20:17" pubdate>
+              2024-11-27
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/c/" class="category-chain-item">c++</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/c/effective-c/" class="category-chain-item">effective c++</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/c/">#c++</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2024/11/27/effective-cpp/8-%E5%AE%9A%E5%88%B6new%E5%92%8Cdelete/" target="_self">
+          <img src="/imgs/effective-cpp.png" srcset="/img/loading.gif" lazyload alt="8. 定制new和delete">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/11/27/effective-cpp/8-%E5%AE%9A%E5%88%B6new%E5%92%8Cdelete/" target="_self">
+          8. 定制new和delete
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt " href="/2024/11/27/effective-cpp/8-%E5%AE%9A%E5%88%B6new%E5%92%8Cdelete/" target="_self">
+        <div>
+          49. 了解new-handler的行为  当operator new无法满足某一内存分配需求时，它会抛出异常。以前它会返回一个u1指针，某些旧式编译器目前也还那么做。 当operator new抛出异常以反映一个未获满足的内存需求之前，它会先调用一个客户指定的错误处理函数，一个所谓的new_handler。 为了指定这个“用以处理内存不足”的函数，客户必须调用set new han
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-11-27 20:17" pubdate>
+              2024-11-27
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/c/" class="category-chain-item">c++</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/c/effective-c/" class="category-chain-item">effective c++</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/c/">#c++</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2024/11/27/effective-cpp/7-%E6%A8%A1%E6%9D%BF%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/" target="_self">
+          <img src="/imgs/effective-cpp.png" srcset="/img/loading.gif" lazyload alt="7. 模板与泛型编程">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/11/27/effective-cpp/7-%E6%A8%A1%E6%9D%BF%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/" target="_self">
+          7. 模板与泛型编程
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt " href="/2024/11/27/effective-cpp/7-%E6%A8%A1%E6%9D%BF%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/" target="_self">
+        <div>
+          41. 了解隐式接口和编译期多态  面向对象编程世界总以显示接口和运行期多态解决问题 由于w的类型被声明为Widget,所以w必须支持Widget接口。我们可以在源码中找出这个接口（例如在idget的.h文件中），看看它是什么样子，所以我称此为一个显式接口(explicit interface），也就是它在源码中明确可见。 由于Widget的某些成员函数是virtual,w对那些函数的调
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-11-27 20:17" pubdate>
+              2024-11-27
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/c/" class="category-chain-item">c++</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/c/effective-c/" class="category-chain-item">effective c++</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/c/">#c++</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/" target="_self">
+          <img src="/imgs/effective-cpp.png" srcset="/img/loading.gif" lazyload alt="6. 继承和面向对象设计">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/" target="_self">
+          6. 继承和面向对象设计
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt " href="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/" target="_self">
+        <div>
+          32. 确定你的public继承塑模出is-a关系  “public继承”意味is-a is-a并非是唯-存在于classes之间的关系。另两个常见的关系是has-a(有一个)和is-implemented-in-terms-of(根据某物实现出)。 “public继承”意味is-a。适用于base classes身上的每一件事情一定也适用于derived classes身上，因为每
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-11-27 20:17" pubdate>
+              2024-11-27
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/c/" class="category-chain-item">c++</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/c/effective-c/" class="category-chain-item">effective c++</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/c/">#c++</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
         <a href="/2024/11/27/effective-cpp/5-%E5%AE%9E%E7%8E%B0/" target="_self">
           <img src="/imgs/effective-cpp.png" srcset="/img/loading.gif" lazyload alt="5. 实现">
         </a>
@@ -567,376 +937,6 @@
     <span>></span>
     
   <a href="/categories/c/effective-c/" class="category-chain-item">effective c++</a>
-  
-  
-
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/c/">#c++</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/27/cpp-primer-plus/17-io%E3%80%81file/" target="_self">
-          <img src="/imgs/cpp-primer-plus.jpg" srcset="/img/loading.gif" lazyload alt="17. io、file">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/11/27/cpp-primer-plus/17-io%E3%80%81file/" target="_self">
-          17. io、file
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt " href="/2024/11/27/cpp-primer-plus/17-io%E3%80%81file/" target="_self">
-        <div>
-          17.1 C++输入和输出概述 17.1.1 流和缓冲区  C++程序把输入和输出看作字节流 streambuf类为缓冲区提供了内存，并提供了用于填充缓冲区、访问缓冲区内容、刷新缓冲区和管理缓冲区内存的类方法 ios base类表示流的一般特征，如是否可读取、是二进制流还是文本流等： ios类基于ios base,其中包括了一个指向streambuf对象的指针成员； ostream
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-27 19:34" pubdate>
-              2024-11-27
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/c/" class="category-chain-item">c++</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/c/c-primer-plus/" class="category-chain-item">c++ primer plus</a>
-  
-  
-
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/c/">#c++</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/27/cpp-primer-plus/16-string%E7%B1%BB%E5%92%8C%E6%A0%87%E5%87%86%E6%A8%A1%E6%9D%BF%E5%BA%93/" target="_self">
-          <img src="/imgs/cpp-primer-plus.jpg" srcset="/img/loading.gif" lazyload alt="16. string类和标准模板库">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/11/27/cpp-primer-plus/16-string%E7%B1%BB%E5%92%8C%E6%A0%87%E5%87%86%E6%A8%A1%E6%9D%BF%E5%BA%93/" target="_self">
-          16. string类和标准模板库
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt " href="/2024/11/27/cpp-primer-plus/16-string%E7%B1%BB%E5%92%8C%E6%A0%87%E5%87%86%E6%A8%A1%E6%9D%BF%E5%BA%93/" target="_self">
-        <div>
-          string类 1. 1.构造字符串 size_type是一个依赖于实现的整型，是在头文件string中定义的。string类将string:: npos定义为字符串的最大长度，通常为unsigned int的最大值。另外，表格中使用缩写NBTS(null-terminated string)来表示以空字符结束的字符串一传统的C字符串。   img  指定分割字符： 123s
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-27 19:34" pubdate>
-              2024-11-27
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/c/" class="category-chain-item">c++</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/c/c-primer-plus/" class="category-chain-item">c++ primer plus</a>
-  
-  
-
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/c/">#c++</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/27/cpp-primer-plus/15-%E5%8F%8B%E5%85%83%E3%80%81%E5%BC%82%E5%B8%B8%E5%92%8C%E5%85%B6%E4%BB%96/" target="_self">
-          <img src="/imgs/cpp-primer-plus.jpg" srcset="/img/loading.gif" lazyload alt="15. 友元、异常和其他">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/11/27/cpp-primer-plus/15-%E5%8F%8B%E5%85%83%E3%80%81%E5%BC%82%E5%B8%B8%E5%92%8C%E5%85%B6%E4%BB%96/" target="_self">
-          15. 友元、异常和其他
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt " href="/2024/11/27/cpp-primer-plus/15-%E5%8F%8B%E5%85%83%E3%80%81%E5%BC%82%E5%B8%B8%E5%92%8C%E5%85%B6%E4%BB%96/" target="_self">
-        <div>
-          1. 友元 友元类、友元函数、类彼此成为对方的友元   img  共同的友元   img  2. 嵌套类 在另一个类中声明的类 被称为嵌套类，通过提供新的类型类作用域来避免名称混乱。   img  模板中也可以嵌套类 3. 异常 1.调用abort()   img    img  2.返回错误码   img    img
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-27 19:34" pubdate>
-              2024-11-27
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/c/" class="category-chain-item">c++</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/c/c-primer-plus/" class="category-chain-item">c++ primer plus</a>
-  
-  
-
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/c/">#c++</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/27/cpp-primer-plus/14-c++%E4%B8%AD%E7%9A%84%E4%BB%A3%E7%A0%81%E9%87%8D%E7%94%A8/" target="_self">
-          <img src="/imgs/cpp-primer-plus.jpg" srcset="/img/loading.gif" lazyload alt="14. c++中的代码重用">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/11/27/cpp-primer-plus/14-c++%E4%B8%AD%E7%9A%84%E4%BB%A3%E7%A0%81%E9%87%8D%E7%94%A8/" target="_self">
-          14. c++中的代码重用
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt " href="/2024/11/27/cpp-primer-plus/14-c++%E4%B8%AD%E7%9A%84%E4%BB%A3%E7%A0%81%E9%87%8D%E7%94%A8/" target="_self">
-        <div>
-          1. 包含对象成员的类 1.1. valaray类简介 使用explicit关闭隐式转换 valarray类是由头文件valarray支持的。顾名思义，这个类用于处理数值（或具有类似特性的类），它支持诸如将数组中所有元素的值相加以及在数组中找出最大和最小的值等操作。valarray被定义为一个模板类，以便能够处理不同的数据类型。 valaray类的方法：   img  C++包含
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-27 19:34" pubdate>
-              2024-11-27
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/c/" class="category-chain-item">c++</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/c/c-primer-plus/" class="category-chain-item">c++ primer plus</a>
-  
-  
-
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/c/">#c++</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/27/cpp-primer-plus/13-%E7%B1%BB%E7%BB%A7%E6%89%BF/" target="_self">
-          <img src="/imgs/cpp-primer-plus.jpg" srcset="/img/loading.gif" lazyload alt="13. 类继承">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/11/27/cpp-primer-plus/13-%E7%B1%BB%E7%BB%A7%E6%89%BF/" target="_self">
-          13. 类继承
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt " href="/2024/11/27/cpp-primer-plus/13-%E7%B1%BB%E7%BB%A7%E6%89%BF/" target="_self">
-        <div>
-          13.2 继承： is-a关系 c++三种继承方式：  公有继承  建立一种is-a关系，即派生类对象也是一个基类对象，可以对基类对象执行的任何操作，也可以对派生类对象执行  保护继承 私有继承  13.3 多态公有继承  在派生类中重新定义基类的方法。 使用虚方法，使用关键词virtual 基类声明了一个虚析构函数，为了确保释放派生对象时，按正确的顺序调用析构函数，
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-27 19:34" pubdate>
-              2024-11-27
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/c/" class="category-chain-item">c++</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/c/c-primer-plus/" class="category-chain-item">c++ primer plus</a>
   
   
 
