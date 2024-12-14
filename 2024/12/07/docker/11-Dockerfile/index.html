@@ -19,14 +19,16 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta property="og:type" content="article">
+    <meta name="description" content="1. Dockerfile Dockerfile是用来构建Docker镜像的文本文件，是由一条条构建镜像所需的指令和参数构成的脚本。 构建步骤：  编写Dockerfile文件 docker build命令构建镜像 docker run依据镜像运行容器实例  2. 构建过程 Dockerfile编写：  每条保留字指令都必须为大写字母，且后面要跟随至少一个参数 指令按照从上">
+<meta property="og:type" content="article">
 <meta property="og:title" content="11. Dockerfile">
 <meta property="og:url" content="http://binbo-zappy.github.io/2024/12/07/docker/11-Dockerfile/index.html">
 <meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="1. Dockerfile Dockerfile是用来构建Docker镜像的文本文件，是由一条条构建镜像所需的指令和参数构成的脚本。 构建步骤：  编写Dockerfile文件 docker build命令构建镜像 docker run依据镜像运行容器实例  2. 构建过程 Dockerfile编写：  每条保留字指令都必须为大写字母，且后面要跟随至少一个参数 指令按照从上">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/docker.jpg">
 <meta property="article:published_time" content="2024-12-07T07:24:11.000Z">
-<meta property="article:modified_time" content="2024-12-07T07:24:11.353Z">
+<meta property="article:modified_time" content="2024-12-14T02:48:55.945Z">
 <meta property="article:author" content="Binbo">
 <meta property="article:tag" content="Docker">
 <meta name="twitter:card" content="summary_large_image">
@@ -223,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          0 字
+          1.7k 字
         
       </span>
     
@@ -234,7 +236,7 @@
         
         
         
-          1 分钟
+          15 分钟
         
       </span>
     
@@ -276,7 +278,133 @@
             
               <div class="markdown-body">
                 
-                
+                <h1 id="dockerfile">1. Dockerfile</h1>
+<p>Dockerfile是用来构建Docker镜像的文本文件，是由一条条构建镜像所需的指令和参数构成的脚本。</p>
+<p>构建步骤：</p>
+<ol type="1">
+<li>编写Dockerfile文件</li>
+<li><code>docker build</code>命令构建镜像</li>
+<li><code>docker run</code>依据镜像运行容器实例</li>
+</ol>
+<h1 id="构建过程">2. 构建过程</h1>
+<p>Dockerfile编写：</p>
+<ul>
+<li>每条保留字指令都必须为大写字母，且后面要跟随至少一个参数</li>
+<li>指令按照从上到下顺序执行</li>
+<li><code>#</code>表示注释</li>
+<li>每条指令都会创建一个新的镜像层并对镜像进行提交</li>
+</ul>
+<p>Docker引擎执行Docker的大致流程：</p>
+<ol type="1">
+<li>docker从基础镜像运行一个容器</li>
+<li>执行一条指令并对容器做出修改</li>
+<li>执行类似<code>docker commit</code>的操作提交一个新的镜像层</li>
+<li>docker再基于刚提交的镜像运行一个新容器</li>
+<li>执行Dockerfile中的下一条指令，直到所有指令都执行完成</li>
+</ol>
+<p>从应用软件的角度来看，Dockerfile、Dockert镜像与Docker容器分别代表软件的三个不同阶段，</p>
+<ul>
+<li>Dockerfile是软件的原材料</li>
+<li>Dockert镜像是软件的交付品</li>
+<li>Docker?容器则可以认为是软件镜像的运行态，也即依照镜像运行的容器实例</li>
+</ul>
+<p>Dockerfile面向开发，Docker镜像成为交付标准，Docker容器则涉及部署与运维，三者缺一不可，合力充当Docker体系的基石。</p>
+<h1 id="dockerfile保留字">3. Dockerfile保留字</h1>
+<h2 id="from">3.1 FROM</h2>
+<p>基础镜像，当前新镜像是基于哪个镜像的，指定一个已经存在的镜像作为模板。Dockerfile第一条必须是<code>FROM</code></p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-comment"># FROM 镜像名</span><br><span class="hljs-keyword">FROM</span> hub.c.<span class="hljs-number">163</span>.com/library/tomcat<br></code></pre></td></tr></table></figure>
+<h2 id="maintainer">3.2 MAINTAINER</h2>
+<p>镜像维护者的姓名和邮箱地址</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-comment"># 非必须</span><br><span class="hljs-keyword">MAINTAINER</span> ZhangSan zs@<span class="hljs-number">163</span>.com<br></code></pre></td></tr></table></figure>
+<h2 id="run">3.3 RUN</h2>
+<p>容器构建时需要运行的命令。</p>
+<p>有两种格式：</p>
+<ul>
+<li>shell格式</li>
+</ul>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-comment"># 等同于在终端操作的shell命令</span><br><span class="hljs-comment"># 格式：RUN &lt;命令行命令&gt;</span><br><span class="hljs-keyword">RUN</span><span class="language-bash"> yum -y install vim</span><br></code></pre></td></tr></table></figure>
+<ul>
+<li>exec格式</li>
+</ul>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-comment"># 格式：RUN [&quot;可执行文件&quot; , &quot;参数1&quot;, &quot;参数2&quot;]</span><br><span class="hljs-keyword">RUN</span><span class="language-bash"> [<span class="hljs-string">&quot;./test.php&quot;</span>, <span class="hljs-string">&quot;dev&quot;</span>, <span class="hljs-string">&quot;offline&quot;</span>]  <span class="hljs-comment"># 等价于 RUN ./test.php dev offline</span></span><br></code></pre></td></tr></table></figure>
+<p><code>RUN</code>是在<code>docker build</code>时运行</p>
+<h2 id="expose">3.4 EXPOSE</h2>
+<p>当前容器对外暴露出的端口。</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-comment"># EXPOSE 要暴露的端口</span><br><span class="hljs-comment"># EXPOSE &lt;port&gt;[/&lt;protocol] ....</span><br><span class="hljs-keyword">EXPOSE</span> <span class="hljs-number">3306</span> <span class="hljs-number">33060</span><br></code></pre></td></tr></table></figure>
+<h2 id="workdir">3.5 WORKDIR</h2>
+<p>指定在创建容器后， 终端默认登录进来的工作目录。</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-keyword">ENV</span> CATALINA_HOME /usr/local/tomcat<br><span class="hljs-keyword">WORKDIR</span><span class="language-bash"> <span class="hljs-variable">$CATALINA_HOME</span></span><br></code></pre></td></tr></table></figure>
+<h2 id="user">3.6 USER</h2>
+<p>指定该镜像以什么样的用户去执行，如果不指定，默认是<code>root</code>。（一般不修改该配置）</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-comment"># USER &lt;user&gt;[:&lt;group&gt;]</span><br><span class="hljs-keyword">USER</span> patrick<br></code></pre></td></tr></table></figure>
+<h2 id="env">3.7 ENV</h2>
+<p>用来在构建镜像过程中设置环境变量。</p>
+<p>这个环境变量可以在后续的任何<code>RUN</code>指令或其他指令中使用</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-comment"># 格式 ENV 环境变量名 环境变量值</span><br><span class="hljs-comment"># 或者 ENV 环境变量名=值</span><br><span class="hljs-keyword">ENV</span> MY_PATH /usr/mytest<br><br><span class="hljs-comment"># 使用环境变量</span><br><span class="hljs-keyword">WORKDIR</span><span class="language-bash"> <span class="hljs-variable">$MY_PATH</span></span><br></code></pre></td></tr></table></figure>
+<h2 id="volume">3.8 VOLUME</h2>
+<p>容器数据卷，用于数据保存和持久化工作。类似于 <code>docker run</code>
+的<code>-v</code>参数。</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-comment"># VOLUME 挂载点</span><br><span class="hljs-comment"># 挂载点可以是一个路径，也可以是数组（数组中的每一项必须用双引号）</span><br><span class="hljs-keyword">VOLUME</span><span class="language-bash"> /var/lib/mysql</span><br></code></pre></td></tr></table></figure>
+<h2 id="add">3.9 ADD</h2>
+<p>将宿主机目录下（或远程文件）的文件拷贝进镜像，且会自动处理URL和解压tar压缩包。</p>
+<h2 id="copy">3.10 COPY</h2>
+<p>类似<code>ADD</code>，拷贝文件和目录到镜像中。</p>
+<p>将从构建上下文目录中<code>&lt;源路径&gt;</code>的文件目录复制到新的一层镜像内的<code>&lt;目标路径&gt;</code>位置。</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-keyword">COPY</span><span class="language-bash"> src dest</span><br><span class="hljs-keyword">COPY</span><span class="language-bash"> [<span class="hljs-string">&quot;src&quot;</span>, <span class="hljs-string">&quot;dest&quot;</span>]</span><br><span class="hljs-comment"># &lt;src源路径&gt;：源文件或者源目录</span><br><span class="hljs-comment"># &lt;dest目标路径&gt;：容器内的指定路径，该路径不用事先建好。如果不存在会自动创建</span><br></code></pre></td></tr></table></figure>
+<h2 id="cmd">3.11 CMD</h2>
+<p>指定容器启动后要干的事情。</p>
+<p>有两种格式：</p>
+<ul>
+<li>shell格式</li>
+</ul>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-comment"># CMD &lt;命令&gt;</span><br><span class="hljs-keyword">CMD</span><span class="language-bash"> <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;hello world&quot;</span></span><br></code></pre></td></tr></table></figure>
+<ul>
+<li>exec格式</li>
+</ul>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-comment"># CMD [&quot;可执行文件&quot;, &quot;参数1&quot;, &quot;参数2&quot; ...]</span><br><span class="hljs-keyword">CMD</span><span class="language-bash"> [<span class="hljs-string">&quot;catalina.sh&quot;</span>, <span class="hljs-string">&quot;run&quot;</span>]</span><br></code></pre></td></tr></table></figure>
+<ul>
+<li>参数列表格式</li>
+</ul>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-comment"># CMD [&quot;参数1&quot;, &quot;参数2&quot; ....]，与ENTRYPOINT指令配合使用</span><br></code></pre></td></tr></table></figure>
+<p>Dockerfile中如果出现多个<code>CMD</code>指令，只有最后一个生效。<code>CMD</code>会被<code>docker run</code>之后的参数替换。</p>
+<p>例如，对于tomcat镜像，执行以下命令会有不同的效果：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">因为tomcat的Dockerfile中指定了 CMD [<span class="hljs-string">&quot;catalina.sh&quot;</span>, <span class="hljs-string">&quot;run&quot;</span>]</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">所以直接docker run 时，容器启动后会自动执行 catalina.sh run</span><br>docker run -it -p 8080:8080 tomcat<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">指定容器启动后执行 /bin/bash</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">此时指定的/bin/bash会覆盖掉Dockerfile中指定的 CMD [<span class="hljs-string">&quot;catalina.sh&quot;</span>, <span class="hljs-string">&quot;run&quot;</span>]</span><br>docker run -it -p 8080:8080 tomcat /bin/bash<br></code></pre></td></tr></table></figure>
+<p><code>CMD</code>是在<code>docker run</code>时运行，而
+<code>RUN</code>是在<code>docker build</code>时运行。</p>
+<h2 id="entrypoint">3.12 ENTRYPOINT</h2>
+<p>用来指定一个容器启动时要运行的命令。</p>
+<p>类似于<code>CMD</code>命令，但是<code>ENTRYPOINT</code>不会被<code>docker run</code>后面的命令覆盖，这些命令参数会被当做参数送给<code>ENTRYPOINT</code>指令指定的程序。</p>
+<p><code>ENTRYPOINT</code>可以和<code>CMD</code>一起用，一般是可变参数才会使用<code>CMD</code>，这里的<code>CMD</code>等于是在给<code>ENTRYPOINT</code>传参。</p>
+<p>当指定了<code>ENTRYPOINT</code>后，<code>CMD</code>的含义就发生了变化，不再是直接运行期命令，而是将<code>CMD</code>的内容作为参数传递给<code>ENTRYPOINT</code>指令，它们两个组合会变成
+<code>&lt;ENTRYPOINT&gt; "&lt;CMD&gt;"</code>。</p>
+<p>例如：</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-keyword">FROM</span> nginx<br><br><span class="hljs-keyword">ENTRYPOINT</span><span class="language-bash"> [<span class="hljs-string">&quot;nginx&quot;</span>, <span class="hljs-string">&quot;-c&quot;</span>]  <span class="hljs-comment"># 定参</span></span><br><span class="hljs-keyword">CMD</span><span class="language-bash"> [<span class="hljs-string">&quot;/etc/nginx/nginx.conf&quot;</span>] <span class="hljs-comment"># 变参</span></span><br></code></pre></td></tr></table></figure>
+<p>对于此Dockerfile，构建成镜像
+<code>nginx:test</code>后，如果执行；</p>
+<ul>
+<li><code>docker run nginx test</code>，则容器启动后，会执行
+<code>nginx -c /etc/nginx/nginx.conf</code></li>
+<li><code>docker run nginx:test /app/nginx/new.conf</code>，则容器启动后，会执行
+<code>nginx -c /app/nginx/new.conf</code></li>
+</ul>
+<h1 id="构建镜像">4. 构建镜像</h1>
+<p>创建名称为<code>Dockerfile</code>的文件，示例：</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-keyword">FROM</span> ubuntu<br><span class="hljs-keyword">MAINTAINER</span> lee&lt;lee@xxx.com&gt;<br><br><span class="hljs-keyword">ENV</span> MYPATH /usr/local<br><span class="hljs-keyword">WORKDIR</span><span class="language-bash"> <span class="hljs-variable">$MYPATH</span></span><br><br><span class="hljs-keyword">RUN</span><span class="language-bash"> apt-get update</span><br><span class="hljs-keyword">RUN</span><span class="language-bash"> apt-get install net-tools</span><br><br><span class="hljs-keyword">EXPOSE</span> <span class="hljs-number">80</span><br><br><span class="hljs-keyword">CMD</span><span class="language-bash"> <span class="hljs-built_in">echo</span> <span class="hljs-variable">$MYPATH</span></span><br><span class="hljs-keyword">CMD</span><span class="language-bash"> <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;install ifconfig cmd into ubuntu success .....&quot;</span></span><br><span class="hljs-keyword">CMD</span><span class="language-bash"> /bin/bash</span><br></code></pre></td></tr></table></figure>
+<p>编写完成之后，将其构建成docker镜像。</p>
+<p>命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">注意：定义的TAG后面有个空格，空格后面有个点</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">docker build -t 新镜像名字:TAG .</span><br>docker build -t ubuntu:1.0.1 .<br></code></pre></td></tr></table></figure>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-keyword">FROM</span> centos:<span class="hljs-number">7</span><br><br><span class="hljs-keyword">ENV</span> MYPATH /usr/local<br><span class="hljs-keyword">WORKDIR</span><span class="language-bash"> <span class="hljs-variable">$MYPATH</span></span><br><br><br><span class="hljs-keyword">RUN</span><span class="language-bash"> <span class="hljs-built_in">mv</span> /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup</span><br><span class="hljs-comment"># 2、下载阿里源</span><br><span class="hljs-keyword">COPY</span><span class="language-bash"> CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo</span><br><span class="hljs-comment"># 3、替换源地址</span><br><span class="hljs-keyword">RUN</span><span class="language-bash"> sed -i -e <span class="hljs-string">&#x27;/mirrors.cloud.aliyuncs.com/d&#x27;</span> -e <span class="hljs-string">&#x27;/mirrors.aliyuncs.com/d&#x27;</span> /etc/yum.repos.d/CentOS-Base.repo</span><br><span class="hljs-comment"># 4、刷新缓存</span><br><span class="hljs-keyword">RUN</span><span class="language-bash"> yum makecache</span><br><span class="hljs-comment"># 5、更新 可做可不做</span><br><span class="hljs-comment"># RUN yum -y update</span><br><br><br><span class="hljs-comment">#安装vim编辑器</span><br><span class="hljs-keyword">RUN</span><span class="language-bash"> yum -y install vim</span><br><span class="hljs-comment">#安装ifconfig命令查看网络IP</span><br><span class="hljs-keyword">RUN</span><span class="language-bash"> yum -y install net-tools</span><br><span class="hljs-comment">#安装java8及lib库</span><br><span class="hljs-keyword">RUN</span><span class="language-bash"> yum -y install glibc.i686</span><br><span class="hljs-keyword">RUN</span><span class="language-bash"> <span class="hljs-built_in">mkdir</span> /usr/local/java</span><br><span class="hljs-comment"># ADD 是相对路径jar,把jdk-8u431-linux-x64.tar.gz添加到容器中,安装包必须要和Dockerfile文件在同一位置</span><br><span class="hljs-keyword">ADD</span><span class="language-bash"> jdk-8u431-linux-x64.tar.gz /usr/local/java</span><br><span class="hljs-comment"># 配置java环境变量</span><br><span class="hljs-keyword">ENV</span> JAVA_HOME /usr/local/java/jdk1.<span class="hljs-number">8.0</span>_431<br><span class="hljs-keyword">ENV</span> JRE_HOME $JAVA_HOME/jre<br><span class="hljs-keyword">ENV</span> CLASSPATH $JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar:$JRE_HOME/lib:$CLASSPATH<br><span class="hljs-keyword">ENV</span> PATH $JAVA_HOME/bin:$PATH<br><br><span class="hljs-keyword">EXPOSE</span> <span class="hljs-number">80</span><br><br><span class="hljs-keyword">CMD</span><span class="language-bash"> <span class="hljs-built_in">echo</span> <span class="hljs-variable">$MYPATH</span></span><br><span class="hljs-keyword">CMD</span><span class="language-bash"> <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;success--------------ok&quot;</span></span><br><span class="hljs-keyword">CMD</span><span class="language-bash"> /bin/bash</span><br><br></code></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">docker build -t centosjava8:1.5 .<br></code></pre></td></tr></table></figure>
+<h1 id="虚悬镜像">虚悬镜像</h1>
+<p>虚悬镜像：仓库名、标签名都是 <code>&lt;none&gt;</code>的镜像，称为
+dangling images（虚悬镜像）。</p>
+<p>在构建或者删除镜像时可能由于一些错误导致出现虚悬镜像。</p>
+<p>例如：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">构建时候没有镜像名、tag</span><br>docker build .<br></code></pre></td></tr></table></figure>
+<p>列出docker中的虚悬镜像：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker image ls -f dangling=true<br></code></pre></td></tr></table></figure>
+<p>虚悬镜像一般是因为一些错误而出现的，没有存在价值，可以删除：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">删除所有的虚悬镜像</span><br>docker image prune<br></code></pre></td></tr></table></figure>
 
                 
               </div>

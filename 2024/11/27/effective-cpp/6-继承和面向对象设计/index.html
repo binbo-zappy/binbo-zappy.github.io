@@ -28,7 +28,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/effective-cpp.png">
 <meta property="article:published_time" content="2024-11-27T12:17:11.000Z">
-<meta property="article:modified_time" content="2024-11-27T12:20:48.856Z">
+<meta property="article:modified_time" content="2024-12-13T08:21:10.423Z">
 <meta property="article:author" content="Binbo">
 <meta property="article:tag" content="c++">
 <meta name="twitter:card" content="summary_large_image">
@@ -289,19 +289,15 @@ classes身上，因为每一个derived class对象也都是一个base class对�
 </ol>
 <h2 id="避免遮掩继承而来的名称">33. 避免遮掩继承而来的名称</h2>
 <ol type="1">
-<li><p>base
+<li>base
 class内的某物（也许是个成员函数、typedef、或成员变量）时，编译器可以找出我们所指涉的东西，因为derived
 classes继承了声明于base classes内的所有东西。实际运作方式是，derived
-class作用域被嵌套在base class作用域内</p></li>
-<li><ol type="1">
-<li><figure>
-<img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707472078740-a22bc7ef-2776-4539-b414-6ec3f0d680bb.png" srcset="/img/loading.gif" lazyload alt="img">
-<figcaption aria-hidden="true">img</figcaption>
-</figure></li>
+class作用域被嵌套在base class作用域内
+<ol type="1">
+<li><img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707472078740-a22bc7ef-2776-4539-b414-6ec3f0d680bb.png" srcset="/img/loading.gif" lazyload></li>
 </ol></li>
-<li><p>有时候你并不想继承base
-classes的所有函数，这是可以理解的。</p></li>
-<li><ol type="1">
+<li>有时候你并不想继承base classes的所有函数，这是可以理解的。
+<ol type="1">
 <li>在public继承下，这绝对不可能发生，因为它违反了public继承所暗示的“base和derived
 classes之间的isa关系”。（这也就是为什么上述using声明式被放在derived
 class的public区域的原因：base class内的public名称在publicly derived
@@ -309,28 +305,22 @@ class内也应该是public。)</li>
 <li>然而在private继承之下（见条款39)它却可能是有意义的。例如假设Derived以private形式继承Base,而Derived唯想继承的mf1是那个无参数版本。using声明式在这里派不上用场，因为using声明式会令继承而来的某给定名称之所有同名函数在derived
 class中都可见。不，我们需要不同的技术，即一个简单的转交函数(forwarding
 function)</li>
-<li><figure>
-<img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707476895583-0a89d8bb-a633-4917-8512-b92d034b8377.png" srcset="/img/loading.gif" lazyload alt="img">
-<figcaption aria-hidden="true">img</figcaption>
-</figure></li>
+<li><img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707476895583-0a89d8bb-a633-4917-8512-b92d034b8377.png" srcset="/img/loading.gif" lazyload></li>
 </ol></li>
-<li><figure>
-<img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707476841476-416c6a76-60d6-412c-895d-d675ff490a57.png" srcset="/img/loading.gif" lazyload alt="img">
-<figcaption aria-hidden="true">img</figcaption>
-</figure></li>
-<li><p>inline转交函数(forwarding
+<li><img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707476841476-416c6a76-60d6-412c-895d-d675ff490a57.png" srcset="/img/loading.gif" lazyload></li>
+<li>inline转交函数(forwarding
 function)的另一个用途是为那些不支持using声明式（注：这并非正确行为）的老旧编译器另辟一条新路，将继承而得的名称汇入derived
-class作用域内。</p></li>
-<li><p>derived classes内的名称会遮掩base
-classes内的名称。在public继承下从来没有人希望如此。</p></li>
-<li><p>为了让被遮掩的名称再见天日，可使用using声明式或转交函数(forwarding
-functions)</p></li>
+class作用域内。</li>
+<li>derived classes内的名称会遮掩base
+classes内的名称。在public继承下从来没有人希望如此。</li>
+<li>为了让被遮掩的名称再见天日，可使用using声明式或转交函数(forwarding
+functions)</li>
 </ol>
 <h2 id="区分接口继承和实现继承">34. 区分接口继承和实现继承</h2>
 <ol type="1">
-<li><p>public继承由函数接口继承和函数实现继承</p></li>
-<li><p>身为class设计者，有时候你会希望</p></li>
-<li><ol type="1">
+<li>public继承由函数接口继承和函数实现继承</li>
+<li>身为class设计者，有时候你会希望
+<ol type="1">
 <li>derived classes只继承成员函数的接口（也就是声明)；</li>
 <li>有时候你又会希望derived
 classes同时继承函数的接口和实现，但又希望能够覆写(override)它们所继承的实现；</li>
@@ -339,72 +329,69 @@ classes同时继承函数的接口和实现，并且不允许覆写任何东西�
 </ol></li>
 </ol>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Shape</span>&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">draw</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>= <span class="hljs-number">0</span>;<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">error</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; msg)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">objectID</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Rectangle</span>: <span class="hljs-keyword">public</span> Shape&#123;&#125;;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Ellipse</span>: <span class="hljs-keyword">public</span> Shape&#123;&#125;;<br></code></pre></td></tr></table></figure>
-<ol type="1">
-<li><p>Shape是个抽象class;:它的pure
+<ol start="3" type="1">
+<li>Shape是个抽象class;:它的pure
 virtual函数draw使它成为一个抽象class。所以客户不能够创建Shape
 class的实体，只能创建其derived
 classes的实体。尽管如此，Shape还是强烈影响了所有以public形式继承它的derived
-classes,因为：</p></li>
-<li><ol type="1">
+classes,因为：
+<ol type="1">
 <li>成员函数的接口总是会被继承。pure
 virtual函数有两个最突出的特性：它们必须被任何“继承了它们”的具象class重新声明，而且它们在抽象class中通常没有定义。把这两个性质摆在一起，你就会明白：</li>
 <li>声明一个pure virtual函数的目的是为了让derived
 classes只继承函数接口。</li>
 <li>令人意外的是，我们竟然可以为pure
 virtual函数提供定义。也就是说你可以为Shape::draw供应一份实现代码，C++并不会发出怨言，但调用它的唯一途径是“调用时明确指出其class名称”：</li>
-<li><figure>
-<img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707526635349-d4f46534-4348-464c-b582-814b87939a8c.png" srcset="/img/loading.gif" lazyload alt="img">
-<figcaption aria-hidden="true">img</figcaption>
-</figure></li>
+<li><img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707526635349-d4f46534-4348-464c-b582-814b87939a8c.png" srcset="/img/loading.gif" lazyload></li>
 <li>可以为简朴的impure virtual 函数提供更平常更安全的缺省实现</li>
 </ol></li>
-<li><p>简朴的impure virtual函数背后的故事和pure
+<li>简朴的impure virtual函数背后的故事和pure
 virtual函数有点不同。一如往常，derived classes继承其函数接口，但impure
-virtual函数会提供一份实现代码，derivedclasses可能覆写(override)它。</p></li>
-<li><p>声明简朴的（非纯）impure virtual函数的目的，是让derived
-classes继承该函数的接口和缺省实现。</p></li>
-<li><p>可以“提供缺省实现给derived
-classes,但除非它们明白要求否则免谈”。此间技俩在于切断“virtual函数接口”和其“缺省实现”之间的连接。</p></li>
+virtual函数会提供一份实现代码，derivedclasses可能覆写(override)它。</li>
+<li>声明简朴的（非纯）impure virtual函数的目的，是让derived
+classes继承该函数的接口和缺省实现。</li>
+<li>可以“提供缺省实现给derived
+classes,但除非它们明白要求否则免谈”。此间技俩在于切断“virtual函数接口”和其“缺省实现”之间的连接。</li>
 </ol>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Airplane</span>&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">fly</span><span class="hljs-params">(<span class="hljs-type">const</span> Airport&amp; destination)</span> </span>= <span class="hljs-number">0</span>;<br><span class="hljs-keyword">protected</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">defaultFly</span><span class="hljs-params">(<span class="hljs-type">const</span> Airport&amp; destination)</span></span>;<br>&#125;;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Airplane::defaultFly</span><span class="hljs-params">(<span class="hljs-type">const</span> Airport&amp; destination)</span></span><br><span class="hljs-function"></span>&#123;<br>    缺省行为，将飞机飞至指定目的地<br>&#125;<br></code></pre></td></tr></table></figure>
-<ol type="1">
+<ol start="7" type="1">
 <li>若想使用缺省实现（例如ModelA和ModelB),可以在其fly函数中对defaultFly做一个inline调用</li>
 </ol>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">ModelA</span>: <span class="hljs-keyword">public</span> Airplane&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">fly</span><span class="hljs-params">(<span class="hljs-type">const</span> Airport&amp; destination)</span> </span>&#123;<span class="hljs-built_in">defaultFly</span>(destination)&#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
-<ol type="1">
+<ol start="8" type="1">
 <li>现在Modelc
 class不可能意外继承不正确的fly实现代码了，因为Airplane中的pure
 virtual函数迫使ModelC必须提供自己的fly版本：</li>
 </ol>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">ModelC</span>: <span class="hljs-keyword">public</span> Airplane&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">fly</span><span class="hljs-params">(<span class="hljs-type">const</span> Airport&amp; destination)</span></span>;<br>&#125;;<br><br><span class="hljs-type">void</span> ModelC:<span class="hljs-built_in">fly</span>(<span class="hljs-type">const</span> Airport&amp; destination)<br>&#123;<br>    将C型飞机飞至指定的目的地<br>&#125;<br></code></pre></td></tr></table></figure>
-<ol type="1">
+<ol start="9" type="1">
 <li>pure virtual函数必须在derived
 classes中重新声明，但它们也可以拥有自己的实现</li>
 </ol>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Airplane</span>&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">fly</span><span class="hljs-params">(<span class="hljs-type">const</span> Airport&amp; destination)</span> </span>= <span class="hljs-number">0</span>;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Airplane::fly</span><span class="hljs-params">(cosnt Airport&amp; destiantion)</span></span><br><span class="hljs-function"></span>&#123;<br>    缺省行为<br>&#125;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">ModelA</span>: <span class="hljs-keyword">public</span> Airplane&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">fly</span><span class="hljs-params">(<span class="hljs-type">const</span> Airport&amp; destination)</span></span><br><span class="hljs-function">    </span>&#123;<br>        Airplane::<span class="hljs-built_in">fly</span>(destination);<br>    &#125;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">ModelC</span>: <span class="hljs-keyword">public</span> Airplane&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">fly</span><span class="hljs-params">(<span class="hljs-type">const</span> Airport&amp; destination)</span></span>;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">ModelC::fly</span><span class="hljs-params">(<span class="hljs-type">const</span> Airport&amp; destination)</span></span><br><span class="hljs-function"></span>&#123;<br>    飞指定地点<br>&#125;<br></code></pre></td></tr></table></figure>
-<ol type="1">
-<li><p>如果成员函数是个non-virtual函数，意味是它并不打算在derived
+<ol start="10" type="1">
+<li>如果成员函数是个non-virtual函数，意味是它并不打算在derived
 classes中有不同的行为。实际上一个non-virtual成员函数所表现的不变性(invariant),凌驾其特异性（specialization),因为它表示不论derived
-class变得多么特异化，它的行为都不可以改变。就其自身而言：</p></li>
-<li><ol type="1">
+class变得多么特异化，它的行为都不可以改变。就其自身而言：
+<ol type="1">
 <li>声明non-virtual函数的目的是为了令derived
 classes继承函数的接口及一份强制性实现。</li>
 </ol></li>
-<li><p>pure
+<li>pure
 virtual函数、simple(impure)virtual函数、non-virtual函数之间的差异，使你得以精确指定你想要derived
-classes继承的东西：只继承接口，或是继承接口和一份缺省实现，或是继承接口和一份强制实现。</p></li>
-<li><p>第一个错误是将所有函数声明为non-virtual。.这使得derived
-classes没有余裕空间进行特化工作。</p></li>
-<li><p>如果你关心virtual函数的成本，请容许我介绍所谓的80-20法则（也可见条款30)。这个法则说，一个典型的程序有80号的执行时间花费在20%的代码身上。此一法则十分重要，因为它意味，平均而言你的函数调用中可以有80号是virtual而不冲击程序的大体效率。所以当你担心是否有能力负担virtual函数的成本之前，请先将心力放在那举足轻重的20号代码上头，它才是真正的关键。</p></li>
-<li><p>另一个常见错误是将所有成员函数声明为virtual。有时候这样做是正确的，例如条款31的Interface
+classes继承的东西：只继承接口，或是继承接口和一份缺省实现，或是继承接口和一份强制实现。</li>
+<li>第一个错误是将所有函数声明为non-virtual。.这使得derived
+classes没有余裕空间进行特化工作。</li>
+<li>如果你关心virtual函数的成本，请容许我介绍所谓的80-20法则（也可见条款30)。这个法则说，一个典型的程序有80号的执行时间花费在20%的代码身上。此一法则十分重要，因为它意味，平均而言你的函数调用中可以有80号是virtual而不冲击程序的大体效率。所以当你担心是否有能力负担virtual函数的成本之前，请先将心力放在那举足轻重的20号代码上头，它才是真正的关键。</li>
+<li>另一个常见错误是将所有成员函数声明为virtual。有时候这样做是正确的，例如条款31的Interface
 classes。然而这也可能是class设计者缺乏坚定立场的前兆。某些函数就是不该在derived
-class中被重新定义，果真如此你应该将那些函数声明为non-virtual。.没有人有权利妄称你的class适用于任何人任何事任何物而他们只需花点时间重新定义你的函数就可以享受一切。如果你的不变性(invariant)凌驾特异性(specialization).，别害怕说出来。</p></li>
-<li><p>接口继承和实现继承不同。在public继承之下，derived
-classes总是继承base class的接口。</p></li>
-<li><p>pure virtual函数只具体指定接口继承。</p></li>
-<li><p>简朴的（非纯）impure
-virtual函数具体指定接口继承及缺省实现继承。</p></li>
-<li><p>non-virtual函数具体指定接口继承以及强制性实现继承。</p></li>
+class中被重新定义，果真如此你应该将那些函数声明为non-virtual。.没有人有权利妄称你的class适用于任何人任何事任何物而他们只需花点时间重新定义你的函数就可以享受一切。如果你的不变性(invariant)凌驾特异性(specialization).，别害怕说出来。</li>
+<li>接口继承和实现继承不同。在public继承之下，derived
+classes总是继承base class的接口。</li>
+<li>pure virtual函数只具体指定接口继承。</li>
+<li>简朴的（非纯）impure
+virtual函数具体指定接口继承及缺省实现继承。</li>
+<li>non-virtual函数具体指定接口继承以及强制性实现继承。</li>
 </ol>
 <h2 id="考虑virtual函数以外的其他选择">35.
 考虑virtual函数以外的其他选择</h2>
@@ -424,11 +411,8 @@ classes的析构函数一见条款7)，这么一来就不能实施NVI手法了�
 <li><strong>藉由Function Pointers实现Strategy模式</strong></li>
 <li>同一人物类型之不同实体可以有不同的健康计算函数。</li>
 </ol>
-<figure>
-<img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707530940516-84b197b8-7e89-4800-a3ee-0dab8bc0b127.png" srcset="/img/loading.gif" lazyload alt="img">
-<figcaption aria-hidden="true">img</figcaption>
-</figure>
-<ol type="1">
+<p><img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707530940516-84b197b8-7e89-4800-a3ee-0dab8bc0b127.png" srcset="/img/loading.gif" lazyload></p>
+<ol start="8" type="1">
 <li>某己知人物之健康指数计算函数可在运行期变更。</li>
 <li>实际上任何时候当你将class内的某个机能（也许取道自某个成员函数）替换为class外部的某个等价机能（也许取道自某个non-member
 non-friend函数或另一个cass的non-friend成员函数)，这都是潜在争议点。</li>
@@ -439,26 +423,17 @@ non-friend函数或另一个cass的non-friend成员函数)，这都是潜在争�
 entity,也就是函数指针、函数对象、或成员函数指针)，只要其签名式兼容于需求端。</li>
 </ol>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">typedef</span> std::tr1::function&lt;<span class="hljs-type">int</span> (<span class="hljs-type">const</span> GameCharacter&amp;)&gt; HealthCalcFunc;<br></code></pre></td></tr></table></figure>
-<ol type="1">
+<ol start="14" type="1">
 <li>tr1::function像一般的函数指针，这个tr1::function类型产生的对象可以持有任何与此签名式兼容的可调用物。所谓兼容，就是这个可调用物的参数可被隐式转换为const
 GameCharacter&amp;，而其返回类型可被隐式转换为int。</li>
 </ol>
-<figure>
-<img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707532060759-2bde1f88-4e85-4cc5-a399-2d7e09a552da.png" srcset="/img/loading.gif" lazyload alt="img">
-<figcaption aria-hidden="true">img</figcaption>
-</figure>
-<ol type="1">
+<p><img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707532060759-2bde1f88-4e85-4cc5-a399-2d7e09a552da.png" srcset="/img/loading.gif" lazyload></p>
+<ol start="15" type="1">
 <li><strong>古典的Strategy模式</strong></li>
 </ol>
-<figure>
-<img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707532579120-22de152a-6b54-4379-bed2-10cd45c99d1a.png" srcset="/img/loading.gif" lazyload alt="img">
-<figcaption aria-hidden="true">img</figcaption>
-</figure>
-<figure>
-<img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707532676304-dc836a59-a083-478f-8354-18ceacc6e742.png" srcset="/img/loading.gif" lazyload alt="img">
-<figcaption aria-hidden="true">img</figcaption>
-</figure>
-<ol type="1">
+<p><img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707532579120-22de152a-6b54-4379-bed2-10cd45c99d1a.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707532676304-dc836a59-a083-478f-8354-18ceacc6e742.png" srcset="/img/loading.gif" lazyload></p>
+<ol start="16" type="1">
 <li>本条款的根本忠告是，当你为解决问题而寻找某个设计方法时，不妨考虑virtual函数的替代方案。下面快速重点复习我们验证过的几个替代方案：</li>
 <li>使用non-virtual interface(NVI)手法，那是Template
 Method设计模式的一种特殊形式。它以public
@@ -492,11 +467,8 @@ virtual函数，后者可被derived
 classes重新定义。这里我们可以让non-virtual函数指定缺省参数，而private
 virtual函数负责真正的工作：</li>
 </ol>
-<figure>
-<img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707533914463-b881606c-63c1-42e5-b931-dc0cd789ac15.png" srcset="/img/loading.gif" lazyload alt="img">
-<figcaption aria-hidden="true">img</figcaption>
-</figure>
-<ol type="1">
+<p><img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707533914463-b881606c-63c1-42e5-b931-dc0cd789ac15.png" srcset="/img/loading.gif" lazyload></p>
+<ol start="5" type="1">
 <li>绝对不要重新定义一个继承而来的缺省参数值，因为缺省参数值都是静态绑定，而virtual函数一你唯一应该覆写的东西一却是动态绑定。</li>
 </ol>
 <h2 id="通过符合塑模出has-a或根据某物实现出">38.
@@ -521,23 +493,14 @@ class中都会变成private属性，纵使它们在base
 class中原本是protected或public属性。</li>
 <li>Private继承意味is-implemented-in-terms-of(根据某物实现出)，这个事实有点令人不安，因为条款38才刚指出复合(composition)的意义也是这样。你如何在两者之间取舍？答案很简单：尽可能使用复合，必要时才使用private继承。何时才是必要？主要是当protected成员和/或virtual函数牵扯进来的时候。其实还有一种激进情况，那是当空间方面的利害关系足以踢翻private继承的支柱时。</li>
 </ol>
-<figure>
-<img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707537572173-10f98648-129a-40e0-9e2a-41cc51d576cb.png" srcset="/img/loading.gif" lazyload alt="img">
-<figcaption aria-hidden="true">img</figcaption>
-</figure>
-<figure>
-<img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707537803594-b7aabf0a-f774-4507-9cbd-025c9830f8ce.png" srcset="/img/loading.gif" lazyload alt="img">
-<figcaption aria-hidden="true">img</figcaption>
-</figure>
-<ol type="1">
+<p><img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707537572173-10f98648-129a-40e0-9e2a-41cc51d576cb.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707537803594-b7aabf0a-f774-4507-9cbd-025c9830f8ce.png" srcset="/img/loading.gif" lazyload></p>
+<ol start="4" type="1">
 <li>用复合取而代之，在Widget内声明一个嵌套式private
 class，后者以public形式继承Timer并重新定义onTick,</li>
 </ol>
-<figure>
-<img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707537869955-7d7f3471-2af4-4f93-a8c8-b7f220d266c3.png" srcset="/img/loading.gif" lazyload alt="img">
-<figcaption aria-hidden="true">img</figcaption>
-</figure>
-<ol type="1">
+<p><img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707537869955-7d7f3471-2af4-4f93-a8c8-b7f220d266c3.png" srcset="/img/loading.gif" lazyload></p>
+<ol start="5" type="1">
 <li>稍早我曾谈到，private继承主要用于“当一个意欲成为derived
 class者想访问一个意欲成为base
 class者的protected成分，或为了重新定义一或多个virtual函数”。但这时候两个classes之间的概念关系其实是is-implemented-in-terms-of(根据某物实现出)而非is-a。然而我也说过，有一种激进情况涉及空间最优化，可能会促使你选择“private继承”而不是“继承加复合”。</li>
@@ -546,11 +509,8 @@ base classes(因为这样的base
 classes也会招致体积上的额外开销，见条款40)。于是这种所谓的empty
 classes对象不使用任何空间，因为没有任何隶属对象的数据需要存储。然而由于技术上的理由，C++裁定凡是独立（非附属）对象都必须有非零大小，所以如果你这样做：</li>
 </ol>
-<figure>
-<img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707538435846-92a3eed4-f3de-4ef2-b328-4a62be1096f1.png" srcset="/img/loading.gif" lazyload alt="img">
-<figcaption aria-hidden="true">img</figcaption>
-</figure>
-<ol type="1">
+<p><img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707538435846-92a3eed4-f3de-4ef2-b328-4a62be1096f1.png" srcset="/img/loading.gif" lazyload></p>
+<ol start="7" type="1">
 <li>几乎可以确定sizeof(HoldsAnInt)=sizeof(int)。这是所谓的EBO(empy base
 optimization;
 空白基类最优化)，我试过的所有编译器都有这样的结果。如果你是一个程序库开发人员，而你的客户非常在意空间，那么值得注意EBO。另外还值得知道的是，EBO一般只在单一继承（而非多重继承）下才可行，统治C++对象布局的那些规则通常表示EBO无法被施行于“拥有多个base”的derived
@@ -580,59 +540,45 @@ classes继承相同名称（如函数、typedef等等）。那会导致较多的
 class内的函数：</li>
 </ol>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cpp">mp.BorrowableItem:<span class="hljs-built_in">checkOut</span>();<br></code></pre></td></tr></table></figure>
-<ol type="1">
+<ol start="5" type="1">
 <li>多重继承的意思是继承1个以上的base classes,但这些base
 classes并不常在继承体系中义有更高级的base
 classes,因为那会导致要命的“钻石型多重继承”：</li>
 </ol>
-<figure>
-<img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707549791781-4e9c1ae9-f68c-4de5-9778-6e1c08f0fa75.png" srcset="/img/loading.gif" lazyload alt="img">
-<figcaption aria-hidden="true">img</figcaption>
-</figure>
-<ol type="1">
+<p><img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707549791781-4e9c1ae9-f68c-4de5-9778-6e1c08f0fa75.png" srcset="/img/loading.gif" lazyload></p>
+<ol start="6" type="1">
 <li>令所有直接继承自它的classes采用“virtual继承</li>
 </ol>
-<figure>
-<img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707549889972-ccb09a69-7fae-41ef-bbb7-43bf7c28d4ce.png" srcset="/img/loading.gif" lazyload alt="img">
-<figcaption aria-hidden="true">img</figcaption>
-</figure>
-<ol type="1">
-<li><p>C++标准程序库内含一个多重继承体系，class
+<p><img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707549889972-ccb09a69-7fae-41ef-bbb7-43bf7c28d4ce.png" srcset="/img/loading.gif" lazyload></p>
+<ol start="7" type="1">
+<li>C++标准程序库内含一个多重继承体系，class
 templates,名称分别是basic_ios, basic_istream,
-basic_ostream和basic_iostream</p></li>
-<li><p>从正确行为的观点看，public继承应该总是virtual。</p></li>
-<li><p>规则很简单：任何时候当你使用public继承，请改用virtual
-public继承.</p></li>
-<li><p>为避免继承得来的成员变量重复，编译器必须提供若干幕后戏法，而其后果是：使用virtual继承的那些classes所产生的对象往往比使用non-virtual继承的兄弟们体积大，访问virtual
+basic_ostream和basic_iostream</li>
+<li>从正确行为的观点看，public继承应该总是virtual。</li>
+<li>规则很简单：任何时候当你使用public继承，请改用virtual
+public继承.</li>
+<li>为避免继承得来的成员变量重复，编译器必须提供若干幕后戏法，而其后果是：使用virtual继承的那些classes所产生的对象往往比使用non-virtual继承的兄弟们体积大，访问virtual
 base classes的成员变量时，也比访问non-virtual base
-classes的成员变量速度慢。种种细节因编译器不同而异，但基本重点很清楚：你得为virtual继承付出代价。</p></li>
-<li><p>virtual继承的成本还包括其他方面。支配“virtual base
+classes的成员变量速度慢。种种细节因编译器不同而异，但基本重点很清楚：你得为virtual继承付出代价。</li>
+<li>virtual继承的成本还包括其他方面。支配“virtual base
 classes初始化”的规则比起non-virtual bases的情况远为复杂且不直观。virtual
-base的初始化责任是由继承体系中的最低层(nost
-derived)class负责，这暗示</p></li>
-<li><ol type="1">
+base的初始化责任是由继承体系中的最低层(nost derived)class负责，这暗示
+<ol type="1">
 <li>(1)classes若派生自virtual bases而需要初始化，必须认知其virtual
 bases一一不论那些bases距离多远，</li>
 <li>(2)当一个新的derived class加入继承体系中，它必须承担其virtual
 bases(不论直接或间接)的初始化责任。</li>
 </ol></li>
-<li><p>我对virtual base
-classes(亦相当于对virtual继承)的忠告很简单。</p></li>
-<li><ol type="1">
+<li>我对virtual base classes(亦相当于对virtual继承)的忠告很简单。
+<ol type="1">
 <li>第一，非必要不使用virtual bases。平常请使用non-virtual继承。</li>
 <li>第二，如果你必须使用virtual base
 classes,尽可能避免在其中放置数据。这么一来你就不需担心这些classes身上</li>
 </ol></li>
 </ol>
-<figure>
-<img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707551059636-152e5f8e-fd50-4248-80b3-b5461267d06b.png" srcset="/img/loading.gif" lazyload alt="img">
-<figcaption aria-hidden="true">img</figcaption>
-</figure>
-<figure>
-<img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707551092898-8edf0efb-f1aa-4349-8d90-7069f57ffcc4.png" srcset="/img/loading.gif" lazyload alt="img">
-<figcaption aria-hidden="true">img</figcaption>
-</figure>
-<ol type="1">
+<p><img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707551059636-152e5f8e-fd50-4248-80b3-b5461267d06b.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/11/27/effective-cpp/6-%E7%BB%A7%E6%89%BF%E5%92%8C%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1/1707551092898-8edf0efb-f1aa-4349-8d90-7069f57ffcc4.png" srcset="/img/loading.gif" lazyload></p>
+<ol start="13" type="1">
 <li>多重继承比单一继承复杂。它可能导致新的歧义性，以及对virtual继承的需要。</li>
 <li>virtual继承会增加大小、速度、初始化（及赋值）复杂度等等成本。如果virtualbase
 classes不带任何数据，将是最具实用价值的情况。</li>

@@ -28,7 +28,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/effective-cpp.png">
 <meta property="article:published_time" content="2024-11-27T12:17:10.000Z">
-<meta property="article:modified_time" content="2024-11-27T12:20:31.639Z">
+<meta property="article:modified_time" content="2024-12-13T08:21:10.423Z">
 <meta property="article:author" content="Binbo">
 <meta property="article:tag" content="c++">
 <meta name="twitter:card" content="summary_large_image">
@@ -287,7 +287,7 @@ flow)到达这个变量定义式时，你便得承受构造成本；当这个变
 <li>循环</li>
 </ol>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs cpp">Widget w;<br><span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; n; ++i)&#123;<br>    w = i;<br>&#125;<br><br><span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; n; ++i)&#123;<br>    Widget w;<br>&#125;<br></code></pre></td></tr></table></figure>
-<ol type="1">
+<ol start="4" type="1">
 <li>如果classes的一个赋值成本低于一组构造+析构成本，做法A大体而言比较高效。尤其当n值很大的时候。否则做法B或许较好。</li>
 <li>此外做法A造成名称w的作用域（覆盖整个循环）比做法B更大，有时那对程序的可理解性和易维护性造成冲突。</li>
 <li>因此除非(1)你知道赋值成本比“构造+析构”成本低，(2)你正在处理代码中效率高度敏感(performance-sensitive)的部分，否则你应该使用做法B。</li>
@@ -295,34 +295,33 @@ flow)到达这个变量定义式时，你便得承受构造成本；当这个变
 </ol>
 <h2 id="尽量少做转型动作">27. 尽量少做转型动作</h2>
 <ol type="1">
-<li><p>旧式转型</p></li>
-<li><ol type="1">
+<li>旧式转型
+<ol type="1">
 <li><ol start="20" type="A">
 <li>expression</li>
 </ol></li>
 <li>T(expression)</li>
 </ol></li>
-<li><p>新式转型</p></li>
-<li><ol type="1">
+<li>新式转型
+<ol type="1">
 <li>const_cast<T> (expression)</T></li>
 <li>dynamic_cast<T> (expression)</T></li>
 <li>reinterpret_cast<T> (expression)</T></li>
 <li>static_cast<T> (expression)</T></li>
 </ol></li>
-<li><p>const_cast通常被用来将对象的常量性转除，它也是唯一有此能力的C+-style转型操作符</p></li>
-<li><p>dynamic_cast主要用来执行“安全向下转型”(safe
-downcasting),也就是用来决定某对象是否归属继承体系中的某个类型。它是唯一一无法由旧式语法执行的动作，也是唯一可能耗费重大运行成本的转型动作</p></li>
-<li><p>reinterpret_cast意图执行低级转型，实际动作（及结果）可能取决于编译器，这也就表示它不可移植。例如将一个pointer
+<li>const_cast通常被用来将对象的常量性转除，它也是唯一有此能力的C+-style转型操作符</li>
+<li>dynamic_cast主要用来执行“安全向下转型”(safe
+downcasting),也就是用来决定某对象是否归属继承体系中的某个类型。它是唯一一无法由旧式语法执行的动作，也是唯一可能耗费重大运行成本的转型动作</li>
+<li>reinterpret_cast意图执行低级转型，实际动作（及结果）可能取决于编译器，这也就表示它不可移植。例如将一个pointer
 to
 int转型为一个int。这一类转型在低级代码以外很少见。本书只使用一次，那是在讨论如何针对原始内存(raw
-memory)写出一个调试用的分配器(debugging
-allocator)时，见条款50。</p></li>
-<li><p>static_cast用来强迫隐式转换(implicit
-conversions),例如将non-const对象转为const对象（就像条款3所为），或将int转为double等等。它也可以用来执行上述多种转换的反向转换，例如将void*指针转为typed指针，将pointer-to-base转为pointer-to-derived。.但它无法将const转为non-const一这个只有const_cast才办得到。</p></li>
-<li><p>使用旧式转型的时机是，当我要调用一个explicit构造函数将一个对象传递给一个函数时。</p></li>
-<li><p>如果可以，尽量避免转型，特别是在注重效率的代码中避免dynamic_casts。如果有个设计需要转型动作，试着发展无需转型的替代设计</p></li>
-<li><p>如果转型是必要的，试着将它隐藏于某个函数背后。客户随后可以调用该函数，而不需将转型放进他们自己的代码内</p></li>
-<li><p>宁可使用C++-style新式转型，不要使用就是转型。前者很容易辨识出来，而且也比较有着分门别类的职掌。</p></li>
+memory)写出一个调试用的分配器(debugging allocator)时，见条款50。</li>
+<li>static_cast用来强迫隐式转换(implicit
+conversions),例如将non-const对象转为const对象（就像条款3所为），或将int转为double等等。它也可以用来执行上述多种转换的反向转换，例如将void*指针转为typed指针，将pointer-to-base转为pointer-to-derived。.但它无法将const转为non-const一这个只有const_cast才办得到。</li>
+<li>使用旧式转型的时机是，当我要调用一个explicit构造函数将一个对象传递给一个函数时。</li>
+<li>如果可以，尽量避免转型，特别是在注重效率的代码中避免dynamic_casts。如果有个设计需要转型动作，试着发展无需转型的替代设计</li>
+<li>如果转型是必要的，试着将它隐藏于某个函数背后。客户随后可以调用该函数，而不需将转型放进他们自己的代码内</li>
+<li>宁可使用C++-style新式转型，不要使用就是转型。前者很容易辨识出来，而且也比较有着分门别类的职掌。</li>
 </ol>
 <h2 id="避免返回handles指向对象内部成分">28.
 避免返回handles指向对象内部成分</h2>
@@ -375,7 +374,7 @@ environments)竞可在运行期完成inlining。然而这样的环境毕竟是�
 <li>将Person类分割为两个class，一个只提供接口，另一个负责实现该接口</li>
 </ol>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Person</span>&#123;<br><span class="hljs-keyword">public</span>:<br>    ...<br><span class="hljs-keyword">private</span>:<br>    std::tr1::shared_ptr&lt;PersonImpl&gt; pImpl;<br>&#125;<br></code></pre></td></tr></table></figure>
-<ol type="1">
+<ol start="4" type="1">
 <li>在这里，main class(Person)只内含个指针成员（这里使用trl:shared
 ptr,见条款13),指向其实现类(PersonImpl)。这般设计常被称为pimpl
 idiom。这种classes内的指针名称往往就是pImpl</li>
@@ -386,15 +385,15 @@ pointers可以完成任务，就不要使用objects。你可以只靠一个类�
 value方式传递该类型的参数（或返回值）亦然</li>
 </ol>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Date</span>;<br><span class="hljs-function">Date <span class="hljs-title">today</span><span class="hljs-params">()</span></span>;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clearAppointment</span><span class="hljs-params">(Date d)</span></span>;<br></code></pre></td></tr></table></figure>
-<ol type="1">
+<ol start="8" type="1">
 <li>为声明式和定义式提供不同的头文件。为了促进严守上述准则，需要两个头文件，一个用于声明式，一个用于定义式。当然，这些文件必须保持一致性，如果有个声明式被改变了，两个文件都得改变。因此程序库客户应该总是#include一个声明文件而非前置声明若干函数，程序库作者也应该提供这两个头文件。</li>
 </ol>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;datefwd.h&quot;</span> <span class="hljs-comment">//声明但未定义class Date</span></span><br><span class="hljs-function">Date <span class="hljs-title">today</span><span class="hljs-params">()</span></span>;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clearAppointment</span><span class="hljs-params">(Date d)</span></span>;<br></code></pre></td></tr></table></figure>
-<ol type="1">
+<ol start="9" type="1">
 <li>"datefwd.h"，命名方式取法c++标准程序库头文件的<iosfwd>。<iosfwd>深具启发意义的另一个原因是，它分外彰显“本条款适用于templates也话用于non-templates”。</iosfwd></iosfwd></li>
 </ol>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;Person.h&quot;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;PersonImpl.h&quot;</span></span><br>Person::<span class="hljs-built_in">Person</span>(<span class="hljs-type">const</span> std::string&amp;name):<span class="hljs-built_in">pImpl</span>(<span class="hljs-keyword">new</span> <span class="hljs-built_in">PersonImpl</span>(name))&#123;&#125;<br><span class="hljs-function">std::string <span class="hljs-title">Person::name</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">return</span> pImpl-&gt;name;<br>&#125;<br></code></pre></td></tr></table></figure>
-<ol type="1">
+<ol start="10" type="1">
 <li>Person构造函数以new调用PersonImpl构造函数，以及Person::name函数内调用PersonImpl::name。让Person变成一个Handle
 class并不会改变它做的事，只会改变它做事的方法</li>
 <li>另一个制作Handle class方法是，令Person成为一种特殊的abstract base

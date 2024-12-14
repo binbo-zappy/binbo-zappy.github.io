@@ -19,14 +19,16 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta property="og:type" content="article">
+    <meta name="description" content="1. Docker安装Redis 以 Redis 6.0.8 为例： 1docker pull redis:6.0.8 2. 单机版安装 2.1 简单版 Redis 简单的启动Redis容器： 1docker run -p 6379:6379 -d redis:6.0.8 简单版没有配置容器卷映射，当容器被删除时数据无法恢复。 2.2 实际应用版Redis 配置文件、数据文件都和">
+<meta property="og:type" content="article">
 <meta property="og:title" content="10. Docker安装Redis">
 <meta property="og:url" content="http://binbo-zappy.github.io/2024/12/07/docker/10-Docker%E5%AE%89%E8%A3%85Redis/index.html">
 <meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="1. Docker安装Redis 以 Redis 6.0.8 为例： 1docker pull redis:6.0.8 2. 单机版安装 2.1 简单版 Redis 简单的启动Redis容器： 1docker run -p 6379:6379 -d redis:6.0.8 简单版没有配置容器卷映射，当容器被删除时数据无法恢复。 2.2 实际应用版Redis 配置文件、数据文件都和">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/docker.jpg">
 <meta property="article:published_time" content="2024-12-07T07:24:09.000Z">
-<meta property="article:modified_time" content="2024-12-07T07:24:09.761Z">
+<meta property="article:modified_time" content="2024-12-12T14:21:22.356Z">
 <meta property="article:author" content="Binbo">
 <meta property="article:tag" content="Docker">
 <meta name="twitter:card" content="summary_large_image">
@@ -223,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          0 字
+          5.1k 字
         
       </span>
     
@@ -234,7 +236,7 @@
         
         
         
-          1 分钟
+          43 分钟
         
       </span>
     
@@ -276,7 +278,286 @@
             
               <div class="markdown-body">
                 
-                
+                <h1 id="docker安装redis">1. Docker安装Redis</h1>
+<p>以 Redis 6.0.8 为例：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker pull redis:6.0.8<br></code></pre></td></tr></table></figure>
+<h1 id="单机版安装">2. 单机版安装</h1>
+<h2 id="简单版-redis">2.1 简单版 Redis</h2>
+<p>简单的启动Redis容器：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker run -p 6379:6379 -d redis:6.0.8<br></code></pre></td></tr></table></figure>
+<p>简单版没有配置容器卷映射，当容器被删除时数据无法恢复。</p>
+<h2 id="实际应用版redis">2.2 实际应用版Redis</h2>
+<p>配置文件、数据文件都和容器卷进行映射。</p>
+<p>步骤：</p>
+<ol type="1">
+<li>宿主机创建目录<code>/app/redis</code></li>
+<li>在<code>/app/redis</code>下创建文件<code>redis.conf</code>，主要修改以下几项配置</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs plain"># 开启密码验证（可选）<br>requirepass 123<br><br># 允许redis外地连接，需要注释掉绑定的IP<br># bind 127.0.0.1<br><br># 关闭保护模式（可选）<br>protected-mode no<br><br># 注释掉daemonize yes，或者配置成 daemonize no。因为该配置和 docker run中的 -d 参数冲突，会导致容器一直启动失败<br>daemonize no<br><br># 开启redis数据持久化， （可选）<br>appendonly yes<br></code></pre></td></tr></table></figure>
+<p>即最后的配置文件为：</p>
+<ol start="3" type="1">
+<li>启动docker容器：（因为要使用自定义的配置文件，所以需要指定容器运行的命令为<code>redis-server 容器内配置文件路径</code>）</li>
+<li>配置文件需要自己从redis配置文件中粘贴，下载地址：</li>
+</ol>
+<p><a target="_blank" rel="noopener" href="https://redis.io/docs/latest/operate/oss_and_stack/management/config/">Redis
+configuration | Docs</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker run -d -p 6379:6379 --name redis --privileged=true \<br>           -v /app/redis/redis.conf:/etc/redis/redis.conf \<br>           -v /app/redis/data:/data \<br>           redis:6.0.8 \<br>           redis-server /etc/redis/redis.conf<br>           <br>docker exec -it redis /bin/bash<br>redis-cli<br></code></pre></td></tr></table></figure>
+<h1 id="集群存储算法">3. 集群存储算法</h1>
+<h2 id="分布式存储算法">3.1 分布式存储算法</h2>
+<p>分布式存储的常见算法：</p>
+<ul>
+<li>哈希取余算法分区</li>
+<li>一致性哈希算法分区</li>
+<li>哈希槽算法分区</li>
+</ul>
+<h2 id="哈希取余算法">3.2 哈希取余算法</h2>
+<p>算法描述：<code>hash(key) % N</code>（其中，<code>key</code>是要存入Redis的键名，<code>N</code>是Redis集群的机器台数）。用户每次读写操作，都是根据传入的键名经过哈希运算，对机器台数取余决定该键存储在哪台服务器上。</p>
+<p>优点：简单直接有效，只需要预估好数据规划好节点，就能保证一段时间的数据支撑。使用Hash算法让固定的一部分请求落到同一台服务器上，这样每台服务器固定处理一部分请求（并维护这些请求的信息），起到负载均衡+分而治之的作用。</p>
+<p>缺点：原来规划好的节点，如果进行了扩容或者缩容，导致节点有变动，映射关系需要重新进行计算。在服务器个数固定不变时没问题，如果需要弹性扩容或者故障停机的情况下，原来取模公式中的
+<code>N</code>就会发生变化，此时经过取模运算的结果就会发生很大变化，导致根据公式获取的服务器变得不可控。</p>
+<h2 id="一致性哈希算法">3.3 一致性哈希算法</h2>
+<p>算法背景：一致性哈希算法是<strong>为了解决哈希取余算法中的分布式缓存数据变动和映射问题</strong>。当服务器个数发生变化时，尽量减少影响到客户端与服务器的映射关系。</p>
+<p>算法描述：</p>
+<p>一致性哈希算法必然有个hash函数并按照算法产生Hash值，这个算法的所有可能哈希值会构成一个全量集，这个集合可以成为一个Hash区间<code>[0, 2^32 - 1]</code>，这是一个线性空间。但是在这个算法中，我们通过适当的逻辑控制将它首尾相连（<code>0 = 2^32</code>），这样让它逻辑上形成了一个环形空间。</p>
+<p>它也是按照使用取模的方式。前面的哈希取余算法是对节点个数进行取模，而一致性哈希算法是对
+<code>2^32</code>取模。</p>
+<p>简单来说，一致性Hash算法将整个哈希值空间组成一个虚拟的圆环。如假设某个哈希函数<code>H</code>的值空间为
+<code>0</code>到<code>2^32 - 1</code>（即哈希值是一个32位无符号整形），整个哈希环如下图：整个空间按顺时针方向组织，圆环的正上方的点代表0，0点右侧的第一个点代表1，以此类推，2、3、4.......直到<code>2^32 - 1</code>，也就是说0点左侧的第一个点代表
+<code>2^32 - 1</code>。0 和
+<code>2^32 - 1</code>在零点钟方向重合，我们把这个由
+<code>2^32</code>个点组成的圆环称为Hash环。</p>
+<p><img src="/2024/12/07/docker/10-Docker%E5%AE%89%E8%A3%85Redis/1652093509506-9d93249f-ba00-4339-b28d-5333d93b0356.jpeg" srcset="/img/loading.gif" lazyload></p>
+<p>有了哈希环之后，还需要进行节点映射，将集群中各个IP节点映射到环上的某一个位置。</p>
+<p>将各个服务器使用Hash进行一个哈希，具体可以选择服务器的IP或主机名作为关键字进行哈希。这样每台机器就能确定其在哈希环上的位置。</p>
+<p>假如4个节点NodeA、B、C、D，经过IP地址的哈希函数计算（<code>hash(ip)</code>），使用IP地址哈希值后在环空间的位置如下：</p>
+<p><img src="/2024/12/07/docker/10-Docker%E5%AE%89%E8%A3%85Redis/1652093520104-5b400131-e3ea-4b37-8e53-e6c59e81fcb3.jpeg" srcset="/img/loading.gif" lazyload></p>
+<p><code>key</code>落到服务器的落键规则。当我们需要存储一个<code>key</code>键值对时，首先计算<code>key</code>的<code>hash</code>值（<code>hash(key)</code>），将这个<code>key</code>使用相同的函数hash，计算出哈希值并确定此数据在环上的位置，从此位置沿环顺时针“行走”，第一台遇到的服务器就是其应该定位到的服务器，并将该键值对存储字该节点上。</p>
+<p>假如我们有ObjectA、B、C、D四个数据对象，经过哈希计算后，在环空间上的位置如下：根据一致性hash算法，数据A会被定位到NodeA上，B被定位到NodeB上，C被定位到NodeC上，D被定位到NodeD上。</p>
+<p><img src="/2024/12/07/docker/10-Docker%E5%AE%89%E8%A3%85Redis/1652093529336-8a318268-7d45-44b7-a038-39c99d6598f3.jpeg" srcset="/img/loading.gif" lazyload></p>
+<p>假设NodeC宕机，可以看到此时对象A、B、D不会受到影响，只有C对象被重新定位到NodeD。</p>
+<p>一般的，在一致性Hash算法中，如果一台服务器不可用，则受影响的数据仅仅是此服务器到其环空间中前一台服务器（即沿着逆时针方向行走遇到的第一台服务器）之间的数据，其他不会受到影响。</p>
+<p>即：假设NodeC宕机，只会影响到Hash定位到NodeB到NodeC之间的数据，并且这些数据会被转移到NodeD进行存储。</p>
+<p><img src="/2024/12/07/docker/10-Docker%E5%AE%89%E8%A3%85Redis/1652093568315-79bb50cb-c3ca-45f3-b2b8-21cd2bdd7ea6.jpeg" srcset="/img/loading.gif" lazyload></p>
+<p>假如需要扩容增加一台节点NodeX，NodeX的<code>hash(ip)</code>位于NodeB和NodeC之间，那受到影响的就是NodeB
+到 NodeX
+之间的数据。重新将B到X的数据录入到X节点上即可，不会导致Hash取余全部数据重新洗牌的后果。</p>
+<p><img src="/2024/12/07/docker/10-Docker%E5%AE%89%E8%A3%85Redis/1652093600085-007ad642-e950-40f4-9470-2a4f3b0c3037.jpeg" srcset="/img/loading.gif" lazyload></p>
+<p>但是Hash环会存在数据倾斜问题。</p>
+<p>一致性Hash算法在服务节点太少时，容易因为节点分布不均匀而造成数据倾斜（被缓存的对象都集中到某一台或某几台服务器）。</p>
+<p><img src="/2024/12/07/docker/10-Docker%E5%AE%89%E8%A3%85Redis/1652093608796-1e42d92f-21c3-44d8-af84-5cab7666b25a.webp" srcset="/img/loading.gif" lazyload></p>
+<p>为了解决数据倾斜问题，一致性哈希算法引入了虚拟节点机制。</p>
+<p>对每一个服务节点计算多个哈希，每个计算结果位置都放置一个此服务节点，称为虚拟节点。具体做法可以先确定每个物理节点关联的虚拟节点数量，然后在IP或主机名后面加上编号。</p>
+<p>例如，可以对NodeA节点虚拟出
+NodeA#1、NodeA#2、NodeA#3，对NodeB虚拟出NodeB#1、NodeB#2、NodeB#3的节点，形成六个虚拟节点。</p>
+<p><img src="/2024/12/07/docker/10-Docker%E5%AE%89%E8%A3%85Redis/1652093615343-e8253b84-6085-4368-9853-29ec0e26b10a.jpeg" srcset="/img/loading.gif" lazyload></p>
+<p>优点：加入和删除节点时，只会影响哈希环中顺时针方向相邻节点，对其他节点无影响。</p>
+<p>缺点：数据的分布和节点的位置有关，因为这些节点不是均匀分布在哈希环上的，所以在数据进行存储时达不到均匀部分的效果。</p>
+<h2 id="哈希槽分区">3.4 哈希槽分区</h2>
+<p>哈希槽分区是为了解决一致性哈希算法的数据倾斜问题。</p>
+<p>哈希槽实质上就是一个数组，数组 <code>[0, 2^14 - 1]</code>形成的 hash
+slot空间。</p>
+<p>目的是为了解决均匀分配的问题。在数据和节点之间又加入了一层，把这层称之为槽（slot），用于管理数据和节点之间的关系。就相当于节点上放的是槽，槽里面放的是数据。</p>
+<p><img src="/2024/12/07/docker/10-Docker%E5%AE%89%E8%A3%85Redis/1652093624003-4b618ccd-4ac1-4ddb-8ff5-665da31781ea.png" srcset="/img/loading.gif" lazyload></p>
+<p>槽解决的是粒度问题，相当于把粒度变大了，这样便于数据移动。</p>
+<p>哈希解决的是映射问题，使用<code>key</code>的哈希值来计算所在的槽，便于数据分配。</p>
+<p>一个集群只能有 16394个槽，编号 0 -
+16383（<code>2^14 - 1</code>）。这些槽会分配给集群中所有的主节点，分配策略没有要求。可以指定哪些编号的槽分配给哪个主节点，集群会记录节点和槽的对应关系。</p>
+<p>解决了节点和槽的关系后，接下来就需要对<code>key</code>求哈希值，然后对16384取余，根据余数决定<code>key</code>落到哪个槽里。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">slot = CRC16(key) % 16384<br></code></pre></td></tr></table></figure>
+<p>以槽为单位移动数据，因为槽的数目是固定的，处理起来比较容易，这样数据移动问题就解决了。</p>
+<h2 id="redis集群存储策略">Redis集群存储策略</h2>
+<p>Redis集群使用的就是哈希槽。Redis集群有16384个哈希槽，每个<code>key</code>通过<code>CRC16</code>校验后对16384取模来决定放置在哪个槽，集群的每个节点负责一部分hash槽。</p>
+<p>哈希槽数量16384（<code>2^14</code>）的决定原因：</p>
+<p><code>CRC16</code>算法产生的hash值有 16bit，该算法可以产生
+<code>2^16</code> =
+65536个值。但是为了心跳方便和数据传输最大化，槽的数量只能有
+<code>2^14</code>个。</p>
+<ol type="1">
+<li>如果槽位数量为65535个，那么发送心跳信息的消息头将达到
+8k，发送的心跳包过于庞大。在消息头中最占空间的是
+<code>myslots[CLUSTER_SLOTS/8]</code>。当槽位为65536时，这块的大小是
+：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">65536 ÷ 8 ÷ 1024 = 8Kb<br></code></pre></td></tr></table></figure>
+<p>每秒中redis节点需要发送一定数量的ping消息作为心跳，如果槽位为65536，那么这个ping消息头就会太大浪费带宽。</p>
+<ol start="2" type="1">
+<li>redis集群的主节点数量基本不可能超过1000个。集群节点越多，心跳包的消息体内携带的数据越多。如果节点超过1000个，也会导致网络拥堵。因此redis作者不建议redis
+cluster节点超过1000个。对于节点数在1000以内的redis
+cluster集群，16384个槽位足够了，没有必要扩展到65536个。</li>
+<li>槽位越小，节点少的情况下压缩比越高，容易传输。Redis主节点的配置信息中它锁负责的哈希槽是通过一张bitmap的形式来保存的，在传输过程中会对bitmap进行压缩，但是如果bitmap的填充率
+<code>slots / N</code>（N为节点数）很高的话，bitmap的压缩率就很低。如果节点数很少，而哈希槽数很多的话，bitmap的压缩率就很低。</li>
+</ol>
+<blockquote>
+<p>原文：</p>
+<p>正常的心跳数据包带有节点的完整配置，使得可以用幂等方式用旧的节点替换旧节点，以便更新旧的配置。这意味着它们包含原始节点的插槽配置，该节点使用
+2k 的空间和 16k 的插槽，而不是使用 8k 的空间（使用65k的插槽）。</p>
+<p>同时，因为其他设计折衷，Redis集群的主节点不太可能扩展到1000个以上</p>
+</blockquote>
+<p>Redis集群中内置了16384个哈希槽，redis会根据节点数量大致均等的将哈希槽映射到不同的节点。当需要在Redis集群中放置一个<code>Key-Value</code>时，redis先对<code>key</code>使用
+<code>CRC16</code> 算法算出一个结果，然后把结果对 16384
+取余，这样每个<code>key</code>都会对应一个编号在0-16383之间的哈希槽，也就是映射到某个节点上。</p>
+<p><img src="/2024/12/07/docker/10-Docker%E5%AE%89%E8%A3%85Redis/1652093634015-d8b7b188-0beb-4d34-a025-3eade79bb6bb.png" srcset="/img/loading.gif" lazyload></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Test</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">test</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-comment">// import io.lettuce.core.cluster.SlotHash;</span><br>    System.out.println(SlotHash.getSlot(<span class="hljs-string">&#x27;A&#x27;</span>));  <span class="hljs-comment">// 计算结果6373，存入上图的Node2</span><br>    System.out.println(SlotHash.getSlot(<span class="hljs-string">&#x27;B&#x27;</span>));  <span class="hljs-comment">// 计算结果10374，存入上图的Node2</span><br>    System.out.println(SlotHash.getSlot(<span class="hljs-string">&#x27;C&#x27;</span>));  <span class="hljs-comment">// 计算结果14503，存入上图的Node3</span><br>    System.out.println(SlotHash.getSlot(<span class="hljs-string">&#x27;Hello&#x27;</span>));  <span class="hljs-comment">// 计算结果866，存入上图的Node1</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<h1 id="主3从redis集群">4. 3主3从Redis集群</h1>
+<h2 id="搭建">4.1 搭建</h2>
+<p>使用docker搭建3主3从的Redis集群，每台主机都对应一台从机。</p>
+<p>启动6台redis容器</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">启动第1台节点</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">--net host 使用宿主机的IP和端口，默认</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">--cluster-enabled <span class="hljs-built_in">yes</span> 开启redis集群</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">--appendonly <span class="hljs-built_in">yes</span> 开启redis持久化</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">--port 6381 配置redis端口号</span><br>docker run -d --name redis-node-1 --net host --privileged=true -v /app/redis-cluster/share/redis-node-1:/data redis:6.0.8 --cluster-enabled yes --appendonly yes --port 6381<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">启动第2台节点</span><br>docker run -d --name redis-node-2 --net host --privileged=true -v /app/redis-cluster/share/redis-node-2:/data redis:6.0.8 --cluster-enabled yes --appendonly yes --port 6382<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">启动第3台节点</span><br>docker run -d --name redis-node-3 --net host --privileged=true -v /app/redis-cluster/share/redis-node-3:/data redis:6.0.8 --cluster-enabled yes --appendonly yes --port 6383<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">启动第4台节点</span><br>docker run -d --name redis-node-4 --net host --privileged=true -v /app/redis-cluster/share/redis-node-4:/data redis:6.0.8 --cluster-enabled yes --appendonly yes --port 6384<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">启动第5台节点</span><br>docker run -d --name redis-node-5 --net host --privileged=true -v /app/redis-cluster/share/redis-node-5:/data redis:6.0.8 --cluster-enabled yes --appendonly yes --port 6385<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">启动第6台节点</span><br>docker run -d --name redis-node-6 --net host --privileged=true -v /app/redis-cluster/share/redis-node-6:/data redis:6.0.8 --cluster-enabled yes --appendonly yes --port 6386<br></code></pre></td></tr></table></figure>
+<p>构建主从关系：</p>
+<ol type="1">
+<li>进入节点1（或其中任意一个节点）:</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker exec -it redis-node-1 /bin/bash<br></code></pre></td></tr></table></figure>
+<p>构建主从关系：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">宿主机IP:端口</span><br>redis-cli --cluster create 192.168.226.137:6381 192.168.226.137:6382 192.168.226.137:6383 192.168.226.137:6384 192.168.226.137:6385 192.168.226.137:6386 --cluster-replicas 1<br></code></pre></td></tr></table></figure>
+<p>--cluster-replicas 1 表示为每个master创建一个slave节点</p>
+<ol start="3" type="1">
+<li>redis尝试自动进行主从节点分配</li>
+<li>因为我们的docker容器IP相同，所以会出现警告，可以直接忽略该警告</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">[WARNING] Some slaves are in the same host as their master<br></code></pre></td></tr></table></figure>
+<ol start="5" type="1">
+<li>redis自动分配结果完成后，需要输入 <code>Yes</code>
+确认配置信息：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs plain">M: f451eb48bbc0a7c31c7da022ffe80cc1696e0f37 192.168.xxx.xxx:6381<br>   slots:[0-5460] (5461 slots) master<br>M: 05984211b8c38222a73abeff1d4e459c0fe1efbc 192.168.xxx.xxx:6382<br>   slots:[5461-10922] (5462 slots) master<br>M: 1fc935c12b1d34a7df50aed643c195eb29bb3435 192.168.xxx.xxx:6383<br>   slots:[10923-16383] (5461 slots) master<br>S: f8d0de47114bf33438747acd713cce4e412ae721 192.168.xxx.xxx:6384<br>   replicates 1fc935c12b1d34a7df50aed643c195eb29bb3435<br>S: de0b393c17e452d856f6de2b348e9ca4e5aa4002 192.168.xxx.xxx:6385<br>   replicates f451eb48bbc0a7c31c7da022ffe80cc1696e0f37<br>S: 0c0767e13a09ee48541738d4163592cd9842c143 192.168.xxx.xxx:6386<br>   replicates 05984211b8c38222a73abeff1d4e459c0fe1efbc<br>Can I set the above configuration? (type &#x27;yes&#x27; to accept):<br></code></pre></td></tr></table></figure>
+<ol start="6" type="1">
+<li>输入<code>Yes</code>确认后，redis会向其他节点发送信息加入集群，并分配哈希槽：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs plain">&gt;&gt;&gt; Nodes configuration updated<br>&gt;&gt;&gt; Assign a different config epoch to each node<br>&gt;&gt;&gt; Sending CLUSTER MEET messages to join the cluster<br>Waiting for the cluster to join<br>.....<br>&gt;&gt;&gt; Performing Cluster Check (using node 192.168.xxx.xxx:6381)<br>M: f451eb48bbc0a7c31c7da022ffe80cc1696e0f37 192.168.xxx.xxx:6381<br>   slots:[0-5460] (5461 slots) master<br>   1 additional replica(s)<br>M: 1fc935c12b1d34a7df50aed643c195eb29bb3435 192.168.xxx.xxx:6383<br>   slots:[10923-16383] (5461 slots) master<br>   1 additional replica(s)<br>M: 05984211b8c38222a73abeff1d4e459c0fe1efbc 192.168.xxx.xxx:6382<br>   slots:[5461-10922] (5462 slots) master<br>   1 additional replica(s)<br>S: 0c0767e13a09ee48541738d4163592cd9842c143 192.168.xxx.xxx:6386<br>   slots: (0 slots) slave<br>   replicates 05984211b8c38222a73abeff1d4e459c0fe1efbc<br>S: f8d0de47114bf33438747acd713cce4e412ae721 192.168.xxx.xxx:6384<br>   slots: (0 slots) slave<br>   replicates 1fc935c12b1d34a7df50aed643c195eb29bb3435<br>S: de0b393c17e452d856f6de2b348e9ca4e5aa4002 192.168.xxx.xxx:6385<br>   slots: (0 slots) slave<br>   replicates f451eb48bbc0a7c31c7da022ffe80cc1696e0f37<br>[OK] All nodes agree about slots configuration.<br>&gt;&gt;&gt; Check for open slots...<br>&gt;&gt;&gt; Check slots coverage...<br>[OK] All 16384 slots covered.<br></code></pre></td></tr></table></figure>
+<p><img src="/2024/12/07/docker/10-Docker%E5%AE%89%E8%A3%85Redis/image-20241212211139874.png" srcset="/img/loading.gif" lazyload></p>
+<p>查看集群状态：</p>
+<ol type="1">
+<li>进入容器节点1（或集群中其他节点）：</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker exec -it redis-node-1 /bin/bash<br></code></pre></td></tr></table></figure>
+<ol start="2" type="1">
+<li>使用<code>redis-cli</code>连接到<code>6381</code>节点：</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">redis-cli -p 6381 <br></code></pre></td></tr></table></figure>
+<ol start="3" type="1">
+<li>使用<code>redis</code>的相关命令查看集群状态：</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">cluster info<br></code></pre></td></tr></table></figure>
+<p>其中，分配的哈希槽数量
+<code>cluster_slots_assigned</code>为16384，集群节点数量<code>cluster_known_nodes</code>为6</p>
+<ol start="4" type="1">
+<li>查看集群节点信息</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">cluster nodes<br></code></pre></td></tr></table></figure>
+<h2 id="redis集群读写出错">4.2 Redis集群读写出错</h2>
+<p>当使用 <code>redis-cli</code>连接redis集群时，需要添加
+<code>-c</code>参数，否则可能会出现读写出错。</p>
+<p>示例：</p>
+<ol type="1">
+<li>进入容器节点1</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker exec -it redis-node-1 /bin/bash<br></code></pre></td></tr></table></figure>
+<ol start="2" type="1">
+<li>使用<code>redis-cli</code>连接，不加<code>-c</code>参数时</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">redis-cli -p 6381<br></code></pre></td></tr></table></figure>
+<ol start="3" type="1">
+<li>此时向redis中添加键值对，可能会成功，也可能会失败</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">set k1 v1<br></code></pre></td></tr></table></figure>
+<p>报错：<code>k1</code>经过计算得到的哈希槽为12706，但是当前连接的redis-server为<code>6381</code>（即节点1），它的哈希槽为：<code>[0,5460]</code>（在创建构建主从关系时redis有提示，也可以通过
+<code>cluster nodes</code>查看），所以会因为存不进去而报错。<br>
+执行
+<code>set k2 v2</code>可以成功，因为<code>k2</code>计算出的哈希槽在<code>[0-5460]</code>区间中。</p>
+<ol start="4" type="1">
+<li>使用<code>-c</code>参数的<code>redis-cli</code>命令连接即可</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">redis-cli -p 6381 -c<br></code></pre></td></tr></table></figure>
+<ol start="5" type="1">
+<li>此时可以正常的插入所有数据</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">set k1 v1<br></code></pre></td></tr></table></figure>
+<p>会有提示信息，哈希槽为12706，重定向到<code>6383</code>（即节点3，哈希槽<code>[10923, 16383]</code>）：</p>
+<h2 id="集群信息检查">4.3 集群信息检查</h2>
+<p>检查查看集群信息：</p>
+<ol type="1">
+<li>进入容器节点1</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker exec -it redis-node-1 /bin/bash<br></code></pre></td></tr></table></figure>
+<ol start="2" type="1">
+<li>进行集群信息检查</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">输入任意一台主节点地址都可以进行集群检查</span><br>redis-cli --cluster check 192.168.226.137:6381<br></code></pre></td></tr></table></figure>
+<p>返回的检查结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs plain">当前集群中各个节点存储的key的数量<br>192.168.xxx.xxx:6381 (f451eb48...) -&gt; 0 keys | 5461 slots | 1 slaves.<br>192.168.xxx.xxx:6383 (1fc935c1...) -&gt; 1 keys | 5461 slots | 1 slaves.<br>192.168.xxx.xxx:6382 (05984211...) -&gt; 0 keys | 5462 slots | 1 slaves.<br>[OK] 1 keys in 3 masters.  <br>0.00 keys per slot on average.<br><br>主从机器信息<br>&gt;&gt;&gt; Performing Cluster Check (using node 192.168.xxx.xxx:6381)<br>M: f451eb48bbc0a7c31c7da022ffe80cc1696e0f37 192.168.xxx.xxx:6381<br>   slots:[0-5460] (5461 slots) master<br>   1 additional replica(s)<br>M: 1fc935c12b1d34a7df50aed643c195eb29bb3435 192.168.xxx.xxx:6383<br>   slots:[10923-16383] (5461 slots) master<br>   1 additional replica(s)<br>M: 05984211b8c38222a73abeff1d4e459c0fe1efbc 192.168.xxx.xxx:6382<br>   slots:[5461-10922] (5462 slots) master<br>   1 additional replica(s)<br>S: 0c0767e13a09ee48541738d4163592cd9842c143 192.168.xxx.xxx:6386<br>   slots: (0 slots) slave<br>   replicates 05984211b8c38222a73abeff1d4e459c0fe1efbc<br>S: f8d0de47114bf33438747acd713cce4e412ae721 192.168.xxx.xxx:6384<br>   slots: (0 slots) slave<br>   replicates 1fc935c12b1d34a7df50aed643c195eb29bb3435<br>S: de0b393c17e452d856f6de2b348e9ca4e5aa4002 192.168.xxx.xxx:6385<br>   slots: (0 slots) slave<br>   replicates f451eb48bbc0a7c31c7da022ffe80cc1696e0f37<br>[OK] All nodes agree about slots configuration.<br>&gt;&gt;&gt; Check for open slots...<br>&gt;&gt;&gt; Check slots coverage...<br>[OK] All 16384 slots covered.<br></code></pre></td></tr></table></figure>
+<p>6381宕机，6386上位</p>
+<h1 id="主从扩容缩容">5. 主从扩容缩容</h1>
+<h2 id="主从扩容">5.1 主从扩容</h2>
+<p>假如因为业务量激增，需要向当前3主3从的集群中再加入1主1从两个节点。</p>
+<p>步骤：</p>
+<ol type="1">
+<li>启动2台新的容器节点</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">启动第7台节点</span><br>docker run -d --name redis-node-7 --net host --privileged=true -v /app/redis-cluster/share/redis-node-7:/data redis:6.0.8 --cluster-enabled yes --appendonly yes --port 6387<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">启动第8台节点</span><br>docker run -d --name redis-node-8 --net host --privileged=true -v /app/redis-cluster/share/redis-node-8:/data redis:6.0.8 --cluster-enabled yes --appendonly yes --port 6388<br></code></pre></td></tr></table></figure>
+<ol start="2" type="1">
+<li>进入6387（节点7）容器内部</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker exec -it redis-node-7 /bin/bash<br></code></pre></td></tr></table></figure>
+<ol start="3" type="1">
+<li>将6387作为master加入集群</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">redis-cli --cluster add-node 本节点地址 要加入的集群中的其中一个节点地址</span><br>redis-cli --cluster add-node 192.168.226.137:6387 192.168.226.137:6381<br></code></pre></td></tr></table></figure>
+<ol start="4" type="1">
+<li>检查当前集群状态</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">redis-cli --cluster check 192.168.226.137:6381<br></code></pre></td></tr></table></figure>
+<p>可以发现，6371节点已经作为master加入了集群，但是该节点没有被分配槽位。</p>
+<ol start="5" type="1">
+<li>重新分配集群的槽位</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">redis-cli --cluster reshard 192.168.226.137:6381<br></code></pre></td></tr></table></figure>
+<p>redis经过槽位检查后，会提示需要分配的槽位数量：<br>
+例如，我们现在是4台master，我们想要给node7分配4096个槽位，这样每个节点都是4096个槽位。<br>
+输入<code>4096</code>后，会让输入要接收这些哈希槽的节点ID，填入node7的节点ID即可。（就是节点信息中很长的一串十六进制串）。<br>
+然后会提示，询问要从哪些节点中拨出一部分槽位凑足4096个分给Node7。一般选择
+<code>all</code>，即将之前的3个主节点的槽位都均一些给Node7，这样可以使得每个节点的槽位数相等均衡。<br>
+输入<code>all</code>之后，redis会列出一个计划，内容是自动从前面的3台master中拨出一部分槽位分给Node7的槽位，需要确认一下分配的计划。<br>
+输入<code>yes</code>确认后，redis便会自动重新洗牌，给Node7分配槽位。</p>
+<p>重新分配完成后，可以进行集群信息检查，查看分配结果：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">redis-cli --cluster check 192.168.xxx.xxx:6381<br></code></pre></td></tr></table></figure>
+<p>可以发现重新洗牌后的槽位分配为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs plain">节点1：[1365-5460]（供4096个槽位），，，分配前为[0-5460]（共5461个槽位）<br>节点2：[6827-10922]（共4096个槽位），，，分配前为[5461-10922]（共5461个槽位）<br>节点3：[12288-16383]（共4096个槽位），，，分配前为[10923-16383]（共5462个槽位）<br><br>节点7：[0-1364],[5461-6826],[10923-12287]（共4096个槽位），从每个节点中匀出来了一部分给了节点7<br></code></pre></td></tr></table></figure>
+<p>因为可能有些槽位中已经存储了<code>key</code>，完全的重新洗牌重新分配的成本过高，所以redis选择从前3个节点中匀出来一部分给节点7</p>
+<p>为主节点6387分配从节点6388：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">redis-cli --cluster add-node 192.168.226.137:6388 192.168.226.137:6381 --cluster-slave --cluster-master-id node7节点的十六进制编号字符串<br></code></pre></td></tr></table></figure>
+<p>redis便会向6388发送消息，使其加入集群并成为6387的从节点。</p>
+<p>检查集群当前状态</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">redis-cli --cluster check 192.168.xxx.xxx:6381<br></code></pre></td></tr></table></figure>
+<h2 id="主从缩容">5.2 主从缩容</h2>
+<p>假如业务高峰期过去，需要将4主4从重新缩容到3主3从。即从集群中移除node8和node7.</p>
+<p>首先删除从节点6388：</p>
+<ol type="1">
+<li>进入容器节点1</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker exec -it redis-node-1 /bin/bash<br></code></pre></td></tr></table></figure>
+<ol start="2" type="1">
+<li>检查容器状态，获取6388的节点编号</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">redis-cli --cluster check 192.168.226.137:6381<br></code></pre></td></tr></table></figure>
+<ol start="3" type="1">
+<li>将6388从集群中移除</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">redis-cli --cluster del-node 192.168.226.137:6388 6388节点编号<br></code></pre></td></tr></table></figure>
+<p>对node7重新分配哈希槽：</p>
+<ol type="1">
+<li>对集群重新分配哈希槽</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">redis-cli --cluster reshard 192.168.226.137:6381<br></code></pre></td></tr></table></figure>
+<ol start="2" type="1">
+<li>redis经过槽位检查后，会提示需要分配的槽位数量：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">How many slots do you want to move (from 1 to 16384)?<br></code></pre></td></tr></table></figure>
+<p>如果我们想直接把node7的4096个哈希槽全部分给某个节点，可以直接输入4096。<br>
+输入<code>4096</code>后，会让输入要接收这些哈希槽的节点ID。假如我们想把这4096个槽都分给Node1，直接输入node1节点的编号即可。<br>
+然后会提示，询问要从哪些节点中拨出一部分槽位凑足4096个分给Node1。这里我们输入node7的节点编号，回车后输入<code>done</code>。</p>
+<p>node7上面没有了哈希槽，此时便可以将node7从集群中移除。（如果node7上面有哈希槽，直接从集群中移除会报错）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">redis-cli --cluster del-node 192.168.226.137:6387 node7节点编号<br></code></pre></td></tr></table></figure>
 
                 
               </div>

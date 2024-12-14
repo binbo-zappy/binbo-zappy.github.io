@@ -19,14 +19,16 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta property="og:type" content="article">
+    <meta name="description" content="Docker Registry Docker Registry是官方提供的工具，用于构建私有镜像仓库。 环境搭建 Docker Registry也是Docker Hub提供的一个镜像，可以直接拉取运行。 步骤：  拉取镜像  1docker pull registry  启动Docker Registry  1docker run -d -p 5000:5000 -v &#x2F;a">
+<meta property="og:type" content="article">
 <meta property="og:title" content="8. Registry搭建docker私仓">
 <meta property="og:url" content="http://binbo-zappy.github.io/2024/12/07/docker/8-Registry%E6%90%AD%E5%BB%BAdocker%E7%A7%81%E4%BB%93/index.html">
 <meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="Docker Registry Docker Registry是官方提供的工具，用于构建私有镜像仓库。 环境搭建 Docker Registry也是Docker Hub提供的一个镜像，可以直接拉取运行。 步骤：  拉取镜像  1docker pull registry  启动Docker Registry  1docker run -d -p 5000:5000 -v &#x2F;a">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/docker.jpg">
 <meta property="article:published_time" content="2024-12-07T07:24:06.000Z">
-<meta property="article:modified_time" content="2024-12-07T07:24:06.135Z">
+<meta property="article:modified_time" content="2024-12-11T12:50:25.329Z">
 <meta property="article:author" content="Binbo">
 <meta property="article:tag" content="Docker">
 <meta name="twitter:card" content="summary_large_image">
@@ -223,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          0 字
+          260 字
         
       </span>
     
@@ -234,7 +236,7 @@
         
         
         
-          1 分钟
+          3 分钟
         
       </span>
     
@@ -276,7 +278,47 @@
             
               <div class="markdown-body">
                 
-                
+                <h1 id="docker-registry">Docker Registry</h1>
+<p>Docker Registry是官方提供的工具，用于构建私有镜像仓库。</p>
+<h1 id="环境搭建">环境搭建</h1>
+<p>Docker Registry也是Docker Hub提供的一个镜像，可以直接拉取运行。</p>
+<p>步骤：</p>
+<ol type="1">
+<li>拉取镜像</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker pull registry<br></code></pre></td></tr></table></figure>
+<ol start="2" type="1">
+<li>启动Docker Registry</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker run -d -p 5000:5000 -v /app/myregistry/:/tmp/registry --privileged=true registry<br></code></pre></td></tr></table></figure>
+<ol start="3" type="1">
+<li>验证（查看私服中的所有镜像）</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">curl http://192.168.xxx.xxx:5000/v2/_catalog<br></code></pre></td></tr></table></figure>
+<p>Registry会返回json格式的所有镜像目录</p>
+<h1 id="向registry私仓中上传镜像">向Registry私仓中上传镜像</h1>
+<h2 id="配置docker允许接收http请求">配置docker允许接收<code>http</code>请求</h2>
+<p>（配置方式和上传到nexus私仓相同）。</p>
+<p>修改<code>/etc/docker/daemon.json</code>，添加<code>insecure-registries</code>允许http：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;registry-mirros&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;https://xxxx.mirror.aliyuncs.com&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;insecure-registries&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;192.168.xxx.xxx:5000&quot;</span><span class="hljs-punctuation">]</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+<p>然后重启docker：（新版本的docker会立即生效）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">centos6 的命令</span><br>sudo chkconfig daemon-reload<br>sudo service docker restart<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">centos7 的命令</span><br>sudo systemctl daemon-reload<br>sudo systemctl restart docker<br></code></pre></td></tr></table></figure>
+<h2 id="推送到私仓">推送到私仓</h2>
+<p>步骤：</p>
+<ol type="1">
+<li>添加一个对应私仓地址的tag</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker tag lee/myubuntu:1.0.1 192.168.xxx.xxx:5000/lee/myubuntu:1.0.1<br></code></pre></td></tr></table></figure>
+<ol start="2" type="1">
+<li>push到私仓</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker push 192.168.xxx.xxx:5000/lee/myubuntu:1.0.1<br></code></pre></td></tr></table></figure>
+<ol start="3" type="1">
+<li>查看私仓中镜像目录验证</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">curl http://192.168.xxx.xxx:5000/v2/_catalog<br></code></pre></td></tr></table></figure>
+<p>拉取验证：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker pull 192.169.xxx.xxx:5000/lee/myubuntu:1.0.1<br></code></pre></td></tr></table></figure>
 
                 
               </div>

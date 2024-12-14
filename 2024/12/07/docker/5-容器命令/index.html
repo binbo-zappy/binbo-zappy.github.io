@@ -28,7 +28,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/docker.jpg">
 <meta property="article:published_time" content="2024-12-07T07:24:01.000Z">
-<meta property="article:modified_time" content="2024-12-10T11:34:50.898Z">
+<meta property="article:modified_time" content="2024-12-11T12:39:15.991Z">
 <meta property="article:author" content="Binbo">
 <meta property="article:tag" content="Docker">
 <meta name="twitter:card" content="summary_large_image">
@@ -225,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.8k 字
+          1.9k 字
         
       </span>
     
@@ -236,7 +236,7 @@
         
         
         
-          16 分钟
+          17 分钟
         
       </span>
     
@@ -380,10 +380,6 @@
 可以在里面执行一些命令操作，然后使用<code>docker commit</code>将新的这个容器快照生成一个镜像。</p>
 </blockquote>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker commit -m=&quot;提交的描述信息&quot; -a=&quot;作者&quot; 容器ID 要创建的目标镜像名:[tag]<br></code></pre></td></tr></table></figure>
-<p>Docker挂载主机目录，可能会出现报错：<code>cannot open directory .: Perission denied</code>。</p>
-<p>解决方案：在命令中加入参数 <code>--privileged=true</code>。</p>
-<p>CentOS7安全模块比之前系统版本加强，不安全的会先禁止，目录挂载的情况被默认为不安全的行为，在SELinux里面挂载目录被禁止掉了。如果要开启，一般使用
-<code>--privileged=true</code>，扩大容器的权限解决挂载没有权限的问题。也即使用该参数，容器内的root才拥有真正的root权限，否则容器内的root只是外部的一个普通用户权限。</p>
 <h1 id="本地镜像发布到阿里云">12. 本地镜像发布到阿里云</h1>
 <ul>
 <li>创建仓库镜像
@@ -404,11 +400,11 @@
 <ol start="2" type="1">
 <li>生成容器</li>
 </ol>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">docker run -d -p 5000:5000 -v /zzyyuse/myregistry/:/tmp/registry --privileged=<span class="hljs-literal">true</span> registry<br></code></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs sh">docker run -d -p 5000:5000 -v /zzyyuse/myregistry/:/tmp/registry --privileged=<span class="hljs-literal">true</span> registry<br><br>-v添加自定义的容器卷<br>/zzyyuse/myregistry/   宿主机路径<br>/tmp/registry   容器内路径<br><br></code></pre></td></tr></table></figure>
 <ol start="3" type="1">
 <li>curl验证私服库上有什么镜像</li>
 </ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">curl -XGET http://localhost:5000/v2/_catalog<br><br></code></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">curl -XGET http://localhost:5000/v2/_catalog<br></code></pre></td></tr></table></figure>
 <ol start="4" type="1">
 <li>修改符合私服tag格式</li>
 </ol>
@@ -430,6 +426,10 @@
 </ol>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sh">docker pull localhost:5000/myubu:1.3<br>docker pull 192.168.226.137:5000/myubu:1.3<br><br></code></pre></td></tr></table></figure>
 <h1 id="容器数据卷">14. 容器数据卷</h1>
+<p>Docker挂载主机目录，可能会出现报错：<code>cannot open directory .: Perission denied</code>。</p>
+<p>解决方案：在命令中加入参数 <code>--privileged=true</code>。</p>
+<p>CentOS7安全模块比之前系统版本加强，不安全的会先禁止，目录挂载的情况被默认为不安全的行为，在SELinux里面挂载目录被禁止掉了。如果要开启，一般使用
+<code>--privileged=true</code>，扩大容器的权限解决挂载没有权限的问题。也即使用该参数，容器内的root才拥有真正的root权限，否则容器内的root只是外部的一个普通用户权限。</p>
 <p>卷就是目录或文件，存在于一个或多个容器中，由docker挂载到容器，但不属于联合文件系统，因此能够绕过UnionFS，提供一些用于持续存储或共享数据。</p>
 <p>特性：卷设计的目的就是数据的持久化，完全独立于容器的生存周期，因此Docker不会在容器删除时删除其挂载的数据卷。</p>
 <p>特点：</p>
@@ -440,14 +440,15 @@
 <li>数据卷的生命周期一直持续到没有容器使用它为止</li>
 </ul>
 <p>运行一个带有容器卷存储功能的容器实例：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker run -it --privileged=true -v 宿主机绝对路径目录:容器内目录[rw | ro] 镜像名<br></code></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker run -it --privileged=true -v 宿主机绝对路径目录:容器内目录[rw | ro] 镜像名<br><br>docker run -it --privileged=true -v /tmp/host_data:/tmp/docker_data --name=u1 ubuntu <br><span class="hljs-meta prompt_"># </span><span class="language-bash">二者共享这个目录</span><br></code></pre></td></tr></table></figure>
 <p>可以使用<code>docker inspect</code>查看容器绑定的数据卷。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-attr">&quot;Mounts&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>            <span class="hljs-punctuation">&#123;</span><br>                <span class="hljs-attr">&quot;Type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;bind&quot;</span><span class="hljs-punctuation">,</span><br>                <span class="hljs-attr">&quot;Source&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;/tmp/host_data&quot;</span><span class="hljs-punctuation">,</span><br>                <span class="hljs-attr">&quot;Destination&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;/tmp/docker_data&quot;</span><span class="hljs-punctuation">,</span><br>                <span class="hljs-attr">&quot;Mode&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;&quot;</span><span class="hljs-punctuation">,</span><br>                <span class="hljs-attr">&quot;RW&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span><br>                <span class="hljs-attr">&quot;Propagation&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;rprivate&quot;</span><br>            <span class="hljs-punctuation">&#125;</span><br>        <span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br><br></code></pre></td></tr></table></figure>
 <p>权限：</p>
 <ul>
-<li><code>rw</code>：读写</li>
+<li><code>rw</code>：读写 默认</li>
 <li><code>ro</code>：只读。如果宿主机写入内容，可以同步给容器内，容器内可以读取。</li>
 </ul>
-<p>容器卷的继承：</p>
+<p>容器卷的继承：继承u1的规则，u1退出，u2仍然正常</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">启动一个容器</span><br>docker run -it --privileged=true /tmp/test:/tmp/docker --name u1 ubuntu /bin/bash<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">使用 --volumes-from 继承 u1的容器卷映射配置</span><br>docker run -it --privileged=true --volumes-from u1 --name u2 ubuntu<br></code></pre></td></tr></table></figure>
 <h1 id="所有命令示意图">15. 所有命令示意图</h1>
 <p><img src="/2024/12/07/docker/5-%E5%AE%B9%E5%99%A8%E5%91%BD%E4%BB%A4/1652093386636-41aec8f5-bd52-4a99-8c3c-daa61c1d78a5.png" srcset="/img/loading.gif" lazyload></p>

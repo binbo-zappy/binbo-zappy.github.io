@@ -28,7 +28,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/effective-cpp.png">
 <meta property="article:published_time" content="2024-11-27T12:17:13.000Z">
-<meta property="article:modified_time" content="2024-11-27T12:20:54.679Z">
+<meta property="article:modified_time" content="2024-12-13T08:21:10.424Z">
 <meta property="article:author" content="Binbo">
 <meta property="article:tag" content="c++">
 <meta name="twitter:card" content="summary_large_image">
@@ -291,18 +291,18 @@ polymorphism)，也就是说将于运行期根据w的动态类型（见条款37)
 expressions)组成。再次看看doProcessing template一开始的条件：</li>
 </ol>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">doProcessing</span><span class="hljs-params">(T &amp;w)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">if</span>(w.<span class="hljs-built_in">size</span>()&gt;<span class="hljs-number">20</span>&amp;&amp; w!=someNastyWIdget&#123;<br>        &#125;<br></code></pre></td></tr></table></figure>
+<ol start="7" type="1">
+<li>T(w的类型)的隐式接口看来好像有这些约束：
 <ol type="1">
-<li><p>T(w的类型)的隐式接口看来好像有这些约束：</p></li>
-<li><ol type="1">
 <li>它必须提供一个名为size的成员函数，该函数返回一个整数值。</li>
 <li>它必须支持一个operator!=函数，用来比较两个T对象。这里我们假设someNastywidget的类型为T。</li>
 <li>真要感谢操作符重载(operator
 overloading)带来的可能性，这两个约束都不需要满足</li>
 </ol></li>
-<li><p>classes和templates都支持接口(interfaces)和多态(polymorphism)。</p></li>
-<li><p>对classes而言接口是显式的(explicit),以函数签名为中心。多态则是通过virtual函数发生于运行期。</p></li>
-<li><p>对template参数而言，接口是隐式的(implicit).,奠基于有效表达式。多态则是通过template具现化和函数重载解析(function
-overloading resolution)发生于编译期。</p></li>
+<li>classes和templates都支持接口(interfaces)和多态(polymorphism)。</li>
+<li>对classes而言接口是显式的(explicit),以函数签名为中心。多态则是通过virtual函数发生于运行期。</li>
+<li>对template参数而言，接口是隐式的(implicit).,奠基于有效表达式。多态则是通过template具现化和函数重载解析(function
+overloading resolution)发生于编译期。</li>
 </ol>
 <h2 id="了解typename的双重意义">42. 了解typename的双重意义</h2>
 <ol type="1">
@@ -321,25 +321,19 @@ iterator是个类型。只要紧临它之前放置关键字typename即可：</li
 <li>一般性规则很简单：任何时候当你想要在template中指涉一个嵌套从属类型名称，就必须在紧临它的前一个位置放上关键字typename。</li>
 <li>typename只被用来验明嵌套从属类型名称；其他名称不该有它存在。</li>
 </ol>
-<figure>
-<img src="/2024/11/27/effective-cpp/7-%E6%A8%A1%E6%9D%BF%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/1707556429425-d318e2cd-59e8-435d-a4e9-52a7b2da947b.png" srcset="/img/loading.gif" lazyload alt="img">
-<figcaption aria-hidden="true">img</figcaption>
-</figure>
-<ol type="1">
+<p><img src="/2024/11/27/effective-cpp/7-%E6%A8%A1%E6%9D%BF%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/1707556429425-d318e2cd-59e8-435d-a4e9-52a7b2da947b.png" srcset="/img/loading.gif" lazyload></p>
+<ol start="10" type="1">
 <li>“typename必须作为嵌套从属类型名称的前缀词”这一规则的例外是，typename不可以出现在base
 classes list内的嵌套从属类型名称之前，也不可在member initialization
 list(成员初值列)中作为base class修饰符.</li>
 </ol>
-<figure>
-<img src="https://cdn.nlark.com/yuque/0/2024/png/35229143/1707556584352-036c9314-8409-40b5-81f6-bb6831b15ed9.png" srcset="/img/loading.gif" lazyload alt="img">
-<figcaption aria-hidden="true">img</figcaption>
-</figure>
-<ol type="1">
+<p><img src="/2024/11/27/effective-cpp/7-%E6%A8%A1%E6%9D%BF%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/1707556584352-036c9314-8409-40b5-81f6-bb6831b15ed9.png" srcset="/img/loading.gif" lazyload></p>
+<ol start="11" type="1">
 <li>让我们看看最后一个typename例子，那是你将在真实程序中看到的代表性例子。假设我们正在撰写一个function
 template,它接受一个迭代器，而我们打算为该迭代器指涉的对象做一份local复件（副本）temp。我们可以这么写：</li>
 </ol>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> IterT&gt;</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">workWithIterator</span><span class="hljs-params">(IterT iter)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">typename</span> std::iterator_traits&lt;IterT&gt;::<span class="hljs-function">value_type <span class="hljs-title">temp</span><span class="hljs-params">(*iter)</span></span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-<ol type="1">
+<ol start="12" type="1">
 <li>标准traits
 class（见条款47)的一种运用，相当于说“类型为IterT之对象所指之物的类型"，这个语句声明一个local变量(temp),使用IterT对象所指物的相同类型，并将temp初始化为iter所指物。如果IterT是vector<int>::iterator,temp的类型就是int。如果IterT是list<string>::iterator,temp的类型就是string。由于std:iterator_traits.<IterT>:value
 type是个嵌套从属类型名称(value type被嵌套于iterator
@@ -356,35 +350,23 @@ template,在template实参是CompanyZ时被使用。这是所谓的模板全特�
 template,specialization)：template
 MsgSender针对类型CompanyZ特化了，而且其特化是全面性的，也就是说一旦类型参数被定义为CompanyZ,再没有其他template参数可供变化。</li>
 </ol>
-<figure>
-<img src="https://cdn.nlark.com/yuque/0/2024/png/35229143/1707557788872-b88bf5fe-ff55-47ab-b2de-89c7aabf83d1.png" srcset="/img/loading.gif" lazyload alt="img">
-<figcaption aria-hidden="true">img</figcaption>
-</figure>
-<ol type="1">
+<p><img src="/2024/11/27/effective-cpp/7-%E6%A8%A1%E6%9D%BF%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/1707557788872-b88bf5fe-ff55-47ab-b2de-89c7aabf83d1.png" srcset="/img/loading.gif" lazyload></p>
+<ol start="2" type="1">
 <li>令C++“不进入templatized base classes观察”的行为失效。</li>
 <li>第一是在base class函数调用动作之前加上 this-&gt;</li>
 </ol>
-<figure>
-<img src="https://cdn.nlark.com/yuque/0/2024/png/35229143/1707558520152-2b05a9ba-7882-4f12-99ac-4428f4c2dabb.png" srcset="/img/loading.gif" lazyload alt="img">
-<figcaption aria-hidden="true">img</figcaption>
-</figure>
-<ol type="1">
+<p><img src="/2024/11/27/effective-cpp/7-%E6%A8%A1%E6%9D%BF%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/1707558520152-2b05a9ba-7882-4f12-99ac-4428f4c2dabb.png" srcset="/img/loading.gif" lazyload></p>
+<ol start="4" type="1">
 <li>第二是使用using声明式。如果你已读过条款33，这个解法应该会令你感到熟悉。条款33描述using声明式如何将“被掩盖的base
 class名称”带入一个derived
 class作用域内。我们可以这样写下sendClearMsg:</li>
 </ol>
-<figure>
-<img src="https://cdn.nlark.com/yuque/0/2024/png/35229143/1707558218801-2272b813-1508-4dd1-bf00-d3ebf10af457.png" srcset="/img/loading.gif" lazyload alt="img">
-<figcaption aria-hidden="true">img</figcaption>
-</figure>
-<ol type="1">
+<p><img src="/2024/11/27/effective-cpp/7-%E6%A8%A1%E6%9D%BF%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/1707558218801-2272b813-1508-4dd1-bf00-d3ebf10af457.png" srcset="/img/loading.gif" lazyload></p>
+<ol start="5" type="1">
 <li>第三个做法是，明白指出被调用的函数位于base class内：</li>
 </ol>
-<figure>
-<img src="https://cdn.nlark.com/yuque/0/2024/png/35229143/1707558357624-cd637eca-fa50-485b-981d-5ee66fc4e5f8.png" srcset="/img/loading.gif" lazyload alt="img">
-<figcaption aria-hidden="true">img</figcaption>
-</figure>
-<ol type="1">
+<p><img src="/2024/11/27/effective-cpp/7-%E6%A8%A1%E6%9D%BF%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/1707558357624-cd637eca-fa50-485b-981d-5ee66fc4e5f8.png" srcset="/img/loading.gif" lazyload></p>
+<ol start="6" type="1">
 <li>但这往往是最不让人满意的一个解法，因为如果被调用的是virtual函数，上述的明确资格修饰(explicit
 qualification)会关闭“virtual绑定行为”。</li>
 <li>可在derived class templates内通过"this-&gt;"指涉base class
@@ -419,22 +401,16 @@ list的某个节点移到另一个节点，但这在list:iterators身上办得�
 conversions)。Derived class指针可以隐式转换为base
 class指针，“指向non-const对象”的指针可以转换为“指向cost对象”…等等。</li>
 </ol>
-<figure>
-<img src="https://cdn.nlark.com/yuque/0/2024/png/35229143/1707564816041-88e0ddec-3c52-4448-b23c-16ed9a536175.png" srcset="/img/loading.gif" lazyload alt="img">
-<figcaption aria-hidden="true">img</figcaption>
-</figure>
-<ol type="1">
+<p><img src="/2024/11/27/effective-cpp/7-%E6%A8%A1%E6%9D%BF%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/1707564816041-88e0ddec-3c52-4448-b23c-16ed9a536175.png" srcset="/img/loading.gif" lazyload></p>
+<ol start="4" type="1">
 <li>但如果想在用户自定的智能指针中模拟上述转换，稍稍有点麻烦</li>
 <li>Templates和泛型编程(Generic Programming)</li>
 <li>为SmartPtr写一个构造函数，而是为它写一个构造模板。这样的模板(templates)是所谓member
 function templates(常简称为nember
 templates),其作用是为class生成函数：</li>
 </ol>
-<figure>
-<img src="https://cdn.nlark.com/yuque/0/2024/png/35229143/1707565419364-bae288b3-bb45-49b0-9116-b0698e6010b7.png" srcset="/img/loading.gif" lazyload alt="img">
-<figcaption aria-hidden="true">img</figcaption>
-</figure>
-<ol type="1">
+<p><img src="/2024/11/27/effective-cpp/7-%E6%A8%A1%E6%9D%BF%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/1707565419364-bae288b3-bb45-49b0-9116-b0698e6010b7.png" srcset="/img/loading.gif" lazyload></p>
+<ol start="7" type="1">
 <li>以上代码的意思是，对任何类型T和任何类型U,这里可以根据SmartPtr<U>生成一个SmartPtr<T>，因为Smartptr<T>有个构造函数接受个SmartPtr<U>参数。这一类构造函数根据对象u创建对象t(例如根据SmartPtr<U>创建一个SmartPtr<T>),而u和v的类型是同一个template的不同具现体，有时我们称之为泛化(generalized)copy构造函数。</T></U></U></T></T></U></li>
 <li>泛化copy构造函数并未被声明为explicit。那是蓄意的，因为原始指针类型之间的转换（例如从derived
 class指针转为base
@@ -464,11 +440,8 @@ classes表现类型信息</h2>
 <ol type="1">
 <li>STL主要由“用以表现容器、迭代器和算法”的templates构成，但也覆盖若干工具性templates,其中一个名为advance,.用来将某个迭代器移动某个给定距离：</li>
 </ol>
-<figure>
-<img src="/2024/11/27/effective-cpp/7-%E6%A8%A1%E6%9D%BF%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/1707567010785-05677fc7-3ce9-4fe3-8c08-40846e028338.png" srcset="/img/loading.gif" lazyload alt="img">
-<figcaption aria-hidden="true">img</figcaption>
-</figure>
-<ol type="1">
+<p><img src="/2024/11/27/effective-cpp/7-%E6%A8%A1%E6%9D%BF%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/1707567010785-05677fc7-3ce9-4fe3-8c08-40846e028338.png" srcset="/img/loading.gif" lazyload></p>
+<ol start="2" type="1">
 <li>random
 access迭代器支持迭代器算术运算，只耗费常量时间，因此如果面对这种迭代器，我们希望运用其优势。</li>
 <li>这种做法首先必须判断iter是否为random
@@ -479,63 +452,57 @@ char*)和一个int,上述advance仍然必须有效运作，那意味traits技术
 <li>“traits必须能够施行于内置类型”意味“类型内的嵌套信息(nesting
 information)”这种东西出局了，因为我们无法将信息嵌套于原始指针内。因此类型的traits信息必须位于类型自身之外。标准技术是把它放进一个template及其或多个特化版本中。这样的templates在标准程序库中有若干个，其中针对迭代器者被命名为iterator_traits:</li>
 </ol>
-<figure>
-<img src="/2024/11/27/effective-cpp/7-%E6%A8%A1%E6%9D%BF%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/1707568377223-8b9c5bf1-0c40-4613-8c3f-147a892e4293.png" srcset="/img/loading.gif" lazyload alt="img">
-<figcaption aria-hidden="true">img</figcaption>
-</figure>
+<p><img src="/2024/11/27/effective-cpp/7-%E6%A8%A1%E6%9D%BF%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/1707568377223-8b9c5bf1-0c40-4613-8c3f-147a892e4293.png" srcset="/img/loading.gif" lazyload></p>
+<ol start="6" type="1">
+<li>现在，你应该知道如何设计并实现一个traits class了：
 <ol type="1">
-<li><p>现在，你应该知道如何设计并实现一个traits class了：</p></li>
-<li><ol type="1">
 <li>确认若干你希望将来可取得的类型相关信息。例如对迭代器而言，我们希望将来可取得其分类(category)。</li>
 <li>为该信息选择一个名称（例如iterator_category)。</li>
 <li>提供一个template和一组特化版本（例如稍早说的terator
 traits)，内含你希望支持的类型相关信息。</li>
 </ol></li>
-<li><p>现在我们可以总结如何使用一个traits class了：</p></li>
-<li><ol type="1">
+<li>现在我们可以总结如何使用一个traits class了：
+<ol type="1">
 <li>建立一组重载函数（身份像劳工）或函数模板（例如doAdvance),彼此间的差异只在于各自的t红aits参数。令每个函数实现码与其接受之traits信息相应和。</li>
 <li>建立一个控制函数（身份像工头）或函数模板（例如advance)，它调用上述那些“劳工函数”并传递traits
 class所提供的信息。</li>
 </ol></li>
-<li><p>Traits广泛用于标准程序库。其中当然有上述讨论的iterator
+<li>Traits广泛用于标准程序库。其中当然有上述讨论的iterator
 traits,.除了供应iterator_category还供应另四份迭代器相关信息（其中最有用的是value
 type,见条款42)。此外还有char
 traits用来保存字符类型的相关信息，以及numeric
 limits用来保存数值类型的相关信息，例如某数值类型可表现之最小值和最大值等等；命名为numeric
 limits有点让人惊讶，因为traits
-classes的名称常以"traits”结束，但numeric_limits却没有遵守这种风格。</p></li>
-<li><p>TR1(条款54)导入许多新的traits classes用以提供类型信息，包括is
+classes的名称常以"traits”结束，但numeric_limits却没有遵守这种风格。</li>
+<li>TR1(条款54)导入许多新的traits classes用以提供类型信息，包括is
 fundamental<T>(判断T是否为内置类型)，is
 array<T>(判断T是否为数组类型)，以及is base
 of&lt;T1,T2&gt;(T1和T2相同，抑或r1是T2的base
-class)。总计TR1一共为标准C+添加了50个以上的traits classes。</T></T></p></li>
-<li><p>Traits
-classes使得“类型相关信息”在编译期可用。它们以templates和“templates特化”完成实现。</p></li>
-<li><p>整合重载技术(overloading)后，traits
-classes有可能在编译期对类型执行if...else测试。</p></li>
+class)。总计TR1一共为标准C+添加了50个以上的traits classes。</T></T></li>
+<li>Traits
+classes使得“类型相关信息”在编译期可用。它们以templates和“templates特化”完成实现。</li>
+<li>整合重载技术(overloading)后，traits
+classes有可能在编译期对类型执行if...else测试。</li>
 </ol>
 <h2 id="认识template元编程">48. 认识template元编程</h2>
 <ol type="1">
-<li><p>TMP有两个伟大的效力。</p></li>
-<li><ol type="1">
+<li>TMP有两个伟大的效力。
+<ol type="1">
 <li>第一，它让某些事情更容易。如果没有它，那些事情将是困难的，甚至不可能的。</li>
 <li>第二，由于template
 metaprograms执行于C++编译期，因此可将工作从运行期转移到编译期。</li>
 </ol></li>
-<li><p>这导致的一个结果是，某些错误原本通常在运行期才能侦测到，现在可在编译期找出来。另一个结果是，使用TMP的C++程序可能在每一方面都更高效：较小的可执行文件、较短的运行期、较少的内存需求。然而将工作从运行期移转至编译期的另一个结果是，编译时间变长了。是的，程序如果使用TMP,其编译时间可能远长于不使用TMP的对应版本。</p></li>
-<li><p>条款47指出，这个typeid-based解法的效率比traits解法低，因为在此方案中，(1)类型测试发生于运行期而非编译期，(2)“运行期类型测试”代码会出现在（或说被连接于)可执行文件中。实际上这个例子正可彰显TMP如何能够比“正常的”C++程序更高效，因为traits解法就是TMP。别忘了，traits引发“编译期发生于类型身上的if.…else计算”。</p></li>
-<li><p>TMP已被证明是个“图灵完全”(Turing-complete)机器，意思是它的威力大到足以计算任何事物。使用TMP你可以声明变量、执行循环、编写及调用函数…但这般构件相对于“正常的”C++对应物看起来很是不同，例如条款47展示的TMP
+<li>这导致的一个结果是，某些错误原本通常在运行期才能侦测到，现在可在编译期找出来。另一个结果是，使用TMP的C++程序可能在每一方面都更高效：较小的可执行文件、较短的运行期、较少的内存需求。然而将工作从运行期移转至编译期的另一个结果是，编译时间变长了。是的，程序如果使用TMP,其编译时间可能远长于不使用TMP的对应版本。</li>
+<li>条款47指出，这个typeid-based解法的效率比traits解法低，因为在此方案中，(1)类型测试发生于运行期而非编译期，(2)“运行期类型测试”代码会出现在（或说被连接于)可执行文件中。实际上这个例子正可彰显TMP如何能够比“正常的”C++程序更高效，因为traits解法就是TMP。别忘了，traits引发“编译期发生于类型身上的if.…else计算”。</li>
+<li>TMP已被证明是个“图灵完全”(Turing-complete)机器，意思是它的威力大到足以计算任何事物。使用TMP你可以声明变量、执行循环、编写及调用函数…但这般构件相对于“正常的”C++对应物看起来很是不同，例如条款47展示的TMP
 if..else条件句是藉由templates和其特化体表现出来。不过那毕竟是汇编语言层级的TMP。针对TMP而设计的程序库（例如Boost's
-MPL,见条款55）提供更高层级的语法一一尽管目前还不足以让你误以为那是“正常的”C++。</p></li>
-<li><p>TMP并没有真正的循环构件，所以循环效果系藉由递归(recursion.)完成。TMP主要是个“函数式语言”(functional
+MPL,见条款55）提供更高层级的语法一一尽管目前还不足以让你误以为那是“正常的”C++。</li>
+<li>TMP并没有真正的循环构件，所以循环效果系藉由递归(recursion.)完成。TMP主要是个“函数式语言”(functional
 language),而递归之于这类语言就像电视之于美国通俗文化一样地无法分割。TMP的递归甚至不是正常种类，因为TMP循环并不涉及递归函数调用，而是涉及“递归模板具现化”(recursive
-template instantiation）。</p></li>
+template instantiation）。</li>
 </ol>
-<figure>
-<img src="/2024/11/27/effective-cpp/7-%E6%A8%A1%E6%9D%BF%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/1707571832635-303bc108-4be6-44ec-8d7b-81cdabc631b0.png" srcset="/img/loading.gif" lazyload alt="img">
-<figcaption aria-hidden="true">img</figcaption>
-</figure>
-<ol type="1">
+<p><img src="/2024/11/27/effective-cpp/7-%E6%A8%A1%E6%9D%BF%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/1707571832635-303bc108-4be6-44ec-8d7b-81cdabc631b0.png" srcset="/img/loading.gif" lazyload></p>
+<ol start="6" type="1">
 <li>Template
 metaprogramming(TMP,模板元编程)可将工作由运行期移往编译期，因而得以实现早期错误侦测和更高的执行效率。</li>
 <li>TMP可被用来生成“基于政策选择组合”(based on combinations of policy

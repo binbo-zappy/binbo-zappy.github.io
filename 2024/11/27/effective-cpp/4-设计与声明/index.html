@@ -28,7 +28,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/effective-cpp.png">
 <meta property="article:published_time" content="2024-11-27T12:17:08.000Z">
-<meta property="article:modified_time" content="2024-11-27T12:20:29.666Z">
+<meta property="article:modified_time" content="2024-12-13T08:21:10.422Z">
 <meta property="article:author" content="Binbo">
 <meta property="article:tag" content="c++">
 <meta name="twitter:card" content="summary_large_image">
@@ -286,29 +286,26 @@
 <li>导入简单的外覆类型来区别天数，月份等</li>
 </ol>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Day</span>&#123;<br><span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">Day</span><span class="hljs-params">(<span class="hljs-type">int</span> d)</span></span><br><span class="hljs-function">:val(d)&#123;</span>&#125;<br><span class="hljs-type">int</span> val;<br>&#125;<br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Month</span>&#123;<br><span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">Month</span><span class="hljs-params">(<span class="hljs-type">int</span> m)</span></span><br><span class="hljs-function">:val(m)&#123;</span>&#125;<br><span class="hljs-type">int</span> val;<br>&#125;<br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Year</span>&#123;<br><span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">Year</span><span class="hljs-params">(<span class="hljs-type">int</span> y)</span></span><br><span class="hljs-function">:val(y)&#123;</span>&#125;<br><span class="hljs-type">int</span> val;<br>&#125;<br></code></pre></td></tr></table></figure>
-<ol type="1">
+<ol start="3" type="1">
 <li>令Day，Month，Year成为成熟且经充分锻炼的类并封装内部数据，比简单使用structs好</li>
 <li>限制正确的类型的取值，比较安全的方法时预定义所有有效的Months，以函数替换对象，表现某个特定月份，因为non-local
 static对象的初始化次序可能出现问题</li>
 </ol>
-<figure>
-<img src="/2024/11/27/effective-cpp/4-%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%A3%B0%E6%98%8E/1707183478622-e5fdf8f5-23a5-4374-9a5e-78ff04c69f48.png" srcset="/img/loading.gif" lazyload alt="img">
-<figcaption aria-hidden="true">img</figcaption>
-</figure>
-<ol type="1">
+<p><img src="/2024/11/27/effective-cpp/4-%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%A3%B0%E6%98%8E/1707183478622-e5fdf8f5-23a5-4374-9a5e-78ff04c69f48.png" srcset="/img/loading.gif" lazyload></p>
+<ol start="5" type="1">
 <li>预防客户错误的另一个办法是，限制类型内什么是可做，什么是不能做。常见的限制是加上const。条款3：以const修饰operator*的返回类型可阻止客户因用户自定义类型而犯错</li>
 <li>除非有好理由，否则应该尽量令你的types的行为于内置types一致</li>
 <li>避免无端与内置类型不兼容，真正的理由是为了提供行为一致的接口。STL容器的接口十分一致，这使得它们非常容易被调用</li>
 <li>较佳接口的设计原则是令函数返回一个智能指针，事实上，返回tr1::shared_ptr让接口设计者阻止资源泄露的错误</li>
 </ol>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cpp">std::<span class="hljs-function">tr1::shared_ptr&lt;Investment&gt; <span class="hljs-title">createInvestment</span><span class="hljs-params">()</span></span>;<br></code></pre></td></tr></table></figure>
-<ol type="1">
+<ol start="9" type="1">
 <li>假设类设计者期许"从createInvestment取得Investment*指针"的客户将该指针传递给一个名为getRidOfInvestment的函数，而不是直接使用delete。这样一个接口又开启通往另一个客户错误的大门，该错误是"企图使用错误的资源析构机制"，设计者可以设计一个返回将getRidOfInvestment绑定为删除器"的tr1::shared_ptr</li>
 <li>tr1::shared_ptr提供的某个构造函数接受两个实参：一个是被管理的指针，另一个是引用次数变成0时将被调用的删除器。这启发我们创建一个null
 tr1::shared_ptr并以getRidOfInvestment作为删除器</li>
 </ol>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cpp">std::tr1::shared_ptr&lt;Investment&gt;<span class="hljs-built_in">pInv</span>(<span class="hljs-built_in">static_cast</span>&lt;Investment*&gt;(<span class="hljs-number">0</span>),getRidOfInvestment);<br></code></pre></td></tr></table></figure>
-<ol type="1">
+<ol start="11" type="1">
 <li>tr1::shared_ptr有一个特别好的性质是，它会自动使用它的“每个指针专属的删除器”，因而消除另一个潜在的客户错误：所谓的“cross-DLL
 problem"。这个问题发生于对象在动态链接程序库DLL中被new创建，却在另一个DLL内被delete销毁，在许多平台上，这一类跨DLL之new/delete成对使用会导致运行期错误。</li>
 <li>好的接口很容易被正确使用，不容易被误用。你应该在你的所有接口中努力达成这些性质。</li>
@@ -319,47 +316,47 @@ deleter)。这可防范DLL问题，可被用来自动解除互斥锁（mutexes;�
 </ol>
 <h2 id="设计class犹如设计type">19. 设计class犹如设计type</h2>
 <ol type="1">
-<li><p>新type对象应该如何被创建和销毁？（第八章）</p></li>
-<li><p>对象的初始化和对象的赋值该有什么样的差别？（条款四）</p></li>
-<li><p>新type的对象如果被passed by value(以值传递)，意味着什么？
-copy构造函数用来定义一个type的pass-by-value如何实现</p></li>
-<li><p>什么是新type的”合法值“</p></li>
-<li><p>你的新type需要配合某个继承图系吗？</p></li>
-<li><ol type="1">
+<li>新type对象应该如何被创建和销毁？（第八章）</li>
+<li>对象的初始化和对象的赋值该有什么样的差别？（条款四）</li>
+<li>新type的对象如果被passed by value(以值传递)，意味着什么？
+copy构造函数用来定义一个type的pass-by-value如何实现</li>
+<li>什么是新type的”合法值“</li>
+<li>你的新type需要配合某个继承图系吗？
+<ol type="1">
 <li>如果继承自某些既有的类，就会受到那些类的设计的束缚，特别是他们的函数时virtual或non-virtual的影响（条款34和36）</li>
 <li>如果允许其他类继承你的class，那会影响你所声明的函数，尤其是析构函数是否为virtual（条款7）</li>
 </ol></li>
-<li><p>你的新type需要什么杨的转换</p></li>
-<li><ol type="1">
+<li>你的新type需要什么杨的转换
+<ol type="1">
 <li>如果允许T1隐式转换为T2，就必须在class
 T1内写一个类型转换函数（operator T2）或者在class
 T2内写一个non-explicit-one-argument（可被单一实参调用）的构造函数，如果只允许explicit狗在函数存在，就得写专门负责转换的函数，且不得为类型转换操作符（type
 conversion
 operators）或者non-explicit-one-argument构造函数。（条款15）</li>
 </ol></li>
-<li><p>什么样的操作符和函数对此新type而言时合理的？</p></li>
-<li><ol type="1">
+<li>什么样的操作符和函数对此新type而言时合理的？
+<ol type="1">
 <li>决定于将为class声明哪些函数，其中某些该是member函数，某些则否（见条款23，24，46）</li>
 </ol></li>
-<li><p>什么样的标准函数应该驳回？</p></li>
-<li><ol type="1">
+<li>什么样的标准函数应该驳回？
+<ol type="1">
 <li>那些正是你必须声明为private者（条款6）</li>
 </ol></li>
-<li><p>谁该取用新type的成员</p></li>
-<li><ol type="1">
+<li>谁该取用新type的成员
+<ol type="1">
 <li>决定哪个成员为public，哪个为protected，哪个为private</li>
 <li>决定哪一个类或者函数应该是friends，以及将它们嵌套于另一个之内是否合理</li>
 </ol></li>
-<li><p>什么是新type的”未声明接口“</p></li>
-<li><ol type="1">
+<li>什么是新type的”未声明接口“
+<ol type="1">
 <li>对效率、异常安全性（条款29）以及资源运用（例如多任务锁定和动态内存）提供何种保证，</li>
 </ol></li>
-<li><p>你的新type有多么一般化</p></li>
-<li><ol type="1">
+<li>你的新type有多么一般化
+<ol type="1">
 <li>定义一个新的class template，定义一整个types家族</li>
 </ol></li>
-<li><p>你真的需要一个新type吗</p></li>
-<li><ol type="1">
+<li>你真的需要一个新type吗
+<ol type="1">
 <li>如果只是定义新的派生类以便为既有的class添加机能，说不定单纯定义一个或者多个non-member函数或者templates，更能达到目标</li>
 </ol></li>
 </ol>
@@ -371,7 +368,7 @@ operators）或者non-explicit-one-argument构造函数。（条款15）</li>
 <li>如何回避所有的构造和析构动作？pass by reference-to-const</li>
 </ol>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">validateStudent</span><span class="hljs-params">(<span class="hljs-type">const</span> Student&amp; s)</span></span>;<br></code></pre></td></tr></table></figure>
-<ol type="1">
+<ol start="4" type="1">
 <li>这种传递方式效率高，没有任何构造函数和析构函数被调用，因为没有任何新对象被创建。const是重要的，</li>
 <li>以by
 reference方式传递参数可以避免slicing（对象切割）问题。当一个派生类对象以by
@@ -397,7 +394,7 @@ value，前者通常高效，并可避免切割问题</li>
 <li>一个必须返回新对象的函数的正确写法是，让那个函数返回一个新对象</li>
 </ol>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">inline</span> <span class="hljs-type">const</span> Rational <span class="hljs-keyword">operator</span>* (<span class="hljs-type">const</span> Rational &amp;lhs, <span class="hljs-type">const</span> Rational&amp; rhs)<br>&#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Rational</span>(lhs.n * rhs.n, lhs.d * rhs.d);<br>&#125;<br></code></pre></td></tr></table></figure>
-<ol type="1">
+<ol start="6" type="1">
 <li>需要承受operator *返回值的构造和析构成本</li>
 <li>当你必须在“返回一个reference和返回一个object”之间抉择时，你的工作时挑出行为正确的那个</li>
 <li>绝不要返回pointer或reference指向一个local
@@ -419,18 +416,13 @@ static对象”提供一个设计实例。</li>
 </ol>
 <h2 id="宁以non-membernon-friend替换member函数">23.
 宁以non-member、non-friend替换member函数</h2>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">WebBrowser</span>&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clearCache</span><span class="hljs-params">()</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clearHistory</span><span class="hljs-params">()</span></span>;<br>    ```<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clearEverythinng</span><span class="hljs-params">()</span></span>;<br>&#125;;<br><br><span class="hljs-comment">//non-member函数</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clearBrowser</span><span class="hljs-params">(WebBrowser&amp; wb)</span></span><br><span class="hljs-function"></span>&#123;<br>    wb.<span class="hljs-built_in">clearCache</span>();<br>    wb.<span class="hljs-built_in">clearHistory</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
-<ol type="1">
-<li>面向对象守则要求，数据以及操作数据的那些函数应该捆绑在一起，member函数时较好的选择。这是对基于对面向对象真实意义的一个误解。面向对象守则要求数据应该尽可能被封装。</li>
-<li>如果member函数的封装性比non-member低。</li>
-<li>愈多东西被封装，我们改变那些东西的能力就越大，这就是推崇封装的原因，它能使改变事物而只影响有限客户</li>
-<li>能够访问private成员变量的函数只有class的member函数加上friend函数而已</li>
-<li>如果在一个member函数和一个non-member,non-friend函数之间选择，而且两者提供相同机能，那么导致封装性较大的时non-member
-non-friend函数，因为它并不增加“能够访问class内之private成分”的函数变量。</li>
-<li>让clearBrowser成为一个non-member函数并位于WebBrowser所在的同一个namespace内</li>
-</ol>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">namespace</span> WebBrowserStuff&#123;<br>    <span class="hljs-keyword">class</span> <span class="hljs-title class_">WebBrowser</span>&#123;&#125;;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clearBrowser</span><span class="hljs-params">(WebBrowser&amp; wb)</span></span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-<ol type="1">
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">WebBrowser</span>&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clearCache</span><span class="hljs-params">()</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clearHistory</span><span class="hljs-params">()</span></span>;<br></code></pre></td></tr></table></figure>
+<pre><code class="hljs">void clearEverythinng();</code></pre>
+<p>};</p>
+<p>//non-member函数 void clearBrowser(WebBrowser&amp; wb) {
+wb.clearCache(); wb.clearHistory(); }</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-number">1.</span> 面向对象守则要求，数据以及操作数据的那些函数应该捆绑在一起，member函数时较好的选择。这是对基于对面向对象真实意义的一个误解。面向对象守则要求数据应该尽可能被封装。<br><span class="hljs-number">2.</span> 如果member函数的封装性比non-member低。<br><span class="hljs-number">3.</span> 愈多东西被封装，我们改变那些东西的能力就越大，这就是推崇封装的原因，它能使改变事物而只影响有限客户<br><span class="hljs-number">4.</span> 能够访问<span class="hljs-keyword">private</span>成员变量的函数只有<span class="hljs-keyword">class</span>的member函数加上<span class="hljs-keyword">friend</span>函数而已<br><span class="hljs-number">5.</span> 如果在一个member函数和一个non-member,non-<span class="hljs-keyword">friend</span>函数之间选择，而且两者提供相同机能，那么导致封装性较大的时non-member non-<span class="hljs-keyword">friend</span>函数，因为它并不增加“能够访问<span class="hljs-keyword">class</span>内之<span class="hljs-keyword">private</span>成分”的函数变量。<br><span class="hljs-number">6.</span> 让clearBrowser成为一个non-member函数并位于WebBrowser所在的同一个<span class="hljs-keyword">namespace</span>内<br><br>​```cpp<br><span class="hljs-keyword">namespace</span> WebBrowserStuff&#123;<br>    <span class="hljs-keyword">class</span> <span class="hljs-title class_">WebBrowser</span>&#123;&#125;;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clearBrowser</span><span class="hljs-params">(WebBrowser&amp; wb)</span></span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ol start="7" type="1">
 <li>namespace和classes不同，前者可以跨越多个源码文件而后者不能。</li>
 <li>将所有便利函数放在多个头文件内但隶属同一个命名空间，意味着客户可以轻松扩展这一组便利函数。要做的是添加更多non-member
 non-friend函数到此命名空间</li>
@@ -443,7 +435,7 @@ non-friend函数替换member函数，这样做可以增加封装性、包裹弹�
 <li>令classes支持隐式转换是个糟糕的主意，最常见的例外就是在建立数值类别时。假设设计一个class用来表现有理数，允许整数“隐式转换”合理。</li>
 </ol>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Rational</span>&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">Rational</span>(<span class="hljs-type">int</span> num1 = <span class="hljs-number">0</span>, <span class="hljs-type">int</span> num2 = <span class="hljs-number">1</span>);<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">num1</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">num2</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;<br>    <span class="hljs-comment">//const Rational operator* (const Rational&amp; rhs) const;</span><br>&#125;;<br><span class="hljs-type">const</span> Rational <span class="hljs-keyword">operator</span>*(<span class="hljs-type">const</span> Rational&amp; lhs, <span class="hljs-type">const</span> Rational&amp; rhs)<br>&#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Rational</span>(lhs.<span class="hljs-built_in">num1</span>() * rhs.<span class="hljs-built_in">num1</span>(), lhs.<span class="hljs-built_in">num2</span>() * rhs.<span class="hljs-built_in">num2</span>());<br>&#125;<br>Rational result;<br>result = R1 * <span class="hljs-number">2</span>;<br>result = <span class="hljs-number">2</span> * R1;<br></code></pre></td></tr></table></figure>
-<ol type="1">
+<ol start="2" type="1">
 <li>member函数的反面时non-member函数，而不是friend函数</li>
 <li>如果需要为某个函数的所有参数（包括被this指针所指的那个隐喻参数）进行类型转换，那么这个函数必须是个non-member</li>
 </ol>
@@ -453,20 +445,20 @@ non-friend函数替换member函数，这样做可以增加封装性、包裹弹�
 <li>swap函数原来只是STL的一部分，而后成为异常安全性编程的脊柱，以及用来处理自我复制的可能性的一个常见机制。还有非凡的复杂度。</li>
 </ol>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">namespace</span> std&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;</span><br><span class="hljs-function">    <span class="hljs-type">void</span> <span class="hljs-title">swap</span><span class="hljs-params">(T&amp; a, T&amp; b)</span></span><br><span class="hljs-function">    </span>&#123;<br>        <span class="hljs-function">T <span class="hljs-title">temp</span><span class="hljs-params">(a)</span></span>;<br>        a = b;<br>        b = temp;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
-<ol type="1">
+<ol start="2" type="1">
 <li>主要类型T支持copying，缺省的swap实现代码会帮你置换类型T的对象</li>
 <li>声明一个non-member函数调用member函数，</li>
 <li>有些类型，swap的缺省行为会降低速度，如以指针指向一个对象，内含真正数据的类型，这种类型的常见表现形式是所谓的“pimpl手法”。</li>
 <li>只要置换其Pimpl指针，将std::swap针对Widget特化</li>
 </ol>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">namespace</span> std&#123;<br>    <span class="hljs-keyword">template</span>&lt;&gt;<br>    <span class="hljs-type">void</span> <span class="hljs-built_in">swap</span>&lt;Widget&gt;(Widget&amp; a, Widget&amp; b)<br>    &#123;<br>        <span class="hljs-built_in">swap</span>(a.pImpl, b.pImpl);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
-<ol type="1">
+<ol start="6" type="1">
 <li>template&lt;&gt;表示它是std::swap的一个全特化版本，函数名称之后的<Widget>表示这一特化版本系针对“T是Widget”而设计的。一般性的swap
 template施行于Widgets身上便会启用这个版本。通常不能够改变std命名空间内的任何东西，但可以为标准templates制造特化版本，使它专属于我们自己的classes</Widget></li>
 <li>令Widget声明一个名为swap的public成员函数做真正的置换工作，然后将std::swap特化</li>
 </ol>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Widget</span>&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">swap</span><span class="hljs-params">(Widget&amp; other)</span></span><br><span class="hljs-function">    </span>&#123;<br>        <span class="hljs-keyword">using</span> std::swap;<br>        <span class="hljs-built_in">swap</span>(pImpl, other.pImpl);<br>    &#125;<br>&#125;;<br><br><span class="hljs-keyword">namespace</span> std&#123;<br>    <span class="hljs-keyword">template</span>&lt;&gt;<br>    <span class="hljs-type">void</span> <span class="hljs-built_in">swap</span>&lt;Widget&gt;(Widget&amp; a, Widget&amp; b)<br>    &#123;<br>        a.<span class="hljs-built_in">swap</span>(b);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
-<ol type="1">
+<ol start="8" type="1">
 <li>这种做法不只能够通过编译，还与STL容器有一致性，因为所有STL容器都是有提供public
 swap成员函数和std::swap特化版本（用以调用前者）</li>
 <li>C++只允许对class template偏特化(partially specialize)，在function
@@ -477,12 +469,12 @@ swap让它调用member swap，但不再将那个non-member
 swap声明为std::swap的特化版本或者重载版本。</li>
 </ol>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs cpp">namesapce WidgetStuff&#123;<br>    <span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;<br>    <span class="hljs-keyword">class</span> <span class="hljs-title class_">Widget</span>&#123;&#125;;<br>    <br>    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;</span><br><span class="hljs-function">    <span class="hljs-type">void</span> <span class="hljs-title">swap</span><span class="hljs-params">(Widget&lt;T&gt;&amp; a, Widget&lt;T&gt;&amp; b)</span></span><br><span class="hljs-function">    </span>&#123;<br>        a.<span class="hljs-built_in">swap</span>(b);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ol start="11" type="1">
+<li>C++的名称查找法则确保将找到global作用域T所在之命名空间内的任何T专属的swap。如果T是Widget并位于命名空间WidgetStuff内，编译器会使用“实参取决之查找规则”找出WidgetStuff内的swap。如果没有T专属之swap存在，编译器就使用std内的swap，这得感谢using表达式让std::swap在函数内曝光。即便如此编译器还是比较喜欢std::swap的T专属特化版，而非一般化的那个template，如果已针对T将std::swap特化，特化版会被编译器挑中。</li>
+<li>首先，如果swap的缺省实现码对你的class或class
+template提供可接受的效率，你不需要额外做任何事。任何尝试置换那种对象的人都会取得缺省版本，而那将有良好的运作。</li>
+<li>其次，如果swap缺省实现版的效率不足（那几乎总是意味你的class或template使用了某种pimpl手法），试着做以下事情：
 <ol type="1">
-<li><p>C++的名称查找法则确保将找到global作用域T所在之命名空间内的任何T专属的swap。如果T是Widget并位于命名空间WidgetStuff内，编译器会使用“实参取决之查找规则”找出WidgetStuff内的swap。如果没有T专属之swap存在，编译器就使用std内的swap，这得感谢using表达式让std::swap在函数内曝光。即便如此编译器还是比较喜欢std::swap的T专属特化版，而非一般化的那个template，如果已针对T将std::swap特化，特化版会被编译器挑中。</p></li>
-<li><p>首先，如果swap的缺省实现码对你的class或class
-template提供可接受的效率，你不需要额外做任何事。任何尝试置换那种对象的人都会取得缺省版本，而那将有良好的运作。</p></li>
-<li><p>其次，如果swap缺省实现版的效率不足（那几乎总是意味你的class或template使用了某种pimpl手法），试着做以下事情：</p></li>
-<li><ol type="1">
 <li>提供一个public
 swap成员函数，让他高效的置换你的类型的两个对象值，这个函数绝不该抛出异常</li>
 <li>在你的class或template所在的命名空间内提供一个non-member
@@ -490,13 +482,13 @@ swap，并令它调用上述swap成员函数</li>
 <li>如果你正在编写一个class（而非class
 template），为你的class特化std::swap。并令它调用你的swap成员函数</li>
 </ol></li>
-<li><p>最后，如果你调用swap，请确定包含一个using声明式，以便让std::swap在你的函数内曝光可见，然后不加任何namespace修饰符，赤裸裸地调用swap</p></li>
-<li><p>当std::swap对你的类型效率不高时，提供一个swap成员函数，并确定这个函数不抛出异常。</p></li>
-<li><p>如果你提供一个member swap，也该提供一个non-member
-swap用来调用前者。对于classes，（而非templates），也请特化std::swap</p></li>
-<li><p>调用swap时应针对std::swap使用using声明式，然后调用swap并且不带任何“命名空间资格修饰”</p></li>
-<li><p>为“用户定义类型”进行std
-templates全特化是好的，但千万不要尝试在std内加入某些对std而言全新的东西</p></li>
+<li>最后，如果你调用swap，请确定包含一个using声明式，以便让std::swap在你的函数内曝光可见，然后不加任何namespace修饰符，赤裸裸地调用swap</li>
+<li>当std::swap对你的类型效率不高时，提供一个swap成员函数，并确定这个函数不抛出异常。</li>
+<li>如果你提供一个member swap，也该提供一个non-member
+swap用来调用前者。对于classes，（而非templates），也请特化std::swap</li>
+<li>调用swap时应针对std::swap使用using声明式，然后调用swap并且不带任何“命名空间资格修饰”</li>
+<li>为“用户定义类型”进行std
+templates全特化是好的，但千万不要尝试在std内加入某些对std而言全新的东西</li>
 </ol>
 
                 

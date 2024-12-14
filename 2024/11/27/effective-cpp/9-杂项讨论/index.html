@@ -28,7 +28,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/effective-cpp.png">
 <meta property="article:published_time" content="2024-11-27T12:17:23.000Z">
-<meta property="article:modified_time" content="2024-11-27T12:21:09.975Z">
+<meta property="article:modified_time" content="2024-12-13T08:21:10.426Z">
 <meta property="article:author" content="Binbo">
 <meta property="article:tag" content="c++">
 <meta name="twitter:card" content="summary_large_image">
@@ -289,13 +289,11 @@
 <h2 id="让自己熟悉包括tr1在内的标准程序库">54.
 让自己熟悉包括TR1在内的标准程序库</h2>
 <ol type="1">
-<li><p>TR1表示“Technical Report 1"</p></li>
-<li><p>TR1组件实例</p></li>
-<li><ol type="1">
-<li>智能指针 trl::shared_ptr和tr1::weak_ptr</li>
-</ol></li>
-<li><ol type="1">
-<li><ol type="1">
+<li>TR1表示“Technical Report 1"</li>
+<li>TR1组件实例
+<ol type="1">
+<li>智能指针 trl::shared_ptr和tr1::weak_ptr
+<ol type="1">
 <li>前者作用如内置指针，但会记录有多少个tr1::shared_ptrs共同指向同一个对象。这就是引用计数
 reference
 countering。一旦最后一个这样的指针被销毁，也就是一旦某对象的引用次数变成，这个对象会被自动删除。这在非环形数据结构中防止资源泄露很有帮助，</li>
@@ -303,8 +301,8 @@ countering。一旦最后一个这样的指针被销毁，也就是一旦某对�
 <li>这就是有trl::weak_ptrs的原因，并不参与引用计数的计算；当最后一个指向对象的trl:shared_ptr被销毁，纵使还有个trl::weak_ptr继续指向同一对象，该对象仍会被删除，该情况下的weak_ptr被自动标示无效</li>
 </ol></li>
 </ol></li>
-<li><p>trl::function</p></li>
-<li><ol type="1">
+<li>trl::function
+<ol type="1">
 <li>表示任何可调用物（任何函数或者函数对象），只要签名符合目标</li>
 <li>假设想注册一个callback函数</li>
 <li>void registerCallback(std::string
@@ -315,20 +313,18 @@ registerCallback(std::string (int));std::string
 </ol></li>
 </ol>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plain">void registerCallback(std::tr1::function&lt;std::string (int)&gt; func);<br>//只要该可调用物的签名与std::string(int)一致<br></code></pre></td></tr></table></figure>
+<ol start="4" type="1">
+<li>tr1::bind
 <ol type="1">
-<li><p>tr1::bind</p></li>
-<li><ol type="1">
 <li>能够做STL绑定器bind1st和bind2nd所做的每一件事，而又更多</li>
 <li>与前任绑定器不同的是，tr1::bind可以和const及non-const成员函数协同运作，可以和by-reference参数协同运作</li>
 <li>不需要特殊协助就可以处理函数指针，所以我们调用tr1::bind之前不必再被什么ptr_fun,men_fun或者mem_fun_ref搞得一团混乱。</li>
 <li>tr1::bind是第二代绑定工具，比前一代好很多</li>
 </ol></li>
-<li><p>彼此互不相干的独立机能：</p></li>
-<li><ol type="1">
-<li>hash tables：</li>
-</ol></li>
-<li><ol type="1">
-<li><ol type="1">
+<li>彼此互不相干的独立机能：
+<ol type="1">
+<li>hash tables：
+<ol type="1">
 <li>用来实现sets，multisets，maps和multi-maps</li>
 <li>每个新容器的接口都是其前任对应容器塑模而成</li>
 <li>名称tr1::unordered_set, tr1::unordered_multiset, tr1::unordered_map,
@@ -336,146 +332,98 @@ tr1::unordered_multimap</li>
 <li>这些名字强调他们和set，multiset, map
 或者multimap不同，以hanshu为基础的这些TR1容器内的元素并无任何可预期的次序</li>
 </ol></li>
-</ol></li>
-<li><ol type="1">
-<li>正则表达式</li>
-</ol></li>
-<li><ol type="1">
-<li><ol type="1">
+<li>正则表达式
+<ol type="1">
 <li>包括正则表达式为基础的字符串查找和替换，</li>
 <li>或者从某个匹配字符串到另一匹配字符串的注意迭代等</li>
 </ol></li>
-</ol></li>
-<li><ol type="1">
-<li>Tuples（变量组），这是标准程序库中pair template的新一代制品。</li>
-</ol></li>
-<li><ol type="1">
-<li><ol type="1">
+<li>Tuples（变量组），这是标准程序库中pair template的新一代制品。
+<ol type="1">
 <li>pair只能有两个对象</li>
 <li>tr1::tuple可以持有任意个数的对象。</li>
 </ol></li>
-</ol></li>
-<li><ol type="1">
 <li>tr1::array，本质上是个STL化的数组，即一个支持成员函数如begin和end的数组，不过tr1::array的大小固定，并不适用动态内存</li>
-<li>tr1::mem_fn</li>
-</ol></li>
-<li><ol type="1">
-<li><ol type="1">
+<li>tr1::mem_fn
+<ol type="1">
 <li>这是个语句构造上与成员函数指针一样的东西</li>
 <li>纳入并扩充了c++98的mem_fun和mem_fun_ref的能力</li>
 </ol></li>
-</ol></li>
-<li><ol type="1">
-<li>tr1::reference_wrapper</li>
-</ol></li>
-<li><ol type="1">
-<li><ol type="1">
+<li>tr1::reference_wrapper
+<ol type="1">
 <li>让reference的行为更像对象的设施</li>
 <li>可以造成容器“犹如持有reference”，实际上，容器只能吃有对象或指针</li>
 </ol></li>
-</ol></li>
-<li><ol type="1">
 <li>随机数生成工具，大大超越了rand</li>
 <li>数学特殊函数，包括laguerre多项式，Bessel函数，完全椭圆积分以及更多数学函数</li>
-<li>C99兼容扩充。</li>
-</ol></li>
-<li><ol type="1">
-<li><ol type="1">
+<li>C99兼容扩充。
+<ol type="1">
 <li>这是一大堆函数和模板，用来将许多新的c99程序库特性带进C++</li>
 </ol></li>
 </ol></li>
-<li><p>更精巧的template编程</p></li>
-<li><ol type="1">
-<li>Type traits</li>
-</ol></li>
-<li><ol type="1">
-<li><ol type="1">
+<li>更精巧的template编程
+<ol type="1">
+<li>Type traits
+<ol type="1">
 <li>一组trait classes，用来一同类型的编译期信息</li>
 <li>给予一个类型T，TR1的type
 traits可以指出T是否是个内置类型，是否一同virtual析构函数，是否是个empty
 class，可隐式转换为其他类型U</li>
 <li>也可以显现该给定类型之适当齐位，这对定制型内存分配器而言是关键信息。</li>
 </ol></li>
-</ol></li>
-<li><ol type="1">
-<li>tr1::result_of</li>
-</ol></li>
-<li><ol type="1">
-<li><ol type="1">
+<li>tr1::result_of
+<ol type="1">
 <li>这是个template，用来推导函数调用的返回类型</li>
 <li>在编写templates时，能够refer
 to函数调用动作返回的对象的类型往往很重要，但是该类型有可能以复杂的方式却决于函数的参数类型</li>
 <li>result_of使得”refer to函数返回类型“变得十分容易</li>
 </ol></li>
 </ol></li>
-<li><p>C++标准程序库的主要机能由STL、iostreams、locales组成，并包含C99标准程序库</p></li>
+<li>C++标准程序库的主要机能由STL、iostreams、locales组成，并包含C99标准程序库</li>
 </ol>
 <h2 id="让自己熟悉boost">55. 让自己熟悉Boost</h2>
 <ol type="1">
-<li><p>字符串与文本处理</p></li>
-<li><ol type="1">
+<li>字符串与文本处理
+<ol type="1">
 <li>覆盖具备类型安全的printf-like格式化动作、正则表达式，以及语汇单元切割和解析</li>
 </ol></li>
-<li><p>容器，覆盖”接口与STL相似且大小固定“的数组、大小可变的bitsets以及多维数组</p></li>
-<li><p>函数对象与高级编程</p></li>
-<li><ol type="1">
+<li>容器，覆盖”接口与STL相似且大小固定“的数组、大小可变的bitsets以及多维数组</li>
+<li>函数对象与高级编程
+<ol type="1">
 <li>覆盖若干被用爱作为TR1机能基础的程序库。其中一个有趣的程序库是Lambda，可以随时随地创建函数对象</li>
 <li></li>
 </ol></li>
 </ol>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs plain">using namespace boost::lambda;<br>std::vector&lt;int&gt; v;<br><br>std::for_each(v.begin(),v.end()),<br>    std::cout &lt;&lt; _1 *2 + 10 &lt;&lt; &quot;\n&quot;);<br></code></pre></td></tr></table></figure>
+<ol start="4" type="1">
+<li>泛型编程，覆盖一大组traits classes</li>
+<li>模板元编程
 <ol type="1">
-<li><p>泛型编程，覆盖一大组traits classes</p></li>
-<li><p>模板元编程</p></li>
-<li><ol type="1">
 <li>覆盖一个针对编译期assertions而写的程序库，以及Boost
 MPL程序库，提供了极好的东西，其中支持编译器实物诸如types的STL-like数据结构等</li>
 <li></li>
-<li>数学和数值</li>
-</ol></li>
-<li><ol type="1">
-<li><ol type="1">
+<li>数学和数值
+<ol type="1">
 <li>包括有理数，八元数和四元数、公约数和少见的多重运算、随机数</li>
 </ol></li>
-</ol></li>
-<li><ol type="1">
-<li>正确性和测试</li>
-</ol></li>
-<li><ol type="1">
-<li><ol type="1">
+<li>正确性和测试
+<ol type="1">
 <li>覆盖用来将隐式模板接口形式化的程序库，以及针对"测试有限"编程形态而设计的措施</li>
 </ol></li>
-</ol></li>
-<li><ol type="1">
-<li>数据结构</li>
-</ol></li>
-<li><ol type="1">
-<li><ol type="1">
+<li>数据结构
+<ol type="1">
 <li>覆盖类型安全的unions，以及tuple程序库（是TR1同类机能的基础）</li>
 </ol></li>
-</ol></li>
-<li><ol type="1">
-<li>语言见的支持</li>
-</ol></li>
-<li><ol type="1">
-<li><ol type="1">
+<li>语言见的支持
+<ol type="1">
 <li>包括允许C++和python之间的无缝互操作性</li>
 </ol></li>
-</ol></li>
-<li><ol type="1">
-<li>内存</li>
-</ol></li>
-<li><ol type="1">
-<li><ol type="1">
+<li>内存
+<ol type="1">
 <li>覆盖Pool程序库，用来做出高效率而区块大小固定的分配器以及多变化的智能指针，包括（但不仅仅是）TR1智能指针。</li>
 <li>另有一个non-TR1智能指针是scoped_array，是个auto_ptr-like智能指针，用来动态分配数组</li>
 </ol></li>
-</ol></li>
-<li><ol type="1">
-<li>杂项</li>
-</ol></li>
-<li><ol type="1">
-<li><ol type="1">
+<li>杂项
+<ol type="1">
 <li>包括CRC检验、日期和时间的处理，在文件系统上来回移动等等</li>
 </ol></li>
 </ol></li>

@@ -19,14 +19,16 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta property="og:type" content="article">
+    <meta name="description" content="Docker 网络 docker安装并启动服务后，会在宿主机中添加一个虚拟网卡。 在Docker服务启动前，使用 ifconfig 或 ip addr 查看网卡信息：  ens33或eth0：本机网卡 lo：本机回环网络网卡 可能有virbr0（CentOS安装时如果选择的有相关虚拟化服务，就会多一个以网桥连接的私网地址的virbr0网卡，作用是为连接虚拟网卡提供NAT访问外网的功能">
+<meta property="og:type" content="article">
 <meta property="og:title" content="13. Docker网络">
 <meta property="og:url" content="http://binbo-zappy.github.io/2024/12/07/docker/13-Docker%E7%BD%91%E7%BB%9C/index.html">
 <meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="Docker 网络 docker安装并启动服务后，会在宿主机中添加一个虚拟网卡。 在Docker服务启动前，使用 ifconfig 或 ip addr 查看网卡信息：  ens33或eth0：本机网卡 lo：本机回环网络网卡 可能有virbr0（CentOS安装时如果选择的有相关虚拟化服务，就会多一个以网桥连接的私网地址的virbr0网卡，作用是为连接虚拟网卡提供NAT访问外网的功能">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/docker.jpg">
 <meta property="article:published_time" content="2024-12-07T07:24:14.000Z">
-<meta property="article:modified_time" content="2024-12-07T07:24:14.579Z">
+<meta property="article:modified_time" content="2024-12-14T03:15:20.650Z">
 <meta property="article:author" content="Binbo">
 <meta property="article:tag" content="Docker">
 <meta name="twitter:card" content="summary_large_image">
@@ -223,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          0 字
+          1.8k 字
         
       </span>
     
@@ -234,7 +236,7 @@
         
         
         
-          1 分钟
+          16 分钟
         
       </span>
     
@@ -276,7 +278,160 @@
             
               <div class="markdown-body">
                 
-                
+                <h1 id="docker-网络">Docker 网络</h1>
+<p>docker安装并启动服务后，会在宿主机中添加一个虚拟网卡。</p>
+<p>在Docker服务启动前，使用 <code>ifconfig</code> 或
+<code>ip addr</code> 查看网卡信息：</p>
+<ul>
+<li><code>ens33</code>或<code>eth0</code>：本机网卡</li>
+<li><code>lo</code>：本机回环网络网卡</li>
+<li>可能有<code>virbr0</code>（CentOS安装时如果选择的有相关虚拟化服务，就会多一个以网桥连接的私网地址的<code>virbr0</code>网卡，作用是为连接虚拟网卡提供NAT访问外网的功能。如果要移除该服务，可以使用
+<code>yum remove libvirt-libs.x86_64</code>）</li>
+</ul>
+<p>使用 <code>systemctl start docker</code>启动Docker服务后，会多出一个
+<code>docker0</code> 网卡。</p>
+<p>作用：</p>
+<ul>
+<li>容器间的互联和通信以及端口映射</li>
+<li>容器IP变动时候可以通过服务名直接网络通信而不受到影响</li>
+</ul>
+<p>Docker容器的网络隔离，是通过Linux内核特性 <code>namespace</code>和
+<code>cgroup</code> 实现的。</p>
+<h1 id="docker网络命令">docker网络命令</h1>
+<p>查看Docker网络模式：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker network ls<br></code></pre></td></tr></table></figure>
+<p>如果没有修改过docker network，则默认有3个网络模式：</p>
+<ul>
+<li><code>bridge</code></li>
+<li><code>host</code></li>
+<li><code>none</code></li>
+</ul>
+<p>添加Docker网络：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker network add xxx<br></code></pre></td></tr></table></figure>
+<p>删除Docker网络：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker network rm xxx<br></code></pre></td></tr></table></figure>
+<p>查看网络元数据：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker network inspect xxx<br></code></pre></td></tr></table></figure>
+<p>删除所有无效的网络：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker network prune<br></code></pre></td></tr></table></figure>
+<h1 id="docker-网络模式">Docker 网络模式</h1>
+<p>Docker 的网络模式：</p>
+<table>
+
+<thead>
+<tr>
+<th>网络模式</th>
+<th>简介</th>
+<th>使用方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bridge</td>
+<td>为每一个容器分配、设置IP等，并将容器连接到一个<code>docker0</code><br>虚拟网桥，默认为该模式</td>
+<td><code>--network bridge</code></td>
+</tr>
+<tr>
+<td>host</td>
+<td>容器将不会虚拟出自己的网卡、配置自己的IP等，而是使用宿主机的IP和端口</td>
+<td><code>--network host</code></td>
+</tr>
+<tr>
+<td>none</td>
+<td>容器有独立的 Network namespace，但并没有对齐进行任何网络设置，如分配
+<code>veth pari</code><br> 和 网桥连接、IP等</td>
+<td><code>--network none</code></td>
+</tr>
+<tr>
+<td>container</td>
+<td>新创建的容器不会创建自己的网卡和配置自己的IP，而是和一个指定的容器共享IP、端口范围等</td>
+<td><code>--network container:NAME或者容器ID</code></td>
+</tr>
+</tbody>
+</table>
+<p>查看某个容器的网络模式：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">通过inspect获取容器信息，最后20行即为容器的网络模式信息</span><br>docker inspect 容器ID | tail -n 20<br></code></pre></td></tr></table></figure>
+<h1 id="docker0">docker0</h1>
+<p>Docker
+服务默认会创建一个<code>docker0</code>网桥（其上有一个<code>docker0</code>内部接口），该桥接网络的名称为
+<code>docker0</code>，它在内核层连通了其他的物理或虚拟网卡，这就将所有容器和本地主机都放到同一个物理网络。</p>
+<p>Docker默认指定了<code>docker0</code>接口的IP地址和子网掩码，让主机和容器之间可以通过网桥互相通信。</p>
+<p>查看<code>bridge</code>网络的详细信息，并通过<code>grep</code>获取名称：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker network inspect bridge | grep name<br></code></pre></td></tr></table></figure>
+<p>可以看到其名称为<code>docker0</code>。</p>
+<h1 id="bridge模式">bridge模式</h1>
+<p>Docker使用Linux桥接，在宿主机虚拟一个<code>Docker</code>容器网桥（<code>docker0</code>），Docker启动一个容器时会根据<code>Docker</code>网桥的网段分配给容器一个IP地址，称为<code>Container-IP</code>，同时Docker网桥是每个容器的默认网关。因为在同一个宿主机内的容器接入同一个网桥，这样容器之间就能够通过容器的<code>Container-IP</code>直接通信。</p>
+<p><code>docker run</code>的时候，没有指定<code>--network</code>的话，默认使用的网桥模式就是<code>bridge</code>，使用的就是<code>docker0</code>。在宿主机<code>ifconfig</code>就可以看到<code>docker0</code>和自己<code>create</code>的<code>network</code>。</p>
+<p>网桥<code>docker0</code>创建一对对等虚拟设备接口，一个叫<code>veth</code>，另一个叫<code>eth0</code>，成对匹配：</p>
+<p>整个宿主机的网桥模式都是<code>docker0</code>，类似一个交换机有一堆接口，每个接口叫
+<code>veth</code>，在本地主机和容器内分别创建一个虚拟接口，并让他们彼此联通（这样一对接口叫做
+<code>veth pair</code>）。</p>
+<p>每个容器实例内部也有一块网卡，容器内的网卡接口叫做<code>eth0</code>。</p>
+<p><code>docker0</code>上面的每个<code>veth</code>匹配某个容器实例内部的<code>eth0</code>，两两配对，一一匹配。</p>
+<p><img src="/2024/12/07/docker/13-Docker%E7%BD%91%E7%BB%9C/1652093671572-83d0901c-5052-482e-9dde-4a2804b35bc9.webp" srcset="/img/loading.gif" lazyload></p>
+<p>例如：</p>
+<p>启动tomcat容器，进入tomcat容器后，执行
+<code>ip addr</code>，可以看到其网卡信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs plain">1: lo ..................<br><br>容器内的网卡为 eth0<br>@符号后面就是宿主机上对应的veth网卡的编号28<br>27: eth0@if28 ...............................<br></code></pre></td></tr></table></figure>
+<p>在宿主机执行 <code>ip addr</code> 查看宿主机网卡信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs plain">每个veth都有个编号：vethXXXXXX<br>@符号后面对应就是容器内的eth0网卡编号27<br><br>28: vethXXXXXX@if27  ................<br></code></pre></td></tr></table></figure>
+<h1 id="host模式">host模式</h1>
+<p>直接使用宿主机的 IP 地址与外界进行通信，不再需要额外进行 NAT
+转换。</p>
+<p>容器将不会获得一个独立的 Network Namespace，而是和宿主机共用一个
+Network space。</p>
+<p>容器将不会虚拟出自己的网卡，而是直接使用宿主机的 IP 和端口。</p>
+<p><img src="/2024/12/07/docker/13-Docker%E7%BD%91%E7%BB%9C/1652093680434-8180b11d-89f2-4bb6-a485-b3c22bd28688.webp" srcset="/img/loading.gif" lazyload></p>
+<p>如果在 <code>docker run</code> 命令中同时使用了
+<code>--network host</code> 和 <code>-p</code>端口映射，例如：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker run -p 8082:8080 --network host tomcat<br></code></pre></td></tr></table></figure>
+<p>那么会出现一个警告：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">WARNING: Published ports are discarded when using host network mode<br></code></pre></td></tr></table></figure>
+<p>因为此时已经使用了<code>host</code>模式，本身就是直接使用的宿主机的IP和端口，此时的<code>-p</code>端口映射就没有了意义，也不会生效，端口号还是会以主机端口号为主。</p>
+<p>正确做法是：不再进行<code>-p</code>端口映射，或者改用<code>bridge</code>模式</p>
+<h1 id="none模式">none模式</h1>
+<p>禁用网络功能。</p>
+<p>在<code>none</code>模式下，并不为docker容器进行任何网络配置。进入容器内，使用
+<code>ip addr</code>查看网卡信息，只能看到
+<code>lo</code>（本地回环网络<code>127.0.0.1</code>网卡）。</p>
+<h1 id="container模式">container模式</h1>
+<p>新建的容器和已经存在的一个容器共享网络IP配置，而不是和宿主机共享。</p>
+<p>新创建的容器不会创建自己的网卡、IP，而是和一个指定的容器共享IP、端口范围。两个容器除了网络共享，其他的如文件系统、进程列表依然是隔离的。</p>
+<p><img src="/2024/12/07/docker/13-Docker%E7%BD%91%E7%BB%9C/1652093688335-b6e6329d-5292-4901-ad0b-9e57bf46a1cf.webp" srcset="/img/loading.gif" lazyload></p>
+<p>示例：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker run -it --name alpine1 alpine /bin/sh<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">指定和 alpine1 容器共享网络</span><br>docker run -it --network container:alpine1 --name alpine2 alpine /bin/sh<br></code></pre></td></tr></table></figure>
+<p>此时使用
+<code>ip addr</code>查看两台容器的网络，会发现两台容器的<code>eth0</code>网卡内的IP等信息完全相同。</p>
+<p>如果关掉了<code>alpine1</code>容器，因为<code>alpine2</code>的网络使用的<code>alpine1</code>共享网络，所以关掉<code>alpin1</code>后，<code>alpine2</code>的<code>eth0</code>网卡也随之消失了。</p>
+<h1 id="自定义网络">自定义网络</h1>
+<p>容器间的互联和通信以及端口映射。</p>
+<p>容器 IP
+变动时候可以通过服务名直接网络通信而不受影响。（类似Eureka，通过服务名直接互相通信，而不是写死IP地址）。</p>
+<blockquote>
+<p>docker中还有一个 <code>--link</code>
+进行容器网络互联，但是已经被标记为过时的，可能会在将来的版本中移除这个功能。推荐使用自定义网络替换link。</p>
+</blockquote>
+<p>自定义桥接网络（自定义网络默认使用的是桥接网络
+<code>bridge</code>）：</p>
+<ol type="1">
+<li>新建自定义网络</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker network create tomcat_network<br></code></pre></td></tr></table></figure>
+<ol start="2" type="1">
+<li>查看网络列表</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker network ls<br></code></pre></td></tr></table></figure>
+<ol start="3" type="1">
+<li>创建容器时，指定加入我们自定义的网络中</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker run -d -p 8081:8080 --network tomcat_network --name tomcat1 tomcat:8.5-jdk8-corretto<br><br>docker run -d -p 8082:8080 --network tomcat_network --name tomcat2 tomcat:8.5-jdk8-corretto<br></code></pre></td></tr></table></figure>
+<ol start="4" type="1">
+<li>此时进入<code>tomcat1</code>中，使用<code>ping</code>命令测试连接<code>tomcat2</code>容器名，发现可以正常连通</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">安装ifconfig命令</span><br>yum install -y net-tools<br><span class="hljs-meta prompt_"># </span><span class="language-bash">安装ip addr命令</span><br>yum install -y iproute<br><span class="hljs-meta prompt_"># </span><span class="language-bash">安装ping命令</span><br>yum install -y iputils<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">直接ping容器名，不需要ping IP地址</span><br>ping tomcat2<br></code></pre></td></tr></table></figure>
+<h1 id="link连接">link连接</h1>
+<p>示例：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">启动一台mysql容器</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">--name 为容器指定一个别名</span><br>docker run --name mysql-matomo -p 3308:3306 -e MYSQL_ROOT_PASSWORD=root -d mysql:8.0.28<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">启动另一个容器，通过--<span class="hljs-built_in">link</span>连接到mysql容器</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">--<span class="hljs-built_in">link</span> 容器名称:本容器连接对方时的别名</span><br>docker run -d -p 8888:80 --link mysql-matomo:db --name matomo matomo:4.9.0<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">此时，在matomo容器中，便可以通过 db 这个hostname连接到mysql-matomo容器，而无须再通过ip</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">连接地址：db:3306</span><br></code></pre></td></tr></table></figure>
 
                 
               </div>
