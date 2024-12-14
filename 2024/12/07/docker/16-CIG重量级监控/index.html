@@ -19,14 +19,16 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta property="og:type" content="article">
+    <meta name="description" content="1. CIG 通过docker stats 命令可以很方便的查看当前宿主机上所有容器的CPU、内存、网络流量等数据，可以满足一些小型应用。 但是 docker stats 统计结果只能是当前宿主机的全部容器，数据资料是实时的，没有地方存储、没有健康指标过线预警等功能。 CAdvisor（监控收集） + InfluxDB（存储数据） + Granfana（展示图表），合称 CIG。">
+<meta property="og:type" content="article">
 <meta property="og:title" content="16. CIG重量级监控">
 <meta property="og:url" content="http://binbo-zappy.github.io/2024/12/07/docker/16-CIG%E9%87%8D%E9%87%8F%E7%BA%A7%E7%9B%91%E6%8E%A7/index.html">
 <meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="1. CIG 通过docker stats 命令可以很方便的查看当前宿主机上所有容器的CPU、内存、网络流量等数据，可以满足一些小型应用。 但是 docker stats 统计结果只能是当前宿主机的全部容器，数据资料是实时的，没有地方存储、没有健康指标过线预警等功能。 CAdvisor（监控收集） + InfluxDB（存储数据） + Granfana（展示图表），合称 CIG。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/docker.jpg">
 <meta property="article:published_time" content="2024-12-07T07:24:19.000Z">
-<meta property="article:modified_time" content="2024-12-07T07:24:19.953Z">
+<meta property="article:modified_time" content="2024-12-14T12:43:50.645Z">
 <meta property="article:author" content="Binbo">
 <meta property="article:tag" content="Docker">
 <meta name="twitter:card" content="summary_large_image">
@@ -223,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          0 字
+          1.1k 字
         
       </span>
     
@@ -234,7 +236,7 @@
         
         
         
-          1 分钟
+          10 分钟
         
       </span>
     
@@ -276,7 +278,96 @@
             
               <div class="markdown-body">
                 
-                
+                <h1 id="cig">1. CIG</h1>
+<p>通过<code>docker stats</code>
+命令可以很方便的查看当前宿主机上所有容器的CPU、内存、网络流量等数据，可以满足一些小型应用。</p>
+<p>但是 <code>docker stats</code>
+统计结果只能是当前宿主机的全部容器，数据资料是实时的，没有地方存储、没有健康指标过线预警等功能。</p>
+<p>CAdvisor（监控收集） + InfluxDB（存储数据） +
+Granfana（展示图表），合称 <code>CIG</code>。</p>
+<p><img src="/2024/12/07/docker/16-CIG%E9%87%8D%E9%87%8F%E7%BA%A7%E7%9B%91%E6%8E%A7/1652093718667-e6440d84-dd9d-4b4f-9a21-d3fcef000a67.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="cadvisor">1.1 CAdvisor</h2>
+<p>CAdvisor是一个容器资源监控工具，包括容器的内存、CPU、网络IO、磁盘IO等监控，同时提供了一个Web页面用于查看容器的实时运行状态。</p>
+<p>CAdvisor默认存储2分钟的数据，而且只是针对单物理机。不过CAdvisor提供了很多数据集成接口，支持
+InfluxDB、Redis、Kafka、Elasticsearch等集成，可以加上对应配置将监控数据发往这些数据库存储起来。</p>
+<p>CAdvisor主要功能：</p>
+<ul>
+<li>展示Host和容器两个层次的监控数据</li>
+<li>展示历史变化数据</li>
+</ul>
+<h2 id="influxdb">1.2 InfluxDB</h2>
+<p>InfluxDB是用Go语言编写的一个开源分布式时序、事件和指标数据库，无需外部依赖。</p>
+<p>CAdvisor默认只在本机保存2分钟的数据，为了持久化存储数据和统一收集展示监控数据，需要将数据存储到InfluxDB中。InfluxDB是一个时序数据库，专门用于存储时序相关数据，很适合存储
+CAdvisor 的数据。而且
+CAdvisor本身已经提供了InfluxDB的集成方法，在启动容器时指定配置即可。</p>
+<p>InfluxDB主要功能：</p>
+<ul>
+<li>基于时间序列，支持与时间有关的相关函数（如最大、最小、求和等）</li>
+<li>可度量性，可以实时对大量数据进行计算</li>
+<li>基于事件，支持任意的事件数据</li>
+</ul>
+<h2 id="granfana">1.3 Granfana</h2>
+<p>Grafana是一个开源的数据监控分析可视化平台，支持多种数据源配置（支持的数据源包括InfluxDB、MySQL、Elasticsearch、OpenTSDB、Graphite等）和丰富的插件及模板功能，支持图表权限控制和报警。</p>
+<p>Granfana主要功能：</p>
+<ul>
+<li>灵活丰富的图形化选项</li>
+<li>可以混合多种风格</li>
+<li>支持白天和夜间模式</li>
+<li>多个数据源</li>
+</ul>
+<h1 id="安装部署">2. 安装部署</h1>
+<ol type="1">
+<li>编写<code>docker-compose.yml</code>服务编排文件</li>
+</ol>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">version:</span> <span class="hljs-string">&#x27;3.1&#x27;</span><br><br><span class="hljs-attr">volumes:</span><br>  <span class="hljs-attr">grafana_data:</span> &#123;&#125;<br><br><span class="hljs-attr">services:</span><br>  <span class="hljs-attr">influxdb:</span><br>	<span class="hljs-comment"># tutum/influxdb 相比influxdb多了web可视化视图。但是该镜像已被标记为已过时</span><br>    <span class="hljs-attr">image:</span> <span class="hljs-string">tutum/influxdb:0.9</span><br>    <span class="hljs-attr">restart:</span> <span class="hljs-string">always</span><br>    <span class="hljs-attr">environment:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">PRE_CREATE_DB=cadvisor</span><br>    <span class="hljs-attr">ports:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;8083:8083&quot;</span>         <span class="hljs-comment"># 数据库web可视化页面端口</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;8086:8086&quot;</span>         <span class="hljs-comment"># 数据库端口</span><br>    <span class="hljs-attr">volumes:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">./data/influxdb:/data</span><br><br>  <span class="hljs-attr">cadvisor:</span><br>    <span class="hljs-attr">image:</span> <span class="hljs-string">google/cadvisor:v0.32.0</span><br>    <span class="hljs-attr">links:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">influxdb:influxsrv</span><br>    <span class="hljs-attr">command:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">-storage_driver=influxdb</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">-storage_driver_db=cadvisor</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">-storage_driver_host=influxsrv:8086</span><br>    <span class="hljs-attr">restart:</span> <span class="hljs-string">always</span><br>    <span class="hljs-attr">ports:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;8080:8080&quot;</span><br>    <span class="hljs-attr">volumes:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">/:/rootfs:ro</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">/var/run:/var/run:rw</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">/sys:/sys:ro</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">/var/lib/docker/:/var/lib/docker:ro</span><br><br>  <span class="hljs-attr">grafana:</span><br>    <span class="hljs-attr">image:</span> <span class="hljs-string">grafana/grafana:8.5.2</span><br>    <span class="hljs-attr">user:</span> <span class="hljs-string">&#x27;104&#x27;</span><br>    <span class="hljs-attr">restart:</span> <span class="hljs-string">always</span><br>    <span class="hljs-attr">links:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">influxdb:influxsrv</span><br>    <span class="hljs-attr">ports:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;3000:3000&quot;</span><br>    <span class="hljs-attr">volumes:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">grafana_data:/var/lib/grafana</span><br>    <span class="hljs-attr">environment:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">HTTP_USER=admin</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">HTTP_PASS=admin</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">INFLUXDB_HOST=influxsrv</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">INFLUXDB_PORT=8086</span><br></code></pre></td></tr></table></figure>
+<ol start="2" type="1">
+<li>检查语法</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker-compose config -q<br></code></pre></td></tr></table></figure>
+<ol start="3" type="1">
+<li>创建并启动容器</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker-compose up -d<br></code></pre></td></tr></table></figure>
+<p>容器启动之后：</p>
+<ol type="1">
+<li>在浏览器打开InfluxDB数据库的页面：
+http://xxx.xxx.xxx.xxx:8083，使用命令查看当前数据库中的数据库实例：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain">SHOW DATABASES<br></code></pre></td></tr></table></figure>
+<p>查看其中是否自动创建了我们在配置文件中配置的 <code>cadvisor</code>
+数据库实例</p>
+<ol start="2" type="1">
+<li>在浏览器打开CAdvisor页面：http://xxx.xxx.xxx.xxx8080/，查看当前docker中的cpu、内存、网络IO等统计信息</li>
+<li>在浏览器打开Grafana页面：http://xxx.xxx.xxx.xxx:3000/，默认用户名密码是：<code>admin</code>/<code>admin</code>。</li>
+</ol>
+<h1 id="grafana配置">3. Grafana配置</h1>
+<h2 id="添加数据源">3.1 添加数据源</h2>
+<p>在<code>Configuration</code>（小齿轮）选项卡中，选择<code>Data Sources</code>，添加一个InfluxDB数据源：</p>
+<ul>
+<li>name：自定义一个数据源名称，例如<code>InfluxDB</code></li>
+<li>Query Language：查询语言，默认<code>InfluxQL</code>即可</li>
+<li>URL：根据compose中的容器服务名连接，<code>http://influxdb:8086</code></li>
+<li>database：我们在InfluxDB中创建的数据库实例，<code>cadvisor</code></li>
+<li>User：InfluxDB的默认用户，<code>root</code></li>
+<li>Password：<code>root</code></li>
+</ul>
+<p>保存并测试，可以连通即可</p>
+<h2 id="添加工作台">3.2 添加工作台</h2>
+<ol type="1">
+<li>在<code>Create</code>（加号）选项卡中，选择创建
+<code>Dash Board</code>工作台。右上角配置中可以配置创建出来的工作台的标题、文件夹等信息。</li>
+<li>在创建出来的工作台中，选择<code>Add panel</code>中的<code>Add a new panel</code>添加一个新的面板。
+<ol type="1">
+<li>在右上角<code>Time series</code>（时序图）位置可以切换展示的图表样式（柱状图、仪表盘、表格、饼图等等）</li>
+<li>右侧边栏为该图表配置相关信息：标题、描述</li>
+<li>图表下方可以配置该图表展示的数据的查询语句，例如：
+<ul>
+<li>FROM：<code>cpu_usage_total</code>（Grafana会自动获取InfluxDB数据库中的元数据，可以直接选择对应表名）</li>
+<li>WHERE：添加一个条件，<code>container_name=cig-cadvisor-1</code></li>
+<li>ALIAS：配置一个别名，<code>CPU使用情况汇总</code></li>
+</ul></li>
+</ol></li>
+</ol>
 
                 
               </div>
