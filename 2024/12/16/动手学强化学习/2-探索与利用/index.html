@@ -1,0 +1,946 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1. 探索与利用 1.1 序列决策任务中的一个基本问题 基于目前策略获取已知最优收益还是尝试不同的决策：  Exploitation 执行能够获得已知最优收益的决策 Exploration 尝试更多可能的决策，不一定会是最优收益   \(\mathcal{E}_t &#x3D; \left\{ \pi_t^i \mid i &#x3D; 1, \ldots, n \right\} \xrighta">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2. 探索与利用">
+<meta property="og:url" content="http://binbo-zappy.github.io/2024/12/16/%E5%8A%A8%E6%89%8B%E5%AD%A6%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/2-%E6%8E%A2%E7%B4%A2%E4%B8%8E%E5%88%A9%E7%94%A8/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="1. 探索与利用 1.1 序列决策任务中的一个基本问题 基于目前策略获取已知最优收益还是尝试不同的决策：  Exploitation 执行能够获得已知最优收益的决策 Exploration 尝试更多可能的决策，不一定会是最优收益   \(\mathcal{E}_t &#x3D; \left\{ \pi_t^i \mid i &#x3D; 1, \ldots, n \right\} \xrighta">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/reinforcementlearning.jpg">
+<meta property="article:published_time" content="2024-12-16T08:38:31.000Z">
+<meta property="article:modified_time" content="2024-12-16T13:23:44.389Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="RL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/reinforcementlearning.jpg">
+  
+  
+  
+  <title>2. 探索与利用 - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="2. 探索与利用"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-12-16 16:38" pubdate>
+          2024年12月16日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          14 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">2. 探索与利用</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="探索与利用">1. 探索与利用</h1>
+<h2 id="序列决策任务中的一个基本问题">1.1
+序列决策任务中的一个基本问题</h2>
+<p>基于目前策略获取已知最优收益还是尝试不同的决策：</p>
+<ul>
+<li>Exploitation 执行能够获得已知最优收益的决策</li>
+<li>Exploration 尝试更多可能的决策，不一定会是最优收益</li>
+</ul>
+<p><img src="/2024/12/16/%E5%8A%A8%E6%89%8B%E5%AD%A6%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/2-%E6%8E%A2%E7%B4%A2%E4%B8%8E%E5%88%A9%E7%94%A8/1734333438459-dde9380c-0b5f-4323-9db6-b9970d6b3ac4.png" srcset="/img/loading.gif" lazyload></p>
+<p><span class="math inline">\(\mathcal{E}_t = \left\{ \pi_t^i \mid i =
+1, \ldots, n \right\} \xrightarrow{\text{探索}} \mathcal{E}_{t+1} =
+\left\{ \pi_t^i \mid i = 1, \ldots, n \right\} \cup \left\{ \pi_e^j \mid
+j = 1, \ldots, m \right\}\)</span></p>
+<p><span class="math inline">\(\exists V^* \left( \cdot \mid \pi_t^i
+\sim \mathcal{E}_t \right) \leq V^* \left( \cdot \mid \pi_{t+1}^i \sim
+\mathcal{E}_{t+1} \right) \quad \pi_{t+1}^i \sim \left\{ \pi_e^i \mid i
+= 1, \ldots, m \right\}\)</span></p>
+<p>探索：可能发现更好的策略</p>
+<h2 id="策略探索的一些原则">1.2 策略探索的一些原则</h2>
+<p>朴素方法（Naïve Exploration）</p>
+<ul>
+<li>添加策略噪声𝜖-greedy</li>
+</ul>
+<p>积极初始化（Optimistic Initialization）</p>
+<p>基于不确定性的度量（Uncertainty Measurement）</p>
+<ul>
+<li>尝试具有不确定收益的策略，可能带来更高的收益</li>
+</ul>
+<p>概率匹配（Probability Matching）</p>
+<ul>
+<li>基于概率选择最佳策略</li>
+</ul>
+<p>状态搜索（State Searching）</p>
+<ul>
+<li>探索后续状态可能带来更高收益的策略</li>
+</ul>
+<h1 id="多臂老虎机">2. 多臂老虎机</h1>
+<h2 id="问题的形式化描述">2.1 问题的形式化描述</h2>
+<p>动作集合：<span class="math inline">\(a^i \in \mathcal{A}, \quad i =
+1, \ldots, K\)</span></p>
+<p>收益（反馈）函数分布：<span class="math inline">\(\mathcal{R}(r \mid
+a^i) = \mathbb{P}(r \mid a^i)\)</span></p>
+<p>最大化累积时间的收益：<span class="math inline">\(\max \sum_{t=1}^{T}
+r_{t}, \quad r_{t} \sim \mathcal{R}\left(\cdot \mid
+a_{t}\right)\)</span></p>
+<h2 id="收益估计">2.2 收益估计</h2>
+<p>期望收益和采样次数的关系: <span class="math inline">\(Q_n(a^i) =
+\frac{r_1 + r_2 + \cdots + r_{n-1}}{n - 1}\)</span></p>
+<p>缺点：每次更新的空间复杂度是O(n)</p>
+<p>增量实现: <span class="math display">\[
+Q_{n+1}(a^i) := \frac{1}{n} \sum_{i=1}^{n} r_i = \frac{1}{n} \left( r_n
++ \frac{n-1}{n-1} \sum_{i=1}^{n-1} r_i \right) = \frac{1}{n} r_n +
+\frac{n-1}{n} Q_n = Q_n(a^i) + \frac{1}{n} (r_n - Q_n)
+\]</span></p>
+<p>空间复杂度为O(1)</p>
+<h2 id="算法多臂老虎机">2.3 算法：多臂老虎机</h2>
+<ol type="1">
+<li>初始化：<span class="math inline">\(Q(a^i) := c^i, \quad N(a^i) = 0,
+\quad i = 1, ..., n\)</span></li>
+<li>主循环<span class="math inline">\(t = 1:T\)</span>
+<ol type="1">
+<li>利用策略𝜋选取某个动作a</li>
+<li>获取收益:<span class="math inline">\(r_t =
+\text{Bandit}(a)\)</span></li>
+<li>更新计数器:<span class="math inline">\(N(a) := N(a) +
+1\)</span></li>
+<li>更新估值:<span class="math inline">\(Q(a) := Q(a) + \frac{1}{N(a)}
+[r_t - Q(a)]\)</span></li>
+</ol></li>
+</ol>
+<h2 id="应当选取什么样的策略">2.4 应当选取什么样的策略</h2>
+<p>Regret函数(懊悔值)</p>
+<ul>
+<li><p>决策的期望收益：<span class="math inline">\(Q(a^i) =
+\mathbb{E}_{r \sim \mathbb{P}(r \mid a^i)}[r]\)</span></p></li>
+<li><p>最优收益：<span class="math inline">\(Q^{\star} = \max_{a^i \in
+\mathcal{A}} Q(a^i)\)</span></p></li>
+<li><p>决策与最优决策的收益差：<span class="math inline">\(R(a&#39;) =
+Q^{\star} - Q(a&#39;)\)</span></p></li>
+<li><p>Total Regret 函数：<span class="math inline">\(\sigma_{R} =
+\mathbb{E}_{a \sim \pi} \left[ \sum_{t=1}^{T} R(a_t^i) \right]\)</span>
+越接近于0越好</p></li>
+</ul>
+<p>最小化Total Regret等价于最大化Q值：<span class="math inline">\(\min
+\sigma_{R} = \max \mathbb{E}_{a \sim \pi} \left[ \sum_{t=1}^{T}
+Q(a_{t}^{i}) \right]\)</span></p>
+<ul>
+<li>如果一直探索新决策：<span class="math inline">\(\sigma_{R} \propto T
+\cdot R\)</span> ,total regret将线性递增，无法收敛</li>
+<li>如果一直不探索新决策：<span class="math inline">\(\sigma_{R} \propto
+T \cdot R\)</span>，total regret 仍将线性递增</li>
+</ul>
+<p>是否存在一个方法具有次线性（sublinear）收敛保证的regret？</p>
+<ul>
+<li>下界
+<ul>
+<li>使用<span class="math inline">\(\Delta_a = Q^* - Q(a)\)</span>
+和反馈函数分布相似性：<span class="math inline">\(D_{KL}\left(\mathcal{R}(r \mid a) \parallel
+\mathcal{R}^*(r \mid a)\right)\)</span></li>
+<li><span class="math inline">\(\lim_{T \to \infty} \sigma_R \geq \log T
+\sum_{a \mid \Delta_a &gt; 0} \frac{\Delta_a}{D_{KL}\left(\mathcal{R}(r
+\mid a) \parallel \mathcal{R}^*(r \mid a)\right)}\)</span></li>
+</ul></li>
+</ul>
+<h2 id="贪心策略和-epsilon-greedy-策略">2.5 贪心策略和 <span class="math inline">\(\epsilon\)</span>-greedy 策略</h2>
+<p>贪心策略</p>
+<p><span class="math inline">\(Q(a^i) = \frac{1}{N(a^i)} \sum_{t=1}^{T}
+r_t \cdot 1(a_t = a^i)\)</span></p>
+<p><span class="math inline">\(a^* = \arg\max_{a^i} Q(a^i)\)</span></p>
+<p><span class="math inline">\(\sigma_R \propto T \cdot [Q(a^i) -
+Q^*]\)</span></p>
+<ul>
+<li>线性增长的 Total regret</li>
+</ul>
+<p><span class="math inline">\(\epsilon\)</span>-greedy 策略</p>
+<p><span class="math inline">\(a_t = \begin{cases}
+\arg\max_a \hat{Q}(a) &amp; \text{采样概率：} 1 - \epsilon \\
+U(0, |\mathcal{A}|) &amp; \text{采样概率：} \epsilon
+\end{cases}\)</span></p>
+<p>常量 <span class="math inline">\(\epsilon\)</span> 保证 total regret
+满足</p>
+<p><span class="math inline">\(\sigma_R \geq
+\frac{\epsilon}{|\mathcal{A}|} \sum_{a \in \mathcal{A}}
+\Delta_a\)</span></p>
+<p>Total regret 仍然是线性递增的，只是增长率比贪心策略小</p>
+<h2 id="衰减贪心策略">2.6 衰减贪心策略</h2>
+<ul>
+<li><span class="math inline">\(\epsilon\)</span>-greedy 的变种，<span class="math inline">\(\epsilon\)</span> 随着时间衰减</li>
+<li>理论上对数渐进收敛！</li>
+<li>一种可能的衰减方式：</li>
+</ul>
+<p><span class="math display">\[
+c \geq 0, \quad d = \min_{a \mid \Delta_a &gt; 0} \Delta_a, \quad
+\epsilon_t = \min\left\{1, \frac{c|\mathcal{A}|}{d^2 t}\right\}
+\]</span></p>
+<p>缺点</p>
+<ul>
+<li>很难找到合适的衰减规划</li>
+</ul>
+<p><span class="math inline">\(c \geq 0, \quad c_t = \min_{a \mid
+\Delta_a &gt; 0} \Delta_a, \quad \epsilon_{r_t} = \min\left(1,
+\frac{c}{c_t^2 \cdot r_t}\right)\)</span></p>
+<h2 id="不同𝝐-greedy-策略对比">2.7 不同𝝐-greedy 策略对比：</h2>
+<p>Total Regret</p>
+<p><img src="/2024/12/16/%E5%8A%A8%E6%89%8B%E5%AD%A6%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/2-%E6%8E%A2%E7%B4%A2%E4%B8%8E%E5%88%A9%E7%94%A8/image-20241216161243673.png" srcset="/img/loading.gif" lazyload></p>
+<p>平均收益</p>
+<p><img src="/2024/12/16/%E5%8A%A8%E6%89%8B%E5%AD%A6%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/2-%E6%8E%A2%E7%B4%A2%E4%B8%8E%E5%88%A9%E7%94%A8/image-20241216161259488.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="乐观初始化">2.8 乐观初始化</h2>
+<ul>
+<li>给<span class="math inline">\(Q(a^i)\)</span>一个较高的初始化值</li>
+<li>增量式蒙特卡洛估计更新 <span class="math inline">\(Q(a^i)\)</span></li>
+</ul>
+<p><span class="math inline">\(Q(a^i) := Q(a^i) + \frac{1}{N(a^i)} (r_t
+- Q(a^i))\)</span></p>
+<ul>
+<li>有偏估计，但是随着采样增加，这个偏差带来的影响会越来越小</li>
+<li>但是仍然可能陷入局部最优</li>
+</ul>
+<p><img src="/2024/12/16/%E5%8A%A8%E6%89%8B%E5%AD%A6%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/2-%E6%8E%A2%E7%B4%A2%E4%B8%8E%E5%88%A9%E7%94%A8/image-20241216161450087.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="显式地考虑动作的价值分布">2.9 显式地考虑动作的价值分布</h2>
+<p><img src="/2024/12/16/%E5%8A%A8%E6%89%8B%E5%AD%A6%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/2-%E6%8E%A2%E7%B4%A2%E4%B8%8E%E5%88%A9%E7%94%A8/image-20241216162546603.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>考虑以上三个动作的价值分布，平衡探索和利用，选择哪个动作？</li>
+<li><ol type="1">
+<li>显式地鼓励不确定性； 2. 直接根据分布采样来选择</li>
+</ol></li>
+</ul>
+<h2 id="基于不确定性测度">2.10 基于不确定性测度</h2>
+<ul>
+<li>不确定性越大的 <span class="math inline">\(Q(a^i)\)</span>，越具有探索的价值，有可能会是最好的策略</li>
+<li>一个经验性指导：
+<ul>
+<li><span class="math inline">\(N_{a}\)</span> 大，<span class="math inline">\(U_{a}\)</span> 小</li>
+<li><span class="math inline">\(N_{a}\)</span> 小，<span class="math inline">\(U_{a}\)</span> 大</li>
+</ul></li>
+<li>策略 <span class="math inline">\(\pi\)</span>：<span class="math inline">\(a = \arg\max_{a \in \mathcal{A}} \hat{Q}(a) +
+\hat{U}(a)\)</span></li>
+<li>也称为 UCB：上置信界法（Upper Confidence Bounds）</li>
+</ul>
+<p><img src="/2024/12/16/%E5%8A%A8%E6%89%8B%E5%AD%A6%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/2-%E6%8E%A2%E7%B4%A2%E4%B8%8E%E5%88%A9%E7%94%A8/image-20241216162915531.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="ucb上置信界">2.11 UCB：上置信界</h2>
+<p>Hoeffding 不等式：<span class="math inline">\(\mathbb{P}[\mathbb{E}[x] &gt; \bar{x}_t + u] \leq
+e^{-2tu^2} \text{ for } x \in [0,1]\)</span></p>
+<ul>
+<li><p>为每个动作收益估值估计一个上置信界：<span class="math inline">\(\hat{U}(a)\)</span></p></li>
+<li><p>显然有：<span class="math inline">\(Q_t(a) \leq \hat{Q}_t(a) +
+\hat{U}_t(a)\)</span> 以高概率 <span class="math inline">\(p\)</span>
+成立（Hoeffding不等式）</p></li>
+<li><p>依据以下原则挑选进行决策： <span class="math display">\[a =
+\arg\max_{a \in \mathcal{A}} \hat{Q}_t(a) + \hat{U}_t(a) \quad
+e^{-2N_t(a)U_t(a)^2} = p \Rightarrow \hat{U}_t(a) = \sqrt{-\frac{\log
+p}{2N_t(a)}}\]</span></p></li>
+<li><p>收敛性：<span class="math inline">\(\lim_{t \to \infty} \sigma_R
+\leq 8 \log t \sum_{a \mid \Delta_a &gt; 0} \Delta_a\)</span></p></li>
+</ul>
+<h2 id="thompson-sampling方法">2.12 Thompson Sampling方法</h2>
+<p>[Chapelle, Olivier, and Lihong Li. "An empirical evaluation of
+thompson sampling." Advances in neural information processing systems.
+2011.]</p>
+<p><img src="/2024/12/16/%E5%8A%A8%E6%89%8B%E5%AD%A6%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/2-%E6%8E%A2%E7%B4%A2%E4%B8%8E%E5%88%A9%E7%94%A8/image-20241216164006590.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>想法：根据每个动作成为最优的概率来选择动作</li>
+</ul>
+<p><span class="math inline">\(p(a) = \int \mathbb{I} \left[
+\mathbb{E}_{p(Q(a))} \left[ Q(a; \theta) \right] = \max_{a&#39; \in
+\mathcal{A}} \mathbb{E}_{p(Q(a&#39;))} \left( Q(a&#39;; \theta) \right)
+\right] d\theta\)</span></p>
+<ul>
+<li>实现：根据当前每个动作 <span class="math inline">\(a\)</span>
+的价值概率分布 <span class="math inline">\(p(Q(a))\)</span>
+来采样到其价值 <span class="math inline">\(\hat{Q}(a)\)</span>，选择价值最大的动作</li>
+</ul>
+<p><img src="/2024/12/16/%E5%8A%A8%E6%89%8B%E5%AD%A6%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/2-%E6%8E%A2%E7%B4%A2%E4%B8%8E%E5%88%A9%E7%94%A8/image-20241216164936879.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="thompson-sampling和ucb的实验对比">2.13 Thompson
+Sampling和UCB的实验对比</h2>
+<p>实验：K-arm多臂老虎机，用Beta分布建模每个arm的成功率，初始化成功率分布为Beta(1,1).
+<span class="math display">\[\text{Beta}(x; \alpha, \beta) \propto
+x^{\alpha-1} (1 - x)^{\beta-1}\]</span> <img src="/2024/12/16/%E5%8A%A8%E6%89%8B%E5%AD%A6%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/2-%E6%8E%A2%E7%B4%A2%E4%B8%8E%E5%88%A9%E7%94%A8/image-20241216165700311.png" srcset="/img/loading.gif" lazyload></p>
+<p>K-arms - The best arm has reward probability of 0.5 - K-1 other arms
+have the reward probability of 0.5-ε</p>
+<h2 id="探索与利用总结">2.14 探索与利用总结</h2>
+<ul>
+<li>探索与利用是强化学习的 trial-and-error 中的必备技术</li>
+<li>多臂老虎机可以被看成是无状态 (state-less) 强化学习</li>
+<li>多臂老虎机是研究探索与利用技术理论的最佳环境
+<ul>
+<li>理论的渐近最优 regret 为 <span class="math inline">\(O(\log
+T)\)</span></li>
+</ul></li>
+<li><span class="math inline">\(\epsilon\)</span>-greedy、UCB 和
+Thompson Sampling
+方法在多臂老虎机任务中十分常用，在强化学习的探索中也十分常用，最常见的是
+<span class="math inline">\(\epsilon\)</span>-greedy</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/AI/" class="category-chain-item">AI</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI/RL/" class="category-chain-item">RL</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI/RL/%E5%8A%A8%E6%89%8B%E5%AD%A6%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/" class="category-chain-item">动手学强化学习</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/RL/" class="print-no-link">#RL</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>2. 探索与利用</div>
+      <div>http://binbo-zappy.github.io/2024/12/16/动手学强化学习/2-探索与利用/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年12月16日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/12/16/hexo/git/" title="git常用命令">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">git常用命令</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/12/16/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/16-%E5%85%B3%E4%BA%8ETCP%E5%B9%B6%E5%8F%91%E8%BF%9E%E6%8E%A5%E7%9A%84%E5%87%A0%E4%B8%AA%E6%80%9D%E8%80%83%E9%A2%98%E4%B8%8E%E8%AF%95%E9%AA%8C/" title="16. 关于TCP并发连接的几个思考题与试验">
+                        <span class="hidden-mobile">16. 关于TCP并发连接的几个思考题与试验</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

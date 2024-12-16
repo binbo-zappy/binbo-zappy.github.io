@@ -1,0 +1,758 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="nginx 安装目录下，其默认的配置文件都放在这个目录的 conf 目录下，而主配置文件 nginx.conf 也在其中，后续对 nginx 的使用基本上都是对此配置文件进行相应的修改。  12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455">
+<meta property="og:type" content="article">
+<meta property="og:title" content="3. nginx.conf配置文件">
+<meta property="og:url" content="http://binbo-zappy.github.io/2024/12/15/nginx/3-nginx-conf%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="nginx 安装目录下，其默认的配置文件都放在这个目录的 conf 目录下，而主配置文件 nginx.conf 也在其中，后续对 nginx 的使用基本上都是对此配置文件进行相应的修改。  12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/nginx.png">
+<meta property="article:published_time" content="2024-12-15T02:29:35.000Z">
+<meta property="article:modified_time" content="2024-12-15T04:17:19.304Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="Nginx">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/nginx.png">
+  
+  
+  
+  <title>3. nginx.conf配置文件 - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="3. nginx.conf配置文件"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-12-15 10:29" pubdate>
+          2024年12月15日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          12 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">3. nginx.conf配置文件</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>nginx 安装目录下，其默认的配置文件都放在这个目录的 conf
+目录下，而主配置文件 nginx.conf 也在其中，后续对 nginx
+的使用基本上都是对此配置文件进行相应的修改。</p>
+<p><img src="/2024/12/15/nginx/3-nginx-conf%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/image-20241215120659660.png" srcset="/img/loading.gif" lazyload></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-comment">#user  nobody;</span><br><span class="hljs-attribute">worker_processes</span>  <span class="hljs-number">1</span>;<br><br><span class="hljs-comment">#error_log  logs/error.log;</span><br><span class="hljs-comment">#error_log  logs/error.log  notice;</span><br><span class="hljs-comment">#error_log  logs/error.log  info;</span><br><br><span class="hljs-comment">#pid        logs/nginx.pid;</span><br><br><br><span class="hljs-section">events</span> &#123;<br><span class="hljs-comment">#    use eopll;</span><br>    <span class="hljs-attribute">worker_connections</span>  <span class="hljs-number">1024</span>;<br>&#125;<br><br><br><span class="hljs-section">http</span> &#123;<br>    <span class="hljs-attribute">include</span>       mime.types;<br>    <span class="hljs-attribute">default_type</span>  application/octet-stream;<br><br>    <span class="hljs-comment">#log_format  main  &#x27;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#x27;</span><br>    <span class="hljs-comment">#                  &#x27;$status $body_bytes_sent &quot;$http_referer&quot; &#x27;</span><br>    <span class="hljs-comment">#                  &#x27;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&#x27;;</span><br><br>    <span class="hljs-comment">#access_log  logs/access.log  main;</span><br><br>    <span class="hljs-attribute">sendfile</span>        <span class="hljs-literal">on</span>;<br>    <span class="hljs-comment">#tcp_nopush     on;</span><br><br>    <span class="hljs-comment">#keepalive_timeout  0;</span><br>    <span class="hljs-attribute">keepalive_timeout</span>  <span class="hljs-number">65</span>;<br><br>    <span class="hljs-comment">#gzip  on;</span><br><br>    <span class="hljs-section">server</span> &#123;<br>        <span class="hljs-attribute">listen</span>       <span class="hljs-number">80</span>;<br>        <span class="hljs-attribute">server_name</span>  localhost;<br><br>        <span class="hljs-comment">#charset koi8-r;</span><br><br>        <span class="hljs-comment">#access_log  logs/host.access.log  main;</span><br><br>        <span class="hljs-section">location</span> / &#123;<br>            <span class="hljs-attribute">root</span> zyFile2;	    <br>	    <span class="hljs-attribute">index</span> upload.html;        <br>	&#125;<br>	<span class="hljs-section">location</span> /Myupload<br>	&#123;<br>	    <span class="hljs-attribute">fastcgi_pass</span> <span class="hljs-number">127.0.0.1:10000</span>;<br>	    <span class="hljs-attribute">include</span> fastcgi.conf;<br>	&#125;<br>	<span class="hljs-section">location</span> /group1/M00<br>	&#123;<br>	    <span class="hljs-attribute">root</span> /home/star/project/fastdfs/storage/data;<br>	    ngx_fastdfs_module;<br>	&#125;<br>	<span class="hljs-section">location</span> /hello/<br>	&#123;<br>	    <span class="hljs-attribute">root</span> yundisk;<br>	&#125;<br>	<span class="hljs-section">location</span> /upload/<br>	&#123;<br>	    <span class="hljs-attribute">root</span> yundisk;<br>	    <span class="hljs-attribute">index</span> upload.html;<br>	&#125;<br>	<span class="hljs-section">location</span> /uploadFile<br>	&#123;<br>	    <span class="hljs-attribute">fastcgi_pass</span> localhost:<span class="hljs-number">9999</span>;<br>	    <span class="hljs-attribute">include</span> fastcgi.conf;<br>	    <span class="hljs-attribute">client_max_body_size</span> <span class="hljs-number">10240m</span>;<br>	&#125;<br>        <span class="hljs-comment">#error_page  404              /404.html;</span><br><br>        <span class="hljs-comment"># redirect server error pages to the static page /50x.html</span><br>        <span class="hljs-comment">#</span><br>        <span class="hljs-attribute">error_page</span>   <span class="hljs-number">500</span> <span class="hljs-number">502</span> <span class="hljs-number">503</span> <span class="hljs-number">504</span>  /50x.html;<br>        <span class="hljs-section">location</span> = /50x.html &#123;<br>            <span class="hljs-attribute">root</span>   html;<br>        &#125;<br><br>        <span class="hljs-comment"># proxy the PHP scripts to Apache listening on 127.0.0.1:80</span><br>        <span class="hljs-comment">#</span><br>        <span class="hljs-comment">#location ~ \.php$ &#123;</span><br>        <span class="hljs-comment">#    proxy_pass   http://127.0.0.1;</span><br>        <span class="hljs-comment">#&#125;</span><br><br>        <span class="hljs-comment"># pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000</span><br>        <span class="hljs-comment">#</span><br>        <span class="hljs-comment">#location ~ \.php$ &#123;</span><br>        <span class="hljs-comment">#    root           html;</span><br>        <span class="hljs-comment">#    fastcgi_pass   127.0.0.1:9000;</span><br>        <span class="hljs-comment">#    fastcgi_index  index.php;</span><br>        <span class="hljs-comment">#    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;</span><br>        <span class="hljs-comment">#    include        fastcgi_params;</span><br>        <span class="hljs-comment">#&#125;</span><br><br>        <span class="hljs-comment"># deny access to .htaccess files, if Apache&#x27;s document root</span><br>        <span class="hljs-comment"># concurs with nginx&#x27;s one</span><br>        <span class="hljs-comment">#</span><br>        <span class="hljs-comment">#location ~ /\.ht &#123;</span><br>        <span class="hljs-comment">#    deny  all;</span><br>        <span class="hljs-comment">#&#125;</span><br>    &#125;<br><br><br>    <span class="hljs-comment"># another virtual host using mix of IP-, name-, and port-based configuration</span><br>    <span class="hljs-comment">#</span><br>    <span class="hljs-comment">#server &#123;</span><br>    <span class="hljs-comment">#    listen       8000;</span><br>    <span class="hljs-comment">#    listen       somename:8080;</span><br>    <span class="hljs-comment">#    server_name  somename  alias  another.alias;</span><br><br>    <span class="hljs-comment">#    location / &#123;</span><br>    <span class="hljs-comment">#        root   html;</span><br>    <span class="hljs-comment">#        index  index.html index.htm;</span><br>    <span class="hljs-comment">#    &#125;</span><br>    <span class="hljs-comment">#&#125;</span><br><br><br>    <span class="hljs-comment"># HTTPS server</span><br>    <span class="hljs-comment">#</span><br>    <span class="hljs-comment">#server &#123;</span><br>    <span class="hljs-comment">#    listen       443 ssl;</span><br>    <span class="hljs-comment">#    server_name  localhost;</span><br><br>    <span class="hljs-comment">#    ssl_certificate      cert.pem;</span><br>    <span class="hljs-comment">#    ssl_certificate_key  cert.key;</span><br><br>    <span class="hljs-comment">#    ssl_session_cache    shared:SSL:1m;</span><br>    <span class="hljs-comment">#    ssl_session_timeout  5m;</span><br><br>    <span class="hljs-comment">#    ssl_ciphers  HIGH:!aNULL:!MD5;</span><br>    <span class="hljs-comment">#    ssl_prefer_server_ciphers  on;</span><br><br>    <span class="hljs-comment">#    location / &#123;</span><br>    <span class="hljs-comment">#        root   html;</span><br>    <span class="hljs-comment">#        index  index.html index.htm;</span><br>    <span class="hljs-comment">#    &#125;</span><br>    <span class="hljs-comment">#&#125;</span><br><br>&#125;<br></code></pre></td></tr></table></figure>
+<h1 id="第一部分全局块">1. 第一部分：全局块</h1>
+<p>从配置文件开始到 events 块之间的内容，主要会设置一些影响 nginx
+服务器整体运行的配置指令，主要包括配置运行 Nginx
+服务器的用户（组）、允许生成的 worker process 数，进程 PID
+存放路径、日志存放路径和类型以及配置文件的引入等。</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-comment">#user  nobody;</span><br><span class="hljs-attribute">worker_processes</span>  <span class="hljs-number">1</span>;<br><br><span class="hljs-comment">#error_log  logs/error.log;</span><br><span class="hljs-comment">#error_log  logs/error.log  notice;</span><br><span class="hljs-comment">#error_log  logs/error.log  info;</span><br><br><span class="hljs-comment">#pid        logs/nginx.pid;</span><br><br><br><span class="hljs-section">events</span> &#123;<br><span class="hljs-comment">#    use eopll;</span><br>    <span class="hljs-attribute">worker_connections</span>  <span class="hljs-number">1024</span>;<br>&#125;<br>------------------------------------------------------------------<br><br></code></pre></td></tr></table></figure>
+<p>比如上面第一行配置的：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">worker_processes</span> <span class="hljs-number">1</span>;<br></code></pre></td></tr></table></figure>
+<p>这是 Nginx 服务器并发处理服务的关键配置，<span class="math inline">\(\text{worker_processes}\)</span>
+值越大，可以支持的 <strong>并发处理量</strong>
+也越多，但是会受到硬件、软件等设备的制约。</p>
+<h1 id="第二部分events-块">2. 第二部分：events 块</h1>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-section">events</span> &#123;<br><span class="hljs-comment">#    use eopll;</span><br>    <span class="hljs-attribute">worker_connections</span>  <span class="hljs-number">1024</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>比如上面的配置：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">worker_connections</span> <span class="hljs-number">1024</span>;<br></code></pre></td></tr></table></figure>
+<p>events 块涉及的指令主要影响 Nginx
+服务器与用户的网络连接，常用的设置包括是否开启对多 work process
+下的网络连接进行序列化，是否允许同时接收多个网络连接，选取哪种事件驱动模型来处理连接请求，每个
+work process 可以同时支持的最大连接数等。</p>
+<p>上述例子就表示每个 work process 支持的最大 <strong>连接数</strong> 为
+<span class="math inline">\(1024\)</span>. 这部分的配置对 Nginx
+的性能影响较大，在实际中应该灵活配置。</p>
+<h1 id="第三部分http-块">3. 第三部分：http 块</h1>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-section">http</span> &#123;<br>    <span class="hljs-attribute">include</span>       mime.types;<br>    <span class="hljs-attribute">default_type</span>  application/octet-stream;<br><br>    <span class="hljs-comment">#log_format  main  &#x27;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#x27;</span><br>    <span class="hljs-comment">#                  &#x27;$status $body_bytes_sent &quot;$http_referer&quot; &#x27;</span><br>    <span class="hljs-comment">#                  &#x27;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&#x27;;</span><br><br>    <span class="hljs-comment">#access_log  logs/access.log  main;</span><br><br>    <span class="hljs-attribute">sendfile</span>        <span class="hljs-literal">on</span>;<br>    <span class="hljs-comment">#tcp_nopush     on;</span><br><br>    <span class="hljs-comment">#keepalive_timeout  0;</span><br>    <span class="hljs-attribute">keepalive_timeout</span>  <span class="hljs-number">65</span>;<br><br>    <span class="hljs-comment">#gzip  on;</span><br><br>    <span class="hljs-section">server</span> &#123;<br>        <span class="hljs-attribute">listen</span>       <span class="hljs-number">80</span>;<br>        <span class="hljs-attribute">server_name</span>  localhost;<br><br>        <span class="hljs-comment">#charset koi8-r;</span><br><br>        <span class="hljs-comment">#access_log  logs/host.access.log  main;</span><br><br>        <span class="hljs-section">location</span> / &#123;<br>            <span class="hljs-attribute">root</span> zyFile2;	    <br>	    <span class="hljs-attribute">index</span> upload.html;        <br>	&#125;<br>	<span class="hljs-section">location</span> /Myupload<br>	&#123;<br>	    <span class="hljs-attribute">fastcgi_pass</span> <span class="hljs-number">127.0.0.1:10000</span>;<br>	    <span class="hljs-attribute">include</span> fastcgi.conf;<br>	&#125;<br>	<span class="hljs-section">location</span> /group1/M00<br>	&#123;<br>	    <span class="hljs-attribute">root</span> /home/star/project/fastdfs/storage/data;<br>	    ngx_fastdfs_module;<br>	&#125;<br>	<span class="hljs-section">location</span> /hello/<br>	&#123;<br>	    <span class="hljs-attribute">root</span> yundisk;<br>	&#125;<br>	<span class="hljs-section">location</span> /upload/<br>	&#123;<br>	    <span class="hljs-attribute">root</span> yundisk;<br>	    <span class="hljs-attribute">index</span> upload.html;<br>	&#125;<br>	<span class="hljs-section">location</span> /uploadFile<br>	&#123;<br>	    <span class="hljs-attribute">fastcgi_pass</span> localhost:<span class="hljs-number">9999</span>;<br>	    <span class="hljs-attribute">include</span> fastcgi.conf;<br>	    <span class="hljs-attribute">client_max_body_size</span> <span class="hljs-number">10240m</span>;<br>	&#125;<br>        <span class="hljs-comment">#error_page  404              /404.html;</span><br><br>        <span class="hljs-comment"># redirect server error pages to the static page /50x.html</span><br>        <span class="hljs-comment">#</span><br>        <span class="hljs-attribute">error_page</span>   <span class="hljs-number">500</span> <span class="hljs-number">502</span> <span class="hljs-number">503</span> <span class="hljs-number">504</span>  /50x.html;<br>        <span class="hljs-section">location</span> = /50x.html &#123;<br>            <span class="hljs-attribute">root</span>   html;<br>        &#125;<br><br>        <span class="hljs-comment"># proxy the PHP scripts to Apache listening on 127.0.0.1:80</span><br>        <span class="hljs-comment">#</span><br>        <span class="hljs-comment">#location ~ \.php$ &#123;</span><br>        <span class="hljs-comment">#    proxy_pass   http://127.0.0.1;</span><br>        <span class="hljs-comment">#&#125;</span><br><br>        <span class="hljs-comment"># pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000</span><br>        <span class="hljs-comment">#</span><br>        <span class="hljs-comment">#location ~ \.php$ &#123;</span><br>        <span class="hljs-comment">#    root           html;</span><br>        <span class="hljs-comment">#    fastcgi_pass   127.0.0.1:9000;</span><br>        <span class="hljs-comment">#    fastcgi_index  index.php;</span><br>        <span class="hljs-comment">#    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;</span><br>        <span class="hljs-comment">#    include        fastcgi_params;</span><br>        <span class="hljs-comment">#&#125;</span><br><br>        <span class="hljs-comment"># deny access to .htaccess files, if Apache&#x27;s document root</span><br>        <span class="hljs-comment"># concurs with nginx&#x27;s one</span><br>        <span class="hljs-comment">#</span><br>        <span class="hljs-comment">#location ~ /\.ht &#123;</span><br>        <span class="hljs-comment">#    deny  all;</span><br>        <span class="hljs-comment">#&#125;</span><br>    &#125;<br><br><br>    <span class="hljs-comment"># another virtual host using mix of IP-, name-, and port-based configuration</span><br>    <span class="hljs-comment">#</span><br>    <span class="hljs-comment">#server &#123;</span><br>    <span class="hljs-comment">#    listen       8000;</span><br>    <span class="hljs-comment">#    listen       somename:8080;</span><br>    <span class="hljs-comment">#    server_name  somename  alias  another.alias;</span><br><br>    <span class="hljs-comment">#    location / &#123;</span><br>    <span class="hljs-comment">#        root   html;</span><br>    <span class="hljs-comment">#        index  index.html index.htm;</span><br>    <span class="hljs-comment">#    &#125;</span><br>    <span class="hljs-comment">#&#125;</span><br><br><br>    <span class="hljs-comment"># HTTPS server</span><br>    <span class="hljs-comment">#</span><br>    <span class="hljs-comment">#server &#123;</span><br>    <span class="hljs-comment">#    listen       443 ssl;</span><br>    <span class="hljs-comment">#    server_name  localhost;</span><br><br>    <span class="hljs-comment">#    ssl_certificate      cert.pem;</span><br>    <span class="hljs-comment">#    ssl_certificate_key  cert.key;</span><br><br>    <span class="hljs-comment">#    ssl_session_cache    shared:SSL:1m;</span><br>    <span class="hljs-comment">#    ssl_session_timeout  5m;</span><br><br>    <span class="hljs-comment">#    ssl_ciphers  HIGH:!aNULL:!MD5;</span><br>    <span class="hljs-comment">#    ssl_prefer_server_ciphers  on;</span><br><br>    <span class="hljs-comment">#    location / &#123;</span><br>    <span class="hljs-comment">#        root   html;</span><br>    <span class="hljs-comment">#        index  index.html index.htm;</span><br>    <span class="hljs-comment">#    &#125;</span><br>    <span class="hljs-comment">#&#125;</span><br><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这算是 Nginx
+服务器配置中最频繁的部分，代理、缓存和日志定义等绝大多数功能和第三方模块的配置都在这里。</p>
+<p>需要注意的是：http 块也可以包括 http 全局块、server 块。</p>
+<h2 id="http-全局块">3.1 http 全局块</h2>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-section">http</span> &#123;<br>    <span class="hljs-attribute">include</span>       mime.types;<br>    <span class="hljs-attribute">default_type</span>  application/octet-stream;<br><br>    <span class="hljs-comment">#log_format  main  &#x27;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#x27;</span><br>    <span class="hljs-comment">#                  &#x27;$status $body_bytes_sent &quot;$http_referer&quot; &#x27;</span><br>    <span class="hljs-comment">#                  &#x27;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&#x27;;</span><br><br>    <span class="hljs-comment">#access_log  logs/access.log  main;</span><br><br>    <span class="hljs-attribute">sendfile</span>        <span class="hljs-literal">on</span>;<br>    <span class="hljs-comment">#tcp_nopush     on;</span><br><br>    <span class="hljs-comment">#keepalive_timeout  0;</span><br>    <span class="hljs-attribute">keepalive_timeout</span>  <span class="hljs-number">65</span>;<br><br>    <span class="hljs-comment">#gzip  on;</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>http 全局块配置的指令包括文件引入、MIME-TYPE
+定义、日志自定义、连接超时时间、单链接请求数上限等。</p>
+<h2 id="server-块">3.2 server 块</h2>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><code class="hljs nginx"> <span class="hljs-section">server</span> &#123;<br>     <span class="hljs-attribute">listen</span>       <span class="hljs-number">80</span>;<br>     <span class="hljs-attribute">server_name</span>  localhost;<br><br>     <span class="hljs-comment">#charset koi8-r;</span><br><br>     <span class="hljs-comment">#access_log  logs/host.access.log  main;</span><br><br>     <span class="hljs-section">location</span> / &#123;<br>         <span class="hljs-attribute">root</span> zyFile2;	    <br>  <span class="hljs-attribute">index</span> upload.html;        <br>&#125;<br>     <span class="hljs-section">location</span> /Myupload<br>     &#123;<br>         <span class="hljs-attribute">fastcgi_pass</span> <span class="hljs-number">127.0.0.1:10000</span>;<br>         <span class="hljs-attribute">include</span> fastcgi.conf;<br>     &#125;<br>     <span class="hljs-section">location</span> /group1/M00<br>     &#123;<br>         <span class="hljs-attribute">root</span> /home/star/project/fastdfs/storage/data;<br>         ngx_fastdfs_module;<br>     &#125;<br>     <span class="hljs-section">location</span> /hello/<br>     &#123;<br>         <span class="hljs-attribute">root</span> yundisk;<br>     &#125;<br>     <span class="hljs-section">location</span> /upload/<br>     &#123;<br>         <span class="hljs-attribute">root</span> yundisk;<br>         <span class="hljs-attribute">index</span> upload.html;<br>     &#125;<br>     <span class="hljs-section">location</span> /uploadFile<br>     &#123;<br>         <span class="hljs-attribute">fastcgi_pass</span> localhost:<span class="hljs-number">9999</span>;<br>         <span class="hljs-attribute">include</span> fastcgi.conf;<br>         <span class="hljs-attribute">client_max_body_size</span> <span class="hljs-number">10240m</span>;<br>     &#125;<br>     <span class="hljs-comment">#error_page  404              /404.html;</span><br><br>     <span class="hljs-comment"># redirect server error pages to the static page /50x.html</span><br>     <span class="hljs-comment">#</span><br>     <span class="hljs-attribute">error_page</span>   <span class="hljs-number">500</span> <span class="hljs-number">502</span> <span class="hljs-number">503</span> <span class="hljs-number">504</span>  /50x.html;<br>     <span class="hljs-section">location</span> = /50x.html &#123;<br>         <span class="hljs-attribute">root</span>   html;<br>     &#125;<br><br>     <span class="hljs-comment"># proxy the PHP scripts to Apache listening on 127.0.0.1:80</span><br>     <span class="hljs-comment">#</span><br>     <span class="hljs-comment">#location ~ \.php$ &#123;</span><br>     <span class="hljs-comment">#    proxy_pass   http://127.0.0.1;</span><br>     <span class="hljs-comment">#&#125;</span><br><br>     <span class="hljs-comment"># pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000</span><br>     <span class="hljs-comment">#</span><br>     <span class="hljs-comment">#location ~ \.php$ &#123;</span><br>     <span class="hljs-comment">#    root           html;</span><br>     <span class="hljs-comment">#    fastcgi_pass   127.0.0.1:9000;</span><br>     <span class="hljs-comment">#    fastcgi_index  index.php;</span><br>     <span class="hljs-comment">#    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;</span><br>     <span class="hljs-comment">#    include        fastcgi_params;</span><br>     <span class="hljs-comment">#&#125;</span><br><br>     <span class="hljs-comment"># deny access to .htaccess files, if Apache&#x27;s document root</span><br>     <span class="hljs-comment"># concurs with nginx&#x27;s one</span><br>     <span class="hljs-comment">#</span><br>     <span class="hljs-comment">#location ~ /\.ht &#123;</span><br>     <span class="hljs-comment">#    deny  all;</span><br>     <span class="hljs-comment">#&#125;</span><br> &#125;<br></code></pre></td></tr></table></figure>
+<p>这块和虚拟主机有密切关系，虚拟主机从用户角度看，和一台独立的硬件主机是完全一样的，该技术的产生是为了节省互联网服务器硬件成本。每个
+http 块可以包括多个 server 块，而每个 server
+块就相当于一个虚拟主机。而每个 server 块也分为全局 server
+块，以及可以同时包含多个 location 块。</p>
+<h3 id="全局-server-块">1. 全局 server 块</h3>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs nginx">   <span class="hljs-section">server</span> &#123;<br>       <span class="hljs-attribute">listen</span>       <span class="hljs-number">80</span>;<br>       <span class="hljs-attribute">server_name</span>  localhost;<br><br>       <span class="hljs-comment">#charset koi8-r;</span><br><br>       <span class="hljs-comment">#access_log  logs/host.access.log  main;</span><br><br>       <span class="hljs-section">location</span> / &#123;<br>           <span class="hljs-attribute">root</span> zyFile2;	    <br>    <span class="hljs-attribute">index</span> upload.html;        <br>&#125;<br></code></pre></td></tr></table></figure>
+<p>最常见的配置是本虚拟机主机的监听配置和本虚拟主机的名称或 IP
+配置。</p>
+<h3 id="location-块">2. location 块</h3>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-section">location</span> /Myupload<br>&#123;<br>    <span class="hljs-attribute">fastcgi_pass</span> <span class="hljs-number">127.0.0.1:10000</span>;<br>    <span class="hljs-attribute">include</span> fastcgi.conf;<br>&#125;<br><span class="hljs-section">location</span> /group1/M00<br>&#123;<br>    <span class="hljs-attribute">root</span> /home/star/project/fastdfs/storage/data;<br>    ngx_fastdfs_module;<br>&#125;<br><span class="hljs-section">location</span> /hello/<br>&#123;<br>    <span class="hljs-attribute">root</span> yundisk;<br>&#125;<br><span class="hljs-section">location</span> /upload/<br>&#123;<br>    <span class="hljs-attribute">root</span> yundisk;<br>    <span class="hljs-attribute">index</span> upload.html;<br>&#125;<br><span class="hljs-section">location</span> /uploadFile<br>&#123;<br>    <span class="hljs-attribute">fastcgi_pass</span> localhost:<span class="hljs-number">9999</span>;<br>    <span class="hljs-attribute">include</span> fastcgi.conf;<br>    <span class="hljs-attribute">client_max_body_size</span> <span class="hljs-number">10240m</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>一个 server 块可以配置多个 location 块。</p>
+<p>这块的主要作用是基于 Nginx 服务器接收到的请求字符串（例如
+server_name/uri-string），对虚拟主机名称（也可以是 IP
+别名）之外的字符串（例如 前面的
+/uri-string）进行匹配，对特定的请求进行处理。地址定向、数据缓存和应答控制等功能，还有许多第三方模块的配置也在这里进行。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/" class="category-chain-item">后端开发</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Nginx/" class="category-chain-item">Nginx</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Nginx/" class="print-no-link">#Nginx</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>3. nginx.conf配置文件</div>
+      <div>http://binbo-zappy.github.io/2024/12/15/nginx/3-nginx-conf配置文件/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年12月15日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/12/15/nginx/4-Nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%AE%9E%E4%BE%8B2/" title="4. Nginx 反向代理实例 1">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">4. Nginx 反向代理实例 1</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/12/15/nginx/2-Nginx%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" title="2. Nginx常用命令">
+                        <span class="hidden-mobile">2. Nginx常用命令</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

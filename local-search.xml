@@ -4,6 +4,1223 @@
   
   
   <entry>
+    <title>17. 系统监测工具</title>
+    <link href="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/17-%E7%B3%BB%E7%BB%9F%E7%9B%91%E6%B5%8B%E5%B7%A5%E5%85%B7/"/>
+    <url>/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/17-%E7%B3%BB%E7%BB%9F%E7%9B%91%E6%B5%8B%E5%B7%A5%E5%85%B7/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>c++</category>
+      
+      <category>Linux高性能服务器-游双</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>网络编程</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>16. 服务器调制、调试和测试</title>
+    <link href="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/16-%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%B0%83%E5%88%B6%E8%B0%83%E8%AF%95%E5%92%8C%E6%B5%8B%E8%AF%95/"/>
+    <url>/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/16-%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%B0%83%E5%88%B6%E8%B0%83%E8%AF%95%E5%92%8C%E6%B5%8B%E8%AF%95/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>c++</category>
+      
+      <category>Linux高性能服务器-游双</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>网络编程</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>15. 进程池和线程池</title>
+    <link href="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/15-%E8%BF%9B%E7%A8%8B%E6%B1%A0%E5%92%8C%E7%BA%BF%E7%A8%8B%E6%B1%A0/"/>
+    <url>/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/15-%E8%BF%9B%E7%A8%8B%E6%B1%A0%E5%92%8C%E7%BA%BF%E7%A8%8B%E6%B1%A0/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>c++</category>
+      
+      <category>Linux高性能服务器-游双</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>网络编程</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>14. 多线程编程</title>
+    <link href="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/14-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B/"/>
+    <url>/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/14-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>c++</category>
+      
+      <category>Linux高性能服务器-游双</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>网络编程</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>13. 多进程编程</title>
+    <link href="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/13-%E5%A4%9A%E8%BF%9B%E7%A8%8B%E7%BC%96%E7%A8%8B/"/>
+    <url>/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/13-%E5%A4%9A%E8%BF%9B%E7%A8%8B%E7%BC%96%E7%A8%8B/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>c++</category>
+      
+      <category>Linux高性能服务器-游双</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>网络编程</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>12. 高性能I/O框架库Libevent</title>
+    <link href="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/12-%E9%AB%98%E6%80%A7%E8%83%BDIO%E6%A1%86%E6%9E%B6%E5%BA%93Libevent/"/>
+    <url>/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/12-%E9%AB%98%E6%80%A7%E8%83%BDIO%E6%A1%86%E6%9E%B6%E5%BA%93Libevent/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>c++</category>
+      
+      <category>Linux高性能服务器-游双</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>网络编程</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>11. 定时器</title>
+    <link href="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/11-%E5%AE%9A%E6%97%B6%E5%99%A8/"/>
+    <url>/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/11-%E5%AE%9A%E6%97%B6%E5%99%A8/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>c++</category>
+      
+      <category>Linux高性能服务器-游双</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>网络编程</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>10. 信号</title>
+    <link href="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/10-%E4%BF%A1%E5%8F%B7/"/>
+    <url>/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/10-%E4%BF%A1%E5%8F%B7/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>c++</category>
+      
+      <category>Linux高性能服务器-游双</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>网络编程</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>9. I/O复用</title>
+    <link href="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/9-IO%E5%A4%8D%E7%94%A8/"/>
+    <url>/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/9-IO%E5%A4%8D%E7%94%A8/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>c++</category>
+      
+      <category>Linux高性能服务器-游双</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>网络编程</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>8. 高性能服务器程序框架</title>
+    <link href="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/8-%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%A8%8B%E5%BA%8F%E6%A1%86%E6%9E%B6/"/>
+    <url>/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/8-%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%A8%8B%E5%BA%8F%E6%A1%86%E6%9E%B6/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>c++</category>
+      
+      <category>Linux高性能服务器-游双</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>网络编程</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>7. Linux服务器程序规范</title>
+    <link href="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/7-Linux%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%A8%8B%E5%BA%8F%E8%A7%84%E8%8C%83/"/>
+    <url>/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/7-Linux%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%A8%8B%E5%BA%8F%E8%A7%84%E8%8C%83/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>c++</category>
+      
+      <category>Linux高性能服务器-游双</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>网络编程</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>6. 高级I/O函数</title>
+    <link href="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/6-%E9%AB%98%E7%BA%A7IO%E5%87%BD%E6%95%B0/"/>
+    <url>/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/6-%E9%AB%98%E7%BA%A7IO%E5%87%BD%E6%95%B0/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>c++</category>
+      
+      <category>Linux高性能服务器-游双</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>网络编程</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>5. Linux网络编程基础API</title>
+    <link href="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/5-Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80API/"/>
+    <url>/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/5-Linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80API/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>c++</category>
+      
+      <category>Linux高性能服务器-游双</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>网络编程</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>4. TCP/IP通信案例：访问Internet上的Web服务器</title>
+    <link href="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/4-TCP-IP%E9%80%9A%E4%BF%A1%E6%A1%88%E4%BE%8B/"/>
+    <url>/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/4-TCP-IP%E9%80%9A%E4%BF%A1%E6%A1%88%E4%BE%8B/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>c++</category>
+      
+      <category>Linux高性能服务器-游双</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>网络编程</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>3. TCP协议详解</title>
+    <link href="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/3-TCP%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3/"/>
+    <url>/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/3-TCP%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>c++</category>
+      
+      <category>Linux高性能服务器-游双</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>网络编程</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>2. IP协议详解</title>
+    <link href="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/2-IP%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3/"/>
+    <url>/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/2-IP%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>c++</category>
+      
+      <category>Linux高性能服务器-游双</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>网络编程</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>1. TCP/IP协议族</title>
+    <link href="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/1-TCP-IP%E5%8D%8F%E8%AE%AE%E6%97%8F/"/>
+    <url>/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/1-TCP-IP%E5%8D%8F%E8%AE%AE%E6%97%8F/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>c++</category>
+      
+      <category>Linux高性能服务器-游双</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>网络编程</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>git常用命令</title>
+    <link href="/2024/12/16/hexo/git/"/>
+    <url>/2024/12/16/hexo/git/</url>
+    
+    <content type="html"><![CDATA[<h1 id="git-安装">1. git 安装</h1><ol type="1"><li>查看git版本</li></ol><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">git --version<br></code></pre></td></tr></table></figure><ol start="2" type="1"><li>配置</li></ol><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">git config --global user.name <span class="hljs-string">&quot;bobo&quot;</span><br></code></pre></td></tr></table></figure><ul><li>省略(Local)：本地配置，只对本地仓库有效</li><li>global：全局配置，所有仓库生效</li><li>system：系统配置，对所有用户生效</li></ul><h1 id="创建仓库">2. 创建仓库</h1><p>两种方式</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs sh">git init<br>git init my-repo<br><br>git <span class="hljs-built_in">clone</span> git地址<br></code></pre></td></tr></table></figure><h1 id="工作区域和文件状态">3. 工作区域和文件状态</h1><ul><li><p>工作区</p></li><li><p>暂存区</p></li><li><p>本地仓库</p></li><li><p>未跟踪 Untrack</p></li><li><p>未修改 Unmodified</p></li><li><p>已修改 Modified</p></li><li><p>已暂存 Staged</p></li></ul><p><code>git ls-files</code></p><ul><li>这个命令用于列出当前 Git 仓库中的所有文件。</li><li>它可以带有不同的选项来显示不同的文件列表，例如：<ul><li><code>git ls-files</code>：列出所有被跟踪的文件。</li><li><code>git ls-files --others</code>：列出所有未被跟踪的文件。</li><li><code>git ls-files --modified</code>：列出所有被修改但尚未暂存的文件。</li><li><code>git ls-files --deleted</code>：列出所有被删除但尚未提交的文件。</li></ul></li><li>这个命令通常用于查看当前工作目录中哪些文件被 Git 跟踪。</li></ul><p><code>git reflog</code></p><ul><li>这个命令用于显示你的 HEAD（当前分支的最新提交）的变化历史。</li><li><code>reflog</code> 记录了 HEAD的移动，包括提交、分支切换、变基等操作。</li><li>它可以帮助用户追踪 HEAD的历史，即使某些提交已经被变基或合并操作修改过。</li><li>输出通常包括操作的哈希值、作者、日期和操作的简短描述。</li><li>这个命令对于调试、恢复丢失的提交或者理解 HEAD的历史变化非常有用。</li></ul><h1 id="添加和提交文件">4. 添加和提交文件</h1><ul><li>查看仓库的状态<ul><li>git status</li></ul></li></ul><p><img src="/2024/12/16/hexo/git/image-20241216184455843.png"></p><ul><li>添加到暂存区<ul><li>git add</li><li>git add . 提交本目录下所有文件</li></ul></li></ul><p><img src="/2024/12/16/hexo/git/image-20241216184547985.png"></p><ul><li>提交<ul><li>git commit</li></ul></li></ul><p><img src="/2024/12/16/hexo/git/image-20241216184713143.png"></p><ul><li>查看提交记录<ul><li>git log --oneline</li><li>git log</li></ul></li></ul><p><img src="/2024/12/16/hexo/git/image-20241216184950653.png"></p><p>一次性添加暂存和提交，-a</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">git commit -a -m <span class="hljs-string">&#x27;feat:1&#x27;</span><br></code></pre></td></tr></table></figure><h1 id="回退版本">5. 回退版本</h1><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sh">git reset --soft<br>git reset --hard<br>git reset --mixed<br></code></pre></td></tr></table></figure><p>Soft参数表示回退到某一个版本,并且保留工作区和暂存区的所有修改内容</p><p>hard参数表示回退到某一个版本,并且丢弃工作区和暂存区的所有修改内容</p><p>mixed参数表示回退到某一个版本,并且只保留工作区的修改内容，而丢弃暂存区的修改内容</p><p><img src="/2024/12/16/hexo/git/image-20241216185315632.png"></p><h1 id="查看差异">6. 查看差异</h1><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">git diff <br></code></pre></td></tr></table></figure><ul><li>查看工作区、暂存区、本地仓库之间的差异默认比较工作区和暂存区的内容</li></ul><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">git diff HEAD<br></code></pre></td></tr></table></figure><ul><li>比较工作区和版本库</li></ul><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">git diff --cache<br></code></pre></td></tr></table></figure><ul><li>比较暂存区和版本库</li></ul><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">git diff 提交id1 提交id2<br></code></pre></td></tr></table></figure><ul><li>比较两个版本之间的差异</li></ul><p>HEAD指向分支的最新提交节点</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">git diff HEAD~ HEAD<br></code></pre></td></tr></table></figure><ul><li>最新和上一个的差异</li><li>HEAD~ 表示上一个版本</li><li>HEAD^ 表示上一个版本</li><li>HEAD~2 表示HEAD之前的两个版本</li></ul><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs BASH">git diff HEAD~ HEAD file1.txt<br></code></pre></td></tr></table></figure><ul><li>指定查看某一个文件的差异</li></ul><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">git diff &lt;branch_name1&gt; &lt;branch_name2&gt;<br></code></pre></td></tr></table></figure><ul><li>比较分支之间的差异</li></ul><h1 id="删除文件">7. 删除文件</h1><ol type="1"><li>先删除本地工作区文件，再提交暂存</li></ol><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh"><span class="hljs-built_in">rm</span> file1.txt<br></code></pre></td></tr></table></figure><ul><li>从工作区删除文件</li></ul><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">git add .<br></code></pre></td></tr></table></figure><ul><li>删除暂存区文件</li></ul><ol start="2" type="1"><li>git rm</li></ol><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">git <span class="hljs-built_in">rm</span> file2.txt<br></code></pre></td></tr></table></figure><p><img src="/2024/12/16/hexo/git/image-20241216192442243.png"></p><p>工作区和暂存区都删除了</p><h1 id="忽略文件">8. 忽略文件</h1><p>应该忽略的文件</p><ul><li>系统或者软件自动生成的文件</li><li>编译产生的中间文件和结果文件</li><li>运行时生成日志文件、缓存文件、临时文件</li><li>涉及身份、密码、口令、秘钥等敏感信息文件</li></ul><p>将文件名写入.gitignore，即可忽略</p><p>修改.gitignore文件，忽略所有的log文件，忽略temp文件夹（以斜线结尾）</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs gitignore">*.log<br>temp/<br></code></pre></td></tr></table></figure><ul><li>空行或者以#开头的行会被Git忽略。一般空行用于可读性的分隔，#一般用作注释</li><li>使用标准的Glob模式匹配，例如：<ul><li>星号*通配任意个字符</li><li>问号？匹配单个字符</li><li>中括号[]表示匹配列表中的单个字符，比如：[abc]表示ab/c</li><li>两个星号*表示匹配任意的中间目录</li><li>中括号可以使用短中线连接，比如：[0-9]表示任意一位数字，[a-z]表示任意一位小写字母</li><li>感叹号！表示取反</li></ul></li></ul><h1 id="远程仓库">9. 远程仓库</h1><p>本地仓库推送远程仓库</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">git push<br></code></pre></td></tr></table></figure><p>添加远程仓库和本地仓库关联起来</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sh">git remote add orgin git@github.com:xxxx/reponame.git<br>git push -u origin main<br></code></pre></td></tr></table></figure><p>查看我们当前仓库所对应的远程仓库的别名和地址</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">git remote -v<br></code></pre></td></tr></table></figure><p>拉取远程仓库，自动执行一次合并操作</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">git pull<br></code></pre></td></tr></table></figure><p>fetch只获取修改，不会自动合并</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">git fetch<br></code></pre></td></tr></table></figure><h1 id="分支">10. 分支</h1><ol type="1"><li>查看分支</li></ol><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">git branch<br></code></pre></td></tr></table></figure><ol start="2" type="1"><li>创建分支</li></ol><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">git branch dev<br></code></pre></td></tr></table></figure><ol start="3" type="1"><li>切换分支</li></ol><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">git checkout dev<br></code></pre></td></tr></table></figure><p>可能存在问题，改为</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">git switch dev<br></code></pre></td></tr></table></figure><ol start="4" type="1"><li>在main分支下，合并dev</li></ol><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">git merge dev<br></code></pre></td></tr></table></figure><ol start="5" type="1"><li>查看分支图</li></ol><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">git <span class="hljs-built_in">log</span> --graph --oneline --decorate --all<br></code></pre></td></tr></table></figure><ol start="6" type="1"><li>删除已经合并的分支</li></ol><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">git branch -d dev<br></code></pre></td></tr></table></figure><ol start="7" type="1"><li>删除没有合并的分支</li></ol><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">git branch -D dev<br></code></pre></td></tr></table></figure><h1 id="合并冲突">11. 合并冲突</h1><p>查看冲突内容</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">git diff<br></code></pre></td></tr></table></figure><p><img src="/2024/12/16/hexo/git/image-20241216204741939.png"></p><p>编辑冲突的文件，再提交，就自动合并了。</p><p>如果不想合并，使用</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">git merge --abort<br></code></pre></td></tr></table></figure><h1 id="回退和rebase">12. 回退和rebase</h1><p>在main上执行</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">git rebase<br></code></pre></td></tr></table></figure><p>main分支接到dev分支上</p><p>merge:</p><ul><li>优点：不会破坏原分支的提交历史，方便回溯和查看。</li><li>缺点：会产生额外的提交节点，分支图比较复杂。</li></ul><p>rebase:</p><ul><li>优点：不会新增额外的提交记录，形成线性历史，比较直观和干净；</li><li>缺点：会改变提交历史，改变了当前分支branchout的节点。避免在共享分支使用。</li></ul><figure><img src="/2024/12/16/hexo/git/image-20241216210154959.png" alt="github flow"><figcaption aria-hidden="true">github flow</figcaption></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>git</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>git</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>2. 探索与利用</title>
+    <link href="/2024/12/16/%E5%8A%A8%E6%89%8B%E5%AD%A6%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/2-%E6%8E%A2%E7%B4%A2%E4%B8%8E%E5%88%A9%E7%94%A8/"/>
+    <url>/2024/12/16/%E5%8A%A8%E6%89%8B%E5%AD%A6%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/2-%E6%8E%A2%E7%B4%A2%E4%B8%8E%E5%88%A9%E7%94%A8/</url>
+    
+    <content type="html"><![CDATA[<h1 id="探索与利用">1. 探索与利用</h1><h2 id="序列决策任务中的一个基本问题">1.1序列决策任务中的一个基本问题</h2><p>基于目前策略获取已知最优收益还是尝试不同的决策：</p><ul><li>Exploitation 执行能够获得已知最优收益的决策</li><li>Exploration 尝试更多可能的决策，不一定会是最优收益</li></ul><p><img src="/2024/12/16/%E5%8A%A8%E6%89%8B%E5%AD%A6%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/2-%E6%8E%A2%E7%B4%A2%E4%B8%8E%E5%88%A9%E7%94%A8/1734333438459-dde9380c-0b5f-4323-9db6-b9970d6b3ac4.png"></p><p><span class="math inline">\(\mathcal{E}_t = \left\{ \pi_t^i \mid i =1, \ldots, n \right\} \xrightarrow{\text{探索}} \mathcal{E}_{t+1} =\left\{ \pi_t^i \mid i = 1, \ldots, n \right\} \cup \left\{ \pi_e^j \midj = 1, \ldots, m \right\}\)</span></p><p><span class="math inline">\(\exists V^* \left( \cdot \mid \pi_t^i\sim \mathcal{E}_t \right) \leq V^* \left( \cdot \mid \pi_{t+1}^i \sim\mathcal{E}_{t+1} \right) \quad \pi_{t+1}^i \sim \left\{ \pi_e^i \mid i= 1, \ldots, m \right\}\)</span></p><p>探索：可能发现更好的策略</p><h2 id="策略探索的一些原则">1.2 策略探索的一些原则</h2><p>朴素方法（Naïve Exploration）</p><ul><li>添加策略噪声𝜖-greedy</li></ul><p>积极初始化（Optimistic Initialization）</p><p>基于不确定性的度量（Uncertainty Measurement）</p><ul><li>尝试具有不确定收益的策略，可能带来更高的收益</li></ul><p>概率匹配（Probability Matching）</p><ul><li>基于概率选择最佳策略</li></ul><p>状态搜索（State Searching）</p><ul><li>探索后续状态可能带来更高收益的策略</li></ul><h1 id="多臂老虎机">2. 多臂老虎机</h1><h2 id="问题的形式化描述">2.1 问题的形式化描述</h2><p>动作集合：<span class="math inline">\(a^i \in \mathcal{A}, \quad i =1, \ldots, K\)</span></p><p>收益（反馈）函数分布：<span class="math inline">\(\mathcal{R}(r \mida^i) = \mathbb{P}(r \mid a^i)\)</span></p><p>最大化累积时间的收益：<span class="math inline">\(\max \sum_{t=1}^{T}r_{t}, \quad r_{t} \sim \mathcal{R}\left(\cdot \mida_{t}\right)\)</span></p><h2 id="收益估计">2.2 收益估计</h2><p>期望收益和采样次数的关系: <span class="math inline">\(Q_n(a^i) =\frac{r_1 + r_2 + \cdots + r_{n-1}}{n - 1}\)</span></p><p>缺点：每次更新的空间复杂度是O(n)</p><p>增量实现: <span class="math display">\[Q_{n+1}(a^i) := \frac{1}{n} \sum_{i=1}^{n} r_i = \frac{1}{n} \left( r_n+ \frac{n-1}{n-1} \sum_{i=1}^{n-1} r_i \right) = \frac{1}{n} r_n +\frac{n-1}{n} Q_n = Q_n(a^i) + \frac{1}{n} (r_n - Q_n)\]</span></p><p>空间复杂度为O(1)</p><h2 id="算法多臂老虎机">2.3 算法：多臂老虎机</h2><ol type="1"><li>初始化：<span class="math inline">\(Q(a^i) := c^i, \quad N(a^i) = 0,\quad i = 1, ..., n\)</span></li><li>主循环<span class="math inline">\(t = 1:T\)</span><ol type="1"><li>利用策略𝜋选取某个动作a</li><li>获取收益:<span class="math inline">\(r_t =\text{Bandit}(a)\)</span></li><li>更新计数器:<span class="math inline">\(N(a) := N(a) +1\)</span></li><li>更新估值:<span class="math inline">\(Q(a) := Q(a) + \frac{1}{N(a)}[r_t - Q(a)]\)</span></li></ol></li></ol><h2 id="应当选取什么样的策略">2.4 应当选取什么样的策略</h2><p>Regret函数(懊悔值)</p><ul><li><p>决策的期望收益：<span class="math inline">\(Q(a^i) =\mathbb{E}_{r \sim \mathbb{P}(r \mid a^i)}[r]\)</span></p></li><li><p>最优收益：<span class="math inline">\(Q^{\star} = \max_{a^i \in\mathcal{A}} Q(a^i)\)</span></p></li><li><p>决策与最优决策的收益差：<span class="math inline">\(R(a&#39;) =Q^{\star} - Q(a&#39;)\)</span></p></li><li><p>Total Regret 函数：<span class="math inline">\(\sigma_{R} =\mathbb{E}_{a \sim \pi} \left[ \sum_{t=1}^{T} R(a_t^i) \right]\)</span>越接近于0越好</p></li></ul><p>最小化Total Regret等价于最大化Q值：<span class="math inline">\(\min\sigma_{R} = \max \mathbb{E}_{a \sim \pi} \left[ \sum_{t=1}^{T}Q(a_{t}^{i}) \right]\)</span></p><ul><li>如果一直探索新决策：<span class="math inline">\(\sigma_{R} \propto T\cdot R\)</span> ,total regret将线性递增，无法收敛</li><li>如果一直不探索新决策：<span class="math inline">\(\sigma_{R} \proptoT \cdot R\)</span>，total regret 仍将线性递增</li></ul><p>是否存在一个方法具有次线性（sublinear）收敛保证的regret？</p><ul><li>下界<ul><li>使用<span class="math inline">\(\Delta_a = Q^* - Q(a)\)</span>和反馈函数分布相似性：<span class="math inline">\(D_{KL}\left(\mathcal{R}(r \mid a) \parallel\mathcal{R}^*(r \mid a)\right)\)</span></li><li><span class="math inline">\(\lim_{T \to \infty} \sigma_R \geq \log T\sum_{a \mid \Delta_a &gt; 0} \frac{\Delta_a}{D_{KL}\left(\mathcal{R}(r\mid a) \parallel \mathcal{R}^*(r \mid a)\right)}\)</span></li></ul></li></ul><h2 id="贪心策略和-epsilon-greedy-策略">2.5 贪心策略和 <span class="math inline">\(\epsilon\)</span>-greedy 策略</h2><p>贪心策略</p><p><span class="math inline">\(Q(a^i) = \frac{1}{N(a^i)} \sum_{t=1}^{T}r_t \cdot 1(a_t = a^i)\)</span></p><p><span class="math inline">\(a^* = \arg\max_{a^i} Q(a^i)\)</span></p><p><span class="math inline">\(\sigma_R \propto T \cdot [Q(a^i) -Q^*]\)</span></p><ul><li>线性增长的 Total regret</li></ul><p><span class="math inline">\(\epsilon\)</span>-greedy 策略</p><p><span class="math inline">\(a_t = \begin{cases}\arg\max_a \hat{Q}(a) &amp; \text{采样概率：} 1 - \epsilon \\U(0, |\mathcal{A}|) &amp; \text{采样概率：} \epsilon\end{cases}\)</span></p><p>常量 <span class="math inline">\(\epsilon\)</span> 保证 total regret满足</p><p><span class="math inline">\(\sigma_R \geq\frac{\epsilon}{|\mathcal{A}|} \sum_{a \in \mathcal{A}}\Delta_a\)</span></p><p>Total regret 仍然是线性递增的，只是增长率比贪心策略小</p><h2 id="衰减贪心策略">2.6 衰减贪心策略</h2><ul><li><span class="math inline">\(\epsilon\)</span>-greedy 的变种，<span class="math inline">\(\epsilon\)</span> 随着时间衰减</li><li>理论上对数渐进收敛！</li><li>一种可能的衰减方式：</li></ul><p><span class="math display">\[c \geq 0, \quad d = \min_{a \mid \Delta_a &gt; 0} \Delta_a, \quad\epsilon_t = \min\left\{1, \frac{c|\mathcal{A}|}{d^2 t}\right\}\]</span></p><p>缺点</p><ul><li>很难找到合适的衰减规划</li></ul><p><span class="math inline">\(c \geq 0, \quad c_t = \min_{a \mid\Delta_a &gt; 0} \Delta_a, \quad \epsilon_{r_t} = \min\left(1,\frac{c}{c_t^2 \cdot r_t}\right)\)</span></p><h2 id="不同𝝐-greedy-策略对比">2.7 不同𝝐-greedy 策略对比：</h2><p>Total Regret</p><p><img src="/2024/12/16/%E5%8A%A8%E6%89%8B%E5%AD%A6%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/2-%E6%8E%A2%E7%B4%A2%E4%B8%8E%E5%88%A9%E7%94%A8/image-20241216161243673.png"></p><p>平均收益</p><p><img src="/2024/12/16/%E5%8A%A8%E6%89%8B%E5%AD%A6%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/2-%E6%8E%A2%E7%B4%A2%E4%B8%8E%E5%88%A9%E7%94%A8/image-20241216161259488.png"></p><h2 id="乐观初始化">2.8 乐观初始化</h2><ul><li>给<span class="math inline">\(Q(a^i)\)</span>一个较高的初始化值</li><li>增量式蒙特卡洛估计更新 <span class="math inline">\(Q(a^i)\)</span></li></ul><p><span class="math inline">\(Q(a^i) := Q(a^i) + \frac{1}{N(a^i)} (r_t- Q(a^i))\)</span></p><ul><li>有偏估计，但是随着采样增加，这个偏差带来的影响会越来越小</li><li>但是仍然可能陷入局部最优</li></ul><p><img src="/2024/12/16/%E5%8A%A8%E6%89%8B%E5%AD%A6%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/2-%E6%8E%A2%E7%B4%A2%E4%B8%8E%E5%88%A9%E7%94%A8/image-20241216161450087.png"></p><h2 id="显式地考虑动作的价值分布">2.9 显式地考虑动作的价值分布</h2><p><img src="/2024/12/16/%E5%8A%A8%E6%89%8B%E5%AD%A6%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/2-%E6%8E%A2%E7%B4%A2%E4%B8%8E%E5%88%A9%E7%94%A8/image-20241216162546603.png"></p><ul><li>考虑以上三个动作的价值分布，平衡探索和利用，选择哪个动作？</li><li><ol type="1"><li>显式地鼓励不确定性； 2. 直接根据分布采样来选择</li></ol></li></ul><h2 id="基于不确定性测度">2.10 基于不确定性测度</h2><ul><li>不确定性越大的 <span class="math inline">\(Q(a^i)\)</span>，越具有探索的价值，有可能会是最好的策略</li><li>一个经验性指导：<ul><li><span class="math inline">\(N_{a}\)</span> 大，<span class="math inline">\(U_{a}\)</span> 小</li><li><span class="math inline">\(N_{a}\)</span> 小，<span class="math inline">\(U_{a}\)</span> 大</li></ul></li><li>策略 <span class="math inline">\(\pi\)</span>：<span class="math inline">\(a = \arg\max_{a \in \mathcal{A}} \hat{Q}(a) +\hat{U}(a)\)</span></li><li>也称为 UCB：上置信界法（Upper Confidence Bounds）</li></ul><p><img src="/2024/12/16/%E5%8A%A8%E6%89%8B%E5%AD%A6%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/2-%E6%8E%A2%E7%B4%A2%E4%B8%8E%E5%88%A9%E7%94%A8/image-20241216162915531.png"></p><h2 id="ucb上置信界">2.11 UCB：上置信界</h2><p>Hoeffding 不等式：<span class="math inline">\(\mathbb{P}[\mathbb{E}[x] &gt; \bar{x}_t + u] \leqe^{-2tu^2} \text{ for } x \in [0,1]\)</span></p><ul><li><p>为每个动作收益估值估计一个上置信界：<span class="math inline">\(\hat{U}(a)\)</span></p></li><li><p>显然有：<span class="math inline">\(Q_t(a) \leq \hat{Q}_t(a) +\hat{U}_t(a)\)</span> 以高概率 <span class="math inline">\(p\)</span>成立（Hoeffding不等式）</p></li><li><p>依据以下原则挑选进行决策： <span class="math display">\[a =\arg\max_{a \in \mathcal{A}} \hat{Q}_t(a) + \hat{U}_t(a) \quade^{-2N_t(a)U_t(a)^2} = p \Rightarrow \hat{U}_t(a) = \sqrt{-\frac{\logp}{2N_t(a)}}\]</span></p></li><li><p>收敛性：<span class="math inline">\(\lim_{t \to \infty} \sigma_R\leq 8 \log t \sum_{a \mid \Delta_a &gt; 0} \Delta_a\)</span></p></li></ul><h2 id="thompson-sampling方法">2.12 Thompson Sampling方法</h2><p>[Chapelle, Olivier, and Lihong Li. "An empirical evaluation ofthompson sampling." Advances in neural information processing systems.2011.]</p><p><img src="/2024/12/16/%E5%8A%A8%E6%89%8B%E5%AD%A6%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/2-%E6%8E%A2%E7%B4%A2%E4%B8%8E%E5%88%A9%E7%94%A8/image-20241216164006590.png"></p><ul><li>想法：根据每个动作成为最优的概率来选择动作</li></ul><p><span class="math inline">\(p(a) = \int \mathbb{I} \left[\mathbb{E}_{p(Q(a))} \left[ Q(a; \theta) \right] = \max_{a&#39; \in\mathcal{A}} \mathbb{E}_{p(Q(a&#39;))} \left( Q(a&#39;; \theta) \right)\right] d\theta\)</span></p><ul><li>实现：根据当前每个动作 <span class="math inline">\(a\)</span>的价值概率分布 <span class="math inline">\(p(Q(a))\)</span>来采样到其价值 <span class="math inline">\(\hat{Q}(a)\)</span>，选择价值最大的动作</li></ul><p><img src="/2024/12/16/%E5%8A%A8%E6%89%8B%E5%AD%A6%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/2-%E6%8E%A2%E7%B4%A2%E4%B8%8E%E5%88%A9%E7%94%A8/image-20241216164936879.png"></p><h2 id="thompson-sampling和ucb的实验对比">2.13 ThompsonSampling和UCB的实验对比</h2><p>实验：K-arm多臂老虎机，用Beta分布建模每个arm的成功率，初始化成功率分布为Beta(1,1).<span class="math display">\[\text{Beta}(x; \alpha, \beta) \proptox^{\alpha-1} (1 - x)^{\beta-1}\]</span> <img src="/2024/12/16/%E5%8A%A8%E6%89%8B%E5%AD%A6%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/2-%E6%8E%A2%E7%B4%A2%E4%B8%8E%E5%88%A9%E7%94%A8/image-20241216165700311.png"></p><p>K-arms - The best arm has reward probability of 0.5 - K-1 other armshave the reward probability of 0.5-ε</p><h2 id="探索与利用总结">2.14 探索与利用总结</h2><ul><li>探索与利用是强化学习的 trial-and-error 中的必备技术</li><li>多臂老虎机可以被看成是无状态 (state-less) 强化学习</li><li>多臂老虎机是研究探索与利用技术理论的最佳环境<ul><li>理论的渐近最优 regret 为 <span class="math inline">\(O(\logT)\)</span></li></ul></li><li><span class="math inline">\(\epsilon\)</span>-greedy、UCB 和Thompson Sampling方法在多臂老虎机任务中十分常用，在强化学习的探索中也十分常用，最常见的是<span class="math inline">\(\epsilon\)</span>-greedy</li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>AI</category>
+      
+      <category>RL</category>
+      
+      <category>动手学强化学习</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>RL</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>16. 关于TCP并发连接的几个思考题与试验</title>
+    <link href="/2024/12/16/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/16-%E5%85%B3%E4%BA%8ETCP%E5%B9%B6%E5%8F%91%E8%BF%9E%E6%8E%A5%E7%9A%84%E5%87%A0%E4%B8%AA%E6%80%9D%E8%80%83%E9%A2%98%E4%B8%8E%E8%AF%95%E9%AA%8C/"/>
+    <url>/2024/12/16/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/16-%E5%85%B3%E4%BA%8ETCP%E5%B9%B6%E5%8F%91%E8%BF%9E%E6%8E%A5%E7%9A%84%E5%87%A0%E4%B8%AA%E6%80%9D%E8%80%83%E9%A2%98%E4%B8%8E%E8%AF%95%E9%AA%8C/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>c++</category>
+      
+      <category>muduo多线程服务器</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>muduo</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>15. 关于Boost的看法</title>
+    <link href="/2024/12/16/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/15-%E5%85%B3%E4%BA%8EBoost%E7%9A%84%E7%9C%8B%E6%B3%95/"/>
+    <url>/2024/12/16/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/15-%E5%85%B3%E4%BA%8EBoost%E7%9A%84%E7%9C%8B%E6%B3%95/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>c++</category>
+      
+      <category>muduo多线程服务器</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>muduo</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>14. 从《C++Primer(第4版)》入手学习C++</title>
+    <link href="/2024/12/16/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/14-%E4%BB%8E%E3%80%8AC++Primer(%E7%AC%AC4%E7%89%88)%E3%80%8B%E5%85%A5%E6%89%8B%E5%AD%A6%E4%B9%A0C++/"/>
+    <url>/2024/12/16/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/14-%E4%BB%8E%E3%80%8AC++Primer(%E7%AC%AC4%E7%89%88)%E3%80%8B%E5%85%A5%E6%89%8B%E5%AD%A6%E4%B9%A0C++/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>c++</category>
+      
+      <category>muduo多线程服务器</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>muduo</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>13. 谈一谈网络编程学习经验</title>
+    <link href="/2024/12/16/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/13-%E8%B0%88%E4%B8%80%E8%B0%88%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E5%AD%A6%E4%B9%A0%E7%BB%8F%E9%AA%8C/"/>
+    <url>/2024/12/16/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/13-%E8%B0%88%E4%B8%80%E8%B0%88%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E5%AD%A6%E4%B9%A0%E7%BB%8F%E9%AA%8C/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>c++</category>
+      
+      <category>muduo多线程服务器</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>muduo</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>12. C++经验谈</title>
+    <link href="/2024/12/16/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/12-C++%E7%BB%8F%E9%AA%8C%E8%B0%88/"/>
+    <url>/2024/12/16/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/12-C++%E7%BB%8F%E9%AA%8C%E8%B0%88/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>c++</category>
+      
+      <category>muduo多线程服务器</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>muduo</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>11. 反思C++面向对象与虚函数</title>
+    <link href="/2024/12/16/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/11-%E5%8F%8D%E6%80%9DC++%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E4%B8%8E%E8%99%9A%E5%87%BD%E6%95%B0/"/>
+    <url>/2024/12/16/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/11-%E5%8F%8D%E6%80%9DC++%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E4%B8%8E%E8%99%9A%E5%87%BD%E6%95%B0/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>c++</category>
+      
+      <category>muduo多线程服务器</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>muduo</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>10. C++编译链接模型精要</title>
+    <link href="/2024/12/16/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/10-C++%E7%BC%96%E8%AF%91%E9%93%BE%E6%8E%A5%E6%A8%A1%E5%9E%8B%E7%B2%BE%E8%A6%81/"/>
+    <url>/2024/12/16/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/10-C++%E7%BC%96%E8%AF%91%E9%93%BE%E6%8E%A5%E6%A8%A1%E5%9E%8B%E7%B2%BE%E8%A6%81/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>c++</category>
+      
+      <category>muduo多线程服务器</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>muduo</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>9. 分布式系统工程实践</title>
+    <link href="/2024/12/16/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/9-%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/"/>
+    <url>/2024/12/16/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/9-%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>c++</category>
+      
+      <category>muduo多线程服务器</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>muduo</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>8. muduo网络库设计与实现</title>
+    <link href="/2024/12/16/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/8-muduo%E7%BD%91%E7%BB%9C%E5%BA%93%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/"/>
+    <url>/2024/12/16/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/8-muduo%E7%BD%91%E7%BB%9C%E5%BA%93%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>c++</category>
+      
+      <category>muduo多线程服务器</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>muduo</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>7. muduo编程示例</title>
+    <link href="/2024/12/16/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/7-muduo%E7%BC%96%E7%A8%8B%E7%A4%BA%E4%BE%8B/"/>
+    <url>/2024/12/16/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/7-muduo%E7%BC%96%E7%A8%8B%E7%A4%BA%E4%BE%8B/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>c++</category>
+      
+      <category>muduo多线程服务器</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>muduo</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>6. muduo网络库简介</title>
+    <link href="/2024/12/16/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/6-muduo%E7%BD%91%E7%BB%9C%E5%BA%93%E7%AE%80%E4%BB%8B/"/>
+    <url>/2024/12/16/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/6-muduo%E7%BD%91%E7%BB%9C%E5%BA%93%E7%AE%80%E4%BB%8B/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>c++</category>
+      
+      <category>muduo多线程服务器</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>muduo</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>5. 高效的多线程日志</title>
+    <link href="/2024/12/16/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/5-%E9%AB%98%E6%95%88%E7%9A%84%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%97%A5%E5%BF%97/"/>
+    <url>/2024/12/16/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/5-%E9%AB%98%E6%95%88%E7%9A%84%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%97%A5%E5%BF%97/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>c++</category>
+      
+      <category>muduo多线程服务器</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>muduo</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>4. C++多线程系统编程精要</title>
+    <link href="/2024/12/16/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/4-C++%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B%E7%B2%BE%E8%A6%81/"/>
+    <url>/2024/12/16/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/4-C++%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B%E7%B2%BE%E8%A6%81/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>c++</category>
+      
+      <category>muduo多线程服务器</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>muduo</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>3. 多线程服务器的适用场合与常用编程模型</title>
+    <link href="/2024/12/16/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/3-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E9%80%82%E7%94%A8%E5%9C%BA%E5%90%88%E4%B8%8E%E5%B8%B8%E7%94%A8%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8B/"/>
+    <url>/2024/12/16/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/3-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E9%80%82%E7%94%A8%E5%9C%BA%E5%90%88%E4%B8%8E%E5%B8%B8%E7%94%A8%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8B/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>c++</category>
+      
+      <category>muduo多线程服务器</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>muduo</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>2. 线程同步精要</title>
+    <link href="/2024/12/16/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/2-%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E7%B2%BE%E8%A6%81/"/>
+    <url>/2024/12/16/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/2-%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E7%B2%BE%E8%A6%81/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>c++</category>
+      
+      <category>muduo多线程服务器</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>muduo</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>1. 线程安全的对象生命期管理</title>
+    <link href="/2024/12/16/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/1-%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E5%AF%B9%E8%B1%A1%E7%94%9F%E5%91%BD%E6%9C%9F%E7%AE%A1%E7%90%86/"/>
+    <url>/2024/12/16/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/1-%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E5%AF%B9%E8%B1%A1%E7%94%9F%E5%91%BD%E6%9C%9F%E7%AE%A1%E7%90%86/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>c++</category>
+      
+      <category>muduo多线程服务器</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>muduo</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>9. nginx原理</title>
+    <link href="/2024/12/15/nginx/9-nginx%E5%8E%9F%E7%90%86/"/>
+    <url>/2024/12/15/nginx/9-nginx%E5%8E%9F%E7%90%86/</url>
+    
+    <content type="html"><![CDATA[<p>当启动 nginx，有一个 master 和一个 worker。</p><p><img src="/2024/12/15/nginx/9-nginx%E5%8E%9F%E7%90%86/82b19ed9ba5770a330af9b0894ad1810.png"></p><h2 id="master-和-worker">1. master 和 worker</h2><p>Nginx 有一个 master 和多个 worker。</p><p><img src="/2024/12/15/nginx/9-nginx%E5%8E%9F%E7%90%86/ca08ebcce1c6feb4b3ab28f3090d04a3.png"></p><blockquote><p>master 就相当于主管，worker 就是打工人。</p></blockquote><h2 id="worker-如何进行工作的">2. worker 如何进行工作的</h2><p><img src="/2024/12/15/nginx/9-nginx%E5%8E%9F%E7%90%86/8232532d66dae61174e95ede7fa15e04.png"></p><p>当客户端发送请求过来，会先通知 master，然后由 mater 通知所有 worker进行争抢，然后由 worker 去完成静态资源加载或者方向代理。</p><h2 id="一个-master-和多个-worker-有好处">3. 一个 master 和多个 worker有好处</h2><p>（1）可以使用 nginx –s reload 热部署，利用 nginx 进行热部署操作。（2）每个 worker 是独立的进程，如果有其中的一个 worker 出现问题，其他worker 独立的，继续进行争抢，实现请求过程，不会造成服务中断。</p><ul><li>首先，对于每个 worker进程来说，独立的进程，不需要加锁，所以省掉了锁带来的开销，同时在编程以及问题查找时，也会方便很多。</li><li>其次，采用独立的进程，可以让互相之间不会影响，一个进程退出后，其它进程还在工作，服务不会中断，master进程则很快启动新的 worker 进程。当然，worker进程的异常退出，肯定是程序有 bug 了，异常退出，会导致当前 worker上的所有请求失败，不过不会影响到所有请求，所以降低了风险。</li></ul><h2 id="设置多少个-worker-合适">4. 设置多少个 worker 合适</h2><p><strong>worker 数和服务器的 cpu 数相等是最为适宜的</strong>。</p><ul><li>Nginx 同 redis 类似都采用了 io 多路复用机制，每个 worker都是一个独立的进程，但每个进程里只有一个主线程，通过异步非阻塞的方式来处理请求，即使是千上万个请求也不在话下。</li><li>每个 worker 的线程可以把一个 cpu 的性能发挥到极致。所以 worker数和服务器的 cpu 数相等是最为适宜的。设少了会浪费 cpu，设多了会造成 cpu频繁切换上下文带来的损耗。</li></ul><h2 id="连接数-worker_connection">5. 连接数 worker_connection</h2><p>第一个：发送请求，占用了 worker 的几个连接数？</p><p>答案：2 或者 4 个</p><p>第二个：nginx 有一个 master，有四个 worker，每个 worker支持最大的连接数 1024，支持的最大并发数是多少？</p><p>普通的静态访问最大并发数是：</p><p><span class="math inline">\(\frac{worker\_connections \timesworker\_processes}{2}\)</span></p><p>而如果是 HTTP 作为反向代理来说，最大并发数量应该是</p><p><span class="math inline">\(\frac{worker\_connections \timesworker\_processes}{4}\)</span></p><p>这个值是表示每个 worker 进程所能建立连接的最大值，所以，一个 nginx能建立的最大连接数，应该是 worker_connections ×worker_processes。当然，这里说的是最大连接数，对于 HTTP请求本地资源来说，能够支持的最大并发数量是 worker_connections ×worker_processes， 如果是支持 http1.1的浏览器每次访问要占两个连接，所以普通的静态访问最大并发数是：<span class="math inline">\(\frac{worker\_connections \timesworker\_processes}{2}\)</span>， 而如果是 HTTP作为反向代理来说，最大并发数量应该是 <span class="math inline">\(\frac{worker\_connections \timesworker\_processes}{4}\)</span>。因为作为反向代理服务器，每个并发会建立与客户端的连接和与后端服务的连接，会占用两个连接。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>Nginx</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Nginx</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>8. Nginx搭建高可用集群</title>
+    <link href="/2024/12/15/nginx/8-Nginx%E6%90%AD%E5%BB%BA%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4/"/>
+    <url>/2024/12/15/nginx/8-Nginx%E6%90%AD%E5%BB%BA%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4/</url>
+    
+    <content type="html"><![CDATA[<p>微服务中，为防止服务提供者宕掉，提供多个服务，nginx同样，如果只使用一个 nginx，可能发生单点故障，导致整个微服务不可用。</p><h1 id="什么是-nginx-高可用">1. 什么是 nginx 高可用</h1><p><img src="/2024/12/15/nginx/8-Nginx%E6%90%AD%E5%BB%BA%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4/aca48c12cf2a2c8f67a91a16449b8179.png"></p><ul><li>需要两台 nginx 服务器</li><li>需要 keepalived</li><li>需要虚拟 ip</li></ul><p><img src="/2024/12/15/nginx/8-Nginx%E6%90%AD%E5%BB%BA%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4/4f5d8055a6ccb97c1b00a0cec2de6c50.png"></p><h1 id="配置高可用的准备工作">2. 配置高可用的准备工作</h1><ul><li>需要两台服务器 192.168.17.129 和 192.168.17.131</li><li>在两台服务器安装 nginx 这里如果不想再去安装一遍 Nginx，可以直接克隆CentOs。</li><li>在两台服务器安装 keepalived</li></ul><h1 id="在两台服务器安装-keepalived">3. 在两台服务器安装 keepalived</h1><ul><li>使用 yum 命令进行安装 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">yum install keepalived –y<br></code></pre></td></tr></table></figure></li><li>安装之后，在 /etc 里面生成目录 keepalived，有文件<code>keepalived.conf</code></li></ul><h1 id="完成高可用配置主从配置">4. 完成高可用配置（主从配置）</h1><h2 id="主机-nginx">主机 Nginx</h2><ul><li><p>修改 <code>/etc/keepalived/keepalived.conf</code> 配置文件<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs nginx">! <span class="hljs-attribute">Configuration</span> File for keepalived<br>global_defs &#123;<br>    <span class="hljs-section">notification_email</span> &#123;<br>        acassen@firewall.<span class="hljs-attribute">loc</span><br>        failover<span class="hljs-variable">@firewall</span>.loc<br>        sysadmin<span class="hljs-variable">@firewall</span>.loc<br>    &#125;<br>    notification_email_from Alexandre.Cassen<span class="hljs-variable">@firewall</span>.loc<br>    smtp_server <span class="hljs-number">192.168.17.129</span><br>    smtp_connect_timeout <span class="hljs-number">30</span><br>    router_id LVS_DEVEL <span class="hljs-comment"># 主机名字</span><br>&#125;<br>vrrp_script chk_http_port &#123;<br>    <span class="hljs-attribute">script</span> <span class="hljs-string">&quot;/usr/local/src/nginx_check.sh&quot;</span><br>    interval <span class="hljs-number">2</span> <span class="hljs-comment">#（检测脚本执行的间隔）</span><br>    weight <span class="hljs-number">2</span> <span class="hljs-comment"># 权重</span><br>&#125;<br>vrrp_instance VI_1 &#123;<br>    <span class="hljs-attribute">state</span> MASTER <span class="hljs-comment"># 备份服务器上将 MASTER 改为 BACKUP</span><br>    interface eth1 <span class="hljs-comment"># 网卡</span><br>    virtual_router_id <span class="hljs-number">51</span>  <span class="hljs-comment"># 主、备机的 virtual_router_id 必须相同</span><br>    priority <span class="hljs-number">100</span>  <span class="hljs-comment"># 主、备机取不同的优先级，主机值较大，备份机值较小</span><br>    advert_int <span class="hljs-number">1</span><br>    authentication &#123;<br>        <span class="hljs-attribute">auth_type</span> PASS<br>        auth_pass <span class="hljs-number">1111</span><br>    &#125;<br>    virtual_ipaddress &#123;<br>        192.168.77.50 <span class="hljs-comment"># VRRP H 虚拟地址</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></p></li><li><p>在 <code>/usr/local/src</code> 添加检测脚本：<code>nginx_check.sh</code> <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-meta">#!/bin/bash</span><br>A=`ps -C nginx –no-header | <span class="hljs-built_in">wc</span> -l`<br><span class="hljs-keyword">if</span> [ <span class="hljs-variable">$A</span> -eq 0 ];<span class="hljs-keyword">then</span><br>    /usr/local/nginx/sbin/nginx<br>    <span class="hljs-built_in">sleep</span> 2<br>    <span class="hljs-keyword">if</span> [ `ps -C nginx --no-header |<span class="hljs-built_in">wc</span> -l` -eq 0 ];<span class="hljs-keyword">then</span><br>        killall keepalived<br>    <span class="hljs-keyword">fi</span><br><span class="hljs-keyword">fi</span><br></code></pre></td></tr></table></figure></p></li></ul><h2 id="从机-nginx">从机 Nginx</h2><ul><li><p>修改 <code>/etc/keepalived/keepalived.conf</code> 配置文件<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs nginx">! <span class="hljs-attribute">Configuration</span> File for keepalived<br>global_defs &#123;<br>    <span class="hljs-section">notification_email</span> &#123;<br>        acassen@firewall.<span class="hljs-attribute">loc</span><br>        failover<span class="hljs-variable">@firewall</span>.loc<br>        sysadmin<span class="hljs-variable">@firewall</span>.loc<br>    &#125;<br>    notification_email_from Alexandre.Cassen<span class="hljs-variable">@firewall</span>.loc<br>    smtp_server <span class="hljs-number">192.168.17.129</span><br>    smtp_connect_timeout <span class="hljs-number">30</span><br>    router_id LVS_DEVEL<br>&#125;<br>vrrp_script chk_http_port &#123;<br>    <span class="hljs-attribute">script</span> <span class="hljs-string">&quot;/usr/local/src/nginx_check.sh&quot;</span><br>    interval <span class="hljs-number">2</span><br>    weight <span class="hljs-number">2</span><br>&#125;<br>vrrp_instance VI_1 &#123;<br>    <span class="hljs-attribute">state</span> BACKUP <span class="hljs-comment"># 修改为从机 BACKUP</span><br>    interface eth2 <span class="hljs-comment"># 修改为从机 ip</span><br>    virtual_router_id <span class="hljs-number">51</span><br>    priority <span class="hljs-number">90</span> <span class="hljs-comment"># 优先级比主机低</span><br>    advert_int <span class="hljs-number">1</span><br>    authentication &#123;<br>        <span class="hljs-attribute">auth_type</span> PASS<br>        auth_pass <span class="hljs-number">1111</span><br>    &#125;<br>    virtual_ipaddress &#123;<br>        192.168.77.50<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></p></li><li><p>在 <code>/usr/local/src</code> 添加检测脚本：<code>nginx_check.sh</code> <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-meta">#!/bin/bash</span><br>A=`ps -C nginx –no-header | <span class="hljs-built_in">wc</span> -l`<br><span class="hljs-keyword">if</span> [ <span class="hljs-variable">$A</span> -eq 0 ];<span class="hljs-keyword">then</span><br>    /usr/local/nginx/sbin/nginx<br>    <span class="hljs-built_in">sleep</span> 2<br>    <span class="hljs-keyword">if</span> [ `ps -C nginx --no-header |<span class="hljs-built_in">wc</span> -l` -eq 0 ];<span class="hljs-keyword">then</span><br>        killall keepalived<br>    <span class="hljs-keyword">fi</span><br><span class="hljs-keyword">fi</span><br></code></pre></td></tr></table></figure></p></li></ul><h2 id="启动-nginx">启动 Nginx</h2><ul><li>分别启动主从 Nginx，切换到 <code>/usr/local/nginx/sbin/</code>，执行<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">./nginx<br></code></pre></td></tr></table></figure> 启动 Nginx，如果已经启动过，就选择重启 <figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli"><span class="hljs-string">./nginx</span> -s <span class="hljs-keyword">reload</span><br></code></pre></td></tr></table></figure></li></ul><h2 id="测试-nginx-是否启动成功">测试 Nginx 是否启动成功</h2><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vim"><span class="hljs-keyword">ps</span> -ef | <span class="hljs-keyword">grep</span> nginx<br></code></pre></td></tr></table></figure><h2 id="启动-keepalived">启动 keepalived</h2><ul><li>CentOs 6<ul><li>启动 keepalived <figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">service keepalived <span class="hljs-literal">start</span><br></code></pre></td></tr></table></figure></li><li>停止 keepalived <figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arduino">service keepalived stop<br></code></pre></td></tr></table></figure></li><li>重启 keepalived <figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">service keepalived restart</span><br></code></pre></td></tr></table></figure></li></ul></li><li>CentOs 7<ul><li>启动 keepalived <figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">systemctl <span class="hljs-literal">start</span> keepalived.service<br></code></pre></td></tr></table></figure></li></ul></li></ul><h2 id="测试-keepalived-是否启动成功">测试 keepalived 是否启动成功</h2><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vim"><span class="hljs-keyword">ps</span> -ef | <span class="hljs-keyword">grep</span> keepalived<br></code></pre></td></tr></table></figure><h1 id="最终测试">5. 最终测试</h1><ul><li><p>在浏览器地址栏输入虚拟 ip地址：<code>http://192.168.77.50/</code> 此时便可以通过虚拟 ip地址访问到 Nginx。</p></li><li><p>把主服务器（192.168.77.130）nginx 和 keepalived 停止，再输入192.168.77.50 此时主机 192.168.77.130 宕机了，从机变为主机。</p></li></ul><h1 id="主机名称-和-ip-映射">6. 主机名称 和 ip 映射</h1><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">vim <span class="hljs-regexp">/etc/</span>hosts<br></code></pre></td></tr></table></figure><p>添加内容： <figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs accesslog"><span class="hljs-number">127.0.0.1</span> LVS_DEVEL<br></code></pre></td></tr></table></figure> 便可以将主机名和ip地址进行映射。<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey"><br>请注意，Markdown格式中的代码块使用三个反引号```来标记，而数学公式使用`$公式$`来标记。由于原文中没有明确的数学公式，所以这里没有使用`$公式$`格式。如果有任何数学公式需要特别标记，请指出。<br></code></pre></td></tr></table></figure></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>Nginx</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Nginx</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>7. Nginx 配置实例-动静分离</title>
+    <link href="/2024/12/15/nginx/7-Nginx%E9%85%8D%E7%BD%AE%E5%AE%9E%E4%BE%8B-%E5%8A%A8%E9%9D%99%E5%88%86%E7%A6%BB/"/>
+    <url>/2024/12/15/nginx/7-Nginx%E9%85%8D%E7%BD%AE%E5%AE%9E%E4%BE%8B-%E5%8A%A8%E9%9D%99%E5%88%86%E7%A6%BB/</url>
+    
+    <content type="html"><![CDATA[<p>以下是文章内容的Markdown格式输出，注意数学公式已经使用<code>$公式$</code>格式：</p><h1 id="什么是动静分离">1. 什么是动静分离</h1><p><img src="/2024/12/15/nginx/7-Nginx%E9%85%8D%E7%BD%AE%E5%AE%9E%E4%BE%8B-%E5%8A%A8%E9%9D%99%E5%88%86%E7%A6%BB/a847f6b53135cd5b13a1127d06dbcb16.png"></p><p>Nginx动静分离简单来说就是把动态跟静态请求分开，不能理解成只是单纯的把动态页面和静态页面物理分离。严格意义上说应该是动态请求跟静态请求分开，可以理解成使用Nginx 处理静态页面，Tomcat处理动态页面。动静分离从目前实现角度来讲大致分为两种，</p><p>一种是纯粹把静态文件独立成单独的域名，放在独立的服务器上，也是目前主流推崇的方案；</p><p>另外一种方法就是动态跟静态文件混合在一起发布，通过 nginx 来分开。</p><p>通过 location 指定不同的后缀名实现不同的请求转发。通过<code>expires</code>参数设置，可以使浏览器缓存过期时间，减少与服务器之前的请求和流量。具体Expires定义：是给一个资源设定一个过期时间，也就是说无需去服务端验证，直接通过浏览器自身确认是否过期即可，所以不会产生额外的流量。此种方法非常适合不经常变动的资源。（如果经常更新的文件，不建议使用Expires 来缓存），我这里设置 3d，表示在这 3 天之内访问这个URL，发送一个请求，比对服务器该文件最后更新时间没有变化，则不会从服务器抓取，返回状态码304，如果有修改，则直接从服务器重新下载，返回状态码200。</p><h1 id="准备工作">2. 准备工作</h1><p>在 liunx 系统中准备静态资源，用于进行访问</p><p>www 中存放 a.html，</p><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>test html !!!<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span><br></code></pre></td></tr></table></figure><p>image 中存放 1.PNG，</p><h1 id="具体配置">3. 具体配置</h1><p>在 nginx 配置文件中进行配置</p><p>添加监听端口、Nginx 地址 、访问名字 重点是添加 location</p><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-section">location</span> /www/ &#123;<br>        <span class="hljs-attribute">root</span>   /data/;<br>        <span class="hljs-attribute">index</span>  index.html index.htm;<br>&#125;<br></code></pre></td></tr></table></figure><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-section">location</span> /image/ &#123;<br>        <span class="hljs-attribute">root</span>   /data/;<br>        <span class="hljs-attribute">autoindex</span> <span class="hljs-literal">on</span>;<br>&#125;<br></code></pre></td></tr></table></figure><p>autoindex on：目的是为了在访问 /image时，能够显示目录里面的内容，当然这里也可以通过 <code>expire</code>设置缓存过期时间。</p><h1 id="最终测试">4. 最终测试</h1><p>重启 Nginx</p><figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli"><span class="hljs-string">./nginx</span> -s <span class="hljs-keyword">reload</span><br></code></pre></td></tr></table></figure><p>访问，</p><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">http:<span class="hljs-regexp">//</span><span class="hljs-number">192.168</span>.<span class="hljs-number">77.130</span><span class="hljs-regexp">/www/</span>a.html<br></code></pre></td></tr></table></figure><p>访问，</p><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">http:<span class="hljs-regexp">//</span><span class="hljs-number">192.168</span>.<span class="hljs-number">77.130</span><span class="hljs-regexp">/image/</span><br></code></pre></td></tr></table></figure><p>这就是因为刚刚配置了 autoindex on 。</p><p>访问，</p><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">http</span>://<span class="hljs-number">192.168.77.130</span>/image/<span class="hljs-number">1</span>.PNG<br></code></pre></td></tr></table></figure><p>成功访问，说明 静态资源 nginx 直接返回了，不走后端 tomcat服务器。</p><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">worker_processes</span>  <span class="hljs-number">1</span>;<br><br><span class="hljs-section">events</span> &#123;<br>    <span class="hljs-attribute">worker_connections</span>  <span class="hljs-number">1024</span>;<br>&#125;<br><br><span class="hljs-section">http</span> &#123;<br>    <span class="hljs-attribute">include</span>       mime.types;<br>    <span class="hljs-attribute">default_type</span>  application/octet-stream;<br><br>    <span class="hljs-attribute">sendfile</span>        <span class="hljs-literal">on</span>;<br>    <span class="hljs-attribute">keepalive_timeout</span>  <span class="hljs-number">65</span>;<br> <br>    <span class="hljs-section">server</span> &#123;<br>        <span class="hljs-attribute">listen</span>       <span class="hljs-number">80</span>;<br>        <span class="hljs-attribute">server_name</span>  <span class="hljs-number">192.168.226.135</span>;<br><br>        <span class="hljs-section">location</span> / &#123;<br>            <span class="hljs-attribute">root</span>   html;<br>            <span class="hljs-attribute">index</span>  index.html index.htm;<br>        &#125;<br><br>        <span class="hljs-section">location</span> /www/ &#123;<br>                <span class="hljs-attribute">root</span>   /home/star/data/;<br>                <span class="hljs-attribute">index</span>  index.html index.htm;<br>            &#125;<br><br>        <span class="hljs-section">location</span> /image/ &#123;<br>                <span class="hljs-attribute">root</span>   /home/star/data/;<br>            <span class="hljs-attribute">autoindex</span> <span class="hljs-literal">on</span>;<br>        &#125;<br><br>        <span class="hljs-attribute">error_page</span>   <span class="hljs-number">500</span> <span class="hljs-number">502</span> <span class="hljs-number">503</span> <span class="hljs-number">504</span>  /50x.html;<br>        <span class="hljs-section">location</span> = /50x.html &#123;<br>            <span class="hljs-attribute">root</span>   html;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>Nginx</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Nginx</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>6. Nginx 配置实例-负载均衡</title>
+    <link href="/2024/12/15/nginx/6-Nginx%E9%85%8D%E7%BD%AE%E5%AE%9E%E4%BE%8B-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/"/>
+    <url>/2024/12/15/nginx/6-Nginx%E9%85%8D%E7%BD%AE%E5%AE%9E%E4%BE%8B-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/</url>
+    
+    <content type="html"><![CDATA[<p>以下是文章内容的Markdown格式输出，注意数学公式已经使用<code>$公式$</code>格式：</p><h1 id="实现效果">1. 实现效果</h1><ul><li>浏览器地址栏输入地址<code>http://192.168.17.129/edu/a.html</code>，负载均衡效果，平均到8080和8081 端口中。</li></ul><h1 id="准备工作">2. 准备工作</h1><ul><li>准备两台 tomcat 服务器，一台 8080，一台 8081。</li><li>在两台 tomcat 里面 webapps 目录中，创建名称是 edu 文件夹，在 edu文件夹中创建页面 a.html，用于测试。</li></ul><h1 id="在-nginx-的配置文件中进行负载均衡的配置">3. 在 nginx的配置文件中进行负载均衡的配置</h1><p>在 <code>nginx.conf</code> 中添加：</p><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-section">upstream</span> myserver&#123;<br>        <span class="hljs-attribute">server</span> <span class="hljs-number">192.168.77.130:8080</span>;<br>        <span class="hljs-attribute">server</span> <span class="hljs-number">192.168.77.130:8081</span>;<br>&#125;<br></code></pre></td></tr></table></figure><p><code>proxy_pass http://myserver;</code></p><hr><p>贴一下配置文件代码：与本文无关，只是不想手敲…</p><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">worker_processes</span>  <span class="hljs-number">1</span>;<br><br><span class="hljs-section">events</span> &#123;<br>    <span class="hljs-attribute">worker_connections</span>  <span class="hljs-number">1024</span>;<br>&#125;<br><br><br><span class="hljs-section">http</span> &#123;<br>    <span class="hljs-attribute">include</span>       mime.types;<br>    <span class="hljs-attribute">default_type</span>  application/octet-stream;<br><br>    <span class="hljs-attribute">sendfile</span>        <span class="hljs-literal">on</span>;<br>    <span class="hljs-attribute">keepalive_timeout</span>  <span class="hljs-number">65</span>;<br><br>    <span class="hljs-section">upstream</span> myserver &#123;<br><span class="hljs-attribute">server</span> <span class="hljs-number">192.168.226.135:8080</span>;<br><span class="hljs-attribute">server</span> <span class="hljs-number">192.168.226.135:8081</span>;<br>&#125;<br>    <span class="hljs-section">server</span> &#123;<br>        <span class="hljs-attribute">listen</span>       <span class="hljs-number">80</span>;<br>        <span class="hljs-attribute">server_name</span>  <span class="hljs-number">192.168.226.135</span>;<br><br>        <span class="hljs-section">location</span> / &#123;<br>            <span class="hljs-attribute">root</span>   html;<br><span class="hljs-attribute">proxy_pass</span> http://myserver;<br>            <span class="hljs-attribute">index</span>  index.html index.htm;<br>        &#125;<br><br>  <br>        <span class="hljs-attribute">error_page</span>   <span class="hljs-number">500</span> <span class="hljs-number">502</span> <span class="hljs-number">503</span> <span class="hljs-number">504</span>  /50x.html;<br>        <span class="hljs-section">location</span> = /50x.html &#123;<br>            <span class="hljs-attribute">root</span>   html;<br>        &#125;<br><br>    &#125;<br><br>   <br>&#125;<br></code></pre></td></tr></table></figure><hr><h1 id="重启-nginx">4. 重启 Nginx</h1><figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli"><span class="hljs-string">./nginx</span> -s <span class="hljs-keyword">reload</span><br></code></pre></td></tr></table></figure><h1 id="测试">5. 测试</h1><p>访问：</p><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">http:<span class="hljs-regexp">//</span><span class="hljs-number">192.168</span>.<span class="hljs-number">226.135</span><span class="hljs-regexp">/edu/</span>a.html<br></code></pre></td></tr></table></figure><p>访问结果在 8081 和 8080 之间切换。</p><hr><h1 id="负载均衡策略">6. 负载均衡策略</h1><p>随着互联网信息的爆炸性增长，负载均衡（loadbalance）已经不再是一个很陌生的话题，顾名思义，负载均衡即是将负载分摊到不同的服务单元，既保证服务的可用性，又保证响应足够快，给用户很好的体验。快速增长的访问量和数据流量催生了各式各样的负载均衡产品，很多专业的负载均衡硬件提供了很好的功能，但却价格不菲，这使得负载均衡软件大受欢迎，nginx就是其中的一个，在 linux 下有 Nginx、LVS、Haproxy等等服务可以提供负载均衡服务，而且 Nginx提供了几种分配方式（策略）：</p><h2 id="轮询默认">6.1 轮询（默认）</h2><p>每个请求按时间顺序逐一分配到不同的后端服务器，如果后端服务器 down掉，能自动剔除。</p><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-section">upstream</span> myserver&#123;<br>        <span class="hljs-attribute">server</span> <span class="hljs-number">192.168.77.130:8080</span>;<br>        <span class="hljs-attribute">server</span> <span class="hljs-number">192.168.77.130:8081</span>;<br>&#125;<br></code></pre></td></tr></table></figure><h2 id="weight">6.2 weight</h2><p>weight 代表权重，默认为 1，权重越高被分配的客户端越多。</p><p>指定轮询几率，weight和访问比率成正比，用于后端服务器性能不均的情况。例如：</p><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-section">upstream</span> myserver&#123;<br>          <span class="hljs-attribute">server</span> <span class="hljs-number">192.168.77.130:8080</span> weight=<span class="hljs-number">10</span>;<br>          <span class="hljs-attribute">server</span> <span class="hljs-number">192.168.77.130:8081</span> weight=<span class="hljs-number">5</span>;<br>&#125;<br></code></pre></td></tr></table></figure><h2 id="ip_hash">6.3 ip_hash</h2><p>每个请求按访问 ip 的 hash结果分配，这样每个访客固定访问一个后端服务器，可以解决 session的问题。</p><p>也就是说客户端在第一次访问某个服务后，后面都是访问此服务。</p><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-section">upstream</span> myserver&#123;<br>            ip_hash;<br>            <span class="hljs-attribute">server</span> <span class="hljs-number">192.168.77.130:8080</span>;<br>            <span class="hljs-attribute">server</span> <span class="hljs-number">192.168.77.130:8081</span>;<br>&#125;<br></code></pre></td></tr></table></figure><h2 id="fair第三方">6.4 fair（第三方）</h2><p>按后端服务器的响应时间来分配请求，响应时间短的优先分配。</p><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-section">upstream</span> myserver&#123;<br>             <span class="hljs-attribute">server</span> <span class="hljs-number">192.168.77.130:8080</span>;<br>             <span class="hljs-attribute">server</span> <span class="hljs-number">192.168.77.130:8081</span>;<br>             fair;<br>&#125;<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>Nginx</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Nginx</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>5. Nginx 反向代理实例 2</title>
+    <link href="/2024/12/15/nginx/5-Nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%AE%9E%E4%BE%8B2/"/>
+    <url>/2024/12/15/nginx/5-Nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%AE%9E%E4%BE%8B2/</url>
+    
+    <content type="html"><![CDATA[<h1 id="实现效果">1. 实现效果</h1><p>使用 nginx 反向代理，根据访问的路径跳转到不同端口的服务中，</p><p>nginx 监听端口为 9001</p><ul><li>访问 http://192.168.17.129:9001/edu/ 直接跳转到 127.0.0.1:8080</li><li>访问 http://192.168.17.129:9001/vod/ 直接跳转到 127.0.0.1:8081</li></ul><h1 id="准备工作">2、准备工作</h1><p>（1）准备两个 tomcat 服务器，一个 8080 端口，一个 8081 端口</p><p>这个地方，需要将其中代表 8081 的服务器进行修改，进入到<code>/Tomcat8081/apache-tomcat-7.0.106/conf</code></p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">vim server.xml<br></code></pre></td></tr></table></figure><p>（2）创建文件夹和测试页面</p><blockquote><p>说明：tomcat 加载是加载的 webapps 中的东西，所以放在该文件夹下。</p></blockquote><p>在 <code>/Tomcat8080/apache-tomcat-7.0.106/webapps</code> 中，新建edu 文件夹，并在该文件夹下新建文件 a.html， 内容如下：</p><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>8080<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span><br></code></pre></td></tr></table></figure><p>在 <code>/Tomcat8081/apache-tomcat-7.0.106/webapps</code> 中，新建vod 文件夹，并在该文件夹下新建文件 a.html， 内容如下：</p><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>8081<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span><br></code></pre></td></tr></table></figure><h1 id="具体配置">3、具体配置</h1><p>（1）找到 nginx 配置文件，进行反向代理配置</p><blockquote><p>三处改变：监听端口 + nginx地址 + 转发地址</p></blockquote><p>（2）开放对外访问的端口号 9001 8080 8081</p><h1 id="最终测试">4、最终测试</h1><p>重启 nginx，</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">./nginx -s reload<br></code></pre></td></tr></table></figure><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">worker_processes</span>  <span class="hljs-number">1</span>;<br><br><span class="hljs-section">events</span> &#123;<br>    <span class="hljs-attribute">worker_connections</span>  <span class="hljs-number">1024</span>;<br>&#125;<br><br><span class="hljs-section">http</span> &#123;<br>    <span class="hljs-attribute">include</span>       mime.types;<br>    <span class="hljs-attribute">default_type</span>  application/octet-stream;<br><br>    <span class="hljs-attribute">sendfile</span>        <span class="hljs-literal">on</span>;<br>    <span class="hljs-attribute">keepalive_timeout</span>  <span class="hljs-number">65</span>;<br>    <br>    <span class="hljs-section">server</span> &#123;<br>        <span class="hljs-attribute">listen</span>       <span class="hljs-number">80</span>;<br>        <span class="hljs-attribute">server_name</span>  <span class="hljs-number">192.168.226.135</span>;<br><br>        <span class="hljs-section">location</span> / &#123;<br>            <span class="hljs-attribute">root</span>   html;<br>    <span class="hljs-attribute">proxy_pass</span> http://127.0.0.1:8080;<br>            <span class="hljs-attribute">index</span>  index.html index.htm;<br>        &#125;<br>        <span class="hljs-attribute">error_page</span>   <span class="hljs-number">500</span> <span class="hljs-number">502</span> <span class="hljs-number">503</span> <span class="hljs-number">504</span>  /50x.html;<br>        <span class="hljs-section">location</span> = /50x.html &#123;<br>            <span class="hljs-attribute">root</span>   html;<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-section">server</span> &#123;<br>        <span class="hljs-attribute">listen</span>       <span class="hljs-number">9001</span>;<br>        <span class="hljs-attribute">server_name</span>  <span class="hljs-number">192.168.226.135</span>;<br><br>        <span class="hljs-section">location</span> <span class="hljs-regexp">~ /edu/</span> &#123;<br>            <span class="hljs-attribute">proxy_pass</span> http://127.0.0.1:8080;<br>        &#125;<br><br><span class="hljs-section">location</span> <span class="hljs-regexp">~ /vod/</span> &#123;<br>            <span class="hljs-attribute">proxy_pass</span> http://127.0.0.1:8081;<br>        &#125;<br>    &#125;<br><br>&#125;<br></code></pre></td></tr></table></figure><h3 id="location-指令说明">location 指令说明</h3><p>该指令用于匹配 URL。</p><p>语法如下：</p><p>1、<code>=</code> ：用于不含正则表达式的 uri 前，要求请求字符串与 uri严格匹配，如果匹配成功，就停止继续向下搜索并立即处理该请求。2、<code>~</code>：用于表示 uri 包含正则表达式，并且区分大小写。3、<code>~*</code>：用于表示 uri 包含正则表达式，并且不区分大小写。4、<code>^~</code>：用于不含正则表达式的 uri 前，要求 Nginx服务器找到标识 uri 和请求字符串匹配度最高的 location 后，立即使用此location 处理请求，而不再使用 location 块中的正则 uri和请求字符串做匹配。</p><p><strong>注意：</strong> 如果 uri 包含正则表达式，则必须要有<code>~</code> 或者 <code>~*</code> 标识。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>Nginx</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Nginx</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>4. Nginx 反向代理实例 1</title>
+    <link href="/2024/12/15/nginx/4-Nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%AE%9E%E4%BE%8B2/"/>
+    <url>/2024/12/15/nginx/4-Nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%AE%9E%E4%BE%8B2/</url>
+    
+    <content type="html"><![CDATA[<h1 id="实现效果">1. 实现效果</h1><p>打开浏览器，在浏览器地址栏输入地址 www.123.com，跳转到 liunx 系统tomcat 主页面中。</p><h1 id="准备工作">2. 准备工作</h1><h2 id="下载-tomcat">2.1 下载 tomcat</h2><p>官网：<a href="https://tomcat.apache.org/download-70.cgi">https://tomcat.apache.org/download-70.cgi</a></p><h2 id="liunx-系统安装-tomcat">2.2 liunx 系统安装 tomcat</h2><p>将 tomcat 安装文件放到 liunx 系统中，解压， <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">tar -xvf apache-tomcat-7.0.106.tar.gz<br></code></pre></td></tr></table></figure> 进入 tomcat的 bin 目录中， <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">./startup.sh<br></code></pre></td></tr></table></figure> 启动 tomcat 服务器。</p><h2 id="对外开放访问的端口">2.3 对外开放访问的端口</h2><p>我这里使用的是 Centos 6，和 Centos 7不一样，Centos7如何开放端口，更多细节可以参考上一篇文章：Nginx 安装 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">vim /etc/sysconfig/iptables<br></code></pre></td></tr></table></figure> 开放8080 端口， <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">Firewall configuration written by system-config-firewall</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">Manual customization of this file is not recommended.</span><br>*filter<br>:INPUT ACCEPT [0:0]<br>:FORWARD ACCEPT [0:0]<br>:OUTPUT ACCEPT [0:0]<br>-A INPUT -m state –state ESTABLISHED,RELATED -j ACCEPT<br>-A INPUT -p icmp -j ACCEPT<br>-A INPUT -i lo -j ACCEPT<br><br>-A INPUT -m state –state NEW -m tcp -p tcp –dport 22 -j ACCEPT<br>-A INPUT -m state –state NEW -m tcp -p tcp –dport 80 -j ACCEPT<br>-A INPUT -m state –state NEW -m tcp -p tcp –dport 8080 -j ACCEPT<br><br>-A INPUT -j REJECT –reject-with icmp-host-prohibited<br>-A FORWARD -j REJECT –reject-with icmp-host-prohibited<br>COMMIT<br></code></pre></td></tr></table></figure> 保存退出！！！ 重启防火墙 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">service iptables restart<br></code></pre></td></tr></table></figure></p><h2 id="在-windows-系统中通过浏览器访问-tomcat-服务器">2.4 在 windows系统中通过浏览器访问 tomcat 服务器</h2><p><img src="/2024/12/15/nginx/4-Nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%AE%9E%E4%BE%8B2/5ed6f680c5db55b3a9ec656fec98d69c.png"></p><h1 id="访问过程的分析">3、访问过程的分析</h1><p><img src="/2024/12/15/nginx/4-Nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%AE%9E%E4%BE%8B2/2284bfa5a895b3156ceaf3774869470c.png"></p><h1 id="具体配置">4、具体配置</h1><p>第一步：在 windows 系统的 host 文件进行域名和 ip 对应关系的配置</p><p>C:/Windows/System32/drivers/etc/hosts</p><p>末尾添加，将 www.123.com 映射到 192.168.77.130</p><blockquote><p>这里的 ip 是 linux 的地址 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">192.168.226.135   www.123.com<br></code></pre></td></tr></table></figure></p></blockquote><p>配置完成之后，我们便可以通过 www.123.com:8080 访问到第一步出现的Tomcat 初始界面。那么如何只需要输入 www.123.com 便可以跳转到 Tomcat初始界面呢？便用到 nginx 的反向代理。</p><p>第二步：在 nginx 进行请求转发的配置（反向代理配置） &gt; 文件地址：<code>/usr/local/nginx/conf</code> &gt; &gt; 两处改变：nginx 地址 +转发地址</p><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs nginx"> <span class="hljs-section">server</span> &#123;<br>        <span class="hljs-attribute">listen</span>       <span class="hljs-number">80</span>;<br>        <span class="hljs-attribute">server_name</span>  <span class="hljs-number">192.168.226.135</span>;<br><br>        <span class="hljs-comment">#charset koi8-r;</span><br><br>        <span class="hljs-comment">#access_log  logs/host.access.log  main;</span><br><br>        <span class="hljs-section">location</span> / &#123;<br>            <span class="hljs-attribute">root</span>   html;<br>    <span class="hljs-attribute">proxy_pass</span> http://127.0.0.1:8080;<br>            <span class="hljs-attribute">index</span>  index.html index.htm;<br>        &#125;<br><br>        <span class="hljs-comment">#error_page  404              /404.html;</span><br>    ...<br>&#125;<br></code></pre></td></tr></table></figure><h1 id="最终测试">5、最终测试</h1><p>切换到 <code>/usr/local/nginx/sbin/</code> 重新启动 nginx<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">./nginx -s reload<br></code></pre></td></tr></table></figure> 访问：www.123.com，</p><p>如上配置，我们监听 80 端口，访问域名为www.123.com，不加端口号时默认为 80 端口，故访问该域名时会跳转到127.0.0.1:8080 路径上。在浏览器端输入 www.123.com 结果如下：</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>Nginx</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Nginx</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>3. nginx.conf配置文件</title>
+    <link href="/2024/12/15/nginx/3-nginx-conf%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/"/>
+    <url>/2024/12/15/nginx/3-nginx-conf%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/</url>
+    
+    <content type="html"><![CDATA[<p>nginx 安装目录下，其默认的配置文件都放在这个目录的 conf目录下，而主配置文件 nginx.conf 也在其中，后续对 nginx的使用基本上都是对此配置文件进行相应的修改。</p><p><img src="/2024/12/15/nginx/3-nginx-conf%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/image-20241215120659660.png"></p><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-comment">#user  nobody;</span><br><span class="hljs-attribute">worker_processes</span>  <span class="hljs-number">1</span>;<br><br><span class="hljs-comment">#error_log  logs/error.log;</span><br><span class="hljs-comment">#error_log  logs/error.log  notice;</span><br><span class="hljs-comment">#error_log  logs/error.log  info;</span><br><br><span class="hljs-comment">#pid        logs/nginx.pid;</span><br><br><br><span class="hljs-section">events</span> &#123;<br><span class="hljs-comment">#    use eopll;</span><br>    <span class="hljs-attribute">worker_connections</span>  <span class="hljs-number">1024</span>;<br>&#125;<br><br><br><span class="hljs-section">http</span> &#123;<br>    <span class="hljs-attribute">include</span>       mime.types;<br>    <span class="hljs-attribute">default_type</span>  application/octet-stream;<br><br>    <span class="hljs-comment">#log_format  main  &#x27;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#x27;</span><br>    <span class="hljs-comment">#                  &#x27;$status $body_bytes_sent &quot;$http_referer&quot; &#x27;</span><br>    <span class="hljs-comment">#                  &#x27;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&#x27;;</span><br><br>    <span class="hljs-comment">#access_log  logs/access.log  main;</span><br><br>    <span class="hljs-attribute">sendfile</span>        <span class="hljs-literal">on</span>;<br>    <span class="hljs-comment">#tcp_nopush     on;</span><br><br>    <span class="hljs-comment">#keepalive_timeout  0;</span><br>    <span class="hljs-attribute">keepalive_timeout</span>  <span class="hljs-number">65</span>;<br><br>    <span class="hljs-comment">#gzip  on;</span><br><br>    <span class="hljs-section">server</span> &#123;<br>        <span class="hljs-attribute">listen</span>       <span class="hljs-number">80</span>;<br>        <span class="hljs-attribute">server_name</span>  localhost;<br><br>        <span class="hljs-comment">#charset koi8-r;</span><br><br>        <span class="hljs-comment">#access_log  logs/host.access.log  main;</span><br><br>        <span class="hljs-section">location</span> / &#123;<br>            <span class="hljs-attribute">root</span> zyFile2;    <br>    <span class="hljs-attribute">index</span> upload.html;        <br>&#125;<br><span class="hljs-section">location</span> /Myupload<br>&#123;<br>    <span class="hljs-attribute">fastcgi_pass</span> <span class="hljs-number">127.0.0.1:10000</span>;<br>    <span class="hljs-attribute">include</span> fastcgi.conf;<br>&#125;<br><span class="hljs-section">location</span> /group1/M00<br>&#123;<br>    <span class="hljs-attribute">root</span> /home/star/project/fastdfs/storage/data;<br>    ngx_fastdfs_module;<br>&#125;<br><span class="hljs-section">location</span> /hello/<br>&#123;<br>    <span class="hljs-attribute">root</span> yundisk;<br>&#125;<br><span class="hljs-section">location</span> /upload/<br>&#123;<br>    <span class="hljs-attribute">root</span> yundisk;<br>    <span class="hljs-attribute">index</span> upload.html;<br>&#125;<br><span class="hljs-section">location</span> /uploadFile<br>&#123;<br>    <span class="hljs-attribute">fastcgi_pass</span> localhost:<span class="hljs-number">9999</span>;<br>    <span class="hljs-attribute">include</span> fastcgi.conf;<br>    <span class="hljs-attribute">client_max_body_size</span> <span class="hljs-number">10240m</span>;<br>&#125;<br>        <span class="hljs-comment">#error_page  404              /404.html;</span><br><br>        <span class="hljs-comment"># redirect server error pages to the static page /50x.html</span><br>        <span class="hljs-comment">#</span><br>        <span class="hljs-attribute">error_page</span>   <span class="hljs-number">500</span> <span class="hljs-number">502</span> <span class="hljs-number">503</span> <span class="hljs-number">504</span>  /50x.html;<br>        <span class="hljs-section">location</span> = /50x.html &#123;<br>            <span class="hljs-attribute">root</span>   html;<br>        &#125;<br><br>        <span class="hljs-comment"># proxy the PHP scripts to Apache listening on 127.0.0.1:80</span><br>        <span class="hljs-comment">#</span><br>        <span class="hljs-comment">#location ~ \.php$ &#123;</span><br>        <span class="hljs-comment">#    proxy_pass   http://127.0.0.1;</span><br>        <span class="hljs-comment">#&#125;</span><br><br>        <span class="hljs-comment"># pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000</span><br>        <span class="hljs-comment">#</span><br>        <span class="hljs-comment">#location ~ \.php$ &#123;</span><br>        <span class="hljs-comment">#    root           html;</span><br>        <span class="hljs-comment">#    fastcgi_pass   127.0.0.1:9000;</span><br>        <span class="hljs-comment">#    fastcgi_index  index.php;</span><br>        <span class="hljs-comment">#    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;</span><br>        <span class="hljs-comment">#    include        fastcgi_params;</span><br>        <span class="hljs-comment">#&#125;</span><br><br>        <span class="hljs-comment"># deny access to .htaccess files, if Apache&#x27;s document root</span><br>        <span class="hljs-comment"># concurs with nginx&#x27;s one</span><br>        <span class="hljs-comment">#</span><br>        <span class="hljs-comment">#location ~ /\.ht &#123;</span><br>        <span class="hljs-comment">#    deny  all;</span><br>        <span class="hljs-comment">#&#125;</span><br>    &#125;<br><br><br>    <span class="hljs-comment"># another virtual host using mix of IP-, name-, and port-based configuration</span><br>    <span class="hljs-comment">#</span><br>    <span class="hljs-comment">#server &#123;</span><br>    <span class="hljs-comment">#    listen       8000;</span><br>    <span class="hljs-comment">#    listen       somename:8080;</span><br>    <span class="hljs-comment">#    server_name  somename  alias  another.alias;</span><br><br>    <span class="hljs-comment">#    location / &#123;</span><br>    <span class="hljs-comment">#        root   html;</span><br>    <span class="hljs-comment">#        index  index.html index.htm;</span><br>    <span class="hljs-comment">#    &#125;</span><br>    <span class="hljs-comment">#&#125;</span><br><br><br>    <span class="hljs-comment"># HTTPS server</span><br>    <span class="hljs-comment">#</span><br>    <span class="hljs-comment">#server &#123;</span><br>    <span class="hljs-comment">#    listen       443 ssl;</span><br>    <span class="hljs-comment">#    server_name  localhost;</span><br><br>    <span class="hljs-comment">#    ssl_certificate      cert.pem;</span><br>    <span class="hljs-comment">#    ssl_certificate_key  cert.key;</span><br><br>    <span class="hljs-comment">#    ssl_session_cache    shared:SSL:1m;</span><br>    <span class="hljs-comment">#    ssl_session_timeout  5m;</span><br><br>    <span class="hljs-comment">#    ssl_ciphers  HIGH:!aNULL:!MD5;</span><br>    <span class="hljs-comment">#    ssl_prefer_server_ciphers  on;</span><br><br>    <span class="hljs-comment">#    location / &#123;</span><br>    <span class="hljs-comment">#        root   html;</span><br>    <span class="hljs-comment">#        index  index.html index.htm;</span><br>    <span class="hljs-comment">#    &#125;</span><br>    <span class="hljs-comment">#&#125;</span><br><br>&#125;<br></code></pre></td></tr></table></figure><h1 id="第一部分全局块">1. 第一部分：全局块</h1><p>从配置文件开始到 events 块之间的内容，主要会设置一些影响 nginx服务器整体运行的配置指令，主要包括配置运行 Nginx服务器的用户（组）、允许生成的 worker process 数，进程 PID存放路径、日志存放路径和类型以及配置文件的引入等。</p><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-comment">#user  nobody;</span><br><span class="hljs-attribute">worker_processes</span>  <span class="hljs-number">1</span>;<br><br><span class="hljs-comment">#error_log  logs/error.log;</span><br><span class="hljs-comment">#error_log  logs/error.log  notice;</span><br><span class="hljs-comment">#error_log  logs/error.log  info;</span><br><br><span class="hljs-comment">#pid        logs/nginx.pid;</span><br><br><br><span class="hljs-section">events</span> &#123;<br><span class="hljs-comment">#    use eopll;</span><br>    <span class="hljs-attribute">worker_connections</span>  <span class="hljs-number">1024</span>;<br>&#125;<br>------------------------------------------------------------------<br><br></code></pre></td></tr></table></figure><p>比如上面第一行配置的：</p><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">worker_processes</span> <span class="hljs-number">1</span>;<br></code></pre></td></tr></table></figure><p>这是 Nginx 服务器并发处理服务的关键配置，<span class="math inline">\(\text{worker_processes}\)</span>值越大，可以支持的 <strong>并发处理量</strong>也越多，但是会受到硬件、软件等设备的制约。</p><h1 id="第二部分events-块">2. 第二部分：events 块</h1><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-section">events</span> &#123;<br><span class="hljs-comment">#    use eopll;</span><br>    <span class="hljs-attribute">worker_connections</span>  <span class="hljs-number">1024</span>;<br>&#125;<br></code></pre></td></tr></table></figure><p>比如上面的配置：</p><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">worker_connections</span> <span class="hljs-number">1024</span>;<br></code></pre></td></tr></table></figure><p>events 块涉及的指令主要影响 Nginx服务器与用户的网络连接，常用的设置包括是否开启对多 work process下的网络连接进行序列化，是否允许同时接收多个网络连接，选取哪种事件驱动模型来处理连接请求，每个work process 可以同时支持的最大连接数等。</p><p>上述例子就表示每个 work process 支持的最大 <strong>连接数</strong> 为<span class="math inline">\(1024\)</span>. 这部分的配置对 Nginx的性能影响较大，在实际中应该灵活配置。</p><h1 id="第三部分http-块">3. 第三部分：http 块</h1><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-section">http</span> &#123;<br>    <span class="hljs-attribute">include</span>       mime.types;<br>    <span class="hljs-attribute">default_type</span>  application/octet-stream;<br><br>    <span class="hljs-comment">#log_format  main  &#x27;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#x27;</span><br>    <span class="hljs-comment">#                  &#x27;$status $body_bytes_sent &quot;$http_referer&quot; &#x27;</span><br>    <span class="hljs-comment">#                  &#x27;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&#x27;;</span><br><br>    <span class="hljs-comment">#access_log  logs/access.log  main;</span><br><br>    <span class="hljs-attribute">sendfile</span>        <span class="hljs-literal">on</span>;<br>    <span class="hljs-comment">#tcp_nopush     on;</span><br><br>    <span class="hljs-comment">#keepalive_timeout  0;</span><br>    <span class="hljs-attribute">keepalive_timeout</span>  <span class="hljs-number">65</span>;<br><br>    <span class="hljs-comment">#gzip  on;</span><br><br>    <span class="hljs-section">server</span> &#123;<br>        <span class="hljs-attribute">listen</span>       <span class="hljs-number">80</span>;<br>        <span class="hljs-attribute">server_name</span>  localhost;<br><br>        <span class="hljs-comment">#charset koi8-r;</span><br><br>        <span class="hljs-comment">#access_log  logs/host.access.log  main;</span><br><br>        <span class="hljs-section">location</span> / &#123;<br>            <span class="hljs-attribute">root</span> zyFile2;    <br>    <span class="hljs-attribute">index</span> upload.html;        <br>&#125;<br><span class="hljs-section">location</span> /Myupload<br>&#123;<br>    <span class="hljs-attribute">fastcgi_pass</span> <span class="hljs-number">127.0.0.1:10000</span>;<br>    <span class="hljs-attribute">include</span> fastcgi.conf;<br>&#125;<br><span class="hljs-section">location</span> /group1/M00<br>&#123;<br>    <span class="hljs-attribute">root</span> /home/star/project/fastdfs/storage/data;<br>    ngx_fastdfs_module;<br>&#125;<br><span class="hljs-section">location</span> /hello/<br>&#123;<br>    <span class="hljs-attribute">root</span> yundisk;<br>&#125;<br><span class="hljs-section">location</span> /upload/<br>&#123;<br>    <span class="hljs-attribute">root</span> yundisk;<br>    <span class="hljs-attribute">index</span> upload.html;<br>&#125;<br><span class="hljs-section">location</span> /uploadFile<br>&#123;<br>    <span class="hljs-attribute">fastcgi_pass</span> localhost:<span class="hljs-number">9999</span>;<br>    <span class="hljs-attribute">include</span> fastcgi.conf;<br>    <span class="hljs-attribute">client_max_body_size</span> <span class="hljs-number">10240m</span>;<br>&#125;<br>        <span class="hljs-comment">#error_page  404              /404.html;</span><br><br>        <span class="hljs-comment"># redirect server error pages to the static page /50x.html</span><br>        <span class="hljs-comment">#</span><br>        <span class="hljs-attribute">error_page</span>   <span class="hljs-number">500</span> <span class="hljs-number">502</span> <span class="hljs-number">503</span> <span class="hljs-number">504</span>  /50x.html;<br>        <span class="hljs-section">location</span> = /50x.html &#123;<br>            <span class="hljs-attribute">root</span>   html;<br>        &#125;<br><br>        <span class="hljs-comment"># proxy the PHP scripts to Apache listening on 127.0.0.1:80</span><br>        <span class="hljs-comment">#</span><br>        <span class="hljs-comment">#location ~ \.php$ &#123;</span><br>        <span class="hljs-comment">#    proxy_pass   http://127.0.0.1;</span><br>        <span class="hljs-comment">#&#125;</span><br><br>        <span class="hljs-comment"># pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000</span><br>        <span class="hljs-comment">#</span><br>        <span class="hljs-comment">#location ~ \.php$ &#123;</span><br>        <span class="hljs-comment">#    root           html;</span><br>        <span class="hljs-comment">#    fastcgi_pass   127.0.0.1:9000;</span><br>        <span class="hljs-comment">#    fastcgi_index  index.php;</span><br>        <span class="hljs-comment">#    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;</span><br>        <span class="hljs-comment">#    include        fastcgi_params;</span><br>        <span class="hljs-comment">#&#125;</span><br><br>        <span class="hljs-comment"># deny access to .htaccess files, if Apache&#x27;s document root</span><br>        <span class="hljs-comment"># concurs with nginx&#x27;s one</span><br>        <span class="hljs-comment">#</span><br>        <span class="hljs-comment">#location ~ /\.ht &#123;</span><br>        <span class="hljs-comment">#    deny  all;</span><br>        <span class="hljs-comment">#&#125;</span><br>    &#125;<br><br><br>    <span class="hljs-comment"># another virtual host using mix of IP-, name-, and port-based configuration</span><br>    <span class="hljs-comment">#</span><br>    <span class="hljs-comment">#server &#123;</span><br>    <span class="hljs-comment">#    listen       8000;</span><br>    <span class="hljs-comment">#    listen       somename:8080;</span><br>    <span class="hljs-comment">#    server_name  somename  alias  another.alias;</span><br><br>    <span class="hljs-comment">#    location / &#123;</span><br>    <span class="hljs-comment">#        root   html;</span><br>    <span class="hljs-comment">#        index  index.html index.htm;</span><br>    <span class="hljs-comment">#    &#125;</span><br>    <span class="hljs-comment">#&#125;</span><br><br><br>    <span class="hljs-comment"># HTTPS server</span><br>    <span class="hljs-comment">#</span><br>    <span class="hljs-comment">#server &#123;</span><br>    <span class="hljs-comment">#    listen       443 ssl;</span><br>    <span class="hljs-comment">#    server_name  localhost;</span><br><br>    <span class="hljs-comment">#    ssl_certificate      cert.pem;</span><br>    <span class="hljs-comment">#    ssl_certificate_key  cert.key;</span><br><br>    <span class="hljs-comment">#    ssl_session_cache    shared:SSL:1m;</span><br>    <span class="hljs-comment">#    ssl_session_timeout  5m;</span><br><br>    <span class="hljs-comment">#    ssl_ciphers  HIGH:!aNULL:!MD5;</span><br>    <span class="hljs-comment">#    ssl_prefer_server_ciphers  on;</span><br><br>    <span class="hljs-comment">#    location / &#123;</span><br>    <span class="hljs-comment">#        root   html;</span><br>    <span class="hljs-comment">#        index  index.html index.htm;</span><br>    <span class="hljs-comment">#    &#125;</span><br>    <span class="hljs-comment">#&#125;</span><br><br>&#125;<br></code></pre></td></tr></table></figure><p>这算是 Nginx服务器配置中最频繁的部分，代理、缓存和日志定义等绝大多数功能和第三方模块的配置都在这里。</p><p>需要注意的是：http 块也可以包括 http 全局块、server 块。</p><h2 id="http-全局块">3.1 http 全局块</h2><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-section">http</span> &#123;<br>    <span class="hljs-attribute">include</span>       mime.types;<br>    <span class="hljs-attribute">default_type</span>  application/octet-stream;<br><br>    <span class="hljs-comment">#log_format  main  &#x27;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#x27;</span><br>    <span class="hljs-comment">#                  &#x27;$status $body_bytes_sent &quot;$http_referer&quot; &#x27;</span><br>    <span class="hljs-comment">#                  &#x27;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&#x27;;</span><br><br>    <span class="hljs-comment">#access_log  logs/access.log  main;</span><br><br>    <span class="hljs-attribute">sendfile</span>        <span class="hljs-literal">on</span>;<br>    <span class="hljs-comment">#tcp_nopush     on;</span><br><br>    <span class="hljs-comment">#keepalive_timeout  0;</span><br>    <span class="hljs-attribute">keepalive_timeout</span>  <span class="hljs-number">65</span>;<br><br>    <span class="hljs-comment">#gzip  on;</span><br>&#125;<br></code></pre></td></tr></table></figure><p>http 全局块配置的指令包括文件引入、MIME-TYPE定义、日志自定义、连接超时时间、单链接请求数上限等。</p><h2 id="server-块">3.2 server 块</h2><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><code class="hljs nginx"> <span class="hljs-section">server</span> &#123;<br>     <span class="hljs-attribute">listen</span>       <span class="hljs-number">80</span>;<br>     <span class="hljs-attribute">server_name</span>  localhost;<br><br>     <span class="hljs-comment">#charset koi8-r;</span><br><br>     <span class="hljs-comment">#access_log  logs/host.access.log  main;</span><br><br>     <span class="hljs-section">location</span> / &#123;<br>         <span class="hljs-attribute">root</span> zyFile2;    <br>  <span class="hljs-attribute">index</span> upload.html;        <br>&#125;<br>     <span class="hljs-section">location</span> /Myupload<br>     &#123;<br>         <span class="hljs-attribute">fastcgi_pass</span> <span class="hljs-number">127.0.0.1:10000</span>;<br>         <span class="hljs-attribute">include</span> fastcgi.conf;<br>     &#125;<br>     <span class="hljs-section">location</span> /group1/M00<br>     &#123;<br>         <span class="hljs-attribute">root</span> /home/star/project/fastdfs/storage/data;<br>         ngx_fastdfs_module;<br>     &#125;<br>     <span class="hljs-section">location</span> /hello/<br>     &#123;<br>         <span class="hljs-attribute">root</span> yundisk;<br>     &#125;<br>     <span class="hljs-section">location</span> /upload/<br>     &#123;<br>         <span class="hljs-attribute">root</span> yundisk;<br>         <span class="hljs-attribute">index</span> upload.html;<br>     &#125;<br>     <span class="hljs-section">location</span> /uploadFile<br>     &#123;<br>         <span class="hljs-attribute">fastcgi_pass</span> localhost:<span class="hljs-number">9999</span>;<br>         <span class="hljs-attribute">include</span> fastcgi.conf;<br>         <span class="hljs-attribute">client_max_body_size</span> <span class="hljs-number">10240m</span>;<br>     &#125;<br>     <span class="hljs-comment">#error_page  404              /404.html;</span><br><br>     <span class="hljs-comment"># redirect server error pages to the static page /50x.html</span><br>     <span class="hljs-comment">#</span><br>     <span class="hljs-attribute">error_page</span>   <span class="hljs-number">500</span> <span class="hljs-number">502</span> <span class="hljs-number">503</span> <span class="hljs-number">504</span>  /50x.html;<br>     <span class="hljs-section">location</span> = /50x.html &#123;<br>         <span class="hljs-attribute">root</span>   html;<br>     &#125;<br><br>     <span class="hljs-comment"># proxy the PHP scripts to Apache listening on 127.0.0.1:80</span><br>     <span class="hljs-comment">#</span><br>     <span class="hljs-comment">#location ~ \.php$ &#123;</span><br>     <span class="hljs-comment">#    proxy_pass   http://127.0.0.1;</span><br>     <span class="hljs-comment">#&#125;</span><br><br>     <span class="hljs-comment"># pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000</span><br>     <span class="hljs-comment">#</span><br>     <span class="hljs-comment">#location ~ \.php$ &#123;</span><br>     <span class="hljs-comment">#    root           html;</span><br>     <span class="hljs-comment">#    fastcgi_pass   127.0.0.1:9000;</span><br>     <span class="hljs-comment">#    fastcgi_index  index.php;</span><br>     <span class="hljs-comment">#    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;</span><br>     <span class="hljs-comment">#    include        fastcgi_params;</span><br>     <span class="hljs-comment">#&#125;</span><br><br>     <span class="hljs-comment"># deny access to .htaccess files, if Apache&#x27;s document root</span><br>     <span class="hljs-comment"># concurs with nginx&#x27;s one</span><br>     <span class="hljs-comment">#</span><br>     <span class="hljs-comment">#location ~ /\.ht &#123;</span><br>     <span class="hljs-comment">#    deny  all;</span><br>     <span class="hljs-comment">#&#125;</span><br> &#125;<br></code></pre></td></tr></table></figure><p>这块和虚拟主机有密切关系，虚拟主机从用户角度看，和一台独立的硬件主机是完全一样的，该技术的产生是为了节省互联网服务器硬件成本。每个http 块可以包括多个 server 块，而每个 server块就相当于一个虚拟主机。而每个 server 块也分为全局 server块，以及可以同时包含多个 location 块。</p><h3 id="全局-server-块">1. 全局 server 块</h3><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs nginx">   <span class="hljs-section">server</span> &#123;<br>       <span class="hljs-attribute">listen</span>       <span class="hljs-number">80</span>;<br>       <span class="hljs-attribute">server_name</span>  localhost;<br><br>       <span class="hljs-comment">#charset koi8-r;</span><br><br>       <span class="hljs-comment">#access_log  logs/host.access.log  main;</span><br><br>       <span class="hljs-section">location</span> / &#123;<br>           <span class="hljs-attribute">root</span> zyFile2;    <br>    <span class="hljs-attribute">index</span> upload.html;        <br>&#125;<br></code></pre></td></tr></table></figure><p>最常见的配置是本虚拟机主机的监听配置和本虚拟主机的名称或 IP配置。</p><h3 id="location-块">2. location 块</h3><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-section">location</span> /Myupload<br>&#123;<br>    <span class="hljs-attribute">fastcgi_pass</span> <span class="hljs-number">127.0.0.1:10000</span>;<br>    <span class="hljs-attribute">include</span> fastcgi.conf;<br>&#125;<br><span class="hljs-section">location</span> /group1/M00<br>&#123;<br>    <span class="hljs-attribute">root</span> /home/star/project/fastdfs/storage/data;<br>    ngx_fastdfs_module;<br>&#125;<br><span class="hljs-section">location</span> /hello/<br>&#123;<br>    <span class="hljs-attribute">root</span> yundisk;<br>&#125;<br><span class="hljs-section">location</span> /upload/<br>&#123;<br>    <span class="hljs-attribute">root</span> yundisk;<br>    <span class="hljs-attribute">index</span> upload.html;<br>&#125;<br><span class="hljs-section">location</span> /uploadFile<br>&#123;<br>    <span class="hljs-attribute">fastcgi_pass</span> localhost:<span class="hljs-number">9999</span>;<br>    <span class="hljs-attribute">include</span> fastcgi.conf;<br>    <span class="hljs-attribute">client_max_body_size</span> <span class="hljs-number">10240m</span>;<br>&#125;<br></code></pre></td></tr></table></figure><p>一个 server 块可以配置多个 location 块。</p><p>这块的主要作用是基于 Nginx 服务器接收到的请求字符串（例如server_name/uri-string），对虚拟主机名称（也可以是 IP别名）之外的字符串（例如 前面的/uri-string）进行匹配，对特定的请求进行处理。地址定向、数据缓存和应答控制等功能，还有许多第三方模块的配置也在这里进行。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>Nginx</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Nginx</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>2. Nginx常用命令</title>
+    <link href="/2024/12/15/nginx/2-Nginx%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"/>
+    <url>/2024/12/15/nginx/2-Nginx%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
+    
+    <content type="html"><![CDATA[<h3 id="nginx-常用的命令">nginx 常用的命令</h3><p>执行前提：进入 nginx 目录中</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">cd /usr/local/nginx/sbin<br></code></pre></td></tr></table></figure><h4 id="查看-nginx-版本号">1、查看 nginx 版本号</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">./nginx -v<br></code></pre></td></tr></table></figure><h4 id="启动-nginx">2、启动 nginx</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">./nginx<br></code></pre></td></tr></table></figure><h4 id="停止-nginx">3、停止 nginx</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">./nginx -s stop<br></code></pre></td></tr></table></figure><h4 id="重新加载-nginx">4、重新加载 nginx</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">./nginx -s reload<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>Nginx</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Nginx</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>1. 安装Nginx</title>
+    <link href="/2024/12/15/nginx/1-%E5%AE%89%E8%A3%85Nginx/"/>
+    <url>/2024/12/15/nginx/1-%E5%AE%89%E8%A3%85Nginx/</url>
+    
+    <content type="html"><![CDATA[<h1 id="准备工作">1. 准备工作</h1><p>（1）打开虚拟机，使用远程连接工具连接 linux 操作系统。</p><blockquote><p>如何在windows上使用 Xshell 连接Linux，可以参照我这篇博客：Xshell连接到 Linux</p></blockquote><p>（2）到 nginx 官网下载软件：<a href="http://nginx.org/">http://nginx.org/</a></p><p>（3）需要准备的素材：</p><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">pcre</span>-<span class="hljs-number">8</span>.<span class="hljs-number">37</span>.tar.gz<br><span class="hljs-attribute">openssl</span>-<span class="hljs-number">1</span>.<span class="hljs-number">0</span>.<span class="hljs-number">1</span>t.tar.gz<br><span class="hljs-attribute">zlib</span>-<span class="hljs-number">1</span>.<span class="hljs-number">2</span>.<span class="hljs-number">8</span>.tar.gz<br><span class="hljs-attribute">nginx</span>-<span class="hljs-number">1</span>.<span class="hljs-number">11</span>.<span class="hljs-number">1</span>.tar.gz<br></code></pre></td></tr></table></figure><h1 id="开始进行-nginx-安装">2. 开始进行 nginx 安装</h1><h2 id="安装-pcre-依赖">2.1 安装 pcre 依赖</h2><h3 id="第一步联网下载-pcre-压缩文件依赖">第一步：联网下载 pcre压缩文件依赖</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">wget http://downloads.sourceforge.net/project/pcre/pcre/8.37/pcre-8.37.tar.gz<br></code></pre></td></tr></table></figure><p>下载后的大小，</p><p><img src="/2024/12/15/nginx/1-%E5%AE%89%E8%A3%85Nginx/a8d429ce32aea6b1512515d02d277470.png"></p><p>如果你发现你的下载文件大小不对，访问：</p><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">https:<span class="hljs-regexp">//</span>sourceforge.net<span class="hljs-regexp">/p/</span>pcre<span class="hljs-regexp">/activity/</span>?page=<span class="hljs-number">1</span>&amp;limit=<span class="hljs-number">100</span><span class="hljs-comment">#553fce622718464538c5fad4</span><br></code></pre></td></tr></table></figure><p>选择对应版本进行下载，</p><p><img src="/2024/12/15/nginx/1-%E5%AE%89%E8%A3%85Nginx/04e35c68dd51cda699c8d8a32d8806b9.png"></p><h3 id="第二步解压压缩文件">第二步：解压压缩文件</h3><p>使用命令，</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">tar –xvf pcre-8.37.tar.gz<br></code></pre></td></tr></table></figure><h3 id="第三步编译">第三步：编译</h3><p>进入 pcre-8.37 执行 <code>./configure</code>，完成后，回到 pcre目录下执行，</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">make &amp;&amp; make install<br></code></pre></td></tr></table></figure><h3 id="第四步查看">第四步：查看</h3><p>查看 pcre 依赖是否安装成功：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">pcre-config --version<br></code></pre></td></tr></table></figure><h2 id="安装-openssl-zlib-gcc-依赖">2.2 安装 openssl 、zlib 、 gcc依赖</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">yum -y install make zlib zlib-devel gcc-c++ libtool openssl openssl-devel<br></code></pre></td></tr></table></figure><h2 id="安装-nginx">2.3 安装 nginx</h2><h3 id="第一步解压-nginx-1.12.2.tar.gz">第一步：解压nginx-1.12.2.tar.gz</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">tar -xvf nginx-1.12.2.tar.gz<br></code></pre></td></tr></table></figure><h3 id="第二步进入解压后的目录">第二步：进入解压后的目录</h3><p>此时，里面有一个文件 configure，执行</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">./configure<br></code></pre></td></tr></table></figure><h3 id="第三步编译-1">第三步：编译</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">make &amp;&amp; make install<br></code></pre></td></tr></table></figure><h1 id="启动-nginx">3. 启动 Nginx</h1><p>进入目录 <code>/usr/local/nginx/sbin/nginx</code>，执行【要换 root用户下执行】</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">./nginx<br></code></pre></td></tr></table></figure><p>浏览器访问：localhost:80</p><blockquote><p>此时要在 linux中关闭防火墙。如果你不知道咋关闭防火墙可以接着往下看，参照下面命令进行关闭。</p></blockquote><p>到这一步，就代表 Nginx 安装成功。</p><h1 id="防火墙设置">4. 防火墙设置</h1><p>windows 系统中访问 linux 中nginx，默认不能访问的，因为防火墙问题，需要设置</p><ul><li><p>（1）关闭防火墙</p></li><li><p>（2）开放访问的端口号，80 端口</p></li></ul><h2 id="centos-6">Centos 6</h2><p>查看防火墙状态</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">service iptables status<br></code></pre></td></tr></table></figure><p>开启防火墙</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">service iptables start<br></code></pre></td></tr></table></figure><p>关闭防火墙</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">service iptables stop<br></code></pre></td></tr></table></figure><p>重启防火墙</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">service iptables restart<br></code></pre></td></tr></table></figure><p>防火墙开放某个端口</p><p>（1）查看防火墙当前设置,具体开发的端口号信息</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">/etc/init.d/iptables status<br></code></pre></td></tr></table></figure><p>（2）配置防火墙策略</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">vim /etc/sysconfig/iptables<br></code></pre></td></tr></table></figure><p>例如我要开22，80端口：</p><figure class="highlight pf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs pf"><span class="hljs-comment"># Firewall configuration written by system-config-firewall</span><br><span class="hljs-comment"># Manual customization of this file is not recommended.</span><br>*filter<br>:INPUT ACCEPT [<span class="hljs-number">0</span>:<span class="hljs-number">0</span>]<br>:FORWARD ACCEPT [<span class="hljs-number">0</span>:<span class="hljs-number">0</span>]<br>:OUTPUT ACCEPT [<span class="hljs-number">0</span>:<span class="hljs-number">0</span>]<br>-A INPUT -m <span class="hljs-keyword">state</span> –<span class="hljs-keyword">state</span> ESTABLISHED,RELATED -j ACCEPT<br>-A INPUT -p icmp -j ACCEPT<br>-A INPUT -i lo -j ACCEPT<br><br>-A INPUT -m <span class="hljs-keyword">state</span> –<span class="hljs-keyword">state</span> NEW -m tcp -p tcp –dport <span class="hljs-number">22</span> -j ACCEPT<br>-A INPUT -m <span class="hljs-keyword">state</span> –<span class="hljs-keyword">state</span> NEW -m tcp -p tcp –dport <span class="hljs-number">80</span> -j ACCEPT<br>-A INPUT -j REJECT –reject-with icmp-host-prohibited<br>-A FORWARD -j REJECT –reject-with icmp-host-prohibited<br>COMMIT<br></code></pre></td></tr></table></figure><p>保存退出！！！</p><p>重启防火墙：<code>service iptables restart</code></p><h2 id="centos-7">Centos 7</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs shell">查看开放的端口号<br><br>firewall-cmd --list-all<br><br>设置开放的端口号<br><br>firewall-cmd --add-service=http –permanent<br><br>firewall-cmd --add-port=80/tcp --permanent<br><br>重启防火墙<br><br>firewall-cmd –reload<br></code></pre></td></tr></table></figure><p>防火墙设置完成后，便可以在 windows 这边进行访问 nginx了。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>Nginx</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Nginx</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>0. Nginx简介</title>
+    <link href="/2024/12/15/nginx/0-Nginx%E7%AE%80%E4%BB%8B/"/>
+    <url>/2024/12/15/nginx/0-Nginx%E7%AE%80%E4%BB%8B/</url>
+    
+    <content type="html"><![CDATA[<h2 id="nginx-概述">1. Nginx 概述</h2><p>Nginx (“engine x”) 是一个高性能的 HTTP和反向代理服务器，特点是占有内存少，并发能力强，能经受高负载的考验，有报告表明能支持高达<span class="math inline">\(50,000\)</span> 个并发连接数。</p><h2 id="正向代理">2. 正向代理</h2><p>正向代理：如果把局域网外的 Internet想象成一个巨大的资源库，则局域网中的客户端要访问Internet，则需要通过代理服务器来访问，这种代理服务就称为正向代理。</p><p><img src="/2024/12/15/nginx/0-Nginx%E7%AE%80%E4%BB%8B/5f9ced6447d7eefe8fe6ec1c0d7061dc.png"></p><p>（1）需要在客户端配置代理服务器进行指定网站访问</p><p><img src="/2024/12/15/nginx/0-Nginx%E7%AE%80%E4%BB%8B/65817765188eca1011cb928219708b27.png"></p><h2 id="反向代理">3. 反向代理</h2><p>反向代理，其实客户端对代理是无感知的，因为客户端不需要任何配置就可以访问，我们只需要将请求发送到反向代理服务器，由反向代理服务器去选择目标服务器获取数据后，在返回给客户端，此时反向代理服务器和目标服务器对外就是一个服务器，暴露的是代理服务器地址，隐藏了真实服务器IP 地址。</p><p><img src="/2024/12/15/nginx/0-Nginx%E7%AE%80%E4%BB%8B/398d3c35bf3c6e95da82673161dacae3.png"></p><p>（1）暴露的是代理服务器地址，隐藏了真实服务器 IP 地址。</p><p><img src="/2024/12/15/nginx/0-Nginx%E7%AE%80%E4%BB%8B/83a2769d61fcf5bf60a548965bf3e23d.png"></p><h2 id="负载均衡">4. 负载均衡</h2><p>客户端发送多个请求到服务器，服务器处理请求，有一些可能要与数据库进行交互，服务器处理完毕后，再将结果返回给客户端。</p><p>这种架构模式对于早期的系统相对单一，并发请求相对较少的情况下是比较适合的，成本也低。但是随着信息数量的不断增长，访问量和数据量的飞速增长，以及系统业务的复杂度增加，这种架构会造成服务器相应客户端的请求日益缓慢，并发量特别大的时候，还容易造成服务器直接崩溃。很明显这是由于服务器性能的瓶颈造成的问题，那么如何解决这种情况呢？</p><p>我们首先想到的可能是升级服务器的配置，比如提高 CPU执行频率，加大内存等提高机器的物理性能来解决此问题，但是我们知道摩尔定律的日益失效，硬件的性能提升已经不能满足日益提升的需求了。最明显的一个例子，天猫双十一当天，某个热销商品的瞬时访问量是极其庞大的，那么类似上面的系统架构，将机器都增加到现有的顶级物理配置，都是不能够满足需求的。那么怎么办呢？</p><p>上面的分析我们去掉了增加服务器物理配置来解决问题的办法，也就是说纵向解决问题的办法行不通了，那么横向增加服务器的数量呢？这时候集群的概念产生了，单个服务器解决不了，我们增加服务器的数量，然后将请求分发到各个服务器上，将原先请求集中到单个服务器上的情况改为将请求分发到多个服务器上，将负载分发到不同的服务器，也就是我们所说的<strong>负载均衡</strong>。</p><p><img src="/2024/12/15/nginx/0-Nginx%E7%AE%80%E4%BB%8B/4b76eb1f78db338b2560ab919285a856.png"></p><p>（1）增加服务器的数量，然后将请求分发到各个服务器上，将原先请求集中到单个服务器上的情况改为将请求分发到多个服务器上，将负载分发到不同的服务器，也就是我们所说的<strong>负载均衡</strong>。</p><p><img src="/2024/12/15/nginx/0-Nginx%E7%AE%80%E4%BB%8B/e985ae526da22b07a471964e53bb5f0e.png"></p><h2 id="动静分离">5. 动静分离</h2><p>为了加快网站的解析速度，可以把动态页面和静态页面由不同的服务器来解析，加快解析速度。降低原来单个服务器的压力。</p><p><img src="/2024/12/15/nginx/0-Nginx%E7%AE%80%E4%BB%8B/42bb56f1314cd6b79d2bcffd6cd867c1.png"></p><p>（1）将静态页面与动态页面交由不同的服务器完成。</p><p><img src="/2024/12/15/nginx/0-Nginx%E7%AE%80%E4%BB%8B/e6a2301d1e822cd35fa20bc82afa4dc0.png"></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>后端开发</category>
+      
+      <category>Nginx</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Nginx</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Centos7虚拟机安装vmtools复制的问题</title>
     <link href="/2024/12/14/ubuntu/Centos7%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85vmtools%E5%A4%8D%E5%88%B6%E7%9A%84%E9%97%AE%E9%A2%98/"/>
     <url>/2024/12/14/ubuntu/Centos7%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85vmtools%E5%A4%8D%E5%88%B6%E7%9A%84%E9%97%AE%E9%A2%98/</url>
@@ -14,6 +1231,8 @@
     <categories>
       
       <category>linux</category>
+      
+      <category>常见问题</category>
       
     </categories>
     
@@ -39,6 +1258,8 @@
     <categories>
       
       <category>linux</category>
+      
+      <category>常见问题</category>
       
     </categories>
     
@@ -67,6 +1288,8 @@
       
       <category>linux</category>
       
+      <category>常见问题</category>
+      
     </categories>
     
     
@@ -91,6 +1314,8 @@
     <categories>
       
       <category>linux</category>
+      
+      <category>常见问题</category>
       
     </categories>
     
@@ -118,6 +1343,8 @@
     <categories>
       
       <category>linux</category>
+      
+      <category>常见问题</category>
       
     </categories>
     
@@ -196,6 +1423,8 @@
       
       <category>linux</category>
       
+      <category>常见问题</category>
+      
     </categories>
     
     
@@ -220,6 +1449,8 @@
     <categories>
       
       <category>linux</category>
+      
+      <category>常见问题</category>
       
     </categories>
     
@@ -6793,6 +8024,8 @@
     <categories>
       
       <category>linux</category>
+      
+      <category>常见问题</category>
       
     </categories>
     
