@@ -19,14 +19,16 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta property="og:type" content="article">
+    <meta name="description" content="第1章 TCP&#x2F;IP协议族 1. TCP&#x2F;IP协议族体系结构以及主要协议 TCP&#x2F;IP协议族是一个四层协议系统，自底而上分别是数据链路层、网络层、传输层和应用层。每一层完成不同的功能，且通过若干协议来实现，上层协议使用下层协议提供的服务，如图1-1所示。  1.1 数据链路层 数据链路层实现了网卡接口的网络驱动程序，以处理数据在物理媒介（比如以太网、令牌环等）上的传输。不同的物理网络具">
+<meta property="og:type" content="article">
 <meta property="og:title" content="1. TCP&#x2F;IP协议族">
 <meta property="og:url" content="http://binbo-zappy.github.io/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/1-TCP-IP%E5%8D%8F%E8%AE%AE%E6%97%8F/index.html">
 <meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="第1章 TCP&#x2F;IP协议族 1. TCP&#x2F;IP协议族体系结构以及主要协议 TCP&#x2F;IP协议族是一个四层协议系统，自底而上分别是数据链路层、网络层、传输层和应用层。每一层完成不同的功能，且通过若干协议来实现，上层协议使用下层协议提供的服务，如图1-1所示。  1.1 数据链路层 数据链路层实现了网卡接口的网络驱动程序，以处理数据在物理媒介（比如以太网、令牌环等）上的传输。不同的物理网络具">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/youshuang.png">
 <meta property="article:published_time" content="2024-12-16T14:03:30.000Z">
-<meta property="article:modified_time" content="2024-12-16T14:03:30.417Z">
+<meta property="article:modified_time" content="2024-12-17T07:31:08.258Z">
 <meta property="article:author" content="Binbo">
 <meta property="article:tag" content="网络编程">
 <meta name="twitter:card" content="summary_large_image">
@@ -223,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          0 字
+          7k 字
         
       </span>
     
@@ -234,7 +236,7 @@
         
         
         
-          1 分钟
+          59 分钟
         
       </span>
     
@@ -276,7 +278,297 @@
             
               <div class="markdown-body">
                 
-                
+                <h1 id="第1章-tcpip协议族">第1章 TCP/IP协议族</h1>
+<h2 id="tcpip协议族体系结构以及主要协议">1.
+TCP/IP协议族体系结构以及主要协议</h2>
+<p>TCP/IP协议族是一个四层协议系统，自底而上分别是数据链路层、网络层、传输层和应用层。每一层完成不同的功能，且通过若干协议来实现，上层协议使用下层协议提供的服务，如图1-1所示。</p>
+<p><img src="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/1-TCP-IP%E5%8D%8F%E8%AE%AE%E6%97%8F/image-20241217104322643.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="数据链路层">1.1 数据链路层</h3>
+<p>数据链路层实现了网卡接口的网络驱动程序，以处理数据在物理媒介（比如以太网、令牌环等）上的传输。不同的物理网络具有不同的电气特性，网络驱动程序隐藏了这些细节，为上层协议提供一个统一的接口。</p>
+<p>数据链路层两个常用的协议是ARP协议（Address Resolve
+Protocol，地址解析协议）和RARP协议（Reverse Address Resolve
+Protocol，逆地址解析协议）。它们实现了IP地址和机器物理地址（通常是MAC地址，以太网、令牌环和802.11无线网络都使用MAC地址）之间的相互转换。</p>
+<p>ARP:</p>
+<ul>
+<li>网络层使用IP地址寻址一台机器，而数据链路层使用物理地址寻址一台机器，因此网络层必须先将目标机器的IP地址转化成其物理地址，才能使用数据链路层提供的服务，这就是ARP协议的用途。</li>
+</ul>
+<p>RARP</p>
+<ul>
+<li>RARP协议仅用于网络上的某些无盘工作站。因为缺乏存储设备，无盘工作站无法记住自己的IP地址，但它们可以利用网卡上的物理地址来向网络管理者（服务器或网络管理软件）查询自身的IP地址。运行RARP服务的网络管理者通常存有该网络上所有机器的物理地址到IP地址的映射。</li>
+</ul>
+<h3 id="网络层">1.2 网络层</h3>
+<p>网络层实现数据包的选路和转发。通信的两台主机一般不是直接相连的，而是通过多个中间节点（路由器）连接的。</p>
+<p>网络层的任务就是选择合适的中间节点，以确定两台主机之间的通信路径。同时，网络层对上层协议隐藏了网络拓扑连接的细节，使得在传输层和网络应用程序看来，通信的双方是直接相连的。</p>
+<p>网络层最核心的协议是IP协议（Internet Protocol，因特网协议）。</p>
+<ul>
+<li>IP协议根据数据包的目的IP地址来决定如何投递它。</li>
+<li>如果数据包不能直接发送给目标主机，那么IP协议就为它寻找一个合适的下一跳（next
+hop）路由器，并将数据包交付给该路由器来转发。</li>
+<li>多次重复这一过程，数据包最终到达目标主机，或者由于发送失败而被丢弃。</li>
+<li>IP协议使用逐跳（hop by hop）的方式确定通信路径。</li>
+</ul>
+<p>网络层另外一个重要的协议是ICMP协议（Internet Control Message
+Protocol，因特网控制报文协议）。</p>
+<ul>
+<li>它是IP协议的重要补充，主要用于检测网络连接。</li>
+<li>ICMP协议使用的报文格式如图1-2所示。</li>
+</ul>
+<p><img src="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/1-TCP-IP%E5%8D%8F%E8%AE%AE%E6%97%8F/image-20241217104843121.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>8位类型字段用于区分报文类型。将ICMP报文分为两大类：
+<ul>
+<li>一类是差错报文，这类报文主要用来回应网络错误，比如目标不可到达（类型值为3）和重定向（类型值为5）；</li>
+<li>另一类是查询报文，这类报文用来查询网络信息，比如ping程序就是使用ICMP报文查看目标是否可到达（类型值为8）的。</li>
+</ul></li>
+<li>有的ICMP报文还使用8位代码字段来进一步细分不同的条件。
+<ul>
+<li>比如重定向报文使用代码值0表示对网络重定向</li>
+<li>代码值1表示对主机重定向。</li>
+</ul></li>
+<li>ICMP报文使用16位校验和字段对整个报文（包括头部和内容部分）进行循环冗余校验（Cyclic
+Redundancy
+Check，CRC），以检验报文在传输过程中是否损坏。不同类型的ICMP报文具有不同的正文内容。</li>
+</ul>
+<h3 id="传输层">1.3 传输层</h3>
+<p>传输层为两台主机上的应用程序提供<strong>端到端</strong>（end to
+end）的通信。与网络层使用的逐跳通信方式不同，传输层只关心通信的起始端和目的端，而不在乎数据包的中转过程。图1-3展示了传输层和网络层的这种区别。</p>
+<p><img src="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/1-TCP-IP%E5%8D%8F%E8%AE%AE%E6%97%8F/image-20241217105126194.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>垂直的实线箭头表示TCP/IP协议族各层之间的实体通信（数据包确实是沿着这些线路传递的）</li>
+<li>水平的虚线箭头表示逻辑通信线路。</li>
+</ul>
+<p>传输层协议主要有三个：TCP协议、UDP协议和SCTP协议。</p>
+<ul>
+<li>TCP协议（Transmission Control Protocol，传输控制协议）
+<ul>
+<li>为应用层提供可靠的、面向连接的和基于流（stream）的服务。TCP协议使用超时重传、数据确认等方式来确保数据包被正确地发送至目的端，因此TCP服务是可靠的。</li>
+<li>使用TCP协议通信的双方必须先建立TCP连接，并在内核中为该连接维持一些必要的数据结构，比如连接的状态、读写缓冲区，以及诸多定时器等。</li>
+<li>当通信结束时，双方必须关闭连接以释放这些内核数据。</li>
+<li>TCP服务是基于流的。基于流的数据没有边界（长度）限制，它源源不断地从通信的一端流入另一端。发送端可以逐个字节地向数据流中写入数据，接收端也可以逐个字节地将它们读出。</li>
+</ul></li>
+<li>UDP协议（User Datagram Protocol，用户数据报协议）
+<ul>
+<li>则与TCP协议完全相反，它为应用层提供不可靠、无连接和基于数据报的服务。</li>
+<li>“不可靠”意味着UDP协议无法保证数据从发送端正确地传送到目的端。</li>
+<li>如果数据在中途丢失，或者目的端通过数据校验发现数据错误而将其丢弃，则UDP协议只是简单地通知应用程序发送失败。</li>
+<li>因此，使用UDP协议的应用程序通常要自己处理数据确认、超时重传等逻辑。</li>
+<li>UDP协议是无连接的，即通信双方不保持一个长久的联系，因此应用程序每次发送数据都要明确指定接收端的地址（IP地址等信息）。</li>
+<li>基于数据报的服务，是相对基于流的服务而言的。每个UDP数据报都有一个长度，接收端必须以该长度为最小单位将其所有内容一次性读出，否则数据将被截断。</li>
+</ul></li>
+<li>SCTP协议（Stream Control Transmission
+Protocol，流控制传输协议）是一种相对较新的传输层协议，它是为了在因特网上传输电话信号而设计的。</li>
+</ul>
+<h3 id="应用层">1.4 应用层</h3>
+<p>应用层负责处理应用程序的逻辑。数据链路层、网络层和传输层负责处理网络通信细节，这部分必须既稳定又高效，因此它们都在内核空间中实现，如图1-1所示。</p>
+<p>应用层则在用户空间实现，因为它负责处理众多逻辑，比如文件传输、名称查询和网络管理等。</p>
+<p>如果应用层也在内核中实现，则会使内核变得非常庞大。当然，也有少数服务器程序是在内核中实现的，这样代码就无须在用户空间和内核空间来回切换（主要是数据的复制），极大地提高了工作效率。不过这种代码实现起来较复杂，不够灵活，且不便于移植。本书只讨论用户空间的网络编程。</p>
+<p>应用层协议很多，图1-1仅列举了其中的几个：</p>
+<ul>
+<li><p>ping是应用程序，而不是协议，前面说过它利用ICMP报文检测网络连接，是调试网络环境的必备工具。</p></li>
+<li><p>telnet协议是一种远程登录协议，它使我们能在本地完成远程任务，</p></li>
+<li><p>OSPF（Open Shortest Path
+First，开放最短路径优先）协议是一种动态路由更新协议，用于路由器之间的通信，以告知对方各自的路由信息。</p></li>
+<li><p>DNS（Domain Name
+Service，域名服务）协议提供机器域名到IP地址的转换，我们将在后面简要介绍DNS协议</p></li>
+</ul>
+<p>应用层协议（或程序）可能跳过传输层直接使用网络层提供的服务，比如ping程序和OSPF协议。</p>
+<p>应用层协议（或程序）通常既可以使用TCP服务，又可以使用UDP服务，比如DNS协议。</p>
+<p>我们可以通过<code>/etc/services</code>文件查看所有知名的应用层协议，以及它们都能使用哪些传输层服务。</p>
+<h2 id="封装">2. 封装</h2>
+<p>封装（encapsulation）实现上层协议使用下层协议提供的服务。</p>
+<ul>
+<li>应用程序数据在发送到物理网络上之前，将沿着协议栈从上往下依次传递。</li>
+<li>每层协议都将在上层数据的基础上加上自己的头部信息（有时还包括尾部信息），以实现该层的功能，这个过程就称为封装</li>
+</ul>
+<p>经过TCP封装后的数据称为TCP报文段（TCP message
+segment），或者简称TCP段。</p>
+<ul>
+<li>TCP协议为通信双方维持一个连接，并且在内核中存储相关数据。</li>
+<li>这部分数据中的TCP头部信息和TCP内核缓冲区（发送缓冲区或接收缓冲区）数据一起构成了TCP报文段，如图1-5中的虚线框所示。</li>
+</ul>
+<p><img src="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/1-TCP-IP%E5%8D%8F%E8%AE%AE%E6%97%8F/image-20241217110024283.png" srcset="/img/loading.gif" lazyload></p>
+<p>经过UDP封装后的数据称为UDP数据报（UDP datagram）。</p>
+<ul>
+<li>UDP对应用程序数据的封装与TCP类似。</li>
+<li>不同的是，UDP无须为应用层数据保存副本，因为它提供的服务是不可靠的。当一个UDP数据报被成功发送之后，UDP内核缓冲区中的该数据报就被丢弃了。</li>
+<li>如果应用程序检测到该数据报未能被接收端正确接收，并打算重发这个数据报，则应用程序需要重新从用户空间将该数据报拷贝到UDP内核发送缓冲区中。</li>
+</ul>
+<p>经过IP封装后的数据称为IP数据报（IP datagram）。</p>
+<ul>
+<li>IP数据报也包括头部信息和数据部分，其中数据部分就是一个TCP报文段、UDP数据报或者ICMP报文。</li>
+</ul>
+<p>经过数据链路层封装的数据称为帧（frame）。</p>
+<ul>
+<li>传输媒介不同，帧的类型也不同。</li>
+<li>比如，以太网上传输的是以太网帧（ethernet
+frame），而令牌环网络上传输的则是令牌环帧（token ring
+frame）。以以太网帧为例，其封装格式如图1-6所示。</li>
+</ul>
+<p><img src="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/1-TCP-IP%E5%8D%8F%E8%AE%AE%E6%97%8F/image-20241217110221962.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>以太网帧使用6字节的目的物理地址和6字节的源物理地址来表示通信的双方。</li>
+<li>关于类型（type）字段，我们将在后面讨论。</li>
+<li>4字节CRC字段对帧的其他部分提供循环冗余校验。</li>
+</ul>
+<p>帧的最大传输单元（Max Transmit
+Unit，MTU），即帧最多能携带多少上层协议数据（比如IP数据报），通常受到网络类型的限制。以太网帧的MTU是1500字节。正因为如此，过长的IP数据报可能需要被分片（fragment）传输。</p>
+<p>帧才是最终在物理网络上传送的字节序列。至此，封装过程完成。</p>
+<h2 id="分用">3. 分用</h2>
+<p>分用（demultiplexing）:</p>
+<ul>
+<li>当帧到达目的主机时，将沿着协议栈自底向上依次传递。</li>
+<li>各层协议依次处理帧中本层负责的头部数据，以获取所需的信息，并最终将处理后的帧交给目标应用程序。</li>
+<li>分用是依靠头部信息中的类型字段实现的。</li>
+</ul>
+<p>帧通过上述分用步骤后，最终将封装前的原始数据送至目标服务。</p>
+<h2 id="测试网络">4. 测试网络</h2>
+<p>测试网络，其中包括两台主机A和B，以及一个连接到因特网的路由器。</p>
+<h2 id="arp协议工作原理">5. ARP协议工作原理</h2>
+<p>ARP协议能实现任意网络层地址到任意物理地址的转换，</p>
+<p>其工作原理是：</p>
+<ul>
+<li>主机向自己所在的网络广播一个ARP请求，该请求包含目标机器的网络地址。此网络上的其他机器都将收到这个请求，但只有被请求的目标机器会回应一个ARP应答，其中包含自己的物理地址。</li>
+</ul>
+<h3 id="以太网arp请求应答报文详解">5.1 以太网ARP请求/应答报文详解</h3>
+<p>以太网ARP请求/应答报文的格式如图1-9所示。</p>
+<p><img src="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/1-TCP-IP%E5%8D%8F%E8%AE%AE%E6%97%8F/image-20241217111106089.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>硬件类型字段定义物理地址的类型，它的值为1表示MAC地址。</li>
+<li>协议类型字段表示要映射的协议地址类型，它的值为0x800，表示IP地址。</li>
+<li>硬件地址长度字段和协议地址长度字段，顾名思义，其单位是字节。对MAC地址来说，其长度为6；对IP（v4）地址来说，其长度为4。</li>
+<li>操作字段指出4种操作类型：ARP请求（值为1）、ARP应答（值为2）、RARP请求（值为3）和RARP应答（值为4）。</li>
+<li>最后4个字段指定通信双方的以太网地址和IP地址。
+<ul>
+<li>发送端填充除目的端以太网地址外的其他3个字段，以构建ARP请求并发送之。</li>
+<li>接收端发现该请求的目的端IP地址是自己，就把自己的以太网地址填进去，然后交换两个目的端地址和两个发送端地址，以构建ARP应答并返回之（当然，如前所述，操作字段需要设置为2）。</li>
+</ul></li>
+<li>由图1-9可知，ARP请求/应答报文的长度为28字节。</li>
+<li>如果再加上以太网帧头部和尾部的18字节（见图1-6），则一个携带ARP请求/应答报文的以太网帧长度为46字节。</li>
+<li>不过有的实现要求以太网帧数据部分长度至少为46字节（见图1-4），此时ARP请求/应答报文将增加一些填充字节，以满足这个要求。</li>
+<li>在这种情况下，一个携带ARP请求/应答报文的以太网帧长度为64字节。</li>
+</ul>
+<h3 id="arp高速缓存的查看和修改">5.2 ARP高速缓存的查看和修改</h3>
+<p>通常，ARP维护一个高速缓存，其中包含经常访问（比如网关地址）或最近访问的机器的IP地址到物理地址的映射。这样就避免了重复的ARP请求，提高了发送数据包的速度。</p>
+<p>Linux下可以使用arp命令来查看和修改ARP高速缓存。（使用arp-a命令）：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sh">arp -a<br><br>Kongming20(192.168.1.109) at 08:00:27:53:10:67[ether] on eth0 ?(192.168.1.1) at 14:e6:e4:93:5b:78[ether] on eth0<br></code></pre></td></tr></table></figure>
+<p>其中，第一项描述的是另一台测试机器Kongming20</p>
+<p>第二项描述的是路由器。</p>
+<p>下面两条命令则分别删除和添加一个ARP缓存项：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> arp -d 192.168.1.109 <span class="hljs-comment"># 删除Kongming20对应的ARP缓存项</span><br><span class="hljs-built_in">sudo</span> arp -s 192.168.1.109 08:00:27:53:10:67 <span class="hljs-comment"># 添加Kongming20对应的ARP缓存项</span><br></code></pre></td></tr></table></figure>
+<h3 id="使用tcpdump观察arp通信过程">5.3 使用tcpdump观察ARP通信过程</h3>
+<p>为了清楚地了解ARP的运作过程，我们从ernest-laptop上执行telnet命令登录Kongming20的echo服务（已经开启），并用tcpdump（详见第17章）抓取这个过程中两台测试机器之间交换的以太网帧。具体操作过程如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> arp -d 192.168.1.109 <span class="hljs-comment"># 清除ARP缓存中Kongming20对应的项</span><br><span class="hljs-built_in">sudo</span> tcpdump -i eth0 -nt -s 500 <span class="hljs-string">&#x27;(dst 192.168.1.109 and src 192.168.1.108) or (dst 192.168.1.108 and src 192.168.1.109)&#x27;</span> <span class="hljs-comment"># 如无特殊声明，抓包都在机器ernest-laptop上执行</span><br>telnet 192.168.1.109 <span class="hljs-built_in">echo</span> <span class="hljs-comment"># 开启另一个终端执行telnet命令</span><br></code></pre></td></tr></table></figure>
+<ul>
+<li>在执行telnet命令之前，应先清除ARP缓存中与Kongming20对应的项，否则ARP通信不被执行，我们也就无法抓取到期望的以太网帧。</li>
+<li>tcpdump抓取到的众多数据包中，只有最靠前的两个和ARP通信有关系，现在将它们列出：</li>
+</ul>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">1</span>. <span class="hljs-number">00</span>:<span class="hljs-number">16</span>:d3:<span class="hljs-number">5</span>c:b9:e3 &gt; ff:ff:ff:ff:ff:ff, ethertype ARP (<span class="hljs-number">0</span>x0806), length <span class="hljs-number">42</span>: Request who-has <span class="hljs-number">192.168.1.109</span> tell <span class="hljs-number">192.168.1.108</span>, length <span class="hljs-number">28</span><br><span class="hljs-attribute">2</span>. <span class="hljs-number">08</span>:<span class="hljs-number">00</span>:<span class="hljs-number">27</span>:<span class="hljs-number">53</span>:<span class="hljs-number">10</span>:<span class="hljs-number">67</span> &gt; <span class="hljs-number">00</span>:<span class="hljs-number">16</span>:d3:<span class="hljs-number">5</span>c:b9:e3, ethertype ARP (<span class="hljs-number">0</span>x0806), length <span class="hljs-number">60</span>: Reply <span class="hljs-number">192.168.1.109</span> is-at <span class="hljs-number">08</span>:<span class="hljs-number">00</span>:<span class="hljs-number">27</span>:<span class="hljs-number">53</span>:<span class="hljs-number">10</span>:<span class="hljs-number">67</span>, length <span class="hljs-number">46</span><br></code></pre></td></tr></table></figure>
+<ul>
+<li><p>由tcpdump抓取的数据包本质上是以太网帧，我们通过该命令的众多选项来控制帧的过滤（比如用dst和src指定通信的目的端IP地址和源端IP地址）和显示（比如用-e选项开启以太网帧头部信息的显示）。</p></li>
+<li><p>第一个数据包中，ARP通信的源端的物理地址是00:16:d3:5c:b9:e3（ernest-laptop），目的端的物理地址是ff:ff:ff:ff:ff:ff，这是以太网的广播地址，用以表示整个LAN。该LAN上的所有机器都会收到并处理这样的帧。</p></li>
+<li><p>数值0x806是以太网帧头部的类型字段的值，它表示分用的目标是ARP模块。该以太网帧的长度为42字节（实际上是46字节，tcpdump未统计以太网帧尾部4字节的CRC字段），其中数据部分长度为28字节。</p></li>
+<li><p>“Request”表示这是一个ARP请求，“who-has 192.168.1.109 tell
+192.168.1.108”则表示是ernest-laptop要查询Kongming20的IP地址。</p></li>
+<li><p>第二个数据包中，ARP通信的源端的物理地址是08:00:27:53:10:67（Kongming20），目的端的物理地址是00:16:d3:5c:b9:e3（ernest-laptop）。“Reply”表示这是一个ARP应答，“192.168.1.109
+is-at
+08:00:27:53:10:67”则表示目标机器Kongming20报告其物理地址。该以太网帧的长度为60字节（实际上是64字节），可见它使用了填充字节来满足最小帧长度。</p></li>
+</ul>
+<p>为了便于理解，我们将上述讨论用图1-10来详细说明。</p>
+<p><img src="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/1-TCP-IP%E5%8D%8F%E8%AE%AE%E6%97%8F/image-20241217145833730.png" srcset="/img/loading.gif" lazyload></p>
+<p>关于该图，需要说明三点：</p>
+<ol type="1">
+<li>我们将两次传输的以太网帧按照图1-6所描述的以太网帧封装格式绘制在图的下半部分。</li>
+<li>ARP请求和应答是从以太网驱动程序发出的，而并非像图中描述的那样从ARP模块直接发送到以太网上，所以我们将它们用虚线表示，这主要是为了体现携带ARP数据的以太网帧和其他以太网帧（比如携带IP数据报的以太网帧）的区别。</li>
+<li>路由器也将接收到以太网帧1，因为该帧是一个广播帧。不过很显然，路由器并没有回应其中的ARP请求。</li>
+</ol>
+<h2 id="dns工作原理">6. DNS工作原理</h2>
+<p>我们通常使用机器的域名来访问这台机器，而不直接使用其IP地址，比如访问因特网上的各种网站。</p>
+<p>需要使用域名查询服务将机器的域名转换成IP地址</p>
+<p>域名查询服务有很多种实现方式，比如NIS（Network Information
+Service，网络信息服务）、DNS和本地静态文件等。</p>
+<h3 id="dns查询和应答报文详解">6.1 DNS查询和应答报文详解</h3>
+<p>DNS是一套分布式的域名服务系统。</p>
+<p>每个DNS服务器上都存放着大量的机器名和IP地址的映射，并且是动态更新的。</p>
+<p>众多网络客户端程序都使用DNS协议来向DNS服务器查询目标主机的IP地址。DNS查询和应答报文的格式如图1-11所示。</p>
+<p><img src="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/1-TCP-IP%E5%8D%8F%E8%AE%AE%E6%97%8F/image-20241217150401422.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li><p>16位标识[1]字段用于标记一对DNS查询和应答，以此区分一个DNS应答是哪个DNS查询的回应。</p></li>
+<li><p>16位标志字段用于协商具体的通信方式和反馈通信状态。DNS报文头部的16位标志字段的细节如图1-12所示。</p></li>
+</ul>
+<p><img src="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/1-TCP-IP%E5%8D%8F%E8%AE%AE%E6%97%8F/image-20241217150835572.png" srcset="/img/loading.gif" lazyload></p>
+<p>图1-12中各标志的含义分别是：</p>
+<ul>
+<li>QR，查询/应答标志。0表示这是一个查询报文，1表示这是一个应答报文。</li>
+<li>opcode，定义查询和应答的类型。0表示标准查询，1表示反向查询（由IP地址获得主机域名），2表示请求服务器状态。</li>
+<li>AA，授权应答标志，仅由应答报文使用。1表示域名服务器是授权服务器。</li>
+<li>TC，截断标志，仅当DNS报文使用UDP服务时使用。因为UDP数据报有长度限制，所以过长的DNS报文将被截断。1表示DNS报文超过512字节，并被截断。</li>
+<li>RD，递归查询标志。1表示执行递归查询，即如果目标DNS服务器无法解析某个主机名，则它将向其他DNS服务器继续查询，如此递归，直到获得结果并把该结果返回给客户端。0表示执行迭代查询，即如果目标DNS服务器无法解析某个主机名，则它将自己知道的其他DNS服务器的IP地址返回给客户端，以供客户端参考。</li>
+<li>RA，允许递归标志。仅由应答报文使用，1表示DNS服务器支持递归查询。</li>
+<li>zero，这3位未用，必须都设置为0。</li>
+<li>rcode，4位返回码，表示应答的状态。常用值有0（无错误）和3（域名不存在）。</li>
+</ul>
+<p>接下来的4个字段则分别指出DNS报文的最后4个字段的资源记录数目。对查询报文而言，它一般包含1个查询问题，而应答资源记录数、授权资源记录数和额外资源记录数则为0。应答报文的应答资源记录数则至少为1，而授权资源记录数和额外资源记录数可为0或非0。</p>
+<p>查询问题的格式如图1-13所示。</p>
+<p><img src="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/1-TCP-IP%E5%8D%8F%E8%AE%AE%E6%97%8F/image-20241217151814088.png" srcset="/img/loading.gif" lazyload></p>
+<p>图1-13中，查询名以一定的格式封装了要查询的主机域名。16位查询类型表示如何执行查询操作，常见的类型有如下几种：</p>
+<ul>
+<li>类型A，值是1，表示获取目标主机的IP地址。</li>
+<li>类型CNAME，值是5，表示获得目标主机的别名。</li>
+<li>类型PTR，值是12，表示反向查询。</li>
+</ul>
+<p>16位查询类通常为1，表示获取因特网地址（IP地址）。</p>
+<p>应答字段、授权字段和额外信息字段都使用资源记录（Resource
+Record，RR）格式。资源记录格式如图1-14所示。</p>
+<p><img src="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/1-TCP-IP%E5%8D%8F%E8%AE%AE%E6%97%8F/image-20241217151857743.png" srcset="/img/loading.gif" lazyload></p>
+<p>图1-14中，32位域名是该记录中与资源对应的名字，其格式和查询问题中的查询名字段相同。16位类型和16位类字段的含义也与DNS查询问题的对应字段相同。</p>
+<p>32位生存时间表示该查询记录结果可被本地客户端程序缓存多长时间，单位是秒。</p>
+<p>16位资源数据长度字段和资源数据字段的内容取决于类型字段。对类型A而言，资源数据是32位的IPv4地址，而资源数据长度则为4（以字节为单位）。</p>
+<h3 id="linux下访问dns服务">6.2 Linux下访问DNS服务</h3>
+<p>我们要访问DNS服务，就必须先知道DNS服务器的IP地址。Linux使用<code>/etc/resolv.conf</code>文件来存放DNS服务器的IP地址。机器ernest-laptop上，该文件的内容如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">#</span><span class="language-bash">Generated by Network Manager</span><br>nameserver 219.239.26.42<br>nameserver 124.207.160.106<br></code></pre></td></tr></table></figure>
+<p>其中的两个IP地址分别是首选DNS服务器地址和备选DNS服务器地址。文件中的注释语句“Generated
+by Network
+Manager”告诉我们，这两个DNS服务器地址是由网络管理程序写入的。</p>
+<p>Linux下一个常用的访问DNS服务器的客户端程序是host，比如下面的命令是向首选DNS服务器219.239.26.42查询机器www.baidu.com的IP地址：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ host -t A www.baidu.com<br>www.baidu.com is an <span class="hljs-built_in">alias</span> <span class="hljs-keyword">for</span> www.a.shifen.com.<br>www.a.shifen.com has address 119.75.217.56<br>www.a.shifen.com has address 119.75.218.77<br></code></pre></td></tr></table></figure>
+<p>host命令的输出告诉我们，机器名www.baidu.com是www.a.shifen.com.的别名，并且该机器名对应两个IP地址。host命令使用DNS协议和DNS服务器通信，其-t选项告诉DNS协议使用哪种查询类型。我们这里使用的是A类型，即通过机器的域名获得其IP地址（但实际上返回的资源记录中还包含机器的别名）。</p>
+<h3 id="使用tcpdump观察dns通信过程">6.3 使用tcpdump观察DNS通信过程</h3>
+<p>为了看清楚DNS通信的过程，下面我们将从ernest-laptop上运行host命令以查询主机www.baidu.com对应的IP地址，并使用tcpdump抓取这一过程中LAN上传输的以太网帧。具体的操作过程如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ <span class="hljs-built_in">sudo</span> tcpdump -i eth0 -nt -s 500 port domain<br>$ host -t A www.baidu.com<br></code></pre></td></tr></table></figure>
+<p>这一次执行tcpdump抓包时，我们使用“port
+domain”来过滤数据包，表示只抓取使用domain（域名）服务的数据包，即DNS查询和应答报文。tcpdump的输出如下：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs txt">1. IP 192.168.1.108.34319 &gt; 219.239.26.42.53: 57428+ A? www.baidu.com. (31)<br>2. IP 219.239.26.42.53 &gt; 192.168.1.108.34319: 57428 3/4/4 CNAME www.a.shifen.com., A 119.75.218.77, A 119.75.217.56 (226)<br></code></pre></td></tr></table></figure>
+<ul>
+<li><p>这两个数据包开始的“IP”指出，它们后面的内容描述的是IP数据报。</p></li>
+<li><p>tcpdump以“IP地址.端口号”的形式来描述通信的某一端；以“&gt;”表示数据传输的方向，“&gt;”前面是源端，后面是目的端。可见，第一个数据包是测试机器ernest-laptop（IP地址是192.168.1.108）向其首选DNS服务器（IP地址是219.239.26.42）发送的DNS查询报文（目标端口53是DNS服务使用的端口，这一点我们在前面介绍过），第二个数据包是服务器反馈的DNS应答报文。</p></li>
+<li><p>第一个数据包中，数值57428是DNS查询报文的标识值，因此该值也出现在DNS应答报文中。</p>
+<ul>
+<li>“+”表示启用递归查询标志。</li>
+<li>“A?”表示使用A类型的查询方式。</li>
+<li>“www.baidu.com”则是DNS查询问题中的查询名。括号中的数值31是DNS查询报文的长度（以字节为单位）。</li>
+</ul></li>
+<li><p>第二个数据包中，“3/4/4”表示该报文中包含3个应答资源记录、4个授权资源记录和4个额外信息记录。</p>
+<ul>
+<li>“CNAME www.a.shifen.com.，A 119.75.218.77，A
+119.75.217.56”则表示3个应答资源记录的内容。</li>
+<li>其中CNAME表示紧随其后的记录是机器的别名，</li>
+<li>A表示紧随其后的记录是IP地址。</li>
+<li>该应答报文的长度为226字节。</li>
+</ul></li>
+</ul>
+<p>注意我们抓包的时候没有开启tcpdump的-X选项（或者-x选项）。如果使用-X选项，我们将能看到DNS报文的每一个字节，也就能明白上面31字节的查询报文和226字节的应答报文的具体含义。限于篇幅，这里不再讨论，读者不妨自己分析。</p>
+<h2 id="socket和tcpip协议族的关系">7. socket和TCP/IP协议族的关系</h2>
+<p>前文提到，数据链路层、网络层、传输层协议是在内核中实现的。</p>
+<p>因此操作系统需要实现一组系统调用，使得应用程序能够访问这些协议提供的服务。</p>
+<p>实现这组系统调用的API（Application Programming
+Interface，应用程序编程接口）主要有两套：socket和XTI。</p>
+<p>XTI现在基本不再使用，本书仅讨论socket。</p>
+<p>由socket定义的这一组API提供如下两点功能：</p>
+<ul>
+<li>一是将应用程序数据从用户缓冲区中复制到TCP/UDP内核发送缓冲区，以交付内核来发送数据（比如图1-5所示的send函数），或者是从内核TCP/UDP接收缓冲区中复制数据到用户缓冲区，以读取数据；</li>
+<li>二是应用程序可以通过它们来修改内核中各层协议的某些头部信息或其他数据结构，从而精细地控制底层通信的行为。比如可以通过setsockopt函数来设置IP数据报在网络上的存活时间。我们将在第5章详细讨论这一组API。</li>
+</ul>
+<p>值得一提的是，socket是一套通用网络编程接口，它不但可以访问内核中TCP/IP协议栈，而且可以访问其他网络协议栈（比如X.25协议栈、UNIX本地域协议栈等）。</p>
 
                 
               </div>

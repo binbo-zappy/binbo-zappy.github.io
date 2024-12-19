@@ -19,14 +19,16 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta property="og:type" content="article">
+    <meta name="description" content="第7章 Linux服务器程序规范  Linux服务器程序一般以后台进程形式运行。后台进程又称守护进程（daemon）。它没有控制终端，因而也不会意外接收到用户输入。守护进程的父进程通常是init进程（PID为1的进程）。 Linux服务器程序通常有一套日志系统，它至少能输出日志到文件，有的高级服务器还能输出日志到专门的UDP服务器。大部分后台进程都在&#x2F;var&#x2F;log目录下拥有自己的日志目录。">
+<meta property="og:type" content="article">
 <meta property="og:title" content="7. Linux服务器程序规范">
 <meta property="og:url" content="http://binbo-zappy.github.io/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/7-Linux%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%A8%8B%E5%BA%8F%E8%A7%84%E8%8C%83/index.html">
 <meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="第7章 Linux服务器程序规范  Linux服务器程序一般以后台进程形式运行。后台进程又称守护进程（daemon）。它没有控制终端，因而也不会意外接收到用户输入。守护进程的父进程通常是init进程（PID为1的进程）。 Linux服务器程序通常有一套日志系统，它至少能输出日志到文件，有的高级服务器还能输出日志到专门的UDP服务器。大部分后台进程都在&#x2F;var&#x2F;log目录下拥有自己的日志目录。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/youshuang.png">
 <meta property="article:published_time" content="2024-12-16T14:03:39.000Z">
-<meta property="article:modified_time" content="2024-12-16T14:03:39.369Z">
+<meta property="article:modified_time" content="2024-12-18T07:55:27.462Z">
 <meta property="article:author" content="Binbo">
 <meta property="article:tag" content="网络编程">
 <meta name="twitter:card" content="summary_large_image">
@@ -223,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          0 字
+          4.3k 字
         
       </span>
     
@@ -234,7 +236,7 @@
         
         
         
-          1 分钟
+          37 分钟
         
       </span>
     
@@ -276,7 +278,174 @@
             
               <div class="markdown-body">
                 
-                
+                <h1 id="第7章-linux服务器程序规范">第7章 Linux服务器程序规范</h1>
+<ul>
+<li><p>Linux服务器程序一般以后台进程形式运行。后台进程又称守护进程（daemon）。它没有控制终端，因而也不会意外接收到用户输入。守护进程的父进程通常是init进程（PID为1的进程）。</p></li>
+<li><p>Linux服务器程序通常有一套日志系统，它至少能输出日志到文件，有的高级服务器还能输出日志到专门的UDP服务器。大部分后台进程都在/var/log目录下拥有自己的日志目录。</p></li>
+<li><p>Linux服务器程序一般以某个专门的非root身份运行。比如mysqld、httpd、syslogd等后台进程，分别拥有自己的运行账户mysql、apache和syslog。</p></li>
+<li><p>Linux服务器程序通常是可配置的。服务器程序通常能处理很多命令行选项，如果一次运行的选项太多，则可以用配置文件来管理。绝大多数服务器程序都有配置文件，并存放在/etc目录下。比如第4章讨论的squid服务器的配置文件是/etc/squid3/squid.conf。</p></li>
+<li><p>Linux服务器进程通常会在启动的时候生成一个PID文件并存入/var/run目录中，以记录该后台进程的PID。比如syslogd的PID文件是/var/run/syslogd.pid。</p></li>
+<li><p>Linux服务器程序通常需要考虑系统资源和限制，以预测自身能承受多大负荷，比如进程可用文件描述符总数和内存总量等。
+在开始系统地学习网络编程之前，我们将用一章的篇幅来探讨服务器程序的一些主要的规范。</p></li>
+</ul>
+<h2 id="日志">1. 日志</h2>
+<h3 id="linux系统日志">1.1 Linux系统日志</h3>
+<p><strong>服务器的调试和维护都需要一个专业的日志系统。</strong></p>
+<p>Linux提供一个守护进程来处理系统日志——syslogd，不过现在的Linux系统上使用的都是它的升级版——rsyslogd。</p>
+<p>rsyslogd守护进程既能接收用户进程输出的日志，又能接收内核日志。</p>
+<p>用户进程是通过调用syslog函数生成系统日志的。</p>
+<ul>
+<li>该函数将日志输出到一个UNIX本地域socket类型（AF_UNIX）的文件/dev/log中，rsyslogd则监听该文件以获取用户进程的输出。</li>
+</ul>
+<p>内核日志在老的系统上是通过另外一个守护进程rklogd来管理的，rsyslogd利用额外的模块实现了相同的功能。</p>
+<ul>
+<li>内核日志由printk等函数打印至内核的环状缓存（ring
+buffer）中。环状缓存的内容直接映射到/proc/kmsg文件中。rsyslogd则通过读取该文件获得内核日志。</li>
+</ul>
+<p>rsyslogd守护进程在接收到用户进程或内核输入的日志后，会把它们输出至某些特定的日志文件。</p>
+<ul>
+<li>默认情况下，调试信息会保存至/var/log/debug文件，普通信息保存至/var/log/messages文件，</li>
+<li>内核消息则保存至/var/log/kern.log文件。</li>
+</ul>
+<p>不过，日志信息具体如何分发，可以在rsyslogd的配置文件中设置。</p>
+<ul>
+<li>rsyslogd的主配置文件是/etc/rsyslog.conf，其中主要可以设置的项包括：
+<ul>
+<li>内核日志输入路径，</li>
+<li>是否接收UDP日志及其监听端口（默认是514，见/etc/services文件），</li>
+<li>是否接收TCP日志及其监听端口，</li>
+<li>日志文件的权限，</li>
+<li>包含哪些子配置文件（比如/etc/rsyslog.d/*.conf）。rsyslogd的子配置文件则指定各类日志的目标存储文件。</li>
+</ul></li>
+</ul>
+<p><img src="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/7-Linux%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%A8%8B%E5%BA%8F%E8%A7%84%E8%8C%83/image-20241218151930934.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="syslog函数">1.2 syslog函数</h3>
+<p>应用程序使用syslog函数与rsyslogd守护进程通信。syslog函数的定义如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span>＜syslog.h＞ </span><br><span class="hljs-type">void</span> <span class="hljs-title function_">syslog</span><span class="hljs-params">(<span class="hljs-type">int</span> priority,<span class="hljs-type">const</span> <span class="hljs-type">char</span>*message,...)</span>;<br></code></pre></td></tr></table></figure>
+<p>该函数采用可变参数（第二个参数message和第三个参数…）来结构化输出。</p>
+<ul>
+<li>priority参数是所谓的设施值与日志级别的按位或。设施值的默认值是LOG_USER，我们下面的讨论也只限于这一种设施值。日志级别有如下几个：</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span>＜syslog.h＞ </span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> LOG_EMERG 0<span class="hljs-comment">/*系统不可用*/</span> </span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> LOG_ALERT 1<span class="hljs-comment">/*报警，需要立即采取动作*/</span> </span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> LOG_CRIT 2<span class="hljs-comment">/*非常严重的情况*/</span> </span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> LOG_ERR 3<span class="hljs-comment">/*错误*/</span> </span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> LOG_WARNING 4<span class="hljs-comment">/*警告*/</span> </span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> LOG_NOTICE 5<span class="hljs-comment">/*通知*/</span> </span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> LOG_INFO 6<span class="hljs-comment">/*信息*/</span> </span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> LOG_DEBUG 7<span class="hljs-comment">/*调试*/</span></span><br></code></pre></td></tr></table></figure>
+<p>下面这个函数可以改变syslog的默认输出方式，进一步结构化日志内容：
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span>＜syslog.h＞ </span><br><span class="hljs-type">void</span> <span class="hljs-title function_">openlog</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>*ident,<span class="hljs-type">int</span> logopt,<span class="hljs-type">int</span> facility)</span>;<br></code></pre></td></tr></table></figure> -
+ident参数指定的字符串将被添加到日志消息的日期和时间之后，它通常被设置为程序的名字。
+- logopt参数对后续syslog调用的行为进行配置，它可取下列值的按位或：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">define</span> LOG_PID 0x01<span class="hljs-comment">/*在日志消息中包含程序PID*/</span> </span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> LOG_CONS 0x02<span class="hljs-comment">/*如果消息不能记录到日志文件，则打印至终端*/</span> </span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> LOG_ODELAY 0x04<span class="hljs-comment">/*延迟打开日志功能直到第一次调用syslog*/</span> </span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> LOG_NDELAY 0x08<span class="hljs-comment">/*不延迟打开日志功能*/</span></span><br></code></pre></td></tr></table></figure>
+<ul>
+<li>facility参数可用来修改syslog函数中的默认设施值。</li>
+</ul>
+<p>此外，日志的过滤也很重要。程序在开发阶段可能需要输出很多调试信息，而发布之后我们又需要将这些调试信息关闭。解决这个问题的方法并不是在程序发布之后删除调试代码（因为日后可能还需要用到），而是简单地<strong>设置日志掩码</strong>，使日志级别大于日志掩码的日志信息被系统忽略。下面这个函数用于设置syslog的日志掩码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span>＜syslog.h＞ </span><br><span class="hljs-type">int</span> <span class="hljs-title function_">setlogmask</span><span class="hljs-params">(<span class="hljs-type">int</span> maskpri)</span>;<br></code></pre></td></tr></table></figure>
+<p>maskpri参数指定日志掩码值。该函数始终会成功，它返回调用进程先前的日志掩码值。最后，不要忘了使用如下函数关闭日志功能：
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span>＜syslog.h＞ </span><br><span class="hljs-type">void</span> <span class="hljs-title function_">closelog</span><span class="hljs-params">()</span>;<br></code></pre></td></tr></table></figure></p>
+<h2 id="用户信息">2. 用户信息</h2>
+<h3 id="uideuidgid和egid">2.1 UID、EUID、GID和EGID</h3>
+<p>用户信息对于服务器程序的安全性来说是很重要的，比如大部分服务器都必须以root身份启动，但不能以root身份运行。下面这一组函数可以获取和设置当前进程的真实用户ID（UID）、有效用户ID（EUID）、真实组ID（GID）和有效组ID（EGID）：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span>＜sys/types.h＞ </span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span>＜unistd.h＞ </span><br><span class="hljs-type">uid_t</span> <span class="hljs-title function_">getuid</span><span class="hljs-params">()</span>;<span class="hljs-comment">/*获取真实用户ID*/</span> <br><span class="hljs-type">uid_t</span> <span class="hljs-title function_">geteuid</span><span class="hljs-params">()</span>;<span class="hljs-comment">/*获取有效用户ID*/</span> <br><span class="hljs-type">gid_t</span> <span class="hljs-title function_">getgid</span><span class="hljs-params">()</span>;<span class="hljs-comment">/*获取真实组ID*/</span> <br><span class="hljs-type">gid_t</span> <span class="hljs-title function_">getegid</span><span class="hljs-params">()</span>;<span class="hljs-comment">/*获取有效组ID*/</span> <br><span class="hljs-type">int</span> <span class="hljs-title function_">setuid</span><span class="hljs-params">(<span class="hljs-type">uid_t</span> uid)</span>;<span class="hljs-comment">/*设置真实用户ID*/</span> <br><span class="hljs-type">int</span> <span class="hljs-title function_">seteuid</span><span class="hljs-params">(<span class="hljs-type">uid_t</span> uid)</span>;<span class="hljs-comment">/*设置有效用户ID*/</span> <br><span class="hljs-type">int</span> <span class="hljs-title function_">setgid</span><span class="hljs-params">(<span class="hljs-type">gid_t</span> gid)</span>;<span class="hljs-comment">/*设置真实组ID*/</span> <br><span class="hljs-type">int</span> <span class="hljs-title function_">setegid</span><span class="hljs-params">(<span class="hljs-type">gid_t</span> gid)</span>;<span class="hljs-comment">/*设置有效组ID*/</span><br></code></pre></td></tr></table></figure>
+<p>需要指出的是，一个进程拥有两个用户ID：UID和EUID。</p>
+<ul>
+<li>EUID存在的目的是方便资源访问：它使得运行程序的用户拥有该程序的有效用户的权限。比如su程序，任何用户都可以使用它来修改自己的账户信息，但修改账户时su程序不得不访问/etc/passwd文件，而访问该文件是需要root权限的。那么以普通用户身份启动的su程序如何能访问/etc/passwd文件呢？窍门就在EUID。</li>
+<li>用ls命令可以查看到，su程序的所有者是root，并且它被设置了set-user-id标志。这个标志表示，<strong>任何普通用户运行su程序时，其有效用户就是该程序的所有者root</strong>。那么，根据有效用户的含义，任何运行su程序的普通用户都能够访问/etc/passwd文件。有效用户为root的进程称为特权进程（privileged
+processes）。EGID的含义与EUID类似：给运行目标程序的组用户提供有效组的权限。</li>
+<li>下面的代码清单7-1可以用来测试进程的UID和EUID的区别。 代码清单7-1
+测试进程的UID和EUID的区别</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span>＜unistd.h＞ </span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span>＜stdio.h＞ </span><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123; <br>    <span class="hljs-type">uid_t</span> uid=getuid(); <br>    <span class="hljs-type">uid_t</span> euid=geteuid(); <br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;userid is%d,effective userid is:%d\n&quot;</span>,uid,euid); <br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>; <br>&#125;<br></code></pre></td></tr></table></figure>
+<p>编译该文件，将生成的可执行文件（名为test_uid）的所有者设置为root，并设置该文件的set-user-id标志，然后运行该程序以查看UID和EUID。具体操作如下：
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo chown root:root test_uid#修改目标文件的所有者为root <br>sudo chmod+s test_uid#设置目标文件的set-user-id标志 <br>./test_uid#运行程序 <br>userid is 1000,effective userid is:0<br></code></pre></td></tr></table></figure>
+从测试程序的输出来看，<strong>进程的UID是启动程序的用户的ID，而EUID则是root账户（文件所有者）的ID</strong>。</p>
+<h3 id="切换用户">2.2 切换用户</h3>
+<p>下面的代码清单7-2展示了如何将以root身份启动的进程切换为以一个普通用户身份运行。
+代码清单7-2 切换用户</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">static</span> <span class="hljs-type">bool</span> <span class="hljs-title function_">switch_to_user</span><span class="hljs-params">(<span class="hljs-type">uid_t</span> user_id,<span class="hljs-type">gid_t</span> gp_id)</span> &#123; <br>    <span class="hljs-comment">/*先确保目标用户不是root*/</span> <br>    <span class="hljs-keyword">if</span>((user_id==<span class="hljs-number">0</span>)＆＆(gp_id==<span class="hljs-number">0</span>)) &#123; <br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>; <br>    &#125; <br>    <span class="hljs-comment">/*确保当前用户是合法用户：root或者目标用户*/</span> <br>    <span class="hljs-type">gid_t</span> gid=getgid(); <br>    <span class="hljs-type">uid_t</span> uid=getuid(); <br>    <span class="hljs-keyword">if</span>(((gid!=<span class="hljs-number">0</span>)||(uid!=<span class="hljs-number">0</span>))＆＆((gid!=gp_id)||(uid!=user_id))) &#123; <br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>; <br>    &#125; <br>    <span class="hljs-comment">/*如果不是root，则已经是目标用户*/</span> <br>    <span class="hljs-keyword">if</span>(uid!=<span class="hljs-number">0</span>) &#123; <br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>; <br>    &#125; <br>    <span class="hljs-comment">/*切换到目标用户*/</span> <br>    <span class="hljs-keyword">if</span>((setgid(gp_id)＜<span class="hljs-number">0</span>)||(setuid(user_id)＜<span class="hljs-number">0</span>)) &#123; <br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>; <br>    &#125; <br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>; <br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="进程间关系">3. 进程间关系</h2>
+<h3 id="进程组">3.1 进程组</h3>
+<p>Linux下每个进程都隶属于一个进程组，因此它们除了PID信息外，还有进程组ID（PGID）。我们可以用如下函数来获取指定进程的PGID：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span>＜unistd.h＞ </span><br><span class="hljs-type">pid_t</span> <span class="hljs-title function_">getpgid</span><span class="hljs-params">(<span class="hljs-type">pid_t</span> pid)</span>;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>该函数成功时返回进程pid所属进程组的PGID，失败则返回-1并设置errno。</li>
+<li>每个进程组都有一个首领进程，其PGID和PID相同。进程组将一直存在，直到其中所有进程都退出，或者加入到其他进程组。</li>
+</ul>
+<p>下面的函数用于设置PGID：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span>＜unistd.h＞ </span><br><span class="hljs-type">int</span> <span class="hljs-title function_">setpgid</span><span class="hljs-params">(<span class="hljs-type">pid_t</span> pid,<span class="hljs-type">pid_t</span> pgid)</span>;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>该函数将PID为pid的进程的PGID设置为pgid。如果pid和pgid相同，则由pid指定的进程将被设置为进程组首领；</li>
+<li>如果pid为0，则表示设置当前进程的PGID为pgid；</li>
+<li>如果pgid为0，则使用pid作为目标PGID。</li>
+<li>setpgid函数成功时返回0，失败则返回-1并设置errno。</li>
+<li>一个进程只能设置自己或者其子进程的PGID。</li>
+<li>并且，当子进程调用exec系列函数后，我们也不能再在父进程中对它设置PGID。</li>
+</ul>
+<h3 id="会话">3.2 会话</h3>
+<p>一些有关联的进程组将形成一个会话（session）。下面的函数用于创建一个会话：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span>＜unistd.h＞ </span><br><span class="hljs-type">pid_t</span> <span class="hljs-title function_">setsid</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<br></code></pre></td></tr></table></figure>
+<p>该函数不能由进程组的首领进程调用，否则将产生一个错误。对于非组首领的进程，调用该函数不仅创建新会话，而且有如下额外效果：
+- 调用进程成为会话的首领，此时该进程是新会话的唯一成员。 -
+新建一个进程组，其PGID就是调用进程的PID，调用进程成为该组的首领。 -
+调用进程将甩开终端（如果有的话）。 -
+该函数成功时返回新的进程组的PGID，失败则返回-1并设置errno。 -
+Linux进程并未提供所谓会话ID（SID）的概念，但Linux系统认为它等于会话首领所在的进程组的PGID，并提供了如下函数来读取SID：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span>＜unistd.h＞ </span><br><span class="hljs-type">pid_t</span> <span class="hljs-title function_">getsid</span><span class="hljs-params">(<span class="hljs-type">pid_t</span> pid)</span>;<br></code></pre></td></tr></table></figure>
+<h3 id="用ps命令查看进程关系">3.3 用ps命令查看进程关系</h3>
+<p>执行ps命令可查看进程、进程组和会话之间的关系：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell">ps-o pid,ppid,pgid,sid,comm|less<br>PID PPID PGID SID COMMAND <br>1943 1942 1943 1943 bash <br>2298 1943 2298 1943 ps <br>2299 1943 2298 1943 less<br></code></pre></td></tr></table></figure>
+<ul>
+<li>我们是在bash
+shell下执行ps和less命令的，所以ps和less命令的父进程是bash命令，这可以从PPID（父进程PID）一列看出。</li>
+<li>这3条命令创建了1个会话（SID是1943）和2个进程组（PGID分别是1943和2298）。</li>
+<li>bash命令的PID、PGID和SID都相同，很明显它既是会话的首领，也是组1943的首领。</li>
+<li>ps命令则是组2298的首领，因为其PID也是2298。</li>
+</ul>
+<p><img src="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/7-Linux%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%A8%8B%E5%BA%8F%E8%A7%84%E8%8C%83/image-20241218154832499.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="系统资源限制">4. 系统资源限制</h2>
+<p>Linux上运行的程序都会受到资源限制的影响，比如物理设备限制（CPU数量、内存数量等）、系统策略限制（CPU时间等），以及具体实现的限制（比如文件名的最大长度）。Linux系统资源限制可以通过如下一对函数来读取和设置：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span>＜sys/resource.h＞ </span><br><span class="hljs-type">int</span> <span class="hljs-title function_">getrlimit</span><span class="hljs-params">(<span class="hljs-type">int</span> resource,<span class="hljs-keyword">struct</span> rlimit*rlim)</span>; <br><span class="hljs-type">int</span> <span class="hljs-title function_">setrlimit</span><span class="hljs-params">(<span class="hljs-type">int</span> resource,<span class="hljs-type">const</span> <span class="hljs-keyword">struct</span> rlimit*rlim)</span>;<br></code></pre></td></tr></table></figure>
+<p>rlim参数是rlimit结构体类型的指针，rlimit结构体的定义如下：
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">rlimit</span> &#123;</span> <br>    <span class="hljs-type">rlim_t</span> rlim_cur; <br>    <span class="hljs-type">rlim_t</span> rlim_max; <br>&#125;; <br></code></pre></td></tr></table></figure> - rlim_t是一个整数类型，它描述资源级别。 -
+rlim_cur成员指定资源的软限制，rlim_max成员指定资源的硬限制。 -
+软限制是一个建议性的、最好不要超越的限制，如果超越的话，系统可能向进程发送信号以终止其运行。
+- 例如，当进程CPU时间超过其软限制时，系统将向进程发送SIGXCPU信号； -
+当文件尺寸超过其软限制时，系统将向进程发送SIGXFSZ信号（见第10章）。 -
+硬限制一般是软限制的上限。 -
+普通程序可以减小硬限制，而只有以root身份运行的程序才能增加硬限制。 -
+此外，我们可以使用ulimit命令修改当前shell环境下的资源限制（软限制或/和硬限制），这种修改将对该shell启动的所有后续程序有效。
+-
+我们也可以通过修改配置文件来改变系统软限制和硬限制，而且这种修改是永久的，详情见第16章。
+- resource参数指定资源限制类型。表7-1列举了部分比较重要的资源限制类型。
+- setrlimit和getrlimit成功时返回0，失败则返回-1并设置errno。</p>
+<p><img src="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/7-Linux%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%A8%8B%E5%BA%8F%E8%A7%84%E8%8C%83/image-20241218155109856.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="改变工作目录和根目录">5. 改变工作目录和根目录</h2>
+<p>有些服务器程序还需要改变工作目录和根目录，比如我们第4章讨论的Web服务器。一般来说，<strong>Web服务器的逻辑根目录并非文件系统的根目录“/”，而是站点的根目录</strong>（对于Linux的Web服务来说，该目录一般是/var/www/）。</p>
+<p>获取进程当前工作目录和改变进程工作目录的函数分别是：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span>＜unistd.h＞ </span><br><span class="hljs-type">char</span>*<span class="hljs-title function_">getcwd</span><span class="hljs-params">(<span class="hljs-type">char</span>*buf,<span class="hljs-type">size_t</span> size)</span>; <br><span class="hljs-type">int</span> <span class="hljs-title function_">chdir</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>*path)</span>;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>buf参数指向的内存用于存储进程当前工作目录的绝对路径名，其大小由size参数指定。如果当前工作目录的绝对路径的长度（再加上一个空结束字符“\0”）超过了size，则getcwd将返回NULL，并设置errno为ERANGE。</li>
+<li>如果buf为NULL并且size非0，则getcwd可能在内部使用malloc动态分配内存，并将进程的当前工作目录存储在其中。</li>
+<li>如果是这种情况，则我们必须自己来释放getcwd在内部创建的这块内存。</li>
+<li>getcwd函数成功时返回一个指向目标存储区（buf指向的缓存区或是getcwd在内部动态创建的缓存区）的指针，失败则返回NULL并设置errno。</li>
+</ul>
+<p>chdir函数</p>
+<ul>
+<li>path参数指定要切换到的目标目录。它成功时返回0，失败时返回-1并设置errno。</li>
+</ul>
+<p>改变进程根目录的函数是chroot，其定义如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span>＜unistd.h＞ </span><br><span class="hljs-type">int</span> <span class="hljs-title function_">chroot</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>*path)</span>;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>path参数指定要切换到的目标根目录。它成功时返回0，失败时返回-1并设置errno。</li>
+<li>chroot并不改变进程的当前工作目录，所以调用chroot之后，我们仍然需要使用chdir(“/”)来将工作目录切换至新的根目录。</li>
+<li>改变进程的根目录之后，程序可能无法访问类似/dev的文件（和目录），因为这些文件（和目录）并非处于新的根目录之下。不过好在调用chroot之后，进程原先打开的文件描述符依然生效，所以我们可以利用这些早先打开的文件描述符来访问调用chroot之后不能直接访问的文件（和目录），尤其是一些日志文件。</li>
+<li>此外，只有特权进程才能改变根目录。</li>
+</ul>
+<h2 id="服务器程序后台化">6. 服务器程序后台化</h2>
+<p>最后，我们讨论如何在代码中让一个进程以守护进程的方式运行。守护进程的编写遵循一定的步骤[2]，下面我们通过一个具体实现来探讨，如代码清单7-3所示。
+代码清单7-3 将服务器程序以守护进程的方式运行</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">bool</span> <span class="hljs-title function_">daemonize</span><span class="hljs-params">()</span> &#123; <br>    <span class="hljs-comment">/*创建子进程，关闭父进程，这样可以使程序在后台运行*/</span> <br>    <span class="hljs-type">pid_t</span> pid=fork(); <br>    <span class="hljs-keyword">if</span>(pid＜<span class="hljs-number">0</span>) &#123; <br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>; <br>    &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(pid＞<span class="hljs-number">0</span>) &#123; <br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>); <br>    &#125; <br>    <span class="hljs-comment">/*设置文件权限掩码。当进程创建新文件（使用open(const char*pathname,int</span><br><span class="hljs-comment">    flags,mode_t mode)系统调用）时，文件的权限将是mode＆0777*/</span><br>    umask(<span class="hljs-number">0</span>); <br>    <span class="hljs-comment">/*创建新的会话，设置本进程为进程组的首领*/</span> <br>    <span class="hljs-type">pid_t</span> sid=setsid(); <br>    <span class="hljs-keyword">if</span>(sid＜<span class="hljs-number">0</span>) &#123; <br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>; <br>    &#125; <br>    <span class="hljs-comment">/*切换工作目录*/</span> <br>    <span class="hljs-keyword">if</span>((chdir(<span class="hljs-string">&quot;/&quot;</span>))＜<span class="hljs-number">0</span>) &#123; <br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>; <br>    &#125; <br>    <span class="hljs-comment">/*关闭标准输入设备、标准输出设备和标准错误输出设备*/</span> <br>    close(STDIN_FILENO); <br>    close(STDOUT_FILENO); <br>    close(STDERR_FILENO); <br>    <span class="hljs-comment">/*关闭其他已经打开的文件描述符，代码省略*/</span> <br>    <span class="hljs-comment">/*将标准输入、标准输出和标准错误输出都定向到/dev/null文件*/</span> <br>    open(<span class="hljs-string">&quot;/dev/null&quot;</span>,O_RDONLY); <br>    open(<span class="hljs-string">&quot;/dev/null&quot;</span>,O_RDWR); <br>    open(<span class="hljs-string">&quot;/dev/null&quot;</span>,O_RDWR); <br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>; <br>&#125;<br></code></pre></td></tr></table></figure>
+<p>实际上，Linux提供了完成同样功能的库函数： <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span>＜unistd.h＞ </span><br><span class="hljs-type">int</span> <span class="hljs-title function_">daemon</span><span class="hljs-params">(<span class="hljs-type">int</span> nochdir,<span class="hljs-type">int</span> noclose)</span>;<br></code></pre></td></tr></table></figure> -
+nochdir参数用于指定是否改变工作目录，如果给它传递0，则工作目录将被设置为“/”（根目录），否则继续使用当前工作目录。
+-
+noclose参数为0时，标准输入、标准输出和标准错误输出都被重定向到/dev/null文件，否则依然使用原来的设备。
+- 该函数成功时返回0，失败则返回-1并设置errno。</p>
 
                 
               </div>

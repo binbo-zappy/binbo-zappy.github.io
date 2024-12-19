@@ -19,14 +19,16 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta property="og:type" content="article">
+    <meta name="description" content="第4章 TCP&#x2F;IP通信案例：访问Internet上的Web服务器 1. 实例总图 我们按照如下方法来部署通信实例：在Kongming20上运行wget客户端程序，在ernest-laptop上运行squid代理服务器程序。客户端通过代理服务器的中转，获取Internet上的主机www.baidu.com的首页文档index.html，如图4-1所示。  由图4-1可见，wget客户端程">
+<meta property="og:type" content="article">
 <meta property="og:title" content="4. TCP&#x2F;IP通信案例：访问Internet上的Web服务器">
 <meta property="og:url" content="http://binbo-zappy.github.io/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/4-TCP-IP%E9%80%9A%E4%BF%A1%E6%A1%88%E4%BE%8B/index.html">
 <meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="第4章 TCP&#x2F;IP通信案例：访问Internet上的Web服务器 1. 实例总图 我们按照如下方法来部署通信实例：在Kongming20上运行wget客户端程序，在ernest-laptop上运行squid代理服务器程序。客户端通过代理服务器的中转，获取Internet上的主机www.baidu.com的首页文档index.html，如图4-1所示。  由图4-1可见，wget客户端程">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/youshuang.png">
 <meta property="article:published_time" content="2024-12-16T14:03:34.000Z">
-<meta property="article:modified_time" content="2024-12-16T14:03:34.898Z">
+<meta property="article:modified_time" content="2024-12-17T12:36:24.374Z">
 <meta property="article:author" content="Binbo">
 <meta property="article:tag" content="网络编程">
 <meta name="twitter:card" content="summary_large_image">
@@ -223,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          0 字
+          6k 字
         
       </span>
     
@@ -234,7 +236,7 @@
         
         
         
-          1 分钟
+          50 分钟
         
       </span>
     
@@ -276,7 +278,120 @@
             
               <div class="markdown-body">
                 
-                
+                <h1 id="第4章-tcpip通信案例访问internet上的web服务器">第4章
+TCP/IP通信案例：访问Internet上的Web服务器</h1>
+<h2 id="实例总图">1. 实例总图</h2>
+<p>我们按照如下方法来部署通信实例：在Kongming20上运行wget客户端程序，在ernest-laptop上运行squid代理服务器程序。客户端通过代理服务器的中转，获取Internet上的主机www.baidu.com的首页文档index.html，如图4-1所示。</p>
+<p><img src="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/4-TCP-IP%E9%80%9A%E4%BF%A1%E6%A1%88%E4%BE%8B/image-20241217195622534.png" srcset="/img/loading.gif" lazyload></p>
+<p>由图4-1可见，wget客户端程序和代理服务器之间，以及代理服务器与Web服务器之间都是使用HTTP协议通信的。HTTP协议是一种应用层协议，它默认使用的传输层协议是TCP协议。</p>
+<p>为了将ernest-laptop设置为Kongming20的HTTP代理服务器，我们需要在Kongming20上设置环境变量http_proxy：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-variable">$export</span> http_proxy=<span class="hljs-string">&quot;ernest-laptop:3128&quot;</span>#在Kongming20上执行<br></code></pre></td></tr></table></figure>
+<p>其中，3128是squid服务器默认使用的端口号（可以通过lsof命令查看服务器程序监听的端口号，见第17章）。设置好环境变量之后，Kongming20访问任何Internet上的Web服务器时，其HTTP请求都将首先发送至ernest-laptop的3128端口。squid代理服务器接收到wget客户端的HTTP请求之后，将简单地修改这个请求，然后把它发送给最终的目标Web服务器。既然代理服务器访问的是Internet上的机器，可以预见它发送的IP数据报都将经过路由器的中转，这一点也体现在图4-1中了。</p>
+<h2 id="部署代理服务器">2. 部署代理服务器</h2>
+<p>由于通信实例中使用了HTTP代理服务器（squid程序），所以先简单介绍一下HTTP代理服务器的工作原理，以及如何部署squid代理服务器。</p>
+<h3 id="http代理服务器的工作原理">2.1 HTTP代理服务器的工作原理</h3>
+<p>在HTTP通信链上，客户端和目标服务器之间通常存在某些中转代理服务器，它们提供对目标资源的中转访问。一个HTTP请求可能被多个代理服务器转发，后面的服务器称为前面服务器的上游服务器。代理服务器按照其使用方式和作用，分为正向代理服务器、反向代理服务器和透明代理服务器。</p>
+<p>正向代理要求客户端自己设置代理服务器的地址。客户的每次请求都将直接发送到该代理服务器，并由代理服务器来请求目标资源。比如处于防火墙内的局域网机器要访问Internet，或者要访问一些被屏蔽掉的国外网站，就需要使用正向代理服务器。</p>
+<p>反向代理则被设置在服务器端，因而客户端无须进行任何设置。反向代理是指用代理服务器来接收Internet上的连接请求，然后将请求转发给内部网络上的服务器，并将从内部服务器上得到的结果返回给客户端。这种情况下，代理服务器对外就表现为一个真实的服务器。</p>
+<p>各大网站通常分区域设置了多个代理服务器，所以在不同的地方ping同一个域名可能得到不同的IP地址，因为这些IP地址实际上是代理服务器的IP地址。图4-2显示了正向代理服务器和反向代理服务器在HTTP通信链上的逻辑位置。</p>
+<p><img src="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/4-TCP-IP%E9%80%9A%E4%BF%A1%E6%A1%88%E4%BE%8B/image-20241217200204564.png" srcset="/img/loading.gif" lazyload></p>
+<p>图4-2中，正向代理服务器和客户端主机处于同一个逻辑网络中。该逻辑网络可以是一个本地LAN，也可以是一个更大的网络。反向代理服务器和真正的Web服务器也位于同一个逻辑网络中，这通常由提供网站的公司来配置和管理。
+透明代理只能设置在网关上。用户访问Internet的数据报必然都经过网关，如果在网关上设置代理，则该代理对用户来说显然是透明的。透明代理可以看作正向代理的一种特殊情况。代理服务器通常还提供缓存目标资源的功能（可选），这样用户下次访问同一资源时速度将很快。优秀的开源软件squid、varnish都是提供了缓存能力的代理服务器软件，其中squid支持所有代理方式，而varnish仅能用作反向代理。</p>
+<h3 id="部署squid代理服务器">2.2 部署squid代理服务器</h3>
+<p>现在我们在ernest-laptop上部署squid代理服务器。这个过程很简单，只需修改squid服务器的配置文件/etc/squid3/squid.conf，在其中加入如下两行代码（需要root权限，且应该加在合适的位置，详情可参考
+其他类似条目的设置）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">acl localnet src 192.168.1.0/24 <br>http_access allow localnet<br></code></pre></td></tr></table></figure>
+<p>这两行代码的含义是：允许网络192.168.1.0上的所有机器通过该代理服务器来访问Web服务器。其中，
+“192.168.1.0/24”是CIDR（Classless Inter-Domain
+Routing，无类域间路由）风格的IP地址表示方法：“/”前
+的部分指定网络的IP地址，“/”后的部分则指定子网掩码中“1”的位数。对IPv4而言，上述表示等价于“192.168.1.0/255.255.255.0”（IP地址/子网掩码）。</p>
+<p>我们通过上面的两行代码简单地配置了squid的访问控制。但实际应用中，squid提供更多、更安全的配置，比如用户验证等。接下来在ernest-laptop上执行如下命令，以重启squid服务器：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-variable">$sudo</span> service squid3 restart <br>*Restarting Squid HTTP Proxy 3.0 squid3[OK]<br></code></pre></td></tr></table></figure>
+<p>service是一个脚本程序（/usr/sbin/service），它为/etc/init.d/目录下的众多服务器程序（比如httpd、vsftpd、sshd和mysqld等）的启动（start）、停止（stop）和重启（restart）等动作提供了一个统一的管理。现在，Linux程序员已经越来越偏向于使用service脚本来管理服务器程序了。</p>
+<h2 id="使用tcpdump抓取传输数据包">3. 使用tcpdump抓取传输数据包</h2>
+<p>在执行wget命令前，我们首先应删除ernest-laptop的ARP高速缓存中路由器对应的项，以便观察TCP/IP通信过程中ARP协议何时起作用。然后，使用tcpdump命令抓取整个通信过程中传输的数据包。完整的操作过程如代码清单4-1所示。
+代码清单4-1 使用wget抓取网页</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-variable">$sudo</span> arp-d 192.168.1.1 <br><span class="hljs-variable">$sudo</span> tcpdump-s 2000-i eth0-ntX<span class="hljs-string">&#x27;(src 192.168.1.108)or(dst 192.168.1.108)or(arp)&#x27;</span><br><span class="hljs-variable">$wget</span>--header=<span class="hljs-string">&quot;Connection:close&quot;</span>http://www.baidu.com/index.html <br>--2012-07-03 00:51:12--http://www.baidu.com/index.html <br>Resolving ernest-laptop...192.168.1.108 <br>Connecting to ernest-laptop|192.168.1.108|:3128...connected. <br>Proxy request sent,awaiting response...200 OK <br>Length:8024(7.8K)[text/html] <br>Saving to:“index.html” 100%[=======================＞]8,024--.-K/s <span class="hljs-keyword">in</span> 0.001s <br>2012-07-03 00:51:12(8.76 MB/s)-“index.html”saved[8024/8024]<br></code></pre></td></tr></table></figure>
+<p>wget命令的输出显示，HTTP请求确实是先被送至代理服务器的3128端口，并且代理服务器正确地返回了文件index.html的内容。</p>
+<p>这次通信的完整tcpdump输出内容如代码清单4-2所示。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs bash">1.IP 192.168.1.109.40988＞192.168.1.108.3128:Flags[S],<span class="hljs-built_in">seq</span> 227192137,length 0<br>2.IP 192.168.1.108.3128＞192.168.1.109.40988:Flags[S.],<span class="hljs-built_in">seq</span> 1084588508,ack 227192138,length 0<br>3.IP 192.168.1.109.40988＞192.168.1.108.3128:Flags[.],ack 1,length 0<br>4.IP 192.168.1.109.40988＞192.168.1.108.3128:Flags[P.],<span class="hljs-built_in">seq</span> 1:137,ack 1,length 136<br>5.IP 192.168.1.108.3128＞192.168.1.109.40988:Flags[.],ack 137,length 0<br>6.ARP,Request who-has 192.168.1.1 tell 192.168.1.108,length 28 <br>7.ARP,Reply 192.168.1.1 is-at 14:e6:e4:93:5b:78,length 46 <br>8.IP 192.168.1.108.46149＞219.239.26.42.53:59410+A? www.baidu.com.(31)<br>9.IP 219.239.26.42.53＞192.168.1.108.46149:59410 3/4/0 CNAME www.a.shifen.com.,A 119.75.218.777,A 119.75.217.56(162)<br>10.IP 192.168.1.108.34538＞119.75.218.77.80:Flags[S],<span class="hljs-built_in">seq</span> 1084002207,length 0<br>11.IP 119.75.218.777.80＞192.168.1.108.34538:Flags[S.],<span class="hljs-built_in">seq</span> 4261071806,ack 1084002208,length 0<br>12.IP 192.168.1.108.34538＞119.75.218.77.80:Flags[.],ack 1,length 0<br>13.IP 192.168.1.108.34538＞119.75.218.77.80:Flags[P.],<span class="hljs-built_in">seq</span> 1:226,ack 1,length 225<br>14.IP 119.75.218.777.80＞192.168.1.108.34538:Flags[.],ack 226,length 0<br>15.IP 119.75.218.77.80＞192.168.1.108.34538:Flags[P.],<span class="hljs-built_in">seq</span> 1:380,ack 226,length 379<br>16.IP 192.168.1.108.34538＞119.75.218.77.80:Flags[.],ack 380,length 0<br>17.IP 119.75.218.77.80＞192.168.1.108.34538:Flags[.],<span class="hljs-built_in">seq</span> 380:1820,ack 226,length 1440<br>18.IP 192.168.1.108.34538＞119.75.218.77.80:Flags[.],ack 1820,length 0<br>19.IP 119.75.218.77.80＞192.168.1.108.34538:Flags[.],<span class="hljs-built_in">seq</span> 1820:3260,ack 226,length 1440<br>20.IP 192.168.1.108.34538＞119.75.218.777.80:Flags[.],ack 3260,length 0<br>21.IP 119.75.218.777.80＞192.168.1.108.34538:Flags[P.],<span class="hljs-built_in">seq</span> 3260:4700,ack 226,length 1440<br>22.IP 192.168.1.108.34538＞119.75.218.77.80:Flags[.],ack 4700,length 0<br>23.IP 192.168.1.108.3128＞192.168.1.109.40988:Flags[.],<span class="hljs-built_in">seq</span> 1:1449,ack 137,length 1448<br>24.IP 192.168.1.108.3128＞192.168.1.109.40988:Flags[P.],<span class="hljs-built_in">seq</span> 1449:2166,ack 137,length 717<br>25.IP 192.168.1.108.3128＞192.168.1.109.40988:Flags[.],<span class="hljs-built_in">seq</span> 2166:3614,ack 137,length 1448<br>26.IP 119.75.218.777.80＞192.168.1.108.34538:Flags[.],<span class="hljs-built_in">seq</span> 4700:6140,ack 226,length 1440<br>27.IP 192.168.1.108.34538＞119.75.218.77.80:Flags[.],ack 6140,length 0<br>28.IP 119.75.218.777.80＞192.168.1.108.34538:Flags[.],<span class="hljs-built_in">seq</span> 6140:7580,ack 226,length 1440<br>29.IP 192.168.1.108.34538＞119.75.218.777.80:Flags[.],ack 7580,length 0<br>30.IP 119.75.218.777.80＞192.168.1.108.34538:Flags[FP.],<span class="hljs-built_in">seq</span> 7580:8404,ack 226,length 824<br>31.IP 192.168.1.108.34538＞119.75.218.777.80:Flags[F.],<span class="hljs-built_in">seq</span> 226,ack 8405,length 0<br>32.IP 192.168.1.109.40988＞192.168.1.108.3128:Flags[.],ack 1449,length 0<br>33.IP 192.168.1.108.3128＞192.168.1.109.40988:Flags[.],<span class="hljs-built_in">seq</span> 3614:6510,ack 137,length 2896<br>34.IP 192.168.1.109.40988＞192.168.1.108.3128:Flags[.],ack 2166,length 0<br>35.IP 192.168.1.108.3128＞192.168.1.109.40988:Flags[.],<span class="hljs-built_in">seq</span> 6510:7958,ack 137,length 1448<br>36.IP 192.168.1.108.3128＞192.168.1.109.40988:Flags[FP.],<span class="hljs-built_in">seq</span> 7958:8523,ack 137,length 565<br>37.IP 192.168.1.109.40988＞192.168.1.108.3128:Flags[.],ack 3614,length 0<br>38.IP 192.168.1.109.40988＞192.168.1.108.3128:Flags[.],ack 5062,length 0<br>39.IP 192.168.1.109.40988＞192.168.1.108.3128:Flags[.],ack 6510,length 0<br>40.IP 192.168.1.109.40988＞192.168.1.108.3128:Flags[.],ack 7958,length 0<br>41.IP 119.75.218.77.80＞192.168.1.108.34538:Flags[.],ack 227,length 0<br>42.IP 192.168.1.109.40988＞192.168.1.108.3128:Flags[F.],<span class="hljs-built_in">seq</span> 137,ack 8524,length 0<br>43.IP 192.168.1.108.3128＞192.168.1.109.40988:Flags[.],ack 138,length 0<br></code></pre></td></tr></table></figure>
+<p>我们一共抓取了43个数据包。与前面章节的讨论不同，这些数据包不是一对客户端和服务器之间交换的内容，而是两对客户端和服务器（wget客户端和代理服务器，以及代理服务器和目标Web服务器）之间通信的全部内容。所以，tcpdump的输出把这两组通信的内容交织在一起。但为了讨论问题的方便，我们将这43个数据包按照其逻辑关系分为如下4个部分：</p>
+<p>❑代理服务器访问DNS服务器以查询域名www.baidu.com对应的IP地址，包括数据包8、9。</p>
+<p>❑代理服务器查询路由器MAC地址的ARP请求和应答，包括数据包6、7。</p>
+<p>❑wget客户端（192.168.1.109）和代理服务器（192.168.1.108）之间的HTTP通信，包括数据包1～5、23～25、32～40、42和43。</p>
+<p>❑代理服务器和Web服务器（119.75.218.7）之间的HTTP通信，包括数据包10～22、26～31和41。</p>
+<p>下面我们将依次讨论前3个部分，第4个部分与第3个部分的内容基本相似。</p>
+<h2 id="访问dns服务器">4. 访问DNS服务器</h2>
+<p>数据包8、9表示代理服务器ernest-laptop向DNS服务器（219.239.26.42，首选DNS服务器的IP地址，见1.6.2节）查询域名www.baidu.com对应的IP地址，并得到了回复。该回复包括一个主机别名（www.a.shifen.com）和两个IP地址（119.75.218.7和119.75.217.56）。代理服务器执行DNS查询的完整过程如图4-3所示。</p>
+<p><img src="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/4-TCP-IP%E9%80%9A%E4%BF%A1%E6%A1%88%E4%BE%8B/image-20241217201022965.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>squid程序通过读取/etc/resolv.conf文件获得DNS服务器的IP地址（见1.6.2节），然后将控制权传递给内核中的UDP模块。</li>
+<li>UDP模块将DNS查询报文封装成UDP数据报，同时把源端口号和目标端口号加入UDP数据报头部，然后UDP模块调用IP服务。</li>
+<li>IP模块则将UDP数据报封装成IP数据报，并把源端IP地址（192.168.1.108）和DNS服务器的IP地址加入IP数据报头部。</li>
+<li>接下来，IP模块查询路由表以决定如何发送该IP数据报。根据路由策略，目标IP地址（219.239.26.42）仅能匹配路由表中的默认路由项，因此该IP数据报先被发送至路由器（IP地址为192.168.1.1），然后通过路由器来转发。</li>
+<li>因为ernest-laptop的ARP缓存中没有与路由器对应的缓存项（我们手动将其删除了），所以ernest-laptop需要发起一个广播以查询路由器的IP地址，而这正是数据包6描述的内容。路由器则通过ARP应答告诉ernest-laptop自己的MAC地址是14:e6:e4:93:5b:78，如数据包7所示。最终，以太网驱动程序将IP数据报封装成以太网帧发送给路由器。</li>
+<li>此后，代理服务器再次发送数据到Internet时将不再需要ARP查询，因为ernest-laptop的ARP高速缓存中已
+经记录了路由器的IP地址和MAC地址的映射关系。需要指出的是，虽然IP数据报是先发送到路由器，再由它转发给目标主机，但是其头部的目标IP地址却是最终的目标主机（DNS服务器）的IP地址，而不是中转路由器的IP地址（192.168.1.1）。这说明，IP头部的源端IP地址和目的端IP地址在转发过程中是始终不变的（一种例外是源路由选择）。但帧头部的源端物理地址和目的端物理地址在转发过程中则是一直在变化的。</li>
+</ul>
+<h2 id="本地名称查询">5. 本地名称查询</h2>
+<p>一般来说，通过域名来访问Internet上的某台主机时，需要使用DNS服务来获取该主机的IP地址。但如果我们通过主机名来访问本地局域网上的机器，则可通过本地的静态文件来获得该机器的IP地址。</p>
+<p>Linux将目标主机名及其对应的IP地址存储在/etc/hosts配置文件中。当需要查询某个主机名对应的IP地址时，程序将首先检查这个文件。Kongming20上/etc/hosts文件的内容如下（笔者手动修改过）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">127.0.0.1 localhost <br>192.168.1.109 Kongming20 <br>192.168.1.108 ernest-laptop<br></code></pre></td></tr></table></figure>
+<p>其中第一项指出本地回路地址127.0.0.1的名称是localhost，第二项和第三项则分别描述了Kongming20和ernest-laptop的IP地址及对应的主机名。</p>
+<p>代码清单4-1中，wget命令输出“Resolving
+ernest-laptop...192.168.1.108”，即它成功地解析了主机名ernest-laptop对应的IP地址，原因如下：当wget访问某个Web服务器时，它先读取环境变量http_proxy。如果该环境变量被设置，并且我们没有阻止wget使用代理服务，则wget将通过http_proxy指定的代理服务器来访问Web服务。</p>
+<p>但http_proxy环境变量中包含主机名ernest-laptop，因此wget将首先读取/etc/hosts配置文件，试图通过它来解析主机名ernest-laptop对应的IP地址。其结果正如wget的输出所示，解析成功。</p>
+<p>如果程序在/etc/hosts文件中未找到目标机器名对应的IP地址，它将求助于DNS服务。
+用户可以通过修改/etc/host.conf文件来自定义系统解析主机名的方法和顺序（一般是先访问本地文件/etc/hosts，再访问DNS服务），Kongming20上的该文件内容如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">order hosts,<span class="hljs-built_in">bind</span> <br>multi on<br></code></pre></td></tr></table></figure>
+<p>其中第一行表示优先使用/etc/hosts文件来解析主机名（hosts），失败后再使用DNS服务（bind）。第二行表示如果/etc/hosts文件中一个主机名对应多个IP地址，那么解析的结果就包含多个IP地址。/etc/host.conf文件通常仅包含这两行，但它支持更多选项，具体使用请参考其man手册。标准文档RFC
+1123指出，网络上的主机都应该实现一个简单的本地名称查询服务。</p>
+<h2 id="http通信">6. HTTP通信</h2>
+<p>为了方便讨论，我们将wget客户端和代理服务器之间的通信过程画成图4-4所示的TCP时序图。</p>
+<p><img src="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/4-TCP-IP%E9%80%9A%E4%BF%A1%E6%A1%88%E4%BE%8B/image-20241217201452990.png" srcset="/img/loading.gif" lazyload></p>
+<p>首先应该注意的是，TCP连接从建立到关闭的过程中，客户端仅给服务器发送了一个HTTP请求（即TCP报文段4），该请求的长度为136字节（见代码清单4-2中TCP报文段4的length值）。</p>
+<p>代理服务器则用6个TCP报文段（23、24、25、33、35和36）给客户端返回了总长度为8522字节（这可以从对方的最后一个确认报文段42的确认值计算得到，考虑同步报文段和结束报文段各占用一个序号）的HTTP应答。客户端使用了7个TCP报文段（32、34、37、38、39、40和42）来确认这8522字节的HTTP应答数据。</p>
+<p>下面我们简单分析一下这136字节的HTTP请求和8522字节的HTTP应答的部分主要内容（开启tcpdump的-X选项来查看）。</p>
+<h3 id="http请求">6.1 HTTP请求</h3>
+<p>HTTP请求的部分内容如下：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs http">GET http://www.baidu.com/index.html HTTP/1.0 <br>User-Agent:Wget/1.12(linux-gnu) Host:www.baidu.com Connection:close<br></code></pre></td></tr></table></figure>
+<p>第1行是请求行。其中“GET”是请求方法，表示客户端以只读的方式来申请资源。常见的HTTP请求方法有9种，如表4-1所示。</p>
+<p><img src="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/4-TCP-IP%E9%80%9A%E4%BF%A1%E6%A1%88%E4%BE%8B/image-20241217202208350.png" srcset="/img/loading.gif" lazyload></p>
+<p>这些方法中，HEAD、GET、OPTIONS和TRACE被视为安全的方法，因为它们只是从服务器获得资源或信息，而不对服务器进行任何修改。而POST、PUT、DELETE和PATCH则影响服务器上的资源。</p>
+<p>另一方面，GET、HEAD、OPTIONS、TRACE、PUT和DELETE等请求方法被认为是等幂的（idempotent），即多次连续的、重复的请求和只发送一次该请求具有完全相同的效果。而POST方法则不同，连续多次发送同样一个请求可能进一步影响服务器上的资源。</p>
+<p>值得一提的是，Linux上提供了几个命令：HEAD、GET和POST。其含义基本与HTTP协议中的同名请求方法相同。它们适合用来快速测试Web服务器。</p>
+<p>“http://www.baidu.com/index.html”是目标资源的URL。其中“http”是所谓的scheme，表示获取目标资源需要使用的应用层协议。</p>
+<p>其他常见的scheme还有ftp、rtsp和file等。“www.baidu.com”指定资源所在的目标主机。“index.html”指定资源文件的名称，这里指的是服务器根目录（站点的根目录，而不是服务器的文件系统根目录“/”）中的索引文件。</p>
+<p>“HTTP/1.
+0”表示客户端（wget程序）使用的HTTP的版本号是1.0。目前的主流HTTP版本是1.1。</p>
+<p>HTTP请求内容中的第2～4行都是HTTP请求的头部字段。一个HTTP请求可以包含多个头部字段。一个头部字段用一行表示，包含字段名称、冒号、空格和字段的值。一个头部字段可按任意顺序排列。</p>
+<p>“User-Agent:Wget/1.12(linux-gnu)”表示客户端使用的程序是wget。</p>
+<p>“Host:www.baidu.com”表示目标主机名是www.baidu.com。HTTP协议规定HTTP请求中必须包含的头部字段就是目标主机名。</p>
+<p>“Connection:close”是我们执行wget命令时传入的（见代码清单4-1），用以告诉服务器处理完这个HTTP请求之后就关闭连接。在旧的HTTP协议中，Web客户端和Web服务器之间的一个TCP连接只能为一个HTTP请求服务。当处理完客户的一个HTTP请求之后，Web服务器就（主动）将TCP连接关闭了。此后，同一客户如果要再发送一个HTTP请求的话，必须与服务器建立一个新的TCP连接。也就是说，同一个客户的多个连续的HTTP请求不能共用同一个TCP连接，这称为短连接。</p>
+<p>长连接与之相反，是指多个请求可以使用同一个TCP连接。长连接在编程上稍微复杂一些，但性能上却有很大提高：它极大地减少了网络上为建立TCP连接导致的负荷，同时对每次请求而言缩减了处理时间。</p>
+<p>HTTP请求和应答中的“Connection”头部字段就是专门用于告诉对方一个请求完成之后该如何处理连接的，比如立即关闭连接（该头部字段的值为“close”）或者保持一段时间以等待后续请求（该头部字段的值为“keep-alive”）。</p>
+<p>在所有头部字段之后，HTTP请求必须包含一个空行，以标识头部字段的结束。请求行和每个头部字段都必须以＜CR＞＜LF＞结束（回车符和换行符）；而空行则必须只包含一个＜CR＞＜LF＞，不能有其他字符，甚至是空白字符。</p>
+<p>在空行之后，HTTP请求可以包含可选的消息体。如果消息体非空，则HTTP请求的头部字段中必须包含描述该消息体长度的字段“Content-Length”。我们的实例只是获取目标服务器上的资源，所以没有消息体。</p>
+<h3 id="http应答">6.2 HTTP应答</h3>
+<p>HTTP应答的部分内容如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">HTTP/1.0 200 OK <br>Server:BWS/1.0 <br>Content-Length:8024 <br>Content-Type:text/html;charset=gbk <br>Set-Cookie:BAIDUID=A5B6C7D68CF639CE8896FD79A03FBD8:FG=1;expires=Wed,04Jul-42 00:10:47 GMT;path=/;domain=.baidu.com<br>Via:1.0 localhost(squid/3.0 STABLE18)<br></code></pre></td></tr></table></figure>
+<p>第一行是状态行。“HTTP/1.0”是服务器使用的HTTP协议的版本号。通常，服务器需要使用和客户端相同的HTTP协议版本。“200OK”是状态码和状态信息。</p>
+<p><img src="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/4-TCP-IP%E9%80%9A%E4%BF%A1%E6%A1%88%E4%BE%8B/image-20241217203418771.png" srcset="/img/loading.gif" lazyload></p>
+<p>第2～7行是HTTP应答的头部字段。其表示方法与HTTP请求中的头部字段相同。</p>
+<p>“Server:BWS/1. 0”表示目标Web服务器程序的名字是BWS（BaiduWeb
+Server）。</p>
+<p>“Content-Length:8024”表示目标文档的长度为8024字节。这个值和wget输出的文档长度一致。</p>
+<p>“Content-Type:text/html;charset=gbk”表示目标文档的MIME类型。其中“text”是主文档类型，“html”是子文档类型。“text/html”表示目标文档index.html是text类型中的html文档。“charset”是text文档类型的一个参数，用于指定文档的字符编码。</p>
+<p>“Set-Cookie:BAIDUID=A5B6C7D68CF639CE8896FD79A03FBD8:FG=1;expires=Wed,04-Jul-42
+00:10:47
+GMT;path=/;domain=.baidu.com”表示服务器传送一个Cookie给客户端。其中，“BAIDUID”指定Cookie的名字，“expires”指定Cookie的生存时间，“domain”和“path”指定该Cookie生效的域名和路径。</p>
+<p>下面我们简单分析一下Cookie的作用。第2章中曾提到，HTTP协议是一种无状态的协议，即每个HTTP请求之间没有任何上下文关系。如果服务器处理后续HTTP请求时需要用</p>
+<p>到前面的HTTP请求的相关信息，客户端必须重传这些信息。这样就导致HTTP请求必须传输更多的数据。</p>
+<p>在交互式Web应用程序兴起之后，HTTP协议的这种无状态特性就显得不适应了，因为交互程序通常要承上启下。因此，我们要使用额外的手段来保持HTTP连接状态，常见的解决方法就是Cookie。Cookie是服务器发送给客户端的特殊信息（通过HTTP应答的头部字段“Set-Cookie”），客户端每次向服务器发送请求的时候都需要带上这些信息（通过HTTP请求的头部字段“Cookie”）。这样服务器就可以区分不同的客户了。基于浏览器的自动登录就是用Cookie实现的。</p>
+<p>“Via:1. 0 localhost(squid/3.0
+STABLE18)”表示HTTP应答在返回过程中经历过的所有代理服务器的地址和名称。这里的localhost实际上指的是“192.168.1.108”。这个头部字段的功能有点类似于IP协议的记录路由功能。</p>
+<p>在所有头部字段之后，HTTP应答必须包含一个空行，以标识头部字段的结束。状态行和每个头部字段都必须以＜CR＞＜LF＞结束；而空行则必须只包含一个＜CR＞＜LF＞，不能有其他字符，甚至是空白字符。</p>
+<p>空行之后是被请求文档index.html的内容（当然，我们并不关心它），其长度是8024字节。</p>
 
                 
               </div>
