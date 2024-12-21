@@ -185,7 +185,7 @@
 <div id="banner" class="banner" parallax=true
      style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
-    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.1)">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
@@ -220,6 +220,168 @@
               <div class="col-12 col-md-10 m-auto">
                 
 
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/6-2-%E5%B8%A6%E5%9F%BA%E7%BA%BF%E7%9A%84-REINFORCE-%E7%AE%97%E6%B3%95/" target="_self">
+          <img src="/imgs/RL-WSS.png" srcset="/img/loading.gif" lazyload alt="6.2 带基线的 REINFORCE 算法">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/6-2-%E5%B8%A6%E5%9F%BA%E7%BA%BF%E7%9A%84-REINFORCE-%E7%AE%97%E6%B3%95/" target="_self">
+          6.2 带基线的 REINFORCE 算法
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt " href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/6-2-%E5%B8%A6%E5%9F%BA%E7%BA%BF%E7%9A%84-REINFORCE-%E7%AE%97%E6%B3%95/" target="_self">
+        <div>
+          带基线的 REINFORCE 算法 上一节推导出了带基线的策略梯度，并且对策略梯度做了蒙特卡洛近似。本节中，我们使用状态价值\(V_\pi(s)\)作基线，得到策略梯度的一个无偏估计： \(\boldsymbol{g}(s,a;\theta) = \left[Q_\pi(s,a) - V_\pi(s)\right] \cdot \nabla_\theta \ln \pi(a|s;\thet
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-12-04 16:02" pubdate>
+              2024-12-04
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/AI/" class="category-chain-item">AI</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI/RL/" class="category-chain-item">RL</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI/RL/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/" class="category-chain-item">DRL-王树森</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/RL/">#RL</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/6-1-%E5%B8%A6%E5%9F%BA%E7%BA%BF%E7%9A%84%E7%AD%96%E7%95%A5%E6%A2%AF%E5%BA%A6%E6%96%B9%E6%B3%95/" target="_self">
+          <img src="/imgs/RL-WSS.png" srcset="/img/loading.gif" lazyload alt="6.1 带基线的策略梯度方法">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/6-1-%E5%B8%A6%E5%9F%BA%E7%BA%BF%E7%9A%84%E7%AD%96%E7%95%A5%E6%A2%AF%E5%BA%A6%E6%96%B9%E6%B3%95/" target="_self">
+          6.1 带基线的策略梯度方法
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt " href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/6-1-%E5%B8%A6%E5%9F%BA%E7%BA%BF%E7%9A%84%E7%AD%96%E7%95%A5%E6%A2%AF%E5%BA%A6%E6%96%B9%E6%B3%95/" target="_self">
+        <div>
+          带基线的策略梯度方法 上一章推导出策略梯度，并介绍了两种策略梯度方法——REINFORCE 和 actor-critic。 虽然上一章的方法在理论上是正确的，但是在实践中效果并不理想。本章介绍的带基线的策略梯度 (policy gradient with baseline) 可以大幅提升策略梯度方法的表现。使用基线(baseline) 之后，REINFORCE 变成 REINFORCE
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-12-04 16:02" pubdate>
+              2024-12-04
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/AI/" class="category-chain-item">AI</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI/RL/" class="category-chain-item">RL</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI/RL/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/" class="category-chain-item">DRL-王树森</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/RL/">#RL</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
 
   <div class="row mx-auto index-card">
     
@@ -809,168 +971,6 @@
       <a class="index-excerpt " href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/2-1-%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E4%BC%B0%E8%AE%A1/" target="_self">
         <div>
           ChatGPT对蒙特卡洛方法的介绍 蒙特卡洛方法是一类基于随机抽样和统计学原理的数值计算方法，其核心思想是通过随机抽样来近似解决问题。这种方法在强化学习、优化问题、概率估计等领域都有广泛的应用。以下是关于蒙特卡洛方法的一些基本概念：  基本思想  随机抽样： 蒙特卡洛方法利用随机抽样的方式来近似计算某个问题的数值解。通过大量的随机样本，可以得到对问题的概率分布、期望值等进行估计的结果。
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-12-04 16:02" pubdate>
-              2024-12-04
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/AI/" class="category-chain-item">AI</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/AI/RL/" class="category-chain-item">RL</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/AI/RL/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/" class="category-chain-item">DRL-王树森</a>
-  
-  
-
-  
-
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/RL/">#RL</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/" target="_self">
-          <img src="/imgs/RL-WSS.png" srcset="/img/loading.gif" lazyload alt="1.5 ALPHAGO">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/" target="_self">
-          1.5 ALPHAGO
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt " href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/" target="_self">
-        <div>
-          围棋游戏介绍  High level Ideas 训练包含3步：  用behavior cloning初始化策略网络 用策略梯度训练策略网络 策略网络训练完之后，用它来训练价值网络。  Behavior Cloning ChatGPT介绍什么是Behavior cloning： Behavior cloning（行为克隆）是一种强化学习中的学习方法，其中一个模型（通常是神
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-12-04 16:02" pubdate>
-              2024-12-04
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/AI/" class="category-chain-item">AI</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/AI/RL/" class="category-chain-item">RL</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/AI/RL/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/" class="category-chain-item">DRL-王树森</a>
-  
-  
-
-  
-
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/RL/">#RL</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-4-Actor-Critic-Method/" target="_self">
-          <img src="/imgs/RL-WSS.png" srcset="/img/loading.gif" lazyload alt="1.4 Actor-Critic Method">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-4-Actor-Critic-Method/" target="_self">
-          1.4 Actor-Critic Method
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt " href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-4-Actor-Critic-Method/" target="_self">
-        <div>
-          Actor-Critic方法把价值学习和策略学习结合起来。 Value Network and Policy Network 离散状态下状态价值函数可以写成： \(V_{\pi}(s) = \sum_{a} \pi(a|s) \cdot Q_{\pi}(s,a).\) 但是其中策略函数\(\pi(a|s)\)和动作价值函数\(Q_{\pi}(s,a)\)都不知道，可以分别用两个神经网络
         </div>
       </a>
 

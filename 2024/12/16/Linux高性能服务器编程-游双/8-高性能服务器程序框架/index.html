@@ -28,7 +28,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/youshuang.png">
 <meta property="article:published_time" content="2024-12-16T14:03:40.000Z">
-<meta property="article:modified_time" content="2024-12-18T15:24:22.587Z">
+<meta property="article:modified_time" content="2024-12-19T13:03:39.826Z">
 <meta property="article:author" content="Binbo">
 <meta property="article:tag" content="网络编程">
 <meta name="twitter:card" content="summary_large_image">
@@ -225,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          6.3k 字
+          12k 字
         
       </span>
     
@@ -236,7 +236,7 @@
         
         
         
-          53 分钟
+          98 分钟
         
       </span>
     
@@ -376,70 +376,328 @@ Peer，点对点）模型比C/S模型更符合网络通信的实际情况。</p>
 <h2 id="两种高效的事件处理模式">4. 两种高效的事件处理模式</h2>
 <p>服务器程序通常需要处理三类事件：I/O事件、信号及定时事件。我们将在后续章节依次讨论这三种类型的事件，这一节先从整体上介绍一下两种高效的事件处理模式：Reactor和Proactor。
 随着网络设计模式的兴起，Reactor和Proactor事件处理模式应运而生。同步I/O模型通常用于实现Reactor模式，异步I/O模型则用于实现Proactor模式。不过后面我们将看到，如何使用同步I/O方式模拟出Proactor模式。</p>
-<p>### 4.1 Reactor模式</p>
+<h3 id="reactor模式">4.1 Reactor模式</h3>
 <p>Reactor是这样一种模式，</p>
 <ul>
-<li>它要求主线程（I/O处理单元，下同）只负责监听文件描述上是否有事件发生，有的话就立即将该事件通知工作线程（逻辑单元，下同）。</li>
+<li>它要求<strong>主线程</strong>（I/O处理单元，下同）<strong>只负责监听文件描述上是否有事件发生</strong>，有的话就立即将该事件通知工作线程（逻辑单元，下同）。</li>
 <li>除此之外，主线程不做任何其他实质性的工作。</li>
 <li>读写数据，接受新的连接，以及处理客户请求均在工作线程中完成。</li>
-<li>使用同步I/O模型（以epoll_wait为例）实现的Reactor模式的工作流程是：</li>
-<li>1）主线程往epoll内核事件表中注册socket上的读就绪事件。</li>
-<li>2）主线程调用epoll_wait等待socket上有数据可读。</li>
-<li>3）当socket上有数据可读时，epoll_wait通知主线程。主线程则将socket可读事件放入请求队列。</li>
-<li>4）睡眠在请求队列上的某个工作线程被唤醒，它从socket读取数据，并处理客户请求，然后往epoll内核事件表中注册该socket上的写就绪事件。</li>
-<li>5）主线程调用epoll_wait等待socket可写。</li>
-<li>6）当socket可写时，epoll_wait通知主线程。主线程将socket可写事件放入请求队列。</li>
-<li>7）睡眠在请求队列上的某个工作线程被唤醒，它往socket上写入服务器处理客户请求的结果。</li>
+<li>使用同步I/O模型（以epoll_wait为例）实现的Reactor模式的工作流程是：
+<ul>
+<li>主线程往epoll内核事件表中注册socket上的读就绪事件。</li>
+<li>主线程调用epoll_wait等待socket上有数据可读。</li>
+<li>当socket上有数据可读时，epoll_wait通知主线程。主线程则将socket可读事件放入请求队列。</li>
+<li>睡眠在请求队列上的某个工作线程被唤醒，它从socket读取数据，并处理客户请求，然后往epoll内核事件表中注册该socket上的写就绪事件。</li>
+<li>主线程调用epoll_wait等待socket可写。</li>
+<li>当socket可写时，epoll_wait通知主线程。主线程将socket可写事件放入请求队列。</li>
+<li>睡眠在请求队列上的某个工作线程被唤醒，它往socket上写入服务器处理客户请求的结果。</li>
+</ul></li>
 </ul>
 <p><img src="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/8-%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%A8%8B%E5%BA%8F%E6%A1%86%E6%9E%B6/image-20241218220132999.png" srcset="/img/loading.gif" lazyload></p>
-<p>图8-5中，工作线程从请求队列中取出事件后，将根据事件的类型来决定如何处理它：对于可读事件，执行读数据和处理请求的操作；对于可写事件，执行写数据的操作。因此，图8-5所示的Reactor模式中，没必要区分所谓的“读工作线程”和“写工作线程”。</p>
-<p>### 8.4.2 Proactor模式</p>
-<p>与Reactor模式不同，Proactor模式将所有I/O操作都交给主线程和内核来处理，工作线程仅仅负责业务逻辑。因此，Proactor模式更符合图8-4所描述的服务器编程框架。
-使用异步I/O模型（以aio_read和aio_write为例）实现的Proactor模式的工作流程是：
-1）主线程调用aio_read函数向内核注册socket上的读完成事件，并告诉内核用户读缓冲区的位置，以及读操作完成时如何通知应用程序（这里以信号为例，详情请参考sigevent的man手册）。
-2）主线程继续处理其他逻辑。
-3）当socket上的数据被读入用户缓冲区后，内核将向应用程序发送一个信号，以通知应用程序数据已经可用。
-4）应用程序预先定义好的信号处理函数选择一个工作线程来处理客户请求。工作线程处理完客户请求之后，调用aio_write函数向内核注册socket上的写完成事件，并告诉内核用户写缓冲区的位置，以及写操作完成时如何通知应用程序（仍然以信号为例）。
-5）主线程继续处理其他逻辑。
-6）当用户缓冲区的数据被写入socket之后，内核将向应用程序发送一个信号，以通知应用程序数据已经发送完毕。
-7）应用程序预先定义好的信号处理函数选择一个工作线程来做善后处理，比如决定是否关闭socket。
-图8-6总结了Proactor模式的工作流程。 图 8-6 Proactor模式
-在图8-6中，连接socket上的读写事件是通过aio_read/aio_write向内核注册的，因此内核将通过信号来向应用程序报告连接socket上的读写事件。所以，主线程中的epoll_wait调用仅能用来检测监听socket上的连接请求事件，而不能用来检测连接socket上的读写事件。</p>
-<p>### 8.4.3 模拟Proactor模式</p>
-<p>参考文献[3]提到了使用同步I/O方式模拟出Proactor模式的一种方法。其原理是：主线程执行数据读写操作，读写完成之后，主线程向工作线程通知这一“完成事件”。那么从工作线程的角度来看，它们就直接获得了数据读写的结果，接下来要做的只是对读写的结果进行逻辑处理。
-使用同步I/O模型（仍然以epoll_wait为例）模拟出的Proactor模式的工作流程如下：
-1）主线程往epoll内核事件表中注册socket上的读就绪事件。
-2）主线程调用epoll_wait等待socket上有数据可读。
-3）当socket上有数据可读时，epoll_wait通知主线程。主线程从socket循环读取数据，直到没有更多数据可读，然后将读取到的数据封装成一个请求对象并插入请求队列。
-4）睡眠在请求队列上的某个工作线程被唤醒，它获得请求对象并处理客户请求，然后往epoll内核事件表中注册socket上的写就绪事件。
-5）主线程调用epoll_wait等待socket可写。
-6）当socket可写时，epoll_wait通知主线程。主线程往socket上写入服务器处理客户请求的结果。
-图8-7总结了用同步I/O模型模拟出的Proactor模式的工作流程。 图 8-7
-用同步I/O模拟出的Proactor模式</p>
-<p>## 8.5 两种高效的并发模式</p>
-<p>并发编程的目的是让程序“同时”执行多个任务。如果程序是计算密集型的，并发编程并没有优势，反而由于任务的切换使效率降低。但如果程序是I/O密集型的，比如经常读写文件，访问数据库等，则情况就不同了。由于I/O操作的速度远没有CPU的计算速度快，所以让程序阻塞于I/O操作将浪费大量的CPU时间。如果程序有多个执行线程，则当前被I/O操作所阻塞的执行线程可主动放弃CPU（或由操作系统来调度），并将执行权转移到其他线程。这样一来，CPU就可以用来做更加有意义的事情（除非所有线程都同时被I/O操作所阻塞），而不是等待I/O操作完成，因此CPU的利用率显著提升。
-从实现上来说，并发编程主要有多进程和多线程两种方式，我们将在后续章节详细讨论它们，这一节先讨论并发模式。对应于图8-4，并发模式是指I/O处理单元和多个逻辑单元之间协调完成任务的方法。服务器主要有两种并发编程模式：半同步/半异步（half-sync/half-async）模式和领导者/追随者（Leader/Followers）模式。我们将依次讨论之。</p>
-<p>### 8.5.1 半同步/半异步模式</p>
-<p>首先，半同步/半异步模式中的“同步”和“异步”与前面讨论的I/O模型中的“同步”和“异步”是完全不同的概念。在I/O模型中，“同步”和“异步”区分的是内核向应用程序通知的是何种I/O事件（是就绪事件还是完成事件），以及该由谁来完成I/O读写（是应用程序还是内核）。在并发模式中，“同步”指的是程序完全按照代码序列的顺序执行；“异步”指的是程序的执行需要由系统事件来驱动。常见的系统事件包括中断、信号等。比如，图8-8a描述了同步的读操作，而图8-8b则描述了异步的读操作。
-图 8-8 并发模式中的同步和异步 a）同步读 b）异步读</p>
-<p>按照同步方式运行的线程称为同步线程，按照异步方式运行的线程称为异步线程。显然，异步线程的执行效率高，实时性强，这是很多嵌入式程序采用的模型。但编写以异步方式执行的程序相对复杂，难于调试和扩展，而且不适合于大量的并发。而同步线程则相反，它虽然效率相对较低，实时性较差，但逻辑简单。因此，对于像服务器这种既要求较好的实时性，又要求能同时处理多个客户请求的应用程序，我们就应该同时使用同步线程和异步线程来实现，即采用半同步/半异步模式来实现。
-半同步/半异步模式中，同步线程用于处理客户逻辑，相当于图8-4中的逻辑单元；异步线程用于处理I/O事件，相当于图8-4中的I/O处理单元。异步线程监听到客户请求后，就将其封装成请求对象并插入请求队列中。请求队列将通知某个工作在同步模式的工作线程来读取并处理该请求对象。具体选择哪个工作线程来为新的客户请求服务，则取决于请求队列的设计。比如最简单的轮流选取工作线程的Round
-Robin算法，也可以通过条件变量（见第14章）或信号量（见第14章）来随机地选择一个工作线程。图8-9总结了半同步/半异步模式的工作流程。
-图 8-9 半同步/半异步模式的工作流程
-在服务器程序中，如果结合考虑两种事件处理模式和几种I/O模型，则半同步/半异步模式就存在多种变体。其中有一种变体称为半同步/半反应堆（half-sync/half-reactive）模式，如图8-10所示。
-图 8-10 半同步/半反应堆模式</p>
-<p>图8-10中，异步线程只有一个，由主线程来充当。它负责监听所有socket上的事件。如果监听socket上有可读事件发生，即有新的连接请求到来，主线程就接受之以得到新的连接socket，然后往epoll内核事件表中注册该socket上的读写事件。如果连接socket上有读写事件发生，即有新的客户请求到来或有数据要发送至客户端，主线程就将该连接socket插入请求队列中。所有工作线程都睡眠在请求队列上，当有任务到来时，它们将通过竞争（比如申请互斥锁）获得任务的接管权。这种竞争机制使得只有空闲的工作线程才有机会来处理新任务，这是很合理的。
-图8-10中，主线程插入请求队列中的任务是就绪的连接socket。这说明该图所示的半同步/半反应堆模式采用的事件处理模式是Reactor模式：它要求工作线程自己从socket上读取客户请求和往socket写入服务器应答。这就是该模式的名称中“half-reactive”的含义。实际上，半同步/半反应堆模式也可以使用模拟的Proactor事件处理模式，即由主线程来完成数据的读写。在这种情况下，主线程一般会将应用程序数据、任务类型等信息封装为一个任务对象，然后将其（或者指向该任务对象的一个指针）插入请求队列。工作线程从请求队列中取得任务对象之后，即可直接处理之，而无须执行读写操作了。我们将在第15章给出一个用半同步/半反应堆模式实现的简单Web服务器的代码。
-半同步/半反应堆模式存在如下缺点： -
-主线程和工作线程共享请求队列。主线程往请求队列中添加任务，或者工作线程从请求队列中取出任务，都需要对请求队列加锁保护，从而白白耗费CPU时间。
--
-每个工作线程在同一时间只能处理一个客户请求。如果客户数量较多，而工作线程较少，则请求队列中将堆积很多任务对象，客户端的响应速度将越来越慢。如果通过增加工作线程来解决这一问题，则工作线程的切换也将耗费大量CPU时间。
-图8-11描述了一种相对高效的半同步/半异步模式，它的每个工作线程都能同时处理多个客户连接。
-图 8-11 高效的半同步/半异步模式
-图8-11中，主线程只管理监听socket，连接socket由工作线程来管理。当有新的连接到来时，主线程就接受之并将新返回的连接socket派发给某个工作线程，此后该新socket上的任何I/O操作都由被选中的工作线程来处理，直到客户关闭连接。主线程向工作线程派发socket的最简单方式，是往它和工作线程之间的管道里写数据。工作线程检测到管道上有数据可读时，就分析是否是一个新的客户连接请求到来。如果是，则把该新socket上的读写事件注册到自己的epoll内核事件表中。
-可见，图8-11中，每个线程（主线程和工作线程）都维持自己的事件循环，它们各自独立地监听不同的事件。因此，在这种高效的半同步/半异步模式中，每个线程都工作在异步模式，所以它并非严格意义上的半同步/半异步模式。我们将在第15章给出一个用这种高效的半同步/半异步模式实现的简单CGI服务器的代码。</p>
-<p>### 8.5.2 领导者/追随者模式</p>
-<p>领导者/追随者模式是多个工作线程轮流获得事件源集合，轮流监听、分发并处理事件的一种模式。在任意时间点，程序都仅有一个领导者线程，它负责监听I/O事件。而其他线程则都是追随者，它们休眠在线程池中等待成为新的领导者。当前的领导者如果检测到I/O事件，首先要从线程池中推选出新的领导者线程，然后处理</p>
+<ul>
+<li>图8-5中，工作线程从请求队列中取出事件后，将根据事件的类型来决定如何处理它：
+<ul>
+<li>对于可读事件，执行读数据和处理请求的操作；</li>
+<li>对于可写事件，执行写数据的操作。</li>
+</ul></li>
+<li>因此，图8-5所示的Reactor模式中，没必要区分所谓的“读工作线程”和“写工作线程”。</li>
+</ul>
+<h3 id="proactor模式">4.2 Proactor模式</h3>
+<p>与Reactor模式不同，<strong>Proactor模式</strong>将所有<strong>I/O操作都交给主线程和内核来处理</strong>，工作线程仅仅负责业务逻辑。因此，Proactor模式更符合图8-4所描述的服务器编程框架。</p>
+<p>使用异步I/O模型（以aio_read和aio_write为例）实现的Proactor模式的工作流程是：</p>
+<ul>
+<li>主线程调用aio_read函数向内核注册socket上的读完成事件，并告诉内核用户读缓冲区的位置，以及读操作完成时如何通知应用程序（这里以信号为例，详情请参考sigevent的man手册）。</li>
+<li>主线程继续处理其他逻辑。</li>
+<li>当socket上的数据被读入用户缓冲区后，内核将向应用程序发送一个信号，以通知应用程序数据已经可用。</li>
+<li>应用程序预先定义好的信号处理函数选择一个工作线程来处理客户请求。工作线程处理完客户请求之后，调用aio_write函数向内核注册socket上的写完成事件，并告诉内核用户写缓冲区的位置，以及写操作完成时如何通知应用程序（仍然以信号为例）。</li>
+<li>主线程继续处理其他逻辑。</li>
+<li>当用户缓冲区的数据被写入socket之后，内核将向应用程序发送一个信号，以通知应用程序数据已经发送完毕。</li>
+<li>应用程序预先定义好的信号处理函数选择一个工作线程来做善后处理，比如决定是否关闭socket。</li>
+</ul>
+<p><img src="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/8-%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%A8%8B%E5%BA%8F%E6%A1%86%E6%9E%B6/image-20241219200115487.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>在图8-6中，连接socket上的读写事件是通过aio_read/aio_write向内核注册的，因此内核将通过信号来向应用程序报告连接socket上的读写事件。</li>
+<li>所以，主线程中的epoll_wait调用仅能用来检测监听socket上的连接请求事件，而不能用来检测连接socket上的读写事件。</li>
+</ul>
+<h3 id="模拟proactor模式">4.3 模拟Proactor模式</h3>
+<p>同步I/O方式模拟出Proactor模式。其原理是：<strong>主线程执行数据读写操作，读写完成之后，主线程向工作线程通知这一“完成事件”。</strong></p>
+<p>那么从工作线程的角度来看，它们就直接获得了数据读写的结果，接下来要做的只是对读写的结果进行逻辑处理。</p>
+<p>使用同步I/O模型（仍然以epoll_wait为例）模拟出的Proactor模式的工作流程如下：</p>
+<ul>
+<li>主线程往epoll内核事件表中注册socket上的读就绪事件。</li>
+<li>主线程调用epoll_wait等待socket上有数据可读。</li>
+<li>socket上有数据可读时，epoll_wait通知主线程。主线程从socket循环读取数据，直到没有更多数据可读，然后将读取到的数据封装成一个请求对象并插入请求队列。</li>
+<li>睡眠在请求队列上的某个工作线程被唤醒，它获得请求对象并处理客户请求，然后往epoll内核事件表中注册socket上的写就绪事件。</li>
+<li>主线程调用epoll_wait等待socket可写。</li>
+<li>当socket可写时，epoll_wait通知主线程。主线程往socket上写入服务器处理客户请求的结果。</li>
+</ul>
+<p><img src="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/8-%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%A8%8B%E5%BA%8F%E6%A1%86%E6%9E%B6/image-20241219200642151.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="两种高效的并发模式">5. 两种高效的并发模式</h2>
+<p>并发编程的目的是让程序“同时”执行多个任务。</p>
+<ul>
+<li>如果程序是计算密集型的，并发编程并没有优势，反而由于任务的切换使效率降低。</li>
+<li>但如果程序是I/O密集型的，比如经常读写文件，访问数据库等，则情况就不同了。</li>
+<li>由于I/O操作的速度远没有CPU的计算速度快，所以让程序阻塞于I/O操作将浪费大量的CPU时间。</li>
+<li>如果程序有多个执行线程，则当前被I/O操作所阻塞的执行线程可主动放弃CPU（或由操作系统来调度），并将执行权转移到其他线程。这样一来，CPU就可以用来做更加有意义的事情（除非所有线程都同时被I/O操作所阻塞），而不是等待I/O操作完成，因此CPU的利用率显著提升。</li>
+<li>从实现上来说，并发编程主要有<strong>多进程和多线程</strong>两种方式，我们将在后续章节详细讨论它们，这一节先讨论并发模式。</li>
+<li>对应于图8-4，并发模式是指I/O处理单元和多个逻辑单元之间协调完成任务的方法。</li>
+<li>服务器主要有两种并发编程模式：半同步/半异步（half-sync/half-async）模式和领导者/追随者（Leader/Followers）模式。</li>
+</ul>
+<h3 id="半同步半异步模式">5.1 半同步/半异步模式</h3>
+<p>首先，半同步/半异步模式中的“同步”和“异步”与前面讨论的I/O模型中的“同步”和“异步”是完全不同的概念。</p>
+<ul>
+<li><p>在I/O模型中，“同步”和“异步”区分的是内核向应用程序通知的是何种I/O事件（是就绪事件还是完成事件），以及该由谁来完成I/O读写（是应用程序还是内核）。</p></li>
+<li><p>在并发模式中，“同步”指的是程序完全按照代码序列的顺序执行；“异步”指的是程序的执行需要由系统事件来驱动。</p></li>
+<li><p>常见的系统事件包括中断、信号等。比如，图8-8a描述了同步的读操作，而图8-8b则描述了异步的读操作。</p></li>
+</ul>
+<p><img src="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/8-%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%A8%8B%E5%BA%8F%E6%A1%86%E6%9E%B6/image-20241219201236171.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>按照同步方式运行的线程称为同步线程，按照异步方式运行的线程称为异步线程。
+<ul>
+<li>显然，异步线程的执行效率高，实时性强，这是很多嵌入式程序采用的模型。但编写以异步方式执行的程序相对复杂，难于调试和扩展，而且不适合于大量的并发。</li>
+<li>而同步线程则相反，它虽然效率相对较低，实时性较差，但逻辑简单。</li>
+</ul></li>
+<li>因此，对于像服务器这种既要求较好的实时性，又要求能同时处理多个客户请求的应用程序，我们就应该同时使用同步线程和异步线程来实现，即采用半同步/半异步模式来实现。
+<ul>
+<li>半同步/半异步模式中，同步线程用于处理客户逻辑，相当于图8-4中的逻辑单元；</li>
+<li>异步线程用于处理I/O事件，相当于图8-4中的I/O处理单元。</li>
+<li>异步线程监听到客户请求后，就将其封装成请求对象并插入请求队列中。</li>
+<li>请求队列将通知某个工作在同步模式的工作线程来读取并处理该请求对象。</li>
+<li>具体选择哪个工作线程来为新的客户请求服务，则取决于请求队列的设计。</li>
+<li>比如最简单的轮流选取工作线程的Round
+Robin算法，也可以通过条件变量（见第14章）或信号量（见第14章）来随机地选择一个工作线程。图8-9总结了半同步/半异步模式的工作流程。</li>
+</ul></li>
+</ul>
+<p><img src="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/8-%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%A8%8B%E5%BA%8F%E6%A1%86%E6%9E%B6/image-20241219201426221.png" srcset="/img/loading.gif" lazyload></p>
+<p>在服务器程序中，如果结合考虑两种事件处理模式和几种I/O模型，则半同步/半异步模式就存在多种变体。其中有一种变体称为半同步/半反应堆（half-sync/half-reactive）模式，如图8-10所示。</p>
+<p><img src="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/8-%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%A8%8B%E5%BA%8F%E6%A1%86%E6%9E%B6/image-20241219201446901.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>图8-10中，异步线程只有一个，由主线程来充当。它负责监听所有socket上的事件。</li>
+<li>如果监听socket上有可读事件发生，即有新的连接请求到来，主线程就接受之以得到新的连接socket，然后往epoll内核事件表中注册该socket上的读写事件。</li>
+<li>如果连接socket上有读写事件发生，即有新的客户请求到来或有数据要发送至客户端，主线程就将该连接socket插入请求队列中。</li>
+<li>所有工作线程都睡眠在请求队列上，当有任务到来时，它们将通过竞争（比如申请互斥锁）获得任务的接管权。
+<ul>
+<li>这种竞争机制使得只有空闲的工作线程才有机会来处理新任务，这是很合理的。</li>
+</ul></li>
+<li>图8-10中，主线程插入请求队列中的任务是就绪的连接socket。这说明该图所示的半同步/半反应堆模式采用的事件处理模式是Reactor模式：
+<ul>
+<li>它要求工作线程自己从socket上读取客户请求和往socket写入服务器应答。这就是该模式的名称中“half-reactive”的含义。</li>
+<li>实际上，半同步/半反应堆模式也可以使用模拟的Proactor事件处理模式，即由主线程来完成数据的读写。</li>
+<li>在这种情况下，主线程一般会将应用程序数据、任务类型等信息封装为一个任务对象，然后将其（或者指向该任务对象的一个指针）插入请求队列。</li>
+<li>工作线程从请求队列中取得任务对象之后，即可直接处理之，而无须执行读写操作了。</li>
+</ul></li>
+<li>半同步/半反应堆模式存在如下缺点：
+<ul>
+<li>主线程和工作线程共享请求队列。主线程往请求队列中添加任务，或者工作线程从请求队列中取出任务，都需要对请求队列加锁保护，从而白白耗费CPU时间。</li>
+<li><strong>每个工作线程在同一时间只能处理一个客户请求</strong>。如果客户数量较多，而工作线程较少，则请求队列中将堆积很多任务对象，客户端的响应速度将越来越慢。如果通过增加工作线程来解决这一问题，则工作线程的切换也将耗费大量CPU时间。</li>
+<li>图8-11描述了一种相对高效的半同步/半异步模式，它的每个工作线程都能同时处理多个客户连接。</li>
+</ul></li>
+</ul>
+<p><img src="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/8-%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%A8%8B%E5%BA%8F%E6%A1%86%E6%9E%B6/image-20241219202204130.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>图8-11中，主线程只管理监听socket，连接socket由工作线程来管理。
+<ul>
+<li>当有新的连接到来时，主线程就接受之并将新返回的连接socket派发给某个工作线程，此后该新socket上的任何I/O操作都由被选中的工作线程来处理，直到客户关闭连接。</li>
+<li>主线程向工作线程派发socket的最简单方式，是往它和工作线程之间的管道里写数据。</li>
+<li>工作线程检测到管道上有数据可读时，就分析是否是一个新的客户连接请求到来。</li>
+<li>如果是，则把该新socket上的读写事件注册到自己的epoll内核事件表中。</li>
+</ul></li>
+<li>可见，图8-11中，每个线程（主线程和工作线程）都维持自己的事件循环，它们各自独立地监听不同的事件。</li>
+<li>因此，在这种高效的半同步/半异步模式中，每个线程都工作在异步模式，所以它并非严格意义上的半同步/半异步模式。</li>
+</ul>
+<h3 id="领导者追随者模式">5.2 领导者/追随者模式</h3>
+<p>领导者/追随者模式是多个工作线程轮流获得事件源集合，<strong>轮流监听、分发并处理事件</strong>的一种模式。</p>
+<ul>
+<li>在任意时间点，程序都仅有一个领导者线程，它负责监听I/O事件。</li>
+<li>而其他线程则都是追随者，它们休眠在线程池中等待成为新的领导者。
+<ul>
+<li>当前的领导者如果检测到I/O事件，首先要从线程池中推选出新的领导者线程，然后处理I/O事件。</li>
+<li>此时，新的领导者等待新的I/O事件，而原来的领导者则处理I/O事件，二者实现了并发。</li>
+</ul></li>
+<li>领导者/追随者模式包含如下几个组件：句柄集（HandleSet）、线程集（ThreadSet）、事件处理器（EventHandler）和具体的事件处理器（ConcreteEventHandler）。</li>
+</ul>
+<p><img src="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/8-%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%A8%8B%E5%BA%8F%E6%A1%86%E6%9E%B6/image-20241219202638006.png" srcset="/img/loading.gif" lazyload></p>
+<ol type="1">
+<li>句柄集</li>
+</ol>
+<ul>
+<li><p>句柄（Handle）用于表示I/O资源，在Linux下通常就是一个文件描述符。</p></li>
+<li><p>句柄集管理众多句柄，它使用wait_for_event方法来监听这些句柄上的I/O事件，并将其中的就绪事件通知给领导者线程。</p></li>
+<li><p>领导者则调用绑定到Handle上的事件处理器来处理事件。</p></li>
+<li><p>领导者将Handle和事件处理器绑定是通过调用句柄集中的register_handle方法实现的。</p></li>
+</ul>
+<ol start="2" type="1">
+<li>线程集</li>
+</ol>
+<ul>
+<li>这个组件是所有工作线程（包括领导者线程和追随者线程）的管理者。</li>
+<li>它负责各线程之间的同步，以及新领导者线程的推选。</li>
+<li>线程集中的线程在任一时间必处于如下三种状态之一：
+<ul>
+<li>Leader：线程当前处于领导者身份，负责等待句柄集上的I/O事件。</li>
+<li>Processing：线程正在处理事件。
+<ul>
+<li>领导者检测到I/O事件之后，可以转移到Processing状态来处理该事件，并调用promote_new_leader方法推选新的领导者；</li>
+<li>也可以指定其他追随者来处理事件（Event
+Handoff），此时领导者的地位不变。</li>
+<li>当处于Processing状态的线程处理完事件之后，如果当前线程集中没有领导者，则它将成为新的领导者，否则它就直接转变为追随者。</li>
+</ul></li>
+<li>Follower：线程当前处于追随者身份，通过调用线程集的join方法等待成为新的领导者，也可能被当前的领导者指定来处理新的任务。</li>
+</ul></li>
+</ul>
+<p><img src="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/8-%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%A8%8B%E5%BA%8F%E6%A1%86%E6%9E%B6/image-20241219204120784.png" srcset="/img/loading.gif" lazyload></p>
+<p>需要注意的是，领导者线程推选新的领导者和追随者等待成为新的领导者这两个操作都将<strong>修改线程集</strong>，因此线程集提供一个成员Synchronizer来同步这两个操作，以避免竞态条件。</p>
+<ol start="3" type="1">
+<li>事件处理器和具体的事件处理器</li>
+</ol>
+<ul>
+<li>事件处理器通常包含一个或多个回调函数handle_event。</li>
+<li>这些回调函数用于处理事件对应的业务逻辑。</li>
+<li>事件处理器在使用前需要被绑定到某个句柄上，当该句柄上有事件发生时，领导者就执行与之绑定的事件处理器中的回调函数。</li>
+<li>具体的事件处理器是事件处理器的派生类。它们必须重新实现基类的handle_event方法，以处理特定的任务。</li>
+</ul>
+<p><img src="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/8-%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%A8%8B%E5%BA%8F%E6%A1%86%E6%9E%B6/image-20241219204321124.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>由于领导者线程自己监听I/O事件并处理客户请求，因而领导者/追随者模式不需要在线程之间传递任何额外的数据，也无须像半同步/半反应堆模式那样在线程之间同步对请求队列的访问。</li>
+<li>但领导者/追随者的一个明显缺点是仅支持一个事件源集合，因此也无法像图8-11所示的那样，让每个工作线程独立地管理多个客户连接。</li>
+</ul>
+<h2 id="有限状态机">6. 有限状态机</h2>
+<p>逻辑单元内部的一种高效编程方法：有限状态机（finite state
+machine）。</p>
+<p>有的应用层协议头部包含数据包类型字段，每种类型可以映射为逻辑单元的一种执行状态，服务器可以根据它来编写相应的处理逻辑，如代码清单8-1所示。</p>
+<p>代码清单8-1 <strong>状态独立的有限状态机</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c">STATE_MACHINE(Package_pack) &#123;<br>    PackageType_type=_pack.GetType();<br>    <span class="hljs-keyword">switch</span>(_type) &#123;<br>        <span class="hljs-keyword">case</span> type_A: process_package_A(_pack); <span class="hljs-keyword">break</span>;<br>        <span class="hljs-keyword">case</span> type_B: process_package_B(_pack); <span class="hljs-keyword">break</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这就是一个简单的有限状态机，只不过该状态机的每个状态都是相互独立的，即状态之间没有相互转移。</p>
+<p>状态之间的<strong>转移</strong>是需要<strong>状态机内部驱动</strong>的.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c">STATE_MACHINE()<br>&#123;<br>    State cur_State=type_A;<br>    <span class="hljs-keyword">while</span>(cur_State!=type_C) &#123;<br>        Package_pack=getNewPackage();<br>        <span class="hljs-keyword">switch</span>(cur_State) &#123;<br>            <span class="hljs-keyword">case</span> type_A: process_package_state_A(_pack); cur_State=type_B; <span class="hljs-keyword">break</span>;<br>            <span class="hljs-keyword">case</span> type_B: process_package_state_B(_pack); cur_State=type_C; <span class="hljs-keyword">break</span>;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>该状态机包含三种状态：type_A、type_B和type_C，
+<ul>
+<li>其中type_A是状态机的开始状态，type_C是状态机的结束状态。</li>
+<li>状态机的当前状态记录在cur_State变量中。</li>
+<li>在一趟循环过程中，状态机先通过getNewPackage方法获得一个新的数据包，然后根据cur_State变量的值判断如何处理该数据包。</li>
+<li>数据包处理完之后，状态机通过给cur_State变量传递目标状态值来实现状态转移。那么当状态机进入下一趟循环时，它将执行新的状态对应的逻辑。</li>
+</ul></li>
+<li>下面我们考虑有限状态机应用的一个实例：HTTP请求的读取和分析。
+<ul>
+<li>很多网络协议，包括TCP协议和IP协议，都在其头部中提供头部长度字段。程序根据该字段的值就可以知道是否接收到一个完整的协议头部。但HTTP协议并未提供这样的头部长度字段，并且其头部长度变化也很大，可以只有十几字节，也可以有上百字节。</li>
+<li>根据协议规定，我们判断HTTP头部结束的依据是遇到一个空行，该空行仅包含一对回车换行符（＜CR＞＜LF＞）。如果一次读操作没有读入HTTP请求的整个头部，即没有遇到空行，那么我们必须等待客户继续写数据并再次读入。</li>
+<li>因此，我们每完成一次读操作，就要分析新读入的数据中是否为空行。不过在寻找空行的过程中，我们可以同时完成对整个HTTP请求头部的分析（记住，空行前面还有请求行和头部域），以提高解析HTTP请求的效率。</li>
+<li>代码清单8-3使用主、从两个有限状态机实现了最简单的HTTP请求的读取和分析。为了使表述简洁，我们约定，直接称HTTP请求的一行（包括请求行和头部字段）为行。</li>
+</ul></li>
+</ul>
+<p>代码清单8-3 <strong>HTTP请求的读取和分析</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/socket.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;netinet/in.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;arpa/inet.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;assert.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;errno.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;fcntl.h&gt;</span></span><br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> BUFFER_SIZE 4096</span><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">    主状态机的两种可能状态，分别表示：</span><br><span class="hljs-comment">    当前正在分析请求行，</span><br><span class="hljs-comment">    当前正在分析头部字段</span><br><span class="hljs-comment">*/</span><br><span class="hljs-class"><span class="hljs-keyword">enum</span> <span class="hljs-title">CHECK_STATE</span> &#123;</span>CHECK_STATE_REQUESTLINE = <span class="hljs-number">0</span>, CHECK_STATE_HEADER, CHECK_STATE_CONTENT&#125;;<br><span class="hljs-comment">/*</span><br><span class="hljs-comment">    从状态机的三种可能状态，即行的读取状态，分别表示：</span><br><span class="hljs-comment">    读取到一个完整的行、</span><br><span class="hljs-comment">    行出错</span><br><span class="hljs-comment">    行数据尚且不完整</span><br><span class="hljs-comment">*/</span><br><span class="hljs-class"><span class="hljs-keyword">enum</span> <span class="hljs-title">LINE_STATUS</span> &#123;</span>LINE_OK = <span class="hljs-number">0</span>, LINE_BAD, LINE_OPEN&#125;;<br><span class="hljs-comment">/*</span><br><span class="hljs-comment">    服务器处理HTTP请求的结果：</span><br><span class="hljs-comment">    NO_REQUEST表示请求不完整，需要继续读取客户数据；</span><br><span class="hljs-comment">    GET_REQUEST表示获得了一个完整的客户请求；</span><br><span class="hljs-comment">    BAD_REQUEST表示客户请求有语法错误；</span><br><span class="hljs-comment">    FORBIDDEN_REQUEST表示客户对资源没有足够的访问权限；</span><br><span class="hljs-comment">    INTERNAL_ERROR表示服务器内部错误；</span><br><span class="hljs-comment">    CLOSED_CONNECTION表示客户端已经关闭连接了</span><br><span class="hljs-comment">*/</span><br><span class="hljs-class"><span class="hljs-keyword">enum</span> <span class="hljs-title">HTTP_CODE</span> &#123;</span>NO_REQUEST, GET_REQUEST, BAD_REQUEST, FORBIDDEN_REQUEST, <br>                    INTERNAL_ERROR, CLOSED_CONNECTION&#125;;<br><span class="hljs-type">static</span> <span class="hljs-type">const</span> <span class="hljs-type">char</span>* szret[] = &#123;<span class="hljs-string">&quot;I get a correct result\n&quot;</span>, <span class="hljs-string">&quot;Something wrong\n&quot;</span>&#125;;<br><br><span class="hljs-comment">/*从状态机，用于解析出一行内容*/</span><br>LINE_STATUS <span class="hljs-title function_">parse_line</span><span class="hljs-params">(<span class="hljs-type">char</span>* buffer, <span class="hljs-type">int</span>&amp; checked_index, <span class="hljs-type">int</span>&amp; read_index)</span> &#123;<br>    <span class="hljs-type">char</span> temp;<br>    <span class="hljs-comment">/*</span><br><span class="hljs-comment">        checked_index指向buffer（应用程序的读缓冲区）中当前正在分析的字节，</span><br><span class="hljs-comment">        read_index指向buffer中客户数据的尾部的下一字节。</span><br><span class="hljs-comment">        buffer中第0～checked_index字节都已分析完毕，</span><br><span class="hljs-comment">        第checked_index～(read_index-1)字节由下面的循环挨个分析</span><br><span class="hljs-comment">    */</span><br>    <span class="hljs-keyword">for</span> ( ; checked_index &lt; read_index; ++checked_index) &#123;<br>        <span class="hljs-comment">/*获得当前要分析的字节*/</span><br>        temp = buffer[checked_index]; <br>        <span class="hljs-comment">/*如果当前的字节是“\r”，即回车符，则说明可能读取到一个完整的行*/</span><br>        <span class="hljs-keyword">if</span> (temp == <span class="hljs-string">&#x27;\r&#x27;</span>) &#123; <br>            <span class="hljs-comment">/*</span><br><span class="hljs-comment">                如果“\r”字符碰巧是目前buffer中的最后一个已经被读入的客户数据，</span><br><span class="hljs-comment">                那么这次分析没有读取到一个完整的行，</span><br><span class="hljs-comment">                返回LINE_OPEN以表示还需要继续读取客户数据才能进一步分析</span><br><span class="hljs-comment">            */</span><br>            <span class="hljs-keyword">if</span> ((checked_index + <span class="hljs-number">1</span>) == read_index) &#123;<br>                <span class="hljs-keyword">return</span> LINE_OPEN;<br>            &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (buffer[checked_index + <span class="hljs-number">1</span>] == <span class="hljs-string">&#x27;\n&#x27;</span>) &#123;<br>                buffer[checked_index++] = <span class="hljs-string">&#x27;\0&#x27;</span>;<br>                buffer[checked_index++] = <span class="hljs-string">&#x27;\0&#x27;</span>;<br>                <span class="hljs-keyword">return</span> LINE_OK;<br>            &#125;<br>            <span class="hljs-keyword">return</span> LINE_BAD;<br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (temp == <span class="hljs-string">&#x27;\n&#x27;</span>) &#123; <span class="hljs-comment">/*如果下一个字符是“\n”，则说明我们成功读取到一个完整的行*/</span><br>            <span class="hljs-keyword">if</span>((checked_index &gt; <span class="hljs-number">1</span>) &amp;&amp; buffer[checked_index - <span class="hljs-number">1</span>] == <span class="hljs-string">&#x27;\r&#x27;</span>) &#123;<br>                buffer[checked_index - <span class="hljs-number">1</span>] = <span class="hljs-string">&#x27;\0&#x27;</span>;<br>                buffer[checked_index++] = <span class="hljs-string">&#x27;\0&#x27;</span>;<br>                <span class="hljs-keyword">return</span> LINE_OK;<br>            &#125;<br>            <span class="hljs-keyword">return</span> LINE_BAD;<br>        &#125;<br>    &#125;<br>    <span class="hljs-comment">/*如果所有内容都分析完毕也没遇到“\r”字符，则返回LINE_OPEN，表示还需要继续读取客户数据才能进一步分析*/</span><br>    <span class="hljs-keyword">return</span> LINE_OPEN;<br>&#125;<br><br>HTTP_CODE <span class="hljs-title function_">parse_requestline</span><span class="hljs-params">(<span class="hljs-type">char</span>* szTemp, CHECK_STATE&amp; checkstate)</span> &#123;<br>    <span class="hljs-type">char</span>* szURL = <span class="hljs-built_in">strpbrk</span>(szTemp, <span class="hljs-string">&quot; \t&quot;</span>);<br>    <span class="hljs-comment">/*如果请求行中没有空白字符或“\t”字符，则HTTP请求必有问题*/</span><br>    <span class="hljs-keyword">if</span>(!szURL) &#123;<br>        <span class="hljs-keyword">return</span> BAD_REQUEST;<br>    &#125;<br>    *szURL++ = <span class="hljs-string">&#x27;\0&#x27;</span>;<br><br>    <span class="hljs-type">char</span>* szMethod = szTemp;<br>    <span class="hljs-comment">/*仅支持GET方法*/</span><br>    <span class="hljs-keyword">if</span>(strcasecmp(szMethod, <span class="hljs-string">&quot;GET&quot;</span>) == <span class="hljs-number">0</span>) &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;The request method is GET\n&quot;</span>);<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-keyword">return</span> BAD_REQUEST;<br>    &#125;<br><br>    szURL += <span class="hljs-built_in">strspn</span>(szURL, <span class="hljs-string">&quot; \t&quot;</span>);<br>    <span class="hljs-type">char</span>* szVersion = <span class="hljs-built_in">strpbrk</span>(szURL, <span class="hljs-string">&quot; \t&quot;</span>);<br>    <span class="hljs-keyword">if</span>(!szVersion) &#123;<br>        <span class="hljs-keyword">return</span> BAD_REQUEST;<br>    &#125;<br>    *szVersion++ = <span class="hljs-string">&#x27;\0&#x27;</span>;<br>    szVersion += <span class="hljs-built_in">strspn</span>(szVersion, <span class="hljs-string">&quot; \t&quot;</span>);<br>    <span class="hljs-comment">/*仅支持HTTP/1.1*/</span><br>    <span class="hljs-keyword">if</span>(strcasecmp(szVersion, <span class="hljs-string">&quot;HTTP/1.1&quot;</span>) != <span class="hljs-number">0</span>) &#123;<br>        <span class="hljs-keyword">return</span> BAD_REQUEST;<br>    &#125;<br>    <span class="hljs-comment">/*检查URL是否合法*/</span><br>    <span class="hljs-keyword">if</span>(strncasecmp(szURL, <span class="hljs-string">&quot;http://&quot;</span>, <span class="hljs-number">7</span>) == <span class="hljs-number">0</span>) &#123;<br>        szURL += <span class="hljs-number">7</span>;<br>        szURL = <span class="hljs-built_in">strchr</span>(szURL, <span class="hljs-string">&#x27;/&#x27;</span>);<br>    &#125;<br><br>    <span class="hljs-keyword">if</span>(!szURL || szURL[<span class="hljs-number">0</span>] != <span class="hljs-string">&#x27;/&#x27;</span>) &#123;<br>        <span class="hljs-keyword">return</span> BAD_REQUEST;<br>    &#125;<br><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;The request URL is: %s\n&quot;</span>, szURL);<br>    <span class="hljs-comment">/*HTTP请求行处理完毕，状态转移到头部字段的分析*/</span><br>    checkstate = CHECK_STATE_HEADER;<br>    <span class="hljs-keyword">return</span> NO_REQUEST;<br>&#125;<br><br><span class="hljs-comment">/*分析头部字段*/</span><br>HTTP_CODE <span class="hljs-title function_">parse_headers</span><span class="hljs-params">(<span class="hljs-type">char</span>* szTemp)</span> &#123;<br>    <span class="hljs-comment">/*遇到一个空行，说明我们得到了一个正确的HTTP请求*/</span><br>    <span class="hljs-keyword">if</span>(szTemp[<span class="hljs-number">0</span>] == <span class="hljs-string">&#x27;\0&#x27;</span>) &#123;<br>        <span class="hljs-keyword">return</span> GET_REQUEST;<br>    &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (strncasecmp(szTemp, <span class="hljs-string">&quot;Host:&quot;</span>, <span class="hljs-number">5</span>) == <span class="hljs-number">0</span>) &#123; <span class="hljs-comment">/*处理“HOST”头部字段*/</span><br>        szTemp += <span class="hljs-number">5</span>;<br>        szTemp += <span class="hljs-built_in">strspn</span>(szTemp, <span class="hljs-string">&quot; \t&quot;</span>);<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;the request host is: %s\n&quot;</span>, szTemp);<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;I can not handle this header\n&quot;</span>);<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> NO_REQUEST;<br>&#125;<br><br><span class="hljs-comment">/*分析HTTP请求的入口函数*/</span><br>HTTP_CODE <span class="hljs-title function_">parse_content</span><span class="hljs-params">(<span class="hljs-type">char</span>* buffer, <span class="hljs-type">int</span>&amp; checked_index, CHECK_STATE&amp; checkstate, </span><br><span class="hljs-params">                            <span class="hljs-type">int</span>&amp; read_index, <span class="hljs-type">int</span>&amp; start_line)</span> &#123;<br>    <span class="hljs-comment">/*记录当前行的读取状态*/</span><br>    LINE_STATUS linestatus = LINE_OK;<br>    <span class="hljs-comment">/*记录HTTP请求的处理结果*/</span><br>    HTTP_CODE retcode = NO_REQUEST;<br>    <span class="hljs-comment">/*主状态机，用于从buffer中取出所有完整的行*/</span><br>    <span class="hljs-keyword">while</span> ((linestatus = parse_line(buffer, checked_index, read_index)) == LINE_OK) &#123;<br>        <span class="hljs-comment">/*start_line是行在buffer中的起始位置*/</span><br>        <span class="hljs-type">char</span>* szTemp = buffer + start_line;<br>        <span class="hljs-comment">/*记录下一行的起始位置*/</span><br>        start_line = checked_index;<br>        <span class="hljs-comment">/*checkstate记录主状态机当前的状态*/</span><br>        <span class="hljs-keyword">switch</span> (checkstate)<br>        &#123;<br>            <span class="hljs-comment">/*第一个状态，分析请求行*/</span><br>            <span class="hljs-keyword">case</span> CHECK_STATE_REQUESTLINE: &#123;<br>                retcode = parse_requestline(szTemp, checkstate);<br>                <span class="hljs-keyword">if</span>(retcode == BAD_REQUEST) &#123;<br>                    <span class="hljs-keyword">return</span> BAD_REQUEST;<br>                &#125;<br>                <span class="hljs-keyword">break</span>;<br>            &#125;<br>            <span class="hljs-comment">/*第二个状态，分析头部字段*/</span><br>            <span class="hljs-keyword">case</span> CHECK_STATE_HEADER: &#123;<br>                retcode = parse_headers(szTemp);<br>                <span class="hljs-keyword">if</span>(retcode == BAD_REQUEST) &#123;<br>                    <span class="hljs-keyword">return</span> BAD_REQUEST;<br>                &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (retcode == GET_REQUEST) &#123;<br>                    <span class="hljs-keyword">return</span> GET_REQUEST;<br>                &#125;<br>                <span class="hljs-keyword">break</span>;<br>            &#125;<br>        <br>            <span class="hljs-keyword">default</span>: &#123;<br>                <span class="hljs-keyword">return</span> INTERNAL_ERROR;<br>                <span class="hljs-keyword">break</span>;<br>            &#125;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">if</span>(linestatus == LINE_OPEN) &#123;<br>        <span class="hljs-keyword">return</span> NO_REQUEST;<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-keyword">return</span> BAD_REQUEST;<br>    &#125;<br>&#125;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span>* argv[])</span><br>&#123;<br>    <span class="hljs-keyword">if</span>(argc &lt;= <span class="hljs-number">2</span>) &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;usage: %s ip_address port_number\n&quot;</span>, basename(argv[<span class="hljs-number">0</span>]));<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br>    &#125;<br><br>    <span class="hljs-type">const</span> <span class="hljs-type">char</span>* ip = argv[<span class="hljs-number">1</span>];<br>    <span class="hljs-type">int</span> port = atoi(argv[<span class="hljs-number">2</span>]);<br><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">sockaddr_in</span> <span class="hljs-title">address</span>;</span><br>    bzero(&amp;address, <span class="hljs-keyword">sizeof</span>(address));<br>    address.sin_family = AF_INET;<br>    inet_pton(AF_INET, ip, &amp;address.sin_addr);<br>    address.sin_port = htons(port);<br><br>    <span class="hljs-type">int</span> listenfd = socket(PF_INET, SOCK_STREAM, <span class="hljs-number">0</span>);<br>    assert(listenfd &gt;= <span class="hljs-number">0</span>);<br><br>    <span class="hljs-type">int</span> ret = bind(listenfd, (<span class="hljs-keyword">struct</span> sockaddr* )&amp;address, <span class="hljs-keyword">sizeof</span>(address));<br>    assert(ret != <span class="hljs-number">-1</span>);<br><br>    ret = listen(listenfd, <span class="hljs-number">5</span>);<br>    assert(ret != <span class="hljs-number">-1</span>);<br><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">sockaddr_in</span> <span class="hljs-title">client_address</span>;</span><br>    <span class="hljs-type">socklen_t</span> client_addrlength = <span class="hljs-keyword">sizeof</span>(client_address);<br><br>    <span class="hljs-type">int</span> fd = accept(listenfd, (<span class="hljs-keyword">struct</span> sockaddr* )&amp;client_address, &amp;client_addrlength);<br>    <span class="hljs-keyword">if</span> (fd &lt; <span class="hljs-number">0</span>) &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;errno is: %d\n&quot;</span>, errno);<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-type">char</span> buffer[BUFFER_SIZE]; <span class="hljs-comment">/*读缓冲区*/</span><br>        <span class="hljs-built_in">memset</span>(buffer, <span class="hljs-string">&#x27;\0&#x27;</span>, BUFFER_SIZE);<br>        <span class="hljs-type">int</span> data_read = <span class="hljs-number">0</span>;<br>        <span class="hljs-type">int</span> read_index = <span class="hljs-number">0</span>;<span class="hljs-comment">/*当前已经读取了多少字节的客户数据*/</span><br>        <span class="hljs-type">int</span> checked_index = <span class="hljs-number">0</span>;<span class="hljs-comment">/*当前已经分析完了多少字节的客户数据*/</span><br>        <span class="hljs-type">int</span> start_line = <span class="hljs-number">0</span>;<span class="hljs-comment">/*行在buffer中的起始位置*/</span><br>        CHECK_STATE checkstate = CHECK_STATE_REQUESTLINE; <span class="hljs-comment">/*设置主状态机的初始状态*/</span><br>        <span class="hljs-keyword">while</span>(<span class="hljs-number">1</span>) &#123;<br>            data_read = recv(fd, buffer + read_index, BUFFER_SIZE - read_index, <span class="hljs-number">0</span>); <span class="hljs-comment">//接收到的字节数</span><br>            <span class="hljs-keyword">if</span>(data_read == <span class="hljs-number">-1</span>) &#123;<br>                <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;reading failed\n&quot;</span>);<br>                <span class="hljs-keyword">break</span>;<br>            &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (data_read == <span class="hljs-number">0</span>) &#123;<br>                <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;remote client has closed the connection\n&quot;</span>);<br>                <span class="hljs-keyword">break</span>;<br>            &#125;<br><br>            read_index += data_read;<br>            HTTP_CODE result = parse_content(buffer, checked_index, checkstate, read_index, start_line);<br><br>            <span class="hljs-keyword">if</span>(result == NO_REQUEST) &#123;<br>                <span class="hljs-keyword">continue</span>;<br>            &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (result == GET_REQUEST) &#123;<br>                send(fd, szret[<span class="hljs-number">0</span>], <span class="hljs-built_in">strlen</span>(szret[<span class="hljs-number">0</span>]), <span class="hljs-number">0</span>);<br>                <span class="hljs-keyword">break</span>;<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                send(fd, szret[<span class="hljs-number">1</span>], <span class="hljs-built_in">strlen</span>(szret[<span class="hljs-number">1</span>]), <span class="hljs-number">0</span>);<br>                <span class="hljs-keyword">break</span>;<br>            &#125;<br>        &#125;<br>        close(fd);<br>    &#125;<br>    close(listenfd);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>将代码清单8-3中的两个有限状态机分别称为主状态机和从状态机，这体现了它们之间的关系：主状态机在内部调用从状态机。</p>
+<p>下面先分析从状态机，即parse_line函数，它从buffer中解析出一个行。</p>
+<p><img src="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/8-%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%A8%8B%E5%BA%8F%E6%A1%86%E6%9E%B6/image-20241219205433191.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>这个状态机的初始状态是LINE_OK，其原始驱动力来自于buffer中新到达的客户数据。</li>
+<li>在main函数中，我们循环调用recv函数往buffer中读入客户数据。</li>
+<li>每次成功读取数据后，我们就调用parse_content函数来分析新读入的数据。</li>
+<li>parse_content函数首先要做的就是调用parse_line函数来获取一个行。</li>
+<li>现在假设服务器经过一次recv调用之后，buffer的内容以及部分变量的值如图8-16a所示。</li>
+</ul>
+<figure>
+<img src="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/8-%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%A8%8B%E5%BA%8F%E6%A1%86%E6%9E%B6/image-20241219205531667.png" srcset="/img/loading.gif" lazyload alt="image-20241219205531667">
+<figcaption aria-hidden="true">image-20241219205531667</figcaption>
+</figure>
+<p>a）调用recv后，buffer里的初始内容和部分变量的值
+b）parse_line函数处理buffer后的结果 c）再次调用recv后的结果
+d）parse_line函数再次处理buffer后的结果</p>
+<ul>
+<li>parse_line函数处理后的结果如图8-16b所示，它挨个检查图8-16a所示的buffer中checked_index到（read_index-1）之间的字节，判断是否存在行结束符，并更新checked_index的值。</li>
+<li>当前buffer中不存在行结束符，所以parse_line返回LINE_OPEN。</li>
+<li>接下来，程序继续调用recv以读取更多客户数据，这次读操作后buffer中的内容以及部分变量的值如图8-16c所示。</li>
+<li>然后parse_line函数就又开始处理这部分新到来的数据，如图8-16d所示。</li>
+<li>这次它读取到了一个完整的行，即“HOST:localhost”。此时，parse_line函数就可以将这行内容递交给parse_content函数中的主状态机来处理了。</li>
+<li>主状态机使用checkstate变量来记录当前的状态。
+<ul>
+<li>如果当前的状态是CHECK_STATE_REQUESTLINE，则表示parse_line函数解析出的行是请求行，于是主状态机调用parse_requestline来分析请求行；</li>
+<li>如果当前的状态是CHECK_STATE_HEADER，则表示parse_line函数解析出的是头部字段，于是主状态机调用parse_headers来分析头部字段。
+checkstate变量的初始值是CHECK_STATE_REQUESTLINE，parse_requestline函数在成功地分析完请求行之后将其设置为CHECK_STATE_HEADER，从而实现状态转移。</li>
+</ul></li>
+</ul>
+<h2 id="提高服务器性能的其他建议">7. 提高服务器性能的其他建议</h2>
+<p>影响服务器性能的首要因素就是系统的硬件资源，比如CPU的个数、速度，内存的大小等。</p>
+<p>不过由于硬件技术的飞速发展，现代服务器都不缺乏硬件资源。因此，我们需要考虑的主要问题是如何从“软环境”来提升服务器的性能。</p>
+<p>服务器的“软环境”，</p>
+<ul>
+<li>一方面是指系统的软件资源，比如操作系统允许用户打开的最大文件描述符数量；</li>
+<li>另一方面指的就是服务器程序本身，即如何从编程的角度来确保服务器的性能，</li>
+</ul>
+<p>前面我们介绍了几种高效的事件处理模式和并发模式，以及高效的逻辑处理方式——有限状态机，它们都有助于提高服务器的整体性能。</p>
+<p>下面我们进一步分析高性能服务器需要注意的其他几个方面：池、数据复制、上下文切换和锁。</p>
+<h3 id="池">7.1 池</h3>
+<p>既然服务器的硬件资源“充裕”，那么提高服务器性能的一个很直接的方法就是<strong>以空间换时间，即“浪费”服务器的硬件资源，以换取其运行效率</strong>。这就是池（pool）的概念。</p>
+<ul>
+<li>池是一组资源的集合，这组资源在服务器启动之初就被完全创建好并初始化，这称为静态资源分配。
+<ul>
+<li>当服务器进入正式运行阶段，即开始处理客户请求的时候，如果它需要相关的资源，就可以直接从池中获取，无须动态分配。</li>
+<li>很显然，直接从池中取得所需资源比动态分配资源的速度要快得多，因为分配系统资源的系统调用都是很耗时的。</li>
+<li>当服务器处理完一个客户连接后，可以把相关的资源放回池中，无须执行系统调用来释放资源。</li>
+<li>从最终的效果来看，池相当于服务器管理系统资源的应用层设施，它避免了服务器对内核的频繁访问。</li>
+</ul></li>
+<li>不过，既然池中的资源是预先静态分配的，我们就无法预期应该分配多少资源。这个问题又该如何解决呢？
+<ul>
+<li>最简单的解决方案就是分配“足够多”的资源，即针对每个可能的客户连接都分配必要的资源。</li>
+<li>这通常会导致资源的浪费，因为任一时刻的客户数量都可能远远没有达到服务器能支持的最大客户数量。好在这种资源的浪费对服务器来说一般不会构成问题。</li>
+</ul></li>
+<li>还有一种解决方案是预先分配一定的资源，此后如果发现资源不够用，就再动态分配一些并加入池中。
+<ul>
+<li>根据不同的资源类型，池可分为多种，常见的有内存池、进程池、线程池和连接池。它们的含义都很明确。</li>
+<li>内存池通常用于socket的接收缓存和发送缓存。对于某些长度有限的客户请求，比如HTTP请求，预先分配一个大小足够（比如5000字节）的接收缓存区是很合理的。
+<ul>
+<li>当客户请求的长度超过接收缓冲区的大小时，我们可以选择丢弃请求或者动态扩大接收缓冲区。</li>
+</ul></li>
+<li>进程池和线程池都是并发编程常用的“伎俩”。
+<ul>
+<li>当我们需要一个工作进程或工作线程来处理新到来的客户请求时，我们可以直接从进程池或线程池中取得一个执行实体，而无须动态地调用fork或pthread_create等函数来创建进程和线程。</li>
+</ul></li>
+</ul></li>
+<li>连接池通常用于服务器或服务器机群的内部永久连接。图8-4中，每个逻辑单元可能都需要频繁地访问本地的某个数据库。
+<ul>
+<li>简单的做法是：</li>
+<li>逻辑单元每次需要访问数据库的时候，就向数据库程序发起连接，而访问完毕后释放连接。</li>
+<li>很显然，这种做法的效率太低。一种解决方案是使用连接池。</li>
+<li>连接池是服务器预先和数据库程序建立的一组连接的集合。</li>
+<li>当某个逻辑单元需要访问数据库时，它可以直接从连接池中取得一个连接的实体并使用之。</li>
+<li>待完成数据库的访问之后，逻辑单元再将该连接返还给连接池。</li>
+</ul></li>
+</ul>
+<h3 id="数据复制">7.2 数据复制</h3>
+<p>高性能服务器应该<strong>避免不必要的数据复制</strong>，尤其是当数据复制发生在用户代码和内核之间的时候。</p>
+<ul>
+<li>如果内核可以直接处理从socket或者文件读入的数据，则应用程序就没必要将这些数据从内核缓冲区复制到应用程序缓冲区中。</li>
+<li>这里说的“直接处理”指的是应用程序不关心这些数据的内容，不需要对它们做任何分析。
+<ul>
+<li>比如ftp服务器，当客户请求一个文件时，服务器只需要检测目标文件是否存在，以及客户是否有读取它的权限，而绝对不会关心文件的具体内容。</li>
+<li>这样的话，ftp服务器就无须把目标文件的内容完整地读入到应用程序缓冲区中并调用send函数来发送，而是可以使用“零拷贝”函数sendfile来直接将其发送给客户端。</li>
+</ul></li>
+<li>此外，用户代码内部（不访问内核）的数据复制也是应该避免的。
+<ul>
+<li>举例来说，当两个工作进程之间要传递大量的数据时，我们就可以考虑使用共享内存来在它们之间直接共享这些数据，而不是使用管道或者消息队列来传递。</li>
+<li>又比如代码清单8-3所示的解析HTTP请求的实例中，我们用指针（start_line）来指出每个行在buffer中的起始位置，以便随后对行内容进行访问，而不是把行的内容复制到另外一个缓冲区中来使用，因为这样既浪费空间，又效率低下。</li>
+</ul></li>
+</ul>
+<h3 id="上下文切换和锁">7.3 上下文切换和锁</h3>
+<p>并发程序必须考虑<strong>上下文切换</strong>（context
+switch）的问题，</p>
+<ul>
+<li>即进程切换或线程切换导致的的系统开销。</li>
+<li>即使是I/O密集型的服务器，也不应该使用过多的工作线程（或工作进程，下同），否则线程间的切换将占用大量的CPU时间，服务器真正用于处理业务逻辑的CPU时间的比重就显得不足了。</li>
+<li>因此，为每个客户连接都创建一个工作线程的服务器模型是不可取的。</li>
+<li>图8-11所描述的半同步/半异步模式是一种比较合理的解决方案，它允许一个线程同时处理多个客户连接。</li>
+<li>此外，多线程服务器的一个优点是不同的线程可以同时运行在不同的CPU上。当线程的数量不大于CPU的数目时，上下文的切换就不是问题了。</li>
+</ul>
+<p>并发程序需要考虑的另外一个问题是共享资源的加锁保护。</p>
+<ul>
+<li>锁通常被认为是导致服务器效率低下的一个因素，因为由它引入的代码不仅不处理任何业务逻辑，而且需要访问内核资源。</li>
+<li>因此，服务器如果有更好的解决方案，就应该避免使用锁。</li>
+<li>显然，图8-11所描述的半同步/半异步模式就比图8-10所描述的半同步/半反应堆模式的效率高。</li>
+<li>如果服务器必须使用“锁”，则可以考虑减小锁的粒度，比如使用读写锁。</li>
+<li>当所有工作线程都只读取一块共享内存的内容时，读写锁并不会增加系统的额外开销。只有当其中某一个工作线程需要写这块内存时，系统才必须去锁住这块区域。</li>
+</ul>
 
                 
               </div>
