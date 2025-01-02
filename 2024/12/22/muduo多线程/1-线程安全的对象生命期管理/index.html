@@ -1,0 +1,1490 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="第1章 线程安全的对象生命期管理 编写线程安全的类不是难事，用同步原语（synchronization primitives）保护内部状态即可。但是对象的生与死不能由对象自身拥有的mutex（互斥器）来保护。 如何避免对象析构时可能存在的race condition（竞态条件）是C++多线程编程面临的基本问题，可以借助Boost库中的shared_ptr和weak_ptr完美解决。这也是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="1. 线程安全的对象生命期管理">
+<meta property="og:url" content="http://binbo-zappy.github.io/2024/12/22/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/1-%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E5%AF%B9%E8%B1%A1%E7%94%9F%E5%91%BD%E6%9C%9F%E7%AE%A1%E7%90%86/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="第1章 线程安全的对象生命期管理 编写线程安全的类不是难事，用同步原语（synchronization primitives）保护内部状态即可。但是对象的生与死不能由对象自身拥有的mutex（互斥器）来保护。 如何避免对象析构时可能存在的race condition（竞态条件）是C++多线程编程面临的基本问题，可以借助Boost库中的shared_ptr和weak_ptr完美解决。这也是">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/muduo.jpg">
+<meta property="article:published_time" content="2024-12-22T02:32:18.000Z">
+<meta property="article:modified_time" content="2024-12-23T13:00:34.999Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="muduo">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/muduo.jpg">
+  
+  
+  
+  <title>1. 线程安全的对象生命期管理 - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="1. 线程安全的对象生命期管理"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-12-22 10:32" pubdate>
+          2024年12月22日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          20k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          171 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">1. 线程安全的对象生命期管理</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="第1章-线程安全的对象生命期管理">第1章
+线程安全的对象生命期管理</h1>
+<p>编写线程安全的类不是难事，用同步原语（synchronization
+primitives）保护内部状态即可。但是对象的生与死不能由对象自身拥有的mutex（互斥器）来保护。</p>
+<p>如何避免对象析构时可能存在的race
+condition（竞态条件）是C++多线程编程面临的基本问题，可以借助Boost库中的shared_ptr和weak_ptr完美解决。这也是实现线程安全的Observer模式的必备技术。</p>
+<h2 id="当析构函数遇到多线程">1. 当析构函数遇到多线程</h2>
+<p>当一个对象能被多个线程同时看到时，那么对象的销毁时机就变得模糊不清，可能出现多种竞态条件（race
+condition）：</p>
+<ul>
+<li>在即将析构一个对象时，从何而知此刻是否有别的线程正在执行该对象的成员函数？</li>
+<li>如何保证在执行成员函数期间，对象不会在另一个线程被析构？</li>
+<li>在调用某个对象的成员函数之前，如何得知这个对象还活着？它的析构函数会不会碰巧执行到一半？</li>
+</ul>
+<p>解决这些race
+condition是C++多线程编程面临的基本问题。本文试图以shared_ptr一劳永逸地解决这些问题，减轻C++多线程编程的精神负担。</p>
+<p>这两个class也是TR1的一部分，位于std::tr1命名空间；在C++11中，它们是标准库的一部分。</p>
+<h3 id="线程安全的定义">1.1 线程安全的定义</h3>
+<p>依据[JCP]，一个线程安全的class应当满足以下三个条件：</p>
+<ul>
+<li>多个线程同时访问时，其表现出正确的行为。</li>
+<li>无论操作系统如何调度这些线程，无论这些线程的执行顺序如何交织（interleaving）。</li>
+<li>调用端代码无须额外的同步或其他协调动作。</li>
+</ul>
+<p>依据这个定义，C++标准库里的大多数class都不是线程安全的，包括std::string、std::vector、std::map等，因为这些class通常需要在外部加锁才能供多个线程同时访问。</p>
+<h3 id="mutexlock-与-mutexlockguard">1.2 MutexLock 与
+MutexLockGuard</h3>
+<p>为了便于后文讨论，先约定两个工具类。</p>
+<p>MutexLock封装临界区（critical
+section），这是一个简单的资源类，用RAII手法封装互斥器的创建与销毁。临界区在Windows上是struct
+CRITICAL_SECTION，是可重入的；在Linux下是pthread_mutex_t，默认是不可重入的。MutexLock一般是别的class的数据成员。</p>
+<p>注释：</p>
+<ul>
+<li>RAII（Resource Acquisition Is
+Initialization）是一种编程技术，主要用于C++中，用于管理资源的生命周期。它的核心思想是在对象的构造函数中获取资源，在析构函数中释放资源。这样，资源的生命周期就和对象的生命周期绑定在一起，可以自动管理资源的分配和释放，减少内存泄漏和其他资源管理错误。</li>
+<li>在多线程编程中，RAII手法可以用来封装互斥锁（Mutex）的使用。通过创建一个互斥锁对象，在其构造函数中锁定互斥锁，在析构函数中解锁互斥锁，可以确保即使在发生异常时，互斥锁也能被正确释放，避免死锁的发生。这种方法可以简化代码，提高代码的安全性和可靠性。</li>
+</ul>
+<p>MutexLockGuard封装临界区的进入和退出，即加锁和解锁。MutexLockGuard一般是栈上对象，它的作用域刚好等于临界区域。</p>
+<p>这两个class都不允许拷贝构造和赋值。</p>
+<h3 id="一个线程安全的counter示例">1.3 一个线程安全的Counter示例</h3>
+<p>编写单个的线程安全的class不算太难，只需用同步原语保护其内部状态。例如下面这个简单的计数器类Counter：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// A thread-safe counter</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Counter</span> : boost::noncopyable &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">Counter</span>() : <span class="hljs-built_in">value_</span>(<span class="hljs-number">0</span>) &#123;&#125;<br>    <span class="hljs-function"><span class="hljs-type">int64_t</span> <span class="hljs-title">value</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">int64_t</span> <span class="hljs-title">getAndIncrease</span><span class="hljs-params">()</span></span>;<br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-type">int64_t</span> value_;<br>    <span class="hljs-keyword">mutable</span> MutexLock mutex_;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">int64_t</span> <span class="hljs-title">Counter::value</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123;<br>    <span class="hljs-function">MutexLockGuard <span class="hljs-title">lock</span><span class="hljs-params">(mutex_)</span></span>;<br>    <span class="hljs-keyword">return</span> value_;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int64_t</span> <span class="hljs-title">Counter::getAndIncrease</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-function">MutexLockGuard <span class="hljs-title">lock</span><span class="hljs-params">(mutex_)</span></span>;<br>    <span class="hljs-type">int64_t</span> ret = value_++;<br>    <span class="hljs-keyword">return</span> ret;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这个class很直白，一看就明白，也容易验证它是线程安全的。每个Counter对象有自己的mutex，因此不同对象之间不构成锁争用（lock
+contention）。即两个线程有可能同时执行L19，前提是它们访问的不是同一个Counter对象。注意到其mutex_成员是mutable的，意味着const成员函数如Counter::value()也能直接使用non-const的mutex。思考：如果mutex_是static，是否影响正确性和/或性能？</p>
+<p>尽管这个Counter本身毫无疑间是线程安全的，但如果Counter是动态创建的并通过指针来访问，前面提到的对象销毁的race
+condition仍然存在。</p>
+<p>PS:</p>
+<p>即使<code>Counter</code>类本身是线程安全的，如果它是动态创建的并通过指针访问，那么在对象销毁时仍然可能遇到竞态条件。这是因为在多线程环境中，一个线程可能正在访问一个<code>Counter</code>对象，而另一个线程可能正在销毁同一个对象。这种情况下，即使<code>Counter</code>内部的每个操作都是线程安全的，对象的生命周期管理也可能引入问题。以下是一些可能发生的问题：</p>
+<ol type="1">
+<li><strong>悬空指针</strong>：如果一个线程正在访问一个<code>Counter</code>对象，而另一个线程已经删除了这个对象，那么第一个线程将访问到一个悬空指针，这可能导致未定义行为，包括程序崩溃。</li>
+<li><strong>对象状态不一致</strong>：如果一个线程正在执行<code>Counter</code>对象的某个操作（比如<code>getAndIncrease</code>），而另一个线程同时销毁了这个对象，那么第一个线程可能会看到一个部分销毁的对象状态，这可能导致数据不一致。</li>
+<li><strong>内存泄漏</strong>：如果一个线程销毁了<code>Counter</code>对象，但是其他线程仍然持有该对象的指针，那么这些指针指向的内存将无法被回收，导致内存泄漏。</li>
+</ol>
+<p>为了解决这些问题，可以采用智能指针，如<code>std::shared_ptr</code>，来管理对象的生命周期。<code>std::shared_ptr</code>内部使用引用计数来跟踪有多少个指针指向同一个对象。当最后一个<code>shared_ptr</code>被销毁时，对象也会被自动销毁。这样，只要所有线程都使用<code>shared_ptr</code>来管理<code>Counter</code>对象，就可以确保在对象被销毁之前，没有线程正在访问它。</p>
+<p>使用<code>std::shared_ptr</code>的另一个好处是，它提供了线程安全的引用计数机制，这意味着即使多个线程同时修改引用计数，也能保持一致性。</p>
+<h2 id="对象的创建很简单">2. 对象的创建很简单</h2>
+<p>对象构造要做到线程安全，唯一的要求是在构造期间不要泄露this指针，即：</p>
+<ul>
+<li>不要在构造函数中注册任何回调；</li>
+<li>也不要在构造函数中把this传给跨线程的对象；</li>
+</ul>
+<p>即使在构造函数的最后一行也不行。</p>
+<p>之所以这样规定，是因为在构造函数执行期间对象还没有完成初始化，如果<strong>this被泄露（escape）给了其他对象（其自身创建的子对象除外），那么别的线程有可能访问这个半成品对象</strong>，这会造成难以预料的后果。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// 不要这么做（Don&#x27;t do this.）</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Foo</span> : <span class="hljs-keyword">public</span> Observer &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">Foo</span>(Observable* s) &#123;<br>        s-&gt;<span class="hljs-built_in">register_</span>(<span class="hljs-keyword">this</span>); <span class="hljs-comment">// 错误，非线程安全</span><br>    &#125;<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">update</span><span class="hljs-params">()</span></span>;<br>&#125;;<br><br>对象构造的正确方法：<br><span class="hljs-comment">// 要这么做（Do this.）</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Foo</span> : <span class="hljs-keyword">public</span> Observer &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">Foo</span>() &#123;&#125;<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">update</span><span class="hljs-params">()</span></span>;<br>    <span class="hljs-comment">// 另外定义一个函数，在构造之后执行回调函数的注册工作</span><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">observe</span><span class="hljs-params">(Observable* s)</span> </span>&#123;<br>        s-&gt;<span class="hljs-built_in">register_</span>(<span class="hljs-keyword">this</span>);<br>    &#125;<br>&#125;;<br><br>Foo* pFoo = <span class="hljs-keyword">new</span> Foo;<br>Observable* s = <span class="hljs-built_in">getSubject</span>();<br>pFoo-&gt;<span class="hljs-built_in">observe</span>(s); <span class="hljs-comment">// 二段式构造，或者直接写s-&gt;register_(pFoo);</span><br></code></pre></td></tr></table></figure>
+<p>这也说明，<strong>二段式构造——即构造函数+initialize()有时会是好办法，这虽然不符合C++教条，但是多线程下别无选择。</strong>另外，既然允许二段式构造，那么构造函数不必主动抛异常，调用方靠initialize()的返回值来判断对象是否构造成功，这能简化错误处理。</p>
+<p><strong>即使构造函数的最后一行也不要泄露this</strong>，因为Foo有可能是个基类，基类先于派生类构造，执行完Foo::Foo()的最后一行代码还会继续执行派生类的构造函数，这时most-derived
+class的对象还处于构造中，仍然不安全。</p>
+<p>相对来说，对象的构造做到线程安全还是比较容易的，毕竟光少，回头率为零。而析构的线程安全就不那么简单，这也是本章关注的焦点。</p>
+<h2 id="销毁太难">3. 销毁太难</h2>
+<p>对象析构，这在单线程里不构成问题，最多需要注意避免空悬指针和野指针。而在多线程程序中，存在了太多的竞态条件。对一般成员函数而言，做到线程安全的办法是让它们顺次执行，而不要并发执行（关键是不要同时读写共享状态），也就是让每个成员函数的临界区不重叠。这是显而易见的，不过有一个隐含条件或许不是每个人都能立刻想到：<strong>成员函数用来保护临界区的互斥器本身必须是有效的</strong>。而析构函数破坏了这一假设，它会把mutex成员变量销毁掉。悲剧啊！</p>
+<h3 id="mutex不是办法">3.1 mutex不是办法</h3>
+<p>mutex只能保证函数一个接一个地执行，考虑下面的代码，它试图用互斥锁来保护析构函数：（注意代码中的（1）和（2）两处标记。）</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs cpp">Foo::~<span class="hljs-built_in">Foo</span>()<br>&#123;<br>    <span class="hljs-function">MutexLockGuard <span class="hljs-title">lock</span><span class="hljs-params">(mutex_)</span></span>;  <span class="hljs-comment">// (1) 锁定互斥量以释放内部状态</span><br>    <span class="hljs-comment">// free internal state</span><br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Foo::update</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-function">MutexLockGuard <span class="hljs-title">lock</span><span class="hljs-params">(mutex_)</span></span>;  <span class="hljs-comment">// (2) 锁定互斥量以使用内部状态</span><br>    <span class="hljs-comment">// make use of internal state</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>此时，有A、B两个线程都能看到Foo对象x，线程A即将销毁x，而线程B正准备调用x-&gt;update。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">extern</span> Foo* x; <span class="hljs-comment">// visible by all threads</span><br><span class="hljs-comment">// thread A</span><br><span class="hljs-keyword">delete</span> x;<br>x = <span class="hljs-literal">NULL</span>; <span class="hljs-comment">// helpless</span><br><br><span class="hljs-comment">// thread B</span><br><span class="hljs-keyword">if</span> (x) &#123;<br>    x-&gt;<span class="hljs-built_in">update</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>尽管线程A在销毁对象之后把指针置为了NULL，尽管线程B在调用x的成员函数之前检查了指针x的值，但还是无法避免一种race
+condition：</p>
+<ol type="1">
+<li>线程A执行到了析构函数的（1）处，已经持有了互斥锁，即将继续往下执行。</li>
+<li>线程B通过了if（x）检测，阻塞在（2）处。</li>
+</ol>
+<p>接下来会发生什么，只有天晓得。因为析构函数会把mutex_销毁，那么（2）处有可能永远阻塞下去，有可能进入“临界区”，然后core
+dump，或者发生其他更糟糕的情况。</p>
+<p>这个例子至少说明delete对象之后把指针置为NULL根本没用，如果一个程序要靠这个来防止二次释放，说明代码逻辑出了问题。</p>
+<h3 id="作为数据成员的mutex不能保护析构">3.2
+作为数据成员的mutex不能保护析构</h3>
+<p>前面的例子说明，作为class数据成员的MutexLock只能用于同步本class的其他数据成员的读和写，它不能保护安全地析构。</p>
+<p>因为MutexLock成员的生命期最多与对象一样长，而析构动作可说是发生在对象身故之后（或者身亡之时）。</p>
+<p>另外，对于基类对象，那么调用到基类析构函数的时候，派生类对象的那部分已经析构了，那么基类对象拥有的MutexLock不能保护整个析构过程。</p>
+<p>再说，析构过程本来也不需要保护，因为只有别的线程都访问不到这个对象时，析构才是安全的，否则会有§1.1谈到的竞态条件发生。</p>
+<p>另外如果要同时读写一个class的两个对象，有潜在的死锁可能。比方说有swap这个函数：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">swap</span><span class="hljs-params">(Counter&amp; a, Counter&amp; b)</span> </span>&#123;<br>    <span class="hljs-function">MutexLockGuard <span class="hljs-title">aLock</span><span class="hljs-params">(a.mutex_)</span></span>;    <span class="hljs-comment">// potential deadlock</span><br>    <span class="hljs-function">MutexLockGuard <span class="hljs-title">bLock</span><span class="hljs-params">(b.mutex_)</span></span>;<br>    <span class="hljs-type">int64_t</span> value = a.value_;<br>    a.value_ = b.value_;<br>    b.value_ = value;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>如果线程A执行swap(a，b)；而同时线程B执行swap(b，a)；，就有可能死锁。operator=()也是类似的道理。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs cpp">Counter&amp; Counter::<span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> Counter&amp; rhs) &#123;<br>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span> == &amp;rhs) &#123;<br>        <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>    &#125;<br>    <span class="hljs-function">MutexLockGuard <span class="hljs-title">myLock</span><span class="hljs-params">(mutex_)</span></span>; <span class="hljs-comment">// potential deadlock</span><br>    <span class="hljs-function">MutexLockGuard <span class="hljs-title">itsLock</span><span class="hljs-params">(rhs.mutex_)</span></span>;<br>    value_ = rhs.value_; <span class="hljs-comment">// 改成value_ = rhs.value(); 会死锁</span><br>    <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>一个函数如果要锁住相同类型的多个对象，为了保证始终按相同的顺序加锁，我们可以比较mutex对象的地址，<strong>始终先加锁地址较小的mutex</strong>。</p>
+<h2 id="线程安全的observer有多难">4. 线程安全的Observer有多难</h2>
+<p><strong>一个动态创建的对象是否还活着，光看指针是看不出来的</strong>（引用也一样看不出来。指针就是指向了一块内存，这块内存上的对象如果已经销毁，那么就根本不能访问（CCS，条款99）（就像free(3）之后的地址不能访问一样），既然不能访问又如何知道对象的状态呢？换句话说，判断一个指针是不是合法指针没有高效的办法，这是C/C++指针问题的根源。（万一原址又创建了一个新的对象呢？再万一这个新的对象的类型异于老的对象呢？）</p>
+<p>在面向对象程序设计中，对象的关系主要有三种：composition、aggregation，association。</p>
+<ul>
+<li>composition（组合/复合）关系在多线程里不会遇到什么麻烦，因为对象x的生命期由其唯一的拥有者owner控制，owner析构的时候会把x也析构掉。
+<ul>
+<li>从形式上看，x是owner的直接数据成员，或者scoped_ptr成员，抑或owner持有的容器的元素。</li>
+</ul></li>
+</ul>
+<p>后两种关系在C++里比较难办，处理不好就会造成内存泄漏或重复释放。</p>
+<ul>
+<li>association（关联/联系）是一种很宽泛的关系，它表示一个对象a用到了另一个对象b，调用了后者的成员函数。
+<ul>
+<li>从代码形式上看，a持有b的指针（或引用），但是b的生命期不由a单独控制。</li>
+</ul></li>
+<li>aggregation（聚合）关系从形式上看与association相同，除了a和b有逻辑上的整体与部分关系。
+<ul>
+<li>如果b是动态创建的并在整个程序结束前有可能被释放，那么就会出现§1.1谈到的竞态条件。</li>
+</ul></li>
+</ul>
+<p>那么似乎一个简单的解决办法是：<strong>只创建不销毁</strong>。程序使用一个对象池来暂存用过的对象，下次申请新对象时，如果对象池有存货，就重复利用现有的对象，否则就新建一个。对象用完了，不是直接释放掉，而是放回池子里。这个办法当然有其自身的很多缺点，但至少能避免访问失效对象的情况发生。</p>
+<p>这种山寨办法的问题有：</p>
+<ul>
+<li>对象池的线程安全，如何安全地完整地把对象放回池子里，防止出现“部分放回”的竞态？（线程A认为对象x已经放回了，线程B认为对象x还活着。）</li>
+<li>全局共享数据引发的lock
+contention，这个集中化的对象池会不会把多线程并发的操作串行化？</li>
+<li>如果共享对象的类型不止一种，那么是重复实现对象池还是使用类模板？</li>
+<li>会不会造成内存泄漏与分片？因为对象池占用的内存只增不减，而且多个对象池不能共享内存（想想为何）。</li>
+</ul>
+<p>回到正题上来，如果对象x注册了任何非静态成员函数回调，那么必然在某处持有了指向x的指针，这就暴露在了race
+condition之下。</p>
+<ul>
+<li>Tips:</li>
+<li>对于对象 <code>x</code>
+注册非静态成员函数作为回调的情况，存在竞态条件的原因在于：
+<ol type="1">
+<li><strong>共享资源访问</strong>：如果对象 <code>x</code>
+的成员函数被注册为回调，并且这个回调可能会被不同的线程调用，那么这些线程实际上是在并发访问对象
+<code>x</code> 的成员数据。</li>
+<li><strong>线程安全问题</strong>：如果成员函数修改了对象 <code>x</code>
+的状态，而这些修改没有适当的同步机制（例如互斥锁），那么不同的线程可能会看到不一致的状态，或者一个线程的修改可能会被另一个线程覆盖。</li>
+<li><strong>对象生命周期管理</strong>：如果对象 <code>x</code>
+的生命周期不是由持有指针的线程完全控制的，那么可能会发生对象被销毁后回调仍然被调用的情况，这会导致未定义行为，比如访问已经被释放的内存。</li>
+<li><strong>指针的不可预测性</strong>：持有指向 <code>x</code>
+的指针的线程可能在任何时候释放这个指针，而其他线程可能不知道这一点，继续使用这个指针调用回调函数，从而访问到无效的内存。</li>
+<li><strong>回调的异步性</strong>：回调函数的调用通常是异步的，这意味着它们可能在对象
+<code>x</code>
+被认为不再有效之后很久才被调用。如果回调函数的调用和对象的生命周期不是严格同步的，就可能发生竞态条件。</li>
+</ol></li>
+</ul>
+<h2 id="原始指针有何不妥">5. 原始指针有何不妥</h2>
+<p>指向对象的原始指针（raw
+pointer）是坏的，尤其当暴露给别的线程时。<strong>Observable应当保存的不是原始的Observer*，而是别的什么东西，能分辨observer对象是否存活</strong>。</p>
+<p>类似地，如果observer要在析构函数里解注册（这虽然不能解决前面提到的race
+condition，但是在析构函数里打扫战场还是应该的），那么subject_的类型也不能是原始的Observable*。</p>
+<p><strong>用智能指针</strong>。没错，这是正道，但也没那么简单，有些关需要注意。这两处直接使用shared_ptr是不行的，会形成循环引用，直接造成资源泄漏。</p>
+<h3 id="空悬指针">5.1 空悬指针</h3>
+<p>有两个指针p1和p2，指向堆上的同一个对象object，p1和p2位于不同的线程中（图1-1的左图）。假设线程A通过p1指针将对象销毁了（尽管把p1置为了NULL），那P2就成了空悬指针（图1-1的右图）。这是一种典型的C/C++内存错误。</p>
+<p><img src="/2024/12/22/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/1-%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E5%AF%B9%E8%B1%A1%E7%94%9F%E5%91%BD%E6%9C%9F%E7%AE%A1%E7%90%86/image-20241223181904895.png" srcset="/img/loading.gif" lazyload></p>
+<p><strong>要安全地销毁对象，最好在别人（线程）都看不到的情况下，偷偷地做。</strong>（这正是垃圾回收的原理，所有人都用不到的东西一定是垃圾。）</p>
+<h3 id="一个解决办法">5.2 一个“解决办法”</h3>
+<p>一个解决空悬指针的办法是，<strong>引入一层间接性</strong>，让p1和p2所指的对象永久有效。比如图1-2中的proxy对象，这个对象，持有一个指向object的指针。（从C语言的角度，p1和p2都是二级指针。）</p>
+<p><img src="/2024/12/22/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/1-%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E5%AF%B9%E8%B1%A1%E7%94%9F%E5%91%BD%E6%9C%9F%E7%AE%A1%E7%90%86/image-20241223182001790.png" srcset="/img/loading.gif" lazyload></p>
+<p>当销毁object之后，proxy对象继续存在，其值变为0（见图1-3）。而p2也没有变成空悬指针，它可以通过查看proxy的内容来判断Object是否还活着。</p>
+<p>问题在于，<strong>何时释放proxy指针</strong>呢？</p>
+<h3 id="一个更好的解决办法">5.3 一个更好的解决办法</h3>
+<p>为了安全地释放proxy，我们可以引入<strong>引用计数</strong>（reference
+counting），再把p1和p2都从指针变成对象sp1和sp2。proxy现在有两个成员，指针和计数器。</p>
+<p>1.一开始，有两个引用，计数值为2（见图1-4）</p>
+<p><img src="/2024/12/22/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/1-%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E5%AF%B9%E8%B1%A1%E7%94%9F%E5%91%BD%E6%9C%9F%E7%AE%A1%E7%90%86/image-20241223182108533.png" srcset="/img/loading.gif" lazyload></p>
+<p>2.Sp1析构了，引用计数的值减为1（见图1-5）。</p>
+<p><img src="/2024/12/22/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/1-%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E5%AF%B9%E8%B1%A1%E7%94%9F%E5%91%BD%E6%9C%9F%E7%AE%A1%E7%90%86/image-20241223182121900.png" srcset="/img/loading.gif" lazyload></p>
+<p>3.sp2也析构了，引用计数降为0，可以安全地销毁proxy和object了（见图1-6）。</p>
+<p><img src="/2024/12/22/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/1-%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E5%AF%B9%E8%B1%A1%E7%94%9F%E5%91%BD%E6%9C%9F%E7%AE%A1%E7%90%86/image-20241223182132038.png" srcset="/img/loading.gif" lazyload></p>
+<p>这不正是引用计数型智能指针吗？</p>
+<h3 id="一个万能的解决方案">5.4 一个万能的解决方案</h3>
+<p>引入另外一层间接性（another layer of
+indirection），用对象来管理共享资源（如果把object看作资源的话），亦即handle/body惯用技法（idiom）。C++的TR1标准库里提供了一对“神兵利器”，可助我们完美解决这个问题。</p>
+<h2 id="神器shared_ptrweak_ptr">6. 神器shared_ptr/weak_ptr</h2>
+<p>shared_ptr是引用计数型智能指针，在Boost和std::tr1里均提供，也被纳入C++11标准库，现代主流的C++编译器都能很好地支持。</p>
+<p>shared_ptr&lt;T&gt;是一个类模板（class
+template），它只有一个类型参数，使用起来很方便。引用计数是自动化资源管理的常用手法，当引用计数降为0时，对象（资源）即被销毁。</p>
+<p>weak_ptr也是个引用计数型智能指针，但是它不增加对象的引用次数，即弱（weak）引用。</p>
+<p>shared_ptr的几个关键点。</p>
+<ul>
+<li>shared_ptr控制对象的生命期。shared_ptr是强引用（想象成用铁丝绑住堆上的对象），只要有一个指向x对象的shared_ptr存在，该x对象就不会析构。
+<ul>
+<li>当指向对象x的最后一个shared_ptr析构或reset的时候，x保证会被销毁。</li>
+</ul></li>
+<li>weak_ptr不控制对象的生命期，但是它知道对象是否还活着（想象成用棉线轻轻拴住堆上的对象）。如果对象还活着，那么它可以提升（promote）为有效的shared_ptr；如果对象已经死了，提升会失败，返回一个空的shared_ptr。“提升/lock()”行为是线程安全的。</li>
+<li>shared_ptr/weak_ptr的“计数”在主流平台上是原子操作，没有用锁，性能不俗。</li>
+<li>shared_ptr/weak_ptr的线程安全级别与std::string和STL容器一样，后面还会讲。</li>
+</ul>
+<p>孟岩在《垃圾收集机制批判》中一针见血地点出智能指针的优势：“C++利用智能指针达成的效果是：一旦某对象不再被引用，系统刻不容缓，立刻回收内存。这通常发生在关键任务完成后的清理（cleanup）时期，不会影响关键任务的实时性，同时，内存里所有的对象都是有用的，绝对没有垃圾空占内存。”</p>
+<h2 id="插曲系统地避免各种指针错误">7. 插曲：系统地避免各种指针错误</h2>
+<p>孟岩说的“大部分用C写的上规模的软件都存在一些内存方面的错误，需要花费大量的精力和时间把产品稳定下来。”举例来说，像Nginx这样成熟且广泛使用的C语言产品都会不时暴露出低级的内存错误。</p>
+<p>C++里可能出现的内存问题有这么几个方面：</p>
+<ol type="1">
+<li>缓冲区溢出（buffer overrun）。</li>
+<li>空悬指针/野指针。</li>
+<li>重复释放（double delete）。</li>
+<li>内存泄漏（memory leak）。</li>
+<li>不配对的new/delete。</li>
+<li>内存碎片（memory fragmentation）。</li>
+</ol>
+<p>正确使用智能指针能很轻易地解决前面5个问题，解决第6个问题需要别的思路，我会在<span class="math inline">\(\S9.2.1\)</span>和<span class="math inline">\(\S4.1.8\)</span>探讨。</p>
+<ol type="1">
+<li>缓冲区溢出：用std::vector&lt;char&gt;/std::string或自己编写Buffer
+class来管理缓冲区，自动记住用缓冲区的长度，并<strong>通过成员函数而不是裸指针来修改缓冲区</strong>。</li>
+<li>空悬指针/野指针：用shared_ptr/weak_ptr，这正是本章的主题。</li>
+<li>重复释放：用<strong>scoped_ptr</strong>，只在对象析构的时候释放一次。</li>
+<li>内存泄漏：用scoped_ptr，对象析构的时候自动释放内存。</li>
+<li>不配对的new/delete：把new统统替换为std::vector/scoped_array。</li>
+</ol>
+<p>正确使用上面提到的这几种智能指针并不难，其难度大概比学习使用std::vector/std::list这些标准库组件还要小，与std::string差不多，只要花一周的时间去适应它，就能信手拈来。我认为，<strong>在现代的C++程序中一般不会出现delete语句</strong>，资源（包括复杂对象本身）都是通过对象（智能指针或容器）来管理的，不需要程序员还为此操心。</p>
+<p>在这儿种错误里边，内存泄漏相对危害性较小，因为它只是借了东西不归还，程序功能在一段时间内还算正常。其他如缓冲区溢出或重复释放等致命错误可能会造成安全性（security和data
+safety）方面的严重后果。</p>
+<p>在 C++ 中，<code>shared_ptr</code>、<code>scoped_ptr</code>（C++11
+后被 <code>std::unique_ptr</code> 替代）和 <code>weak_ptr</code>
+是智能指针，它们用于自动管理动态分配的内存，以防止内存泄漏。这些智能指针的设计遵循值语义，意味着它们应该像值一样被传递和存储，而不是通过指针。</p>
+<p>以下是为什么不应该使用
+<code>new shared_ptr&lt;Foo&gt;(new Foo)</code> 这种用法的原因：</p>
+<ol type="1">
+<li><strong>内存泄漏风险</strong>：当你使用 <code>new</code> 来创建一个
+<code>shared_ptr</code> 时，你实际上是在堆上分配了一个
+<code>shared_ptr</code> 实例。如果这个 <code>shared_ptr</code>
+的生命周期结束时没有被适当地删除，那么它指向的 <code>Foo</code>
+对象也不会被销毁，因为 <code>shared_ptr</code> 会保持对 <code>Foo</code>
+对象的引用计数。这会导致内存泄漏。</li>
+<li><strong>违反智能指针的设计原则</strong>：智能指针的设计初衷是简化资源管理，使得资源的生命周期管理更加自动化和安全。通过
+<code>new</code>
+创建智能指针本身，实际上是在手动管理智能指针的生命周期，这违背了智能指针的设计原则。</li>
+<li><strong>不必要的复杂性</strong>：使用 <code>new</code>
+创建智能指针会增加代码的复杂性，使得资源管理更加困难。智能指针应该直接创建和管理它们指向的对象，而不是被其他指针所管理。</li>
+<li><strong>性能问题</strong>：使用 <code>new</code>
+创建智能指针意味着额外的内存分配和可能的内存碎片问题。智能指针通常设计为轻量级，而通过
+<code>new</code> 创建它们会增加额外的内存开销</li>
+</ol>
+<p>还要注意，如果这几种智能指针是对象x的数据成员，而它的模板参数T是个incomplete类型，那么x的析构函数不能是默认的或内联的，必须在.cpp文件里边显式定义，否则会有编译错或运行错（原因见<span class="math inline">\(\S10.3.2\)</span>）。</p>
+<p>Tips:</p>
+<ul>
+<li><p>在 C++ 中，如果一个对象 <code>x</code> 包含智能指针（如
+<code>shared_ptr</code>、<code>unique_ptr</code> 或
+<code>weak_ptr</code>）作为其数据成员，并且这些智能指针的模板参数
+<code>T</code> 是一个不完整类型（incomplete
+type），那么确实需要特别注意析构函数的处理。</p></li>
+<li><p>不完整类型（Incomplete Type）</p>
+<p>不完整类型是指在某个点上，类型的定义尚未完全声明。例如，如果有一个前向声明的类，但没有提供完整的类定义，那么这个类就是不完整类型。不完整类型不能被直接使用，比如不能创建不完整类型的实例，也不能取其地址。</p></li>
+<li><p>智能指针和不完整类型</p>
+<p>当你有一个智能指针指向一个不完整类型时，智能指针的完整定义需要等到
+<code>T</code> 的完整定义被提供之后才能完成。这意味着，如果
+<code>T</code>
+是不完整的，智能指针的析构函数也不能在头文件中被内联定义，因为编译器在处理头文件时还没有
+<code>T</code> 的完整信息。</p></li>
+<li><p>析构函数的问题</p>
+<p>如果 <code>x</code> 的析构函数是默认的或内联的，并且 <code>x</code>
+包含指向不完整类型的智能指针，那么在链接时可能会遇到问题。这是因为：</p>
+<ol type="1">
+<li><p><strong>默认析构函数</strong>：如果 <code>x</code>
+的析构函数是默认的，编译器会在每个使用 <code>x</code> 的翻译单元（通常是
+.cpp 文件）中生成一个。但是，如果 <code>x</code>
+包含指向不完整类型的智能指针，编译器在生成默认析构函数时可能无法处理这些智能指针，因为它们需要
+<code>T</code> 的完整定义。</p></li>
+<li><p><strong>内联析构函数</strong>：如果析构函数是内联的，它会被包含在每个包含类声明的文件中。同样，如果
+<code>T</code>
+是不完整的，编译器在处理内联析构函数时可能无法处理这些智能指针。</p></li>
+</ol></li>
+<li><p>解决方案</p>
+<p>为了避免这些问题，你需要在 <code>.cpp</code> 文件中显式定义
+<code>x</code> 的析构函数。这样做确保了在 <code>T</code>
+的完整定义可用时，析构函数可以正确处理智能指针。例如：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// Foo.h</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Foo</span>; <span class="hljs-comment">// 前向声明</span><br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">X</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    ~<span class="hljs-built_in">X</span>(); <span class="hljs-comment">// 声明析构函数，但不定义</span><br><span class="hljs-keyword">private</span>:<br>    std::shared_ptr&lt;Foo&gt; fooPtr;<br>&#125;;<br><br><span class="hljs-comment">// X.cpp</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;Foo.h&quot;</span></span><br><br>X::~<span class="hljs-built_in">X</span>() &#123;<br>    <span class="hljs-comment">// 这里可以安全地处理 fooPtr，因为 Foo 的完整定义现在是可用的</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>通过在 <code>.cpp</code> 文件中定义析构函数，你可以确保在
+<code>T</code>
+的完整定义可用时，智能指针可以被正确处理，从而避免编译错误或运行时错误。</p></li>
+</ul>
+<h2 id="应用到observer上">8. 应用到Observer上</h2>
+<p>既然通过weak_ptr能探查对象的生死，那么Observer模式的竞态条件就很容易解决，只要让Observable保存weak_ptr&lt;Observer&gt;即可：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs cpp">recipes/thread/test/Observer_safe.cc<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Observable</span> <span class="hljs-comment">// not 100% thread safe!</span><br>&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">register_</span><span class="hljs-params">(<span class="hljs-type">const</span> weak_ptr&lt;Observer&gt;&amp; x)</span></span>; <span class="hljs-comment">// 参数类型可用 const weak_ptr&lt;Observer&gt;&amp;</span><br>	<span class="hljs-comment">// void unregister(weak_ptr&lt;Observer&gt; x); //不需要</span><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">notifyObservers</span><span class="hljs-params">()</span></span>;<br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-keyword">mutable</span> MutexLock mutex_;<br>    std::vector&lt;weak_ptr&lt;Observer&gt;&gt; observers_;<br>	<span class="hljs-keyword">typedef</span> std::vecotr&lt;weak_ptr&lt;Observer&gt;&gt;::iterator Iterator;<br>&#125;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Observable::notifyObservers</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-function">MutexLockGuard <span class="hljs-title">lock</span><span class="hljs-params">(mutex_)</span></span>;<br>    Iterator it = observers_.<span class="hljs-built_in">begin</span>();<br>    <span class="hljs-keyword">while</span> (it != observers_.<span class="hljs-built_in">end</span>()) &#123;<br>        <span class="hljs-function">shared_ptr&lt;Observer&gt; <span class="hljs-title">obj</span><span class="hljs-params">(it-&gt;lock())</span></span>; <span class="hljs-comment">// 尝试提升，这一步是线程安全的</span><br>        <span class="hljs-keyword">if</span> (obj) &#123;<br>            <span class="hljs-comment">// 提升成功，现在引用计数值至少为2（想想为什么？）</span><br>            obj-&gt;<span class="hljs-built_in">update</span>(); <span class="hljs-comment">// 没有竞态条件，因为obj在栈上，对象不可能在本作用域内销毁</span><br>            ++it;<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-comment">// 对象已经销毁，从容器中拿走weak_ptr</span><br>            it = observers_.<span class="hljs-built_in">erase</span>(it);<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>就这么简单。前文代码（3）处（p.10的C17）的竞态条件已经弥补了。思考：如果把L48改为vector&lt;shared_ptr&lt;Observer&gt;&gt;
+observers_；，会有什么后果？</p>
+<p>解决了吗？</p>
+<p>把Observer*替换为weak_ptr&lt;observer&gt;部分解决了Observer模式的线程安全，但还有以下几个疑点。这些问题留到本章<span class="math inline">\(\S1.14\)</span>中去探讨，每个都是能解决的。</p>
+<p><strong>侵入性</strong> 强制要求 Observer 必须以 shared_ptr
+来管理。</p>
+<p><strong>不是完全线程安全</strong> Observer 的析构函数会调用
+subject_-&gt;unregister(this)，万一 subject_
+已经不复存在了呢？为了解决它，又要求 Observable 本身是用 shared_ptr
+管理的，并且 subject_ 多半是个 weak_ptr&lt;Observable&gt;。</p>
+<p><strong>锁争用</strong>（lock contention）即 Observable
+的三个成员函数都用了互斥器来同步，这会造成 register_() 和 unregister()
+等待
+notifyObservers()，而后者的执行时间是无上限的，因为它同步回调了用户提供的
+update() 函数。我们希望 register_() 和 unregister()
+的执行时间不会超过某个固定的上限，以免殃及无辜群众。</p>
+<p><strong>死锁</strong> 万一update() 虚函数中调用了 (un)register
+呢？如果 mutex_ 是不可重入的，那么会死锁；如果 mutex_
+是可重入的，程序会面临迭代器失效（core dump 是最好的结果），因为 vector
+observers_
+在遍历期间被意外地修改了。这个问题乍看起来似乎没有解决办法，除非在文档里做要求。（一种办法是：用可重入的
+mutex_，把容器换为 std::list，并把 ++it 往前挪一行。）</p>
+<p>我个人倾向于使用不可重入的 mutex，例如 Pthreads
+默认提供的那个，因为“要求 mutex
+可重入”本身往往意味着设计上出了问题（§2.1.1）。Java 的 intrinsic lock
+是可重入的，因为要允许 synchronized 方法相互调用（派生类调用基类的同名
+synchronized 方法），我觉得这也是无奈之举。</p>
+<h2 id="再论shared_ptr的线程安全">9. 再论shared_ptr的线程安全</h2>
+<p>虽然我们借shared_ptr来实现线程安全的对象释放，但是shared_ptr本身不是100%线程安全的。它的引用计数本身是安全且无锁的，但<strong>对象的读写则不是</strong>，因为shared_ptr有两个数据成员，读写操作不能原子化。根据文档，shared_ptr的线程安全级别和内建类型、标准库容器、std::string一样，即：</p>
+<ul>
+<li>一个shared_ptr对象实体可被多个线程同时读取；</li>
+<li>两个shared_ptr对象实体可以被两个线程同时写入，“析构”算写操作；</li>
+<li>如果要从多个线程读写同一个shared_ptr对象，那么需要加锁。</li>
+</ul>
+<p>请注意，以上是shared_ptr对象本身的线程安全级别，不是它管理的对象的线程安全级别。</p>
+<p>要在多个线程中同时访问同一个shared_ptr，正确的做法是用mutex保护：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs cpp">MutexLock mutex; <span class="hljs-comment">// No need for ReaderwriterLock</span><br>shared_ptr&lt;Foo&gt; globalPtr;<br><span class="hljs-comment">// 我们的任务是把globalPtr安全地传给doit</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">doit</span><span class="hljs-params">(<span class="hljs-type">const</span> shared_ptr&lt;Foo&gt;&amp; pFoo)</span></span>;<br></code></pre></td></tr></table></figure>
+<p>globalPtr能被多个线程看到，那么它的读写需要加锁。注意我们不必用读写锁，而只用最简单的互斥锁，这是为了性能考虑。因为临界区非常小，用互斥锁也不会阻塞并发读。</p>
+<p>为了拷贝globalPtr，需要在读取它的时候加锁，即：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">read</span><span class="hljs-params">()</span> </span>&#123;<br>    shared_ptr&lt;Foo&gt; localPtr;<br>    &#123;<br>        <span class="hljs-function">MutexLockGuard <span class="hljs-title">lock</span><span class="hljs-params">(mutex)</span></span>;<br>    	localPtr = globalPtr; <span class="hljs-comment">// read globalPtr</span><br>    &#125;<br>    <span class="hljs-comment">// 从这里开始，读写localPtr也无须加锁</span><br>    <span class="hljs-built_in">doit</span>(localPtr);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>写入的时候也要加锁：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">write</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-function">shared_ptr&lt;Foo&gt; <span class="hljs-title">newPtr</span><span class="hljs-params">(<span class="hljs-keyword">new</span> Foo)</span></span>; <span class="hljs-comment">// 注意，对象的创建在临界区之外</span><br>    &#123;<br>        <span class="hljs-function">MutexLockGuard <span class="hljs-title">lock</span><span class="hljs-params">(mutex)</span></span>;<br>    	globalPtr = newPtr; <span class="hljs-comment">// write to globalPtr</span><br>    &#125;<br>    <span class="hljs-comment">// 从这里开始，读写newPtr无须加锁</span><br>    <span class="hljs-built_in">doit</span>(newPtr);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>注意到上面的read和write在临界区之外都没有再访问globalPtr，而是用了一个指向同一Foo对象的栈上shared_ptr
+localPtr。下面会谈到，只要有这样的localPtr存在，shared_ptr作为参数传递时不必复制，用reference
+to
+const作为参数类型即可。另外注意到上面的newFoo是在临界区之外执行的，这种写法通常比在临界区内写globalPtr.reset(new
+Foo)要好，因为缩短了临界区长度。如果要销毁对象，我们固然可以在临界区内执行globalPtr.reset(),
+但是这样往往会让对象析构发生在临界区以内，增加了临界区的长度。一种改进办法是像上面一样定义一个localPtr，用它在临界区内与globalPtr交换（swap()），这样能保证把对象的销毁推迟到临界区之外。</p>
+<p>练习：在write()函数中，globalPtr = newPtr;
+这一句有可能在临界区内销毁原来globalPtr指向的Foo对象，设法将销毁行为移出临界区。</p>
+<h2 id="shared_ptr技术与陷阱">10. shared_ptr技术与陷阱</h2>
+<h3 id="意外延长对象的生命期">10. 意外延长对象的生命期</h3>
+<p>shared_ptr是强引用（“铁丝”绑的），只要有一个指向x对象的shared_ptr存在，该对象就不会析构。而shared_ptr又是允许拷贝构造和赋值的（否则引用计数就无意义了），如果不小心遗留了一个拷贝，那么对象就永世长存了。例如前面提到如果把p.16中
+observers_的类型改为vector&lt;shared_ptr&lt;Observer&gt;&gt;，那么除非手动调用unregister(),
+否则observer对象永远不会析构。即便它的析构函数会调用unregister(),
+但是不去unregister()就不会调用Observer的析构函数，这变成了鸡与蛋的问题。这也是Java内存泄漏的常见原因。</p>
+<p>Tips:</p>
+<p>这个例子说明的是智能指针 <code>shared_ptr</code> 在 C++
+中如何可能导致内存泄漏的问题。<code>shared_ptr</code>
+是一种智能指针，它通过引用计数来管理对象的生命周期。每个
+<code>shared_ptr</code>
+实例都包含一个指向对象的指针和一个指向该对象引用计数的指针。当一个
+<code>shared_ptr</code> 被拷贝时，引用计数会增加，当一个
+<code>shared_ptr</code>
+被销毁时，引用计数会减少。如果引用计数达到零，对象会被自动销毁。</p>
+<p>问题出现在当 <code>shared_ptr</code> 被用于容器（如
+<code>vector</code> 或 <code>list</code>）中时，如果不正确地管理这些
+<code>shared_ptr</code>
+的生命周期，可能会导致对象永远不会被销毁。以下是这个例子中可能出现的问题：</p>
+<ol type="1">
+<li><p><strong>意外的拷贝</strong>：如果一个 <code>shared_ptr</code>
+被拷贝到另一个 <code>shared_ptr</code>
+或者被插入到容器中，引用计数会增加。如果这个拷贝没有被适当地管理，即使原始的
+<code>shared_ptr</code>
+被销毁了，由于引用计数不为零，对象也不会被销毁。</p></li>
+<li><p><strong>循环引用</strong>：如果两个 <code>shared_ptr</code>
+互相引用对方，它们的引用计数永远不会达到零，因为每个
+<code>shared_ptr</code> 的存在都使得另一个 <code>shared_ptr</code>
+的引用计数增加。</p></li>
+<li><p><strong>忘记释放</strong>：如果代码中没有逻辑来释放（即减少引用计数）<code>shared_ptr</code>，那么它们指向的对象将永远不会被销毁。</p></li>
+</ol>
+<p>在你提供的例子中，如果
+<code>vector&lt;shared_ptr&lt;Observer&gt;&gt;</code>
+被用来存储观察者对象，并且没有适当的机制来移除不再需要的
+<code>shared_ptr</code>，那么这些观察者对象将永远不会被销毁，因为它们的引用计数永远不会达到零。即使
+<code>Observer</code> 的析构函数中有逻辑来注销观察者，如果没有调用
+<code>unregister()</code>，<code>Observer</code>
+的析构函数也不会被调用，这就形成了一个“鸡与蛋”的问题，因为需要调用
+<code>unregister()</code> 来减少引用计数，但是 <code>unregister()</code>
+又依赖于 <code>Observer</code> 的析构函数被调用。</p>
+<p>为了避免这种问题，可以采取以下措施：</p>
+<ul>
+<li>使用 <code>weak_ptr</code> 来打破循环引用。</li>
+<li>确保在不再需要观察者时调用 <code>unregister()</code>。</li>
+<li>使用自定义的删除器来管理 <code>shared_ptr</code> 的生命周期。</li>
+<li>避免在容器中存储 <code>shared_ptr</code>，或者确保容器中的
+<code>shared_ptr</code> 被正确地管理。</li>
+</ul>
+<p>Java
+中的内存泄漏通常是因为对象之间的强引用没有被适当地释放，导致垃圾回收器无法回收这些对象。这与
+C++ 中使用 <code>shared_ptr</code>
+时可能出现的问题类似，都需要开发者注意管理对象的生命周期。</p>
+<p>另外一个出错的可能是boost::bind，因为boost::bind会把实参拷贝一份，如果参数是个shared_ptr，那么对象的生命期就不会短于boost::function对象：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Foo</span> &#123;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">doit</span><span class="hljs-params">()</span></span>;<br>&#125;;<br><br><span class="hljs-function">shared_ptr&lt;Foo&gt; <span class="hljs-title">pFoo</span><span class="hljs-params">(<span class="hljs-keyword">new</span> Foo)</span></span>;<br>boost::function&lt;<span class="hljs-type">void</span>()&gt; func = boost::<span class="hljs-built_in">bind</span>(&amp;Foo::doit, pFoo); <span class="hljs-comment">// long life foo</span><br></code></pre></td></tr></table></figure>
+<p>这里func对象持有了shared_ptr<Foo>的一份拷贝，有可能会在不经意间延长倒数第二行创建的Foo对象的生命期。</Foo></p>
+<h3 id="函数参数">10.2 <strong>函数参数</strong></h3>
+<p>因为要修改引用计数（而且拷贝的时候通常要加锁），shared_ptr的拷贝开销比拷贝原始指针要高，但是需要拷贝的时候并不多。<strong>多数情况下它可以以const
+reference方式传递，一个线程只需要在最外层函数有一个实体对象，之后都可以用const
+reference来使用这个shared_ptr</strong>。例如有几个函数都要用到Foo对象：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">save</span><span class="hljs-params">(<span class="hljs-type">const</span> shared_ptr&lt;Foo&gt;&amp; pFoo)</span></span>; <span class="hljs-comment">// pass by const reference</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">validateAccount</span><span class="hljs-params">(<span class="hljs-type">const</span> Foo&amp; foo)</span></span>;<br><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">validate</span><span class="hljs-params">(<span class="hljs-type">const</span> shared_ptr&lt;Foo&gt;&amp; pFoo)</span> <span class="hljs-comment">// pass by const reference</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-built_in">validateAccount</span>(*pFoo);<br>&#125; <br></code></pre></td></tr></table></figure>
+<p>那么在通常情况下，我们可以传常引用（pass by const reference）：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">onMessage</span><span class="hljs-params">(<span class="hljs-type">const</span> string&amp; msg)</span> </span>&#123;<br>    <span class="hljs-function">shared_ptr&lt;Foo&gt; <span class="hljs-title">pFoo</span><span class="hljs-params">(<span class="hljs-keyword">new</span> Foo(msg))</span></span>; <span class="hljs-comment">// 只要在最外层持有一个实体，安全不成问题</span><br>    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">validate</span>(pFoo)) &#123; <span class="hljs-comment">// 没有拷贝pFoo</span><br>        <span class="hljs-built_in">save</span>(pFoo);        <span class="hljs-comment">// 没有拷贝pFoo</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>遵照这个规则，基本上不会遇到反复拷贝shared_ptr导致的性能问题。另外由于pFoo是栈上对象，不可能被别的线程看到，那么读取始终是线程安全的。</p>
+<p>Tips:</p>
+<p>在C++中，栈上对象（局部对象）被认为是线程安全的，主要基于以下几个原因：</p>
+<ol type="1">
+<li><p><strong>生命周期和作用域</strong>：栈上对象仅在创建它们的函数或代码块中存在。它们在函数调用结束后立即被销毁。由于它们的存在仅限于函数的局部作用域，因此它们不会被多个线程共享。</p></li>
+<li><p><strong>线程的独立性</strong>：每个线程都有自己的栈。因此，栈上对象是线程私有的，不会被其他线程访问。这意味着不存在多个线程同时访问同一个栈上对象的情况。</p></li>
+<li><p><strong>没有共享状态</strong>：由于栈上对象不会被多个线程共享，它们自然不会成为竞态条件（race
+condition）的源头。竞态条件发生在多个线程尝试同时访问和修改同一共享数据时。</p></li>
+<li><p><strong>局部性原理</strong>：栈上对象通常用于存储临时数据，这些数据只在局部上下文中有用。它们不涉及跨线程的通信或数据共享，因此不需要额外的同步机制来保证线程安全。</p></li>
+</ol>
+<p>在你提供的代码示例中，<code>shared_ptr&lt;Foo&gt; pFoo(new Foo(msg));</code>
+创建了一个<code>shared_ptr</code>对象<code>pFoo</code>，它是一个栈上对象。由于<code>pFoo</code>仅在<code>onMessage</code>函数的作用域内存在，它不会被其他线程看到或访问。因此，即使<code>shared_ptr</code>内部可能会有一些线程不安全的操作上（比如引用计数的增加和减少），但由于<code>pFoo</code>是线程私有的，这些操作在这个上下文中是线程安全的。</p>
+<p>此外，<code>shared_ptr</code>通过原子操作来更新引用计数，确保即使多个<code>shared_ptr</code>实例共享同一个对象，它们的引用计数更新也是线程安全的。但在你的代码中，由于<code>pFoo</code>是唯一的<code>shared_ptr</code>实例，并且它是一个栈上对象，所以不存在多个线程同时修改引用计数的问题，因此是线程安全的。</p>
+<h3 id="析构动作在创建时被捕获">10.3 析构动作在创建时被捕获</h3>
+<p>这是一个非常有用的特性，这意味着：</p>
+<ul>
+<li>虚析构不再是必需的。</li>
+<li>shared_ptr&lt;void&gt;可以持有任何对象，而且能安全地释放。</li>
+<li>shared_ptr对象可以安全地跨越模块边界，比如从DLL里返回，而不会造成从模块A分配的内存在模块B里被释放这种错误。</li>
+<li>二进制兼容性，即便Foo对象的大小变了，那么旧的客户代码仍然可以使用新的动态库，而无须重新编译。前提是Foo的头文件中不出现访问对象的成员的inline函数，并且Foo对象的由动态库中的Factory构造，返回其shared_ptr。</li>
+<li>析构动作可以定制。</li>
+</ul>
+<hr>
+<p>Tips:
+这段描述提到的是C++中<code>std::shared_ptr</code>的一个特性，即“析构动作在创建时被捕获”。这个特性指的是<code>std::shared_ptr</code>在创建时会存储一个删除器（deleter），这个删除器是一个函数或者函数对象，它定义了如何释放<code>shared_ptr</code>所管理的资源。下面是对这段描述中提到的几个点的解释：</p>
+<ol type="1">
+<li><strong>虚析构不再是必需的</strong>：
+<ul>
+<li>在使用裸指针或<code>std::unique_ptr</code>时，如果一个基类指向派生类对象，并且通过基类的指针来删除对象，那么必须有虚析构函数来确保正确的析构顺序（派生类的析构函数先于基类的析构函数被调用）。但是，当使用<code>std::shared_ptr</code>时，由于<code>std::shared_ptr</code>会存储一个删除器，这个删除器可以是一个指向派生类析构函数的函数指针，因此不需要虚析构函数来保证正确的析构顺序。</li>
+</ul></li>
+<li><strong><code>shared_ptr&lt;void&gt;</code>可以持有任何对象，而且能安全地释放</strong>：
+<ul>
+<li><code>std::shared_ptr&lt;void&gt;</code>是一个不包含类型信息的<code>shared_ptr</code>，它可以持有任何类型的对象。由于<code>void</code>类型的指针没有类型信息，<code>shared_ptr&lt;void&gt;</code>不能直接调用对象的析构函数。但是，如果提供了一个适当的删除器，<code>shared_ptr&lt;void&gt;</code>就可以安全地释放它所管理的资源。</li>
+</ul></li>
+<li><strong><code>shared_ptr</code>对象可以安全地跨越模块边界</strong>：
+<ul>
+<li>当一个<code>shared_ptr</code>从一个动态链接库（DLL）返回到另一个模块时，如果使用裸指针或<code>std::unique_ptr</code>，可能会因为不同的模块使用不同的内存分配器而导致错误。但是，<code>std::shared_ptr</code>可以存储一个删除器，这个删除器知道如何正确地释放内存，因此可以安全地跨越模块边界。</li>
+</ul></li>
+<li><strong>二进制兼容性</strong>：
+<ul>
+<li>如果<code>Foo</code>对象的大小变化了，但是<code>Foo</code>的析构函数没有变化，那么旧的客户代码仍然可以使用新的动态库，因为<code>shared_ptr</code>存储的删除器包含了正确的析构函数。只要不通过头文件直接访问对象的成员，并且对象是通过动态库中的工厂函数构造的，那么即使对象的大小变化，旧代码也可以通过<code>shared_ptr</code>正确地管理新对象。</li>
+</ul></li>
+<li><strong>析构动作可以定制</strong>：
+<ul>
+<li><code>std::shared_ptr</code>允许用户自定义删除器，这意味着用户可以定义一个特定的函数或函数对象来控制资源的释放方式。这提供了灵活性，允许用户实现复杂的资源管理策略。</li>
+</ul></li>
+</ol>
+<p>总结来说，这段描述强调了<code>std::shared_ptr</code>通过存储删除器来提供灵活性和安全性，使得资源管理更加健壮和灵活。</p>
+<p>血压升高了！</p>
+<hr>
+<p>最后这个特性的实现比较巧妙，因为shared_ptr&lt;T&gt;只有一个模板参数，而“析构行为”可以是函数指针、仿函数（functor）或者其他什么东西。这是泛型编程和面向对象编程的一次完美结合。这个技术在后面的对象池中还会用到。</p>
+<h3 id="析构所在的线程">10.4 析构所在的线程</h3>
+<p>对象的析构是同步的，<strong>当最后一个指向x的shared_ptr离开其作用域的时候，X会同时在同一个线程析构</strong>。这个线程不一定是对象诞生的线程。</p>
+<p>这个特性是把双刃剑：如果对象的析构比较耗时，那么可能会拖慢关键线程的速度（如果最后一个shared_ptr引发的析构发生在关键线程）；同时，我们可以用一个单独的线程来专门做析构，通过一个BlockingQueue&lt;shared_ptr&lt;void&gt;&gt;把对象的析构都转移到那个专用线程，从而解放关键线程。</p>
+<h3 id="现成的raii-handle">10.5 现成的RAII handle</h3>
+<p>我认为RAII（资源获取即初始化）是C++语言区别于其他所有程序语言的最重要的特性，一个不懂RAII的C++程序员不是一个合格的C++程序员。初学C++的教条是“new和delete要配对，new了之后要记得delete”；如果使用RAII[CCS，条款13]，要改成“每一个明确的资源配置动作（例如new）都应该在单一语句中执行，并在该语句中立刻将配置获得的资源交给handle对象（如shared_ptr），程序中一般不出现delete”。shared_ptr是管理共享资源的利器，需要注意的是避免循环引用，<strong>通常的做法是owner持有指向child的shared_ptr，child持有指向owner的weak_ptr</strong>。</p>
+<h2 id="对象池">11. 对象池</h2>
+<p>假设有Stock类，代表一只股票的价格。每一只股票有一个唯一的字符串标识，比如Google的key是"NASDAQ：GOOG"，IBM是"NYSE：IBM"。Stock对象是个主动对象，它能不断获取新价格。为了节省系统资源，同一个程序里边每一只出现的股票只有一个Stock对象，如果多处用到同一只股票，那么Stock对象应该被共享。如果某一只股票没有再在任何地方用到，其对应的Stock对象应该析构，以释放资源，这隐含了“引用计数”。</p>
+<p>为了达到上述要求，我们可以设计个对象池StockFactory。它的接口很简单，根据key返回Stock对象。我们已经知道，在多线程程序中，既然对象可能被销毁，那么返回shared_ptr是合理的。自然地，我们写出如下代码（可惜是错的）。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// version 1: questionable code</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">StockFactory</span> : boost::noncopyable &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">shared_ptr&lt;Stock&gt; <span class="hljs-title">get</span><span class="hljs-params">(<span class="hljs-type">const</span> string&amp; key)</span></span>;<br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-keyword">mutable</span> MutexLock mutex_;<br>    std::map&lt;string, shared_ptr&lt;Stock&gt;&gt; stocks_;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>get()的逻辑很简单，如果在stocks_里找到了key，就返回stocks_[key]；否则新建一个Stock，并存储在stocks_[key]。</p>
+<p>细心的读者或许已经发现这里有一个间题，Stock对象永远不会被销毁，因为map里存的是shared_ptr，始终有“铁丝”绑着。</p>
+<hr>
+<p>Tips:</p>
+<p>这段代码中提到的 <code>Stock</code> 对象不会被销毁的原因在于使用了
+<code>std::shared_ptr</code> 来管理 <code>Stock</code>
+对象的生命周期。<code>std::shared_ptr</code> 是 C++11
+标准库中的智能指针，它通过引用计数机制来管理对象的生命周期。具体来说，当一个
+<code>std::shared_ptr</code>
+被复制时，它所指向的对象的引用计数会增加；当
+<code>std::shared_ptr</code>
+被销毁或者被重新赋值时，引用计数会减少。只有当引用计数降到零时，对象才会被销毁。</p>
+<p>在这段代码中，<code>stocks_</code> 这个 <code>std::map</code>
+存储了键为 <code>std::string</code> 和值为
+<code>std::shared_ptr&lt;Stock&gt;</code> 的键值对。由于
+<code>std::shared_ptr</code> 的引用计数机制，只要 <code>stocks_</code>
+中的 <code>std::shared_ptr&lt;Stock&gt;</code>
+还存在，<code>Stock</code> 对象的引用计数就不会降到零，因此
+<code>Stock</code> 对象不会被销毁。</p>
+<p>问题在于，这段代码没有提供任何机制来从 <code>stocks_</code>
+中移除元素，也没有减少 <code>Stock</code>
+对象引用计数的逻辑。这意味着一旦 <code>Stock</code> 对象被添加到
+<code>stocks_</code> 中，它的引用计数就一直至少为1，因为
+<code>stocks_</code> 中的 <code>std::shared_ptr</code>
+始终持有这个对象。除非程序结束或者 <code>stocks_</code> 被清空，否则这些
+<code>Stock</code> 对象将永远不会被销毁，这将导致内存泄漏。</p>
+<p>要解决这个问题，需要提供一种机制来适当地减少 <code>Stock</code>
+对象的引用计数，例如：</p>
+<ol type="1">
+<li>提供一个方法来显式地从 <code>stocks_</code> 中移除元素，这将减少
+<code>Stock</code> 对象的引用计数。</li>
+<li>使用 <code>std::weak_ptr</code> 来跟踪 <code>Stock</code>
+对象，这样当 <code>std::shared_ptr</code>
+不再持有对象时，<code>std::weak_ptr</code> 可以自动失效。</li>
+<li>确保 <code>StockFactory</code> 的生命周期管理得当，比如在
+<code>StockFactory</code> 被销毁时清空
+<code>stocks_</code>，从而减少所有 <code>Stock</code>
+对象的引用计数。</li>
+</ol>
+<p>以上任何一种方法都可以确保 <code>Stock</code>
+对象在不再需要时能够被正确销毁，避免内存泄漏。</p>
+<p>首先，我们需要了解几个关键概念：</p>
+<ol type="1">
+<li><p><code>std::map</code>：这是一个C++标准库中的容器，用于存储键值对。在这个例子中，键是
+<code>std::string</code> 类型，值是
+<code>std::shared_ptr&lt;Stock&gt;</code> 类型。</p></li>
+<li><p><code>std::shared_ptr</code>：这是一个C++智能指针，用于自动管理对象的生命周期。它通过引用计数机制来确保对象在不再需要时被销毁。每个
+<code>std::shared_ptr</code> 内部都有一个计数器，记录有多少个
+<code>std::shared_ptr</code> 指向同一个对象。</p></li>
+</ol>
+<p>现在，我们来分析这句话：</p>
+<ul>
+<li><p><code>stocks_</code> 这个 <code>std::map</code> 存储了键为
+<code>std::string</code> 和值为
+<code>std::shared_ptr&lt;Stock&gt;</code> 的键值对。这意味着
+<code>stocks_</code> 中的每个元素都包含一个 <code>std::string</code>
+作为键，和一个 <code>std::shared_ptr&lt;Stock&gt;</code>
+作为值。</p></li>
+<li><p>由于 <code>std::shared_ptr</code> 的引用计数机制，只要
+<code>stocks_</code> 中的 <code>std::shared_ptr&lt;Stock&gt;</code>
+还存在，<code>Stock</code> 对象的引用计数就不会降到零。这是因为
+<code>stocks_</code> 中的每个 <code>std::shared_ptr&lt;Stock&gt;</code>
+都指向一个 <code>Stock</code> 对象，并且每个
+<code>std::shared_ptr</code> 都会增加对应 <code>Stock</code>
+对象的引用计数。只要 <code>stocks_</code> 中的
+<code>std::shared_ptr&lt;Stock&gt;</code>
+还存在，引用计数就不会降到零。</p></li>
+<li><p>因此，<code>Stock</code>
+对象不会被销毁。由于引用计数始终大于零，<code>Stock</code>
+对象不会被销毁，因为 <code>std::shared_ptr</code>
+的析构函数会检查引用计数。如果引用计数为零，它才会销毁指向的对象；否则，它只会减少引用计数。</p></li>
+</ul>
+<p>综上所述，这句话的意思是：由于 <code>stocks_</code> 中的
+<code>std::shared_ptr&lt;Stock&gt;</code> 始终存在，它们会保持对应
+<code>Stock</code> 对象的引用计数大于零，因此这些 <code>Stock</code>
+对象不会被销毁。这可能导致内存泄漏，因为这些对象实际上已经不再需要，但仍然占用内存。</p>
+<hr>
+<p>那么或许应该仿照前面Observable那样存一个weak_ptr？比如</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// version 2: 数据成员修改为std::map&lt;string, weak_ptr&lt;Stock&gt;&gt; stocks_</span><br><span class="hljs-function">shared_ptr&lt;Stock&gt; <span class="hljs-title">StockFactory::get</span><span class="hljs-params">(<span class="hljs-type">const</span> string&amp; key)</span> </span>&#123;<br>    shared_ptr&lt;stock&gt; pstock;<br>    <span class="hljs-function">MutexLockGuard <span class="hljs-title">lock</span><span class="hljs-params">(mutex_)</span></span>;<br>    weak_ptr&lt;Stock&gt;&amp; wkStock = stocks_[key]; <span class="hljs-comment">// 如果key不存在，会默认构造一个</span><br>    pStock = wkStock.<span class="hljs-built_in">lock</span>(); <span class="hljs-comment">// 尝试把“棉线”提升为“铁丝”</span><br>    <span class="hljs-keyword">if</span> (!pstock) &#123;<br>        pStock.<span class="hljs-built_in">reset</span>(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Stock</span>(key));<br>        wkStock = pStock; <span class="hljs-comment">// 这里更新了stocks_[key]，注意wkStock是个引用</span><br>    &#125;<br>    <span class="hljs-keyword">return</span> pStock;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这么做固然Stock对象是销毁了，但是程序却出现了轻微的内存泄漏，为什么？因为stocks_的大小只增不减，stocks_.size()是曾经存活过的Stock对象的总数，即使活的Stock对象数目降为0。或许有人认为这不算泄漏，因为内存并不是彻底遗失不能访问了，而是被某个标准库容器占用了。我认为这也算内存泄漏，毕竟是“战场”没有打扫干净。</p>
+<hr>
+<p>Tips:</p>
+<p>在这里，"棉线"指的是 <code>std::weak_ptr</code>，而"铁丝"指的是
+<code>std::shared_ptr</code>。这个比喻是为了形象地说明两者在引用计数和对象生命周期管理上的差异：</p>
+<ul>
+<li><p><code>std::weak_ptr</code>（棉线）：它是一种弱引用，不增加对象的引用计数，因此不会阻止对象被销毁。它可以用来观察一个对象是否存在，但不能用来管理对象的生命周期。</p></li>
+<li><p><code>std::shared_ptr</code>（铁丝）：它是一种强引用，会增加对象的引用计数，管理对象的生命周期。当最后一个
+<code>std::shared_ptr</code> 被销毁时，对象会被自动删除。</p></li>
+</ul>
+<p>在代码 <code>pStock = wkStock.lock();</code> 中，<code>wkStock</code>
+是一个 <code>std::weak_ptr&lt;Stock&gt;</code> 对象。调用
+<code>lock()</code> 方法时，它会尝试将这个 <code>std::weak_ptr</code>
+转换为一个 <code>std::shared_ptr</code>。如果 <code>std::weak_ptr</code>
+所指向的对象仍然存在（即至少有一个 <code>std::shared_ptr</code>
+仍然指向它），那么 <code>lock()</code> 方法会成功，并返回一个有效的
+<code>std::shared_ptr</code>，这个 <code>std::shared_ptr</code>
+会持有对象的一个强引用，增加对象的引用计数。</p>
+<p>如果 <code>std::weak_ptr</code> 所指向的对象已经被销毁（即没有任何
+<code>std::shared_ptr</code> 指向它），那么 <code>lock()</code>
+方法会失败，并返回一个空的 <code>std::shared_ptr</code>。</p>
+<p>所以，"尝试把‘棉线’提升为‘铁丝’"这个表述的意思是，尝试将一个不增加引用计数的弱引用转换为一个增加引用计数的强引用。如果对象仍然存在，这个转换就会成功，<code>std::weak_ptr</code>
+就会像 <code>std::shared_ptr</code>
+一样，持有对象的一个强引用。如果对象不存在，那么这个转换就会失败，<code>std::weak_ptr</code>
+仍然是一个无效的引用。</p>
+<p>在这段代码中，<code>stocks_</code> 被声明为
+<code>std::map&lt;string, weak_ptr&lt;Stock&gt;&gt;</code>，这意味着每个键值对中的值是一个
+<code>std::weak_ptr&lt;Stock&gt;</code>。<code>std::weak_ptr</code>
+是一种智能指针，它不拥有它所指向的对象，因此不会增加对象的引用计数。<code>std::weak_ptr</code>
+通常与 <code>std::shared_ptr</code> 一起使用，用于解决
+<code>std::shared_ptr</code>
+相互引用时可能产生的循环引用问题，或者用于“观察”一个由
+<code>std::shared_ptr</code> 管理的对象，而不需要增加其引用计数。</p>
+<p>在 <code>StockFactory::get</code> 方法中，代码尝试通过
+<code>std::weak_ptr</code> 提升为
+<code>std::shared_ptr</code>，如果提升失败（即
+<code>std::weak_ptr</code> 所指向的对象已经被销毁），则会创建一个新的
+<code>Stock</code> 对象，并将其 <code>std::shared_ptr</code> 存储在
+<code>stocks_</code> 中。这里的关键是，<strong>即使 <code>Stock</code>
+对象被销毁了，<code>stocks_</code> 中对应的 <code>std::weak_ptr</code>
+并不会被自动移除，因为 <code>std::weak_ptr</code>
+只是失去了对对象的引用，但它本身仍然存在。</strong></p>
+<p>因此，<code>stocks_.size()</code> 会随着每次 <code>get</code>
+方法的调用而增加，即使 <code>Stock</code> 对象已经被销毁。这是因为
+<code>stocks_</code> 中的每个 <code>std::weak_ptr</code>
+都是一个有效的元素，即使它不再指向一个有效的 <code>Stock</code>
+对象。这就导致了 <code>stocks_</code> 的大小只增不减，即使没有任何活着的
+<code>Stock</code> 对象，<code>stocks_</code>
+中仍然保留了所有曾经创建过的 <code>Stock</code> 对象的记录。</p>
+<p>这就是为什么 <code>stocks_.size()</code> 是曾经存活过的
+<code>Stock</code> 对象的总数。即使 <code>Stock</code>
+对象被销毁，对应的 <code>std::weak_ptr</code> 仍然占据着
+<code>stocks_</code> 的空间，导致 <code>stocks_</code>
+的大小不会减少。这就是所谓的轻微内存泄漏，因为随着时间的推移，<code>stocks_</code>
+会占用越来越多的内存，而这些内存并没有被释放，尽管它们并没有指向任何活着的对象。</p>
+<hr>
+<p>其实，考虑到世界上的股票数目是有限的，这个内存不会一直泄漏下去，大不了把每只股票的对象都创建一遍，估计泄漏的内存也只有几兆字节。如果这是一个其他类型的对象池，对象的key的集合不是封闭的，内存就会一直泄漏下去。</p>
+<p>解决的办法是，利用shared_ptr的定制析构功能。shared_ptr的构造函数可以有一个额外的模板类型参数，传入一个函数指针或仿函数d，在析构对象时执行d(ptr)，其中ptr是shared_ptr保存的对象指针。shared_ptr这么设计并不是多余的，因为反正要在创建对象时捕获释放动作，始终需要一个bridge。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">class</span> Y, <span class="hljs-keyword">class</span> D&gt; <span class="hljs-title">shared_ptr::shared_ptr</span><span class="hljs-params">(Y* p, D d)</span></span>;<br><span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">class</span> Y, <span class="hljs-keyword">class</span> D&gt; <span class="hljs-type">void</span> <span class="hljs-title">shared_ptr::reset</span><span class="hljs-params">(Y* p, D d)</span></span>;<br><span class="hljs-comment">// 注意Y的类型可能与T不同，这是合法的，只要Y能隐式转换为T*。</span><br></code></pre></td></tr></table></figure>
+<p>那么我们可以利用这一点，在析构Stock对象的同时清理stocks_。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// version 3</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">StockFactory</span> : boost::noncopyable &#123;<br>    <span class="hljs-comment">// 在get()中，将pStock.reset(new Stock(key)); 改为：</span><br>    <span class="hljs-comment">// pStock.reset(new Stock(key), boost::bind(&amp;StockFactory::deleteStock, this, _1)); // **</span><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">deleteStock</span><span class="hljs-params">(Stock* stock)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span> (stock) &#123;<br>            <span class="hljs-function">MutexLockGuard <span class="hljs-title">lock</span><span class="hljs-params">(mutex_)</span></span>;<br>            stocks_.<span class="hljs-built_in">erase</span>(stock-&gt;<span class="hljs-built_in">key</span>());<br>        &#125;<br>        <span class="hljs-keyword">delete</span> stock; <span class="hljs-comment">// sorry, I lied</span><br>    &#125;  <span class="hljs-comment">// assuming StockFactory lives longer than all Stock&#x27;s.</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>这里我们向pStock.reset()传递了第二个参数，一个boost::function，让它在析构Stock*
+p时调用本StockFactory对象的deleteStock成员函数。</p>
+<p>警惕的读者可能已经发现问题，那就是我们把一个原始的StockFactory
+this指针保存在了boost::function里（***处），这会有线程安全问题。如果这个StockFactory先于Stock对象析构，那么会coredump。正如observer在析构函数里去调用observable::unregister()，而那时Observable对象可能已经不存在了。</p>
+<p>当然这也是能解决的，要用到<span class="math inline">\(\S1.11.2\)</span>介绍的弱回调技术。</p>
+<hr>
+<p>这段代码是关于C++中的<code>shared_ptr</code>智能指针的使用，特别是如何利用它的自定义析构功能来管理资源的生命周期。<code>shared_ptr</code>是一个模板类，用于自动管理动态分配的内存，以防止内存泄漏。它通过引用计数机制来确保当最后一个<code>shared_ptr</code>被销毁时，它所管理的对象也会被自动销毁。</p>
+<p>代码中提到的<code>shared_ptr</code>的构造函数和<code>reset</code>函数允许传递一个删除器（deleter），这是一个函数或者函数对象，它将在<code>shared_ptr</code>所管理的对象被销毁时被调用。这个特性可以用来执行一些自定义的清理工作，比如释放其他资源或者从容器中移除对象。</p>
+<p>在提供的代码示例中，<code>StockFactory</code>类使用<code>shared_ptr</code>来管理<code>Stock</code>对象的生命周期，并且在<code>Stock</code>对象被销毁时，通过传递一个<code>boost::function</code>对象作为删除器，来调用<code>StockFactory</code>的<code>deleteStock</code>成员函数。这个函数负责从<code>StockFactory</code>维护的<code>stocks_</code>容器中移除对应的<code>Stock</code>对象。</p>
+<p>代码中提到的潜在问题是，<code>deleteStock</code>函数中保存了<code>StockFactory</code>对象的<code>this</code>指针，并将其传递给了<code>boost::function</code>对象。如果<code>StockFactory</code>对象在<code>Stock</code>对象之前被销毁，那么在<code>Stock</code>对象析构时调用<code>deleteStock</code>函数将会导致未定义行为，因为<code>this</code>指针将指向一个已经被销毁的对象，这可能会导致程序崩溃（coredump）。</p>
+<p>为了避免这个问题，可以采取以下几种策略：</p>
+<ol type="1">
+<li><p><strong>确保对象生命周期</strong>：确保<code>StockFactory</code>对象的生命周期长于它所管理的所有<code>Stock</code>对象。</p></li>
+<li><p><strong>使用弱引用</strong>：使用<code>boost::weak_ptr</code>或者C++11中的<code>std::weak_ptr</code>来代替<code>shared_ptr</code>保存<code>StockFactory</code>对象的引用，这样即使<code>StockFactory</code>对象被销毁，<code>weak_ptr</code>也不会阻止<code>Stock</code>对象的析构。</p></li>
+<li><p><strong>线程安全</strong>：如果<code>StockFactory</code>对象可能在多线程环境中被销毁，需要确保对<code>StockFactory</code>对象的访问是线程安全的，比如使用互斥锁（mutex）来保护对<code>StockFactory</code>对象的访问。</p></li>
+<li><p><strong>智能指针和删除器的改进</strong>：使用C++11或更高版本中的<code>std::function</code>和<code>std::shared_ptr</code>，它们提供了更好的异常安全性和性能。</p></li>
+<li><p><strong>析构顺序</strong>：在设计类和对象时，明确对象的析构顺序，避免依赖于不确定的析构顺序。</p></li>
+</ol>
+<p>通过这些方法，可以避免由于对象生命周期管理不当而导致的线程安全问题和程序崩溃。</p>
+<hr>
+<h3 id="enable_shared_from_this">11.1 enable_shared_from_this</h3>
+<p>StockFactory::get()把原始指针this保存到了boost::function中（***处）如果StockFactory的生命期比Stock短，那么Stock析构时去回调StockFactory::deleteStock就会coredump。似乎我们应该祭出惯用的shared_ptr大法来解决对象生命期问题，但是StockFactory::get()本身是个成员函数，如何获得一个指向当前对象的shared_ptr&lt;StockFactory&gt;对象呢？</p>
+<hr>
+<p>Tips:</p>
+<p><code>boost::enable_shared_from_this</code> 是 Boost
+库中的一个模板类，它允许一个对象在已经被 <code>boost::shared_ptr</code>
+管理的情况下，能够安全地生成一个新的 <code>shared_ptr</code>
+实例，该实例与原始的 <code>shared_ptr</code>
+共享对象的所有权。这在某些情况下非常有用，比如当你需要从成员函数中返回一个指向自身的
+<code>shared_ptr</code>，但又不希望复制对象的所有权。</p>
+<p>以下是 <code>boost::enable_shared_from_this</code> 的一些关键点：</p>
+<ol type="1">
+<li><p><strong>模板参数</strong>：<code>boost::enable_shared_from_this</code>
+需要一个模板参数，这个参数通常是当前类的类型。这允许
+<code>enable_shared_from_this</code> 知道如何创建指向自身的
+<code>shared_ptr</code>。</p></li>
+<li><p><strong>继承</strong>：你的类需要从
+<code>boost::enable_shared_from_this</code> 继承，这样它才能使用
+<code>shared_from_this</code> 成员函数。</p></li>
+<li><p><strong>非复制性</strong>：<code>boost::noncopyable</code> 是
+Boost
+库中的一个基类，它阻止了对象的复制构造和赋值操作。这通常是为了避免对象的所有权被意外复制，导致潜在的内存管理问题。</p></li>
+<li><p><strong><code>shared_from_this</code>
+方法</strong>：当你的类继承自
+<code>boost::enable_shared_from_this</code> 后，你可以在其成员函数中调用
+<code>shared_from_this</code> 方法。这个方法会返回一个
+<code>shared_ptr</code>，它与创建当前对象的原始 <code>shared_ptr</code>
+共享所有权。</p></li>
+<li><p><strong>线程安全</strong>：<code>shared_from_this</code>
+是线程安全的，只要 <code>shared_ptr</code>
+的引用计数操作是线程安全的。</p></li>
+<li><p><strong>使用场景</strong>：当你的对象需要在多个线程或不同部分的代码中共享，并且需要能够从对象内部访问其自身的
+<code>shared_ptr</code> 时，<code>enable_shared_from_this</code>
+非常有用。</p></li>
+</ol>
+<p>下面是一个简单的示例，展示了如何使用
+<code>boost::enable_shared_from_this</code>：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;boost/shared_ptr.hpp&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;boost/enable_shared_from_this.hpp&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Stock</span> : <span class="hljs-keyword">public</span> boost::enable_shared_from_this&lt;Stock&gt; &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">doSomething</span><span class="hljs-params">()</span> </span>&#123;<br>        std::cout &lt;&lt; <span class="hljs-string">&quot;Doing something&quot;</span> &lt;&lt; std::endl;<br>    &#125;<br><br>    <span class="hljs-comment">// 返回指向自身的 shared_ptr</span><br>    <span class="hljs-function">boost::shared_ptr&lt;Stock&gt; <span class="hljs-title">getSharedPtr</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">shared_from_this</span>();<br>    &#125;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-comment">// 创建一个 shared_ptr 管理 Stock 对象</span><br>    boost::shared_ptr&lt;Stock&gt; stock = boost::<span class="hljs-built_in">make_shared</span>&lt;Stock&gt;();<br><br>    <span class="hljs-comment">// 通过 Stock 对象获取 shared_ptr</span><br>    boost::shared_ptr&lt;Stock&gt; stockPtr = stock-&gt;<span class="hljs-built_in">getSharedPtr</span>();<br><br>    <span class="hljs-comment">// 使用 shared_ptr 调用成员函数</span><br>    stockPtr-&gt;<span class="hljs-built_in">doSomething</span>();<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>在这个例子中，<code>Stock</code> 类继承自
+<code>boost::enable_shared_from_this&lt;Stock&gt;</code>，使得它能够通过
+<code>shared_from_this</code> 方法安全地获取一个指向自身的
+<code>shared_ptr</code>。这种方法避免了手动管理内存和对象生命周期的复杂性，同时保持了代码的清晰和安全。</p>
+<hr>
+<p>有办法，用enable_shared_from_this。这是一个以其派生类为模板类型实参的基类模板，继承它，this指针就能变身为shared_ptr。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">StockFactory</span> : <span class="hljs-keyword">public</span> boost::enable_shared_from_this&lt;StockFactory&gt;, boost::noncopyable &#123;<br>    <span class="hljs-comment">// ...</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>为了使用shared_from_this(), StockFactory不能是stack
+object，必须是heap object且由shared_ptr管理其生命期，即：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function">shared_ptr&lt;StockFactory&gt; <span class="hljs-title">stockFactory</span><span class="hljs-params">(<span class="hljs-keyword">new</span> StockFactory)</span></span>;<br></code></pre></td></tr></table></figure>
+<p>万事俱备，可以让this摇身一变，化为shared_ptr&lt;StockFactory&gt;了。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">//version 4</span><br><span class="hljs-function">shared_ptr&lt;Stock&gt; <span class="hljs-title">StockFactory::get</span><span class="hljs-params">(<span class="hljs-type">const</span> string&amp; key)</span> </span>&#123;<br>    <span class="hljs-comment">//change</span><br>    <span class="hljs-comment">// pStock.reset(new Stock(key), boost::bind(&amp;StockFactory::deleteStock, this, _1));</span><br>    <span class="hljs-comment">// to</span><br>    pStock.<span class="hljs-built_in">reset</span>(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Stock</span>(key), boost::<span class="hljs-built_in">bind</span>(&amp;StockFactory::deleteStock, <span class="hljs-built_in">shared_from_this</span>(), _1));<br>    <span class="hljs-comment">// 上面必须强制把shared_from_this转型为weak_ptr，才不会延长生命期，</span><br>    <span class="hljs-comment">// 因为boost::bind拷贝的是实参类型，不是形参类型</span><br>    <span class="hljs-comment">// ...</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这样一来，boost::function里保存了一份shared_ptr&lt;StockFactory&gt;，<strong>可以保证调用StockFactory::deleteStock的时候那个StockFactory对象还活着</strong>。</p>
+<p>注意一点，shared_from_this()不能在构造函数里调用，因为在构造StockFactory的时候，它还没有被交给shared_ptr接管。</p>
+<p>最后一个问题，StockFactory的生命期似乎被意外延长了。</p>
+<h3 id="弱回调">11.2 弱回调</h3>
+<p>把shared_ptr绑（boost::bind）到boost::function里，那么回调的时候StockFactory对象始终存在，是安全的。这同时也延长了对象的生命期，使之不短于绑得的boost::function对象。</p>
+<p>有时候我们需要“如果对象还活着，就调用它的成员函数，否则忽略之”的语意，就像Observable::notifyObservers()那样，我称之为“弱回调”。这也是可以实现的，利用weak_ptr，我们可以把weak_ptr绑到boost::function里，这样对象的生命期就不会被延长。然后在回调的时候先尝试提升为shared_ptr，如果提升成功，说明接受回调的对象还健在，那么就执行回调；如果提升失败，就不必劳神了。</p>
+<p>使用这一技术的完整StockFactory代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">StockFactory</span> : <span class="hljs-keyword">public</span> boost::enable_shared_from_this&lt;StockFactory&gt;, boost::noncopyable &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">shared_ptr&lt;Stock&gt; <span class="hljs-title">get</span><span class="hljs-params">(<span class="hljs-type">const</span> string&amp; key)</span></span>;<br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">void</span> <span class="hljs-title">weakDeleteCallback</span><span class="hljs-params">(<span class="hljs-type">const</span> boost::weak_ptr&lt;StockFactory&gt;&amp; wkFactory, Stock* stock)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">removeStock</span><span class="hljs-params">(Stock* stock)</span></span>;<br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-keyword">mutable</span> MutexLock mutex_;<br>    std::map&lt;string, weak_ptr&lt;Stock&gt;&gt; stocks_;<br>&#125;;<br><br><span class="hljs-function">shared_ptr&lt;Stock&gt; <span class="hljs-title">StockFactory::get</span><span class="hljs-params">(<span class="hljs-type">const</span> string&amp; key)</span> </span>&#123;<br>    shared_ptr&lt;Stock&gt; pStock;<br>    <span class="hljs-function">MutexLockGuard <span class="hljs-title">lock</span><span class="hljs-params">(mutex_)</span></span>;<br>    weak_ptr&lt;Stock&gt;&amp; wkStock = stocks_[key]; <span class="hljs-comment">// 注意wkStock是引用</span><br>    pStock = wkStock.<span class="hljs-built_in">lock</span>();<br>    <span class="hljs-keyword">if</span> (!pStock) &#123;<br>        pStock.<span class="hljs-built_in">reset</span>(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Stock</span>(key),<br>            boost::<span class="hljs-built_in">bind</span>(&amp;StockFactory::weakDeleteCallback,<br>                boost::<span class="hljs-built_in">weak_ptr</span>&lt;StockFactory&gt;(<span class="hljs-built_in">shared_from_this</span>()), _1));<br>        <span class="hljs-comment">// 上面必须强制把shared_from_this转型为weak_ptr，才不会延长生命期，</span><br>        <span class="hljs-comment">// 因为boost::bind拷贝的是实参类型，不是形参类型</span><br>        wkStock = pStock;<br>    &#125;<br>    <span class="hljs-keyword">return</span> pStock;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">StockFactory::removeStock</span><span class="hljs-params">(Stock* stock)</span> </span>&#123;<br>    <span class="hljs-keyword">if</span> (stock) &#123;<br>        <span class="hljs-function">MutexLockGuard <span class="hljs-title">lock</span><span class="hljs-params">(mutex_)</span></span>;<br>        stocks_.<span class="hljs-built_in">erase</span>(stock-&gt;<span class="hljs-built_in">key</span>());<br>    &#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">StockFactory::weakDeleteCallback</span><span class="hljs-params">(<span class="hljs-type">const</span> boost::weak_ptr&lt;StockFactory&gt;&amp; wkFactory, Stock* stock)</span> </span>&#123;<br>    <span class="hljs-function">shared_ptr&lt;StockFactory&gt; <span class="hljs-title">factory</span><span class="hljs-params">(wkFactory.lock())</span></span>; <span class="hljs-comment">// 尝试提升</span><br>    <span class="hljs-keyword">if</span> (factory) &#123; <span class="hljs-comment">// 如果factory还在，那就清理stocks_</span><br>        factory-&gt;<span class="hljs-built_in">removeStock</span>(stock);<br>        <span class="hljs-keyword">delete</span> stock; <span class="hljs-comment">// sorry, I lied</span><br>    &#125;<br>&#125;<br><br><br><span class="hljs-comment">// 两个简单的测试</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">testLongLifeFactory</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-function">shared_ptr&lt;StockFactory&gt; <span class="hljs-title">factory</span><span class="hljs-params">(<span class="hljs-keyword">new</span> StockFactory)</span></span>;<br><br>    &#123;<br>        shared_ptr&lt;Stock&gt; stock = factory-&gt;<span class="hljs-built_in">get</span>(<span class="hljs-string">&quot;NYSE:IBM&quot;</span>);<br>        shared_ptr&lt;Stock&gt; stock2 = factory-&gt;<span class="hljs-built_in">get</span>(<span class="hljs-string">&quot;NYSE:IBM&quot;</span>);<br>        <span class="hljs-built_in">assert</span>(stock == stock2);<br>        <span class="hljs-comment">// stock destructs here when the block ends</span><br>    &#125;<br>    <span class="hljs-comment">// factory destructs here when the function ends</span><br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">testShortLifeFactory</span><span class="hljs-params">()</span> </span>&#123;<br>    shared_ptr&lt;Stock&gt; stock;<br>    &#123;<br>        <span class="hljs-function">shared_ptr&lt;StockFactory&gt; <span class="hljs-title">factory</span><span class="hljs-params">(<span class="hljs-keyword">new</span> StockFactory)</span></span>;<br>        stock = factory-&gt;<span class="hljs-built_in">get</span>(<span class="hljs-string">&quot;NYSE:IBM&quot;</span>);<br>        shared_ptr&lt;Stock&gt; stock2 = factory-&gt;<span class="hljs-built_in">get</span>(<span class="hljs-string">&quot;NYSE:IBM&quot;</span>);<br>        <span class="hljs-built_in">assert</span>(stock == stock2);<br>        <span class="hljs-comment">// factory destructs here when the block ends</span><br>    &#125;<br>    <span class="hljs-comment">// stock destructs here when the function ends</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这下完美了，无论Stock和StockFactory谁先挂掉都不会影响程序的正确运行。</p>
+<p>这里我们借助shared_ptr和weak_ptr完美地解决了两个对象相互引用的问题。</p>
+<p>当然，通常Factory对象是个singleton（单例），在程序正常运行期间不会销毁，这里只是为了展示弱回调技术，这个技术在事件通知中非常有用。</p>
+<p>本节的StockFactory只有针对单个Stock对象的操作，如果程序需要遍历整个stocks，稍不注意就会造成死锁或数据损坏（<span class="math inline">\(\S2.1\)</span>），请参考S2.8的解决办法。</p>
+<h2 id="替代方案">12. 替代方案</h2>
+<p>除了使用shared_ptr/weak_ptr，要想在C++里做到线程安全的对象回调与析构，可能的办法有以下一些。</p>
+<ol type="1">
+<li>用一个全局的facade来代理Foo类型对象访问，所有的Foo对象回调和析构都通过这个facade来做，也就是把指针替换为objId/handle，每次要调用对象的成员函数的时候先check-out，用完之后再check-in。这样理论上能避免race
+condition，但是代价很大。因为要想把这个facade做成线程安全的，那么必然要用互斥锁。这样一来，从两个线程访问两个不同的Foo对象也会用到同一个锁，让本来能够并行执行的函数变成了串行执行，没能发挥多核的优势。当然，可以像Java的ConcurrentHashMap那样用多个buckets，每个bucket分别加锁，以降低contention。</li>
+</ol>
+<table style="width:6%;">
+
+<tbody>
+<tr>
+<td>这段描述涉及到软件设计中的一些概念，主要是关于如何通过一个全局的门面（facade）来管理对某个类型对象（在这个例子中是<code>Foo</code>类型）的访问，以及这样做的优缺点。下面我将逐步解释这段描述的意思：</td>
+</tr>
+<tr>
+<td>1.
+<strong>全局门面（Facade）</strong>：这是一个设计模式，其中创建一个统一的接口来访问子系统中的一组接口。在这个上下文中，全局门面被用来代理对<code>Foo</code>类型对象的所有访问。</td>
+</tr>
+<tr>
+<td>2.
+<strong>代理访问</strong>：所有的<code>Foo</code>对象的回调和析构（对象销毁）都通过这个门面来进行。这意味着，任何对<code>Foo</code>对象的操作都需要通过这个门面，而不是直接操作对象。</td>
+</tr>
+<tr>
+<td>3.
+<strong>指针替换为objId/handle</strong>：这里提到将直接的指针替换为对象标识符（objId）或句柄（handle）。这是一种常见的做法，用于在不直接暴露对象的情况下引用对象。</td>
+</tr>
+<tr>
+<td>4.
+<strong>check-out和check-in</strong>：这是一种资源管理策略，类似于借阅和归还。在使用对象之前，你需要“check-out”（检查出），使用完毕后“check-in”（检查入）。这有助于管理对象的生命周期和并发访问。</td>
+</tr>
+<tr>
+<td>5. <strong>避免race
+condition</strong>：通过控制对<code>Foo</code>对象的访问，可以减少或消除竞态条件，即多个线程或进程同时访问共享资源时导致的数据不一致问题。</td>
+</tr>
+<tr>
+<td>6.
+<strong>线程安全和互斥锁</strong>：为了使门面线程安全，需要使用互斥锁（mutex）。互斥锁是一种同步机制，用于防止多个线程同时访问共享资源。</td>
+</tr>
+<tr>
+<td>7.
+<strong>性能代价</strong>：使用互斥锁会导致性能开销，因为它们会阻塞其他线程，直到锁被释放。这可能导致本来可以并行执行的操作变成串行执行。</td>
+</tr>
+<tr>
+<td>8.
+<strong>多核优势</strong>：由于互斥锁的使用，即使两个线程访问的是不同的<code>Foo</code>对象，它们也可能因为共享同一个锁而被迫串行执行，这限制了多核处理器的并行处理能力。</td>
+</tr>
+<tr>
+<td>9.
+<strong>降低contention</strong>：为了减少锁的竞争（contention），可以采用类似于Java的<code>ConcurrentHashMap</code>的做法，使用多个桶（buckets），每个桶都有自己的锁。这样，不同桶中的操作可以并行执行，减少了锁的竞争。</td>
+</tr>
+<tr>
+<td>总结来说，这段描述讨论了通过全局门面来管理对<code>Foo</code>对象的访问，以避免竞态条件，但这样做会引入性能开销，尤其是在多线程环境中。为了减少这种开销，可以考虑使用分桶策略来降低锁的竞争。</td>
+</tr>
+</tbody>
+</table>
+<ol start="2" type="1">
+<li><p>S1.4提到的“只创建不销毁”手法，实属无奈之举。</p></li>
+<li><p>自已编写引用计数的智能指针。本质上是重新发明轮子，把shared_ptr实现一遍。正确实现线程安全的引用计数智能指针不是一件容易的事情，而高效的实现就更加困难。既然shared_ptr已经提供了完整的解决方案，那么似乎没有理由抗拒它。</p></li>
+<li><p>将来在C++11里有unique_ptr，能避免引用计数的开销，或许能在某些场合替换shared_ptr。</p></li>
+</ol>
+<p>其他语言怎么办有垃圾回收就好办。Google的Go语言教程明确指出，没有垃圾回收的并发编程是困难的（Concurrency
+is hard without garbage
+collection）。天生具备垃圾回收的语言在并发编程方面具有明显的优势，Java是目前支持并发编程最好的主流语言，它的util.concurrent库和内存模型是C++11效仿的对象。</p>
+<h2 id="心得与小结">13. 心得与小结</h2>
+<p>学习多线程程序设计远远不是看看教程了解API怎么用那么简单，这最多只是为了读懂别人的代码，如果自己要写这类代码，必须专门花时间严肃、认真、系统地学习，严禁半桶水上阵（孟岩）。一般的多线程教程上都会提到要让加锁的区域足够小，这没错，问题是如何找出这样的区域并加锁，本章<span class="math inline">\(\S1.9\)</span>举的安全读写shared_ptr可算是一个例子。</p>
+<p>据我所知，目前C++没有特别好的多线程领域专著，但C语言有，Java语言也有。《JavaConcurrency
+in
+Practice》（UCP）是我读过的写得最好的书，内容足够新，可读性和可操作性俱佳。C++程序员反过来要向Java学习，多少有些讽刺。除了编程书，操作系统教材也是必读的，至少要完整地学习一本经典教材的相关章节，可从《操作系统设计与实现》、《现代操作系统》、《操作系统概念》任选一本，了解各种同步原语、临界区、竞态条件、死锁、典型的IPC问题等等，防止闭门造车。</p>
+<p>分析可能出现的race
+condition不仅是多线程编程的基本功，也是设计分布式系统的基本功，需要反复历练，形成一定的思考范式，并积累一些经验教训，才能少犯错误。这是一个快速发展的领域，要不断吸收新知识，才不会落伍。单CPU时代的多线程编程经验到了多CPU时代不一定有效，因为多CPU能做到真正的并行执行，每个CPU看到的事件发生顺序不一定完全相同。正如狭义相对论所说的每个观察者都有自己的时钟，在不违反因果律的前提下，可能发生十分违反直觉的事情。</p>
+<p>尽管本章通篇在讲如何安全地使用（包括析构）跨线程的对象，但我建议尽量减少使用跨线程的对象，我赞同水未网友ilovecpp说的：“用流水线，生产者消费者，任务队列这些有规律的机制，最低限度地共享数据。这是我所知最好的多线程编程的建议了。”</p>
+<p>不用跨线程的对象，自然不会遇到本章描述的各种险态。如果不得已要用，希望本章内容能对你有帮助。</p>
+<p>小结：</p>
+<ul>
+<li>原始指针暴露给多个线程往往会造成race
+condition或额外的簿记负担。</li>
+<li>统一用shared_ptr/scoped_ptr来管理对象的生命期，在多线程中尤其重要。</li>
+<li>shared_ptr是值语意，当心意外延长对象的生命期。例如boost::bind和容器都可能拷贝shared_ptr。</li>
+<li>weak_ptr是shared_ptr的好搭档，可以用作弱回调、对象池等。</li>
+<li>认真阅读一遍boost::shared_ptr的文档，能学到很多东西：<a target="_blank" rel="noopener" href="http://www.boost.org/doc/libs/release/libs/smart_ptr/shared_ptr.htm">http://www.boost.org/doc/libs/release/libs/smart_ptr/shared_ptr.htm</a></li>
+<li>保持开放心态，留意更好的解决办法，比如C++11引入的unique_ptr。忘掉已被废弃的auto_ptr。</li>
+</ul>
+<p>shared_ptr是TR1的一部分，即C++标准库的一部分，值得花一点时间去学习掌握，对编写现代的C++程序有莫大的帮助。我个人的经验是，一周左右就能基本掌握各种用法与常见陷阱，比学STL还快。网络上有一些对shared_ptr的批评，那可以算作故意误用的例子，就好比故意访问失效的迭代器来证明std::vector不安全一样。</p>
+<p>正确使用标准库（含shared_ptr）作为自动化的内存/资源管理器，解放大脑，从此告别内存错误。</p>
+<h2 id="observer之谬">14. Observer之谬</h2>
+<p>本章S1.8把shared_ptr/weak_ptr应用到Observer模式中，部分解决了其线程安全问题。我用Observer举例，因为这是一个广为人知的设计模式，但是它有本质的问题。</p>
+<p>Observer模式的本质问题在于其面向对象的设计。换句话说，我认为正是面向对象（OO）本身造成了Observer的缺点。Observer
+class是基类，这带来了非常强的耦合，强度仅次于友元（friend）。这种耦合不仅限制了成员函数的名字、参数、返回值，还限制了成员函数所属的类型（必须是Observer的派生类）。</p>
+<p>Observer
+class是基类，这意味着如果Foo想要观察两个类型的事件（比如时钟和温度），需要使用多继承。这还不是最糟糕的，如果要重复观察同一类型的事件（比如1秒一次的心跳和30秒一次的自检），就要用到一些其实并不workaround，因为不能从一个Base
+class继承两次。</p>
+<p>现在的语言一般可以绕过Observer模式的限制，比如Java可以用匿名内部类，Java
+8用Closure，C#用delegate，C++用boost::function/boost::bind。</p>
+<p>在C++里为了替换Observer，可以用Signal/Slots，我指的不是QT那种靠语言扩展的实现，而是完全靠标准库实现的thread-safe、race-condition-free、thread-contention-free的Signal/Slots，并且不强制要求shared_ptr来管理对象，也就是说完全解决了<span class="math inline">\(\S1.8\)</span>列出的Observer遗留问题。这会用到<span class="math inline">\(\S2.8\)</span>介绍的“借shared_ptr实现copy-on-write”技术。</p>
+<p>在C++11中，借助variadic
+template，实现最简单（trivial）的一对多回调可谓不费吹灰之力，代码如下。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs cpp">recipes/thread/SignalSlotTrivial.h<br><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> Signature&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">SignalTrivial</span> ;<br><span class="hljs-comment">// NOT thread safe!!</span><br><br><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> RET, <span class="hljs-keyword">typename</span>... ARGS&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">SignalTrivial</span>&lt;<span class="hljs-built_in">RET</span>(ARGS...)&gt; &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-keyword">typedef</span> std::function&lt;RET(ARGS...)&gt; Functor;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">connect</span><span class="hljs-params">(Functor&amp;&amp; func)</span> </span>&#123;<br>        functors_.<span class="hljs-built_in">push_back</span>(std::forward&lt;Functor&gt;(func));<br>    &#125;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">call</span><span class="hljs-params">(ARGS&amp;&amp;... args)</span> </span>&#123;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> Functor&amp; f : functors_) &#123;<br>            <span class="hljs-built_in">f</span>(std::forward&lt;ARGS&gt;(args)...);<br>        &#125;<br>    &#125;<br><span class="hljs-keyword">private</span>:<br>    std::vector&lt;Functor&gt; functors_;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>我们不难把以上基本实现扩展为线程安全的Signal/Slots，并且在Slot析构时自动unregister。有兴趣的读者可仔细阅读完整实现的代码（recipes/thread/SignalSlot.h）。</p>
+<p>结语</p>
+<p>《C++沉思录》（Ruminations on
+C++中文版）的附录是王曦和孟岩对作者夫妇二人的采访，在被问到“请给我们三个你们认为最重要的建议”时，Koenig和Moo的第一个建议是“避免使用指针”。我2003年读到这段时，理解不深，觉得固然使用指针容易造成内存方面的问题，但是完全不用也是做不到的，毕竟C++的多态要通过指针或引用来起效。6年之后重新拾起来，发现天师的观点何其深刻，不免掩卷长叹。</p>
+<p>这本书详细地介绍了handle/body
+idiom，这是编写大型C++程序的必备技术，也是实现物理隔离的“法宝”，值得细读。</p>
+<p>目前来看，用shared_ptr来管理资源在国内C++界似乎并不是一种主流做法，很多人排斥智能指针，视其为“洪水猛兽”（这或许受了auto_ptr的垃圾设计的影响）。据我所知，很多C++项目还是手动管理内存和资源，因此我觉得有必要把我认为是好的做法分享出来，让更多的人尝试并采纳。我觉得shared_ptr对于编写线程安全的C++程序是至关重要的，不然就得“土法炼钢”，自己“重新发明轮子”。这让我想起了2001年前后STL刚传入国内，大家也是很犹豫，觉得它性能不高，使用不便，还不如自己造的容器类。10年过去了，现在STL已经是主流，大家也适应了迭代器、容器、算法、适配器、仿函数这些“新”名词、“新”技术，开始在项目中普遍使用（至少用vector代替数组嘛）。我希望，几年之后人们回头看本章内容，觉得“怎么讲的都是常识”，那我的写作目的也就达到了。</p>
+<hr>
+<p>Tips:</p>
+<p>在《C++沉思录》这本书中，Koenig和Moo作为C++语言的专家，提出了他们对于C++编程的重要建议。他们的第一个建议是“避免使用指针”，这个建议可能在初次阅读时难以理解，因为指针在C++中扮演着非常重要的角色，特别是在实现多态性方面。以下是对这个建议的一些解释：</p>
+<ol type="1">
+<li><p><strong>内存管理问题</strong>：指针是直接操作内存的工具，使用不当容易导致内存泄漏、野指针、越界访问等问题。这些问题在大型软件项目中尤其难以追踪和修复。</p></li>
+<li><p><strong>复杂性增加</strong>：指针的使用会增加代码的复杂性，使得代码更难理解和维护。指针的间接访问和手动内存管理使得代码的逻辑更加隐晦。</p></li>
+<li><p><strong>现代C++特性</strong>：随着C++语言的发展，现代C++提供了许多不需要直接使用指针就能实现多态和其他高级特性的方法，比如智能指针（<code>std::unique_ptr</code>、<code>std::shared_ptr</code>等）、RAII（Resource
+Acquisition Is Initialization）原则等。</p></li>
+<li><p><strong>安全性和稳定性</strong>：避免使用裸指针可以减少程序出错的机会，提高程序的安全性和稳定性。现代C++鼓励使用更安全的编程实践，比如使用容器和算法库，这些通常不需要直接操作指针。</p></li>
+<li><p><strong>代码可读性和可维护性</strong>：不使用指针的代码通常更易于阅读和维护，因为它们减少了需要理解的复杂性层次。</p></li>
+<li><p><strong>性能考虑</strong>：虽然指针可以提供对内存的精细控制，但在许多情况下，现代编译器和硬件已经足够智能，能够优化那些不使用指针的代码，使得性能差异不再显著。</p></li>
+<li><p><strong>多态的实现</strong>：确实，多态性在C++中常常需要通过指针或引用来实现，但现代C++提供了其他机制，如虚函数表（vtable）和RTTI（运行时类型识别），这些机制在背后处理了指针的使用，使得程序员可以更安全地实现多态。</p></li>
+</ol>
+<p>随着编程实践的发展和语言特性的丰富，越来越多的开发者开始意识到避免直接使用指针的好处，尤其是在大型项目和企业级应用中。这种观点的深刻性在于它鼓励开发者采用更现代、更安全、更易于维护的编程方法。因此，当你在2003年读到这个建议时可能不以为然，但随着经验的积累和对C++语言理解的深入，你可能会逐渐认同这个观点。</p>
+<hr>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/c/" class="category-chain-item">c++</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/c/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="category-chain-item">muduo多线程服务器</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/muduo/" class="print-no-link">#muduo</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>1. 线程安全的对象生命期管理</div>
+      <div>http://binbo-zappy.github.io/2024/12/22/muduo多线程/1-线程安全的对象生命期管理/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年12月22日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/12/23/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/2-%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E7%B2%BE%E8%A6%81/" title="2. 线程同步精要">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">2. 线程同步精要</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/12/16/Linux%E9%AB%98%E6%80%A7%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B-%E6%B8%B8%E5%8F%8C/17-%E7%B3%BB%E7%BB%9F%E7%9B%91%E6%B5%8B%E5%B7%A5%E5%85%B7/" title="17. 系统监测工具">
+                        <span class="hidden-mobile">17. 系统监测工具</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,1419 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="第6章 muduo网络库简介 1. 由来 2010年3月我写了一篇《学之者生，用之者死——ACE历史与简评》，其中提到“我心目中理想的网络库”的样子：  线程安全，原生支持多核多线程。 不考虑可移植性，不跨平台，只支持Linux，不支持Windows。 主要支持x86-64，兼顾IA32。（实际上muduo也可以运行在ARM上。） 不支持UDP，只支持TCP。 不支持IPv6，只">
+<meta property="og:type" content="article">
+<meta property="og:title" content="6. muduo网络库简介">
+<meta property="og:url" content="http://binbo-zappy.github.io/2024/12/25/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/6-muduo%E7%BD%91%E7%BB%9C%E5%BA%93%E7%AE%80%E4%BB%8B/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="第6章 muduo网络库简介 1. 由来 2010年3月我写了一篇《学之者生，用之者死——ACE历史与简评》，其中提到“我心目中理想的网络库”的样子：  线程安全，原生支持多核多线程。 不考虑可移植性，不跨平台，只支持Linux，不支持Windows。 主要支持x86-64，兼顾IA32。（实际上muduo也可以运行在ARM上。） 不支持UDP，只支持TCP。 不支持IPv6，只">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/muduo.jpg">
+<meta property="article:published_time" content="2024-12-25T02:32:25.000Z">
+<meta property="article:modified_time" content="2024-12-25T14:11:57.455Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="muduo">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/muduo.jpg">
+  
+  
+  
+  <title>6. muduo网络库简介 - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="6. muduo网络库简介"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-12-25 10:32" pubdate>
+          2024年12月25日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          20k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          165 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">6. muduo网络库简介</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="第6章-muduo网络库简介"><strong>第6章
+muduo网络库简介</strong></h1>
+<h2 id="由来">1. 由来</h2>
+<p>2010年3月我写了一篇《学之者生，用之者死——ACE历史与简评》，其中提到“我心目中理想的网络库”的样子：</p>
+<ul>
+<li>线程安全，原生支持多核多线程。</li>
+<li>不考虑可移植性，不跨平台，只支持Linux，不支持Windows。</li>
+<li>主要支持x86-64，兼顾IA32。（实际上muduo也可以运行在ARM上。）</li>
+<li>不支持UDP，只支持TCP。</li>
+<li>不支持IPv6，只支持IPv4。</li>
+<li>不考虑广域网应用，只考虑局域网。（实际上muduo也可以用在广域网上。）</li>
+<li>不考虑公网，只考虑内网。不为安全性做特别的增强。</li>
+<li>只支持一种使用模式：非阻塞IO+one event loop per
+thread，不支持阻塞IO。</li>
+<li>API简单易用，只暴露具体类和标准库里的类。API不使用non-trivial
+templates，也不使用虚函数。</li>
+<li>只满足常用需求的90%，不面面俱到，必要的时候以app来适应lib。</li>
+<li>只做library，不做成framework。</li>
+<li>争取全部代码在5000行以内（不含测试）。</li>
+<li>在不增加复杂度的前提下可以支持FreeBSD/Darwin，方便将来用Mac作为开发用机，但不为它做性能优化。也就是说，IO
+multiplexing使用poll(2)和epoll(4)。</li>
+<li>以上条件都满足时，可以考虑搭配Google Protocol Buffers RPC。</li>
+</ul>
+<ol type="1">
+<li>http://blog.csdn.net/Solstice/archive/2010/03/1/5364096.asp</li>
+</ol>
+<p>在想清楚这些目标之后，我开始第三次尝试编写自己的C++网络库。与前两次不同，这次我一开始就想好了库的名字，叫muduo（木铎）2，并在Google
+code上创建了项目：http://code.google.com/p/muduo/。muduo以git为版本管理工具，托管于https://github.com/chenshuo/muduo。muduo的主体内容在2010年5月底已经基本完成，8月底发布0.1.0版，现在（2012年11月）的最新版本是0.8.2。</p>
+<h3 id="为什么需要网络库">1.1 <strong>为什么需要网络库</strong></h3>
+<p>使用Sockets
+API进行网络编程是很容易上手的一项技术，花半天时间读完一两篇网上教程，相信不难写出能相互连通的网络程序。例如下面这个网络服务端和客户端程序，它用Python实现了一个简单的“Hello”协议，客户端发来姓名，服务端返回问候语和服务器的当前时间。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># hello-server.py</span><br><span class="hljs-comment">#!/usr/bin/python</span><br><br><span class="hljs-keyword">import</span> socket, time<br><br>serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)<br>serversocket.bind((<span class="hljs-string">&quot;&quot;</span>, <span class="hljs-number">8888</span>))<br>serversocket.listen(<span class="hljs-number">5</span>)<br><br><span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>    clientsocket, address = serversocket.accept()<br>    data = clientsocket.recv(<span class="hljs-number">4096</span>)<br>    datetime = time.asctime() + <span class="hljs-string">&#x27;\n&#x27;</span><br>    clientsocket.send(<span class="hljs-string">&#x27;Hello &#x27;</span> + data)<br>    clientsocket.send(<span class="hljs-string">&#x27;My time is &#x27;</span> + datetime)<br>    clientsocket.close()<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># hello-client.py</span><br><span class="hljs-keyword">import</span> socket<br><span class="hljs-keyword">import</span> os<br><br>sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)<br>sock.connect((sys.argv[<span class="hljs-number">1</span>], <span class="hljs-number">8888</span>))<br>sock.send(os.getlogin() + <span class="hljs-string">&quot;\n&quot;</span>)<br>message = sock.recv(<span class="hljs-number">4096</span>)<br><span class="hljs-built_in">print</span> message<br>sock.close()<br></code></pre></td></tr></table></figure>
+<p>以上两个程序使用了全部主要的Sockets
+API，包括socket(2)、bind(2)、listen(2)、accept(2)、connect(2)、recv(2)、send(2)、close(2)、gethostbyname(3)3等，似乎网络编程一点也不难嘛。在同一台机器上运行上面的服务端和客户端，结果不出意料：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ ./hello-client.py localhost<br>Hello schen<br>My time is Sun May 13 12:56:44 2012<br></code></pre></td></tr></table></figure>
+<p>但是连接同一局域网的另外一台服务器时，收到的数据是不完整的。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ ./hello-client.py atom<br>Hello schen<br></code></pre></td></tr></table></figure>
+<p>出现这种情况的原因是高级语言（Java、Python等）的Sockets库并没有对Sockets
+API提供更高层的封装，直接用它编写网络程序很容易掉到陷阱里，因此我们需要一个好的网络库来降低开发难度。网络库的价值还在于能方便地处理并发连接(<span class="math inline">\(\S6.6\)</span>)。</p>
+<h2 id="安装">2. 安装</h2>
+<p>源文件tar包的下载地址：http://code.google.com/p/muduo/downloads/list，此处以muduo-0.8.2-beta.tar.gz为例。</p>
+<p>muduo使用了Linux较新的系统调用（主要是timerfd和eventfd），要求Linux的内核版本大于2.6.28。我自己用Debian
+6.0 Squeeze/Ubuntu 10.04 LTS作为主要开发环境（内核版本2.6.32），以g++
+4.4为主要编译器版本，在32-bit和64-bit
+x86系统都编译测试通过。muduo在Fedora 13和CentOS
+6上也能正常编译运行，还有热心网友为Arch Linux编写了AUR文件4。</p>
+<p>另外muduo也可以运行在嵌入式系统中，我在Samsung
+S3C2440开发板（ARM9）和Raspberry
+Pi（ARM11）上成功运行了muduo的多个示例。代码只需略作改动，请参考armlinuxdiff。</p>
+<p>muduo采用CMake为build system，安装方法如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> apt-get install cmake<br></code></pre></td></tr></table></figure>
+<p>muduo依赖于Boost7，也很容易安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> apt-get install libboost-dev libboost-test-dev<br></code></pre></td></tr></table></figure>
+<p>muduo有三个非必需的依赖库：curl、c-ares DNS、Google
+Protobuf，如果安装了这三个库，cmake会自动多编译一些示例。安装方法如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> apt-get install libcurl4-openssl-dev libc-ares-dev<br><span class="hljs-built_in">sudo</span> apt-get install protobuf-compiler libprotobuf-dev<br></code></pre></td></tr></table></figure>
+<p>muduo的编译方法很简单：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">tar zxf muduo-0.8.2-beta.tar.gz<br><span class="hljs-built_in">cd</span> muduo/<br>./build.sh -j2<br></code></pre></td></tr></table></figure>
+<p>编译muduo库和它自带的例子，生成的可执行文件和静态库文件分别位于../build/debug/(bin，lib)。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">./build.sh install<br></code></pre></td></tr></table></figure>
+<p>以上命令将muduo头文件和库文件安装到./build/debug-install/(include，lib)，以便muduo-protorpc
+和muduo-udns 等库使用。</p>
+<p>如果要编译release版（以-O2优化），可执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">BUILD_TYPE=release ../build.sh -j2<br></code></pre></td></tr></table></figure>
+<p>编译muduo库和它自带的例子，生成的可执行文件和静态库文件分别位于./build/release/bin，lib)。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">BUILD_TYPE=release ./build.sh install<br></code></pre></td></tr></table></figure>
+<p>以上命令将muduo头文件和库文件安装到./build/release-install/（include，lib），以便muduo-protorpc
+和muduo-udns等库使用。在muduo
+1.0正式发布之后，BUILD_TYPE的默认值会改成release。</p>
+<p>编译完成之后请试运行其中的例子，比如bin/inspector_test，然后通过浏览器访问http://10.0.0.10:12345/或http://10.0.0.10:12345/proc/status，其中10.0.0.10誉换为你的Linux
+box的IP。</p>
+<p>在自己的程序中使用muduo，muduo是静态链接的C++程序库，使用muduo库的时候，只需要设置好头文件路径（例如./build/debug-install/include）和库文件路径（例如./build/debug-install/lib）并链接相应的静态库文件（-lmuduo_net
+-lmuduo_base）即可。下面这个示范项目展示了如何使用CMake和普通makefile编译基于muduo的程序：https://github.com/chenshuo/muduo-tutorial。</p>
+<p>原因是在分布式系统中正确安全地发布动态库的成本很高，见第11章。</p>
+<h2 id="目录结构">3. 目录结构</h2>
+<p>muduo的目录结构如下：</p>
+<p><img src="/2024/12/25/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/6-muduo%E7%BD%91%E7%BB%9C%E5%BA%93%E7%AE%80%E4%BB%8B/image-20241225150028651.png" srcset="/img/loading.gif" lazyload></p>
+<p>muduo的源代码文件名与class名相同，例如ThreadPool类的定义是muduo/base/ThreadPool.h，其实现位于muduo/base/ThreadPool.cc。</p>
+<h4 id="基础库">1. <strong>基础库</strong></h4>
+<p>muduo/base目录是一些基础库，都是用户可见的类，内容包括：</p>
+<figure>
+<img src="/2024/12/25/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/6-muduo%E7%BD%91%E7%BB%9C%E5%BA%93%E7%AE%80%E4%BB%8B/image-20241225150156308.png" srcset="/img/loading.gif" lazyload alt="image-20241225150156308">
+<figcaption aria-hidden="true">image-20241225150156308</figcaption>
+</figure>
+<h4 id="网络核心库">2. <strong>网络核心库</strong></h4>
+<p>muduo是基于Reactor模式的网络库，其核心是个事件循环EventLoop，用于响应计时器和IO事件。muduo采用基于对象（object-based）而非面向对象（object-oriented）的设计风格，其事件回调接口多以boost::function+boost::bind表达，用户在使用muduo的时候不需要继承其中的class。</p>
+<p>网络库核心位于muduo/net和muduo/net/poller，一共不到4300行代码，以下灰底表示用户不可见的内部类。</p>
+<p><img src="/2024/12/25/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/6-muduo%E7%BD%91%E7%BB%9C%E5%BA%93%E7%AE%80%E4%BB%8B/image-20241225150654005.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="网络附属库">3. <strong>网络附属库</strong></h4>
+<p>网络库有一些附属模块，它们不是核心内容，在使用的时候需要链接相应的库，例如-lmuduo_http、-lmuduo_inspect等等。HttpServer和Inspector暴露出一个http界面，用于监控进程的状态，类似于Java
+JMX（S9.5）。</p>
+<p>附属模块位于muduo/net/(http,inspect,protorpc)等处。</p>
+<p><img src="/2024/12/25/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/6-muduo%E7%BD%91%E7%BB%9C%E5%BA%93%E7%AE%80%E4%BB%8B/image-20241225150839723.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="代码结构">3.4 代码结构</h3>
+<p>muduo的头文件明确分为客户可见和客户不可见两类。以下是安装之后暴露的头文件和库文件。对于使用muduo库而言，只需要掌握5个关键类：Buffer、EventLoop、TcpConnection、TcpClient、TcpServer。</p>
+<p><img src="/2024/12/25/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/6-muduo%E7%BD%91%E7%BB%9C%E5%BA%93%E7%AE%80%E4%BB%8B/image-20241225150944500.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2024/12/25/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/6-muduo%E7%BD%91%E7%BB%9C%E5%BA%93%E7%AE%80%E4%BB%8B/image-20241225151018680.png" srcset="/img/loading.gif" lazyload></p>
+<p>图6-1是muduo的网络核心库的头文件包含关系，用户可见的为白底，用户不可见的为灰底。</p>
+<p><img src="/2024/12/25/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/6-muduo%E7%BD%91%E7%BB%9C%E5%BA%93%E7%AE%80%E4%BB%8B/image-20241225151046192.png" srcset="/img/loading.gif" lazyload></p>
+<p>muduo头文件中使用了前向声明（forward
+declaration），大大简化了头文件之间的依赖关系。例如Acceptor.h、Channel.h、Connector.h、TcpConnection.h都前向声明了EventLoop
+class，从而避免包含EventLoop.h。另外，TcpClient.h前向声明了Connector
+class，从而避免将内部类暴露给用户，类似的做法还有TcpServer.h用到的Acceptor和EventLoopThreadPool、EventLoop.h用到的Poller和TimerQueue、TcpConnection.h用到的Channel和Socket等等。</p>
+<p>这里简单介绍各个class的作用，详细的介绍参见后文。</p>
+<h4 id="公开接口">1. <strong>公开接口</strong></h4>
+<ul>
+<li>Buffer仿Netty ChannelBuffer的buffer
+class，数据的读写通过buffer进行。用户代码不需要调用read(2)/write(2)，只需要处理收到的数据和准备好要发送的数据（<span class="math inline">\(\S7.4\)</span>）。</li>
+<li>InetAddress封装IPv4地址（endpoint），注意，它不能解析域名，只认IP地址。因为直接用gethostbyname(3)解析域名会阻塞IO线程。</li>
+<li>EventLoop事件循环（反应器Reactor），每个线程只能有一个EventLoop实体，它负责IO和定时器事件的分派。它用eventfd(2)来异步唤醒，这有别于传统的用一对pipe(2)的办法。它用TimerQueue作为计时器管理，用Poller作为IO
+multiplexing。</li>
+<li>EventLoopThread启动一个线程，在其中运行EventLoop::loop()。</li>
+<li>TcpConnection整个网络库的核心，封装一次TCP连接，注意它不能发起连接。</li>
+<li>TcpClient用于编写网络客户端，能发起连接，并且有重试功能。</li>
+<li>TcpServer用于编写网络服务器，接受客户的连接。</li>
+</ul>
+<p>在这些类中，TcpConnection的生命期依靠shared_ptr管理（即用户和库共同控制）。Buffer的生命期由TcpConnection控制。其余类的生命期由用户控制。Buffer和InetAddress具有值语义，可以拷贝；其他class都是对象语义，不可以拷贝。</p>
+<h4 id="内部实现">2. <strong>内部实现</strong></h4>
+<ul>
+<li>Channel是selectable IO
+channel，负责注册与响应IO事件，注意它不拥有file
+descriptor。它是Acceptor、Connector、EventLoop、TimerQueue、TcpConnection的成员，生命期由后者控制。</li>
+<li>Socket是一个RAII handle，封装一个file
+descriptor，并在析构时关闭fd。它是Acceptor、TcpConnection的成员，生命期由后者控制。EventLoop、TimerQueue也拥有fd，但是不封装为Socket
+class。</li>
+<li>Socketsops封装各种Sockets系统调用。</li>
+<li>Poller是PollPoller和EPollPoller的基类，采用“电平触发”的语义。它是EventLoop的成员，生命期由后者控制。</li>
+<li>PollPoller和EPollPoller封装poll(2)和epoll(4)两种IO
+multiplexing后端。poll的存在价值是便于调试，因为poll(2)调用是上下文无关的，用strace(1)很容易知道库的行为是否正确。</li>
+<li>Connector用于发起TCP连接，它是TcpClient的成员，生命期由后者控制。</li>
+<li>Acceptor用于接受TCP连接，它是TcpServer的成员，生命期由后者控制。</li>
+<li>TimerQueue用timerfd实现定时，这有别于传统的设置poll/epoll_wait的等待时长的办法。TimerQueue用std::map来管理Timer，常用操作的复杂度是O(logN)，N为定时器数目。它是EventLoop的成员，生命期由后者控制。</li>
+<li>EventLoopThreadPool用于创建IO线程池，用于把TcpConnection分派到某个EventLoop线程上。它是TcpServer的成员，生命期由后者控制。</li>
+</ul>
+<p><img src="/2024/12/25/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/6-muduo%E7%BD%91%E7%BB%9C%E5%BA%93%E7%AE%80%E4%BB%8B/image-20241225151712176.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="例子"><strong>3.2 例子</strong></h3>
+<p>muduo附带了十几个示例程序，编译出来有近百个可执行文件。这些例子位于examples目录，其中包括从Boost.Asio、JavaNetty、PythonTwisted等处移植过来的例子。这些例子基本覆盖了常见的服务端网络编程功能点，从这些例子可以充分学习非阻塞网络编程。</p>
+<figure class="highlight coq"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><code class="hljs coq">examples<br>    |<span class="hljs-type">- asio</span><br>        从Boost.Asio 移植的例子<br>    |<span class="hljs-type">- chat</span><br>        多人聊天的服务端和客户端，示范打包和拆包（codec）<br>    |<span class="hljs-type">- tutorial</span><br>        一系列timers<br>    |<span class="hljs-type">- cdns</span><br>        基于 c-ares 的异步 DNS 解析<br>    |<span class="hljs-type">- curl</span><br>        基于 curl 的异步 HTTP 客户端<br>    |<span class="hljs-type">- filetransfer</span><br>        简单的文件传输，示范完整发送TCP数据<br>    |<span class="hljs-type">- hub</span><br>        一个简单的pub/sub/hub服务，演示应用级的广播<br>    |<span class="hljs-type">- idleconnection</span><br>        踢掉空闲连接<br>    |<span class="hljs-type">- maxconnection</span><br>        控制最大连接数<br>    |<span class="hljs-type">- multiplexer</span><br>        <span class="hljs-number">1</span>:n串并转换服务<br>    |<span class="hljs-type">- netty</span><br>        从JBoss Netty移植的例子<br>        |<span class="hljs-type">-- discard</span><br>            可用于测试带宽，服务器可多线程运行<br>        |<span class="hljs-type">-- echo</span><br>            可用于测试带宽，服务器可多线程运行<br>        |<span class="hljs-type">-- uptime</span><br>            带自动重连的TCP 长连接客户端<br>    |<span class="hljs-type">-- pingpong</span><br>        pingpong协议，用于测试消息吞吐量<br>    |<span class="hljs-type">-- protobuf</span><br>        Google Protobuf 的网络传输示例<br>        |<span class="hljs-type">-- codec</span><br>            自动反射消息类型的传输方案<br>        |<span class="hljs-type">-- rpc</span><br>            RPC示例，实现Sudoku服务<br>        |<span class="hljs-type">-- rpcbench</span><br>            RPC性能测试示例<br>    |<span class="hljs-type">-- roundtrip</span><br>        测试两台机器的网络延时与时间差<br>    |<span class="hljs-type">-- shorturl</span><br>        简单的短址服务<br>    |<span class="hljs-type">-- simple</span><br>        <span class="hljs-number">5</span>个简单网络协议的实现<br>        |<span class="hljs-type">-- allinone</span><br>            在一个程序里同时实现下面<span class="hljs-number">5</span>个协议<br>            |<span class="hljs-type">-- chargen</span><br>                RFC864，可测试带宽<br>            |<span class="hljs-type">-- chargenclient</span><br>                chargen 的客户端<br>            |<span class="hljs-type">-- daytime</span><br>                RFC867<br>            |<span class="hljs-type">-- discard</span><br>                RFC863<br>            |<span class="hljs-type">-- echo</span><br>                RFC862<br>            |<span class="hljs-type">-- time</span><br>                RFC868<br>            |<span class="hljs-type">-- timeclient</span><br>                <span class="hljs-built_in">time</span> 协议的客户端<br>    |<span class="hljs-type">-- socks4a</span><br>        Socks4a代理服务器，示范动态创建TcpClient<br>    |<span class="hljs-type">-- sudoku</span><br>        数独求解器，示范muduo的多线程模型<br>    |<span class="hljs-type">-- twisted</span><br>        从Python Twisted移植的例子<br>        |<span class="hljs-type">-- finger</span><br>            finger <span class="hljs-number">1</span><span class="hljs-number">-07</span><br>        |<span class="hljs-type">-- zeromq</span><br>        从ZeroMQ移植的性能（消息延迟）测试<br></code></pre></td></tr></table></figure>
+<p>另外还有一些基于muduo的示例项目，由于License等原因没有放到muduo发行版中，可以单独下载。</p>
+<ul>
+<li>http://github.com/chenshuo/muduo-udns：基于UDNS的异步DNS解析。</li>
+<li>http://github.com/chenshuo/muduo-protorpc：新的RPC实现，自动管理对象生命期。</li>
+</ul>
+<h3 id="线程模型">3.3 线程模型</h3>
+<p>muduo的线程模型符合我主张的one loop per thread + thread
+pool模型。每个线程最多有一个EventLoop，每个TcpConnection必须归某个EventLoop管理，所有的IO会转移到这个线程。换句话说，一个file
+descriptor只能由一个线程读写。TcpConnection所在的线程由其所属的EventLoop决定，这样我们可以很方便地把不同的TCP连接放到不同的线程去，也可以把一些TCP连接放到一个线程里。TcpConnection和EventLoop是线程安全的，可以跨线程调用。</p>
+<p>TcpServer直接支持多线程，它有两种模式：</p>
+<ul>
+<li>单线程，accept(2)与TcpConnection用同一个线程做IO。</li>
+<li>多线程，accept(2)与EventLoop在同一个线程，另外创建一个EventLoopThreadPool，新到的连接会按round-robin方式分配到线程池中。</li>
+</ul>
+<p>后文<span class="math inline">\(\S6.6\)</span>还会以Sudoku服务器为例再次介绍muduo的多线程模型。</p>
+<p>注意，目前muduo-protorpc与Ubuntu Linux
+12.04中通过apt-get安装的Protobuf编译器无法配合，请从源码编译安装Protobuf
+2.4.1。</p>
+<h4 id="结语"><strong>结语</strong></h4>
+<p>muduo是我对带见网络编程任务的总结，用它我能很容易地编写多线程的TCP服务器和客户端。muduo是我业余时间的作品，代码估计还有一些bug，功能也不完善（例如不支持signal处理），待日后慢慢改进吧。</p>
+<h2 id="使用教程">4. 使用教程</h2>
+<p>本节主要介绍muduo网络库的使用，其设计与实现将在第8章讲解。muduo只支持Linux
+2.6.x下的并发非阻塞TCP网络编程，它的核心是每个IO线程一个事件循环，把IO事件分发到回调函数上。我编写muduo网络库的目的之一就是简化日常的TCP网络编程，让程序员能把精力集中在业务逻辑的实现上，而不要天天和Sockets
+API较劲。借用Brooks的话来说，我希望muduo能减少网络编程中的偶发复杂性（accidental
+complexity）。</p>
+<h3 id="tcp网络编程本质论">4.1 TCP网络编程本质论</h3>
+<p>基于事件的非阻塞网络编程是编写高性能并发网络服务程序的主流模式，头一次使用这种方式编程通常需要转换思维模式。把原来“主动调用recv(2)来接收数据，主动调用accept(2)来接受新连接，主动调用send(2)来发送数据”的思路换成“注册一个收数据的回调，网络库收到数据会调用我，直接把数据提供给我，供我消费。注册一个接受连接的回调，网络库接受了新连接会回调我，直接把新的连接对象传给我，供我使用。需要发送数据的时候，只管往连接中写，网络库会负责无阻塞地发送。”这种编程方式有点像Win32的消息循环，消息循环中的代码应该避免阻塞，否则会让整个窗口失去响应，同理，事件处理函数也应该避免阻塞，否则会让网络服务失去响应。</p>
+<p>我认为，TCP网络编程最本质的是处理三个半事件：</p>
+<ol type="1">
+<li>连接的建立，包括服务端接受（accept）新连接和客户端成功发起（connect）连接。TCP连接一旦建立，客户端和服务端是平等的，可以各自收发数据。</li>
+<li>连接的断开，包括主动断开（close、shutdown）和被动断开（read(2)返回0）。</li>
+<li>消息到达，文件描述符可读。这是最为重要的一个事件，对它的处理方式决定了网络编程的风格（阻塞还是非阻塞，如何处理分包，应用层的缓冲如何设计，等等）。
+3.5
+消息发送完毕，这算半个。对于低流量的服务，可以不必关心这个事件；另外这里的“发送完毕”是指将数据写入操作系统的缓冲区，将由TCP协议栈负责数据的发送与重传，不代表对方已经收到数据。</li>
+</ol>
+<p>这其中有很多难点，也有很多细节需要注意，比方说：</p>
+<ul>
+<li><p>如果要主动关闭连接，如何保证对方已经收到全部数据？如果应用层有缓冲（这在非阻塞网络编程中是必需的，见下文），那么如何保证先发送完缓冲区中的数据，然后再断开连接？直接调用close(2)恐怕是不行的。</p></li>
+<li><p>如果主动发起连接，但是对方主动拒绝，如何定期（带backoff）重试？</p></li>
+<li><p>非阻塞网络编程该用边沿触发（edge trigger）还是电平触发（level
+trigger）？</p></li>
+<li><p>如果是电平触发，那么什么时候关注EPOLLET事件？会不会造成busy-loop？如果是边沿触发，如何防止漏读造成的饥饿？epoll(4)一定比poll(2)快吗？</p></li>
+<li><p>在非阻塞网络编程中，为什么要使用应用层发送缓冲区？假设应用程序需要发送40kB数据，但是操作系统的TCP发送缓冲区只有25kB剩余空间，那么剩下的15kB数据怎么办？如果等待OS缓冲区可用，会阻塞当前线程，因为不知道对方什么时候收到并读取数据。因此网络库应该把这15kB数据缓存起来，放到这个TCP链接的应用层发送缓冲区中，等socket变得可写的时候立刻发送数据，这样“发送”操作不会阻塞。如果应用程序随后又要发送50kB数据，而此时发送缓冲区中尚有未发送的数据（若干kB），那么网络库应该将这50kB数据追加到发送缓冲区的未尾，而不能立刻尝试write，因为这样有可能打乱数据的顺序。</p></li>
+<li><p>在非阻塞网络编程中，为什么要使用应用层接收缓冲区？假如一次读到的数据不够一个完整的数据包，那么这些已经读到的数据是不是应该先暂存在某个地方，等剩余的数据收到之后再一并处理？见lighttpd关于line-based分包的bug。假如数据是一个字节一个字节地到达，间隔10ms，每个字节触发一次文件描述符可读（readable）事件，程序是否还能正常工作？lighttpd在这个问题上出过安全漏洞。</p></li>
+<li><p>在非阻塞网络编程中，如何设计并使用缓冲区？一方面我们希望减少系统调用，一次读的数据越多越划算，那么似乎应该准备一个大的缓冲区。另一方面，我们希望减少内存占用。如果有10000个并发连接，每个连接一建立就分配各50kB的读写缓冲区(s)的话，将占用1GB内存，而大多数时候这些缓冲区的使用率很低。muduo用readv(2)结合栈上空间巧妙地解决了这个问题。</p></li>
+<li><p>如果使用发送缓冲区，万一接收方处理缓慢，数据会不会一直堆积在发送方，造成内存暴涨？如何做应用层的流量控制？</p></li>
+<li><p>如何设计并实现定时器？并使之与网络IO共用一个线程，以避免锁。</p>
+<p>这些问题在muduo的代码中可以找到答案。 ### 4.2 echo服务的实现</p></li>
+</ul>
+<p>muduo的使用非常简单，不需要从指定的类派生，也不用覆写虚函数，只需要注册几个回调函数去处理前面提到的三个半事件就行了。</p>
+<p>下面以经典的echo回显服务为例：</p>
+<ol type="1">
+<li>定义EchoServer class，不需要派生自任何基类。</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// echo.h</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;muduo/net/TcpServer.h&gt;</span></span><br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">EchoServer</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">EchoServer</span>(muduo::net::EventLoop* loop,<br>               <span class="hljs-type">const</span> muduo::net::InetAddress&amp; listenAddr);<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">start</span><span class="hljs-params">()</span></span>; <span class="hljs-comment">// calls server_.start();</span><br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">onConnection</span><span class="hljs-params">(<span class="hljs-type">const</span> muduo::net::TcpConnectionPtr&amp; conn)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">onMessage</span><span class="hljs-params">(<span class="hljs-type">const</span> muduo::net::TcpConnectionPtr&amp; conn,</span></span><br><span class="hljs-params"><span class="hljs-function">                   muduo::net::Buffer* buf,</span></span><br><span class="hljs-params"><span class="hljs-function">                   muduo::Timestamp time)</span></span>;<br><br>    muduo::net::EventLoop* loop_;<br>    muduo::net::TcpServer server_;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<hr>
+<p>Tips:</p>
+<p>这段代码是一个简单的服务器框架，使用了 <code>muduo</code>
+网络库来创建一个 <code>EchoServer</code> 类，<code>EchoServer</code>
+类的主要功能是接收客户端发送的消息，并将相同的消息回显给客户端。下面是代码的逐行解释：</p>
+<ol type="1">
+<li><p><code>#include &lt;muduo/net/TcpServer.h&gt;</code>：包含
+<code>muduo</code> 网络库中的 <code>TcpServer.h</code>
+头文件，这个头文件定义了 <code>TcpServer</code> 类，它是
+<code>EchoServer</code> 类的基础。</p></li>
+<li><p><code>class EchoServer &#123;</code>：定义了一个名为
+<code>EchoServer</code> 的类。</p></li>
+<li><p><code>public:</code>：定义了类的公共接口部分。</p></li>
+<li><p><code>EchoServer(muduo::net::EventLoop* loop,</code>：这是
+<code>EchoServer</code> 类的构造函数，它接受两个参数：一个
+<code>EventLoop</code> 指针和一个 <code>InetAddress</code>
+对象。<code>EventLoop</code> 是 <code>muduo</code>
+网络库中的事件循环类，负责处理所有的 I/O 事件；<code>InetAddress</code>
+表示服务器监听的地址和端口。</p></li>
+<li><p><code>const muduo::net::InetAddress&amp; listenAddr);</code>：<code>listenAddr</code>
+参数指定了服务器监听的网络地址和端口。</p></li>
+<li><p><code>void start();</code>：这是一个公共成员函数，用于启动服务器。它调用
+<code>server_.start()</code> 来开始接受连接。</p></li>
+<li><p><code>private:</code>：定义了类的私有成员和函数。</p></li>
+<li><p><code>void onConnection(const muduo::net::TcpConnectionPtr&amp; conn);</code>：这是一个私有成员函数，当有新的
+TCP 连接建立时会被调用。<code>conn</code> 参数是一个
+<code>TcpConnectionPtr</code> 对象，代表新的连接。</p></li>
+<li><p><code>void onMessage(const muduo::net::TcpConnectionPtr&amp; conn,</code>：这是另一个私有成员函数，当服务器接收到消息时会被调用。<code>conn</code>
+参数代表接收消息的连接。</p></li>
+<li><p><code>muduo::net::Buffer* buf,</code>：<code>buf</code>
+参数是一个 <code>Buffer</code>
+对象的指针，包含了接收到的消息数据。</p></li>
+<li><p><code>muduo::Timestamp time);</code>：<code>time</code>
+参数是一个 <code>Timestamp</code> 对象，表示消息接收的时间。</p></li>
+<li><p><code>muduo::net::EventLoop* loop_;</code>：这是一个私有成员变量，存储了指向
+<code>EventLoop</code> 对象的指针。</p></li>
+<li><p><code>muduo::net::TcpServer server_;</code>：这是一个私有成员变量，存储了
+<code>TcpServer</code> 对象，用于处理 TCP 连接和消息。</p></li>
+<li><p><code>&#125;;</code>：类定义结束。</p></li>
+</ol>
+<p>总结来说，这段代码定义了一个 <code>EchoServer</code> 类，它使用
+<code>muduo</code>
+网络库来监听网络连接，接收消息，并将接收到的消息回显给客户端。这个类的设计模式是典型的事件驱动服务器模型，其中
+<code>EventLoop</code> 负责事件的分发，<code>TcpServer</code>
+负责具体的网络操作。</p>
+<hr>
+<p>在构造函数里注册回调函数。</p>
+<p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// echo.cc</span><br>EchoServer::<span class="hljs-built_in">EchoServer</span>(muduo::net::EventLoop* loop,<br>                     <span class="hljs-type">const</span> muduo::net::InetAddress&amp; listenAddr)<br>    : <span class="hljs-built_in">loop_</span>(loop),<br>      <span class="hljs-built_in">server_</span>(loop, listenAddr, <span class="hljs-string">&quot;EchoServer&quot;</span>) &#123;<br>    server_.<span class="hljs-built_in">setConnectionCallback</span>(<br>        boost::<span class="hljs-built_in">bind</span>(&amp;EchoServer::onConnection, <span class="hljs-keyword">this</span>, _1));<br>    server_.<span class="hljs-built_in">setMessageCallback</span>(<br>        boost::<span class="hljs-built_in">bind</span>(&amp;EchoServer::onMessage, <span class="hljs-keyword">this</span>, _1, _2, _3));<br>&#125;<br></code></pre></td></tr></table></figure></p>
+<ol start="2" type="1">
+<li>实现EchoServer::onConnection和EchoServer::onMessage。</li>
+</ol>
+<p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">EchoServer::onConnection</span><span class="hljs-params">(<span class="hljs-type">const</span> muduo::net::TcpConnectionPtr&amp; conn)</span> </span>&#123;<br>    LOG_INFO &lt;&lt; <span class="hljs-string">&quot;EchoServer &quot;</span> &lt;&lt; conn-&gt;<span class="hljs-built_in">peerAddress</span>().<span class="hljs-built_in">toIpPort</span>()<br>             &lt;&lt; <span class="hljs-string">&quot; -&gt; &quot;</span> &lt;&lt; conn-&gt;<span class="hljs-built_in">localAddress</span>().<span class="hljs-built_in">toIpPort</span>()<br>             &lt;&lt; <span class="hljs-string">&quot; is &quot;</span> &lt;&lt; (conn-&gt;<span class="hljs-built_in">connected</span>() ? <span class="hljs-string">&quot;UP&quot;</span> : <span class="hljs-string">&quot;DOWN&quot;</span>);<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">EchoServer::onMessage</span><span class="hljs-params">(<span class="hljs-type">const</span> muduo::net::TcpConnectionPtr&amp; conn,</span></span><br><span class="hljs-params"><span class="hljs-function">                         muduo::net::Buffer* buf,</span></span><br><span class="hljs-params"><span class="hljs-function">                         muduo::Timestamp time)</span> </span>&#123;<br>    <span class="hljs-function">muduo::string <span class="hljs-title">msg</span><span class="hljs-params">(buf-&gt;retrieveAllAsString())</span></span>;<br>    LOG_INFO &lt;&lt; conn-&gt;<span class="hljs-built_in">name</span>() &lt;&lt; <span class="hljs-string">&quot; echo &quot;</span> &lt;&lt; msg.<span class="hljs-built_in">size</span>() &lt;&lt; <span class="hljs-string">&quot; bytes&quot;</span>;<br>    LOG_INFO &lt;&lt; <span class="hljs-string">&quot;data received at &quot;</span> &lt;&lt; time.<span class="hljs-built_in">toString</span>();<br>    conn-&gt;<span class="hljs-built_in">send</span>(msg);<br>&#125;<br></code></pre></td></tr></table></figure></p>
+<p>L10和L13是echo服务的“业务逻辑”：把收到的数据原封不动地发回客户端。注意我们不用担心L13的send(msg)是否完整地发送了数据，因为muduo网络库会帮我们管理发送缓冲区。</p>
+<p>这两个函数体现了“基于事件编程”的典型做法，即程序主体是被动等待事件发生，事件发生之后网络库会调用（回调）事先注册的事件处理函数（event
+handler）。在onConnection()函数中，conn参数是TcpConnection对象的shared_ptr。TcpConnection::connected()返回一个bool值，表明目前连接是建立还是断开，TcpConnection的peerAddress()和localAddress()成员函数分别返回对方和本地的地址（以InetAddress对象表示的IP和port）。</p>
+<p>在onMessage()函数中，conn参数是收到数据的那个TCP连接；buf是已经收到的数据，buf的数据会累积，直到用户从中取走（retrieve）数据。注意buf是指针，表明用户代码可以修改（消费）buffer；time是收到数据的确切时间，即epoll_wait(2)返回的时间，注意这个时间通常比read(2)发生的时间略早，可以用来正确测量程序的消息处理延迟。另外，Timestamp对象采用pass-by-value，而不是pass-by-(const)reference，这是有意的，因为在x86-64上可以直接通过寄存器传参。</p>
+<ol start="3" type="1">
+<li>在main()里用EventLoop让整个程序跑起来。</li>
+</ol>
+<p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// main.cc</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;echo.h&quot;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;muduo/base/Logging.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;muduo/net/EventLoop.h&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    LOG_INFO &lt;&lt; <span class="hljs-string">&quot;pid=&quot;</span> &lt;&lt; <span class="hljs-built_in">getpid</span>();<br>    muduo::net::EventLoop loop;<br>    muduo::<span class="hljs-function">net::InetAddress <span class="hljs-title">listenAddr</span><span class="hljs-params">(<span class="hljs-number">2007</span>)</span></span>;<br>    <span class="hljs-function">EchoServer <span class="hljs-title">server</span><span class="hljs-params">(&amp;loop, listenAddr)</span></span>;<br>    server.<span class="hljs-built_in">start</span>();<br>    loop.<span class="hljs-built_in">loop</span>();<br>&#125;<br></code></pre></td></tr></table></figure></p>
+<p>完整的代码见muduo/examples/simple/echo。这个几十行的小程序实现了一个单线程并发的echo服务程序，可以同时处理多个连接。</p>
+<p>这个程序用到了TcpServer、EventLoop、TcpConnection、Buffer这几个class，也大致反映了这几个class的典型用法，后文还会详细介绍这几个class。注意，以后的代码大多会省略namespace。</p>
+<h3 id="七步实现finger服务">4.3 七步实现finger服务</h3>
+<p>Python
+Twisted是一款非常好的网络库，它也采用Reactor作为网络编程的基本模型，所以从使用上与muduo颇有相似之处（当然，muduo没有deferreds）。finger是Twisted文档的一个经典例子，本文展示如何用muduo来实现最简单的finger服务端。限于篇幅，只实现finger01~finger07。代码位于examples/twisted/finger。</p>
+<ol type="1">
+<li>拒绝连接。什么都不做，程序空等。</li>
+</ol>
+<p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// finger01.cc</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;muduo/net/EventLoop.h&gt;</span></span><br><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> muduo;<br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> muduo::net;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    EventLoop loop;<br>    loop.<span class="hljs-built_in">loop</span>();<br>&#125;<br></code></pre></td></tr></table></figure></p>
+<ol start="2" type="1">
+<li>接受新连接。在1079端口侦听新连接，接受连接之后什么都不做，程序空等。muduo会自动丢弃收到的数据。</li>
+</ol>
+<p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// finger02.cc</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;muduo/net/EventLoop.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;muduo/net/TcpServer.h&gt;</span></span><br><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> muduo;<br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> muduo::net;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    EventLoop loop;<br>    <span class="hljs-function">TcpServer <span class="hljs-title">server</span><span class="hljs-params">(&amp;loop, InetAddress(<span class="hljs-number">1079</span>), <span class="hljs-string">&quot;Finger&quot;</span>)</span></span>;<br>    server.<span class="hljs-built_in">start</span>();<br>    loop.<span class="hljs-built_in">loop</span>();<br>&#125;<br></code></pre></td></tr></table></figure></p>
+<ol start="3" type="1">
+<li>主动断开连接。接受新连接之后主动断开。</li>
+</ol>
+<p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// finger03.cc</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">onConnection</span><span class="hljs-params">(<span class="hljs-type">const</span> TcpConnectionPtr&amp; conn)</span> </span>&#123;<br>    <span class="hljs-keyword">if</span> (conn-&gt;<span class="hljs-built_in">connected</span>()) &#123;<br>        conn-&gt;<span class="hljs-built_in">shutdown</span>();<br>    &#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    EventLoop loop;<br>    <span class="hljs-function">TcpServer <span class="hljs-title">server</span><span class="hljs-params">(&amp;loop, InetAddress(<span class="hljs-number">1079</span>), <span class="hljs-string">&quot;Finger&quot;</span>)</span></span>;<br>    server.<span class="hljs-built_in">setConnectionCallback</span>(onConnection);<br>    server.<span class="hljs-built_in">start</span>();<br>    loop.<span class="hljs-built_in">loop</span>();<br>&#125;<br></code></pre></td></tr></table></figure></p>
+<ol start="4" type="1">
+<li>读取用户名，然后断开连接。如果读到一行以，就断开连接。注意这段代码有安全问题，如果恶意客户端不断发送数据而不换行，会撑爆服务端的内存。另外，Buffer::findCRLF()是线性查找，如果客户端每次发一个字节，服务端的时间复杂度为O(N^2)，会消耗CPU资源。</li>
+</ol>
+<p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// finger04.cc</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">onMessage</span><span class="hljs-params">(<span class="hljs-type">const</span> TcpConnectionPtr&amp; conn,</span></span><br><span class="hljs-params"><span class="hljs-function">               Buffer* buf,</span></span><br><span class="hljs-params"><span class="hljs-function">                Timestamp receiveTime)</span> </span>&#123;<br>    <span class="hljs-keyword">if</span> (buf-&gt;<span class="hljs-built_in">findCRLF</span>()) &#123;<br>        conn-&gt;<span class="hljs-built_in">shutdown</span>();<br>    &#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    EventLoop loop;<br>    <span class="hljs-function">TcpServer <span class="hljs-title">server</span><span class="hljs-params">(&amp;loop, InetAddress(<span class="hljs-number">1079</span>), <span class="hljs-string">&quot;Finger&quot;</span>)</span></span>;<br>    server.<span class="hljs-built_in">setMessageCallback</span>(onMessage);<br>    server.<span class="hljs-built_in">start</span>();<br>    loop.<span class="hljs-built_in">loop</span>();<br>&#125;<br></code></pre></td></tr></table></figure></p>
+<ol start="5" type="1">
+<li>读取用户名、输出错误信息，然后断开连接。如果读到一行以，就发送一条出错信息，然后断开连接。安全问题同上。</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">onMessage</span><span class="hljs-params">(<span class="hljs-type">const</span> TcpConnectionPtr&amp; conn,</span></span><br><span class="hljs-params"><span class="hljs-function">               Buffer* buf,</span></span><br><span class="hljs-params"><span class="hljs-function">                Timestamp receiveTime)</span> </span>&#123;<br>    <span class="hljs-keyword">if</span> (buf-&gt;<span class="hljs-built_in">findCRLF</span>()) &#123;<br>        conn-&gt;<span class="hljs-built_in">send</span>(<span class="hljs-string">&quot;No such user\r\n&quot;</span>);<br>        conn-&gt;<span class="hljs-built_in">shutdown</span>();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ol start="6" type="1">
+<li>从空的UserMap里查找用户。从一行消息中拿到用户名（L18），在UserMap里查找，然后返回结果。安全问题同上。</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">typedef</span> std::map&lt;string, string&gt; UserMap;<br><br>UserMap users;<br><span class="hljs-function">string <span class="hljs-title">getUser</span><span class="hljs-params">(<span class="hljs-type">const</span> string&amp; user)</span> </span>&#123;<br>    string result = <span class="hljs-string">&quot;No such user&quot;</span>;<br>    UserMap::iterator it = users.<span class="hljs-built_in">find</span>(user);<br>    <span class="hljs-keyword">if</span> (it != users.<span class="hljs-built_in">end</span>()) &#123;<br>        result = it-&gt;second;<br>    &#125;<br>    <span class="hljs-keyword">return</span> result;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">onMessage</span><span class="hljs-params">(<span class="hljs-type">const</span> TcpConnectionPtr&amp; conn,</span></span><br><span class="hljs-params"><span class="hljs-function">               Buffer* buf,</span></span><br><span class="hljs-params"><span class="hljs-function">                Timestamp receiveTime)</span> </span>&#123;<br>    <span class="hljs-type">const</span> <span class="hljs-type">char</span>* crlf = buf-&gt;<span class="hljs-built_in">findCRLF</span>();<br>    <span class="hljs-keyword">if</span> (crlf) &#123;<br>        <span class="hljs-function">string <span class="hljs-title">user</span><span class="hljs-params">(buf-&gt;peek(), crlf)</span></span>;<br>        conn-&gt;<span class="hljs-built_in">send</span>(<span class="hljs-built_in">getUser</span>(user) + <span class="hljs-string">&quot;\r\n&quot;</span>);<br>        buf-&gt;<span class="hljs-built_in">retrieveUntil</span>(crlf + <span class="hljs-number">2</span>);<br>        conn-&gt;<span class="hljs-built_in">shutdown</span>();<br>    &#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    EventLoop loop;<br>    <span class="hljs-function">TcpServer <span class="hljs-title">server</span><span class="hljs-params">(&amp;loop, InetAddress(<span class="hljs-number">1079</span>), <span class="hljs-string">&quot;Finger&quot;</span>)</span></span>;<br>    server.<span class="hljs-built_in">setMessageCallback</span>(onMessage);<br>    server.<span class="hljs-built_in">start</span>();<br>    loop.<span class="hljs-built_in">loop</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
+<ol start="7" type="1">
+<li>往UserMap里添加一个用户。。</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    users[<span class="hljs-string">&quot;schen&quot;</span>] = <span class="hljs-string">&quot;Happy and well&quot;</span>;<br>    EventLoop loop;<br>    <span class="hljs-function">TcpServer <span class="hljs-title">server</span><span class="hljs-params">(&amp;loop, InetAddress(<span class="hljs-number">1079</span>), <span class="hljs-string">&quot;Finger&quot;</span>)</span></span>;<br>    server.<span class="hljs-built_in">setMessageCallback</span>(onMessage);<br>    server.<span class="hljs-built_in">start</span>();<br>    loop.<span class="hljs-built_in">loop</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>以上就是全部内容，可以用telnet（1）扮演客户端来测试我们的简单finger服务端。</p>
+<h4 id="telnet测试"><strong>Telnet测试</strong></h4>
+<p>在一个命令行窗口运行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ ./bin/twisted_finger07<br></code></pre></td></tr></table></figure>
+<p>另一个命令行运行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ telnet localhost 1079<br>Trying 127.0.0.1...<br>Connected to localhost.<br>Escape character is <span class="hljs-string">&#x27;^]&#x27;</span>.<br>muduo<br>No such user<br>Connection closed by foreign host<br></code></pre></td></tr></table></figure>
+<p>再试一次：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ telnet localhost 1079<br>Trying 127.0.0.1...<br>Connected to localhost.<br>Escape character is <span class="hljs-string">&#x27;^]&#x27;</span>.<br>schen<br>Happy and well<br>Connection closed by foreign host<br></code></pre></td></tr></table></figure>
+<p>冒烟测试过关。</p>
+<hr>
+<p>Tips:</p>
+<p>冒烟测试（Smoke
+Testing）是一种软件测试策略，通常在软件开发过程中的早期阶段进行。它的主要目的是快速验证软件的基本功能是否按预期工作，以确保软件没有严重的缺陷，从而避免在后续更详细的测试中浪费资源。</p>
+<p>以下是冒烟测试的一些关键特点：</p>
+<ol type="1">
+<li><p><strong>快速检查</strong>：冒烟测试通常在软件构建完成后立即执行，以快速识别明显的问题。</p></li>
+<li><p><strong>基本功能验证</strong>：它主要关注软件的核心功能，确保这些功能至少可以运行，即使它们可能不完全符合预期。</p></li>
+<li><p><strong>减少风险</strong>：通过识别和修复关键问题，冒烟测试有助于减少在后续测试阶段发现严重缺陷的风险。</p></li>
+<li><p><strong>自动化</strong>：冒烟测试通常是自动化的，以确保快速和一致的执行。</p></li>
+<li><p><strong>构建验收</strong>：在某些情况下，冒烟测试可以作为构建验收测试（Build
+Verification Test,
+BVT）的一部分，以确保构建是稳定的，可以进行进一步的测试。</p></li>
+<li><p><strong>决策依据</strong>：如果冒烟测试失败，团队可能会决定不继续进行更详细的测试，而是先修复发现的问题。</p></li>
+<li><p><strong>非详尽测试</strong>：冒烟测试不是详尽的测试，它不覆盖所有的测试用例，只关注最关键的部分。</p></li>
+</ol>
+<p>冒烟测试是敏捷开发和持续集成/持续部署（CI/CD）流程中的一个重要组成部分，有助于确保软件质量并加快开发周期。</p>
+<hr>
+<h2 id="性能评测">5. 性能评测</h2>
+<p>我在一开始编写muduo的时候并没有以高性能为首要目标。在2010年8月发布之后，有网友询问其性能与其他常见网络库相比如何，因此我才加入了一些性能对比的示例代码。我很惊奇地发现，在muduo擅长的领域（TCP长连接），其性能不比任何开源网络库差。</p>
+<p><strong>性能对比原则：</strong>采用对方的性能测试方案，用muduo实现功能相同或类似的程序，然后放到相同的软硬件环境中对比。</p>
+<p>注意这里的测试只是简单地比较了平均值；其实在严肃的性能对比中至少还应该考虑分布和百分位数（percentile）的值。限于篇幅，此处从略。</p>
+<h3 id="muduo与boost.asiolibevent2的吞吐量对比">5.1
+muduo与Boost.Asio、libevent2的吞吐量对比</h3>
+<p>我在编写muduo的时候并没有以高并发、高吞吐为主要目标。但出乎我的意料，pingpong测试表明，muduo的吞吐量比Boost.Asio高15%以上；比libevent2高18%以上，个别情况甚至达到70%。</p>
+<p>测试对象：</p>
+<ul>
+<li>boost 1.40中的asio 1.4.3</li>
+<li>asio 1.4.5（http://think-async.com/Asio/Download）</li>
+<li>libevent
+2.0.6-rc（http://monkey.org/~provos/libevent-2.0.6-rc.tar.gz）</li>
+<li>muduo 0.1.1</li>
+</ul>
+<p>测试代码：</p>
+<ul>
+<li>asio的测试代码取自http://asio.sourceforge.net/viewvc/asio/asio/src/tests/performance/，未做更改。</li>
+<li>我自己编写了libevent2的pingpong测试代码，路径是recipes/pingpong/libevent/。</li>
+<li>muduo的测试代码位于examples/pingpong/，代码如gist7所示。</li>
+</ul>
+<p>muduo和asio的优化编译参数均为-O2 -finline-limit=1000。</p>
+<p>测试环境：</p>
+<ul>
+<li>硬件：DELL 490工作站，双路Intel四核Xeon E5320
+CPU，共8核，主频1.86GHz，内存16GiB。</li>
+<li>软件：操作系统为Ubuntu Linux Server 10.04.1 LTS x86_64，编译器是g++
+4.4.3。</li>
+</ul>
+<p>测试方法：</p>
+<p>依据asio性能测试的办法，用pingpong协议来测试muduo、asio、libevent2在单机上的吞吐量。</p>
+<p>简单地说，pingpong协议是客户端和服务器都实现echo协议。当TCP连接建立时，客户端向服务器发送一些数据，服务器会echo回这些数据，然后客户端再echo回服务器。这些数据就会像乒乓球一样在客户端和服务器之间来回传送，直到有一方断开连接为止。这是用来测试吞吐量的常用办法。注意数据是无格式的，双方都是收到多少数据就反射回去多少数据，并不拆包，这与后面的ZeroMQ延迟测试不同。</p>
+<p>我主要做了两项测试：</p>
+<ul>
+<li>单线程测试。客户端与服务器运行在同一台机器，均为单线程，测试并发连接数为1/10/100/1000/10000时的吞吐量。</li>
+<li>多线程测试。并发连接数为100或1000，服务器和客户端的线程数同时设为1/2/3/4。（由于我家里只有一台8核机器，而且服务器和客户端运行在同一台机器上，线程数大于4没有意义。）</li>
+</ul>
+<p>在所有测试中，pingpong消息的大小均为16KiB。测试用的shell脚本可从http://gist.github.com/564985下载。</p>
+<p>在同一台机器测试吞吐量的原因如下：</p>
+<ul>
+<li>现在的CPU很快，即便是单线程单TCP连接也能把千兆以太网的带宽跑满。如果用两台机器，所有的吞吐量测试结果都将是110MiB/s，失去了对比的意义。（用Python也能跑出同样的吞吐量，或许可以对比哪个库占的CPU少。）</li>
+<li>在同一台机器上测试，可以在CPU资源相同的情况下，单纯对比网络库的效率。也就是说在单线程下，服务端和客户端各占满1个CPU，比较哪个库的吞吐量高。</li>
+</ul>
+<p>测试结果：</p>
+<p>单线程测试的结果（见图6-3），数字越大越好。</p>
+<p><img src="/2024/12/25/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/6-muduo%E7%BD%91%E7%BB%9C%E5%BA%93%E7%AE%80%E4%BB%8B/image-20241225164452586.png" srcset="/img/loading.gif" lazyload></p>
+<p>以上结果让人大跌眼镜，muduo居然比libevent2快70%！跟踪libevent2的源代码发现，它每次最多从socket读取4096字节的数据（证据在buffer.c的evbuffer_read()函数），怪不得吞吐量比muduo小很多。因为在这一测试中，muduo每次读取16384字节，系统调用的性价比较高。</p>
+<p>为了公平起见，我再测了一次，这回两个库都发送4096字节的消息（见图6-4）。</p>
+<p><img src="/2024/12/25/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/6-muduo%E7%BD%91%E7%BB%9C%E5%BA%93%E7%AE%80%E4%BB%8B/image-20241225164528399.png" srcset="/img/loading.gif" lazyload></p>
+<p>测试结果表明muduo的吞吐量平均比libevent2高18%以上。</p>
+<p>多线程测试的结果（见图6-5），数字越大越好。</p>
+<p><img src="/2024/12/25/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/6-muduo%E7%BD%91%E7%BB%9C%E5%BA%93%E7%AE%80%E4%BB%8B/image-20241225164555150.png" srcset="/img/loading.gif" lazyload></p>
+<p>测试结果表明muduo的吞吐量平均比asio高15%以上。</p>
+<h4 id="讨论"><strong>讨论</strong></h4>
+<p>muduo出乎意料地比asio性能优越，我想主要得益于其简单的设计和简洁的代码。asio在多线程测试中表现不佳，我猜测其主要原因是测试代码只使用了一个io_service，如果改用“io_service
+per
+CPU”的话，其性能应该有所提高。我对asio的了解程度仅限于能读懂其代码，希望能有asio高手编写“io_service
+per CPU”的pingpong测试，以便与muduo做一个公平的比较。</p>
+<p>由于libevent2每次最多从网络读取4096字节，这大大限制了它的吞吐量。</p>
+<p>pingPong测试很容易实现，欢迎其他网络库（ACE、POCO、libevent等）也能加入到对比中来，期待这些库的高手出马。</p>
+<h3 id="击鼓传花对比muduo与libevent2的事件处理效率">5.2
+击鼓传花：对比muduo与libevent2的事件处理效率</h3>
+<p>前面我们比较了muduo和libevent2的吞吐量，得到的结论是muduo比libevent2快18%。有人会说，libevent2并不是为高吞吐量的应用场景而设计的，这样的比较不公平，胜之不武。为了公平起见，这回我们用libevent2自带的性能测试程序（击鼓传花）来对比muduo和libevent2在高并发情况下的IO事件处理效率。</p>
+<p>测试用的软硬件环境与前一小节相同，另外我还在自已的DELL
+E6400笔记本电脑上运行了测试，结果也附在后面。</p>
+<p>测试的场景是：有1000个人围成一圈，玩击鼓传花的游戏，一开始第1个人手里有花，他把花传给右手边的人，那个人再继续把花传给右手边的人，当花转手100次之后游戏停止，记录从开始到结束的时间。</p>
+<p>用程序表达是，有1000个网络连接（socketpair(2)或pipe(2)），数据在这些连接中顺次传递，一开始往第1个连接里写1个字节，然后从这个连接的另一端读出这1个字节，再写入第2个连接，然后读出来继续写到第3个连接，直到一共写了100次之后程序停止，记录所用的时间。</p>
+<p>以上是只有一个活动连接的场景，我们实际测试的是100个或1000个活动连接（即100朵花或1000朵花，均匀分散在人群手中），而连接总数（即并发数）从100~100000（10万）。注意每个连接是两个文件描述符，为了运行测试，需要调高每个进程能打开的文件数，比如设为256000。</p>
+<p>libevent2的测试代码位于test/bench.c，我修复了2.0.6-rc版里的一个小bug。修正后的代码见已经提交给libevent2作者，现在下载的最新版本是正确的。</p>
+<p>muduo的测试代码位于examples/pingpong/bench.cc。</p>
+<h4 id="测试结果与讨论"><strong>测试结果与讨论</strong></h4>
+<p>第一轮，分别用100个活动连接和1000个活动连接，无超时，读写100次，测试一次游戏的总时间（包含初始化）和事件处理的时间（不包含注册event
+watcher）随连接数（并发数）变化的情况。具体解释见libev的性能测试文档，不同之处在于我们不比较timer
+event的性能，只比较IO
+event的性能。对每个并发数，程序循环25次，刨去第一次的热身数据，后24次算平均值。测试用的脚本是libev的作者Marc
+Lehmann写的，我略做改用，用于测试muduo和libevent2。</p>
+<p>第一轮的结果（见图6-6），请先只看“×”线（实线）和“+”线（粗虚线）。“×”线是libevent2用的时间，“+”线是muduo用的时间。数字越小越好。注意这个图的横坐标是对数的，每一个数量级的取值点为1，2，3，4，5，6，7.5，10。</p>
+<p><img src="/2024/12/25/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/6-muduo%E7%BD%91%E7%BB%9C%E5%BA%93%E7%AE%80%E4%BB%8B/1735116618924.png" srcset="/img/loading.gif" lazyload></p>
+<p>从两条线的对比可以看出：</p>
+<ol type="1">
+<li><p>libevent2在初始化event
+watcher方面比muduo快20%（左边的两个图）。</p></li>
+<li><p>在事件处理方面（右边的两个图）：</p>
+<ol type="a">
+<li><p>在100个活动连接的情况下，当总连接数（并发数）小于1000或大于30000时，三者性能差不多；当总连接数大于1000或小于30000时，libevent2明显领先。</p></li>
+<li><p>在1000个活动连接的情况下，当并发数小于10000时，libevent2和muduo得分接近；当并发数大于10000时，muduo明显占优。</p></li>
+</ol></li>
+</ol>
+<p>这两个问题值得探讨：</p>
+<ol type="1">
+<li>为什么muduo花在初始化上的时间比较多？</li>
+<li>为什么在一些情况下它比libevent2慢很多？</li>
+</ol>
+<p>我仔细分析了其中的原因，并参考了libev的作者Marc
+Lehmann的观点，结论是：在第一轮初始化时，libevent2和muduo都是用epoll_ctl(fd,
+EPOLL_CTL_ADD, ...)来添加文件描述符的event
+watcher。不同之处在于，在后面24轮中，muduo使用了epoll_ctl(fd,
+EPOLL_CTL_MOD, -)来更新已有的event
+watcher；然而libevent2继续调用epoll_ctl(fd, EPOLL_CTL_ADD,
+.)来重复添加fd，并忽略返回的错误码EEXIST（File
+exists）。在这种重复添加的情况下，EPOLL_CTL_ADD将会快速地返回错误，而EPOLL_CTL_MOD会做更多的工作，花的时间也更长。于是libevent2捡了个便宜。</p>
+<p>为了验证这个结论，我改动了muduo，让它每次都用EPOLL_CTL_ADD方式初始化和更新event
+watcher，并忽略返回的错误。</p>
+<p>第二轮测试结果见图6-6的细虚线，可见改动之后的muduo的初始化性能比libevent2更好，事件处理的耗时也有所降低（我推测是kernel内部的原因）。</p>
+<p>这个改动只是为了验证想法，我并没有把它放到muduo最终的代码中去，这或许可以留作日后优化的余地。（具体的改动是muduo/net/poller/EPollPoller.cc第138行和173行，读者可自行验证。）</p>
+<p>同样的测试在双核笔记本电脑上运行了一次，结果如图6-7所示。（我的笔记本电脑的CPU主频是2.4GHz，高于台式机的1.86GHz，所以用时较少。）</p>
+<p><img src="/2024/12/25/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/6-muduo%E7%BD%91%E7%BB%9C%E5%BA%93%E7%AE%80%E4%BB%8B/1735116852903.png" srcset="/img/loading.gif" lazyload></p>
+<p>结论：在事件处理效率方面，muduo与libevent2总体比较接近，各擅胜场。在并发量特别大的情况下（大于10000），muduo略微占优。</p>
+<h3 id="muduo与nginx的吞吐量对比">5.3 muduo与Nginx的吞吐量对比</h3>
+<p>本节简单对比了Nginx 1.0.12和muduo
+0.3.1内置的简陋HTTP服务器的长连接性能。其中muduo的HTTP实现和测试代码位于muduo/net/http/。</p>
+<p>测试环境：</p>
+<ul>
+<li>服务端，运行HTTP server，8核DELL 490工作站，Xeon E5320 CPU。</li>
+<li>客户端，运行ab和weighttp，4核i5-2500 CPU。</li>
+<li>网络：普通家用千兆网。</li>
+</ul>
+<p>测试方法为了公平起见，Nginx和muduo都没有访问文件，而是直接返回内存中的数据。毕竟我们想比较的是程序的网络性能，而不是机器的磁盘性能。另外这里客户机的性能优于服务机，因为我们要给服务端HTTP
+server施压，试图使其饱和，而不是测试HTTP client的性能。</p>
+<p>muduo HTTP测试服务器的主要代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">onRequest</span><span class="hljs-params">(<span class="hljs-type">const</span> HttpRequest&amp; req, HttpResponse* resp)</span> </span>&#123;<br>    <span class="hljs-keyword">if</span> (req.<span class="hljs-built_in">path</span>() == <span class="hljs-string">&quot;/&quot;</span>) &#123;<br>        <span class="hljs-comment">// do nothing</span><br>    &#125; <span class="hljs-built_in">elseif</span> (req.path == <span class="hljs-string">&quot;/hello&quot;</span>) &#123;<br>        resp-&gt;<span class="hljs-built_in">setStatusCode</span>(HttpResponse::k200Ok);<br>        resp-&gt;<span class="hljs-built_in">setStatusMessage</span>(<span class="hljs-string">&quot;Ok&quot;</span>);<br>        resp-&gt;<span class="hljs-built_in">setContentType</span>(<span class="hljs-string">&quot;text/plain&quot;</span>);<br>        resp-&gt;<span class="hljs-built_in">addHeader</span>(<span class="hljs-string">&quot;Server&quot;</span>, <span class="hljs-string">&quot;Muduo&quot;</span>);<br>        resp-&gt;<span class="hljs-built_in">setBody</span>(<span class="hljs-string">&quot;hello, world!\n&quot;</span>);<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        resp-&gt;<span class="hljs-built_in">setStatusCode</span>(HttpResponse::k404NotFound);<br>        resp-&gt;<span class="hljs-built_in">setStatusMessage</span>(<span class="hljs-string">&quot;Not Found&quot;</span>);<br>        resp-&gt;<span class="hljs-built_in">setCloseConnection</span>(<span class="hljs-literal">true</span>);<br>    &#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span>* argv[])</span> </span>&#123;<br>    <span class="hljs-type">int</span> numThreads = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">if</span> (argc &gt; <span class="hljs-number">1</span>) &#123;<br>        <span class="hljs-comment">// benchmark = true;</span><br>        Logger::<span class="hljs-built_in">setLogLevel</span>(Logger::WARN);<br>        numThreads = <span class="hljs-built_in">atoi</span>(argv[<span class="hljs-number">1</span>]);<br>    &#125;<br>    EventLoop loop;<br>    <span class="hljs-function">HttpServer <span class="hljs-title">server</span><span class="hljs-params">(&amp;loop, InetAddress(<span class="hljs-number">8000</span>), <span class="hljs-string">&quot;dummy&quot;</span>)</span></span>;<br>    server.<span class="hljs-built_in">setHttpCallback</span>(onRequest);<br>    server.<span class="hljs-built_in">setThreadNum</span>(numThreads);<br>    server.<span class="hljs-built_in">start</span>();<br>    loop.<span class="hljs-built_in">loop</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>Nginx使用了章亦春的HTTP
+echo模块来实现直接返回数据。配置文件如下：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-comment">#user nobody;</span><br><span class="hljs-attribute">worker_processes</span> <span class="hljs-number">4</span>;<br><span class="hljs-section">events</span> &#123;<br>    <span class="hljs-attribute">worker_connections</span> <span class="hljs-number">10240</span>;<br>&#125;<br><span class="hljs-section">http</span> &#123;<br>    <span class="hljs-attribute">include</span> mime.types;<br>    <span class="hljs-attribute">default_type</span> application/octet-stream;<br>    <span class="hljs-attribute">access_log</span> <span class="hljs-literal">off</span>;<br>    <span class="hljs-attribute">sendfile</span> <span class="hljs-literal">on</span>;<br>    <span class="hljs-attribute">tcp_nopush</span> <span class="hljs-literal">on</span>;<br>    <span class="hljs-attribute">keepalive_timeout</span> <span class="hljs-number">65</span>;<br>    <span class="hljs-section">server</span> &#123;<br>        <span class="hljs-attribute">listen</span> <span class="hljs-number">8080</span>;<br>        <span class="hljs-attribute">server_name</span> localhost;<br>        <span class="hljs-section">location</span> / &#123;<br>            <span class="hljs-attribute">root</span> html;<br>            <span class="hljs-attribute">index</span> index.html index.htm;<br>        &#125;<br>        <span class="hljs-section">location</span> /hello &#123;<br>            <span class="hljs-attribute">default_type</span> text/plain;<br>            <span class="hljs-attribute">echo</span> <span class="hljs-string">&quot;hello, world!&quot;</span>;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>客户端运行以下命令来获取/hello的内容，服务端返回字符串"hello,
+world!"。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">./ab -n 100000 -k -r -c 100 -m 1000 10.0.0.9:8080/hello<br></code></pre></td></tr></table></figure>
+<p>先测试单线程的性能（见图6-8），横轴是并发连接数，纵轴为每秒完成的HTTP请求响应数目，下同。在测试期间，ab的CPU使用率低于70%，客户端游刃有余。</p>
+<p><img src="/2024/12/25/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/6-muduo%E7%BD%91%E7%BB%9C%E5%BA%93%E7%AE%80%E4%BB%8B/image-20241225165744279.png" srcset="/img/loading.gif" lazyload></p>
+<p>再对比muduo 4线程和Nginx
+4工作进程的性能（见图6-9）。当连接数大于200时，top(1)显示ab的CPU使用率达到85%，已经饱和，因此换用weighttp（双线程）来完成其余测试。</p>
+<p><img src="/2024/12/25/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/6-muduo%E7%BD%91%E7%BB%9C%E5%BA%93%E7%AE%80%E4%BB%8B/image-20241225165801630.png" srcset="/img/loading.gif" lazyload></p>
+<p>CPU使用率对比（百分比是top(1)显示的数值）：</p>
+<ul>
+<li>10000并发连接，4 workers/threads，muduo是4×83%，Nginx是4×75%。</li>
+<li>1000并发连接，4 workers/threads，muduo是4×85%，Nginx是4×78%。</li>
+</ul>
+<p>初看起来Nginx的CPU使用率略低，但是实际上二者都已经把CPU资源耗尽了。与CPU
+benchmark不同，涉及IO的benchmark在满负载下的CPU使用率不会达到100%，因为内核要占用一部分时间处理IO。这里的数值差异说明muduo和Nginx在满负荷的情况下，用户态和内核态的比重略有区别。</p>
+<p>测试结果显示muduo多数情况下略快，Nginx和muduo在合适的条件下qps（每秒请求数）都能超过10万。值得说明的是，muduo没有实现完整的HTTP服务器，而只是实现了满足最基本要求的HTTP协议，因此这个测试结果并不是说明muduo比Nginx更适合用做httpd，而是说明muduo在性能方面没有犯低级错误。</p>
+<h3 id="muduo与zeromq的延迟对比">5.4 muduo与ZeroMQ的延迟对比</h3>
+<p>本节我们用ZeroMQ自带的延迟和吞吐量测试与muduo做一对比，muduo代码位于examples/zeromq/。测试的内容很简单，可以认为是<span class="math inline">\(\S6.5.1\)</span>
+pingpong测试的翻版，不同之处在于这里的消息的长度是固定的，收到完整的消息再echo回发送方，如此往复。测试结果如图6-10所示，横轴为消息的长度，纵轴为单程延迟（微秒）。可见在消息长度小于16KiB时，muduo的延迟稳定地低于ZeroMQ。</p>
+<p><img src="/2024/12/25/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/6-muduo%E7%BD%91%E7%BB%9C%E5%BA%93%E7%AE%80%E4%BB%8B/image-20241225165921758.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="详解muduo多线程模型">6. 详解muduo多线程模型</h2>
+<p>本节以一个SudokuSolver为例，回顾了并发网络服务程序的多种设计方案，并介绍了使用muduo网络库编写多线程服务器的两种最常用手法。下一章的例子展现了muduo在编写单线程并发网络服务程序方面的能力与便捷性。今天我们先看一看它在多线程方面的表现。本节代码参见：examples/sudoku/。</p>
+<h3 id="数独求解服务器">6.1 数独求解服务器</h3>
+<p>假设有这么个网络编程任务：写一个求解数独的程序（SudokuSolver），并把它做成一个网络服务。</p>
+<p>SudokuSolver是我喜爱的网络编程例子，它曾经出现在“分布式系统部署、监控与进程管理的几重境界”、“muduo
+Buffer类的设计与使用”、“多线程服务器的适用场合”例释与答疑等处，它也可以看成是echo服务的一个变种。写这么一个程序在网络编程方面的难度不高，跟写echo服务差不多（从网络连接读入一个Sudoku题目，算出答案，再发回给客户），挑战在于怎样做才能发挥现在多核硬件的能力？在谈这个问题之前，让我们先写一个基本的单线程版。</p>
+<h4 id="协议"><strong>协议</strong></h4>
+<p>一个简单的以，便用TCP长连接，客户端在不需要服务时主动断开连接。</p>
+<p>请求：[id:]&lt;81digits&gt;</p>
+<p>响应：[id:]&lt;81digits&gt;</p>
+<p>或者：[id:]NoSolution</p>
+<p>其中[id:]表示可选的id，用于区分先后的请求，以支持Parallel
+Pipelining，响应中会回显请求中的id。Parallel
+Pipelining的意义见赖勇浩的《以小见大——那些基于Protobuf的五花八门的RPC》或者见我写的《分布式系统的工程化开发方法》第54页关于out-of-order
+RPC的介绍。</p>
+<p>&lt;81digits&gt;是Sudoku的棋盘，9×9个数字，从左上角到右下角按行扫描，未知数字以0表示。如果Sudoku有解，那么响应是填满数字的棋盘；如果无解，则返回NoSolution。</p>
+<p>例子1请求：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs css"><span class="hljs-number">0000000104000000000200000000000504070080003000010900003004002000501000000008060001</span>\<span class="hljs-attribute">r</span>\n<br></code></pre></td></tr></table></figure>
+<p>响应：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs css"><span class="hljs-number">6937845124875129361259638749326514875682473917413986253194752688561297432748361591</span>\<span class="hljs-attribute">r</span>\n<br></code></pre></td></tr></table></figure>
+<p>例子2请求：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-selector-tag">a</span>:<span class="hljs-number">8000000104800000000200000000000504070080003000010900003004002000501000000008060001</span>\<span class="hljs-attribute">r</span>\n<br></code></pre></td></tr></table></figure>
+<p>响应：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-selector-tag">a</span>:<span class="hljs-number">6937845124875129361259638749326514875682473917413986253194752688561297432748361591</span>\<span class="hljs-attribute">r</span>\n<br></code></pre></td></tr></table></figure>
+<p>例子3请求：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-selector-tag">b</span>:<span class="hljs-number">0000000104000000000200000000000504070080003000010900003004002000501000000008060051</span>\<span class="hljs-attribute">r</span>\n<br></code></pre></td></tr></table></figure>
+<p>响应：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-selector-tag">b</span>:NoSolution\<span class="hljs-attribute">r</span>\n<br></code></pre></td></tr></table></figure>
+<p>基于这个文本协议，我们可以用telnet模拟客户端来测试我们的简单SudokuSolver，不需要单独编写SudokuClient。SudokuSolver的默认端口号是9981，因为它有9×9=81个格子。</p>
+<h4 id="基本实现"><strong>基本实现</strong></h4>
+<p>Sudoku的求解算法见《谈谈数独（Sudoku）》一文，这不是本文的重点。假设我们已经有一个函数能求解Sudoku，它的原型如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function">string <span class="hljs-title">solveSudoku</span><span class="hljs-params">(<span class="hljs-type">const</span> string&amp; puzzle)</span></span>;<br></code></pre></td></tr></table></figure>
+<p>函数的输入是上文的“&lt;81digits&gt;”，输出是“&lt;81digits&gt;”或“NoSolution”。</p>
+<p>这个函数是个pure function，同时也是线程安全的。</p>
+<p>有了这个函数，我们以<span class="math inline">\(\S6.4.2\)</span>“echo服务的实现”中出现的EchoServer为蓝本，稍加修改就能得到SudokuServer。这里只列出最关键的onMessage()函数，完整的代码见examples/sudoku/server_basic.cc。onMessage()的主要功能是处理协议格式，并调用solveSudoku()求解问题。这个函数应该能正确处理TCP分包。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">const</span> <span class="hljs-type">int</span> kCells = <span class="hljs-number">81</span>; <span class="hljs-comment">// 81个格子</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">onMessage</span><span class="hljs-params">(<span class="hljs-type">const</span> TcpConnectionPtr&amp; conn, Buffer* buf, Timestamp)</span> </span>&#123;<br>    LOG_DEBUG &lt;&lt; conn-&gt;<span class="hljs-built_in">name</span>();<br>    <span class="hljs-type">size_t</span> len = buf-&gt;<span class="hljs-built_in">readableBytes</span>();<br>    <span class="hljs-keyword">while</span> (len &gt;= kCells + <span class="hljs-number">2</span>) &#123; <span class="hljs-comment">// 反复读取数据，2为回车换行字符</span><br>        <span class="hljs-type">const</span> <span class="hljs-type">char</span>* crlf = buf-&gt;<span class="hljs-built_in">findCRLF</span>();<br>        <span class="hljs-keyword">if</span> (crlf) &#123; <span class="hljs-comment">// 如果找到了一条完整的请求</span><br>            <span class="hljs-function">string <span class="hljs-title">request</span><span class="hljs-params">(buf-&gt;peek(), crlf)</span></span>; <span class="hljs-comment">// 取出请求</span><br>            string id;<br>            buf-&gt;<span class="hljs-built_in">retrieveUntil</span>(crlf + <span class="hljs-number">2</span>); <span class="hljs-comment">// retrieve已读取的数据</span><br>            string::iterator colon = <span class="hljs-built_in">find</span>(request.<span class="hljs-built_in">begin</span>(), request.<span class="hljs-built_in">end</span>(), <span class="hljs-string">&#x27;:&#x27;</span>);<br>            <span class="hljs-keyword">if</span> (colon != request.<span class="hljs-built_in">end</span>()) &#123; <span class="hljs-comment">// 如果找到了id部分</span><br>                id.<span class="hljs-built_in">assign</span>(request.<span class="hljs-built_in">begin</span>(), colon);<br>                request.<span class="hljs-built_in">erase</span>(request.<span class="hljs-built_in">begin</span>(), colon + <span class="hljs-number">1</span>);<br>            &#125;<br>            <span class="hljs-keyword">if</span> (request.<span class="hljs-built_in">size</span>() == <span class="hljs-built_in">implicit_cast</span>&lt;<span class="hljs-type">size_t</span>&gt;(kCells)) &#123; <span class="hljs-comment">// 请求的长度合法</span><br>                string result = <span class="hljs-built_in">solveSudoku</span>(request); <span class="hljs-comment">// 求解数独，然后发回响应</span><br>                <span class="hljs-keyword">if</span> (id.<span class="hljs-built_in">empty</span>())<br>                    conn-&gt;<span class="hljs-built_in">send</span>(result + <span class="hljs-string">&quot;\r\n&quot;</span>);<br>                <span class="hljs-keyword">else</span><br>                    conn-&gt;<span class="hljs-built_in">send</span>(id + <span class="hljs-string">&quot;;&quot;</span> + result + <span class="hljs-string">&quot;\r\n&quot;</span>);<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                <span class="hljs-comment">// 非法请求，断开连接</span><br>                conn-&gt;<span class="hljs-built_in">send</span>(<span class="hljs-string">&quot;BadRequest!\r\n&quot;</span>);<br>                conn-&gt;<span class="hljs-built_in">shutdown</span>();<br>            &#125;<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-comment">// 请求不完整，退出消息处理函数</span><br>            <span class="hljs-keyword">break</span>;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>server_basic.cc是一个并发服务器，可以同时服务多个客户连接。但是它是单线程的，无法发挥多核硬件的能力。</p>
+<p>Sudoku是一个计算密集型的任务（见<span class="math inline">\(\S7.4\)</span>中关于其性能的分析），其瓶颈在CPU。为了让这个单线程server_basic程序充分利用CPU资源，一个简单的办法是在同一台机器上部署多个server_basic进程，让每个进程占用不同的端口，比如在一台8核机器上部署8个server_basic进程，分别占用9981，9982，….，9988端口。这样做其实是把难题推给了客户端，因为客户端（s）要自已做负载均衡。再想得远一点，在8个server_basic前面部署一个load
+balancer？似乎小题大做了。</p>
+<p>能不能在一个端口上提供服务，并且还能发挥多核处理器的计算能力呢？当然可以，办法不止一种。</p>
+<h3 id="常见的并发网络服务程序设计方案">6.2
+常见的并发网络服务程序设计方案</h3>
+<p>W.Richard Stevens的《UNIX网络编程（第2版）》第27章“Client-Server
+Design
+Alternatives”介绍了十来种当时（20世纪90年代末）流行的编写并发网络程序的方案。[UNP]第3版第30章，内容未变，还是这几种。以下简称UNP-CSDA方案。[UNP]这本书主要讲解阻塞式网络编程，在非阻塞方面着墨不多，仅有一章。正确使用non-blocking
+IO需要考虑的问题很多，不适宜直接调用Sockets
+API，而需要一个功能完善的网络库支撑。</p>
+<p>随着2000年前后第一次互联网浪潮的兴起，业界对高并发HTTP服务器的强烈需求大大推动了这一领域的研究，目前高性能httpd普遍采用的是单线程Reactor方式。另外一个说法是IBM
+Lotus使用TCP长连接协议，而把Lotus服务端移植到Linux的过程中IBM的工程师们大大提高了Linux内核在处理并发连接方面的可伸缩性，因为一个公司可能有上万人同时上线，连接到同一台跑署Lotus
+Server的Linux服务器。</p>
+<p>可伸缩网络编程这个领域其实近十年来没什么新东西，POSA2已经进行了相当全面的总结，另外以下几篇文章也值得参考。</p>
+<ul>
+<li>http://bulk.fefe.de/scalable-networking.pdf</li>
+<li>http://www.kegel.com/c10k.html</li>
+<li>http://gee.cs.oswego.edu/d/cpjslides/nio.pdf</li>
+</ul>
+<p>表6-1是笔者总结的12种常见方案。其中“互通”指的是如果开发chat服务，多个客户连接之间是否能方便地交换数据（chat也是附录A中举的三大TCP网络编程案例之一）。对于echo/httpd/Sudoku这类“连接相互独立”的服务程序，这个功能无足轻重，但是对于chat类服务却至关重要。“顺序性”指的是在httpd/Sudoku这类请求响应服务中，如果客户连接顺序发送多个请求，那么计算得到的多个响应是否按相同的顺序发还给客户（这里指的是在自然条件下，不含刻意同步）。</p>
+<p><img src="/2024/12/25/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/6-muduo%E7%BD%91%E7%BB%9C%E5%BA%93%E7%AE%80%E4%BB%8B/1735118257757.png" srcset="/img/loading.gif" lazyload></p>
+<p><strong>UNPCSDA方案归入0～5。</strong>
+方案5也是目前用得很多的单线程Reactor方案，muduo对此提供了很好的支持。方案6和方案7其实不是实用的方案，只是作为过渡品。方案8和方案9是本文重点介绍的方案，其实这两个方案已经在<span class="math inline">\(\S3.3\)</span>“多线程服务器的常用编程模型”中提到过，只不过当时没有用具体的代码示例来说明。</p>
+<p>在对比各方案之前，我们先看看基本的microbenchmark数据（前两项由Thread
+bench.cc测得，第三项由BlockingQueuebench.cc测得，硬件为E5320，内核Linux2.6.32）：</p>
+<ul>
+<li>fork()+exit(): 534.7us。</li>
+<li>pthread_create（+pthread_join（）：42.5us，其中创建线程用了26.1us。</li>
+<li>push/pop a blocking queue: 11.5μs。</li>
+<li>Sudoku resolve: 100us（根据题目难度不同，浮动范围20~200us）。</li>
+</ul>
+<p><strong>方案0</strong>
+这其实不是并发服务器，而是iterative服务器，因为它一次只能服务一个客户。代码见[UNP]中的Figure1.9，[UNP]
+以此为对比其他方案的基准点。这个方案不适合长连接，倒是很适合daytime这种write-only短连接服务。以下Python代码展示用方案0实现echo
+server的大致做法（本章的Python代码均没有考虑错误处理）：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs python">recipes/python/echo-iterative.py<br><span class="hljs-keyword">import</span> socket<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">handle</span>(<span class="hljs-params">client_socket, client_address</span>):<br>    <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>        data = client_socket.recv(<span class="hljs-number">4096</span>)<br>        <span class="hljs-keyword">if</span> data:<br>            sent = client_socket.send(data)<br>        <span class="hljs-keyword">else</span>:<br>            <span class="hljs-built_in">print</span> <span class="hljs-string">&quot;disconnect&quot;</span>, client_address<br>            client_socket.close()<br>            <span class="hljs-keyword">break</span><br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    listen_address = (<span class="hljs-string">&quot;0.0.0.0&quot;</span>, <span class="hljs-number">2007</span>)<br>    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)<br>    server_socket.bind(listen_address)<br>    server_socket.listen(<span class="hljs-number">5</span>)<br><br>    <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>        (client_socket, client_address) = server_socket.accept()<br>        <span class="hljs-built_in">print</span> <span class="hljs-string">&quot;got connection from&quot;</span>, client_address<br>        handle(client_socket, client_address)<br></code></pre></td></tr></table></figure>
+<p>L5~L12是echo服务的“业务逻辑循环”，从L20~L23可以看出它一次只能服务一个客户连接。后面列举的方案都是在保持这个循环的功能不变的情况下，设法能高效地同时服务多个客户端。L8代码值得商榷，或许应该用sendall()函数，以确保完整地发回数据。</p>
+<p><strong>方案1</strong>
+这是传统的Unix并发网络编程方案，[UNP]称之为child-per-client或fork()-per-client，另外也俗称process-per-connection。这种方案适合并发连接数不大的情况。至今仍有一些网络服务程序用这种方式实现，比如PostgreSQL和Perforce的服务端。这种方案适合“计算响应的工作量远大于fork()的开销”这种情况，比如数据库服务器。这种方案适合长连接，但不太适合短连接，因为fork()开销大于求解Sudoku的用时。</p>
+<p>Python示例如下，注意其中L10~L17正是前面的业务逻辑循环，self.request代替了前面的client_socket。ForkingTCPServer会对每个客户连接新建一个子进程，在子进程中调用EchoHandler.handle()，从而同时服务多个客户端。在这种编程方式中，业务逻辑已经初步从网络框架分离出来，但是仍然和IO紧密结合。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs python">recipes/python/echo-fork.py<br><span class="hljs-comment">#!/usr/bin/python</span><br><br><span class="hljs-keyword">from</span> SocketServer <span class="hljs-keyword">import</span> BaseRequestHandler, TCPServer<br><span class="hljs-keyword">from</span> SocketServer <span class="hljs-keyword">import</span> ForkingTCPServer, ThreadingTCPServer<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">EchoHandler</span>(<span class="hljs-title class_ inherited__">BaseRequestHandler</span>):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">handle</span>(<span class="hljs-params">self</span>):<br>        <span class="hljs-built_in">print</span> <span class="hljs-string">&quot;got connection from&quot;</span>, <span class="hljs-variable language_">self</span>.client_address<br>        <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>            data = <span class="hljs-variable language_">self</span>.request.recv(<span class="hljs-number">4096</span>)<br>            <span class="hljs-keyword">if</span> data:<br>                sent = <span class="hljs-variable language_">self</span>.request.send(data)<br>            <span class="hljs-keyword">else</span>:<br>                <span class="hljs-built_in">print</span> <span class="hljs-string">&quot;disconnect&quot;</span>, <span class="hljs-variable language_">self</span>.client_address<br>                <span class="hljs-variable language_">self</span>.request.close()<br>                <span class="hljs-keyword">break</span><br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    listen_address = (<span class="hljs-string">&quot;0.0.0.0&quot;</span>, <span class="hljs-number">2007</span>)<br>    server = ForkingTCPServer(listen_address, EchoHandler)<br>    server.serve_forever()<br></code></pre></td></tr></table></figure>
+<p><strong>方案2</strong>
+这是传统的Java网络编程方案thread-per-connection；在Java
+1.4引入NIO之前，Java网络服务多采用这种方案。它的初始化开销比方案1要小很多，但与求解Sudoku的用时差不多，仍然不适合短连接服务。这种方案的伸缩性受到线程数的限制，一两百个还行，几千个的话对操作系统的scheduler恐怕是个不小的负担。</p>
+<p>Python示例如下，只改动了一行代码。ThreadingTCPServer会对每个客户连接新建一个线程，在该线程中调用EchoHandler.handle()。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python">$ diff -U2 echo-fork.py echo-thread.py<br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>listen_address = (<span class="hljs-string">&quot;0.0.0.0&quot;</span>, <span class="hljs-number">2007</span>)<br>-	server = ForkingTCPServer(listen_address, EchoHandler)<br>+<br>    server = ThreadingTCPServer(listen_address, EchoHandler)<br>    server.serve_forever()<br></code></pre></td></tr></table></figure>
+<p>这里再次体现了将“并发策略”与业务逻辑（EchoHandler.handle()）分离的思路。用同样的思路重写方案0的代码，可得到</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python">$ diff -U2 echo-fork.py echo-single.py<br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>listen_address = (<span class="hljs-string">&quot;0.0.0.0&quot;</span>, <span class="hljs-number">2007</span>)<br>-	server = ForkingTCPServer(listen_address, EchoHandler)<br>+	server = TCPServer(listen_address, EchoHandler)<br>	server.serve_forever()<br></code></pre></td></tr></table></figure>
+<p><strong>方案3</strong>
+这是针对方案1的优化，[UNP]详细分析了几种变化，包括对accept(2)“惊群”问题（thundering
+herd）的考虑。</p>
+<p><strong>方案4</strong>
+这是对方案2的优化，[UNP]详细分析了它的几种变化。方案3和方案4这两个方案都是Apache
+httpd长期使用的方案。</p>
+<p>以上几种方案都是阻塞式网络编程，程序流程（thread of
+control）通常阻塞在read(2)上，等待数据到达。但是TCP是个全双工协议，同时支持read(2)和write(2)操作，当一个线程/进程阻塞在read(2)上，但程序又想给这个TCP连接发数据，那该怎么办？比如说echo
+client，既要从stdin读，又要从网络读，当程序正在阻塞地读网络的时候，如何处理键盘输入？又比如proxy，既要把连接a收到的数据发给连接b，又要把从b收到的数据发给a，那么到底读哪个？（proxy是附录A讲的三大TCP网络编程案例之一。）</p>
+<p>一种方法是用两个线程/进程，一个负责读，一个负责写。[UNP]也在实现echo
+client时介绍了这种方案。<span class="math inline">\(\S7.13\)</span>举了一个Python双线程TCP
+relay的例子，另外见Python
+Pinhole的代码：http://code.activestate.com/recipes/114642/。</p>
+<p>另一种方法是使用IO
+multiplexing，也就是select/poll/epoll/kqueue这一系列的“多路选择器”，让一个thread
+of
+control能处理多个连接。"IO复用"其实复用的不是IO连接，而是复用线程。使用select/poll几乎肯定要配合non-blocking
+IO，而使用non-blocking IO肯定要使用应用层buffer，原因见<span class="math inline">\(\S7.4\)</span>。这就不是一件轻松的事儿了，如果每个程序都去搞一套自已的IO
+multiplexing机制（本质是event-driven事件驱动），这是一种很大的浪费。感谢Doug
+Schmidt为我们总结出了Reactor模式，让event-driven网络编程有章可循。继而出现了一些通用的Reactor框架/库，比如libevent、muduo、Netty、twisted、POE等等。有了这些库，我想基本不用去编写阻塞式的网络程序了（特殊情况除外，比如proxy流量限制）。</p>
+<p>这里先用一小段Python代码简要地回顾“以IO multiplexing方式实现并发echo
+server”的基本做法。为了简单起见，以下代码并没有开启non-blocking，也没有考虑数据发送不完整（L27）等情况。首先定义一个从文件描述符到socket对象的映射（L12），程序的主体是一个事件循环（L14~L31），每当有IO事件发生时，就针对不同的文件描述符（fileno）执行不同的操作（L15,L16）。对于listening
+fd，接受（accept）新连接，并注册到IO事件关注列表（watchlist），然后把连接添加到connections字典中（L17~L22）。对于客户连接，则读取并回显数据，并处理连接的关闭（L23~L31）。对于echo服务而言，真正的业务逻辑只有L27：将收到的数据原样发回客户端。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs python">recipes/python/echo-poll.py<br><br>server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)<br>server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, <span class="hljs-number">1</span>)<br>server_socket.bind((<span class="hljs-string">&quot;0.0.0.0&quot;</span>, <span class="hljs-number">2007</span>))<br>server_socket.listen(<span class="hljs-number">5</span>)<br><br><span class="hljs-comment"># server_socket.setblocking(0)</span><br>poll = select.poll() <span class="hljs-comment"># epoll() should work the same</span><br>poll.register(server_socket.fileno(), select.POLLIN)<br><br>connections = &#123;&#125;<br><br><span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>    events = poll.poll(<span class="hljs-number">1000</span>) <span class="hljs-comment"># 10 seconds</span><br>    <span class="hljs-keyword">for</span> fileno, event <span class="hljs-keyword">in</span> events:<br>        <span class="hljs-keyword">if</span> fileno == server_socket.fileno():<br>            (client_socket, client_address) = server_socket.accept()<br>            <span class="hljs-built_in">print</span> <span class="hljs-string">&quot;got connection from&quot;</span>, client_address<br>            <span class="hljs-comment"># client_socket.setblocking(0)</span><br>            poll.register(client_socket.fileno(), select.POLLIN)<br>            connections[client_socket.fileno()] = client_socket<br>        <span class="hljs-keyword">elif</span> event &amp; select.POLLIN:<br>            client_socket = connections[fileno]<br>            data = client_socket.recv(<span class="hljs-number">4096</span>)<br>            <span class="hljs-keyword">if</span> data:<br>                client_socket.send(data) <span class="hljs-comment"># sendall() partial?</span><br>            <span class="hljs-keyword">else</span>:<br>                poll.unregister(fileno)<br>                client_socket.close()<br>                <span class="hljs-keyword">del</span> connections[fileno]<br></code></pre></td></tr></table></figure>
+<p>注意以上代码不是功能完善的IO
+multiplexing范本，它没有考虑错误处理，也没有实现定时功能，而且只适合侦听一个端口的网络服务程序。如果需要侦听多个端口，或者要同时扮演客户端，那么代码的结构需要推倒重来。</p>
+<p>这个代码骨架可用于实现多种TCP服务器。例如写一个聊天服务只需改动3行代码，如下所示。业务逻辑是L10-L12：将本连接收到的数据转发给其他客户连接。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ diff echo-poll.py chat-poll.py -U4<br>--- echo-poll.py 2012-08-20 08:50:49.000000000 +0800<br>+++ chat-poll.py 2012-08-20 08:50:49.000000000 +0800<br><br><span class="hljs-keyword">elif</span> event &amp; select.POLLIN:<br>    client_socket = connections[fileno]<br>    data = client_socket.recv(4096)<br>    <span class="hljs-keyword">if</span> data:<br>-       client_socket.send(data) <span class="hljs-comment"># sendall() partial?   </span><br>+		<span class="hljs-keyword">for</span>(fd, other_socket) <span class="hljs-keyword">in</span> connections.iteritems():<br>+       	<span class="hljs-keyword">if</span> other_socket != client_socket:<br>+           	other_socket.send(data) <span class="hljs-comment"># sendall() partial?</span><br>    <span class="hljs-keyword">else</span>:<br>        poll.unregister(fileno)<br>        client_socket.close()<br>        del connections[fileno]<br></code></pre></td></tr></table></figure>
+<p>但是这种把业务逻辑隐藏在一个大循环中的做法其实不利于将来功能的扩展，我们能不能设法把业务逻辑抽取出来，与网络基础代码分离呢？</p>
+<p>Doug
+Schmidt指出，其实网络编程中有很多是事务性（routine）的工作，可以提取为公用的框架或库，而用户只需要填上关键的业务逻辑代码，并将回调注册到框架中，就可以实现完整的网络服务，这正是Reactor模式的主要思想。</p>
+<p>如果用传统Windows GUI消息循环来做一个类比，那么我们前面展示IO
+multiplexing的做法相当于把程序的全部逻辑都放到了窗口过程（wndProc）的一个巨大的switch-case语句中，这种做法无疑是不利于扩展的。（各种GUI框架在此各显神通。）</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function">LRESULT CALLBACK <span class="hljs-title">WndProc</span><span class="hljs-params">(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-built_in">Switch</span>(message)<br>    &#123;<br>        CaSe WM_DESTROY:<br>            <span class="hljs-built_in">PostQuitMessage</span>(<span class="hljs-number">0</span>);<br>            <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>        <span class="hljs-comment">// many more cases</span><br>     &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">DefWindowProc</span>(hwnd, message, wParam, lParam);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><strong>而Reactor的意义在于将消息（IO事件）分发到用户提供的处理函数，并保持网络部分的通用代码不变，独立于用户的业务逻辑。</strong></p>
+<p>单线程Reactor的程序执行顺序如图6-11（左图）所示。在没有事件的时候，线程等待在select/poll/epoll_wait等函数上。事件到达后由网络库处理IO，再把消息通知（回调）客户端代码。Reactor事件循环所在的线程通常叫IO线程。通常由网络库负责读写socket，用户代码负载解码、计算、编码。</p>
+<p>注意由于只有一个线程，因此事件是顺序处理的，一个线程同时只能做一件事情。在这种协作式多任务中，事件的优先级得不到保证，因为从“poll返回之后”到“下一次调用poll进入等待之前”这段时间内，线程不会被其他连接上的数据或事件抢占（见图6-11的右图）。如果我们想要延迟计算（把compute()推迟100ms），那么也不能用sleep()之类的阻塞调用，而应该注册超时回调，以避免阻塞当前IO线程。</p>
+<p><img src="/2024/12/25/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/6-muduo%E7%BD%91%E7%BB%9C%E5%BA%93%E7%AE%80%E4%BB%8B/image-20241225174452442.png" srcset="/img/loading.gif" lazyload></p>
+<p><strong>方案5</strong>
+基本的单线程Reactor方案（见图6-11），即前面的server_basic.cc程序。本文以它作为对比其他方案的基准点。这种方案的优点是由网络库搞定数据收发，程序只关心业务逻辑；缺点在前面已经谈了：适合IO密集的应用，不太适合CPU密集的应用，因为较难发挥多核的威力。另外，与方案2相比，方案5处理网络消息的延迟可能要略高一些，因为方案2直接一次read(2)系统调用就能拿到请求数据，而方案5要先poll(2)再read(2)，多了一次系统调用。</p>
+<p>这里用一小段Python代码展示Reactor模式的雏形。为了节省篇幅，这里直接使用了全局变量，也没有处理异常。程序的核心仍然是事件循环（L32~L36），与前面不同的是，<strong>事件的处理通过handlers转发到各个函数中</strong>，不再集中在一坨。例如listening
+fd的处理函数是handle_accept，它会注册客户连接的handler。普通客户连接的处理函数是handle_request，其中又把连接断开和数据到达这两个事件分开，后者由handle_input处理。业务逻辑位于单独的handle_input函数，实现了分离。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs python">recipes/python/echo-reactor.py<br>server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)<br>server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, <span class="hljs-number">1</span>)<br>server_socket.bind((<span class="hljs-string">&quot;0.0.0.0&quot;</span>, <span class="hljs-number">2007</span>))<br>server_socket.listen(<span class="hljs-number">5</span>)<br><span class="hljs-comment"># server_socket.setblocking()</span><br>poll = select.poll() <span class="hljs-comment"># epoll() should work the same</span><br>connections = &#123;&#125;<br>handlers = &#123;&#125;<br><span class="hljs-keyword">def</span> <span class="hljs-title function_">handle_input</span>(<span class="hljs-params">socket, data</span>):<br>    socket.send(data) <span class="hljs-comment"># sendall() partial?</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">handle_request</span>(<span class="hljs-params">fileno, event</span>):<br>    <span class="hljs-keyword">if</span> event &amp; select.POLLIN:<br>        client_socket = connections[fileno]<br>        data = client_socket.recv(<span class="hljs-number">4096</span>)<br>        <span class="hljs-keyword">if</span> data:<br>            handle_input(client_socket, data)<br>        <span class="hljs-keyword">else</span>:<br>            poll.unregister(fileno)<br>            client_socket.close()<br>            <span class="hljs-keyword">del</span> connections[fileno]<br>            <span class="hljs-keyword">del</span> handlers[fileno]<br><span class="hljs-keyword">def</span> <span class="hljs-title function_">handle_accept</span>(<span class="hljs-params">fileno, event</span>):<br>    (client_socket, client_address) = server_socket.accept()<br>    <span class="hljs-built_in">print</span> <span class="hljs-string">&quot;got connection from&quot;</span>, client_address<br>    <span class="hljs-comment"># client_socket.setblocking(0)</span><br>    poll.register(client_socket.fileno(), select.POLLIN)<br>    connections[client_socket.fileno()] = client_socket<br>    handlers[client_socket.fileno()] = handle_request<br>poll.register(server_socket.fileno(), select.POLLIN)<br>handlers[server_socket.fileno()] = handle_accept<br><span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>    events = poll.poll(<span class="hljs-number">1000</span>) <span class="hljs-comment"># 10 seconds</span><br>    <span class="hljs-keyword">for</span> fileno, event <span class="hljs-keyword">in</span> events:<br>        handler = handlers[fileno]<br>        handler(fileno, event)<br></code></pre></td></tr></table></figure>
+<p>如果要改成聊天服务，重新定义handle_input函数即可，程序的其余部分保持不变。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ diff echo-reactor.py chat-reactor.py -U1<br>def handle_input(socket, data):<br>-   socket.send(data) <span class="hljs-comment"># sendall() partial?</span><br>+<br>+	<span class="hljs-keyword">for</span> (fd, other_socket) <span class="hljs-keyword">in</span> connections.iteritems():<br>    <span class="hljs-keyword">if</span> other_socket != socket:<br>        other_socket.send(data) <span class="hljs-comment"># sendall() partial?</span><br></code></pre></td></tr></table></figure>
+<p>必须说明的是，完善的非阻塞IO网络库远比上面的玩具代码复杂，需要考虑各种错误场景。特别是要真正接管数据的收发，而不是像上面的示例那样直接在事件处理回调函数中发送网络数据。</p>
+<p>注意在使用非阻塞IO+事件驱动方式编程的时候，一定要注意避免在事件回调中执行耗时的操作，包括阻塞IO等，否则会影响程序的响应。这和Windows
+GUI消息循环非常类似。</p>
+<p><strong>方案6</strong>
+这是一个过渡方案，收到Sudoku请求之后，不在Reactor线程计算，而是创建一个新线程去计算，以充分利用多核CPU。这是非常初级的多线程应用，因为它为每个请求（而不是每个连接）创建了一个新线程。这个开销可以用线程池来避免，即方案8。这个方案还有一个特点是out-of-order，即同时创建多个线程去计算同一个连接上收到的多个请求，那么算出结果的次序是不确定的，可能第2个Sudoku比较简单，比第1个先算出结果。这也是我们在一开始设计协议的时候使用了id的原因，以便客户端区分response对应的是哪个request。</p>
+<p><strong>方案7</strong>
+为了让返回结果的顺序确定，我们可以为每个连接创建一个计算线程，每个连接上的请求固定发给同一个线程去算，先到先得。这也是一个过渡方案，因为并发连接数变限于线程数目，这个方案或许还不如直接使用阻塞IO的thread-per-connection方案2。</p>
+<p>方案7与方案6的另外一个区别是单个client的最大CPU占用率。在方案6中，一个TCP连接上发来的一长串突发请求（burst
+requests）可以占满全部8个core；而在方案7中，由于每个连接上的请求固定由同一个线程处理，那么它最多占用12.5%的CPU资源。这两种方案各有优劣，取决于应用场景的需要（到底是公平性重要还是突发性能重要）。这个区别在方案8和方案9中同样存在，需要根据应用来取舍。</p>
+<p><strong>方案8</strong>
+为了弥补方案6中为每个请求创建线程的缺陷，我们使用固定大小线程池，程序结构如图6-12所示。全部的IO工作都在一个Reactor线程完成，而计算任务交给thread
+pool。如果计算任务彼此独立，而且IO的压力不大，那么这种方案是非常适用的。Sudoku
+Solver正好符合。代码参见：examples/sudoku/server_threadpool.cc。</p>
+<p><img src="/2024/12/25/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/6-muduo%E7%BD%91%E7%BB%9C%E5%BA%93%E7%AE%80%E4%BB%8B/image-20241225180146931.png" srcset="/img/loading.gif" lazyload></p>
+<p>方案8使用线程池的代码与单线程Reactor的方案5相比变化不大，只是把原来onMessage()中涉及计算和发回响应的部分抽出来做成一个函数，然后交给ThreadPool去计算。记住方案8有乱序返回的可能，客户端要根据id来匹配响应。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ diff server_basic.cc server_threadpool.cc -u<br>--- server_basic.cc 2012-04-20 20:19:56.000000000 +0800<br>+++ server_threadpool.cc 2012-06-10 22:15:02.000000000 +0800<br>@@ -96,16 +100,7 @@ void onMessage(const TcpConnectionPtr&amp; conn,...<br><span class="hljs-keyword">if</span> (puzzle.size() == implicit_cast&lt;size_t&gt;(kCells))<br>&#123;<br>-	string result = solveSudoku(puzzle);<br>-	<span class="hljs-keyword">if</span> (id.empty())<br>-		conn-&gt;send(result + <span class="hljs-string">&quot;\r\n&quot;</span>);<br>-	<span class="hljs-keyword">else</span><br>-		conn-&gt;send(<span class="hljs-built_in">id</span> + <span class="hljs-string">&quot;;&quot;</span> + result + <span class="hljs-string">&quot;\r\n&quot;</span>);<br>+	threadPool_.run(boost::<span class="hljs-built_in">bind</span>(&amp;solve, conn, puzzle, <span class="hljs-built_in">id</span>));<br>&#125;    <br>@@ -114,17 +109,40 @@<br>+	static void solve(const TcpConnectionPtr&amp; conn,<br>+	                const string&amp; puzzle,<br>+	                const string&amp; <span class="hljs-built_in">id</span>) &#123;<br>+	    string result = solveSudoku(puzzle);<br>+		<span class="hljs-keyword">if</span> (id.empty())<br>+	       conn-&gt;send(result + <span class="hljs-string">&quot;\r\n&quot;</span>);<br>+		<span class="hljs-keyword">else</span><br>+       	conn-&gt;send(<span class="hljs-built_in">id</span> + <span class="hljs-string">&quot;;&quot;</span> + result + <span class="hljs-string">&quot;\r\n&quot;</span>);<br>+	&#125;<br>	EventLoop* loop_;<br>	TcpServer server_;<br>+	ThreadPool threadPool_;<br>	Timestamp startTime_;<br><br></code></pre></td></tr></table></figure>
+<p>线程池的另外一个作用是执行阻塞操作。比如有的数据库的客户端只提供同步访问，那么可以把数据库查询放到线程池中，可以避免阻塞IO线程，不会影响其他客户连接，就像Java
+Servlet
+2.x的做法一样。另外也可以用线程池来调用一些阻塞的IO函数，例如fsync(2)/fdatasync(2)，这两个函数没有非阻塞的版本。</p>
+<p>如果IO的压力比较大，一个Reactor处理不过来，可以试试方案9，它采用多个Reactor来分担负载。</p>
+<p><strong>方案9</strong>
+这是muduo内置的多线程方案，也是Netty内置的多线程方案。这种方案的特点是one
+loop per thread，有一个main
+Reactor负责accept(2)连接，然后把连接挂在某个sub
+Reactor中（muduo采用round-robin的方式来选择sub
+Reactor），这样该连接的所有操作都在那个sub
+Reactor所处的线程中完成。多个连接可能被分派到多个线程中，以充分利用CPU。</p>
+<p>muduo采用的是固定大小的Reactor
+pool，池子的大小通常根据CPU数目确定，也就是说线程数是固定的，这样程序的总体处理能力不会随连接数增加而下降。另外，由于一个连接完全由一个线程管理，那么请求的顺序性有保证，突发请求也不会占满全部8个核（如果需要优化突发请求，可以考虑方案11）。这种方案把IO分派给多个线程，防止出现一个Reactor的处理能力饱和。</p>
+<p>与方案8的线程池相比，方案9减少了进出thread
+pool的两次上下文切换，在把多个连接分散到多个Reactor线程之后，小规模计算可以在当前IO线程完成并发回结果，从而降低响应的延迟。我认为这是一个适应性很强的多线程IO模型，因此把它作为muduo的默认线程模型（见图6-13）。</p>
+<p><img src="/2024/12/25/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/6-muduo%E7%BD%91%E7%BB%9C%E5%BA%93%E7%AE%80%E4%BB%8B/image-20241225215851933.png" srcset="/img/loading.gif" lazyload></p>
+<p>方案9代码见：examples/sudoku/server_multiloop.cc。它与server_basic.cc的区别很小，最关键的只有一行代码：server_setThreadNum(numThreads)；</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs bash">s diff server_basic.cc server_multiloop.cc -up<br>---server_basic.cc<br>2011-06-15 13:40:59.000000000 +0800<br>+++ server_multiloop.cc 2011-06-15 13:39:53.000000000 +0800<br>@@ -21,19 +21,22 @@ class SudokuServer<br>-    SudokuServer(EventLoop* loop, const InetAddress&amp; listenAddr)<br>+	 SudokuServer(EventLoop* loop, const InetAddress&amp; listenAddr, int numThreads)<br>    : loop_(loop),<br>      server_(loop, listenAddr, <span class="hljs-string">&quot;SudokuServer&quot;</span>),<br>      startTime_(Timestamp::now())<br>&#123;<br>    server_.setConnectionCallback(<br>        boost::<span class="hljs-built_in">bind</span>(&amp;SudokuServer::onConnection, this, _1));<br>    server_.setMessageCallback(<br>        boost::<span class="hljs-built_in">bind</span>(&amp;SudokuServer::onMessage, this, _1, _2, _3));<br>+    server_.setThreadNum(numThreads);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><strong>方案10</strong>
+这是Nginx的内置方案。如果连接之间无交互，这种方案也是很好的选择。工作进程之间相互独立，可以热升级。</p>
+<p><strong>方案11</strong>
+把方案8和方案9混合，既使用多个Reactor来处理IO，又使用线程池来处理计算。这种方案适合既有突发IO（利用多线程处理多个连接上的IO），又有突发计算的应用（利用线程池把一个连接上的计算任务分配给多个线程去做），见图6-14。</p>
+<p><img src="/2024/12/25/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/6-muduo%E7%BD%91%E7%BB%9C%E5%BA%93%E7%AE%80%E4%BB%8B/image-20241225220321667.png" srcset="/img/loading.gif" lazyload></p>
+<p>这种方案看起来复杂，其实写起来很简单，只要把方案8的代码加一行server_.setThreadNum(numThreads)；就行，这里就不举例了。</p>
+<p>一个程序到底是使用一个event loop还是使用多个event
+loops呢？ZeroMQ的手册给出的建议是，按照每千兆比特每秒的吞吐量配一个event
+loop的比例来设置event
+loop的数目，即muduo::TcpServer::setThreadNum()的参数。依据这条经验规则，在编写运行于千兆以太网上的网络程序时，用一个event
+loop就足以应付网络IO。如果程序本身没有多少计算量，而主要瓶颈在网络带宽，那么可以按这条规则来办，只用一个event
+loop。另一方面，如果程序的IO带宽较小，计算量较大，而且对延迟不敏感，那么可以把计算放到thread
+pool中，也可以只用一个event loop。</p>
+<p>值得指出的是，以上假定了TCP连接是同质的，没有优先级之分，我们看重的是服务程序的总吞吐量。但是如果TCP连接有优先级之分，那么单个event
+loop可能不适合，正确的做法是把高优先级的连接用单独的event
+loop来处理。</p>
+<p>在muduo中，属于同一个event
+loop的连接之间没有事件优先级的差别。我这么设计的原因是为了防止优先级反转。比方说一个服务程序有10个心跳连接，有10个数据请求连接，都归属同一个event
+loop，我们认为心跳连接有较高的优先级，心跳连接上的事件应该优先处理。但是由于事件循环的特性，如果数据请求连接上的数据先于心跳连接到达（早到1ms），那么这个event
+loop就会调用相应的event
+handler去处理数据请求，而在下一次epoll_wait()的时候再来处理心跳事件。因此在同一event
+loop中区分连接的优先级并不能达到预想的效果。我们应该用单独的event
+loop来管理心跳连接，这样就能避免数据连接上的事件阻塞了心跳事件，因为它们分属不同的线程。</p>
+<p>结语</p>
+<p>总结起来，我推荐的C++多线程服务端编程模式为：one loop per thread +
+thread pool.</p>
+<ul>
+<li>event loop用作non-blocking IO和定时器。</li>
+<li>thread pool用来做计算，具体可以是任务队列或生产者消费者队列。</li>
+</ul>
+<p>现在有了muduo网络库，我终于能够用具体的代码示例把自己的思想完整地表达出来了。归纳一下，实用的方案有5种，muduo直接支持后4种，见表6-2。</p>
+<p><strong>表6-2</strong></p>
+<table>
+
+<thead>
+<tr>
+<th>方案</th>
+<th>名称</th>
+<th>接受新连接</th>
+<th>网络IO</th>
+<th>计算任务</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2</td>
+<td>thread-per-connection</td>
+<td>1个线程</td>
+<td>N线程</td>
+<td>在网络线程进行</td>
+</tr>
+<tr>
+<td>5</td>
+<td>单线程Reactor</td>
+<td>1个线程</td>
+<td>在连接线程进行</td>
+<td>在连接线程进行</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Reactor+线程池</td>
+<td>1个线程</td>
+<td>在连接线程进行</td>
+<td>C2线程</td>
+</tr>
+<tr>
+<td>9</td>
+<td>one loop per thread</td>
+<td>1个线程</td>
+<td>C1线程</td>
+<td>在网络线程进行</td>
+</tr>
+<tr>
+<td>11</td>
+<td>one loop per thread+线程池</td>
+<td>1个线程</td>
+<td>C线程</td>
+<td>C2线程</td>
+</tr>
+</tbody>
+</table>
+<p>表6-2中的N表示并发连接数目，C1和C2是与连接数无关、与CPU数目有关的常数。</p>
+<p>我再用银行柜台办理业务为比喻，简述各种模型的特点。银行有旋转门，办理业务的客户人员从旋转门进出（IO）；银行也有柜台，客户在柜台办理业务（计算）。要想办理业务，客户要先通过旋转门进入银行；办理完之后，客户要再次通过旋转门离开银行。一个客户可以办理多次业务，每次都必须从旋转门进出（TCP长连接）。另外，旋转门一次只允许一个客户通过（无论进出），因为read/write只能同时调用其中一个。</p>
+<ul>
+<li><p><strong>方案5</strong>：这间小银行有一个旋转门、一个柜台，每次只允许一名客户办理业务。而且当有人在办理业务时，旋转门是锁住的（计算和IO在同一线程）。为了维持工作效率，银行要求客户应该尽快办理业务，最好不要在取款的时候打电话去问家里人密码，也不要在通过旋转门的时候停下来系鞋带，这都会阻塞其他堵在门外的客户。如果客户很少，这是很经济且高效的方案；但是如果场地较大（多核），则这种布局就浪费了不少资源，只能并发（concurrent）不能并行（parallel）。如果确实一次办不完，应该离开柜台，到门外等着，等银行通知再来继续办理（分阶段回调）。</p></li>
+<li><p><strong>方案8</strong>：这间银行有一个旋转门，一个或多个柜台。银行进门之后有一个队列，客户在这里排队到柜台（线程池）办理业务。即在单线程Reactor后面接了一个线程池用于计算，可以利用多核。旋转门基本是不锁的，随时都可以进出。但是排队会消耗一点时间，相比之下，方案5中客户一进门就能立刻办理业务。另外一种做法是线程池中的每个线程有自己的任务队列，而不是整个线程池共用一个任务队列。这样做的好处是避免全局队列的锁争用，坏处是计算资源有可能分配不平均，降低并行度。</p></li>
+<li><p><strong>方案9</strong>：这间大银行相当于包含方案5中的多家小银行，每个客户进大门的时候就被固定分配到某一间小银行中，他的业务只能由这间小银行办理，他每次都要进出小银行的旋转门。但总体来看，大银行可以同时服务多个客户。这时同样要求办理业务时不能空等（阻塞），否则会影响分到同一间小银行的其他客户。而且必要的时候可以为VIP客户单独开一间或几间小银行，优先办理VIP业务。这跟方案5不同，当普通客户在办理业务的时候，VIP客户也只能在门外等着（见图6-11的右图）。这是一种适应性很强的方案，也是muduo原生的多线程IO模型。</p></li>
+<li><p><strong>方案11</strong>：这间大银行有多个旋转门，多个柜台。旋转门和柜台之间没有一一对应关系，客户进大门的时候就被固定分配到某一旋转门中（奇怪的安排，易于实现线程安全的IO，见<span class="math inline">\(\S4.6\)</span>），进入旋转门之后，有一个队列，客户在此排队到柜台办理业务。这种方案的资源利用率可能比方案9更高，一个客户不会被同一小银行的其他客户阻塞，但延迟也比方案9略大。方案11的设计允许每个客户通过不同的旋转门进入银行，并且每个旋转门后面都有一系列的柜台来处理业务。这种设计意味着即使一个旋转门（即一个IO线程）变得繁忙，其他客户仍然可以通过其他旋转门进入并被服务，从而提高了整体的吞吐量和响应性。这种模型特别适合于那些IO操作和计算任务都非常繁重，且对延迟有一定容忍度的应用场景。</p>
+<p>在这种模型下，每个旋转门（IO线程）都负责处理一部分连接的IO操作，而计算任务则被分配到线程池中的不同线程去执行。这样，即使某个计算任务特别耗时，也不会阻塞特定的IO线程，从而避免了潜在的瓶颈问题。同时，由于计算任务是在线程池中进行的，这也使得资源分配更加灵活，可以根据实际的工作负载动态调整线程池的大小。</p>
+<p>然而，方案11也带来了一些挑战，比如需要更复杂的逻辑来确保任务正确地分配给不同的旋转门和线程池，以及确保数据的一致性和线程安全。此外，由于涉及到多个线程之间的协作，可能需要额外的同步机制，这可能会增加编程的复杂性。</p>
+<p>总的来说，这些方案各有优劣，选择哪种方案取决于具体的应用需求、硬件环境以及性能目标。在设计和实现网络服务时，开发者需要根据实际情况权衡各种因素，选择最合适的并发模型。muduo网络库提供了灵活的架构，支持多种并发模型，使得开发者可以根据具体需求选择或者组合不同的方案，以实现高性能、高可用的网络服务。</p></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/c/" class="category-chain-item">c++</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/c/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="category-chain-item">muduo多线程服务器</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/muduo/" class="print-no-link">#muduo</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>6. muduo网络库简介</div>
+      <div>http://binbo-zappy.github.io/2024/12/25/muduo多线程/6-muduo网络库简介/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年12月25日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/12/25/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/7-muduo%E7%BC%96%E7%A8%8B%E7%A4%BA%E4%BE%8B/" title="7. muduo编程示例">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">7. muduo编程示例</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/12/25/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/5-%E9%AB%98%E6%95%88%E7%9A%84%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%97%A5%E5%BF%97/" title="5. 高效的多线程日志">
+                        <span class="hidden-mobile">5. 高效的多线程日志</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

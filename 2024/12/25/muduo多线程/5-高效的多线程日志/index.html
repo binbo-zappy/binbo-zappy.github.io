@@ -1,0 +1,895 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="第5章 高效的多线程日志 “日志（logging）”有两个意思：  诊断日志（diagnostic log）即log4j、logback、slf4j、glog、g2log、log4cxx、log4cpp、log4cplus、Pantheios、ezlogger等常用日志库提供的日志功能。 交易日志（transaction log）即数据库的write-ahead log、文件系统的jo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="5. 高效的多线程日志">
+<meta property="og:url" content="http://binbo-zappy.github.io/2024/12/25/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/5-%E9%AB%98%E6%95%88%E7%9A%84%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%97%A5%E5%BF%97/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="第5章 高效的多线程日志 “日志（logging）”有两个意思：  诊断日志（diagnostic log）即log4j、logback、slf4j、glog、g2log、log4cxx、log4cpp、log4cplus、Pantheios、ezlogger等常用日志库提供的日志功能。 交易日志（transaction log）即数据库的write-ahead log、文件系统的jo">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/muduo.jpg">
+<meta property="article:published_time" content="2024-12-25T02:32:24.000Z">
+<meta property="article:modified_time" content="2024-12-25T04:11:33.496Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="muduo">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/muduo.jpg">
+  
+  
+  
+  <title>5. 高效的多线程日志 - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="5. 高效的多线程日志"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-12-25 10:32" pubdate>
+          2024年12月25日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          7.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          65 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">5. 高效的多线程日志</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="第5章-高效的多线程日志">第5章 高效的多线程日志</h1>
+<p>“日志（logging）”有两个意思：</p>
+<ol type="1">
+<li>诊断日志（diagnostic
+log）即log4j、logback、slf4j、glog、g2log、log4cxx、log4cpp、log4cplus、Pantheios、ezlogger等常用日志库提供的日志功能。</li>
+<li>交易日志（transaction log）即数据库的write-ahead
+log、文件系统的journaling等，用于记录状态变更，通过回放日志可以逐步恢复每一次修改之后的状态。</li>
+</ol>
+<p>本章的“日志”是前一个意思，即文本的、供人阅读的日志，通常用于故障诊断和追踪（trace），也可用于性能分析。日志通常是分布式系统中事故调查时的唯一线索，用来追寻蛛丝马迹，查出元凶。</p>
+<p>在服务端编程中，日志是必不可少的，在生产环境中应该做到“Log Everything
+All The Time”。对于关键进程，日志通常要记录：</p>
+<ol type="1">
+<li>收到的每条内部消息的id（还可以包括关键字段、长度、hash等）；</li>
+<li>收到的每条外部消息的全文；</li>
+<li>发出的每条消息的全文，每条消息都有全局唯一的id；</li>
+<li>关键内部状态的变更，等等。</li>
+</ol>
+<p>每条日志都有时间戳，这样就能完整道踪分布式系统中一个事件的来龙去脉。也只有这样才能查清楚发生故障时究竟发生了什么，比如业务处理流程卡在了哪一步。</p>
+<p>诊断日志不光是给程序员看的，更多的时候是给运维人员看的，因此日志的内容应避免造成误解，不要误导调查故障的主攻方向，拖延故障解决的时间。</p>
+<p>一个日志库大体可分为前端（frontend）和后端（backend）两部分。前端是供应用程序使用的接口（API），并生成日志消息（log
+message）；后端则负责把日志消息写到目的地（destination）。这两部分的接口有可能简单到只有一个回调函数：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">output</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* message, <span class="hljs-type">int</span> len)</span></span>;<br></code></pre></td></tr></table></figure>
+<p>其中的message字符串是一条完整的日志消息，包含日志级别、时间戳、源文件位置、线程等基本信息，以及程序输出的具体消息内容。</p>
+<p>在多线程程序中，前端和后端都与单线程程序无甚区别，无非是每个线程有自己的前端，整个程序共用一个后端。但难点在于将日志数据从多个前端高效地传输到后端。这是一个典型的多生产者-单消费者问题，对生产者（前端）而言，要做到低延迟、低CPU开销、无阻塞；对消费者（后端）而言，要做到足够大的吞吐量，并占用较少资源。</p>
+<p>对C++程序而言，最好整个程序（包括主程序和程序库）都使用相同的日志库，程序有一个整体的日志输出，而不要各个组件有各自的日志输出。从这个意义上讲，日志库是个singleton。</p>
+<p>C++日志库的前端大体上有两种API风格：</p>
+<ol type="1">
+<li>C/Java的printf风格，例如<code>log_info("Received %d bytes from %s", len, getClientName().c_str())</code>；</li>
+<li>C++的stream&lt;&lt;风格，例如<code>LOG_INFO &lt;&lt; "Received " &lt;&lt; len &lt;&lt; " bytes from " &lt;&lt; getClientName();</code>。</li>
+</ol>
+<p>muduo日志库是C++
+stream风格，这样用起来更自然，不必费心保持格式字符串与参数类型的一致性，可以随用随写，而且是类型安全的。</p>
+<p>stream风格的另一个好处是当输出的日志级别高于语句的日志级别时，打印日志是个空操作，运行时开销接近零。比方说当日志级别为WARNING时，<code>LOG_INFO &lt;&lt;</code>是空操作，这个语句根本不会调用<code>std::string getClientName()</code>函数，减小了开销。而printf风格不易做到这一点。</p>
+<p>muduo没有用标准库中的iostream，而是自己写的LogStream
+class，这主要是因为性能原因。</p>
+<h2 id="功能需求">1. 功能需求</h2>
+<p>常规的通用日志库如log4j/logback通常会提供丰富的功能，但这些功能不一定全都是必需的。</p>
+<ol type="1">
+<li>日志消息有多种级别（level），如TRACE、DEBUG、INFO、WARN、ERROR、FATAL等。</li>
+<li>日志消息可能有多个目的地（appender），如文件、socket、SMTP等。</li>
+<li>日志消息的格式可配置（layout），例如org.apache.log4j.PatternLayout。</li>
+<li>可以设置运行时过滤器（filter），控制不同组件的日志消息的级别和目的地。</li>
+</ol>
+<p>在上面这几项中，我认为除了第一项之外，其余三项都是非必需的功能。日志的输出级别在运行时可调，这样同一个可执行文件可以分别在QA测试环境的时候输出DEBUG级别的日志，在生产环境输出INFO级别的日志。在必要的时候也可以临时在线调整日志的输出级别。例如某台机器的消息量过大、日志文件太多、越盘空间紧张，那么可以临时调整为WARNING级别输出，减少日志数目。比如某个新上线的进程的行为略显古怪，则可以临时调整为DEBUG级别输出，打印更细节的日志消息以便分析查错。<strong>调整日志的输出级别不需要重新编译，也不需要重启进程，只要调用muduo::Logger::setLogLevel就能即时生效。</strong></p>
+<p><strong>对于分布式系统中的服务进程而言，日志的目的地（destination）只有一个：本地文件。</strong>往网络写日志消息是不靠谱的，因为诊断日志的功能之一正是诊断网络故障，比如连接断开（网卡或交换机故障）、网络暂时不通（若十秒之内没有收到心跳消息）、网络拥塞（消息延迟明显加大）等等。如果日志消息也是通过网络发到另一台机器上的，那不是一损俱损？如果接收网络日志消息的服务器（日志服务器）发生故障或者出现进程死锁（阻塞），通常会导致发送日志的多个服务进程阻塞，或者内存暴涨（用户态和内核的TCP缓存），这无异于放大了单机故障。往网络写日志消息的另一个坏处是增加网络带宽消耗。试想收到一条业务消息、发出一条业务消息时都会写日志，如果写到网络上岂不是让网络带宽消耗翻倍，加剧trashing？同理，应该避免往网络文件系统（例如NFS）上写日志，这等于掩耳盗铃。</p>
+<p>以本地文件为日志的destination，那么日志文件的滚动（rolling）是必需的，这样可以简化日志归档（archive）的实现。rolling的条件通常有两个：文件大小（例如每写满1GB就换下一个文件）和时间（例如每天零点新建一个日志文件，不论前一个文件有没有写满）。muduo日志库的LogFile会自动根据文件大小和时间来主动滚动日志文件。既然能主动rolling，自然也就不必支持SIGUSR1了，毕竟多线程程序处理signal很麻烦。</p>
+<p>一个典型的日志文件的文件名如下：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">logfile_test</span>.<span class="hljs-number">2012050</span>-<span class="hljs-number">144022</span>.hostname.<span class="hljs-number">3605</span>.<span class="hljs-number">1</span>og<br></code></pre></td></tr></table></figure>
+<p>文件名由以下几部分组成：</p>
+<ol type="1">
+<li>第1部分logfile_test是进程的名字。通常是main()函数参数中argv[0]的basename，这样容易区分究竟是哪个服务程序的日志。必要时还可以把程序版本加进去。</li>
+<li>第2部分是文件的创建时间（GMT时区）。这样很容易通过文件名来选择某一时间范围内的日志，例如用通配符*.20120603-14*表示2012年6月3日下午2点（GMT）左右的日志文件（s）。</li>
+<li>第3部分是机器名称。这样即便把日志文件拷贝到别的机器上也能追溯其来源。</li>
+<li>第4部分是进程id。如果一个程序一秒之内反复重启，那么每次都会生成不同的日志文件，参考<span class="math inline">\(\S9.4\)</span>。</li>
+<li>第5部分是统一的后缀名.log。同样是为了便于周边配套脚本的编写。</li>
+</ol>
+<p>muduo的日志文件滚动没有采用文件改名的办法，即dmesg.log是最新日志，dmesg.log.1是前一个日志，dmesg.log.2.gz是更早的日志等。这种做法的一个好处是dmesg.log始终是最新日志，便于编写某些及时解析日志的脚本。将来可以增加一个功能，每次滚动日志文件之后立刻创建（更新）一个symlink，logfile_test.log始终指向当前最新的日志文件，这样达到相同的效果。</p>
+<p><strong>日志文件压缩与归档不是日志库应有的功能，而应该交给专门的脚本去做</strong>，这样C++和Java的服务程序可以共享这一基础设施。如果想更换日志压缩算法或归档策略也不必动业务程序，改改周边配套脚本就行了。磁盘空间监控也不是日志库的必备功能。有人或许曾经遇到日志文件把磁盘占满的情况，因此希望日志库能限制空间使用，例如只分配10GB磁盘空间，用满之后就冲掉旧日志，重复利用空间，就像循环磁带一样。殊不知如果出现程序死循环拼命写日志的异常情况，那么往往是开头的几条日志最关键，它往往反映了引发异常（busy-loop）的原因（例如收到某条非法消息），后面都是无用的垃圾日志。如果日志库具备重复利用空间的“功能”，只会帮倒忙。磁盘写入的带宽按100MB/s计算，写满一个100GB的磁盘分区需要16分钟，这足够监控系统报警并人工干预了。</p>
+<p>往文件写日志的一个常见问题是，万一程序崩溃，那么最后若干条日志往往就丢失了，因为日志库不能每条消息都flush硬盘，更不能每条日志都open/close文件，这样性能开销太大。</p>
+<p>muduo日志库用两个办法来应对这一点，其一是定期（默认3秒）将缓冲区内的日志消息flush到硬盘；其二是每条内存中的日志消息都带有cookie（或者叫哨兵值/sentry），其值为某个函数的地址，这样通过在coredump文件中查找cookie就能找到尚未来得及写入磁盘的消息。</p>
+<p>日志消息的格式是固定的，不需要运行时配置，这样可节省每条日志解析格式字符串的开销。我认为日志的格式在项目的整个生命周期几乎不会改变，因为我们经常会为不同目的编写parse日志的脚本，既要解析最近几天的日志文件，也要和几个月之前，甚至一年之前的日志文件的同类数据做对比。如果在此期间日志格式变了，势必会增加很多无谓的工作量。如果真的需要调整消息格式，直接修改代码并重新编译即可。以下是muduo日志库的默认消息格式：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs">日期 时间 微秒 线程 级别 正文 源文件名：行号<br></code></pre></td></tr></table></figure>
+<p>日志消息格式有几个要点：</p>
+<ol type="1">
+<li>尽量每条日志占一行。这样很容易用awk、sed、grep等命令行工具来快速联机分析日志，比方说要查看“2012-06-03
+08:02:00”至“2012-06-03
+08:02:59”这1分钟内每秒打印日志的条数（直方图），可以运行<code>$ grep -o '.*' | sort | uniq -c</code>。</li>
+<li>时间戳精确到微秒。每条消息都通过gettimeofday()获得当前时间，这么做不会有太大的性能损失。因为在x86-64
+Linux上，gettimeofday()不是系统调用，不会陷入内核。</li>
+<li>始终使用GMT时区。对于跨洲的分布式系统而言，可省去本地时区转换的麻烦（别忘了主要西方国家大多实行夏令时），更易于追查事件的顺序。</li>
+<li>打印线程id。便于分析多线程程序的时序，也可以检测死锁。这里的线程id是指调用LOG_INFO&lt;&lt;的线程，线程id的获取见<span class="math inline">\(\S4.3\)</span>。</li>
+<li>打印日志级别。在线查错的时候先看看有无ERROR日志，通常可加速定位问题。</li>
+<li>打印源文件名和行号。修复bug的时候不至于搞错对象。</li>
+</ol>
+<p>每行日志的前4个字段的宽度是固定的，以空格分隔，便于用脚本解析。另外，应该避免在日志格式（特别是消息id）中出现正则表达式的元字符（meta
+character），例如"["和"]"等等，这样在用less查看日志文件的时候查找字符串更加便捷。</p>
+<p>运行时的日志过滤器（filter）或许是有用的，例如控制不同部件（程序库）的输出日志级别，但我认为这应该放到编译期去做，整个程序有一个整体的输出级别就足够好了。同时我认为一个程序同时写多个日志文件是非常罕见的需求，这可以事后留给logarchiver来分流，不必做到日志库中。不实现filter自然也能减小生成每条日志的运行时开销，可以提高日志库的性能。</p>
+<h2 id="性能需求">2. 性能需求</h2>
+<p>编写Linux服务端程序的时候，我们需要一个高效的日志库。只有日志库足够高效，程序员才敢在代码中输出足够多的诊断信息，减小运维难度，提升效率。高效性体现在几方面：</p>
+<ol type="1">
+<li>每秒写几千上万条日志的时候没有明显的性能损失。</li>
+<li>能应对一个进程产生大量日志数据的场景，例如1GB/min。</li>
+<li>不阻碍正常的执行流程。</li>
+<li>在多线程程序中，不造成争用。</li>
+</ol>
+<p>这里列举一些具体的性能指标，考虑往普通7200rpm
+SATA硬盘写日志文件的情况：</p>
+<ul>
+<li>磁盘带宽约是110MB/s，日志库应该能瞬时写满这个带宽（不必持续太久）。</li>
+<li>假如每条日志消息的平均长度是110字节，这意味着1秒要写100万条日志。</li>
+</ul>
+<p>以上是“高性能”日志库的最低指标。如果磁盘带宽更高，那么日志库的预期性能指标也会相应提高。反过来说，在磁盘带宽确定的情况下，日志库的性能只要“足够好”就行了。假如某个神奇的日志库1秒能往/dev/null写1000MB数据，那么到哪里去找这么快的磁盘来让程序写诊断日志呢？</p>
+<p>以下是muduo日志库在两台机器上的实测性能数据。</p>
+<p>硬件之一：</p>
+<ul>
+<li>CPU: E5320</li>
+<li>磁盘：7200rpm SATA</li>
+<li>消息/s: 97.1万</li>
+<li>MiB/s: 107.6</li>
+<li>消息/s: 242.2万</li>
+<li>MiB/s: 256.2</li>
+</ul>
+<p>硬件之二：</p>
+<ul>
+<li>CPU: i5-2500</li>
+<li>磁盘：7200rpm SATA</li>
+<li>消息/s: 91.2万</li>
+<li>MiB/s: 101.1</li>
+<li>消息/s: 234.2万</li>
+<li>MiB/s: 247.7</li>
+</ul>
+<p>可见muduo日志库在现在的PC上能写到每秒200万条消息，带宽足够撑满两个千兆网连接或4个SATA组成的RAID10，性能是达标的。</p>
+<p>为了实现这样的性能指标，muduo日志库的实现有几点优化措施值得一提：</p>
+<ol type="1">
+<li><strong>时间戳字符串中的日期和时间两部分是缓存的，</strong>一秒之内的多条日志只需重新格式化微秒部分。</li>
+<li>日志消息的前4个字段是定长的，因此可以避免在运行期求字符串长度（不会反复调用strlen）。因为编译器认识memcpy函数，对于定长的内存复制，会在编译期把它inline展开为高效的自标代码。</li>
+<li>线程id是预先格式化为字符串，在输出日志消息时只需简单拷贝几个字节。见CurrentThread::tidString()</li>
+<li>每行日志消息的源文件名部分采用了编译期计算来获得basename，避免运行期strrchr()开销。见SourceFile
+class，这里利用了gcc的内置函数。</li>
+</ol>
+<h2 id="多线程异步日志">3. 多线程异步日志</h2>
+<p>多线程程序对日志库提出了新的需求：线程安全，即多个线程可以并发写日志，两个线程的日志消息不会出现交织。线程安全不难办到，简单的办法是用一个全局mutex保护IO，或者每个线程单独写一个日志文件，但这两种做法的高效性就堪忧了。前者会造成全部线程抢一个锁，后者有可能让业务线程阻塞在写磁盘操作上。</p>
+<p>我认为一<strong>个多线程程序的每个进程最好只写一个日志文件，这样分析日志更容易，不必在多个文件中跳来跳去。</strong>再说多线程写多个文件也不一定能提速，见P.99的分析。解决办法不难想到，用一个背景线程负责收集日志消息，并写入日志文件，其他业务线程只管往这个“日志线程”发送日志消息，这称为“异步日志”。</p>
+<p>在多线程服务程序中，异步日志（叫“非阻塞日志”似乎更准确）是必需的，因为如果在网络IO线程或业务线程中直接在磁盘写数据的话，写操作偶尔可能阻塞长达数秒之久（原因很复杂，可能是磁盘或磁盘控制器复位）。这可能导致请求方超时，或者耽误发送心跳消息，在分布式系统中更可能造成多米诺骨牌效应，例如误报死锁引发自动failover等。因此，在正常的实时业务处理流程中应该彻底避免磁盘IO，这在使用one
+loop per
+thread模型的非阻塞服务端程序中尤为重要，因为线程是复用的，阻塞线程意味着影响多个客户连接。</p>
+<p>我们需要一个“队列”来将日志前端的数据传送到后端（日志线程），但这个“队列”不必是现成的BlockingQueue&lt;std::string&gt;，因为不用每次产生一条日志消息都通知（notify）接收方。</p>
+<p><strong>muduo日志库采用的是双缓冲（double
+buffering）技术</strong>，基本思路是准备两块buffer：A和B，前端负责往buffer
+A填数据（日志消息），后端负责将buffer B的数据写入文件。当buffer
+A写满之后，交换A和B，让后端将buffer A的数据写入文件，而前端则往buffer
+B填入新的日志消息，如此往复。用两个buffer的好处是在新建日志消息的时候不必等待磁盘文件操作，也避免每条新日志消息都触发（唤醒）后端日志线程。换言之，前端不是将一条条日志消息分别传送给后端，而是将多条日志消息拼成一个大的buffer传送给后端，相当于批处理，减少了线程唤醒的频率，降低开销。另外，为了及时将日志消息写入文件，即便buffer
+A未满，日志库也会每3秒执行一次上述交换写入操作。</p>
+<p>muduo异步日志的性能开销大约是前端每写一条日志消息耗时1.0us~1.6us。</p>
+<h3 id="关键代码">3.1 关键代码</h3>
+<p>实际实现采用了四个缓冲区，这样可以进一步减少或避免日志前端的等待。数据结构如下（muduo/base/AsyncLogging.h）：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">typedef</span> boost::ptr_vector&lt;LargeBuffer&gt; BufferVector;<br><span class="hljs-keyword">typedef</span> BufferVector::auto_type BufferPtr;<br>muduo::MutexLock mutex_;<br>muduo::Condition cond_;<br>BufferPtr currentBuffer_;	<span class="hljs-comment">//当前缓冲</span><br>BufferPtr nextBuffer_,		<span class="hljs-comment">//预备缓冲</span><br>BufferVector buffers_;		<span class="hljs-comment">//待写入文件的已填满的缓冲</span><br></code></pre></td></tr></table></figure>
+<p>其中，LargeBuffer类型是FixedBuffer class
+template的一份具体实现（instantiation），其大小为4MB，可以存至少1000条日志消息。boost::ptr_vector&lt;T&gt;::auto_type类型类似C++11中的std::unique_ptr，具备移动语义（move
+semantics），而且能自动管理对象生命期。mutex_用于保护后面的四个数据成员。buffers_存放的是供后端写入的buffer。</p>
+<p>先来看发送方代码，即p.108回调函数output()的实现。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs cpp">muduo/base/AsyncLogging.<span class="hljs-function">cc</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">AsyncLogging::append</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* logline, <span class="hljs-type">int</span> len)</span> </span>&#123;<br>    <span class="hljs-function">muduo::MutexLockGuard <span class="hljs-title">lock</span><span class="hljs-params">(mutex_)</span></span>;<br>    <span class="hljs-keyword">if</span> (currentBuffer_-&gt;<span class="hljs-built_in">avail</span>() &gt; len) &#123;<br>        <span class="hljs-comment">// most common case: buffer is not full, copy data here</span><br>        currentBuffer_-&gt;<span class="hljs-built_in">append</span>(logline, len);<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-comment">// buffer is full, push it, and find next spare buffer</span><br>        buffers_.<span class="hljs-built_in">push_back</span>(currentBuffer_.<span class="hljs-built_in">release</span>());<br>        <span class="hljs-keyword">if</span> (nextBuffer_) &#123;<br>            currentBuffer = boost::ptr_container::<span class="hljs-built_in">move</span>(nextBuffer_);<span class="hljs-comment">// 移动，而非复制</span><br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            currentBuffer_.<span class="hljs-built_in">reset</span>(<span class="hljs-keyword">new</span> LargeBuffer);<br>        &#125;<br>        currentBuffer_-&gt;<span class="hljs-built_in">append</span>(logline, len);<br>        cond_.<span class="hljs-built_in">notify</span>();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>前端在生成一条日志消息的时候会调用AsyncLogging::append()。在这个函数中，如果当前缓冲（currentBuffer_）剩余的空间足够大，则会直接把日志消息拷贝（追加）到当前缓冲中，这是最常见的情况。这里拷贝一条日志消息并不会带来多大开销。前后端代码的其余部分都没有拷贝，而是简单的指针交换。</p>
+<p>否则，说明当前缓冲已经写满，就把它送人（移入）buffers_（C37），并试图把预备好的另一块缓冲（nextBuffer_）移用（move）为当前缓冲，然后追加日志消息并通知（唤醒）后端开始写入日志数据。以上两种情况在临界区内都没有耗时的操作，运行时间为常数。</p>
+<p>如果前端写入速度太快，一下子把两块缓冲都用完了，那么只好分配一块新的buffer，作为当前缓冲，这是极少发生的情况。</p>
+<p>再来看接收方（后端）实现，这里只给出了最关键的临界区内的代码，其他项事请见源文件。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs cpp">muduo/base/AsyncLogging.<span class="hljs-function">cc</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">AsyncLogging::threadFunc</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-comment">// 首先准备好两块空闲的buffer，以备在临界区内交换</span><br>    <span class="hljs-function">BufferPtr <span class="hljs-title">newBuffer1</span><span class="hljs-params">(<span class="hljs-keyword">new</span> LargeBuffer)</span></span>;<br>    <span class="hljs-function">BufferPtr <span class="hljs-title">newBuffer2</span><span class="hljs-params">(<span class="hljs-keyword">new</span> LargeBuffer)</span></span>;<br>    BufferVector buffersTowrite;<br>    <span class="hljs-keyword">while</span> (running_) &#123;<br>        BufferPtr currentBuffer;<br>        BufferPtr nextBuffer;<br>        &#123;<br>            <span class="hljs-function">muduo::MutexLockGuard <span class="hljs-title">lock</span><span class="hljs-params">(mutex_)</span></span>;<br><span class="hljs-comment">//             等待条件触发</span><br>            <span class="hljs-keyword">if</span> (buffers_.<span class="hljs-built_in">empty</span>()) &#123;<br>                cond_.<span class="hljs-built_in">waitForSeconds</span>(flushInterval_);<br>            &#125;<br>            <br>            buffers_.<span class="hljs-built_in">push_back</span>(currentBuffer_.<span class="hljs-built_in">release</span>());<br>            currentBuffer = boost::ptr_container::<span class="hljs-built_in">move</span>(newBuffer1);<br>            buffersTowrite.<span class="hljs-built_in">swap</span>(buffers_);<br>            <span class="hljs-keyword">if</span> (nextBuffer_) &#123;<br>                nextBuffer = boost::ptr_container::<span class="hljs-built_in">move</span>(newBuffer2);<br>            &#125;<br>        &#125;<br>        <span class="hljs-comment">// output buffersTowrite to file</span><br>        <span class="hljs-comment">// re-fill newBuffer1 and newBuffer2</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>首先准备好两块空闲的buffer，以备在临界区内交换。在临界区内，等待条件触发，这里的条件有两个：其一是超时，其二是前端写满了一个或多个buffer。注意这里是非常规的condition
+variable用法，它没有使用while循环，而且等待时间有上限。</p>
+<p>当“条件”满足时，先将当前缓冲（currentBuffer_）移入buffers_，并立刻将空闲的newBuffer1移用为当前缓冲。注意这整段代码位于临界区之内，因此不会有任何race
+condition。接下来将buffers与buffersToWrite交换，后面的代码可以在临界区之外安全地访问buffersToWrite，将其中的日志数据写入文件。临界区里最后干的一件事情是用newBuffer2替换nextBuffer_，这样前端始终有一个预备buffer可供调配。nextBuffer_可以减少前端临界区分配内存的概率，缩短前端临界区长度。注意到后端临界区内也没有耗时的操作，运行时间为常数。</p>
+<p>re-fill newBuffer1 and newBuffer2
+会将buffersToWrite内的buffer重新填充newBuffer1和newBuffer2，这样下一次执行的时候还有两个空闲buffer可用于替换前端的当前缓冲和预备缓冲。最后，这四个缓冲在程序启动的时候会全部填充为0，这样可以避免程序热身时page
+fault引发性能不稳定。</p>
+<h3 id="运行图示">3.2 运行图示</h3>
+<p>以下再用图表展示前端和后端的具体交互情况。一开始先分配好四个缓冲区A、B、C、D，前端和后端各持有其中两个。前端和后端各有一个缓冲区数组，初始时都是空的。</p>
+<p><img src="/2024/12/25/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/5-%E9%AB%98%E6%95%88%E7%9A%84%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%97%A5%E5%BF%97/image-20241225115407839.png" srcset="/img/loading.gif" lazyload></p>
+<p>第一种情况是前端写日志的频度不高，后端3秒超时后将“当前缓冲currentBuffer_”写入文件，见图5-1（图中变量名为简写，下同）。</p>
+<p>在第2.9秒的时候，currentBuffer_使用了80%，在第3秒的时候后端线程醒过来，先把currentBuffer送入buffers_，再把newBuffer1移用为currentBuffer。随后第3+秒，交换buffers和buffersToWrite，离开临界区，后端开始将bufferA写入文件。写完（write
+done）之后再把newBuffer1重新填上，等待下一次cond_.waitForSeconds返回。</p>
+<p>后面在画图时将有所简化，不再画出buffers_和buffersToWrite交换的步骤。</p>
+<p>第二种情况，在3秒超时之前已经写满了当前缓冲，于是唤醒后端线程开始写入文件，见图5-2。</p>
+<p><img src="/2024/12/25/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/5-%E9%AB%98%E6%95%88%E7%9A%84%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%97%A5%E5%BF%97/image-20241225115532189.png" srcset="/img/loading.gif" lazyload></p>
+<p>在第1.5秒的时候，currentBuffer_使用了80%；第1.8秒，currentBuffer_写满，于是将当前缓冲送入buffers_，并将nextBuffer_移用为当前缓冲，然后唤醒后端线程开始写入。当后端线程唤醒之后（第1.8+秒），先将currentBuffer_送入buffers_，再把newBuffer1移用为currentBuffer_，然后交换buffers和buffersToWrite，最后用newBuffer2替换nextBuffer，即保证前端有两个空缓冲可用。离开临界区之后，将buffersTowrite中的缓冲区A和B写入文件，写完之后重新填充newBuffer1和newBuffer2，完成一次循环。</p>
+<p>上面这两种情况都是最常见的，再来看一看前端需要分配新buffer的两种情况。</p>
+<p>第三种情况，前端在短时间内密集写入日志消息，用完了两个缓冲，并重新分配了一块新的缓冲，见图5-3。</p>
+<p><img src="/2024/12/25/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/5-%E9%AB%98%E6%95%88%E7%9A%84%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%97%A5%E5%BF%97/image-20241225120448542.png" srcset="/img/loading.gif" lazyload></p>
+<p>在第1.8秒的时候，缓冲A已经写满，缓冲B也接近写满，并且已经notify()了后端线程，但是出于种种原因，后端线程并没有立刻开始工作。到了第1.9秒，缓冲B也已经写满，前端线程新分配了缓冲E。到了第1.8+秒，后端线程终于获得控制权，将C、D两块缓冲交给前端，并开始将A、B、E依次写入文件。一段时间之后，完成写入操作，用A、B重新填充那两块空闲缓冲。注意这里有意用A和B来填充newBuffer1/2，而释放了缓冲E，这是因为使用A和B不会造成page
+fault。</p>
+<p>思考题：阅读代码并回答，缓冲E是何时在哪个线程释放的？</p>
+<p>第四种情况，文件写入速度较慢，导致前端耗尽了两个缓冲，并分配了新缓冲，见图5-4。</p>
+<p><img src="/2024/12/25/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/5-%E9%AB%98%E6%95%88%E7%9A%84%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%97%A5%E5%BF%97/image-20241225120546771.png" srcset="/img/loading.gif" lazyload></p>
+<p>前1.8+秒的场景和前面“第二种情况”相同，前端写满了一个缓冲，唤醒后端线程开始写入文件。之后，后端花了较长时间（大半秒）才将数据写完。这期间前端又用完了两个缓冲，并分配了一个新的缓冲，这期间前端的notify()已经丢失。当后端写完（write
+done）后，发现buffers_不为空，立刻进入下一循环。即替换前端的两个缓冲，并开始一次写入C、D、E。假定前端在此期间产生的日志较少，请读者补全后续的情况。</p>
+<h3 id="改进措施">3.3 改进措施</h3>
+<p>前面我们一共准备了四块缓冲，应该足以应付日常的需求。如果需要进一步增加buffer数目，可以改用下面的数据结构。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs cpp">BufferPtr currentBuffer_;	<span class="hljs-comment">//当前缓冲</span><br>BufferVector emptyBuffers_; <span class="hljs-comment">//空闲缓冲</span><br>BufferVector fullBuffers_;	<span class="hljs-comment">//已写满的缓冲</span><br></code></pre></td></tr></table></figure>
+<p>初始化时在emptyBuffers_中放入足够多空闲buffer，这样前端几乎不会遇到需要在临界区内新分配buffer的情况，这是一种空间换时间的做法。为了避免短时突发写大量日志造成新分配的buffer占用过多内存，后端代码应该保证emptyBuffers_和fullBuffers_的长度之和不超过某个定值。buffer在前端和后端之间流动，形成一个循环，如图5-5所示。</p>
+<p>以上改进留作练习。</p>
+<p><img src="/2024/12/25/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/5-%E9%AB%98%E6%95%88%E7%9A%84%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%97%A5%E5%BF%97/image-20241225120735905.png" srcset="/img/loading.gif" lazyload></p>
+<p>如果日志消息堆积怎么办</p>
+<p>万一前端陷入死循环，拼命发送日志消息，超过后端的处理（输出）能力，会导致什么后果？对于同步日志来说，这不是问题，因为阻塞IO自然就限制了前端的写入速度，起到了节流阀（throttling）的作用。但是对于异步日志来说，这就是典型的生产速度高于消费速度问题，会造成数据在内存中积累，严重时引发性能问题（可用内存不足）或程序崩溃（分配内存失败）。</p>
+<p>muduo日志库处理日志堆积的方法很简单：<strong>直接丢掉多余的日志buffer</strong>，以腾出内存，见muduo/base/AsyncLogging.cc第87~96行代码。这样可以防止日志库本身引起程序故障，是一种自我保护措施。将来或许可以加上网络报警功能，通知人工介入，以尽快修复故障。</p>
+<h2 id="其他方案">4. 其他方案</h2>
+<p>当然在前端和后端之间高效传递日志消息的办法不止这一种，比方说使用常规的muduo::BlockingQueue&lt;std::string&gt;或muduo::BoundedBlockingQueue&lt;std::string&gt;在前后端之间传递日志消息，其中每个std::string是一条消息。这种做法每条日志消息都要分配内存，特别是在前端线程分配的内存要由后端线程释放，因此对malloc的实现要求较高，需要针对多线程特别优化。另外，如果用这种方案，那么需要修改LogStream的Buffer，使之直接将日志写到std::string中，可节省一次内存拷贝。</p>
+<p>相比前面展示的直接拷贝日志消息的做法，这个传递指针的方案似乎会更高效，但是据我测试，<strong>直接拷贝日志数据的做法比传递指针快3倍</strong>（在每条日志消息不大于4kB的时候），估计是内存分配的开销所致。因此muduo日志库只提供了<span class="math inline">\(\S5.3\)</span>介绍的这一种异步日志机制。这再次说明“性能”不能凭感觉说了算，一定要有典型场景的测试数据作为支撑。</p>
+<p>muduo现在的异步日志实现用了一个全局锁。尽管临界区很小，但是如果线程数目较多，锁争用（lock
+contention）也可能影响性能。一种解决办法是像Java的ConcurrentHashMap那样用多个桶子（bucket），前端写日志的时候再按线程id哈希到不同的bucket中，以减少contention。这种方案的后端实现较为复杂，有兴趣的读者可以试一试。</p>
+<p>为了简化实现，目前muduo日志库只允许指定日志文件的名字，不允许指定其路径。日志库会把日志文件写到当前路径，因此可以在启动脚本（shell脚本）重改变当前路径，以达到相同的目的。</p>
+<p>Linux默认会把coredump写到当前目录，而且文件名是固定的core。为了不让新的coredump文件冲掉旧的，我们可以通过sysctl设置kernel.core_pattern参数（也可以修改/proc/sys/kernel/core_pattern），让每次coredump都产生不同的文件。例如设为%e.%t.%p.%u.core，其中各个参数的意义见man5core。另外也可以使用Apport来收集有用的诊断信息，见https://wiki.ubuntu.com/Apport。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/c/" class="category-chain-item">c++</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/c/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="category-chain-item">muduo多线程服务器</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/muduo/" class="print-no-link">#muduo</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>5. 高效的多线程日志</div>
+      <div>http://binbo-zappy.github.io/2024/12/25/muduo多线程/5-高效的多线程日志/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年12月25日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/12/25/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/6-muduo%E7%BD%91%E7%BB%9C%E5%BA%93%E7%AE%80%E4%BB%8B/" title="6. muduo网络库简介">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">6. muduo网络库简介</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/12/24/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/4-C++%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B%E7%B2%BE%E8%A6%81/" title="4. C++多线程系统编程精要">
+                        <span class="hidden-mobile">4. C++多线程系统编程精要</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,1259 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="第3章 多线程服务器的适用场合与常用编程模型 总结了一些常用的线程模型，归纳了进程间通信与线程同步的最佳实践，以期用简单规范的方式开发功能正确、线程安全的多线程程序。本章假定读者已经有多线程编程的知识与经验（本书不是一篇入门教程）。 文中的“多线程服务器”是指运行在Linux操作系统上的独占式网络应用程序。硬件平台为Intel x86-64系列的多核CPU，单路或双路SMP服务器（每台机器">
+<meta property="og:type" content="article">
+<meta property="og:title" content="3. 多线程服务器的适用场合与常用编程模型">
+<meta property="og:url" content="http://binbo-zappy.github.io/2024/12/24/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/3-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E9%80%82%E7%94%A8%E5%9C%BA%E5%90%88%E4%B8%8E%E5%B8%B8%E7%94%A8%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8B/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="第3章 多线程服务器的适用场合与常用编程模型 总结了一些常用的线程模型，归纳了进程间通信与线程同步的最佳实践，以期用简单规范的方式开发功能正确、线程安全的多线程程序。本章假定读者已经有多线程编程的知识与经验（本书不是一篇入门教程）。 文中的“多线程服务器”是指运行在Linux操作系统上的独占式网络应用程序。硬件平台为Intel x86-64系列的多核CPU，单路或双路SMP服务器（每台机器">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/muduo.jpg">
+<meta property="article:published_time" content="2024-12-24T02:32:21.000Z">
+<meta property="article:modified_time" content="2024-12-24T13:59:33.345Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="muduo">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/muduo.jpg">
+  
+  
+  
+  <title>3. 多线程服务器的适用场合与常用编程模型 - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="3. 多线程服务器的适用场合与常用编程模型"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-12-24 10:32" pubdate>
+          2024年12月24日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          16k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          132 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">3. 多线程服务器的适用场合与常用编程模型</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="第3章-多线程服务器的适用场合与常用编程模型">第3章
+多线程服务器的适用场合与常用编程模型</h1>
+<p>总结了一些常用的线程模型，归纳了进程间通信与线程同步的最佳实践，以期用简单规范的方式开发功能正确、线程安全的多线程程序。本章假定读者已经有多线程编程的知识与经验（本书不是一篇入门教程）。</p>
+<p>文中的“多线程服务器”是指运行在Linux操作系统上的独占式网络应用程序。硬件平台为Intel
+x86-64系列的多核CPU，单路或双路SMP服务器（每台机器一共拥有四个核或八个核，十几GB内存），机器之间用千兆以太网连接。这大概是目前民用PC服务器的主流配置。不考虑做分布式存储，只考虑分布式计算，系统的规模大约是几十台服务器到几百台服务器之间。</p>
+<p>我将要谈的“网络应用程序”的基本功能可以简单归纳为“收到数据，算一算，再发出去”。在这个简化了的模型中，似乎看不出用多线程的必要，单线程应该也能做得很好。“为什么需要写多线程程序”这个问题容易引发口水战，我放到<span class="math inline">\(\S3.5\)</span>讨论。请允许我先假定“多线程编程”这一背景。</p>
+<p>“服务器”这个词有时指程序，有时指进程，有时指硬件（无论虚拟的或真实的），请按上下文区分。另外，本书不考虑虚拟化的场景，当我说“两个进程不在同一台机器上”时，指的是逻辑上不在同一个操作系统中运行，虽然物理上可能位于同一台机器虚拟出来的两台“虚拟机”上。</p>
+<h2 id="进程与线程">1. 进程与线程</h2>
+<p>“进程（process）”是操作系统最重要的两个概念之一（另一个是文件），粗略地讲，<strong>一个进程是“内存中正在运行的程序”。</strong>本书的进程指的是Linux操作系统通过fork()系统调用产生的那个东西，或者Windows下CreateProcess()的产物，不是Erlang里的那种“轻量级进程（Actor）”。</p>
+<p>每个进程有自己独立的地址空间（address
+space），“在同一个进程”还是“不在同一个进程”是系统功能划分的重要决策点。《Erlang程序设计》[ERL]把“进程”比喻为“人”，我觉得十分精当，为我们提供了一个思考的框架。</p>
+<p>每个人有自己的记忆（memory），人与人通过谈话（消息传递）来交流，谈话既可以是面谈（同一台服务器），也可以在电话里谈（不同的服务器，有网络通信）。面谈和电话谈的区别在于，面谈可以立即知道对方是否死了（crash，SIGCHLD），而电话谈只能通过周期性的心跳来判断对方是否还活着。</p>
+<p>有了这些比喻，设计分布式系统时可以采取“角色扮演”，团队里的几个人各自扮演一个进程，人的角色由进程的代码决定（管登录的、管消息分发的、管买卖的等等）。每个人有自己的记忆，但不知道别人的记忆，要想知道别人的看法，只能通过交谈（暂不考虑共享内存这种IPC）。然后就可以思考：</p>
+<ul>
+<li>容错：万一有人突然死了。</li>
+<li>扩容：新人中途加进来。</li>
+<li>负载均衡：把甲的活儿挪给乙做。</li>
+<li>退休：甲要修复bug，先别派新任务，等他做完手上的事情就把他重启。</li>
+</ul>
+<p>等等各种场景，十分便利。</p>
+<p>“线程”这个概念大概是在1993年以后才慢慢流行起来的，距今不到20年，比不得有40年光辉历史的Unix操作系统。线程的出现给Unix添了不少乱，很多C库函数（strtok(),
+ctime()）不是线程安全的，需要重新定义（<span class="math inline">\(\S4.2\)</span>）；signal的语义也大为复杂化。据我所知，最早支持多线程编程的（民用）操作系统是Solaris
+2.2和Windows NT 3.1，它们均发布于1993年。随后在1995年，POSIX
+threads标准确立。</p>
+<p><strong>线程的特点是共享地址空间，从而可以高效地共享数据</strong>。一台机器上的多个进程能高效地共享代码段（操作系统可以映射为同样的物理内存），但不能共享数据。如果多个进程大量共享内存，等于是把多进程程序当成多线程来写，掩耳盗铃。</p>
+<p>“多线程”的价值，我认为是为了更好地发挥多核处理器（multi-cores）的效能。在单核时代，多线程没有多大价值。Alan
+Cox说过：“A computer is a state machine. Threads are for people who
+can't program state
+machines.”（计算机是一台状态机。线程是给那些不能编写状态机程序的人准备的。）如果只有一块CPU、一个执行单元，那么确实如Alan
+Cox所说，按状态机的思路去写程序是最高效的，这正好也是下节展示的编程模型。</p>
+<h2 id="单线程服务器的常用编程模型">2. 单线程服务器的常用编程模型</h2>
+<p>[在高性能的网络程序中，使用得最为广泛的恐怕要数“non-blocking IO+IO
+multiplexing”这种模型，即Reactor模式，我知道的有：</p>
+<ul>
+<li>lighttpd，单线程服务器。（Nginx与之类似，每个工作进程有一个event
+loop。）</li>
+<li>libevent, libev.</li>
+<li>ACE, Poco C++ libraries.</li>
+<li>Java NIO，包括Apache Mina和Netty.</li>
+<li>POE(Perl)</li>
+<li>Twisted (Python).</li>
+</ul>
+<p>相反，Boost.Asio和Windows IO Completion
+Ports实现了Proactor模式，应用面似乎要窄一些。此外，ACE也实现了Proactor模式。</p>
+<p>在“non-blocking IO+IO
+multiplexing”这种模型中，程序的基本结构是一个事件循环（event
+loop），以事件驱动（event-driven）和事件回调的方式实现业务逻辑：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">while</span> (!done) &#123;<br>    <span class="hljs-type">int</span> timeout_ms = <span class="hljs-built_in">max</span>(<span class="hljs-number">100</span>, <span class="hljs-built_in">getNextTimedCallback</span>());<br>    <span class="hljs-type">int</span> retval = ::<span class="hljs-built_in">poll</span>(fds, nfds, timeout_ms);<br>    <span class="hljs-keyword">if</span> (retval &lt; <span class="hljs-number">0</span>) &#123;<br>        <span class="hljs-comment">// 处理错误，回调用户的error handler</span><br>    &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (retval == <span class="hljs-number">0</span>) &#123;<br>        <span class="hljs-comment">// 处理到期的timers，回调用户的timer handler</span><br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-comment">// 处理IO事件，回调用户的IO event handler</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这里select(2)/poll(2)有伸缩性方面的不足，Linux下可替换为epoll(4)，其他操作系统也有对应的高性能替代品。</p>
+<p>Reactor模型的优点很明显，编程不难，效率也不错。不仅可以用于读写socket，连接的建立（connect(2)/accept(2)）甚至DNS解析都可以用非阻塞方式进行，以提高并发度和吞吐量（throughput），对于IO密集的应用是个不错的选择。lighttpd就是这样，它内部的fdevent结构十分精妙，值得学习。</p>
+<p>基于事件驱动的编程模型也有其本质的缺点，它要求事件回调函数必须是非阻塞的。对于涉及网络IO的请求响应式协议，它容易割裂业务逻辑，使其散布于多个回调函数之中，相对不容易理解和维护。现代的语言有一些应对方法（例如coroutine），但是本书只关注C++这种传统语言，因此就不展开讨论了。</p>
+<hr>
+<p>Tips:</p>
+<p><code>select(2)</code> 和 <code>poll(2)</code> 是指在 Unix 和类 Unix
+操作系统中提供的系统调用，它们用于实现非阻塞 I/O 操作和 I/O
+多路复用。这里的数字 "2" 表示这些系统调用的手册页（man page）在 Unix
+手册中的位置。Unix 手册分为多个部分，其中第二部分（Section
+2）通常包含系统调用的文档。</p>
+<p><strong>select(2)</strong></p>
+<p><code>select(2)</code>
+是一个系统调用，它允许程序同时监视多个文件描述符（file
+descriptors），以查看是否有任何 I/O
+事件（如数据可读、可写或有错误）。<code>select</code>
+通过检查每个文件描述符的状态，来确定是否有 I/O 事件准备好被处理。如果
+<code>select</code>
+检测到一个或多个文件描述符准备好了，它就会返回，程序就可以处理这些事件。</p>
+<p><strong>poll(2)</strong></p>
+<p><code>poll(2)</code> 是另一个类似的系统调用，它提供了与
+<code>select</code> 类似的功能，但使用不同的接口。<code>poll</code>
+直接传递一个包含文件描述符和相关事件的数组，而不是像 <code>select</code>
+那样使用三个分开的集合（可读、可写、异常）。<code>poll</code>
+通常被认为比 <code>select</code>
+更灵活，因为它不需要在传递的数组和内核之间复制文件描述符集合，这可以减少调用的开销。</p>
+<p><strong>伸缩性问题</strong></p>
+<p>尽管 <code>select</code> 和 <code>poll</code> 可以用于 I/O
+多路复用，但它们都有伸缩性问题。<code>select</code>
+有一个限制，即它只能监视一定数量的文件描述符（通常是 1024
+个），超过这个限制就不能监视更多的文件描述符。<code>poll</code>
+没有这个限制，但它的性能随着监视的文件描述符数量增加而下降，因为它需要复制整个文件描述符数组。</p>
+<p><strong>高性能替代品</strong></p>
+<p>由于 <code>select</code> 和 <code>poll</code>
+的这些限制，许多操作系统提供了更高效的替代品：</p>
+<ul>
+<li><strong>Linux</strong>: <code>epoll(4)</code> 是 Linux 提供的 I/O
+事件通知机制，它比 <code>select</code> 和 <code>poll</code>
+更高效，因为它不需要在每次调用时复制文件描述符集合，并且可以处理大量的文件描述符而不会有性能问题。</li>
+<li><strong>Solaris</strong>: <code>/dev/poll</code> 是 Solaris
+提供的类似 <code>epoll</code> 的机制。</li>
+<li><strong>BSD 系列</strong>: <code>kqueue(2)</code> 是在 BSD
+系统中提供的，类似于 <code>epoll</code> 和 <code>/dev/poll</code>
+的机制。</li>
+</ul>
+<p>这些替代品通常提供了更好的性能和伸缩性，特别是在需要监视大量文件描述符的情况下。</p>
+<hr>
+<p>Tips:</p>
+<p>Reactor模式是一种事件驱动的设计模式，用于处理服务请求，这些请求必须由服务程序处理。这种模式非常适合于处理多个客户端的并发请求，常见于网络服务器、数据库服务器等需要处理大量并发I/O操作的场景。Reactor模式的核心思想是将服务请求的发起者（如客户端）和请求的处理者（如服务器端的处理逻辑）解耦，通过事件多路分离和分发机制来实现。</p>
+<p><strong>Reactor模式的主要组件：</strong></p>
+<ol type="1">
+<li><strong>Reactor（反应器）</strong>：
+<ul>
+<li>负责监听和分发事件或请求。</li>
+<li>当有事件到达时，Reactor会将事件委托给适当的处理程序（Handler）。</li>
+</ul></li>
+<li><strong>Handlers（处理程序）</strong>：
+<ul>
+<li>具体处理事件的逻辑。</li>
+<li>可以有多个Handler，每个Handler负责处理不同类型的事件。</li>
+</ul></li>
+<li><strong>Acceptor（接受器）</strong>（可选）：
+<ul>
+<li>用于接受客户端的连接请求。</li>
+<li>通常用于建立连接，并将连接后的socket传递给Reactor进行事件监听。</li>
+</ul></li>
+<li><strong>Channels（通道）</strong>（可选）：
+<ul>
+<li>代表服务器和客户端之间的连接。</li>
+<li>可以是TCP连接、UDP套接字等。</li>
+</ul></li>
+<li><strong>Events（事件）</strong>：
+<ul>
+<li>服务请求的表现形式，如客户端的连接请求、数据到达等。</li>
+</ul></li>
+</ol>
+<p><strong>Reactor模式的工作流程：</strong></p>
+<ol type="1">
+<li><strong>事件监听</strong>：
+<ul>
+<li>Reactor在一个或多个Channel上等待事件的发生。</li>
+</ul></li>
+<li><strong>事件分发</strong>：
+<ul>
+<li>一旦检测到事件，Reactor会将事件和对应的Channel封装成任务，并分发给相应的Handler处理。</li>
+</ul></li>
+<li><strong>事件处理</strong>：
+<ul>
+<li>Handler接收到事件后，执行具体的业务逻辑处理。</li>
+</ul></li>
+<li><strong>响应客户端</strong>：
+<ul>
+<li>处理完成后，Handler可能需要通过Channel向客户端发送响应。</li>
+</ul></li>
+</ol>
+<p><strong>Reactor模式的变体：</strong></p>
+<ul>
+<li><strong>单Reactor单线程模型</strong>：
+<ul>
+<li>所有事件都在同一个线程中处理，Reactor和Handler是同一个线程。</li>
+</ul></li>
+<li><strong>单Reactor多线程模型</strong>：
+<ul>
+<li>Reactor在一个线程中运行，但将事件分发给多个Handler线程处理。</li>
+</ul></li>
+<li><strong>主Reactor多线程模型</strong>：
+<ul>
+<li>主Reactor负责接收客户端连接，并将连接分发给多个子Reactor处理。</li>
+</ul></li>
+</ul>
+<p>这些变体可以根据实际的应用需求和性能要求来选择。Reactor模式的优势在于它可以有效地处理大量的并发事件，同时保持代码的清晰和易于管理。在现代的网络编程和异步编程中，Reactor模式及其变体被广泛使用。</p>
+<hr>
+<h2 id="多线程服务器的常用编程模型">3. 多线程服务器的常用编程模型</h2>
+<ol type="1">
+<li>每个请求创建一个线程，使用阻塞式IO操作。在Java
+1.4引入NIO之前，这是Java网络编程的推荐做法。可惜伸缩性不佳。</li>
+<li>使用线程池，同样使用阻塞式IO操作。与第1种相比，这是提高性能的措施。</li>
+<li>使用 non-blocking IO+IO multiplexing。即 Java NIO的方式。</li>
+<li>Leader/Follower等高级模式。</li>
+</ol>
+<p>在默认情况下，我会使用第3种，即non-blocking IO+one looper
+thread模式来编写多线程C++网络服务程序。</p>
+<h3 id="one-looper-thread">3.1 one looper thread</h3>
+<p>此种模型下，程序单的每个IO线程有一个event
+loop（或者叫Reactor），用于处理读写和定时事件（无论周期性的还是单次的），代码框架跟<span class="math inline">\(\S3.2\)</span>一样。</p>
+<p>ibev的作者说：</p>
+<p>One loop per thread is usually a good model. Doing this is almost
+never wrong, sometimes a better-performance model exists, but it is
+always a good start.</p>
+<p>这种方式的好处是：</p>
+<ul>
+<li>线程数目基本固定，可以在程序启动的时候设置，不会频繁创建与销毁。</li>
+<li>可以很方便地在线程间调配负载。</li>
+<li>IO事件发生的线程是固定的，同个TCP连接不必考虑事件开发。</li>
+</ul>
+<p>Event loop代表了线程的主循环，需要让哪个线程干活，就把timer或IO
+channel（如TCP连接）注册到哪个线程的loop里即可。对实时性有要求的connection可以单独用一个线程；数据量大的connection可以独占一个线程，并把数据处理任务分担到另几个计算线程中（用线程池）；其他次要的辅助性connections可以共享一个线程。</p>
+<p>对于non-trivial的服务端程序，一般会采用non-blocking IO+IO
+multiplexing，每个connection/acceptor都会注册到某个event
+loop上，程序里有多个event loop，每个线程至多有一个event loop。</p>
+<p>多线程程序对event
+loop提出了更高的要求，那就是“线程安全”。要允许一个线程往别的线程的loop里塞东西，这个loop必须得是线程安全的。如何实现一个优质的多线程Reactor？可参考第8章。</p>
+<h3 id="线程池">3.2 线程池</h3>
+<p>不过，对于没有IO而光有计算任务的线程，使用event
+loop有点浪费，我会用一种补充方案，即用blocking
+queue实现的任务队列（TaskQueue）：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">typedef</span> boost::function&lt;<span class="hljs-type">void</span>()&gt; Functor;<br>BlockingQueue&lt;Functor&gt; taskQueue; <span class="hljs-comment">// 线程安全的阻塞队列</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">workerThread</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">while</span> (running) &#123; <span class="hljs-comment">// running变量是个全局标志</span><br>        Functor task = taskQueue.<span class="hljs-built_in">take</span>(); <span class="hljs-comment">// this blocks</span><br>        <span class="hljs-built_in">task</span>(); <span class="hljs-comment">// 在产品代码中需要考虑异常处理</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>用这种方式实现线程池特别容易，以下是启动容量（并发数）为N的线程池：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">int</span> N = num_of_computing_threads;<br><span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; N; ++i)<br>    <span class="hljs-built_in">create_thread</span>(&amp;workerThread); <span class="hljs-comment">// 伪代码：启动线程</span><br></code></pre></td></tr></table></figure>
+<p>使用起来也很简单：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs cpp">Foo foo; <span class="hljs-comment">// Foo 有calc()成员函数</span><br>boost::function&lt;<span class="hljs-type">void</span>()&gt; task = boost::<span class="hljs-built_in">bind</span>(&amp;Foo::calc, &amp;foo);<br>taskQueue.<span class="hljs-built_in">post</span>(task);<br></code></pre></td></tr></table></figure>
+<p>以上十几行代码就实现了一个简单的固定数目的线程池，功能大概相当于Java中的ThreadPoolExecutor的某种“配置”。当然，在真实的项目中，这些代码都应该封装到一个class中，而不是使用全局对象。另外需要注意一点：Foo对象的生命期，第1章详细讨论了这个问题。</p>
+<p>muduo的线程池比这个略复杂，因为要提供stop()操作。</p>
+<p>除了任务队列，还可以用BlockingQueue&lt;T&gt;实现数据的生产者消费者队列，即T是数据类型而非函数对象，queue的消费者(s)从中拿到数据进行处理。</p>
+<p>BlockingQueue&lt;T&gt;是多线程编程的利器，它的实现可参照Java.util.concurrent里的（ArrayBlockingQueue/LinkedBlockingQueue）。这份Java代码可读性很高，代码的基本结构和教科书一致（1个mutex，2个condition
+variables），健壮性要高得多。如果不想自己实现，用现成的库更好。muduo里有一个基本的实现，包括无界的BlockingQueue和有界的BoundedBlockingQueue两个class。有兴趣的读者还可以试试Intel
+Threading Building
+Blocks里的concurrent_queue&lt;T&gt;，性能估计会更好。</p>
+<h3 id="推荐模式">3.3 推荐模式</h3>
+<p>总结起来，我推荐的C++多线程服务端编程模式为：one event loop thread +
+thread pool.</p>
+<ul>
+<li>event loop（也叫IO loop）用作IO multiplexing，配合non-blocking
+IO和定时器。</li>
+<li>thread pool用来做计算，具体可以是任务队列或生产者消费者队列。</li>
+</ul>
+<p>以这种方式写服务器程序，需要一个优质的<strong>基于Reactor模式的网络库</strong>来支撑，muduo正是这样的网络库。</p>
+<p>程序里具体用几个loop、线程池的大小等参数需要根据应用来设定，基本原则是“阻抗匹配”，使得CPU和IO都能高效地运作，具体的例子见P.80。</p>
+<p>此外，程序里或许还有个别执行特殊任务的线程，比如logging，这对应用程序来说基本上是不可见的，但是在分配资源（CPU和IO）的时候要算进去，以免高估了系统的容量。</p>
+<h2 id="进程间通信只用tcp">4. 进程间通信只用TCP</h2>
+<p>Linux下进程间通信（IPC）的方式数不胜数，光[UNPv2]列出的就有：置名管道（pipe）具名管道（FIFO）、POSIX消息队列、共享内存、信号（signals）等等，更不必说Sockets了。同步原语（synchronization
+primitives）也很多，如互斥器（mutex）、条件变量（condition
+variable）、读写锁（reader-writer lock）、文件锁（record
+locking）、信号量（semaphore）等等。</p>
+<p>进程间通信我首选Sockets（主要指TCP，我没有用过UDP，也不考虑Unix
+domain协议），其最大的好处在于：<strong>可以跨主机，具有伸缩性</strong>。反正都是多进程了，如果一台机器的处理能力不够，很自然地就能用多台机器来处理。把进程分散到同一局域网的多台机器上，程序改改host
+port配置就能继续用。相反，前面列出的其他IPC都不能跨机器，这就限制了scalability。</p>
+<p>在编程上，TCP
+sockets和pipe都是操作文件描述符，用来收发字节流，都可以read/write/fcntl/select/poll等。不同的是，TCP是双向的，Linux的pipe是单向的，进程间双向通信还得开两个文件描述符，不方便；而且进程要有父子关系才能用pipe，这些都限制了pipe的使用。在收发字节流这一通信模型下，没有比Sockets/TCP更自然的IPC了。当然，pipe也有一个经典应用场景，那就是写Reactor/event
+loop时用来异步唤醒select（或等价的poll/epoll_wait）调用，Sun HotSpot
+JVM在Linux就是这么做的。</p>
+<p>TCP port由一个进程独占，且操作系统会自动回收（listening
+port和已建立连接的TCP
+socket都是文件描述符，在进程结束时操作系统会关闭所有文件描述符）。这说明，即使程序意外退出，也不会给系统留下垃圾，程序重启之后能比较容易地恢复，而不需要重启操作系统（用跨进程的mutex就有这个风险）。还有一个好处，既然port是独占的，那么可以防止程序重复启动，后面那个进程抢不到port，自然就没法初始化了，避免造成意料之外的结果。</p>
+<p>两个进程通过TCP通信，如果一个崩溃了，操作系统会关闭连接，另一个进程几乎立刻就能感知，可以快速failover。当然应用层的心跳也是必不可少的（<span class="math inline">\(\S9.3\)</span>）。</p>
+<p>与其他IPC相比，<strong>TCP协议的一个天生的好处是“可记录、可重现”</strong>。tcpdump和Wireshark是解决两个进程间协议和状态争端的好帮手，也是性能（吞吐量、延时）分析的利器。我们可以借此编写分布式程序的自动化回归测试。也可以用tcpcopy之类的工具进行压力测试。TCP还能跨语言，服务端和客户端不必使用同一种语言。</p>
+<p>另外，如果网络库带“连接重试”功能的话，我们可以不要求系统里的进程以特定顺序启动，任何一个进程都能单独重启。换句话说，TCP连接是可再生的，连接的任何一方都可以退出再启动，重建连接之后就能继续工作，这对开发牢靠的分布式系统意义重大。</p>
+<p>使用TCP这种字节流（bytestream）方式通信，会有marshal/unmarshal的开销，这要求我们选用合适的消息格式，准确地说是wire
+format，目前我推荐Google Protocol Buffers。见S<span class="math inline">\(\S9.6\)</span>关于分布式系统消息格式的讨论。</p>
+<p>有人或许会说，具体问题具体分析，如果两个进程在同一台机器，就用共享内存，否则就用TCP，比如MS
+SQL
+Server就同时支持这两种通信方式。试问，是否值得为那么一点性能提升而让代码的复杂度大大增加呢？何况TCP的local吞吐量一点都不低，见S6.5.1的测试结果。TCP是字节流协议，只能顺序读取，有写缓冲；共享内存是消息协议，A进程填好一块内存让B进程来读，基本是“停等（stop-and-wait）”方式。要把这两种方式用到一个程序中，需要建一个抽象层，封装两种IPC。这会带来不透明性，并且增加测试的复杂度。而且一旦通信的某一方崩溃，状态reconcile也会比sockets麻烦。（数据刚写到一半，怎么办？）为我所不取。再说了，你舍得让几万块买来的SQL
+Server和其他应用程序分享机器资源吗？生产环境下的数据库服务器往往是独立的高配置服务器，一般不会同时运行其他占资源的程序。</p>
+<p>ICP本身是个数据流协议，除了直接使用它来通信外，还可以在此之上构建RPC/HTTP/SOAP之类的上层通信协议，这超过了本章的范围。另外，除了点对点的通信之外，应用级的广播协议也是非常有用的，可以方便地构建可观可控的分布式系统，见S7.11。</p>
+<h3 id="分布式系统中使用tcp长连接通信">4.1
+分布式系统中使用TCP长连接通信</h3>
+<p>§3.1提到，分布式系统的软件设计和功能划分一般应该以“进程”为单位。从宏观上看，一个分布式系统是由运行在多台机器上的多个进程组成的，进程之间采用TCP长连接通信。本章讨论分布式系统中单个服务进程的设计方法，第9章将谈一谈整个系统的设计。我提倡用多线程，并不是说把整个系统放到一个进程里实现，而是指功能划分之后，在实现每一类服务进程时，在必要时可以借助多线程来提高性能。对于整个分布式系统，要做到能scale
+out,即享受增加机器带来的好处。</p>
+<p>使用TCP长连接的好处有两点：</p>
+<ul>
+<li>一是容易定位分布式系统中的服务之间的依赖关系。只要在机器上运行netstat
+-tpna |
+grep:port就能立刻列出用到某服务的客户端地址（Foreign列)，然后在客户端的机器上用netstat或lsof命令找出是哪个进程发起的连接。这样在迁移服务的时候能有效地防止出现outage。TCP短连接和UDP则不具备这一特性。</li>
+<li>二是通过接收和发送队列的长度也较容易定位网络或程序故障。在正常运行的时候，netstat打印的Recv-Q和Send-Q都应该接近0，或者在0附近摆动。如果Rcv-Q保持不变或持续增加，则通常意味着服务进程的处理速度变慢，可能发生了死锁或阻塞。如果Send-Q保持不变或持续增加，有可能是
+对方服务器太忙、来不及处理，也有可能是网络中间某个路由器或交换机故障造成丢包，甚至对方服务器掉线，这些因素都可能表现为数据发送不出去。</li>
+</ul>
+<p>通过持续监控Recv-Q和Send-Q就能及早预警性能或可用性故障。以下是服务端线程阻塞造成Recv-Q和客户端Send-Q激增的例子。</p>
+<p><img src="/2024/12/24/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/3-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E9%80%82%E7%94%A8%E5%9C%BA%E5%90%88%E4%B8%8E%E5%B8%B8%E7%94%A8%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8B/image-20241224200431927.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="多线程服务器的适用场合">5. 多线程服务器的适用场合</h2>
+<p>“服务器开发”，用一句话形容是：<strong>跑在多核机器上的Linux用户态的没有用户界面的长期运行的网络应用程序</strong>，通常是分布式系统的组成部件。</p>
+<p>开发服务端程序的一个基本任务是处理并发连接，现在服务端网络编程处理并发连接主要有两种方式：</p>
+<ul>
+<li>当“线程”很廉价时，一台机器上可以创建远高于CPU数目的“线程”。这时一个线程只处理一个TCP连接（甚至半个），通常使用阻塞IO（至少看起来如此）。例如，Python
+gevent、Go goroutine、Erlang
+actor，这里的“线程”由语言的runtime自行调度，与操作系统线程不是一回事。</li>
+<li>当线程很宝贵时，一台机器上只能创建与CPU数目相当的线程。这时一个线程要处理多个TCP连接上的IO，通常使用非阻塞IO和IO
+multiplexing。例如，libevent、muduo、Netty。这是原生线程，能被操作系统的任务调度器看见。</li>
+</ul>
+<p>在处理并发连接的同时，也要充分发挥硬件资源的作用，不能让CPU资源闲置。以上列出的库不是每个都能做到这一点。既然本书讨论的是C++编程，那么只考虑后一种方式，这是在Linux下使用native语言编写用户态高性能网络程序的最成熟的模式。本节主要讨论的是这些“线程”应该属于一个进程（以下模式2），还是分属多个进程（模式3）。</p>
+<p>与前文相同，本节的“进程”指的是fork(2)系统调用的产物。“线程”指的是pthread_create()的产物，因此是宝贵的那种原生线程。而且我指的Pthreads是NPTL的，每个线程由clone(2)产生，对应一个内核的task_struct。</p>
+<p>首先，一个由多台机器组成的分布式系统必然是多进程的（字面意义上），因为进程不能跨OS边界。在这个前提下，我们把目光集中到一台机器，一台拥有至少4个核的普通服务器。如果要在一台多核机器上提供一种服务或执行一个任务，可用的模式有：（这里的“模式”不是pattern，而是model，不巧它们的中译文是一样的。）</p>
+<ol type="1">
+<li>运行一个单线程的进程；</li>
+<li>运行一个多线程的进程；</li>
+<li>运行多个单线程的进程；</li>
+<li>运行多个多线程的进程。</li>
+</ol>
+<p>这些模式之间的比较已经是老生常谈，简单地总结如下：</p>
+<ul>
+<li>模式1是不可伸缩的（scalable），不能发挥多核机器的计算能力。</li>
+<li>模式3是自前公认的主流模式。它有两种子模式：
+<ul>
+<li>3a. 简单地把模式1中的进程运行多份</li>
+<li>3b. 主进程+worker进程，如果必须绑定到一个TCP
+port，比如httpd+fastcgi</li>
+</ul></li>
+<li>模式2是被很多人所鄙视的，认为多线程程序难写，而且与模式3相比并没有什么优势。</li>
+<li>模式4更是千夫所指，它不但没有结合2和3的优点，反而汇聚了二者的缺点。</li>
+</ul>
+<p>本文主要想讨论的是模式2和模式3b的优劣，即：什么时候一个服务器程序应该是多线程的。从功能上讲，没有什么是多线程能做到而单线程做不到的，反之亦然，都是状态机嘛（我很高兴看到反例）。从性能上讲，无论是IObound还是CPUbound的服务，多线程都没有什么优势。</p>
+<p>Paul E. McKenney 在《Is Parallel Programming Hard, And, If So, What
+Can You Do About It?》第3.5节指出，“As a rough rule of thumb, use the
+simplest tool that will get the job
+done.”比方说，使用速率为50MB/s的数据压缩库、在进程创建销毁的开销是800us、线程创建销毁的开销是50us的前提下，考虑如何执行压缩任务：</p>
+<ul>
+<li>如果要偶尔压缩1GB的文本文件，预计运行时间是20s，那么起一个进程去做是合理的，因为进程启动和销毁的开销远远小于实际任务的耗时。</li>
+<li>如果要经常压缩500kB的文本数据，预计运行时间是10ms，那么每次都起进程似乎有点浪费了，可以每次单独起一个线程去做。</li>
+<li>如果要频繁压缩10kB的文本数据，预计运行时间是200us，那么每次起线程似乎也很浪费，不如直接在当前线程搞定。也可以用一个线程池，每次把压缩任务交给线程池，避免阻塞当前线程（特别要避免阻塞IO线程）。</li>
+</ul>
+<p>由此可见，多线程并不是万灵丹（silver
+bullet），它有适用的场合。那么究竟什么时候该用多线程？在回答这个问题之前，我先谈谈必须用单线程的场合。</p>
+<h3 id="必须用单线程的场合">5.1 必须用单线程的场合</h3>
+<p>据我所知，有两种场合必须使用单线程：</p>
+<ol type="1">
+<li>程序可能会fork();</li>
+<li>限制程序的CPU占用率。</li>
+</ol>
+<p><strong>只有单线程程序能fork()</strong>。根据后面<span class="math inline">\(\S4.9\)</span>的分析，一个设计为可能调用fork()的程序必须是单线程的，比如后面S3.5.3中提到的“看门狗进程”。多线程程序不是不能调用fork()，而是这么做会遇到很多麻烦，我想不出做的理由。</p>
+<p>一个程序fork()之后一般有两种行为：</p>
+<ol type="1">
+<li>立刻执行exec())，变身为另一个程序。例如shell和inetd；又比如lighttpd
+fork()出子进程，然后运行fastcgi程序。或者集群中运行在计算节点上负责启动job的守护进程（即我所谓的“看门狗进程”）。</li>
+<li>不调用exec()，继续运行当前程序。要么通过共享的文件描述符与父进程通信，协同完成任务；要么接过父进程传来的文件描述符，独立完成工作，例如20世纪80年代的Web服务器NCSA
+httpd。</li>
+</ol>
+<p>这些行为中，我认为只有“看门狗进程”必须坚持单线程，其他的均可替换为多线程程序（从功能上讲）。</p>
+<p>单线程程序能限制程序的CPU占用率这个很容易理解，比如在一个8核的服务器上，一个单线程程序即便发生busy-wait（无论是因为bug，还是因为overload），占满1个core，其CPU使用率也只有12.5%。在这种最坏的情况下，系统还是有87.5%的计算资源可供其他服务进程使用。</p>
+<p>因此对于一些辅助性的程序，如果它必须和主要服务进程运行在同一台机器的话（比如它要监控其他服务进程的状态），那么做成单线程的能避免过分抢夺系统的计算资源。比如如果要把生产服务器上的日志文件压缩后备份到NFS上，那么应该使用普通单线程压缩工具（gzip/bzip2）。它们对系统造成的影响较小，在8核服务器上最多占满1个core。如果有人为了“提高速度”，开启了多线程压缩或者同时起多个进程来压缩多个日志文件，有可能造成的结果是非关键任务耗尽了CPU资源，正常客户的请求响应变慢。这是我们不愿意看到的。</p>
+<h3 id="单线程程序的优缺点">5.2 单线程程序的优缺点</h3>
+<p>从编程的角度，单线程程序的优势无须赞言：简单。程序的结构一般如<span class="math inline">\(\S3.2\)</span>所言，是一个基于IO
+multiplexing的event loop。或者如云风所言，直接用阻塞IO。</p>
+<p>Event
+loop有一个明显的缺点，它是非抢占的（non-preemptive）。假设事件a的优先级高于事件b，处理事件a需要1ms，处理事件b需要10ms。如果事件b稍早于a发生，那么当事件a到来时，程序已经离开了poll()调用，并开始处理事件b。事件a要等上10ms才有机会被处理：总的响应时间为11ms。这等于发生了优先级反转。这个缺点可以用多线程来克服，这也是多线程的主要优势。</p>
+<p>多线程程序有性能优势吗？</p>
+<p>前面我说，无论是IObound还是CPUbound的服务，多线程都没有什么绝对意义上的性能优势。这句话是说，如果用很少的CPU负载就能让IO跑满，或者用很少的IO流量就能让CPU跑满，那么多线程没啥用处。举例来说：</p>
+<ul>
+<li>对于静态Web服务器，或者FTP服务器，CPU的负载较轻，主要瓶颈在磁盘IO和网络IO方面。这时候往往一个单线程的程序（模式1）就能撑满IO。用多线程并不能提高吞吐量，因为IO硬件容量已经饱和了。同理，这时增加CPU数目也不能提高吞吐量。</li>
+<li>CPU跑满的情况比较少见，这里我只好虚构一个例子。假设有一个服务，它的输入是n个整数，问能否从中选出m个整数，使其和为0（这里n&lt;100，m&gt;0）。这是著名的subset
+sum问题，是NP-Complete的。对于这样一个“服务”，哪怕很小的n值也会让CPU算死。比如n=30，一次的输入不过200字节（32-bit整数），CPU的运算时间却能长达几分钟。对于这种应用，模式3a是最适合的，能发挥多核的优势，程序也简单。</li>
+</ul>
+<p>也就是说，无论任何一方早早地先到达瓶颈，多线程程序都没啥优势。</p>
+<p>说到这重，可能已经有读者不耐烦了：你讲了这么多，都在说单线程的好处，那么多线程究竟有什么用？</p>
+<h3 id="适用多线程程序的场景">5.3 适用多线程程序的场景</h3>
+<p>我认为多线程的适用场景是：提高响应速度，让IO和“计算”相互重叠，降低latency。虽然多线程不能提高绝对性能，但能提高平均响应性能。</p>
+<p>一个程序要做成多线程的，大致要满足：</p>
+<ul>
+<li>有多个CPU可用。单核机器上多线程没有性能优势（但或许能简化并发业务逻辑的实现）。</li>
+<li>线程间有共享数据，即内存中的全局状态。如果没有共享数据，用模型3b就行。虽然我们应该把线程间的共享数据降到最低，但不代表没有。</li>
+<li>共享的数据是可以修改的，而不是静态的常量表。如果数据不能修改，那么可以在进程间用shared
+memory，模式3就能胜任。</li>
+<li>提供非均质的服务。即，事件的响应有优先级差异，我们可以用专门的线程来处理优先级高的事件。防止优先级反转。</li>
+<li>latency和throughput同样重要，不是逻辑简单的IObound或CPUbound程序。换言之，程序要有相当的计算量。</li>
+<li>利用异步操作。比如logging。无论往磁盘写logfile，还是往logserver发送消息都不应该阻塞critical
+path。</li>
+<li>能scale
+up。一个好的多线程程序应该能享受增加CPU数目带来的好处，目前主流是8核，很快就会用到16核的机器了。</li>
+<li>具有可预测的性能。随着负载增加，性能缓慢下降，超过某个临界点之后会急速下降。线程数一般不随负载变化。
+<ul>
+<li>多线程能有效地划分责任与功能，让每个线程的逻辑比较简单，任务单一，便于编码。而不是把所有逻辑都塞到一个event
+loop里，不同类别的事件之间相互影响。</li>
+</ul></li>
+</ul>
+<p>这些条件比较抽象，这里举两个具体的（虽然是虚构的）例子。</p>
+<p>假设要管理一个Linux服务器机群，这个机群量有8个计算节点，1个控制节点。机器的配置都是一样的，双路四核CPU，千兆网互联。现在需要编写一个简单的机群管理软件（参考LLNL的SLURM），这个软件由3个程序组成：</p>
+<ol type="1">
+<li>运行在控制节点上的master，这个程序监视并控制整个机群的状态。</li>
+<li>运行在每个计算节点上的slave，负责启动和终止job，并监控本机的资源。</li>
+<li>供最终用户使用的client命令行工具，用于提交job。</li>
+</ol>
+<p>根据前面的分析，slave是个“看门狗进程”，它会启动别的job进程，因此必须是个单线程程序。另外它不应该占用太多的CPU资源，这也适合单线程模型。master应该是个模式2的多线程程序：</p>
+<ul>
+<li>它独占一台8核的机器，如果用模型1，等于浪费了87.5%的CPU资源。</li>
+<li>整个机群的状态应该能完全放在内存中，这些状态是共享且可变的。如果用模型3，那么进程之间的状态同步会成天问题。而如果大量使用共享内存，则等于披着多进程外衣的多线程程序。因为一个进程一旦在临界区内阻塞或crash，其他进程会全部死锁。</li>
+<li>master的主要性能指标不是throughput（吞吐量），而是latency(延迟），即尽快地响应各种事件。它几乎不会出现把IO或CPU跑满的情况。</li>
+<li>master监控的事件有优先级区别，一个程序正常运行结束和异常崩溃的处理优先级不同，计算节点的硬盘满了和机箱温度过高这两种报警条件的优先级也不同。如果用单线程，则可能会出现优先级反转。</li>
+<li>假设master和每个slave之间用一个TCP连接，那么master采用2个或4个IO线程来处理8个TCP
+connections能有效地降低延迟。</li>
+<li>master要异步地往本地硬盘写log，这要求logging
+library有自已的IO线程。</li>
+<li>master有可能要读写数据库，那么数据库连接这个第三方library可能有自已的线程，并回调master的代码。</li>
+<li>master要服务于多个clients，用多线程也能降低客户响应时间。也就是说它可以再用2个IO线程专门处理和clients的通信。</li>
+<li>master还可以提供一个monitor接口，用来推送（pushing）机群的状态，这样用户不用主动轮询（polling）。这个功能如果用单独的线程来做，会比较容易实现，不会搞乱其他主要功能。
+<ul>
+<li>master一共开了10个线程：
+<ul>
+<li>4个用于和slaves通信的IO线程。</li>
+<li>1个logging线程。</li>
+<li>1个数据库IO线程。</li>
+<li>2个和clients通信的IO线程。</li>
+<li>1个主线程，用于做些背景工作，比如job调度。</li>
+<li>1个pushing线程，用于主动广播机群的状态。</li>
+</ul></li>
+<li>虽然线程数目略多于core数目，但是这些线程很多时候都是空闲的，可以依赖OS的进程调度来保证可控的延迟。</li>
+</ul></li>
+</ul>
+<p>综上所述，master用多线程方式编写是自然且高效的。</p>
+<p>再举一个TCP聊天服务器的例子，这里的“聊天”不完全指人与人聊天，也可能是机器与机器“聊天”。这种服务的特点是并发连接之间有数据交换，从一个连接收到的数据要转发给其他多个连接。因此我们不能按模式3的做法，把多个连接分到多个进程中分别处理（这会带来复杂的进程间通信），而只能用模式1或者模式2。如果纯粹只有数据交换，那么我想模式1也能工作得很好，因为现在的CPU足够快，单线程应付几百个连接不在话下。</p>
+<p>如果功能进一步复杂化，加上关键字过滤、黑名单、防灌水等等功能，甚至要给聊天内容自动加上相关连接，每一项功能都会占用CPU资源。这时就要考虑模式2了，因为单个CPU的处理能力显得捉襟见肘，顺序处理导致消息转发的延迟增加。这时我们考虑把空闲的多个CPU利用起来，自然的做法是把连接分散到多个线程上，例如按round-robin的方式把1000个客户连接分配到4个IO线程上。这样充分利用多核加速。具体的例子见<span class="math inline">\(\S6.6\)</span>的方案9，以及P.260的实现。</p>
+<p>线程的分类</p>
+<p>据我的经验，一个多线程服务程序中的线程大致可分为3类：</p>
+<ol type="1">
+<li>IO线程，这类线程的主循环是IO
+multiplexing，阻塞地等在select/poll/epoll_wait系统调用上。这类线程也处理定时事件。当然它的功能不止IO，有些简单计算也可以放入其中，比如消息的编码或解码。</li>
+<li>计算线程，这类线程的主循环是blocking queue，阻塞地等在condition
+variable上。这类线程一般位于thread
+pool中。这种线程通常不涉及IO，一般要避免任何阻塞操作。</li>
+<li>第三方库所用的线程，比如logging，又比如database connection。</li>
+</ol>
+<p>服务器程序一般不会频繁地启动和终止线程。甚至，在我写过的程序里，create
+thread只在程序启动的时候调用，在服务运行期间是不调用的。</p>
+<p>在多核时代，要想充分发挥CPU性能，多线程编程是不可避免的，“能拖算法”不是办法。在学会多线程编程之前，我也一直认为单线程服务程序才是主道。在接触多线程编程之后，经过一段时间的训练和适应，我已能比较自如地编写正确且足够高效的多线程程序。学习多线程编程还有一个好处，即训练异步思维，提高分析并发事件的能力。这对设计分布式系统帮助巨大，因为运行在多台机器上的服务进程本质上是异步的。熟悉多线程编程的话，很容易就能发现分布式系统在消息和事件处理方面的race
+condition。</p>
+<h2 id="多线程服务器的适用场合例释与答疑">6.
+“多线程服务器的适用场合”例释与答疑</h2>
+<p>《多线程服务器的适用场合》一文在博客登出之后，有热心读者提出质疑，我自己也觉得原文没有把道理说通、说透，下面用一些实例来解答读者的疑问。以下“连接、端口”均指TCP协议。</p>
+<h3 id="linux能同时启动多少个线程">6.1 Linux能同时启动多少个线程？</h3>
+<p>对于32-bit
+Linux，一个进程的地址空间是4GiB，其中用户态能访问3GiB左右，而一个线程的默认栈（stack）大小是10MB，心算可知，一个进程大约最多能同时启动300个线程。如果不改线程的调用栈大小的话，300左右是上限，因为程序的其他部分（数据段、代码段、堆、动态库等等）同样要占用内存（地址空间）。</p>
+<p>对于64-bit系统，线程数目可大大增加，具体数字我没有测试过，因为我在实际项目中一台机器上最多只用到过几十个用户线程，其中大部分还是空闲的。</p>
+<p>下面的第2问关于线程数目的讨论以32-bit Linux为例。</p>
+<h3 id="多线程能提高并发度吗">6.2 多线程能提高并发度吗？</h3>
+<p>如果指的是“并发连接数”，则不能。
+由问题1可知，假如单纯采用thread-per-connection的模型，那么并发连接数最多300，这远远低于基于事件的单线程程序所能轻松达到的并发连接数（几千乃至上万，甚至几万）。所谓“基于事件”，指的是用IO
+multiplexing event
+loop的编程模型，又称Reactor模式，在前文中已有介绍。</p>
+<p>那么采用前文中推荐的one loop per
+thread呢？至少不逊于单线程程序。实际上单个event
+loop处理1万个并发长连接并不罕见，一个multi-loop的多线程程序应该能轻松支持5万并发连接。
+小结：thread-per-connection不适合高并发场合，其scalability不佳。one loop
+per thread的并发度足够大，且与CPU数目成正比。</p>
+<h3 id="多线程能提高吞吐量吗">6.3 多线程能提高吞吐量吗？</h3>
+<p>对于计算密集型服务，不能。
+假设有一个耗时的计算服务，用单线程算需要0.8s。在一台8核的机器上，我们可以启动8个线程一起对外服务（如果内存够用，启动8个进程也一样）。这样完成单个计算仍然要0.8s，但是由于这些进程的计算可以同时进行，理想情况下吞吐量可以从单线程的1.25qps（query
+per
+second）上升到10qps。（实际情况可能要打个八折——如果不是打对折的话。）</p>
+<p>假如改用并行算法，用8个核一起算，理论上如果完全并行，加速比高达8，那么计算时间是0.1s，吞吐量还是10qps，但是首次请求的响应时间却降低了很多。实际上根据Amdahl's
+law，即便算法的并行度高达95%，8核的加速比也只有6，计算时间为0.133s，这样会造成吞吐量下降为7.5qps。不过以此为代价，换得响应时间的降低，在有些应用场合也是值得的。</p>
+<p>再举一个例子，如果要在一台8核机器上压缩100个1GB的文本文件，每个core的处理能力为200MB/s，那么“每次起8个进程，每个进程压缩1个文件”与“依次压缩每个文件，每个文件用8个线程并行压缩”这两种方式的总耗时相当，因为CPU都是满载的。但是第二种方式能较快地拿到第一个压缩完的文件，也就是首次响应的延时更小。</p>
+<p>这也回答了问题4。</p>
+<h3 id="多线程能降低响应时间吗">6.4 多线程能降低响应时间吗？</h3>
+<p>如果设计合理，充分利用多核资源的话，可以。在突发（burst）请求时效果尤为明显。</p>
+<p>例1：多线程处理输入：以memcached服务端为例。memcached一次请求响应大概可以分为3步：
+1. 读取并解析客户端输入； 2. 操作hash table； 3. 返回客户端。</p>
+<p>在单线程模式下，这3步是串行执行的。在启用多线程模式时，它会后用多个输入线程（默认是4个），并在建立连接时按round-robin法把新连接分派给其中一个输入线程，这正好是我说的one
+loop per
+thread模型。这样一来，第1步的操作就能多线程并行，在多核机器上提高多用户的响应速度。第2步用了全局锁，还是单线程的，这可算是一个值得继续改进的地方。</p>
+<p>比如，有两个用户同时发出了请求，这两个用户的连接正好分配在两个IO线程上，那么两个请求的第1步操作可以在两个线程上并行执行，然后汇总到第2步串行执行，这样总的响应时间比完全串行执行要短一些（在“读取并解析”所占的比重较大的时候，效果更为明显）。</p>
+<p>例2：多线程分担负载假设我们要做一个求解Sudoku的服务，这个服务程序在9981端口接受请求，输入为一行81个数字（待填数字用0表示），输出为填好的之后的81个数字（1~9），如果无解，输出“NO”。</p>
+<p>由于输入格式很简单，用单个线程做IO就行了。先假设每次求解的计算用时为10ms，用前面的方法计算，单线程程序能达到的吞吐量上限为100qps；在8核机器上，如果用线程池来做计算，能达到的吞吐量上限为800qps。下面我们看看多线程如何降低响应时间。</p>
+<p>假设1个用户在极短的时间内发出了10个请求，如果用单线程“来一个处理一个”的模型，这些请求会排在队列里依次处理（这个队列是操作系统的TCP缓冲区，不是程序里自己的任务队列）。在不考虑网络延迟的情况下，第1个请求的响应时间是10ms；第2个请求要等第1个算完了才能获得CPU资源，它等了10ms，算了10ms，响应时间是20ms；依此类推，第10个请求的响应时间为100ms；这10个请求的平均响应时间为55ms。</p>
+<p>如果Sudoku服务在每个请求到达时开始计时，会发现每个请求都是10ms响应时间；而从用户的观点来看，10个请求的平均响应时间为55ms，请读者想想为什么会有这个差异。</p>
+<p>下面改用多线程：1个IO线程，8个计算线程（线程池）。二者之间用Blocking
+Queue沟通。同样是10个并发请求，第1个请求被分配到计算线程1，第2个请求被分配到计算线程2，依此类推，直到第8个请求被第8个计算线程承担。第9和第10号请求会等在Blocking
+Queue里，直到有计算线程回到空闲状态其才能被处理。（请注意，这里的分配实际上由操作系统来做，操作系统会从处于waiting状态的线程里挑一个，不一定是round-robin的。）这样一来，前8个请求的响应时间差不多都是10ms，后2个请求属于第二批，其响应时间大约会是20ms，总的平均响应时间是12ms。可以看出这比单线程快了不少。</p>
+<p>由于每道Sudoku题目的难度不一，对于简单的题目，可能1ms就能算出来，复杂的题目最多用10ms。那么线程池方案的优势就更明显，它能有效地降低“简单任务被复杂任务压住”的出现概率。</p>
+<p>以上举的都是计算密集的例子，即线程在响应一次请求时不会等待IO。下面谈谈更复杂的情况。</p>
+<h3 id="多线程程序如何让io和计算相互重叠降低latency">6.5
+多线程程序如何让IO和“计算”相互重叠，降低latency？</h3>
+<p>基本思路是，把IO操作（通常是写操作）通过Blocking
+Queue交给别的线程去做，自己不必等待。</p>
+<p>例1:日志（logging）在多线程服务器程序中，日志（logging）至关重要，本例仅考虑写logfile的情况，不考虑logserver。</p>
+<p>在一次请求响应中，可能要写多条日志消息，而如果用同步的方式写文件（fprintf或fwrite），多半会降低性能，因为：</p>
+<ul>
+<li>文件操作一般比较慢，服务线程会等在IO上，让CPU闲置，增加响应时间。</li>
+<li>就算有buffer，还是不灵。多个线程一起写，为了不至于把buffer写错乱，往往要加锁。这会让服务线程互相等待，降低并发度。（同时用多个log文件不是办法，除非你有多个磁盘，且保证logfiles分散在不同的磁盘上，否则还是要受到磁盘IO瓶颈的制约。）</li>
+</ul>
+<p>解决办法是单独用一个logging线程，负责写磁盘文件，通过一个或多个Blocking
+Queue对外提供接口。别的线程要写日志的时候，先把消息（字符串）准备好，然后往queue里一塞就行，基本不用等待。这样服务线程的计算就和logging线程的磁盘IO相互重叠，降低了服务线程的响应时间。</p>
+<p>尽管logging很重要，但它不是程序的主要逻辑，因此对程序的结构影响越小越好，最好能简单到如同一条printf语句，且不用担心其他性能开销。而一个好的多线程异步logging库能帮我们做到这一点，见第5章。（Apache的log4cxx和log4j都支持AsyncAppender这种异步logging方式。）</p>
+<p>例2:memcached客户端假设我们用memcached来保存用户最后发帖的时间，那么每次响应用户发帖的请求时，程序重要去设置一下memcached里的值。这一步如果用同步IO，会增加延退。</p>
+<p>对于“设置一个值”这样的write-only
+idempotent操作，我们其实不用等memcached返回操作结果，这里也不用在乎set操作失败，那么可以借助多线程来降低响应延迟。比方说我们可以写一个多线程版的memcached的客户端，对于set操作，调用方只要把key和value准备好，调用一下asyncSet()函数，把数据往Blocking
+Queue上一放就能立即返回，延迟很小。剩下的事就留给memcached客户端的线程去操心，而服务线程不受阻碍。</p>
+<p>其实所有的网络写操作都可以这么异步地做，不过这也有一个缺点，那就是每次asyncWrite()都要在线程间传递数据。其实如果TCP缓冲区是空的，我们就可以在本线程写完，不用劳烦专门的IO线程。Netty就使用了这个办法来进一步降低延迟。</p>
+<p>以上都仅讨论了“打一枪就跑”的情况，如果是一问一答，比如从memcached取一个值，那么“重叠IO”并不能降低响应时间，因为你无论如何要等memcached的回复。这时我们可以用别的方式来提高并发度，见问题8。（虽然不能降低响应时间，但也不要浪费线程在空等上。）</p>
+<p>以上的例子也说明，Blocking
+Queue是构建多线程程序的利器。另见S12.8.3。</p>
+<h3 id="为什么第三方库往往要用自己的线程">6.6
+为什么第三方库往往要用自己的线程？</h3>
+<p>event
+loop模型没有标准实现。如果自己写代码，尽可以按所用Reactor的推荐方式来编程。但是第三方库不一定能很好地适应并融入这个event
+loop framework，有时需要用线程来做一些串并转换。</p>
+<p>比如检测串口上的数据到达可以用文件描述符的可读事件，因此可以方便地融入event
+loop。但是检测串口上的某些控制信号（例如DCD）只能用轮询（ioctl(fd,
+TIOCMGET, &amp;flags)）或阻塞等待（ioctl(fd, TIOCMIWAIT,
+TIOCM_CAR)）；要想融入event
+loop，需要单独起一个线程来查询串口信号翻转，再转换为文件描述符的读写事件（可以通过pipe(2)）。</p>
+<p>对于Java，这个问题还好办一些，因为thread
+pool在Java里有标准实现，叫ExecutorService。如果第三方库支持线程池，那么它可以和主程序共享一个ExecutorService，而不是自己创建一堆线程。（比如在初始化时传入主程序的obj。）</p>
+<p>对于C++，情况麻烦得多，Reactor和thread pool都没有标准库。</p>
+<p>例1：libmemcached只支持同步操作libmemcached支持所谓的“非阻塞操作”，但没有暴露一个能被select/poll/epoll的file
+descriptor，它的memcached_fetch始终会阻塞。它号称memcached_set可以是非阻塞的，实际意思是不必等待结果返回，但实际上这个函数会阻塞地调用write(2)，仍可能阻塞在网络IO上。</p>
+<p>如果在我们的Reactor event
+handler里调用了libmemcached的函数，那么latency就堪忧了。如果想继续用libmemcached，我们可以为它做一次线程封装，按问题5例2的办法，用额外的线程专门做memcached的IO，而程序主体还是Reactor。甚至可以把memcached的“数据就绪”作为一个event，注入我们的event
+loop中，以进一步提高并发度。（例子留待问题8讲。）</p>
+<p>万幸的是，memcached的协议非常简单，大不了可以自已写一个基于Reactor的客户端，但是数据库客户端就没那么容易了。</p>
+<p>例2：MySQL的官方C
+API不支持异步操作MySQL的官方客户端只支持同步操作，对于UPDATE/INSERT/DELETE之类只要行为不管结果的操作（如果代码需要得知其执行结果，则另当别论），我们可以用一个单独的线程来做，以降低服务线程的延迟。可仿照前面memcached_set的例子，不再赘言。麻烦的是SELECT，如果要把它也异步化，就得动用更复杂的模式了，见问题8。</p>
+<p>相比之下，PostgreSQL的C客户端libpq的设计要好得多，我们可以用PQsendQuery()来发起一次查询，然后用标准的select/poll/epoll来等待PQsocket。如果有数据可读，那么用PQconsumeInput处理之，并用PQisBusy判断查询结果是否已就绪。最后用PQgetResult来获取结果。借助这套异步API，我们可以很容易地为libpq写一套wrapper，使之融入程序所用的event
+loop模型中。</p>
+<h3 id="什么是线程池大小的阻抗匹配原则">6.7
+什么是线程池大小的阻抗匹配原则？</h3>
+<p>我在前文中提到“阻抗匹配原则”，这里大致讲一讲。</p>
+<p>如果池中线程在执行任务时，密集计算所占的时间比重为P（0 &lt; P ≤
+1），而系统一共有C个CPU，为了让这C个CPU跑满而不超载，线程池大小的经验公式T
+= C /
+P。T是个hint，考虑到P值的估计不是很准确，T的最佳值可以上下浮动50%。这个经验公式的原理很简单，T个线程，每个线程占用P的CPU时间，如果刚好占满C个CPU，那么必有T
+× P = C。下面验证一下边界条件的正确性。</p>
+<p>假设C = 8，P = 1.0，线程池的任务完全是密集计算，那么T =
+8。只要8个活动线程就能让8个CPU饱和，再多也没用，因为CPU资源已经耗光了。</p>
+<p>假设C = 8，P = 0.5，线程池的任务有一半是计算，有一半等在IO上，那么T =
+16。考虑操作系统能灵活、合理地调度sleeping/writing/running线程，那么大概16个“50%繁忙的线程”能让8个CPU忙个不停。启动更多的线程并不能提高吞吐量，反而因为增加上下文切换的开销而降低性能。</p>
+<p>如果P &lt; 0.2，这个公式就不适用了，T可以取一个固定值，比如5 ×
+C。另外，公式里的C不一定是CPU总数，可以是“分配给这项任务的CPU数目”，比如在8核机器上分出4个核来做一项任务，那么C
+= 4。</p>
+<h3 id="除了你推荐的reactorthread-pool还有别的non-trivial多线程编程模型吗">6.8
+除了你推荐的Reactor+thread
+pool，还有别的non-trivial多线程编程模型吗？</h3>
+<p>有，Proactor。如果一次请求响应中要和别的进程打多次交道，那么Proactor模型能在更高的并发度。当然，代价是代码变得支离破碎，难以理解。</p>
+<p>这里举HTTP proxy为例，一次HTTP
+proxy的请求如果没有命中本地cache，那么它多半会：</p>
+<ol type="1">
+<li>解析域名（不要小看这一步，对于一个陌生的域名，解析可能要花几秒的时间）；</li>
+<li>建立连接；</li>
+<li>发送HTTP请求；</li>
+<li>等待对方回应；</li>
+<li>把结果返回给客户。</li>
+</ol>
+<p>这5步中跟2个server发生了3次round-trip，每次都可能花几百毫秒：</p>
+<ol type="1">
+<li>向DNS问域名，等待回复；</li>
+<li>向对方的HTTP服务器发起连接，等待TCP三路握手完成；</li>
+<li>向对方发送HTTP request，等待对方response。</li>
+</ol>
+<p>而实际上HTTP
+proxy本身的运算量不大，如果用线程池，池中线程的数目会很庞大，不利于操作系统的管理调度。</p>
+<p>这时我们有两个解决思路：</p>
+<ol type="1">
+<li>把“域名已解析”、“连接已建立”、“对方已完成响应”做成event，继续按照Reactor的方式来编程。这样一来，每次客户请求就不能用一个函数从头到尾执行完成，而要分成多个阶段，并且要管理好请求的状态（“现在到了第几步？”）。</li>
+<li>用回调函数，让系统来把任务串起来。比如收到用户请求，如果没有命中本地缓存，那么需要执行：</li>
+</ol>
+<ol type="a">
+<li>立刻发起异步的DNS解析startDNSResolve()，告诉系统在解析完之后调用DNSResolved()函数；</li>
+<li>在DNSResolved()中，发起TCP连接请求，告诉系统在连接建立之后调用connectionEstablished();</li>
+<li>在connectionEstablished()中发送HTTP
+request，告诉系统在收到响应之后调用httpResponsed();</li>
+<li>最后，在httpResponsed()里把结果返回给客户。</li>
+</ol>
+<p>NET大量采用的BeginInvoke/EndInvoke操作也是这个编程模式。当然，对于不熟悉这种编程方式的人，代码会显得很难阅读。有关Proactor模式的例子可参见Boost.Asio的文档，这里不再多说。</p>
+<p>Proactor模式依赖操作系统或库来高效地调度这些子任务，每个子任务都不会阻塞，因此能用比较少的线程达到很高的IO并发度。</p>
+<p>Proactor能提高吞吐量，但不能降低延时，所以我没有深入研究。另外，在没有语言直接支持的情况下，Proactor模式让代码非常破碎，在C++中使用Proactor是很痛苦的。因此最好在“线程”很廉价的语言中使用这种方式，这时runtime往往会屏蔽细节，程序用单线程阻塞IO的方式来处理TCP连接。</p>
+<h3 id="模式2和模式3a该如何取舍">6.9 模式2和模式3a该如何取舍？</h3>
+<p><span class="math inline">\(\S3.5\)</span>中提到，模式2是一个多线程的进程，模式3a是多个相同的单线程进程。</p>
+<p>我认为，在其他条件相同的情况下，可以根据工作集（workset）的大小来取舍。工作集是指服务程序响应一次请求所访问的内存大小。</p>
+<p>如果工作集较大，那么就用多线程，避免CPU
+cache换入换出，影响性能；否则，就用单线程多进程，享受单线程编程的便利。举例来说：</p>
+<ul>
+<li>如果程序有一个较大的本地cache，用于缓存一些基础参考数据（in-memory
+look-up
+table），几乎每次请求都会访问cache，那么多线程更适合一些，因为可以避免每个进程都自已保留一份cache，增加内存使用。</li>
+<li>memcached这个内存消耗大户用多线程服务端就比在同一台机器上运行多个memcached
+instance要好。（但是如果你在16GiB内存的机器上运行32-bit
+memcached，那么此时多instance是必需的。）</li>
+<li>求解Sudoku用不了多大内存。如果单线程编程更方便的话，可以用单线程多进程来做。再在前面加一个单线程的load
+balancer，仿lighttpd+fastcgi的成例：</li>
+</ul>
+<p>线程不能减少工作量，即不能减少CPU时间。如果解决一个问题需要执行一亿条指令（这个数字不大，不要被吓到），那么用多线程只会让这个数字增加。但是通过合理调配这一亿条指令在多个核上的执行情况，我们能让工期提早结束。这听上去像统筹方法，其实也确实是统筹方法。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/c/" class="category-chain-item">c++</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/c/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="category-chain-item">muduo多线程服务器</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/muduo/" class="print-no-link">#muduo</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>3. 多线程服务器的适用场合与常用编程模型</div>
+      <div>http://binbo-zappy.github.io/2024/12/24/muduo多线程/3-多线程服务器的适用场合与常用编程模型/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年12月24日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/12/24/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/4-C++%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B%E7%B2%BE%E8%A6%81/" title="4. C++多线程系统编程精要">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">4. C++多线程系统编程精要</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/12/23/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/2-%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%E7%B2%BE%E8%A6%81/" title="2. 线程同步精要">
+                        <span class="hidden-mobile">2. 线程同步精要</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
