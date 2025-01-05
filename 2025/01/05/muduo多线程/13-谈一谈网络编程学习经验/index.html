@@ -1,0 +1,1130 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="附录 A 谈一谈网络编程学习经验 本文谈一谈我在学习网络编程方面的一些个人经验。“网络编程”这个术语的范围很广，本文指用 Sockets API 开发基于 TCP&#x2F;IP 的网络应用程序，具体定义见 SA.1.5“网络编程的各种任务角色”. 受限于本人的经历和经验，本附录的适应范围是： - x86-64 Linux 服务端网络编程，直接或间接使用 Sockets API. - 公司内网">
+<meta property="og:type" content="article">
+<meta property="og:title" content="13. 谈一谈网络编程学习经验">
+<meta property="og:url" content="http://binbo-zappy.github.io/2025/01/05/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/13-%E8%B0%88%E4%B8%80%E8%B0%88%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E5%AD%A6%E4%B9%A0%E7%BB%8F%E9%AA%8C/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="附录 A 谈一谈网络编程学习经验 本文谈一谈我在学习网络编程方面的一些个人经验。“网络编程”这个术语的范围很广，本文指用 Sockets API 开发基于 TCP&#x2F;IP 的网络应用程序，具体定义见 SA.1.5“网络编程的各种任务角色”. 受限于本人的经历和经验，本附录的适应范围是： - x86-64 Linux 服务端网络编程，直接或间接使用 Sockets API. - 公司内网">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/muduo.jpg">
+<meta property="article:published_time" content="2025-01-05T02:32:34.000Z">
+<meta property="article:modified_time" content="2025-01-05T10:39:21.005Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="muduo">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/muduo.jpg">
+  
+  
+  
+  <title>13. 谈一谈网络编程学习经验 - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="13. 谈一谈网络编程学习经验"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-01-05 10:32" pubdate>
+          2025年1月5日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          13k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          109 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">13. 谈一谈网络编程学习经验</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="附录-a-谈一谈网络编程学习经验">附录 A
+谈一谈网络编程学习经验</h1>
+<p>本文谈一谈我在学习网络编程方面的一些个人经验。“网络编程”这个术语的范围很广，本文指用
+Sockets API 开发基于 TCP/IP 的网络应用程序，具体定义见
+SA.1.5“网络编程的各种任务角色”.
+受限于本人的经历和经验，本附录的适应范围是： - x86-64 Linux
+服务端网络编程，直接或间接使用 Sockets API. -
+公司内网。不一定是局域网，但总体位于公司防火墙之内，环境可控。
+本文可能不适合： - PC 客户端网络编程，程序运行在客户的 PC
+上，环境多变且不可控。 - Windows 网络编程。 - 面向公网的服务程序。 -
+高性能网络服务器。 本文分两个部分： 1.
+网络编程的一些“胡思乱想”，以自问自答的形式谈谈我对这一领域的认识。 2.
+几本必看的书，基本上还是 W. Richard Stevens 的那些。
+另外，本文没有特别说明时均暗指 TCP 协议，“连接”是“TCP
+连接”，“服务端”是“TCP 服务端”. ## A.1 网络编程的一些“胡思乱想” ### A.1.1
+网络编程是什么 网络编程是什么？是熟练使用 Sockets API
+吗？说实话，在实际项目里我只用过两次 Sockets
+API，其他时候都是使用封装好的网络库。</p>
+<p>第二次是 2010 年编写 muduo 网络库，我再次拿起了 Sockets
+API，写了一个基于 Reactor 模式的 C++
+网络库。写这个库的目的之一就是想让日常的网络编程从 Sockets API
+的琐碎细节中解脱出来，让程序员专注于业务逻辑，把时间用在刀刃上。</p>
+<p>muduo
+网络库的示例代码包含了十几个网络程序，这些示例程序都没有直接使用 Sockets
+API. 在此之外，无论是实习还是工作，虽然我写的程序都会通过 TCP
+协议与其他程序打交道，但我没有直接使用过 Sockets API。</p>
+<p>对于 TCP 网络编程，我认为核心是处理“三个半事件”，见 <span class="math inline">\(\S6.4.1\)</span>“TCP
+网络编程本质论”。程序员的主要工作是在事件处理函数中实现业务逻辑，而不是和
+Sockets API“较劲”.</p>
+<h3 id="a.1.2-学习网络编程有用吗">A.1.2 学习网络编程有用吗</h3>
+<p>以上说的是比较底层的网络编程，程序代码直接面对从 TCP 或 UDP
+收到的数据以及构造数据包发出去。</p>
+<p>在实际工作中，另一种常见的情况是通过各种 client library
+来与服务端打交道，或者在现成的框架中填空来实现
+server，或者采用更上层的通信方式。比如用 libmemcached 与 memcached
+打交道，使用 libpq 来与 PostgreSQL 打交道，编写 Servlet 来响应 HTTP
+请求，使用某种 RPC
+与其他进程通信，等等。这些情况都会发生网络通信，但不一定算作“网络编程”。如果你的工作是前面列举的这些，学习
+TCP/IP 网络编程还有用吗？</p>
+<p>我认为还是有必要学一学，至少在 troubleshooting
+的时候有用。无论如何，这些 library 或 framework 都会调用底层的 Sockets
+API 来实现网络功能。当你的程序遇到一个线上问题时，如果你熟悉 Sockets
+API，那么从 strace 不难发现程序卡在哪里，尽管可能你没有直接调用这些
+Sockets API。另外，熟悉 TCP/IP 协议、会用 tcpdump
+也非常有助于分析解决线上网络服务问题。</p>
+<h3 id="a.1.4-可移植性重要吗">A.1.4 可移植性重要吗</h3>
+<p>写网络程序要不要考虑移植性？要不要跨平台？这取决于项目需要，如果贵公司做的程序要卖给其他公司，而对方可能使用
+Windows、Linux、FreeBSD、Solaris、AIX、HP-UX
+等等操作系统，这时候当然要考虑移植性。如果编写公司内部的服务器上用的网络程序，那么可以关注一个平台，比如
+Linux。因为编写和维护可移植的网络程序的代价相当高，平台间的差异可能远比想象中大，即便是
+POSIX 系统之间也有不小的差异（比如 Linux 没有 SO_NOSIGPIPE 选项，Linux
+的 pipe(2) 是单向的，而 FreeBSD 是双向的），错误的返回码也大不一样。
+我就不打算把 muduo 往 Windows
+或其他操作系统移植。如果需要编写可移植的网络程序，我宁愿用
+libevent、libuv、Java Netty 这样现成的库，把“脏活、累活”留给别人。 ###
+A.1.5 网络编程的各种任务角色 计算机网络是个 big
+topic，涉及很多人物和角色，既有开发人员，也有运维人员。比方说：公司内部两台机器之间
+ping
+不通，通常由网络运维人员解决，看看是布线有问题还是路由器设置不对；两台机器能
+ping
+通，但是程序连不上，经检查是本机防火墙设置有问题，通常由系统管理员解决：两台机器能连上，但是丢包很严重，发现是网卡或者交换机的网口故障，由硬件维修人员解决；两台机器的程序能连上，但是偶尔发过去的请求得不到响应，通常是程序
+bug，应该由开发人员解决。</p>
+<p>本文主要关心开发人员这一角色。下面简单列出一些我能想到的跟网络打交道的编程任务，其中前三项是面向网络本身，后面几项是在计算机网络之上构建信息系统。</p>
+<ol type="1">
+<li>开发网络设备，编写防火墙、交换机、路由器的固件（firmware）.</li>
+<li>开发或移植网卡的驱动。</li>
+<li>移植或维护 TCP/IP 协议栈（特别是在嵌入式系统上）.</li>
+<li>开发或维护标准的网络协议程序，HTTP、FTP、DNS、SMTP、POP3、NFS.</li>
+<li>开发标准网络协议的“附加品”，比如 HAProxy、squid、varnish 等 Web load
+balancer.</li>
+<li>开发标准或非标准网络服务的客户端库，比如 ZooKeeper
+客户端库、memcached 客户端库。</li>
+<li>开发与公司业务直接相关的网络服务程序，比如即时聊天软件的后台服务器、网游服务器、金融交易系统、互联网企业用的分布式海量存储、微博发帖的内部广播通知等等。</li>
+<li>客户端程序中涉及网络的部分，比如邮件客户端中与 POP3、SMTP
+通信的部分，以及网游的客户端程序中与服务器通信的部分。
+本文所指的“网络编程”专指第 7 项，即在 TCP/IP
+协议之上开发业务软件。换句话说，不是用 Sockets API 开发 muduo
+这样的网络库，而是用 libevent、muduo、Netty、gevent
+这样现成的库开发业务软件，muduo
+自带的十几个示例程序是业务软件的代表。</li>
+</ol>
+<h3 id="a.1.6-面向业务的网络编程的特点">A.1.6
+面向业务的网络编程的特点</h3>
+<p>与通用的网络服务器不同，面向公司业务的专用网络程序有其自身的特点。 -
+业务逻辑比较复杂，而且时常变化。如果写一个 HTTP 服务器，在大致实现
+HTTP/1.1
+标准之后，程序的主体功能一般不会有太大的变化，程序员会把时间放在性能调优和
+bug 修复上。而开发针对公司业务的专用程序时，功能说明书（spec）很可能不如
+HTTP/1.1
+标准那么细致明确。更重要的是，程序是快速演化的。以即时聊天工具的后台服务器为例，可能第一版只支持在线聊天：几个月之后发布第二版，支持离线消息；支过了儿个月，第三版支持隐身聊天；随后，第四版支持上传头像；如此等等。这要求程序员能快速响应新的业务需求，公司才能保持竞争力。由手业务时常变化（假设每月一次版本升级），也会降低服务程序连续运行时间的要求。相反，我们要设计一套流程，通过轮流重启服务器来完成平滑升级（s9.2.2）.
+-
+不一定需要遵循公认的通信协议标准。比方说网游服务器就没什么协议标准，反正客户端和服务端都是本公司开发的，如果发现自前的协议设计有问题，两边一起改就行了。由于可以自已设计协议，因此我们可以绕开一些性能难点，简化程序结构。比方说，对于多线程的服务程序，如果用短连接
+TCP 协议，为了优化性能通常要精心设计 accept
+新连接的机制，避免惊群并减少上下支切换。但是如果改用长连接，用最简单的单线程
+accept 就行了。 -
+程序结构没有定论。对于高并发大吞吐的标准网络服务，一般采用单线程事件驱动的方式开发，比如
+HAProxy、lighttpd
+等等都是这个模式。但是对于专用的业务系统，其业务逻辑比较复杂，占用较多的
+CPU
+资源，这种单线程事件驱动方式不见得能发挥现在多核处理器的优势。这留给程序员比较大的自由发挥空间，做好了“横扫千军”，做烂了一败涂地。我认为目前
+one loop per thread 是通用性较高的一种程序结构，能发挥多核的优势，见
+S3.3 和 S6.6. - 性能评判的标准不同。如果开发 httpd
+这样的通用服务，必然会和开源的 Nginx lighttpd
+等高性能服务器比较，程序员要投入相当的精力去优化程序，才能在市场上占有一席之地。而面向业务的专用网络程序不一定是
+IO
+bound，也不一定有开源的实现以供对比性能，优化方向也可能不同。程序员通常更加注重功能的稳定性与开发的便捷性。性能只要一代比一代强即可。
+-
+网络编程起到支撑作用，但不处于主导地位。程序员的主要工作是实现业务逻辑，而不只是实现网络通信协议。这要求程序员深入理解业务。程序的性能瓶颈不一定会在网络上，瓶颈有可能是
+CPU、Disk
+IO、数据库等，这时优化网络方面的代码并不能提高整体性能。只有对所在的领域有深入的了解，明白各种因素的权衡（trade-off），才能做出一些有针对性的优化。现在的机器上，简单的并发长连接
+echo 服务程序不用特别优化就做到十多万 qps，但是如果每个业务请求需要 1ms
+密集计算，在 8 核机器上充其量能达到 8.000 qps，优化 IO
+不如去优化业务计算（如果投入产出合算的话）. ### A.1.7 几个术语
+互联网上的很多“口水战”是由对同一术语的不同理解引起的，比如我写的《多线程服务器的适用场合》3，就曾经被人说是“挂羊头卖狗肉”，因为这篇文章中举的
+master
+例子“根本就算不上是个网络服务器。因为它的瓶颈根本就跟网络无关。”</p>
+<p>“网络服务器”这个术语确实含义模糊，到底指硬件还是软件？到底是服务于网络本身的机器（交换机、路由器、防火墙、NAT），还是利用网络为他人或程序提供服务的机器（打印服务器、文件服务器、邮件服务器）？每个人根据自己熟悉的领域，可能会有不同的解读。比方说，或许有人认为只有支持高并发、高吞吐量的才算是网络服务器。</p>
+<p>为了避免无谓的争执，我只用“网络服务程序”或者“网络应用程序”这种含义明确的术语。“开发网络服务程序”通常不会造成误解。</p>
+<p>客户端？服务端？在 TCP
+网络编程中，客户端和服务端很容易区分，主动发起连接的是客户端，被动接受连接的是服务端。当然，这个“客户端”本身也可能是个后台服务程序，HTTP
+proxy 对 HTTP server 来说就是个客户端。</p>
+<p>客户端编程？服务端编程？但是“服务端编程”和“客户端编程”就不那么好区分了。比如
+Web crawler，它会主动发起大量连接，扮演的是 HTTP
+客户端的角色，但似乎应该归入“服务端编程”。再比如写一个 HTTP
+proxy，它既会扮演服务端——被动接受 Web browser
+发起的连接，也会扮演客户端——主动向 HTTP server
+发起连接，它究竟算服务端还是客户端？我猜大多数人会把它归入服务端编程。</p>
+<p>那么究竟如何定义“服务端编程”？</p>
+<p>服务端编程需要处理大量并发连接？也许是，也许不是。比如云风在一篇介绍网游服务器的博客4中就谈到，网游中用到的“连接服务器”需要处理大量连接，而“逻辑服务器”只有一个外部连接。那么开发这种网游“逻辑服务器”算服务端编程还是客户端编程呢？再比如机房的服务进程监控软件，并发数跟机器数成正比，至多也就是两三千的并发连接。（再大规模就超出本书的范围了。）</p>
+<p>我认为，“服务端网络编程”指的是编写没有用户界面的长期运行的网络程序，程序默默地运行在一台服务器上，通过网络与其他程序打交道，而不必和人打交道。与之对应的是客户端网络程序，要么是短时间运行，比如
+wget；要么是有用户界面（无论是字符界面还是图形界面）。本文主要谈服务端网络编程。</p>
+<h3 id="a.1.8-724-重要吗内存碎片可怕吗">A.1.8 7×24
+重要吗，内存碎片可怕吗</h3>
+<p>一谈到服务端网络编程，有人立刻会提出 7×24
+运行的要求。对于某些网络设备而言，这是合理的需求，比如交换机、路由器。对于开发商业系统，我认为要求程序
+7×24 运行通常是系统设计上考虑不周。具体见本书
+S9.2“分布式系统的可靠性浅说”。重要的不是 7×24，而是在程序不必做到 7×24
+的情况下也能达到足够高的可用性。一个考虑周到的系统应该允许每个进程都能随时重启，这样才能在廉价的服务器硬件上做到高可用性。
+既然不要求 7×24，那么也不必害怕内存碎片，理由如下： - 64-bit
+系统的地址空间足够大，不会出现没有足够的连续空间这种情况。有没有谁能够故意制造内存碎片（不是内存泄漏）使得服务程序失去响应？
+- 现在的内存分配器（malloc 及其第三方实现）今非昔比，除了 memcached
+这种纯以内存为卖点的程序需要自己设计分配器之外，其他网络程序大可使便用系统自带的
+malloc 或者某个第三方实现。重新发明 memory pool
+似乎已经不流行（S12.2.8）. - Linux Kernel
+也大量用到了动态内存分配。既然操作系统内核都不怕动态分配内存造成碎片，应用程序为什么要害怕？应用程序的可靠性只要不低于硬件和操作系统的可靠性就行。普通
+PC 服务器的年故障率约为
+3%~5%，算一算你的服务程序一年要被意外重后多少次。 -
+内存碎片如何度量？有没有什么工具能为当前进程的内存碎片状况评个分？如果不能比较两种方案的内存碎片程度，谈何优化？
+有人为了避免内存碎片，不使用 STL 容器，也不敢 new/delete，这算是
+premature Optimization 还是因噎废食呢？ ### A.1.9
+协议设计是网络编程的核心
+对于专用的业务系统，协议设计是核心任务，决定了系统的开发难度与可靠性，但是这个领域还没有形成大家公认的设计流程。</p>
+<p>系统中哪个程序发起连接，哪个程序接受连接？如果写标准的网络服务，那么这不是问题，按
+RFC
+来就行了。自已设计业务系统，有没有章法可循？以网游为例，到底是连接服务器主动连接逻辑服务器，还是逻辑服务器主动连接“连接服务器”？似乎没有定论，两种做法都行。一般可以按照“依赖→被依赖”的关系来设计发起连接的方向。</p>
+<p>比新建连接难的是关闭连接。在传统的网络服务中（特别是短连接服务），不少是服务端主动关闭连接，比如
+daytime、HTTP/1.0。也有少部分是客户端主动关闭连接，通常是些长连接服务，比如
+echo、chargen 等等。我们自已的业务系统该如何设计连接关闭协议呢？</p>
+<p>服务端主动关闭连接的缺点之一是会多占用服务器资源。服务端主动关闭连接之后会进入
+TIME_WAIT
+状态，在一段时间之内持有（hold）一些内核资源。如果并发访问量很高，就会影响服务端的处理能力。这似乎暗示我们应该把协议设计为客户端主动关闭，让
+TIME_WAIT 状态分散到多台客户机器上，化整为零。</p>
+<p>这文有另外的问题：客户端赖着不走怎么办？会不会造成拒绝服务攻击？或许有一个二者结合的方案：客户端在收到响应之后就应该主动关闭，这样把
+TIME_WAIT
+留在客户端（s）。服务端有一个定时器，如果客户端若干秒之内没有主动断开，就踢掉它。这样善意的客户端会把
+TIME_WAIT 留给自己，buggy 的客户端会把 TIME_WAIT
+留给服务端。或者干脆使用长连接协议，这样可避免频繁创建、销毁连接。</p>
+<p>比连接的建立与断开更重要的是设计消息协议。消息格式很好办，XML、JSON、Protobuf
+都是很好的选择：难的是消息内容。一个消息应该包含哪些内容？多个程序相互通信如何避免
+race condition？（见 p.348 举的例子）外部事件发生时，网络消息应该发
+snapshot 还是 delta？新增功能时，各个组件如何平滑升级？</p>
+<p>可惜这方面可供参考的例子不多，也没有太多通用的指导原则，我知道的只有
+30 年前提出的 end-to-end principle 和 happens-before relationship.
+只能从实践中慢慢积累了。</p>
+<h3 id="a.1.10-网络编程的三个层次">A.1.10 网络编程的三个层次</h3>
+<p>侯捷先生在《漫谈程序员与编程》7 中讲到 STL 运用的三个档次：“会用
+STL，是一种档次，对 STL 原理有所了解，又是一个档次。追踪过 STL
+源码，文是一个档次。第三种档次的人用起 STL
+来，虎虎生风之势绝非第一档次的人能够望其项背。”</p>
+<p>我认为网络编程也可以分为三个层次：</p>
+<ol type="1">
+<li>读过教程和文档，做过练习；</li>
+<li>熟悉本系统 TCP/IP 协议栈的脾气；</li>
+<li>自己写过一个简单的 TCP/IP stack.</li>
+</ol>
+<p>第一个层次是基本要求，读过《UNIX
+网络编程》这样的编程教材，读过《TCP/IP 详解》并基本理解 TCP/IP
+协议，读过本系统的
+manpage。在这个层次，可以编写一些基本的网络程序，完成常见的任务。但网络编程不是照猫画虎这么简单，若是按照
+manpage 的功能描述就能编写产品级的网络程序，那人生就太幸福了。</p>
+<p>第二个层次，熟悉本系统的 TCP/IP
+协议栈参数设置与优化是开发高性能网络程序的必备条件。摸透协议栈的脾气，还能解决工作中遇到的比较复杂的网络问题。拿
+Linux 的 TCP/IP 协议栈来说</p>
+<ul>
+<li>有可能出现 TCP 自连接（self-connection）8，程序应该有所准备。</li>
+<li>Linux 的内核会有 bug. 比如某种 TCP 拥塞控制算法曾经出现 TCP window
+clamping（窗口夹位）bug，导致吞吐量暴跌，可以选用其他拥塞控制算法来绕开（workaround）这个问题。</li>
+</ul>
+<p>这些“阴暗角落”在 manpage 里没有描述，要通过其他渠道了解。</p>
+<p>编写可靠的网络程序的关键是熟悉各种场景下的 error
+code（文件描述符用完了如何？本地 ephemeral port
+暂时用完，不能发起新连接怎么办？服务端新建并发连接太快，backlog
+用完了，客户端 connect 会返回什么错误？），有的在 manpage
+里有描述，有的要通过实践或阅读源码获得。
+第三个层次，通过自己写一个简单的 TCP/IP 协议栈，能大大加深对 TCP/IP
+的理解，更能明白 TCP
+为什么要这么设计，有哪些因素制约，每一步操作的代价是什么，写起网络程序来更是成竹在胸。</p>
+<p>其实实现 TCP/IP
+只需要操作系统提供三个接口函数：一个函数，两个回调函数。分别是：send_packet()、on_receive_packet()、on_timer()。多年前有一篇文章《使用
+libnet 与 libpcap 构造 TCP/IP 协议软件》介绍了在用户态实现 TCP/IP
+的方法。IwIP 也是很好的借鉴对象。</p>
+<h4 id="如果有时间我打算自己写一个-minitinytoytrivialyet-another-tcpip."><strong>如果有时间，我打算自己写一个
+Mini/Tiny/Toy/Trivial/Yet-Another TCP/IP.</strong></h4>
+<p>我准备换一个思路，用 TUN/TAP 设备在用户态实现一个能与本机点对点通信的
+TCP/IP 协议栈（见本书附录
+D），这样那三个接口函数就表现为我最熟悉的文件读写。在用户态实现的好处是便于调试，协议栈做成静态库，与应用程序链接到一起（库的接口不必是标准的
+Sockets API）。写完这一版协议栈，还可以继续发挥，用 FTDI 的 USB-SPI
+接口芯片连接 ENC28J60 适配器，做一个真正独立于操作系统的 TCP/IP stack.
+如果只实现最基本的 IP、ICMP Echo、TCP，代码应能控制在 3000
+行以内；也可以实现 UDP，如果应用程序需要用到 DNS 的话。</p>
+<h3 id="a.1.11-最主要的三个例子">A.1.11 最主要的三个例子</h3>
+<p>我认为 TCP 网络编程有三个例子最值得学习研究，分别是
+echo、chat、proxy，都是长连接协议。 - echo
+的作用：熟悉服务端被动接受新连接、收发数据、被动处理连接断开。每个连接是独立服务的，连接之间没有关联。在消息内容方面
+echo
+有一些变种：比如做成一问一答的方式，收到的请求和发送响应的内容不一样，这时候要考虑打包与拆包格式的设计，进一步还可以写简单的
+HTTP 服务。 - chat 的作用：连接之间的数据有交流，从 a 收到的数据要发给
+b。这样对连接管理提出了更高的要求：如何用一个程序同时处理多个连接？fork()-per-connection
+似乎是不行的。如何防止串话？b 有可能随时断开连接，而新建立的连接 c
+可能恰好复用了 b 的文件描述符，那么 a 会不会错误地把消息发给 c？ - proxy
+的作用：连接的管理更加复杂：既要被动接受连接，也要主动发起连接；既要主动关闭连接，也要被动关闭连接。还要考虑两边速度不匹配（S7.13）.
+这三个例子功能简单，突出了 TCP
+网络编程中的重点问题，换着做一遍基本就能达到层次一的要求。 ### A.1.12
+学习 Sockets API 的利器：IPython 我在编写 muduo
+网络库的时候，写了一个命令行交互式的调试工具°，方便试验各个 Sockets API
+的返回时机和返回值。后来发现其实可以用 IPython
+达到相同的效果，不必自己编程。用交互式工具很快就能摸清各种 IO
+事件的发生条件，比反复编译 C 代码高效得多。比方说想简单试验一下 TCP
+服务器和 epoll，可以这么写： <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs python">$ ipython<br>In [<span class="hljs-number">1</span>]: <span class="hljs-keyword">import</span> socket, select<br>In [<span class="hljs-number">2</span>]: s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)<br>In [<span class="hljs-number">3</span>]: s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, <span class="hljs-number">1</span>)<br>In [<span class="hljs-number">4</span>]: s.bind((<span class="hljs-string">&quot;&quot;</span>, <span class="hljs-number">5000</span>))<br>In [<span class="hljs-number">5</span>]: s.listen(<span class="hljs-number">5</span>)<br>In [<span class="hljs-number">6</span>]: client, address = s.accept() <span class="hljs-comment"># client.fileno() = 4</span><br>In [<span class="hljs-number">7</span>]: client.recv(<span class="hljs-number">1024</span>) <span class="hljs-comment"># 此处会阻塞</span><br>Out[<span class="hljs-number">7</span>]: <span class="hljs-string">&#x27;Hello\n&#x27;</span><br>In [<span class="hljs-number">8</span>]: epoll = select.epoll()<br>In [<span class="hljs-number">9</span>]: epoll.register(client.fileno(), select.EPOLLIN) <span class="hljs-comment"># 尝试省略第二个参数</span><br>In [<span class="hljs-number">10</span>]: epoll.poll(<span class="hljs-number">60</span>) <span class="hljs-comment"># 此处会阻塞</span><br>Out[<span class="hljs-number">10</span>]: [(<span class="hljs-number">4</span>, <span class="hljs-number">1</span>)]<br><span class="hljs-comment"># 表示第 4 号文件可读（select.EPOLLIN = 1）</span><br>In [<span class="hljs-number">11</span>]: client.recv(<span class="hljs-number">1024</span>) <span class="hljs-comment"># 已经有数据可读，不会阻塞了</span><br>Out[<span class="hljs-number">11</span>]: <span class="hljs-string">&#x27;World\n&#x27;</span><br>In [<span class="hljs-number">12</span>]: client.setblocking(<span class="hljs-number">0</span>) <span class="hljs-comment"># 改为非阻塞方式</span><br>In [<span class="hljs-number">13</span>]: client.recv(<span class="hljs-number">1024</span>)<br><span class="hljs-comment"># 没有数据可读，立刻返回，错误码 EAGAIN = 11</span><br>error: [Errno <span class="hljs-number">11</span>] Resource temporarily unavailable<br>In [<span class="hljs-number">14</span>]: epoll.poll(<span class="hljs-number">60</span>)<br><span class="hljs-comment">#</span><br></code></pre></td></tr></table></figure></p>
+<p>形成大家公认的设计流程。
+系统中哪个程序发起连接，哪个程序接受连接？如果写标准的网络服务，那么这不是问题，按
+RFC
+来就行了。自已设计业务系统，有没有章法可循？以网游为例，到底是连接服务器主动连接逻辑服务器，还是逻辑服务器主动连接“连接服务器”？似乎没有定论，两种做法都行。一般可以按照“依赖→被依赖”的关系来设计发起连接的方向。
+比新建连接难的是关闭连接。在传统的网络服务中（特别是短连接服务），不少是服务端主动关闭连接，比如
+daytime、HTTP/1.0。也有少部分是客户端主动关闭连接，通常是些长连接服务，比如
+echo、chargen 等等。我们自已的业务系统该如何设计连接关闭协议呢？
+服务端主动关闭连接的缺点之一是会多占用服务器资源。服务端主动关闭连接之后会进入
+TIME_WAIT
+状态，在一段时间之内持有（hold）一些内核资源。如果并发访问量很高，就会影响服务端的处理能力。这似乎暗示我们应该把协议设计为客户端主动关闭，让
+TIME_WAIT 状态分散到多台客户机器上，化整为零。
+这文有另外的问题：客户端赖着不走怎么办？会不会造成拒绝服务攻击？或许有一个二者结合的方案：客户端在收到响应之后就应该主动关闭，这样把
+TIME_WAIT
+留在客户端（s）。服务端有一个定时器，如果客户端若干秒之内没有主动断开，就踢掉它。这样善意的客户端会把
+TIME_WAIT 留给自己，buggy 的客户端会把 TIME_WAIT
+留给服务端。或者干脆使用长连接协议，这样可避免频繁创建、销毁连接。
+比连接的建立与断开更重要的是设计消息协议。消息格式很好办，XML、JSON、Protobuf
+都是很好的选择：难的是消息内容。一个消息应该包含哪些内容？多个程序相互通信如何避免
+race condition？（见 p.348 举的例子）外部事件发生时，网络消息应该发
+snapshot 还是 delta？新增功能时，各个组件如何平滑升级？
+可惜这方面可供参考的例子不多，也没有太多通用的指导原则，我知道的只有 30
+年前提出的 end-to-end principle 和 happens-before relationship.
+只能从实践中慢慢积累了。</p>
+<h3 id="a.1.10-网络编程的三个层次-1">A.1.10 网络编程的三个层次</h3>
+<p>侯捷先生在《漫谈程序员与编程》7 中讲到 STL 运用的三个档次：“会用
+STL，是一种档次，对 STL 原理有所了解，又是一个档次。追踪过 STL
+源码，文是一个档次。第三种档次的人用起 STL
+来，虎虎生风之势绝非第一档次的人能够望其项背。”
+我认为网络编程也可以分为三个层次： 1. 读过教程和文档，做过练习； 2.
+熟悉本系统 TCP/IP 协议栈的脾气； 3. 自己写过一个简单的 TCP/IP stack.
+第一个层次是基本要求，读过《UNIX 网络编程》这样的编程教材，读过《TCP/IP
+详解》并基本理解 TCP/IP 协议，读过本系统的
+manpage。在这个层次，可以编写一些基本的网络程序，完成常见的任务。但网络编程不是照猫画虎这么简单，若是按照
+manpage 的功能描述就能编写产品级的网络程序，那人生就太幸福了。
+第二个层次，熟悉本系统的 TCP/IP
+协议栈参数设置与优化是开发高性能网络程序的必备条件。摸透协议栈的脾气，还能解决工作中遇到的比较复杂的网络问题。拿
+Linux 的 TCP/IP 协议栈来说 - 有可能出现 TCP
+自连接（self-connection）8，程序应该有所准备。 - Linux 的内核会有 bug.
+比如某种 TCP 拥塞控制算法曾经出现 TCP window
+clamping（窗口夹位）bug，导致吞吐量暴跌，可以选用其他拥塞控制算法来绕开（workaround）这个问题。
+这些“阴暗角落”在 manpage 里没有描述，要通过其他渠道了解。
+编写可靠的网络程序的关键是熟悉各种场景下的 error
+code（文件描述符用完了如何？本地 ephemeral port
+暂时用完，不能发起新连接怎么办？服务端新建并发连接太快，backlog
+用完了，客户端 connect 会返回什么错误？），有的在 manpage
+里有描述，有的要通过实践或阅读源码获得。
+第三个层次，通过自己写一个简单的 TCP/IP 协议栈，能大大加深对 TCP/IP
+的理解，更能明白 TCP
+为什么要这么设计，有哪些因素制约，每一步操作的代价是什么，写起网络程序来更是成竹在胸。
+其实实现 TCP/IP
+只需要操作系统提供三个接口函数：一个函数，两个回调函数。分别是：send_packet()、on_receive_packet()、on_timer()。多年前有一篇文章《使用
+libnet 与 libpcap 构造 TCP/IP 协议软件》介绍了在用户态实现 TCP/IP
+的方法。IwIP 也是很好的借鉴对象。 如果有时间，我打算自己写一个
+Mini/Tiny/Toy/Trivial/Yet-Another TCP/IP. 我准备换一个思路，用 TUN/TAP
+设备在用户态实现一个能与本机点对点通信的 TCP/IP 协议栈（见本书附录
+D），这样那三个接口函数就表现为我最熟悉的文件读写。在用户态实现的好处是便于调试，协议栈做成静态库，与应用程序链接到一起（库的接口不必是标准的
+Sockets API）。写完这一版协议栈，还可以继续发挥，用 FTDI 的 USB-SPI
+接口芯片连接 ENC28J60 适配器，做一个真正独立于操作系统的 TCP/IP stack.
+如果只实现最基本的 IP、ICMP Echo、TCP，代码应能控制在 3000
+行以内；也可以实现 UDP，如果应用程序需要用到 DNS 的话。 ### A.1.11
+最主要的三个例子 我认为 TCP 网络编程有三个例子最值得学习研究，分别是
+echo、chat、proxy，都是长连接协议。 - echo
+的作用：熟悉服务端被动接受新连接、收发数据、被动处理连接断开。每个连接是独立服务的，连接之间没有关联。在消息内容方面
+echo
+有一些变种：比如做成一问一答的方式，收到的请求和发送响应的内容不一样，这时候要考虑打包与拆包格式的设计，进一步还可以写简单的
+HTTP 服务。 - chat 的作用：连接之间的数据有交流，从 a 收到的数据要发给
+b。这样对连接管理提出了更高的要求：如何用一个程序同时处理多个连接？fork()-per-connection
+似乎是不行的。如何防止串话？b 有可能随时断开连接，而新建立的连接 c
+可能恰好复用了 b 的文件描述符，那么 a 会不会错误地把消息发给 c？ - proxy
+的作用：连接的管理更加复杂：既要被动接受连接，也要主动发起连接；既要主动关闭连接，也要被动关闭连接。还要考虑两边速度不匹配（S7.13）.
+这三个例子功能简单，突出了 TCP
+网络编程中的重点问题，换着做一遍基本就能达到层次一的要求。 ###
+A.1.12学习SocketsAPI的利器：IPython</p>
+<p>我在编写muduo网络库的时候，写了一个命令行交互式的调试工具°，方便试验各个SocketsAPI的返回时机和返回值。后来发现其实可以用IPython达到相同的效果，不必自已编程。用交互式工具很快就能摸清各种IO事件的发生条件，比反复编译C代码高效得多。比方说想简单试验一下TCP服务器和epoll，可以这么写：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs python">$ ipython<br>In [<span class="hljs-number">1</span>]: <span class="hljs-keyword">import</span> socket, select<br>In [<span class="hljs-number">2</span>]: s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)<br>In [<span class="hljs-number">3</span>]: s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, <span class="hljs-number">1</span>)<br>In [<span class="hljs-number">4</span>]: s.bind((<span class="hljs-string">&quot;&quot;</span>, <span class="hljs-number">5000</span>))<br>In [<span class="hljs-number">5</span>]: s.listen(<span class="hljs-number">5</span>)<br>In [<span class="hljs-number">6</span>]: client, address = s.accept() <span class="hljs-comment"># client.fileno() = 4</span><br>In [<span class="hljs-number">7</span>]: client.recv(<span class="hljs-number">1024</span>) <span class="hljs-comment">#此处会阻塞</span><br>Out[<span class="hljs-number">7</span>]: <span class="hljs-string">b&#x27;Hello\n&#x27;</span><br>In [<span class="hljs-number">8</span>]: epoll = select.epoll()<br>In [<span class="hljs-number">9</span>]: epoll.register(client.fileno(), select.EPOLLIN) <span class="hljs-comment">#试试省略第二个参数</span><br>In [<span class="hljs-number">10</span>]: epoll.poll(<span class="hljs-number">60</span>) <span class="hljs-comment">#此处会阻塞</span><br>Out[<span class="hljs-number">10</span>]: [(<span class="hljs-number">4</span>, <span class="hljs-number">1</span>)]<br><span class="hljs-comment">#表示第4号文件可读（select.EPOLLIN = 1）</span><br>In [<span class="hljs-number">11</span>]: client.recv(<span class="hljs-number">1024</span>) <span class="hljs-comment">#已经有数据可读，不会阻塞了</span><br>Out[<span class="hljs-number">11</span>]: <span class="hljs-string">b&#x27;World\n&#x27;</span><br>In [<span class="hljs-number">12</span>]: client.setblocking(<span class="hljs-number">0</span>) <span class="hljs-comment">#改为非阻塞方式</span><br>In [<span class="hljs-number">13</span>]: client.recv(<span class="hljs-number">1024</span>)<br><span class="hljs-comment">#没有数据可读，立刻返回，错误码EAGAIN=11</span><br>error: [Errno <span class="hljs-number">11</span>] Resource temporarily unavailable<br>In [<span class="hljs-number">14</span>]: epoll.poll(<span class="hljs-number">60</span>)<br><span class="hljs-comment">#epoll_wait()一下</span><br>Out[<span class="hljs-number">14</span>]: [(<span class="hljs-number">4</span>, <span class="hljs-number">1</span>)]<br>In [<span class="hljs-number">15</span>]: client.recv(<span class="hljs-number">1024</span>)<br><span class="hljs-comment">#再去读数据，立刻返回结果</span><br>Out[<span class="hljs-number">15</span>]: <span class="hljs-string">b&#x27;Bye!\n&#x27;</span><br>In [<span class="hljs-number">16</span>]: client.close()<br></code></pre></td></tr></table></figure>
+<p>同时在另一个命令行窗口用nc发送数据：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ nc localhost 5000<br>Hello &lt;enter&gt;<br>World&lt;enter&gt;<br>Bye! &lt;enter&gt;<br></code></pre></td></tr></table></figure>
+<p>在编写muduo的时候，我一般会开四个命令行窗口，其一看log，其二看strace，其三用netcat/tempest/ipython充作通信对方，其四看tcpdump。各个工具的输出相互验证，很快就摸清了门道。muduo是一个基于Reactor模式的LinuxC++网络库，采用非阻塞IO，支持高并发和多线程，核心代码量不大（4000多行），示例丰富，可供网络编程的学习者参考。</p>
+<h3 id="a.1.13-tcp的可靠性有多高">A.1.13 TCP的可靠性有多高</h3>
+<p>TCP是“面向连接的、可靠的、字节流传输协议”，这里的“可靠”究竞是什么意思？《EffectiveTCP/IPProgramming》第9条说：“RealizeThatTCPIsaReliableProtocol,NotanInfallibleProtocol”，那么TCP在哪种情况下会出错？这里说的“出错”指的是收到的数据与发送的数据不一致，而不是数据不可达。</p>
+<p>我在s7.5“一种自动反射消息类型的GoogleProtobuf网络传输方案”中设计了带checksum的消息格式，很多人表示不理解，认为是多余的。IPheader中有checksum，TCPheader也有checksum，链路层以太网还有CRC32校验，那么为什么还需要在应用层做校验？什么情况下TCP传送的数据会出错？</p>
+<p>IPheader和TCPheader的checksum是一种非常弱的16-bitchecksum算法，其把数据当成反码表示的16-bitintegers，再加到一起。这种checksum算法能检出一些简单的错误，而对某些错误无能为力。由于是简单的加法，遇到“和（sum）不变的情况就无法检查出错误（比如交换两个16-bit整数，加法满足交换律，checksum不变）。以太网的CRC32只能保证同一个网段上的通信不会出错（两台机器的网线插到同一个交换机上，这时候以太网的CRC是有用的。但是，如果两台机器之间经过了多级路由器呢？</p>
+<p>图A-1中client向server发了一个TCPsegment，这个segment先被封装成一个IPpacket，再被封装成ethernetframe，发送到路由器（图A-1中的消息a）。router收到ethernetframeb，转发到另一个网段（消息c），最后server收到d，通知应用程序。以太网CRC能保证a和b相同，c和d相同；TCPheaderchecksum的强度不足以保证收发payload的内容一样。另外，如果把router换成NAT，那么NAT自已会构造消息c（替换掉源地址），这时候a和d的payload不能用TCPheaderchecksum校验。</p>
+<p>路由器可能出现硬件故障，比方说它的内存故障（或偶然错误）导致收发IP报文出现多bit的反转或双字节交换，这个反转如果发生在payload区，那么无法用链路层、网络层、传输层的checksum查出来，只能通过应用层的checksum来检测。这个现象在开发的时候不会遇到，因为开发用的儿台机器很可能都连到同一个交换机，ethernetCRC能防止错误。开发和测试的时候数据量不大，错误很难发生。之后大规模部署到生产环境，网络环境复杂，这时候出个错就让人措手不及。有一篇论文《When
+the CRC and TCP checksum disagree》分析了这个问题。另外《The Limitations
+of the Ethernet CRC and TCP/IP checksums for error
+detection》也值得一读。</p>
+<p>这个情况真的会发生吗？会的，Amazon
+S3在2008年7月就遇到过，单bit反转导致了一次严重线上事故，所以他们吸取教训加了checksum。另外见Google工程师的经验分享。</p>
+<p>另外一个例证：下载大文件的时候一般都会附上MD5，这除了有安全方面的考虑（防止篡改），也说明应用层应该自已设法校验数据的正确性。这是end-to-end
+principle的一个例证。</p>
+<h2 id="a.2-三本必看的书">A.2 三本必看的书</h2>
+<p>谈到Unix编程和网络编程，W.RichardStevens是个绕不开的人物，他生前写了6本书，即[APUE]、两卷《UNIX网络编程》、三卷《TCP/IP详解》。其中四本与网络编程直接相关。[UNPv2]其实跟网络编程关系不大，是[APUE]在多线程和进程间通信（IPC）方面的补充。很多人把《TCP/IP详解》一二三卷作为整体推荐，其实这三本书的用处不同，应该区别对待。</p>
+<p>这里谈到的几本书都没有超出孟岩在《TCP/IP网络编程之四书五经》中的推荐，说明网络编程这一领域已经相对成熟稳定。</p>
+<h3 id="第一本tcpip-illustrated-vol.1-the-protocols中文名tcpip详解以下简称tcpv1">第一本：《TCP/IP
+Illustrated, Vol.1: The
+Protocols》（中文名《TCP/IP详解》），以下简称TCPv1</h3>
+<p>TCPv1是一本奇书。这本书迄今至少被三百多篇学术论文引用过。一本学术专著被论文引用算不上出奇，难得的是一本写给程序员看的技术书能被学术论文引用儿百次，我不知道还有哪本技术书能做到这一点。</p>
+<p>TCPv1堪称TCP/IP领域的圣经。作者W.RichardStevens不是TCP/IP协议的发明人，他从使用者（程序员）的角度，以tcpdump为工具，对TCP协议抽丝剥董、妮绳道来（第17～24章），让人叹服。恐怕TCP协议的设计者也难以讲解得如此出色，至少不会像他这么耐心细致地画几百幅收发package的时序图。</p>
+<p>TCP作为一个可靠的传输层协议，其核心有三点：</p>
+<ol type="1">
+<li>Positive acknowledgement with retransmission;</li>
+<li>Flow control using sliding window（包括Nagle算法等）；</li>
+<li>Congestion control（包括slow start、congestion avoidance、fast
+retransmit等）。</li>
+</ol>
+<p>第一点已经足以满足“可靠性”要求（为什么？）第二点是为了提高吞吐量，充分利用链路层带宽；第三点是防止过载造成丢包。换言之，第二点是避免发得太慢，第三点是避免发得太快，二者相互制约。从反馈控制的角度看，TCP像是一个自适应的节流阀，根据管道的拥堵情况自动调整阀门的流量。</p>
+<p>TCP的flow control有一个间题，每个TCP
+connection是彼此独立的，保存着自己的状态变量：一个程序如果同时开启多个连接，或者操作系统中运行多个网络程序，这些连接似乎不知道他人的存在，缺少对网卡带宽的统筹安排。（或许现代的操作系统已经解决了这个尚题？！）</p>
+<p>TCPv1唯一的不足是它出版得太早了，1993年至今网络技术发展了儿代。链路层方面，当年主流的10Mbit网卡和集线器早已经被淘汰：100Mbit以太网也没什么企业再用，交换机（switch）也已经全面取代了集线器（hub）；服务器机房以1Gbit网络为主，有些场合甚至用上了10Gbit以太网。另外，无线网的普及也让TCP
+flow
+control面临新挑战：原来设计TCP的时候，人们认为丢包通常是拥塞造成的，这时应该放慢发送速度，减轻拥塞：而在无线网中，丢包可能是信号太弱造成的，这时反而应该快速重试，以保证性能。网络层方面变化不大，IPv6“雷声大、雨点小”。传输层方面，由于链路层带宽大增，TCP
+window scale option被普遍使用，另外TCP timestamps option和TCP selective
+ack
+option也很常用。由于这些因素，在现在的Linux机器上运行tcpdump观察TCP协议，程序输出会与原书有些不同。</p>
+<p>一个好消息：TCPv1已于2011年10月推出第2版，经典能否重现？</p>
+<h3 id="第二本unix-network-programming-vol.1-networking-apis第2版或第3版这两版的副标题稍有不同第3版去掉了xti以下统称unp">第二本：《Unix
+Network Programming, Vol.1: Networking
+APIs》第2版或第3版（这两版的副标题稍有不同，第3版去掉了XTI），以下统称UNP</h3>
+<p>W.RichardStevens在UNP第2版出版之后就不幸去世了，UNP第3版是由他人续写的。</p>
+<p>UNP是Sockets API的权威指南，但是网络编程远不是使用那十儿个Sockets
+API那么简单，作者W.RichardStevens深刻地认识到了这一点，他在UNP第2版的前言中写道：</p>
+<blockquote>
+<p>I have found when teaching network programming that about 80% of all
+network programming problems have nothing to do with network
+programming, per se. That is, the problems are not with the API
+functions such as accept and select, but the problems arise from a lack
+of understanding of the underlying network protocols. For example, I
+have found that once a student understands TCP's three-way handshake and
+four-packet connection termination, many network programming problems
+are immediately understood.</p>
+</blockquote>
+<p>搞网络编程，一定要熟悉TCP/IP协议及其外在表现（比如打开和关闭Nagle算法对收发包延时的影响），不然出点意料之外的情况就摸不着头脑了。我不知道为什么UNP第3版在前言中去掉了这段至关重要的话。</p>
+<p>另外值得一提的是，UNP中文版《UNIX网络编程》翻译得相当好，译者杨继张先生是真懂网络编程的。</p>
+<p>UNP很详细，面面俱到，UDP、TCP、IPv4、IPv6都讲到了。要说有什么缺点的话，就是太详细了，重点不够突出。我十分赞同孟岩说的：</p>
+<blockquote>
+<p>我主张，在具备基础之后，学习任何新东西，都要抓住主线，突出重点。对于关键理论的学习，要集中精力，速战速决。而旁枝末节和非本质性的知识内容，完全可以留给实践去零敲碎打。</p>
+</blockquote>
+<p>原因是这样的，任何一个高级的知识内容，其中都只有一小部分是有思想创新、有重大影响的，而其他很多东西都是零碎的、非本质的。因此，集中学习时必须把握住真正重要的那部分，把其他东西留给实践。对于重点知识，只有集中学习其理论，才能确保体系性、连贯性、正确性；而对于那些旁枝末节，只有边干边学才能够让你了解它们的真实价值是大是小，才能让你留下更生动的印象。如采你把精力用错了地方，比如用集中大块的时间来学习那些本来只需要查查手册就可以明白的小技巧，而对于真正重要的、思想性的内容放在平时零敲碎打，那么肯定是事倍功半，甚至适得其反。</p>
+<p>因此我对于市面上绝大部分开发类图书都不满一它们基本上都是面向知识体系本身的，而不是面向读者的。总是把相关的所有知识细节都放在一堆，然后一堆一堆揽起来变成一本书。反映在内容上，就是毫无重点地平铺直叙，不分轻重地陈述细节，往往在第三章以前就用无聊的细节“谋杀”了读者的热情。为什么当年侯捷先生的《深入浅出MFC》和Scott
+Meyers的《Effective
+C++》能够成为经典？就在于这两本书抓住了各自领域中的主干，提纲掌领，纲举目张，一下子打通了读者的“任督二脉”。可情这样的书太少了，就算是已故的W.RichardStevens和当今Jeffrey
+Richter的书，也只在体系性和深入性上高人一头，并不是面向读者的书。</p>
+<p>什么是旁枝未节呢？拿以太网来说，CRC32如何计算就是“旁枝末节”。网络程序员要明白checksum的作用，知道为什么需要checksum，至于具体怎么算CRC就不需要程序员操心了。这部分通常是由网卡硬件完成的，在发包的时候由硬件填充CRC，在收包的时候网卡自动丢弃CRC不合格的包。如果代码中确实要用到CRC计算，调用通用的zlib就行，也不用自己实现。</p>
+<p>UNP就像给了你一堆做菜的原料（各种Sockets函数的用法），常用和不常用的都给了（Out-of-Band
+Data、Signal-Driven
+IO等等），要靠读者自已设法取舍组合，做出一盘天菜来。在读第一遍的时候，我建议只读那些基本且重要的章节；另外那些次要的内容可略作了解，即便跳过不读也无妨。UNP是一本操作性很强的书，读这本书一定要上机练习。</p>
+<p>另外，UNP举的两个例子（菜谱）太简单，daytime和echo一个是短连接协议，一个是长连接无格式协议，不足以覆盖基本的网络开发场景（比如TCP封包与拆包、多连接之间交换数据）。我估计W.Richard
+Stevens原打算在UNP第三卷中讲解一些实际的例子，只可惜他英年早逝，我等无福阅读。</p>
+<p>UNP是一本偏重Unix传统的书，这本书写作的时候服务端还不需要处理成千上万的连接，也没有现在那么多网络攻击。书中重点介绍的以accept()
++
+fork()来处理并发连接的方式在现在看来已经有点吃力，这本书的代码也没有特别防范恶意攻击。如果工作涉及这些方面，需要再进一步学习专门的知识（C10k问题，安全编程）。</p>
+<p>TCPv1和UNP应该先看哪本？见仁见智吧。我自已是先看的TCPv1，花了大约两个月时间，然后再读UNP和APUE。</p>
+<h3 id="第三本effective-tcpip-programming">第三本：《Effective TCP/IP
+Programming》</h3>
+<p>关于第三本书，我犹豫了很久，不知道该推荐哪本。还有哪本书能与W.Richard
+Stevens的这两本比肩吗？W.Richard
+Stevens为技术书籍的写作树立了难以逾越的标杆，他是一位伟大的技术作家。没能看到他写完UNP第三卷实在是人生的遗憾。</p>
+<p>《Effective TCP/IP
+Programming》这本书属于专家经验总结类，初看时觉得收获很大，工作一段时间再看也能有新的发现。比如第6条“TCP是一个学节流协议”看过这一条就不会去研究所请的“TCP粘包问题”。我手头这本中国电力出版社2001年的中文版翻译尚可，但是却把参考文献去掉了，正文中引用的文章资料根本查不到名字。人民邮电出版社2011年重新翻译出版的版本有参考文献。</p>
+<p>其他值得一看的书</p>
+<p>以下两本都不易读，需要相当的基础。</p>
+<ul>
+<li>《TCP/IP Illustrated, Vol.2: The
+Implementation》，以下简称TCPv2</li>
+</ul>
+<p>1200页的大部头，详细讲解了4.4BSD的完整TCP/IP协议栈，注释了15000行C源码。这本书啃下来不容易，如果时间不充裕，我认为没必要全看，应用层的网络程序员选其中与工作相关的部分来阅读即可。</p>
+<p>这本书的第一作者是Gary
+Wright，从叙述风格和内容组织上是典型的“面向知识体系本身”，先讲mbuf，再从链路层一路往上，以太网、IP网络层、ICMP、IP多播、IGMP、IP路由、多播路由、Sockets系统调用、ARP等等。到了正文内容3/4的地方才开始讲TCP。面面俱到、主次不明。</p>
+<p>对手主要使用TCP的程序员，我认为TCPv2的一大半内容可以跳过不看，比如路由表、IGMP等等（开发网络设备的人可能更关心这些内容）。在工作中大可以把IP视为host-to-host的协议，把“IP
+packet如何送达对方机器”的细节视为黑盒子，这不会影响对TCP的理解和运用，因为网络协议是分层的。这样精简下来，需要看的只有三四百页，四五千行代码，大大减轻了阅读的负担。</p>
+<p>这本书直接呈现高质量的工业级操作系统源码，读起来有难度，读懂它甚至要有“不求甚解的能力”。其一，代码只能看，不能上机运行，也不能改动试验。其二，与操作系统的其他部分紧密关联。比如TCP/IP
+stack下接网卡驱动、软中断：上承inode转发来的系统调用操作：中间还要与平级的进程文件描述符管理子系统打交道。如果要把每一部分都弄清楚，把持不住就会迷失主题。其三，一些历史包袱让代码变得复杂晦涩。比如BSD在20世纪80年代初需要在只有4MiB内存的VAX小型机上实现TCP/IP，内存方面捉襟见肘，这才发明了mbuf结构，代码也增加了不少偶发复杂度（buffer不连续的处理）。</p>
+<p>读这套TCP/IP书切不可胶柱鼓瑟，这套书以4.4BSD为讲解对象，其描述的行为（特别是与timer相关的行为）与现在的Linux
+TCP/IP有不小的出入，用书本上的知识直接套用到生产环境的Linux系统可能会造成不小的误解和困扰。《TCP/IP
+Illustrated（第3卷）》不重要，可以成套买来收藏，不读亦可。</p>
+<ul>
+<li>《Pattern-Oriented Software Architecture Volume 2: Patterns for
+Concurrent and Networked Objects》，以下简称POSA2。</li>
+</ul>
+<p>这本书总结了开发并发网络服务程序的模式，是对UNP很好的补充。UNP中的代码往往把业务逻辑和Sockets
+API调用混在一起，代码固然短小精悍，但是这种编码风格恐怕不适合开发大型的网络程序。POSA2强调模块化，网络通信交给library/framework去做，程序员写代码只关注业务逻辑（这是非常重要的思想）。</p>
+<p>阅读这本书对于深入理解常用的event-driven网络库（libevent、Java
+Netty、Java Mina、Perl POE、Python
+Twisted等等）也很有帮助，因为这些库都是依照这本书的思想编写的。</p>
+<p>POSA2的代码是示意性的，思想很好，细节不佳。其C++代码没有充分考虑资源的自动化管理（RAII），如果直接按照书中介绍的方式去实现网络库，那么会给使用者造成不小的负担与陷阱。换言之，照他说的做，而不是照他做的学。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/c/" class="category-chain-item">c++</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/c/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="category-chain-item">muduo多线程服务器</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/muduo/" class="print-no-link">#muduo</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>13. 谈一谈网络编程学习经验</div>
+      <div>http://binbo-zappy.github.io/2025/01/05/muduo多线程/13-谈一谈网络编程学习经验/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年1月5日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/01/05/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/14-%E4%BB%8E%E3%80%8AC++Primer(%E7%AC%AC4%E7%89%88)%E3%80%8B%E5%85%A5%E6%89%8B%E5%AD%A6%E4%B9%A0C++/" title="14. 从《C++Primer(第4版)》入手学习C++">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">14. 从《C++Primer(第4版)》入手学习C++</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/01/05/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/12-C++%E7%BB%8F%E9%AA%8C%E8%B0%88/" title="12. C++经验谈">
+                        <span class="hidden-mobile">12. C++经验谈</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

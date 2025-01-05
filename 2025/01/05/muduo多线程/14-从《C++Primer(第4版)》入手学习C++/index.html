@@ -1,0 +1,956 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="附录 B 从《C++ Primer（第4版）》入手学习 C++ B.1 为什么要学习 C++ 2009 年本书作者 Stanley Lippman 先生应邀来华参加上海祝成科技举办的 C++ 技术大会，他表示人们现在还用 C++ 的唯一理由是其性能。相比之下，Java、C#、Python 等语言更加易学易用并且开发工具丰富，它们的开发效率都高于 C++。但 C++ 目前仍然是运行最快">
+<meta property="og:type" content="article">
+<meta property="og:title" content="14. 从《C++Primer(第4版)》入手学习C++">
+<meta property="og:url" content="http://binbo-zappy.github.io/2025/01/05/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/14-%E4%BB%8E%E3%80%8AC++Primer(%E7%AC%AC4%E7%89%88)%E3%80%8B%E5%85%A5%E6%89%8B%E5%AD%A6%E4%B9%A0C++/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="附录 B 从《C++ Primer（第4版）》入手学习 C++ B.1 为什么要学习 C++ 2009 年本书作者 Stanley Lippman 先生应邀来华参加上海祝成科技举办的 C++ 技术大会，他表示人们现在还用 C++ 的唯一理由是其性能。相比之下，Java、C#、Python 等语言更加易学易用并且开发工具丰富，它们的开发效率都高于 C++。但 C++ 目前仍然是运行最快">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/muduo.jpg">
+<meta property="article:published_time" content="2025-01-05T02:32:36.000Z">
+<meta property="article:modified_time" content="2025-01-05T10:07:53.453Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="muduo">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/muduo.jpg">
+  
+  
+  
+  <title>14. 从《C++Primer(第4版)》入手学习C++ - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="14. 从《C++Primer(第4版)》入手学习C++"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-01-05 10:32" pubdate>
+          2025年1月5日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          50 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">14. 从《C++Primer(第4版)》入手学习C++</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="附录-b-从c-primer第4版入手学习-c">附录 B 从《C++
+Primer（第4版）》入手学习 C++</h1>
+<h2 id="b.1-为什么要学习-c">B.1 为什么要学习 C++</h2>
+<p>2009 年本书作者 Stanley Lippman 先生应邀来华参加上海祝成科技举办的
+C++ 技术大会，他表示人们现在还用 C++
+的唯一理由是其性能。相比之下，Java、C#、Python
+等语言更加易学易用并且开发工具丰富，它们的开发效率都高于 C++。但 C++
+目前仍然是运行最快的语言，如果你的应用领域确实在乎这个性能，那么 C++
+是不二之选。</p>
+<p>这里略举几个例子2。对于手持设备而言，提高运行效率意味着完成相同任务需要更少的电能，从而延长设备的操作时间，增强用户体验。对于嵌入式设备而言，提高运行效率意味着：实现相同的功能可以选用较低档的处理器和较少的存储器，降低单个设备的成本；如果设备销量大到一定的规模，可以弥补
+C++ 开发的成本。对于分布式系统而言，提高 10% 的性能就意味着节约 10%
+的机器和能源。如果系统大到一定的规模（数千台服务器），值得用程序员的时间去换取机器的时间和数量，可以降低总体成本。另外，对于某些延迟敏感的应用（游戏、金融交易），通常不能容忍垃圾收集（GC）带来的不确定延时，而
+C++
+可以自动并精确地控制对象销毁和内存释放时机。我曾经不止一次见到，出于性能（特别是及时性方面的）原因，用
+C++ 重写现有的 Java 或 C# 程序。</p>
+<p>C++ 之父 Bjarne Stroustrup 把 C++ 定位于偏重系统编程（system
+programming）的通用程序设计语言，开发信息基础架构（infrastructure）是
+C++ 的重要用途之一。Herb Sutter 总结道，C++
+注重运行效率（efficiency）、灵活性（flexibility）和抽象能力（abstraction），并为此付出了生产力（productivity）方面的代价。用本书作者的话来说，就是“C++
+is about efficient programming with abstractions”（C++
+的核心价值在于能写出“运行效率不打折扣的抽象”）。</p>
+<p>要想发挥 C++
+的性能优势，程序员需要对语言本身及各种操作的代价有深入的了解，特别要避免不必要的对象创建。例如下面这个函数如果漏写了
+&amp;，功能还是正确的，但性能将会大打折扣。编译器和单元测试都无法帮我们查出此类错误，程序员自己在编码时须得小心在意。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-type">int</span> <span class="hljs-title">find_longest</span><span class="hljs-params">(<span class="hljs-type">const</span> std::vector&lt;std::string&gt;&amp; words)</span></span><br><span class="hljs-function">    <span class="hljs-comment">// std::max_element(words.begin(), words.end(), LengthCompare());</span></span><br></code></pre></td></tr></table></figure>
+<p>在现代 CPU 体系结构下，C++
+的性能优势很大程度上得益于对内存布局（memory
+layout）的精确控制，从而优化内存访问的局部性（locality of
+reference）。可参考 Scott Meyers 的讲义《CPU Caches and Why You
+Care》，Herb Sutter 的讲义《Machine Architecture》
+和任何一本现代的计算机体系结构教材（《计算机体系结构：量化研究方法》、《计算机组成与设计：硬件/软件接口》、《深入理解计算机系统》等。这一点优势在近期不会被基于
+GC 的语言赶上。</p>
+<p>C++ 的协作性不如
+C、Java、Python，开源项目也比这几个语言少得多，因此在 TIOBE
+语言流行榜中节节下滑。但是据我所知，很多企业内部使用 C++
+来构建自己的分布式系统基础架构，并且有替换 Java 开源实现的趋势。</p>
+<h2 id="b.2-学习-c-只需要读一本大部头">B.2 学习 C++
+只需要读一本大部头</h2>
+<p>C++
+不是特性（features）最丰富的语言，却是最复杂的语言，诸多语言特性相互干扰，使其复杂度成倍增加。鉴于其学习难度和知识点之间的关联性，恐怕不能用“粗粗看看语法，就撸起袖子开干，边查
+Google 边学习” 这种方式来学习
+C++，那样很容易掉到陷阱里或养成坏的编程习惯。如果想成为专业 C++
+开发者，全面而深入地了解这门复杂语言及其标准库，你需要一本系统而权威
+的书，这样的书必定会是一本八九百页的大部头。</p>
+<p>兼具系统性和权威性的 C++ 教材有两本，C++ 之父 Bjarne Stroustrup
+的代表作《The C++ Programming Language》和 Stanley Lippman 的这本《C++
+Primer》。候捷先生评价道：“泰山北斗已现，又何必案族劳形于墨瀚书海之中！这两本书都从
+C++ 盘古开天以来，一路改版，新将学旗，追奔逐北，成就一生荣光。”</p>
+<p>从实用的角度，这两本书读一本即可。因为它们覆盖的 C++
+知识点相差无几。就我个人的阅读体验而言，Primer 更易读一些，我 10
+年前深入学习 C++ 正是用的《C++ Primer（第 3
+版）》。这次借评注的机会仔细阅读了《C++ Primer（第 4
+版）》，感觉像在读一本完全不同的新书。第 4 版内容组织及文字表达比第 3
+版进步很多，第 3 版可谓“事无巨细、面面俱到”，第 4
+版则重点突出、详略得当，甚至篇幅也缩短了，这多半归功于新加盟的作者
+Barbara Moo.</p>
+<h3 id="c-primer第-4-版讲什么适合谁读">《C++ Primer（第 4
+版）》讲什么？适合谁读？</h3>
+<p>这是一本 C++ 语言的教程，不是编程教程。本书不讲八皇后问题、Huffman
+编码、汉诺塔、约瑟夫环、大整数运算等经典编程例题，本书的例子和习题往往都跟
+C++ 本身直接相关。本书的主要内容是精解 C++
+语法（syntax）与语意（semantics），并介绍 C++ 标准库的大部分内容（含
+STL）。 “这本书在全世界 C++
+教学领域的突出和重要，已经无须我再赞言。”</p>
+<p>本书适合 C++
+语言的初学者，但不适合编程初学者。换句话说，这本书可以是你的第一本 C++
+书，但恐怕不能作为第一本编程书。如果你不知道什么是变量、赋值、分支、条件、循环、函数，你需要一本更加初级的书24，本书第
+1 章可用做自测题。</p>
+<p>如果你已经学过一门编程语言，并且打算成为专业 C++ 开发者，从《C++
+Primer（第 4
+版）》入手不会让你走弯路。值得特别说明的是，学习本书不需要事先具备 C
+语言知识。相反，这本书教你编写真正的 C++ 程序，而不是披着 C++ 外衣的 C
+程序。</p>
+<p>《C++ Primer（第 4
+版）》的定位是语言教材，不是语言规格书，它并没有面面俱到地谈到 C++
+的每一个角落，而是重点讲解 C++
+程序员日常工作中真正有用的、必须掌握的语言设施和标准库25。本书的作者一点也不炫耀自己的知识和技巧，虽然他们有十足的资本26。这本书用语非常严谨（没有那些似是而非的比），用词平和，讲解细致，读起来并不枯燥。特别是如果你已经有一定的编程经验，在阅读时不妨思考如何用
+C++ 来更好地完成以往的编程任务。</p>
+<p>尽管本书篇幅近 900
+页，但其内容还是十分紧凑的，很多地方读一个句子就值得写一小段代码去验证。为了节省篇幅，本书经常修改前文代码中的一两行，来说明新的知识点，值得把每一行代码敲到机器中去验证。习题当然也不能轻易放过。</p>
+<p>《C++ Primer（第 4 版）》体现了现代 C++
+教学与编程理念：在现成的高质量类库上构建自己的程序，而不是什么都从头自己写。这本书在第
+3 章介绍了 string 和 vector 这两个常用的
+class，立刻就能写出很多有用的程序。但作者不是一次性把 string
+的上百个成员函数一列举，而是有选择地先讲解了最常用的那几个函数，充分体现了本书作为教材而不是手册的定位。</p>
+<p>《C++ Primer（第 4
+版）》的代码示例质量很高，不是那种随手写的玩具代码。第 10.4.2
+节实现了带禁用词的单词计数，第 10.6
+利用标准库容器简洁地实现了基于倒索引思路的文本检索，第 15.9
+节用面向对象方法扩充了文本检索的功能，支持布尔查询。值得一提的是，这本书讲解继承和多态时举的例子符合
+Liskov
+替换原则，是正宗的面向对象。相反，某些教材以复用基类代码为目的，常以“人、学生、老师、教授”或“雇员、经理、销售、合同工”为例，这是误用了面向对象的“复用”。</p>
+<p>《C++ Primer（第 4 版）》出版于 2005 年，遵循 2003 年的 C++
+语言标准27。C++ 新标准已于 2011 年定案（称为 C++11），本书不涉及 TR128
+和
+C++11，这并不意味着这本书过时了29。相反，这本书里沉淀的都是当前广泛使用的
+C++
+编程实践，学习它可谓正当时。评注版也不会越俎代庖地介绍这些新内容，但是会指出哪些语言设施已在新标准中废弃，避免读者浪费精力。</p>
+<p>《C++ Primer（第 4
+版）》是平台中立的，并不针对特定的编译器或操作系统。目前最主流的 C++
+编译器有两个，GNU G++ 和微软 Visual
+C++。实际上，这两个编译器阵营基本上“模塑”了 C++
+语言的行为。理论上讲，C++ 语言的行为是由 C++ 标准规定的。但是 C++
+不像其他很多语言有“官方参考实现”，因此 C++
+的行为实际上是由语言标准、几大主流编译器、现有不计其数的 C++
+产品代码共同确定的，三者相互制约。C++
+编译器不光要尽可能符合标准，同时也要遵循自身平台的成文或不成文规范和约定，例如高效地利用硬件资源、兼容操作系统提供的
+C 语言接口等等。在 C++ 标准没有明文规定的地方，C++
+编译器也不能随心所欲地自由发挥。学习 C++
+的要点之一是明白哪些行为是由标准保证的，哪些是由实现（软硬件平台和编译器）保证的32，哪些是编译器自由实现，没有保证的：换言之，明白哪些程序行为是可依赖的。从学习的角度，我建议如果有条件不妨两个编译器都用，相互比照，避免把编译器和平台特定的行为误解为
+C++
+语言规定的行为33。尽管不是每个人都需要写跨平台的代码，但也大可不必自我限定在编译器的某个特定版本，毕竟编译器是会升级的。</p>
+<p>本着“练从难处练，用从易处用”的精神，我建议在命令行下编译运行本书的示例代码，并尽量少用调试器。另外，值得了解
+C++
+的编译链接模型34，这样才能不被实际开发中遇到的编译错误或链接错误难住手脚。（C++
+不像现代语言那样有完善的模块（module）和包（package）设施，它从 C
+语言继承了头文件、源文件、库文件等古老的模块化机制，这套机制相对较为脆弱，需要花一定时间学习规范的做法，避免误用。）</p>
+<p>就学习 C++
+语言本身而言，我认为有几个练习非常值得一做。这不是“重复发明轮子”，而是必要的编程练习，帮助你熟悉、掌握这门语言。一是写一个复数类或者大整数类35，实现基本的加减乘运算，熟悉封装与数据抽象。二是写一个字符串类，熟悉内存管理与拷贝控制。三是写一个简化的
+vector&lt;T&gt; 类模板，熟悉基本的模板编程，你的这个 vector 应该能放入
+int 和 std::string
+等元素类型。四是写一个表达式计算器，实现一个节点类的继承体系（图 B-1
+右），体会面向对象编程。前三个练习是写独立的值语义的类，第四个练习是对象语义，同时要考虑类与类之间的关系。</p>
+<p>表达式计算器能把四则运算式 3+2×4 解析为图 B-1
+左图的表达式树，对根节点调用 calculate()
+虚函数就能算出表达式的值。做完之后还可以再扩充功能，比如支持三角函数和变量。</p>
+<p>在写完面向对象版的表达式树之后，还可以略微尝试泛型编程。比如把类的继承体系简化为图
+B-2，然后用 BinaryNode&lt;std::plus<double>&gt; 和
+BinaryNode&lt;std::multiplies<double>&gt; 来具现化 BinaryNode&lt;T&gt;
+类模板，通过控制模板参数的类型来实现不同的运算。</double></double></p>
+<p>在表达式树这个例子中，节点对象是动态创建的，值得思考：如何才能安全地、不重不漏地释放内存。本书第
+15.8 节的 Handle 可供参考。（C++
+的面向对象基础设施相对于现代的语言而言显得很简陋，现在 C++
+也不再以“支持面向对象”为卖点了。）</p>
+<p>C++
+难学吗？“能够靠读书、看文章、读代码、做练习学会的东西没什么门槛，智力正常的人只要愿意花工夫，都不难达到（不错）的程度。37”C++
+好书很多，不过优秀的 C++
+开源代码很少，而且风格迥异38。我这里按个人口味和经验列几个供读者参考阅读：Google
+的 Protobuf、leveldb、PCRE 的 C++ 封装，我自己写的 muduo
+网络库。这些代码都不长，功能明确，阅读难度不大。如果有时间，还可以读一读
+Chromium 中的基础库源码。在读 Google 开源的 C++
+代码时要连注释一起细读。我不建议一开始就读 STL 或 Boost
+的源码，因为编写通用 C++ 模板库和编写 C++
+应用程序的知识体系相差很大。另外可以考虑读一些优秀的 C 或 Java
+开源项目，并思考是否可以用 C++
+更好地实现或封装之（特别是资源管理方面能否避免手动清理）。</p>
+<h2 id="b.3-继续前进">B.3 继续前进</h2>
+<p>我能够随手列出十几本 C++
+好书，但是从实用角度出发，这里只举两三本必读的书。读过《C++
+Primer》和这儿本书之后，想必读者已能自行识别 C++
+图书的优劣，可以根据项目需要加以钻研。 第一本是《Effective C++
+中文版（第 3
+版）》39[EC3]。学习语法是一回事，高效地运用这门语言是另一回事。C++
+是一个遍布陷阱的语言，吸取专家经验无比重要，既能快速提高眼界，又能避免重蹈覆辙。《C++
+Primer》加上这本书包含的 C++ 知识足以应付日常应用程序开发。</p>
+<p>我假定读者一定会阅读这本书，因此在评注中不引用《Effective C++
+中文版（第 3 版）》的任何章节。</p>
+<p>《Effective C++ 中文版（第 3 版）》的内容也反映了 C++ 用法的进步。第
+2 版建议“总是让基类拥有虚析构函数”，第 3
+版改为“为多态基类声明虚析构函数”。因为在 C++
+中，“继承”不光只有面向对象这一种用途，即 C++
+的继承不一定是为了覆写（override）基类的虚函数。第 2
+版花了很多笔墨介绍浅拷贝与深拷贝，以及对指针成员变量的处理40。第 3
+版则提议，对于多数 class
+而言，要么直接禁用拷贝构造函数和赋值操作符，要么通过选用合适的成员变量类型41，使得编译器默认生成的这两个成员函数就能正常工作。</p>
+<p>什么是 C++
+编程中最重要的编程技法（idiom）？我认为是“用对象来管理资源”，即
+RAII。资源包括动态分配的内存42，也包括打开的文件、TCP
+网络连接、数据库连接、互斥锁等等。借助
+RAII，我们可以把资源管理和对象生命期管理等同起来，而对象生命期管理在现代
+C++ 里根本不困难（见注 5），只需要花几天时间熟悉几个智能指针43
+的基本用法即可。学会了这三招两式，现代的 C++ 程序中可以完全不写
+delete，也不必为指针或内存错误操心。现代 C++
+程序中出现资源和内存泄漏的唯一可能是循环引用，一旦发现，也很容易修正设计和代码。这方面的详细内容请参考《Effective
+C++ 中文版（第 3 版）》的第 3 章“资源管理”。</p>
+<p>C++ 是目前唯一能实现自动化资源管理的语言，C
+语言完全靠手工释放资源，而其他基于垃圾收集的语言只能自动清理内存，而不能自动清理其他资源44（网络连接，数据库连接等）。除了智能指针，TR1
+中的 bind/function
+也十分值得投入精力去学一学45。让你从一个崭新的视角，重新审视类与类之间的关系。Stephan
+T. Lavavej 有一套 PPT 介绍 TR1 的这几个主要部件46。</p>
+<p>第二本书，如果读者还是在校学生，已经学过数据结构课程47
+的话，可以考虑读一读<strong>《泛型编程与
+STL》</strong>48；如果已经工作，学完《C++ Primer》立刻就要参加 C++
+项目开发，那么我推荐阅读《C++ 编程规范》49[CCS]。</p>
+<p>泛型编程有一套自己的术语，如 concept、model、refinement
+等等，理解这套术语才能阅读泛型程序库的文档。即便不掌握泛型编程作为一种程序设计方法，也要掌握
+C++
+中以泛型思维设计出来的标准容器库和算法库（STL）。坊间面向对象的书琳琅满目，学习机会也很多，而泛型编程只有这么一本，读之可以开阔视野，并且加深对
+STL 的理解和应用（特别是迭代器50）。</p>
+<p>C++
+模板是一种强大的抽象手段，我不建议每个人都把精力花在钻研艰深的模板语法和技巧上。从实用角度，能在应用程序中写写简单的函数模板和类模板即可（以
+typetraits 为限），并非每个人都要去写公用的模板库。</p>
+<p>由于 C++
+语言过于庞大复杂，我见过的开发团队都对其剪裁使用51。往往团队越大，项目成立时间越早，剪裁得越厉害，也越接近
+C。制订一份好的编程规范相当不容易。若规范定得太紧（比如定为团队成员知识能力的交集），程序员束手束脚，限制了生产力，对程序员个人发展也不利52。若规范定得太松（定为团队成员知识能力的并集），项目内代码风格过于异样，学习交流协作成本上升，恐怕对生产力也不利。</p>
+<p>由两位顶级专家合写的<strong>《C++ 编程规范》</strong>一书堪称现代 C++
+编程规范的范本。《C++
+编程规范》同时也是专家经验一类的书，这本书篇幅比《Effective C++
+中文版（第 3
+版）》短小，条款数却多了近一倍，可谓言简意赅。有的条款看了就明白，照做即可：</p>
+<ul>
+<li>第 1 条，以高警告级别编译代码，确保编译器无警告。</li>
+<li>第 31 条，避免写出依赖于函数实参求值顺序的代码。C++
+操作符的优先级、结合性与表达式的求值顺序是无关的。裘宗燕老师写的《C/C++
+语言中表达式的求值》53 一文对此有明确的说明。</li>
+<li>第 35 条，避免继承“并非设计作为基类使用”的 class.</li>
+<li>第 43 条，明智地使用 pimpl。这是编写 C++
+动态链接库的必备手法，可以最大限度地提高二进制兼容性。</li>
+<li>第 56 条，尽量提供不会失败的 swap() 函数。有了 swap()
+函数，我们在自定义赋值操作符时就不必检查自赋值了。</li>
+<li>第 59 条，不要在头文件中或 #include 之前写 using.</li>
+<li>第 73 条，以 by value 方式抛出异常，以 by reference
+方式捕捉异常。</li>
+<li>第 76 条，优先考虑 vector，其次再选择适当的容器。</li>
+<li>第 79 条，容器内只可存放 value 和 smart pointer.
+有的条款则需要相当的设计与编码经验才能解其中三味：</li>
+<li>第 5 条，为每个物体（entity）分配一个内聚任务。</li>
+<li>第 6 条，正确性、简单性、清晰性居首。</li>
+<li>第 8、9 条，不要过早优化：不要过早劣化。</li>
+<li>第 22 条，将依赖关系最小化。避免循环依赖。</li>
+<li>第 32 条，搞清楚你写的是哪一种 class。明白 value class、base
+class、trait class、policy class、exception class
+各有其作用，写法也不尽相同。</li>
+<li>第 33 条，尽可能写小型 class，避免写出“大怪兽（monolithic
+class）”.</li>
+<li>第 37 条，public 继承意味着可替换性。继承非为复用，乃为被复用。</li>
+<li>第 57 条，将 class 类型及其非成员函数接口放入同一个 namespace.</li>
+</ul>
+<p>值得一提的是，《C++ 编程规范》是出发点，但不是一份终极规范。例如
+Google 的 C++ 编程规范54 和 LLVM 编程规范55
+都明确禁用异常，这跟这本书的推荐做法正好相反。</p>
+<h2 id="b.4-评注版使用说明">B.4 评注版使用说明</h2>
+<p>评注版采用大 16
+开印刷，在保留原书版式的前提下，对其进行了重新分页，评注的文字与正文左右分栏并列排版。另外，本书已依据原书
+2010 年第 11
+次印刷的版本进行了全面修订。为了节省篇幅，原书每章末尾的小结、术语表及书末的索引都没有印在评注版中，而是做成
+PDF 供读者下载，这也方便读者检索。评注的目的是帮助初次学习 C++
+的读者快速深入掌握这门语言的核心知识，澄清一些概念比较与其他语言的不同、补充实践中的注意事项等。评注的内容约占全书篇幅的
+15%，大致比例是三分评、七分注，并有一些补白的内容56。如果读者拿不定主意是否购买，可以先翻一翻第
+5 章。我在评注中不谈 C++11，但会略微涉及 TR1，因为 TR1
+已经投入实用。</p>
+<p>为了不打断读者阅读的思路，评注中不会给 URL
+链接，评注中偶尔会引用《C++ 编程规范》的条款，以 [CCS]
+标明，这些条款的标题已在前文列出。另外评注中出现的 soXxXxXX 表示
+http://stackoverflow.com/questions/xxxxxx 网址 网上资源</p>
+<ul>
+<li>代码下载：http://www.informit.com/store/product.aspx?isbn=0201721481</li>
+<li>豆瓣页面：http://book.douban.com/subject/10944985/</li>
+<li>术语表与索引 PDF
+下载：http://chenshuo.com/cp4/（本序的电子版也发布于此，方便读者访问脚注中的网站）.</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/c/" class="category-chain-item">c++</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/c/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="category-chain-item">muduo多线程服务器</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/muduo/" class="print-no-link">#muduo</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>14. 从《C++Primer(第4版)》入手学习C++</div>
+      <div>http://binbo-zappy.github.io/2025/01/05/muduo多线程/14-从《C++Primer(第4版)》入手学习C++/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年1月5日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/01/05/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/15-%E5%85%B3%E4%BA%8EBoost%E7%9A%84%E7%9C%8B%E6%B3%95/" title="15. 关于Boost的看法">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">15. 关于Boost的看法</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/01/05/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/13-%E8%B0%88%E4%B8%80%E8%B0%88%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E5%AD%A6%E4%B9%A0%E7%BB%8F%E9%AA%8C/" title="13. 谈一谈网络编程学习经验">
+                        <span class="hidden-mobile">13. 谈一谈网络编程学习经验</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

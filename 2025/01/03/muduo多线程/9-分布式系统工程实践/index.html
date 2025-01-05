@@ -1,0 +1,1521 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="第9章 分布式系统工程实践 本章谈的分布式系统是指运行在公司防火墙以内的信息基础设施，用于对外（客户）提供联机信息服务，不是针对公司员工的办公自动化系统。服务器的硬件平台是多核Intel x86-64处理器、几十GB内存、千兆网互联、常规存储、运行Linux操作系统。系统的规模大约在几十台到几百台，可以位于一个机房，也可以位于全球的多个数据中心。只有两台机器的双机容错（热备）系统不是本章的讨">
+<meta property="og:type" content="article">
+<meta property="og:title" content="9. 分布式系统工程实践">
+<meta property="og:url" content="http://binbo-zappy.github.io/2025/01/03/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/9-%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="第9章 分布式系统工程实践 本章谈的分布式系统是指运行在公司防火墙以内的信息基础设施，用于对外（客户）提供联机信息服务，不是针对公司员工的办公自动化系统。服务器的硬件平台是多核Intel x86-64处理器、几十GB内存、千兆网互联、常规存储、运行Linux操作系统。系统的规模大约在几十台到几百台，可以位于一个机房，也可以位于全球的多个数据中心。只有两台机器的双机容错（热备）系统不是本章的讨">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/muduo.jpg">
+<meta property="article:published_time" content="2025-01-03T02:32:29.000Z">
+<meta property="article:modified_time" content="2025-01-03T12:05:58.938Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="muduo">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/muduo.jpg">
+  
+  
+  
+  <title>9. 分布式系统工程实践 - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="9. 分布式系统工程实践"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-01-03 10:32" pubdate>
+          2025年1月3日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          31k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          259 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">9. 分布式系统工程实践</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="第9章-分布式系统工程实践"><strong>第9章
+分布式系统工程实践</strong></h1>
+<p><strong>本章谈的分布式系统是指运行在公司防火墙以内的信息基础设施</strong>，用于对外（客户）提供联机信息服务，不是针对公司员工的办公自动化系统。服务器的硬件平台是多核Intel
+x86-64处理器、几十GB内存、千兆网互联、常规存储、运行Linux操作系统。系统的规模大约在几十台到几百台，可以位于一个机房，也可以位于全球的多个数据中心。只有两台机器的双机容错（热备）系统不是本章的讨论范围。<strong>服务程序是普通的Linux用户进程，进程之间通过TCP/IP通信</strong>。特别是，本章不考虑分布式存储系统，<strong>只考虑分布式即时计算</strong>。</p>
+<p>本章不谈“企业级开发”，也就是以商用数据库为存储，使用商用消息中间件（MQ）或交易中间件（Tuxedo），故障转移切换（failover）用VCS等商业解决方案。也不谈“高性能计算（HPC）”，这是一个相对成熟的领域，通常以MPI为编程平台。并行算法对延迟有苛刻要求，通常采用InfiniBand为通信方式，不是常规的基于以太网的TCP/IP互联。</p>
+<p>先谈钱每台机器的购买成本是几万元人民币，每年的使用成本以一元计（电费、机位、空调、网管，不含对外带宽）。换言之，本章讨论的是运行在几十台或几百台PC服务器（每台价值几万元）上的分布式系统，不是运行在几台高端服务器（每台价值几十万乃至上百万元）上的系统。换言之，是Google、Facebook、Amazon那种风格的分布式系统，不是IBM、Oracle、HP的scale-up系统。</p>
+<p>在这种用commodity硬件（服务器和网络）搭建的分布式系统中，扩容方式主要通过增加机器（scale-out）进行。理想情况下，系统架构应该具备线性的伸缩性，系统实现应该让“伸缩”具有较小的比例系数。不妨假定同一批购买的相同用途的机器具有相同的配置，每次采购总是购买性价比最高的机型。服务器的服役期一般不超过5年，因为一台5年前购买的旧机器在消耗相同的电能的情况下，提供的处理能力只有新机器的一半甚至更少，不如淘汰它再买新机器更划算。</p>
+<p>网络方面，可以认为同一数据中心的任何两机器之间有千兆带宽，常用的做法是采用Clos/Fat-tree网络拓扑。TCP/IP协议原本是为广域网设计的，但数据中心里的网络特性与传统广域网不同，会出现TCP-Incast症状。</p>
+<p>也就是说，本章讨论在均质（homogeneous）的硬件和网络情况下来设计系统。</p>
+<p>本书讨论的分布式系统对操作系统的功能需求是：</p>
+<ul>
+<li>管理十几个核上的任务调度。</li>
+<li>管理几十GB物理内存的分配释放。</li>
+<li>驱动一两个千兆或万兆网卡。</li>
+<li>驱动十来块普通服务器级的硬盘。</li>
+</ul>
+<p>Linux内核可以很好地完成以上这些任务，我不认为其他操作系统能把这几样普通硬件管得更好。或许在高端128核1TB内存的安腾服务器上Windows表现更佳，但这就不是本书讨论的范围了。既然操作系统选定为Linux，那自然不必考虑跨平台的问题，程序开发工作因此也简化了许多。</p>
+<p>故分布式系统一个有意思的现象：公司越大，技术能力越强，用的机器越便宜。一般的公司会购买品牌服务器，配备冗余的电源和网卡，硬盘通常是配置为RAID
+5/6/10等阵列，商用SAN存储也不少见。技术领先的互联网公司为了压缩成本，往往采用单电源、单网卡，存储也用一两块普通SATA硬盘（并且不用RAID），但无论如何，使用的还是服务器级的多路CPU和ECC内存。有的公司甚至用Intel
+Atom或ARM来替换Xeon服务器，以进一步降低能耗，但是由于可靠性较低（内存无校验），这些低端“服务器”通常用于静态cache之类的场合。</p>
+<h2 id="我们在技术浪潮中的位置">9.1 我们在技术浪潮中的位置</h2>
+<p>单机服务端编程问题已经基本解决编写高吞吐、高并发、高性能的服务端程序的技术已经成熟。无论是程序设计还是性能调优，都有成熟的办法。<strong>在分布式系统中，单机表现出来就是一个网口，能收发消息，至于它内部用什么语言什么编程模型都是次要的。</strong>在满足性能要求的前提下，应该用尽量简单直接的编程方式。</p>
+<p>单机的技术热点不在于提高性能，而在于解放程序员的生产力，例如牺牲少许性能，用更易于开发的语言。</p>
+<p>在编程模型方面，分布式对象已被淘汰准确地说是远程对象，对象位于另一个进程（可能运行在另一台机器上），程序就像操作本地对象一样通过成员函数调用来使用远程服务。这种模型的本质难点在于容错语义。假设对象所在的机器坏了怎么办？已经发起但尚未返回的调用到底有没有成功？调用远程对象的method应该是阻塞还是抛异常呢？假设持有对象引用的机器崩溃怎么办？对象有机会被回收吗？你理解并信得过它内置的容错与对象迁移机制吗？</p>
+<p><strong>20世纪80年代提出这种编程模型的前提是服务器的可靠性极高，有相当强的容错能力，几乎不存在失效的可能。</strong>这一前提在目前的分布式系统开发中是不成立的，这种技术适合所谓的企业级开发，不适合面向业务的分布式系统。这里推荐一篇Google的好文《Introduction
+to Distributed System
+Design》。其中的点晴之笔是：分布式系统设计，是design for
+failure。<strong>设计分布式系统不能基于错误的假设</strong>。</p>
+<p>大规模分布式系统处于技术浪潮的前期大家都在摸索中前进，尚未形成一套完整的方法论。某些领域相对成熟一些（分布式非结构化存储、离线数据处理等），有一些开源的组件。但更多更本质的问题（正确性、可靠性、可用性、容错性、一致性）尚没有一套行之有效的方法论来指导实践，有的只是一些相对零散的经验。</p>
+<p>我们怎么办？勿在浮沙筑高台，只用成熟的基础设施。目前来看，Linux、多线程编程、TCP/IP网络编程是成熟的，我认为没有哪个“C++分布式中间件”是成熟的。2000年，Linux和多线程编程都不成熟；2004年Linux
+2.6内核支持epoll和NPTL，Linux服务端多线程编程基本成熟。1990年，TCP/IP网络编程不成熟；W.Richard
+Stevens的传世经典《TCP/IP详解》和《UNIX网络编程（第2版）》分别在1993和1998年出版，网络编程基本成熟。现在，如果要学习Linux性能调优、多线程编程、网络编程、TCP/IP协议等等知识，都能找到非常好的书籍和网上资源，“能够靠读书、看文章、读代码、做练习学会的东西没什么门槛”。</p>
+<p>这也是本书主讲Linux多线程TCP网络编程的重要原因。但是这距离设计分布式系统还有巨大的鸿沟，本章的一些个人经验或许能让读者稍微少走一些弯路。</p>
+<h3 id="分布式系统的本质困难">1.1 分布式系统的本质困难</h3>
+<p>Jim Waldo等人写的《A Note on Distributed
+Computing》一针见血地指出分布式系统的本质困难在于partial failure。</p>
+<p>当我们熟悉的单机和分布式做个对比，初看起来，分布式系统很像是放大了的单机。一台机器通过总线把CPU、内存、扩展卡（网卡和磁盘控制器）连到一起，一个分布式系统通过网络把服务进程连到一起，网络就是总线。这种看法对吗？单机和分布式的区别究竟在哪里？能不能按照编写单机程序的思路来设计分布式系统？</p>
+<p>分布式系统不是放大了的单机系统，根本原因在于单机没有部分故障（partial
+failure）一说。对于单机，我们能轻易判断某个进程、某个硬件是否还在正常工作。而在分布式系统中，这是无解的，我们无法及时得知另外一台机器的死活，也无法把机器崩溃与网络故障区分开来。这正是分布式系统与单机的最大区别。</p>
+<p>例如一次RPC调用超时，调用方无法区分：</p>
+<ul>
+<li>是网络故障还是对方机器崩溃？</li>
+<li>软件还是硬件错误？</li>
+<li>是去的路上出错还是回来的路上出错？</li>
+<li>对方有没有收到请求，能不能重试？</li>
+</ul>
+<p>在本机调用成员函数根本不会出现这种情况。这不是RPC的过错，而是分布式系统固有的特点，此处把RPC换成网络消息的请求响应也是一样的。简单地说，单机的编程经验不能直接套用在分布式系统上，分布式系统需要用单独的理论来分析。</p>
+<p><strong>单机（集中式）与分布式的根本区别在于进程的地址空间（address
+space）是一个还是多个</strong>，对于分布式系统来说，如果把进程比喻成“人”，那么这些“人”不是在一个屋子里交谈，而是通过电话会议交谈。或者类比成一群盲人在屋子里交谈。重要的区别在于，通过电话会议交谈的时候只能听到别人的发言，如果有人离场，其他人不会立刻得知，通常只能通过“一段时间没有发言”或者“叫他的名字没有回答”来间接判断某人已经离场。但是一个人被其他事情吸引（短暂过载）或开小差（网络暂时故障）也会表现为“一段时间没有发言”或者“叫他的名字没有回答”，其他人无法区分这两种情况。换言之，进程间通过收发消息来交换信息，一个进程看不到别的进程的数据，也不能立刻判断别的进程的死活。当然，这个比喻本身也有问题，它假设了同时性和事件顺序的确定性。一个人说的话会立刻被其他人听到，甲乙两个人先后说话，那么其他人听到的顺序都是先甲后乙。这在分布式系统中是不成立的，见P.348的例子。</p>
+<p><strong>分布式系统设计以进程为基本单位，先确定有哪些功能，需要做几个程序，每个程序的职责和它掌握的数据。</strong>然后安排这些程序在多台机器上的分布，规划每个程序起几个进程。进程之间的传输协议很容易确定，使用TCP长连接即可。比较费脑筋的是进程之间的通信协议，即发送哪些消息，每条消息包含哪些内容。随着系统的演化，消息的内容也会变化，因此要提前做好准备。</p>
+<h3 id="分布式系统是个险恶的问题">1.2 分布式系统是个险恶的问题</h3>
+<p>险恶的问题（wicked
+problem）的意思是：你必须首先把这个问题“解决”一次，以便能够明确地定义它，然后再解决一遍。在实现一个系统之前，很可能无法预料哪个技术方案行得通。这里举两个虚构的例子说明其险恶。</p>
+<p>假设有一个缩略图（Thumbnailer）服务，它的功能是将用户提供的数码照片按比例缩小为固定尺寸，这是一个典型的无状态服务。它的实现很简单，不过是给ImageMagick的convert命令提供一层网络封装。计算缩略图是一项相当耗时的任务，平均每张图片用时0.5s，一台8核服务器每秒只能处理16张图片。相比之下，一台8核Web服务器可支撑每秒8000次HTTP请求响应，平均每个HTTP请求只占用1ms
+CPU时间。为了避免压缩照片影响Web服务器的性能，我们把生成缩略图功能移到单独的服务器中。系统中有多台Web服务器，连接到多台Thumbnailer服务器。现在的问题是，我们该如何做负载均衡？</p>
+<p>第一个想法是每台Web服务器只和一台Thumbnailer打交道，通过Web本身的负载均衡来让图片压缩请求均匀地分散到多个Thumbnailer上。如图9-1所示的两种做法。</p>
+<p><img src="/2025/01/03/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/9-%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/image-20250103161235323.png" srcset="/img/loading.gif" lazyload></p>
+<p>这种做法足够简单，但是Web负载从短期来看是非均匀的，具有突发性。假如某个用户通过一个Web服务器上传了一堆照片，那么在现在这个设计中，会有一个Thumbnailer满负荷，而其他Thumbnailer都闲着，这不利于快速响应。</p>
+<p>自然地，我们让每个Web服务器都可以和每个Thumbnailer服务器打交道，以期充分均匀地分散某一Web服务器的突发负载，形成了如图9-2所示的连接关系。那么负载均衡又该怎么做呢？</p>
+<p><img src="/2025/01/03/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/9-%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/image-20250103161309403.png" srcset="/img/loading.gif" lazyload></p>
+<p>有几个实践证明不靠谱的做法：</p>
+<ol type="1">
+<li><p>每个Web服务器轮流向Thumbnailer[1,2,3,...,N)发送请求，结果发现Thumbnailer的负载像走马灯一样移动，因为Web服务器先集中火力攻击第1台Thumbnailer，然后再集中攻击第2台Thumbnailer，如此等等。</p></li>
+<li><p>既然轮流发送请求不合适，就采用随机的方式选择Thumbnailer，随机数的种子用时间初始化。但是Web服务器几乎同时启动，它们用于初始化的种子相同，产生的伪随机序列也相同，造成与第1种做法相同的“潮涌”现象。</p></li>
+</ol>
+<p>前面这两条都是开环控制，下面考虑闭环控制，让Web服务器知道Thumbnailer的实际负载，并从中选出负载最轻的来发送请求。</p>
+<ol start="3" type="1">
+<li><p>让Thumbnailer向Web服务器定期汇报当前负载情况，这种做法的缺点是消息数目与服务器数目呈平方关系，有M台Web服务器，N台Thumbnailer服务器，每个周期要发送M×N条消息，伸缩性不佳。而且“负载”强弱本身也不易定义。</p></li>
+<li><p>通过某个集中的负载均衡器（load
+balancer）来收集并分发负载情况，好处是把消息数目降为M+N，但是造成了单点故障（Single
+Point of Failure，SPOF）。</p></li>
+</ol>
+<p>这几个想法初看上去都挺合理，但是仔细一分析却有各自的问题。这里提出一种完全基于客户端视角的负载均衡策略。</p>
+<p>第3和第4两种方案是基于Thumbnailer服务的当前负载的反馈控制，每次新请求都发向当前负载最轻的服务端。那么我们遇到的一个更本质问题是，如何定义服务端的负载？或者说Thumbnailer如何算出自已当前负载的单值，以供客户端排序？其当前负载值与本机CPU使用率、内存占用率、硬盘剩余空间比例、网络带宽使用率是什么关系？各部分权重如何分配？有没有考虑同时运行在同一台机器上的其他服务进程也会消耗资源？</p>
+<p>我们注意到，响应客户端（这只是Web服务器）请求的快慢直接反应了服务端（Thumbnailer）的负载。客户端根本无须关心服务端负载的具体情况（CPU负载、网络带宽负载、内存使用率等），只需要看它响应自已请求的速度就可以判断应该把下一个请求发给哪个服务端。<strong>具体地说是选择活动请求（已经发出请求而尚未收到响应）数最少的那个服务端。</strong>这样一来客户端无须定期查询各个服务端的负载，只要根据自己的以往的调用情况就能做出判断。这个做法大大简化了系统的设计。</p>
+<p>客户端把服务端看成一个循环队列，在选择服务端时，从上次调用的服务端的下一个位置开始遍历，<strong>找出负载最轻的服务端。</strong>每次遍历的起点选在上次遍历终点的下一个位置，这是为了在服务端负载相等的情况下轮流使用各个服务端，使各服务端负载大致相当。算法如下，其中last表示上次选取的服务端编号。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">selectLeastLoad</span><span class="hljs-params">(<span class="hljs-type">const</span> vector&lt;Endpoint&gt;&amp; endpoints, <span class="hljs-type">int</span>* last)</span> </span>&#123;<br>    <span class="hljs-type">int</span> N = endpoints.<span class="hljs-built_in">size</span>();<br>    <span class="hljs-type">int</span> start = (*last + <span class="hljs-number">1</span>) % N; <span class="hljs-comment">// 每次从前次调用的下一位置找起</span><br>    <span class="hljs-type">int</span> min_load_idx = start; <span class="hljs-comment">// 从start开始找负载最轻的服务端</span><br>    <span class="hljs-type">int</span> min_load = endpoints[start].<span class="hljs-built_in">active_reqs</span>(); <span class="hljs-comment">// 活动请求数目</span><br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; N; ++i) &#123;<br>        <span class="hljs-type">int</span> idx = (start + i) % N;<br>        <span class="hljs-type">int</span> load = endpoints[idx].<span class="hljs-built_in">active_reqs</span>(); <span class="hljs-comment">// 负载即活动请求数目</span><br>        <span class="hljs-keyword">if</span> (load &lt; min_load) &#123; <span class="hljs-comment">// 找到更小的负载</span><br>            min_load = load;<br>            min_load_idx = idx;<br>            <span class="hljs-keyword">if</span> (min_load == <span class="hljs-number">0</span>) <span class="hljs-comment">// 已经找到最小负载，无须再找</span><br>                <span class="hljs-keyword">break</span>;<br>        &#125;<br>    &#125;<br>    *last = min_load_idx;<br>    <span class="hljs-keyword">return</span> min_load_idx;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>举例来说，有4台Thumbnailer服务器。在某一时刻，客户端WebServerA向这4台服务器已发起而尚未结束的请求（即前述“活动请求”）的数目分别为3、2、3、4，Thumbnailer2负载最轻，那么这时新的图片压缩任务将发给Thumbnailer2。在下一次请求到来时，活动请求数目分别为3、3、3、3，客户端从Thumbnailer2的下一位置（即Thumbnailer3）开始查找可用的服务端，没有哪个服务端的负载比Thumbnailer3更轻，因此新的图片压缩任务将发给Thumbnailer3。</p>
+<p>在最初的两种反馈控制设计中（3和4），是站在服务器的角度评估服务器的当前负载。某个服务程序的“当前负载”是一个全局数据，由服务端产生，每个客户端都希望这个全局数据随时保持更新。而在新的设计中，客户端根本不用关心这个全局数据，只要从自己的角度看，哪个服务器负载轻、等待响应的活动请求少，就把下一个请求发给哪个服务器。各个客户端看到的服务器负载情况可能不尽相同，不过从统计上看，负载仍然是均匀分配的，实验结果很好地支持了这一点。新的设计规避了分布式系统中保持全局数据一致性这个老大难问题。</p>
+<p><strong>在多个客户端（WebServer）的情况下，为了避免潮涌，每个WebServer用于初始化last值的随机数种子应该有足够的随机性</strong>，例如可以包括IP地址、MAC地址、当前时间、PID号等等。</p>
+<p>这个简单的负载均衡策略在实际应用中获得了良好的效果。</p>
+<p>第二个例子，分布式系统的险恶之处还在于时间与事件顺序违反直觉（具有狭义相对论效应，每个本地观察者有自己的时钟和事件顺序），因为消息传递的延时是不固定的。</p>
+<p>比方说，顾客向商店订购了一件商品（O:order），商店先是确认订单已收到（a:ack），再通知仓库发货（b:ship），随后立刻通知客户货物已发出（c:confirm），最后客户收到货物（d:deliver）。消息流程如图9-3所示。</p>
+<p><img src="/2025/01/03/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/9-%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/image-20250103162855158.png" srcset="/img/loading.gif" lazyload></p>
+<p>按照常规的想法，a、c、d这3条消息发送的顺序是明确的，那么Customer收到消息的顺序也应该是a、c、d。但是在分布式系统中，a、c、d这3条消息到达Customer的顺序有6种可能。即便Shop与Customer采用一个TCP连接通信，保证a先于c到达，那么Customer收到这3条消息仍然有3种可能的顺序：</p>
+<ol type="1">
+<li>a, c, d</li>
+<li>a, d, c</li>
+<li>d, a, c</li>
+</ol>
+<p>由于a、c与d由两个不同的TCP连接发送，它们之间没有确定的先后关系。</p>
+<p>同样的道理，如果客户端往Master发出一个请求，Master指定某个Worker来完成任务，Worker把计算结果发给客户端，消息流程如图9-4所示。</p>
+<p><img src="/2025/01/03/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/9-%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/image-20250103163709735.png" srcset="/img/loading.gif" lazyload></p>
+<p>那么“4:result”完全有可能先于“2:response”到达客户端，因为TCP重传的首次间隔是200ms，如果发送“2:response”的时候发生了重传，那么它会比没有重传的“4:result”更晚到达客户端。网络上消息传递的延迟没有上界，完全有可能出现后发先至的情况。客户端程序必须预见到并能正确应对这种乱序的情况。</p>
+<p>另外，Client也没有办法判断“4:result”和“2:response”的发送哪个在前、哪个在后，即便Master和Worker都在消息中加上发送时间戳。这是因为分布式系统中每台机器有自己的本地时钟，Master和Worker的时钟之间必定是有误差的，而Client并不知道它们的时间差多少。</p>
+<p>在局域网内，消息的传输延迟不能通过发送方和接收方时间戳的差值算出来。因为在局域网中，虽然NTP对时的精度可以达到1毫秒之内，但消息的延迟本身也在1毫秒以内。测量值和未知系统误差在同一量级，测量结果是无意义的。必要时我们可以先测量两台机器之间的时间差，用来修正延迟测量的结果。</p>
+<h2 id="分布式系统的可靠性浅说">2. 分布式系统的可靠性浅说</h2>
+<p>本节谈谈我对分布式系统可靠性的理解。要谈可靠性，必须要谈基本指标MTBF（平均无故障运行时间），单位通常是小时。MTBF与可靠性的关系如下，其中t是系统运行时间。</p>
+<p><span class="math display">\[\text{Reliability} =
+e^{-\frac{t}{t_\text{MTBF}}}\]</span></p>
+<p>按照上式，当<span class="math inline">\(t=t_\text{MTBF}\)</span>时，系统的可靠度为36.8%。也就是说当系统连续运转MTBF这么长时间后，发生故障的概率为63.2%。见图9-5中的指数曲线。</p>
+<p><img src="/2025/01/03/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/9-%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/image-20250103164243812.png" srcset="/img/loading.gif" lazyload></p>
+<p>图9-5的横坐标为MTBF的倍数，纵坐标为可靠度。在粗略估算的时候，可以用直线代替曲线，达到MTBF时系统发生故障的概率为50%（图9-5中的实线）或100%（图9-5中的虚线）。如果要粗略估算短期可靠性，应该用图9-5中的虚线，它是指数曲线在t=0附近的一阶近似（斜率相等，为-1）。在估算可靠性的时候，一两倍的差距无伤大雅，因为MTBF本身只是平均数，而设备损坏是非均匀的。</p>
+<p>MTBF与使用寿命无关。硬盘的寿命通常是3~5年，但其标称MTBF是100万小时，即114年。这两个数字并不矛盾，MTBF为100万小时，意味着如果有1万块硬盘同时运行，那么平均每200小时会坏掉一块。如果按MTBF为100万小时计算，硬盘每年的故障率不到1%，但是硬盘实际的年故障率在3%~8%，因此不能一味相信厂家给出的数据。</p>
+<p>一个系统由多个部件组成，系统的整体可靠性取决于部件之间是“并联”还是“串联”。所谓两个部件“并联”，指的是两个部件同时坏掉会导致系统失灵，比方说冗余电源就是“并联”的。所谓两个部件“串联”，指的是只要有一个部件坏掉，系统就失灵了；一般的人门级服务器上，主板、CPU、内存都是“串联”的。</p>
+<p>“并联”可以极大地提高可靠性。例如一台服务器有两个电源，同时工作，而且可以热插拔。如果单个电源的MTBF是10万小时，更换坏电源需要24小时。假设有100台单电源的机器，平均每42天会有一台机器出现电源故障。如果改用双电源，在出现环择一个电源的情况后，在24小时内更换它，可确保不停机。那么这台机器的另一个电源在这24小时内坏掉的可能性是1－exp(-24/100000)=0.024%，因此双电源的可靠性是99.976%。</p>
+<p>再来计算硬盘存储数据的可靠性。为了便于计算，假设硬盘的年故障率是3.65%，更换坏硬盘并重建数据需要24小时。一块硬盘在24小时内坏掉的可能性约是0.01%（即<span class="math inline">\(10^{-4}\)</span>）。如果我们按GFS的思路把数据存3份，在一块硬盘坏掉之后，立刻用另外两份拷贝开始在空余的硬盘上重建数据。那么在接下来的24小时里，另外两份拷贝同时坏掉的可能性是<span class="math inline">\(10^{-8}\)</span>。在一年之内，某一块数据丢失的可能性是<span class="math inline">\(3.65×10^{-10}\)</span>。换言之，数据的可靠性（durability）是9个9。要想进一步提高可靠性，可行的方法有两个：一是提高冗余，比如每块数据存6份；二是降低重建数据的时间，比如把更换并重建硬盘的时间降为12小时。</p>
+<p>前面考虑的是从客户的角度看某一块指定的数据不丢失的概率，如果从存储服务端的角度考虑系统全部数据都不丢失的概率，情况就大不一样了。假设一个硬盘每天坏掉的概率为p，一共有n块硬盘，一天之内恰好坏k块硬盘的概率满足二项分布。情况下，如果一天之内坏掉3块以上的硬盘，就有可能丢数据。因为如果有某块数据的3份几余正好位于这3块坏掉的硬盘，那么这块数据就丢失了。因此不出现数据丢失的概率是<span class="math inline">\(f(0;n，p)+f(1;n，p)+f(2;n，P)\)</span>。把<span class="math inline">\(p=10^{-4},n=100,1000,10000\)</span>分别带入公式，可知当n=100时，数据的可靠性接近100%；当n=1000时，数据可靠性为99.985%；而当n=10000时，数据的可靠性降为91.971%，即每天有8.029%的概率出现3块以上硬盘同时损坏的情况。如果某个有10000个硬盘的存储系统连续运行一个月，那么几乎肯定会遇到某天坏掉3块硬盘的情况出现，连续运行一年，几乎肯定会遇到数据丢失的情况出现。如果磁盘总数n继续增大，数据的总可靠性迅速降低。在无法改变硬盘故障率的情况下，<strong>如果基于GFS思路不变，那么增加数据的冗余份数和降低重建数据的时间是提高可靠性的两个可行办法。</strong></p>
+<p>这看似矛盾的结果其实也很容易理解：一个人买一张彩票中头奖的概率是百分之一，一期彩票有几百人购买，那么每期都能开出头奖来。</p>
+<p>可靠性与可用性（availability）是两码事，可靠性指的是数据不丢失的概率，可用性指的是数据或服务能被随时访问到的概率。可用性=<span class="math inline">\(\text{Availability} =
+\frac{t_\text{MTBF}}{t_\text{MTBF} + t_\text{MTTR}}\)</span></p>
+<p>其中MTTR是平均修复时间。因此为了提高可用性，提高MTBF和降低MTTR都是可行的。例如假设某服务的MTBF短到只有24小时，但MTTR做到10秒，可用性还是高达99.988%。</p>
+<p>值得一提的是，前面只考虑了硬盘整体故障，没有考虑数据读写错误。普通SATA硬盘的误码率（bit
+error rate）约是<span class="math inline">\(10^{-14}\)</span>，也就是说大约每读12TB的数据就会出现有数据读不出来。磁盘带宽按100MB/s算，那么持续全速读33小时就会出现这种错误。而ECC内存的可靠度远高于硬盘，大约每年有1.3%的机器会遇到不可恢复的内存故障。<strong>因此在没有使用RAID的廉价服务器上，应该关闭swap分区，避免因磁盘读写错误而损害非存储业务的可靠性。</strong></p>
+<p>单机易坏的部件通常都有廉价的冗余方案（双电源、热插拨硬盘、双口网卡），但是其余的核心部件（主板、CPU、内存）没有廉价的热插拨方案，出现故障必须停机修复。如此看来，分布式系统中服务器硬件的可靠性并不如想象中高，如果服务器的MTBF是10万小时，在100台服务器组成的分布式系统中，每个月出现一次服务器硬件故障的可能性略大于50%。</p>
+<p>这还没有考虑需要停机维护的其他原因，包括机器搬动、空调故障、供电故障、网络交换机或路由器故障、机房进水或漏雨、操作系统或其他系统软件（固件）的安全补丁等等。因此，在设计分布式系统的时候，要把这些硬件和环境的不可靠因素考虑进去，避免制定出不切实际的单机软件可靠性指标（7×24是overkill）。考虑了硬件不可靠的因素，实际上能降低软件的编码难度。</p>
+<p>硬件故障固然不可避免，不过软件故障和人为故障往往更容易制造麻烦。软件故障的很大一部分是资源不足，例如内存耗尽、硬盘写满、网络带宽占满，以及文件描述符或i-node用完等。应对这种故障的办法是持续监控并报警，必要时自动或人工干预。有了这样的监控系统，也能减轻应用程序开发的负担，比如日志库就不必在意磁盘是否写满，因为机器上肯定有监测磁盘剩余空间的程序。</p>
+<h3 id="分布式系统的软件不要求724可靠"><strong>2.1
+分布式系统的软件不要求7×24可靠</strong></h3>
+<p>运行在一台机器（设备）上的软件的可靠性受限于硬件，如果硬件本身的可靠性不高，那么软件做得再可靠也没有意义。自已开发的软件的可靠性只需要略高于硬件及操作系统即可，即“不当短板”。学软件（计算机科学系）出身的人往往认为硬件不会坏，而学硬件（电子信息系）出身的人一般都认为硬件不会坏才怪。半导体器件是非常娇弱的，宇宙射线的中子和集成电路封装材料中的同位素衰变产生的α粒子在击中硅片时会释放能量，有可能影响储能器件的“状态”，造成bit翻转。</p>
+<p>前面分析过，如果一台服务器的MTBF是10万小时，连续运行一年出现故障的概率是8.4%；如果一台网络交换机的MTBF是20万小时，它连续运行一年出现故障的概率是4.3%。在编写单机服务软件或网络交换机固件的时候，程序应该尽量可靠（7×24），要能连续稳定运行一年才不会影响系统的可靠性。</p>
+<p>但是，在一个100台服务器规模的分布式系统中，每个月出现一次硬件故障的概率是51.3%；在一个1000台服务器规模的分布式系统中，每周出现硬件故障的概率是81.4%。在开发运行于这些硬件上的分布式服务软件时，要求单个程序“连续稳定运行一年”是做无用功。如果一年之内因为硬件或操作失误造成10次停机，软件故障造成两次停机，消除这两次软件故障并不能有效地提高系统的可靠性。</p>
+<p>要求分布式中的单个服务进程“7×24不停机”通常是错误地理解了需求与约束。<strong>高可用的关键不在于做到不停机；恰恰相反，要做到能随时重启任何一个进程或服务。</strong>通过容错策略让系统保持整体可用，关键是要设计合理的协议来避免对单机过高的可靠性要求。只要重启或故障转移（failover）的时间足够短（秒级），则可用性仍然相当高。要设法从架构上搬掉这块“绊脚石”，通过多机协作达到可用性指标。</p>
+<p>在不可靠的硬件上，只有通过软件手段来提高系统的整体可用度。比方说<span class="math inline">\(\S9.1.2\)</span>举的Thumbnailer就不必做到7×24，通过合理的设计协议，任何一个Thumbnailer都可以随时重启。</p>
+<p>如果真要7×24连续运行，应该有明确的MTBF指标。另外，6.9×24行不行？7×23.9行不行？对于非性命攸关的系统，在星期天凌晨3点短暂不可用会有多大的实际影响呢？</p>
+<p>既然预料到硬件会出现故障，就能避免不切实际的软件可靠性指标。对于分布式系统中的进程来说，考虑到平均一两个月就会有程序版本更新，那么进程能连续运行数星期就可算达标了，软件升级的时候反正还是要重启进程的。</p>
+<p>以上理由不是给写出低质量代码找开脱的借口，而是说在编程的时候，不必纠结于想尽一切办法防止程序崩溃。这样可以简化错误处理，用最自然的方式编写C++代码，该new的就new，该用STL就用，不要视动态分配内存为“洪水猛兽”。不要浪费时间在解决错误的问题上，应集中精力应付更本质的业务问题。</p>
+<p>比方说，对于某些资源耗尽的错误可以简化处理，在编写64-bit程序时也不必再在意内存碎片。遇到某些发生概率很小的严重错误事件时，可以直接退出进程。举例来说：</p>
+<ol type="1">
+<li>如果初始化mutex失败，直接退出进程好了，反正程序也无法正确执行下去。</li>
+<li>一般的程序不必在意内存分配失败，遇到这种情况直接退出即可。一方面是在程序分配内存失败之前，资源监控系统应该已经报警，实施负载迁移；另一方面，如果真遇到<code>std::bad_alloc</code>异常，也没有特别有效的办法来应对。</li>
+<li>程序也不必考虑磁盘写满，在磁盘写满之前，监控系统已经报警。如果是关键业务，必然已经有人采取必要的措施来腾出磁盘空间。</li>
+</ol>
+<h3 id="能随时重启进程作为程序设计目标"><strong>2.2
+“能随时重启进程”作为程序设计目标</strong></h3>
+<p>既然硬件和软件条件都不需要（不允许）程序长期运行，那么程序在设计的时候，必须想清楚重启进程的方式与代价。进程重启大致可分为软硬件故障导致的意外重启与软硬件升级引起的有计划主动重启。无论是哪种重启，都最好让最终用户感觉不到程序在重启。<strong>重启耗时应尽量短，中断服务的时间也尽量短，或者最好能做到根本不中断服务</strong>。重启进程之后，应该能自动恢复服务，最好避免需要手动恢复。</p>
+<p>《Google File System》论文第5.1.1节“Fast Recovery”提到：</p>
+<blockquote>
+<p>Both the master and the chunkserver are designed to restore their
+state and start in seconds no matter how they terminated. In fact, we do
+not distinguish between normal and abnormal termination; servers are
+routinely shut down just by killing the process.</p>
+</blockquote>
+<p>以上说明，由于不必区分进程的正带退出与异常终止，程序也就不必做到能安全退出，只要能安全被杀即可。这天大简化了多线程服务端编程，我们只需关心正常的业务逻辑，不必为安全退出进程费心。</p>
+<p><strong>无论是程序主动调用<code>exit(3)</code>或是被管理员<code>kill(1)</code>，进程都能立即重启。这就要求程序只使用操作系统能自动回收的IPC，不使用生命期大于进程的IPC，也不使用无法重建的IPC。</strong>具体说，只用TCP为进程间通信的唯一手段，进程一退出，连接与端口自动关闭。而且无论连接的哪一方断连，都可以重建TCP连接，恢复通信。</p>
+<p><strong>不要使用跨进程的mutex或semaphore，也不要使用共享内存</strong>，因为进程意外终止的话，无法清理资源，特别是无法解锁。另外也不要使用父子进程共享文件描述符的方式来通信（pipe），父进程死了，子进程怎么办？pipe是无法重建的。</p>
+<p>意外重启的常见情况及其原因是：</p>
+<ul>
+<li>服务进程本机重启——程序bug或内存耗尽。</li>
+<li>机器重启——kernel bug，偶然硬件错误。</li>
+<li>服务进程移机重启——硬件/网络故障。</li>
+</ul>
+<p>协议设计时应该要求客户端在TCP连接断开后能自动重连，muduo的TcpClient自带此功能。但在某些故障中客户端不能立刻收TCP断开的消息，因此也要求客户端检测服务端心跳，并能自动failover到备用地址。但是换机器的话，如何通知客户端？</p>
+<p>如何优雅地重启？对于计划中的重启，一般可以采取以下步骤：</p>
+<ol type="1">
+<li>先主动停止一个服务进程心跳：
+<ul>
+<li>对于短连接，关闭listen port，不会有新请求到达。</li>
+<li>对于长连接，客户会主动failover到备用地址或其他活者的服务端。</li>
+</ul></li>
+<li>等一段时间，直到该服务进程没有活动的请求。</li>
+<li>kill并重启进程（通常是新版本）。</li>
+<li>检查新进程的服务正常与否。</li>
+<li>依次重启服务端剩余进程，可避免中断服务。</li>
+</ol>
+<p>除要求客户端能正确处理心跳和TCP重连，还要求客户端能同时兼容新旧版本的服务端协议。</p>
+<p>升级<span class="math inline">\(\S9.1.2\)</span>提到的Thumbnailer服务就可以采取这个办法，完全可以做到不中断服务，因为每步只杀掉一个Thumbnailer进程，缩略图服务始终是可用的。如果要升级Web服务器，可以考虑Joshua
+Zhu介绍的Nginx热升级办法。</p>
+<p><strong>另外一种升级软件的做法是“迁移”</strong>。先启动一个新版本的服务进程，然后让旧版本的服务进程停止接受新请求，把所有新请求都导向新进程。这样一段时间之后，旧版本的服务进程上已经没有活动请求，可以直接k山进程，完成迁移和升级。在此升级过程中服务不中断，每个用户不必在意自己是连接到新版本还是旧版本的服务。一些看似不能中断的服务可以采用这种方式升级，因为单个请求的时长总是有限的。扯远一句，火星探路者（pathfinder)也经历过真正的远程重启，发生在距离地球几亿千米的火星。</p>
+<h2 id="分布式系统中心跳协议的设计"><strong>3.
+分布式系统中心跳协议的设计</strong></h2>
+<p>前面提到使用<strong>TCP连接作为分布式系统中进程间通信的唯一方式</strong>，其好处之一是任何一方进程意外退出的时候对方能及时得到连接断开的通知，因为操作系统会关闭进程使用中的TCP
+socket，会往对方发送FIN分节（TCP
+segment）。尽管如此，<strong>应用层的心跳还是必不可少的</strong>。原因有：</p>
+<ul>
+<li>如果操作系统崩溃导致机器重启，没有机会发送FIN分节。</li>
+<li>服务器硬件故障导致机器重启，也没有机会发送FIN分节。</li>
+<li>并发连接数很高时，操作系统或进程如果重启，可能没有机会断开全部连接。</li>
+<li>网络故障，连接双方得知这一情况的唯一方案是检测心跳超时。</li>
+</ul>
+<p>为什么TCP
+keepalive不能替代应用层心跳？<strong>心跳除了说明应用程序还活着（进程还在，网络通畅），更重要的是表明应用程序还能正常工作</strong>。而TCP
+keepalive由操作系统负责探查，即便进程死锁或阻塞，操作系统也会如期收发TCP
+keepalive消息。对方无法得知这一异常。</p>
+<p>心跳协议的基本形式是：如果进程C依赖S，那么S应该按固定周期向C发送心跳，而C按固定的周期检查心跳。换言之，通常是服务端向客户端发送心跳，例如<span class="math inline">\(\S9.1.2\)</span>提到的Thumbnailer服务应该向WebServer定期发送心跳。</p>
+<p><img src="/2025/01/03/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/9-%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/image-20250103170657144.png" srcset="/img/loading.gif" lazyload></p>
+<p>图9-6中Sender以1秒为周期向Receiver发送心跳消息，而Receiver以1秒为周期检查心跳消息。注意到Sender和Receiver的计时器是独立的，因此可能会出现图9-7所示的“发送和检查时机不对齐”情况，这是完全正常的。</p>
+<p><img src="/2025/01/03/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/9-%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/image-20250103170753555.png" srcset="/img/loading.gif" lazyload></p>
+<p>心跳的检查也很简单，<strong>如果Receiver最后一次收到心跳消息的时间与当前时间之差超过某个timeout值，那么就判断对方心跳失效。</strong>例如Sender所在的机器在T=11.5时刻崩溃，Receiver在T=12时刻检查心跳是正常的，在T=13时刻发现过去timeout秒之内没有收到心跳消息，于是判断心跳失效。注意到这距离实际发生崩溃的时刻已过去了1.5秒，这是不可避免的延迟。分布式系统没有全局瞬时状态，不存在立刻判断对方故障的方法，这是分布式系统的本质困难。</p>
+<p>如果要保守一些，可以在连续两次检查都失效的情况下认定Sender已无法提供服务，但这种方法发现故障的延迟比前一种方法要多一个检查周期。这反映了心跳协议的内在矛盾：<strong>高置信度与低反应时间不可兼得。</strong></p>
+<p>现在的问题是如何确定发送周期、检查周期、timeout这三个值。通常Sender的发送周期和Receiver的检查周期相同，均为Tc；而timeout
+&gt;
+Tc，timeout的选择要能容忍网络消息延时波动和定时器的波动。图9-9中T=12.1发出的消息由于网络延迟波动，错过了检查点，如果timeout过小，会造成误报。尽管发送周期和检查周期均为Tc，但无法保证每个检查周期内恰好收到一条心跳，有可能一条也没有收到。<strong>因此为了避免误报（false
+alarm），通常可取timeout = 2Tc。</strong></p>
+<p>Tc的选择要平衡两方面因素：Tc越小，Sender和Receiver单位时间内处理的心跳消息越多，开销越大；Tc越大，Receiver检测到故障的延迟也就越大。在故障延迟敏感的场合，可取Tc
+= 1s，否则可取Tc =
+10s。总结一下心跳的判断规则：<strong>如果最近的心跳消息的接收时间早于now
+- 2Tc，可判断心跳失效</strong>。</p>
+<p>心跳消息应该包含发送方的标识符，可按<span class="math inline">\(\S9.4\)</span>的方式确定分布式系统中每个进程的唯一标识符。建议也包含当前负载，便于客户端做负载均衡。由于每个程序对“负载”的定义不同，因此心跳消息的格式也就各不相同。可以在某些公共字段的基础上增加应用程序的特定字段，而不要强行规定全部程序都用相同的心跳消息格式。</p>
+<p>以上是Sender和Receiver直接通过TCP连接发送心跳的做法，如果Sender和Receiver之间有其他消息中转进程，那么还应该在心跳消息中加上Sender的发送时间，防止消息在传输过程中堆积而导致假心跳。相应的判断规则改为：如果最近的心跳消息的发送时间早于now
+-
+2Tc，心跳失效。使用这种方式时，两台机器的时间应该都通过NTP协议与时间服务器同步，否则几秒的时钟差可能造成误判心跳失效，因为Receiver始终收到的是“过去”发送的消息。</p>
+<p>考虑到闰秒的影响，Tc小于1秒是无意义的，因为闰秒会让两台机器的相对时差发生跳变，可能造成误报警。计算机的计时是UTC时间，UTC时间会受秒的影响，它不是完全均匀流逝的。目前闰秒的插入点是在每年的固定日期（12月31日或6月30日），不考虑星期几。这会对日常生活（特别是电子化交易）造成影响。应该修改规则，在年末或年中的某个星期日凌晨（GMT时区）插入闰秒，避免在交易时段出现时间跳变。NTP协议对秒的处理也比较僵硬，基本采取暂停时钟的办法来插入秒，这会造成分布式系统中两台机器在发生闰秒时突然出现时间差，即便它们的时钟都是和NTP服务器对准的。在分布式系统中，有时我们需要特别处理这一问题，尤其在设计容错协议的时候。</p>
+<p>心跳协议还有两个实现上的关键点：</p>
+<ol type="1">
+<li><strong>要在工作线程发送，不要单独起一个“心跳线程”。</strong></li>
+<li><strong>与业务消息用同一个连接，不要单独用“心跳连接”。</strong></li>
+</ol>
+<p><strong>这么做的原因是为了防止伪心跳</strong>。对于第1点，这是防止工作线程死锁或阻塞时还在继续发心跳。对于采用<span class="math inline">\(\S6.6\)</span>方案5的单线程服务程序，应该用EventLoop::runEvery注册周期性定时器回调，在回调函数中发送心跳消息。对于采用方案8的多线程服务器，应该用EventLoop::runEvery()注册周期性定时器回调，在回调函数中往线程池post一个任务，该任务会发送心跳消息。这样就能有效地检测工作线程死锁或阻塞的情况。对于方案9和方案11也可以采取类似的办法，对多个EventLoop轮流调用runInLoop()，以防止某个业务线程死锁还继续发送心跳。</p>
+<p>对于第2点，<strong>心跳消息的作用之一是验证网络畅通</strong>，如果它验证的不是收发业务数据的TCP连接畅通，那其意义就大为缩水了。特别要避免用TCP做业务连接，用UDP发送心跳消息，防止一旦TCP业务连接上出现消息堆积而影响正常业务处理时，程序还一如既往地发送UDP心跳，造成客户端误认为服务可用。《ReleaseIt》一书中第4.1节“The
+5 a.m.
+Problem”讲了一个生动的例子，用于描述心跳也是合适的。这个例子说的是Sender和Receiver位于两个数据中心，之间有网络防火墙。网络防火墙的一个特点是会自动检测TCP死链接，即长期没有消息往来的TCP连接，并清除内存中的连通规则。原来的程序通过单独的TCP连接发送心跳，与业务数据不在同一个TCP连接。由于心跳始终在周期性地发送，因此，防火墙认为这个TCP连接是活动的。但是业务连接在每天晚上有很长一段时间没有数据交互，防火墙就判断其为死链接，并且不再转发此链接的IP
+packet。尽管Sender和Receiver还认为这个TCP业务连接活着，但防火墙实际上已经让连接断开了。当每天早上5点钟第一笔订单进来的时候，始终会出现超时错误，因为业务连接的TCP
+segment无法到达对方。TCP协议要经过很长一段时间才能真正判断连接断开（相当于中途断网，TCP会重试很多次），这时只有重启一方的进程才能快速修复错误。当把心跳消息放到业务连接上之后，问题就迎刃而解了。</p>
+<h2 id="分布式系统中的进程标识"><strong>4.
+分布式系统中的进程标识</strong></h2>
+<p>本节假定一台机器（host）只有一个IP，不考虑multihome的情况。同时假定分布式系统中的每一台机器都正确运行了NTP，各台机器的时间大体同步。</p>
+<p>“进程（process）”是操作系统的两大基本概念之一，指的是在内存中运行的程序。在日常交流中，“进程”这个词通常不止这一个意思。有时候我们会说“httpd进程”或者“mysqld进程”，指的其实是program，而不一定是特指某一个“进程”——某一次fork()系统调用的产物。一个“httpd进程”重启了，它还是“一个httpd进程”。本文讨论的是，如何<strong>为一个程序每次运行的进程取一个唯一标识符</strong>。也就是说，httpd程序第一次运行，进程是httpd_1，它原地重启了，进程是httpd_2。</p>
+<p>本节所指的“进程标识符”是用来唯一标识一个程序的“一次运行”的。每次启动一个进程，这个进程应该被赋予一个唯一的标识符，与当前正在运行的所有进程都不同；不仅如此，它应该与历史上曾经运行过，目前已消亡的进程也都不同（这两条的直接推论是，与将来可能运行的进程也都不同）。“为每个进程命名”在分布式系统中中有相当大的实际意义，特别是在考虑failover的时候。因为一个程序重启之后的新进程和它的“前世进程”的状态通常不一样，凡是与它打交道的其他进程最好能通过它的进程标识符变更来很容易地判断该程序已经重启，而采取必要的救灾措施，防止搭错话。</p>
+<p>本节先假定每个服务端程序的端口是静态分配的，在公司内部有一个公用wiki来记录端口和程序的对应关系（然后通过NIS或DNS发布）。比如端口11211始终对应memcached，其他程序不会使用11211端口；3306始终留给mysqld；3690始终留给svnserve。在分布式系统的初级阶段，这是通常的做法；到了高级阶段，多半会用动态分配端口号，因为端口号只有6万多个，是稀缺资源，在公司内部也有分配完的一天。</p>
+<p>我们假定在一台机器上，一个listening
+port同时只能由一个进程使用，不考虑古老的listen+fork模型（多个进程可以accept同一个端口上进来的连接）。关于这点我已经写了很多，见第3章。本书只考虑TCP协议，不考虑UDP协议，“端口”指的都是TCP端口。</p>
+<h3 id="错误做法"><strong>4.1 错误做法</strong></h3>
+<p>在分布式系统中，如何指涉（refer
+to）某一个进程呢，或者说一个进程如何取得自己的全局标识符（以下简称gpid）？容易想到的有两种做法：</p>
+<ul>
+<li>ip:port</li>
+<li>host:pid</li>
+</ul>
+<p>而这两种做法都有问题。为什么？</p>
+<p>如果进程本身是无状态的，或者重启了也没有关系，那么用ip:port来标识一个“服务”是没问题的，比如常见的httpd和memcached都可以用它们的惯用port（80和11211）来标识。我们可以在其他程序里安全地引用“运行在10.0.0.5:80的那个HTTP服务器”，或者“10.0.0.6:11211的memcached”，就算这两个service重启了，也不会有太恶劣的后果，大不了客户端重试一下，或者自动切换到备用地址。如果服务是有状态的，那么ip:port这种标识方法就有大问题，因为客户端无法区分从头到尾和自已打交道的是一个进程还是先后多个进程。如果客户端和服务端直接通过TCP相连，那么可以获知进程退出引发的连接断开事件。但是如果客户端与服务端之间用某种消息中间件来回转发消息，那么客户端必须通过进程标识才能识别服务端。在开发服务端程序的时候，为了能快速重启，我们一般都会设置SO_REUSEADDR，这样的结果是前一秒站在10.0.0.7:8888后面的进程和后一秒占据10.0.0.7:8888的进程可能不相同——服务端程序快速重启了。</p>
+<p>比方说，考虑一个类似GFS的分布式文件系统的master，如果它仅以ip:port来标识自已，然后它向shadows（不是chunkserver）下达同步指令，那么shadows如何得知master是不是已经重启呢？发指令的是master的“前世”还是“今生”？是不是应该拒绝“前世”的遗命？</p>
+<p>考虑如果改成host:pid这种标识方式会不会好一点？我认为换汤不换药，因为pid的状态空间很小，重复的概率比较大。比如<strong>Linux的pid的最大值默认是32768</strong>，一个程序重启之后，获得与“前世”相同pid的概率是1/32768。或许有读者不相信重启之后pid会重复，理由是因为pid是递增的，遇到上限再回到目前空闲的最小pid。考虑一个服务端程序A，它的pid是1234，它已经稳定运行了好几天，这期间，pid已经增长了几个轮回（因为这台机器时常会启动一些后台脚本执行一些辅助工作）。在A崩溃的前一刻，最近被使用的pid已经回到了1232，当A崩溃之后，某个守护进程启动一个脚本（pid=1233）来清理A的log，然后再重启A程序；这样一来，重启之后的A程序的pid碰巧和它的前世相同，都是1234。也就是说，用host:pid不能唯一标识进程。</p>
+<p>那么合在一起，用ip:port:pid呢？也不能做到唯一。它和host:pid面临的问题是一样的，因为ip:port这部分在重启之后不会变，pid可能轮回。</p>
+<p>我猜这时有人会想，建一个中心服务器，专门分配系统的gpid好了，每个进程启动的时候向它询自已的gpid。这错得更远：这个全局pid分配器的gpid由谁来定？如何保证它分配的pid不重复（考虑这个程序也可能意外重启）？它是不是成为系统的single
+point of
+failure？如果要对该gpid分配器做容错，是不是面临分布式系统的基本问题：状态迁移？</p>
+<p>还有一种办法，用一个足够强的随机数做gpid，这样一来确实不会重复，但是这个gpid本身也没有多大额外的意义，不便于管理和维护，比方说根据gpid找到是哪个机器上运行的哪个进程。</p>
+<h3 id="正确做法"><strong>4.2 正确做法</strong></h3>
+<p><strong>正确做法：以四元组ip:port:start_time:pid作为分布式系统中进程的gpid</strong>，其中start_time是64-bit整数，表示进程的启动时刻（UTC时区，从Unix
+Epoch到现在的微秒数，muduo::Timestamp）。理由如下：</p>
+<ul>
+<li>容易保证唯一性。如果程序短时间重启，那么两个进程的pid必定不重复（还没有走完一个轮回：就算每秒创建1000个进程，也要30多秒才会轮回，而且这么高的速度创建进程的话，服务器已基本瘫痪了。）；如果程序运行了相当长一段时间再重启，那么两次启动的start_time必定不重复。</li>
+<li>产生这种pid的成本很低（几次低成本系统调用），没有用到全局服务器，不存在single
+point of failure。</li>
+<li>gpid本身有意义，根据gpid立刻就能知道是什么进程（port），运行在哪台机器（IP），是什么时间启动的，在/proc记录中的位置（/proc/pid）等，进程的资源使用情况也可以通过运行在那台机器上的监控程序报告出来。</li>
+<li>gpid具有历史意义，便于将来追溯。比方说进程crash，那么我知道它的gpid就可以去历史记录中查询它crash之前的CPU和内存负载有多大。</li>
+<li>如果仅以ip:port:start_time作为gpid，则不能保证唯一性，如果程序短时间重启（间隔一秒或几秒），start_time可能会往回跳变（NTP在调时间）。</li>
+</ul>
+<p>没有port怎么办？一般来说，一个网络服务程序会侦听某个端口来提供服务，如果它是个纯粹的客户端，只主动发起连接，没有主动侦听端口，gpid该如何分配呢？根据<span class="math inline">\(\S9.5\)</span>的观点，分布式系统中的每个长期运行的、会与其他机器打交道的进程都应该提供一个管理接口，对外提供一个维修探查通道，可以查看进程的全部状态。这个管理接口就是一个TCP
+server，它会侦听某个port。</p>
+<p>使用这样的维修通道的一个额外好处是，可以自动防止重复启动程序。因为如果重复启动，bind到那个运维port的时候会出错（端口已被占用），程序会立刻退出。更妙的是，不用担心进程crash没来得及清理锁（如果用跨进程的mutex就有这个风险），进程关闭的时候操作系统会自动把它打开的port都关上，下一个进程可以顺利启动。</p>
+<p>进一步，还可以把程序的名称和版本号作为gpid的一部分，这起到锦上添花的作用。</p>
+<p>有了唯一的gpid，那么生成全局唯一的消息id字符串也十分简单，只要在进程内使用一个原子计数器，用计数器递增的值和gpid即可组成每个消息的全局唯一id。这个消息id本身包含了发送者的gpid，便于追溯。当消息被传递到多个程序中，也可根据gpid道潮其来源。</p>
+<h3 id="tcp协议的启示"><strong>4.3 TCP协议的启示</strong></h3>
+<p>本节讲的这个gpid其实是由TCP协议启发而来的。TCP用ip:port来表示endpoint，两个endpoint构成一个socket。这似乎符合一开始提到的以ip:port来标识进程的做法。其实不然。在发起TCP连接的时候，为了防止前一次同样地址的连接（相同的local
+ip:local port:remote ip:remote port）的干扰（称为wandering
+duplicates，即流浪的packets），TCP协议使用seq号码（这种在SYN
+packet里第一次发送的seq号码称为initial sequence
+number，ISN）来区分本次连接和以往的连接。TCP的这种思路与我们防止进程的“前世”干扰“今生”很相像。内核每次新建TCP连接的时候会设法递增ISN以确保与上次连接最后使用的seq号码不同。相当于说把start_time加入到了endpoint之中，这就很接近我们后面提到的“正确的gpid做法了。（当然，原始BSD
+4.4的ISN生成算法有安全漏洞，会导致TCP sequence prediction
+attack，Linux内核已经来用更安全的办法来生成ISN。）</p>
+<h2 id="构建易于维护的分布式程序"><strong>5.
+构建易于维护的分布式程序</strong></h2>
+<p>本节标题中的“易于维护”指的是supportability，不是maintainability。前者是从运维人员的角度说，程序管理起来很方便，日常的劳动负担小；后者是从开发人员的角度说，代码好读好改。</p>
+<p>在《分布式系统的工程化开发方法》中我提到了一个观点：分布式系统中的每个长期运行的、会与其他机器打交道的进程都应该提供一个管理接口，对外提供一个维修探查通道，可以查看进程的全部状态。<strong>一种具体的做法是在程序里内置HTTP服务器，能查看基本的进程健康状态与当前负载，包括活动连接及其用途，能从root
+set开始查到每一个业务对象的状态。</strong>这种做法类似Java的JMX，又类似memcached的stats命令。</p>
+<p>这里展开谈一谈这么做的必要性。分成两个方面来说：一、在服务程序内置监控接口的必要性；二、HTTP协议的便利性。</p>
+<h3 id="必要性">5.1 <strong>必要性</strong></h3>
+<p>在程序中内置监控接口可以说是受了Linux
+procfs的启发。在Linux下，查看内核的状态不需要任何特殊的工具，只要用ls和cat在/proc目录下查看文件就行了。要知道当前系统中运行了哪些进程、每个进程都打开了哪些文件、进程的内存和CPU使用情况如何、每个进程启动了多少个线程、当前有哪些TCP连接、每个网卡收发的字节数等等，都可以在/proc中找到答案。<strong>Linux
+Kernel通过procfs这么一个探测接口把状态充分暴露出来，让监控操作系统的运行变得容易</strong>。</p>
+<p>但是procfs也有两点明显的不足：</p>
+<ol type="1">
+<li>它只能暴露system-wide的数据，不能查看每个进程内部的数据。</li>
+<li>它是本地文件系统，必须要登录到这台机器上才能查看，如果要管理很多台机器，则势必增加工作量。</li>
+</ol>
+<p>对于第一点，举例来说，我想知道某个我们自已编写的服务进程的运行情况：</p>
+<ul>
+<li>到目前为止累计接受了多少个TCP连接。</li>
+<li>当前有多少活动连接（这个可以通过procfs查看）。</li>
+<li>每个活动连接的用途是什么。</li>
+<li>一共响应了多少次请求。</li>
+<li>每次请求的平均输入输出数据长度是多少字节。</li>
+<li>每次请求的平均响应时间是多少毫秒。</li>
+<li>进程平均有多少个活动请求（并发请求）。</li>
+<li>并发请求数的峰值是多少，出现在什么时候。</li>
+<li>某个连接上平均有多少个活动请求。</li>
+<li>进程中XXXRequest对象有多少份实体。</li>
+<li>进程中打开了多少个数据库连接，每个连接的存活时间是多少。</li>
+<li>程序中有一个hashmap，保存了当前的活动请求，我想把它打印出来。</li>
+<li>某个请求似乎卡在某个步骤了，我想打印进程中该请求的状态。</li>
+</ul>
+<p>这些正当需求只有通过程序主动暴露状态才能满足；否则，就算ssh登录到这台机器上，也看不到这些有用的进程内部信息。（总不能gdb
+attach吧？那就让服务进程暂停响应了。且不说gdb打印一个hashmap有多麻烦。）</p>
+<h3 id="便利性">5.2 <strong>便利性</strong></h3>
+<p>如果程序要主动暴露内部状态，那么以哪种方式最为便利呢？当然是HTTP。</p>
+<p>HTTP的好处如下：</p>
+<ul>
+<li>它是TCP server，可以远程访问，不必登录到这台机器上。</li>
+<li>TCP server的另一个好处是能安全方便地防止程序重复启动，这一点在<span class="math inline">\(\S9.4\)</span>已有论述。</li>
+<li>最基本的HTTP协议实现起来很简单，不会给服务端程序带来多大负担，见muduo::net::HttpServer的例子。</li>
+<li>不必使用特定的客户端程序，用普通Web浏览器就能访问。</li>
+<li>可以比较容易地用脚本语言实现客户端，便于自动化的状态收集与分析。</li>
+<li>HTTP是文本协议，紧急情况下在命令行用curl/wget甚至telnet也能访问（比方说你在家通过ssh连到公司服务器解决某个线上问题，这时候没有Web浏览器可用）。</li>
+<li>借助URL路径区分，很容易实现有选择地查看一些信息，而不是把进程的全部状态一股脑儿全dump出来，见muduo::net::Inspector的例子，如http://host:port/request/xxx表示ID为xxx的请求的状态。</li>
+<li>HTTP天生支持聚合，一个浏览器页面可以内置多个iframe，一眼就能看清多个进程的状态。</li>
+<li>除了GET
+method，如果有必要，还可以实现PUT/POST/DELETE，通过HTTP协议来控制并修改进程的状态，让程序“能观能控”。</li>
+<li>最好在运行时修改程序用到的后台服务的host:port（原本写在配置文件中），这样可以随时主动切换后台服务（平滑升级或故障预防），而无须重启本进程。</li>
+<li>必要的时候还可以用REST的方式实现高级的聚合，见我在演讲中的“一种REST风格的监控”。</li>
+</ul>
+<p>另外，我们讨论分布式系统是运行在企业防火墙之内的基础设施，HTTP的安全性应该由防火墙保证。就好比你的Hadoop
+master和memcached不会暴露给外网一样，在公司内部使用HTTP，只要没有人故意搞破坏就没事。</p>
+<h3 id="实例">5.3 <strong>实例</strong></h3>
+<p>演讲中我举了Google的例子，Google的每个服务进程（无论C++或Java）都会：</p>
+<ul>
+<li>提供HTML的状态页面，以便快速诊断问题；</li>
+<li>通过某种标准接口暴露一组key-value pairs；</li>
+<li>监控程序定期从全部服务进程收集性能数据；</li>
+<li>RPC子系统对全部请求采样：错误的，耗时&gt;0.05s，&gt;0.1s，&gt;0.5s，&gt;1.0s。</li>
+</ul>
+<p>当然，我们看不到Google内部的服务器的状态页面究竟是什么样子，不过可以看看别的例子，比如Hadoop。Hadoop有四种主要services：NameNode、DataNode、JobTracker、TaskTracker。每种service都内置了HTTP状态页面，其默认HTTP端口分别是：</p>
+<ul>
+<li>NameNode 50070</li>
+<li>DataNode 50075</li>
+<li>JobTracker 50030</li>
+<li>TaskTracker 50060</li>
+</ul>
+<p>如果某台机器运行了DataNode和TaskTracker，那么我们可以通过访问http://hostname:50075和http://hostname:50060来方便地查询其运行状态。</p>
+<h3 id="例外">5.4 <strong>例外</strong></h3>
+<p>如果不方便内置HTTP服务，那么内置一个简单的telnet服务也不难，就像memcached的stats命令那样。</p>
+<p>如果服务程序本身以RPC方式提供服务，那么可以不必内置HTTP服务，而是增加一个RPC调用实现相同的功能。这个RPC可以命名为inspect()，输入的内容类似URL，返回的是该URL对应的页面内容，可以是文本格式，也可以是RPC原生的打包格式。</p>
+<p>如果是Java程序，可以直接使用JMX，也可以继续使用本节提到的HTTP方法，这样管理和监控的一致性较好，至少不需要为Java服务进程准备特殊的客户端。</p>
+<h3 id="小结">5.5 <strong>小结</strong></h3>
+<p>在自已编写分布式程序的时候，提供一个维修通道是很有必要的，它能帮助日常运维，而且在出现故障的时候帮助排查。相反，如果不在程序开发的时候统一预留这些维修通道，那么运维起来就抓瞎了——每个进程都是黑盒子，出点什么情况都得拼命查log试图恢复（猜测）进程的状态，工作效率不高。</p>
+<h2 id="为系统演化做准备">6. 为系统演化做准备</h2>
+<p>一个分布式系统的生命期会长达数年，在首次上线运行之后，系统会经历多次升级和演化，因此在一开始设计的时候要适当为将来考虑。一个典型的考虑点是：通信的双方很有可能不会同时升级。通信双方可能由不同的开发团队开发，开发和发布周期不同步。有可能为了稳要起见先升级其中一方，验证稳定性，然后再升级另一方。当然，升级之前一定要制定好rollback计划，留好退路。</p>
+<p>具体来说，服务端新加功能，不一定所有的客户端都会马上升级并用上新功能，因此新的服务端上线之后要保证和现有的客户端的功能和协议的兼容性，这样才能平稳升级。系统中的不同组件可能用不同的编程语言来编写，有时候会把一个组件换一种语言重写，因此应该使用一种跨语言的可扩展消息格式。</p>
+<h3 id="可扩展的消息格式"><strong>6.1 可扩展的消息格式</strong></h3>
+<p>考虑服务端升级的可能时，一种很容易想到的做法是在消息中放入版本号，服务端每次收到消息，先根据版本号做分发（dispatch）。实践证明这种做法是非常不靠谱的，很容易在服务端留下一堆垃圾代码，时间一长，谁也弄不清版本之间具体有哪些细微差别，也不敢轻易删掉处理旧版本消息的代码，历史包就一直背下去。</p>
+<p>因此，<strong>可扩展消息格式的第一条原则是避免协议的版本号</strong>，否则代码里会有一堆堆难以维护的switch-case，就像Google
+Protocol Buffers文档举的反面例子。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">if</span> (version == <span class="hljs-number">3</span>) &#123;<br>    <span class="hljs-comment">// ...</span><br>&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (version &gt; <span class="hljs-number">4</span>) &#123;<br>    <span class="hljs-keyword">if</span> (version == <span class="hljs-number">5</span>) &#123;<br>        <span class="hljs-comment">// ...</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><strong>另一种常见错误是通过TCP连接发送C struct或使用bit
+fields。</strong>这或许是因为在学习TCP/IP协议和网络编程的时候，书上一般会画出IP
+header和TCP header，其中就有bit
+fields，这给人留下了一个错误印象，似乎网络协议应该这么设计。其实不是这样的，C
+struct和bit fields的缺点很多。其一是不易升级。如果在C
+struct里新加了一些元素，通常要求客户端和服务端一起升级，否则就言语不通了。其二是不跨语言。如果客户端和服务端用不同的语言来编写，那么让非C/C++语言生成和解析这种消息格式是比较麻烦的。而且更重要的是需要时刻维护其他语言的打包、解包代码与C/C++头文件里struct定义的同步，稍不注意就会造成格式解析错乱。(就算是C/C++也要考虑32-bit或64-bit平台、endian、编译器对齐(alignment)的影响等等。)</p>
+<p><strong>解决办法是，采用某种中间语言来描述消息格式（schema）</strong>，然后生成不同语言的解析与打包代码。如果用文本格式，可以考虑JSON或XML；如果用二进制格式，可以考虑Google
+Protocol Buffers。使用文本格式的一个常见问题是处理转义字符（escape
+character），比如消息id字段如果出现&amp;，在XML中要写成&amp;amp;。如果公司名字是AT&amp;T，在XML中要写成&lt;company&gt;AT&amp;amp;T&lt;/company&gt;。</p>
+<p>Google
+Protobuf是结构化的二进制消息格式，兼顾性能与可扩展性。其文档中说：</p>
+<blockquote>
+<p>Importantly, the protocol buffer format supports the idea of
+extending the format over time in such a way that the code can still
+read data encoded with the old format.</p>
+</blockquote>
+<p>这种“中间语言”或者叫“数据描述语言”定义的消息格式可以有可选字段（optional
+fields），一举解决了服务端和客户端升级的难题。新版的服务端可以定义一些optional
+fields，根据请求中这些字段的存在与否来实施不同的行为，即可同时兼容旧版和新版的客户端。给每个field赋终生不变的id是保证兼容性的绝招，Google
+Protobuf的文档强调在升级proto文件时要注意：</p>
+<ul>
+<li>You must not change the tag numbers of any existing fields.</li>
+<li>You must not add or delete any required fields.</li>
+</ul>
+<p>proto文件就像C/C++动态库的头文件，其中定义的消息就是库（分布式服务）的接口，一旦发布就不能做有损二进制兼容性的修改。因此<span class="math inline">\(\S11.2\)</span>的知识可以套用过来，包括不能更改已有的enum类型的成员的值等。</p>
+<p>PNG文件给我们很好的启示。PNG是一种精心设计的二进制文件格式，文件由一系列数据块（chunks）组成，每个数据块的前4个字节表示该数据块的长度，接下来的4个字节代表该数据块的类型。PNG的解译程序会忽略那些自已不认识的数据块，因此PNG文件没有版本之说，不存在前后版本不兼容的问题。</p>
+<p>Google
+Protobuf是精心设计的协议格式，还体现在客户端可以先升级，发送服务端不认识的field，服务端可以安全地跳过这些字段。</p>
+<p>TCP/IP在设计的时候也在固定长度的header之后预留了可选项，目前广泛便用的有window
+scale和timestamp等。</p>
+<h3 id="反面教材ice的消息打包格式"><strong>6.2
+反面教材：ICE的消息打包格式</strong></h3>
+<p>ICE是一个对象中间件，它实现类似CORBA的跨语言、跨进程的函数调用。我对ICE的设计及实现很不以为然。其中一个原因是它按struct
+field和函数参数的顺序来打包消息：难以无痛升级。一旦给struct新加一个成员或者给函数新加一个参数，客户端和服务端必须同时升级，否则就言语不通了。另外一个原因是它的远程函数调用居然能返回异常。也就是说，当服务端的RPC函数抛出异常时，RPC机制会捕提这个异常，通过网络传送到客户端，在客户端重新抛出这个异常。我实在不理解这种异常捕捉下来有何用处，客户端可能是Python，服务端是C++，Python代码拿到C++异常能干什么？还不如老老实实直接返回错误代码，处理起来更简单。</p>
+<h2 id="分布式程序的自动化回归测试"><strong>7.
+分布式程序的自动化回归测试</strong></h2>
+<p>本节所谈的“测试”指的是“开发者测试（developer
+testing）”，由程序员自己来做，不是由QA团队进行的系统测试。这两种测试各有各的用途，不能相互替代。</p>
+<p><span class="math inline">\(\S11.1\)</span>“朴实的C++设计”中谈道：“为了确保正确性，我们另外用Java写了一个个测试夹具（test
+harness）来测试我们这个C++程序。这个测试夹具模拟了所有与我们这个C++程序打交道的其他程序，能够测试各种正常或异常的情况。”</p>
+<p>本节详细介绍一下这个test harness的做法。</p>
+<h4 id="自动化测试的必要性"><strong>自动化测试的必要性</strong></h4>
+<p>我想自动化测试的必要性无须费言，自动化测试是absolutely good
+stuff。基本上，要是没有自动化的测试，我是不敢改产品代码的（“改”包括添加新功能和重构）。自动化测试的作用是把程序已经实现的features以test
+case的形式固化下来，将来任何代码改动如果破坏了现有的功能需求就会触发测试failure。好比DNA双链的互补关系，这种互补结构对保持生物遗传的稳定有重要作用。类似地，自动化测试与被测程序的互补结构对保持系统的功能稳定有重要作用。</p>
+<h3 id="单元测试的能与不能"><strong>7.1 单元测试的能与不能</strong></h3>
+<p>一提到自动化测试，我猜很多人想到的是单元测试（unittesting）。单元测试确实有很天的用处，对于解决某一类型的问题很有帮助。粗略地说，单元测试主要用于测试一个函数、一个class或者相关的几个class。</p>
+<p>最典型的是测试纯函数，比如计算个人所得税的数，输入是“起征点、扣除五险一金之后的应纳税所得额、税率表”，输出是应该缴的个税。又比如，我在《程序中的日期与时间》的第一章“日期计算”中用单元测试来验证Julian
+day
+number算法的正确性。再比如，我在“过家家”版的移动离线计费系统实现和《模拟银行窗口排队叫号系统的运作》中用单元测试来检查程序运行的结果是否符合预期。（最后这个或许不是严格意义上的单元测试，更像是验收测试。）</p>
+<p>为了能用单元测试，程序代码有时候需要做一些改动。这对Java通常不构成问题（反正都编译成jar文件，在运行的时候指定entrypoint）。对于C++，一个程序只能有一个main()人口点，要采用单元测试的话，需要把功能代码（被测对象）做成一个library，然后让单元测试代码（包含main函数）link到这个library上：当然，为了正常启动程序，我们还需要写一个普通的main，并link到这个library上。</p>
+<h4 id="单元测试的缺点">单元测试的缺点</h4>
+<p>根据我的个人经验，我发现单元测试有以下缺点。</p>
+<p>阻碍大型重构单元测试是白盒测试，测试代码直接调用被测代码，测试代码与被测代码紧耦合。从理论上说，“测试”应该只关心被测代码实现的功能，不用管它是如何实现的（包括它提供什么样的函数调用接口）。比方说，以前面提到的个税计算器函数为例，作为使用者，我们只关心它算的结果是否正确。但是，如果要写单元测试，测试代码必须调用被测代码，那么测试代码必须要知道个税计算器的package、class、methodname、parameterlist、returntype等等信息，还要知道如何构造这个class。以上任何一点改动都会造成测试失败（编译就不通过）。</p>
+<p>在添加新功能的时候，我们常会重构已有的代码，在保持原有功能的情况下让代码的“形状”更适合实现新的需求。一旦修改原有的代码，单元测试就可能编译不过：比如给成员函数或构造函数添加一个参数，或者把成员函数从一个class移到另一个class。对于Java，这个问题还比较好解决，因为IDE的重构功能很强，能自动找到references，并修改之。</p>
+<p>对于C++，这个问题更为严重，因为一改功能代码的接口，单元测试就编译不过了，而C++通常没有自动重构工具（语法太复杂，语意太微妙）可以帮我们，都得手动来。要么每改动一点功能代码就修复单元测试，让编译通过；要么留着单元测试编译不通过，先把功能代码改成我们想要的样子，再来统一修复单元测试。</p>
+<p>这两种做法都有困难，前者，C++编译缓慢，如果每改动一点就修复单元测试，一天下来也前进不了几步，很多时间都浪费在了等待编译上；后者，问题更严重，单元测试与被测代码的互补性是保证程序功能稳定的关键，如果大幅修改功能代码的同时又大幅修改了单元测试，那么如何保证前后的单元测试的效果（测试点）不变？如果单元测试自身的代码发生了改动，如何保证它测试结果的有效性？会不会某个手误让功能代码和单元测试犯了相同的错误，负负得正，测试结果还是绿的，但是实际功能已经亮了红灯？难道我们要为单元测试编写单元测试吗？</p>
+<p>有时候，我们需要重新设计并重写某个程序（有可能换用另一种语言）。这时候日代码中的单元测试完全作废了（代码结构发生巨天改变，甚至连编程语言都换了），其中包含的宝贵的业务知识也付之东流，岂不可惜？</p>
+<h4 id="为了方便测试而施行依赖注入破坏代码的整体性">为了方便测试而施行依赖注入，破坏代码的整体性</h4>
+<p>为了让代码具有“可测试性”，我们常会使用依赖注入技术，这么做的好处据说是“解耦”，坏处就是割裂了代码的逻辑：单看一块代码不知道它是干嘛的，它依赖的对象不知道是在哪儿创建的，如果一个interface有多个实现，不到运行的时候不知道用的是哪个实现。（动态绑定的初衷就是如此，想来读过“以面向对象思想实现”的代码的人都明白我在说什么。）</p>
+<p>以<span class="math inline">\(\S7.3\)</span>“Boost.Asio的聊天服务器”中出现的聊天服务器ChatServer为例，ChatServer直接使用了muduo::net::TcpServer和muduo::net::TcpConnection来处理网络连接并收发数据，这个设计简单直接。如果要为chatServer写单元测试，那么首先它肯定不能在构造函数里初始化TcpServer了。</p>
+<h4 id="稍微复杂一点的测试要用mock-object"><strong>稍微复杂一点的测试要用mock
+object</strong></h4>
+<p>ChatServer用TcpServer和TcpConnection来收发消息，为了能单元测试，我们要为TcpServer和TcpConnection提供mock实现，原本一个具体类TcpServer就变成了一个TcpServer
+interface加两个实现TcpServerImpl和TcpServerMock，同理TcpConnection也一化为三。ChatServer本身的代码也变得复杂，我们要设法把TcpServer和TcpConnection注入其中，ChatServer不能自己初始化TcpServer对象。</p>
+<p>这恐怕是在C++中使用单元测试的主要困难之一。Java有动态代理，还可以用cglib来操作字节码以实现注入。而C++比较原始，只能自己手工实现interface和implementations。这样原本紧凑的以concrete
+class构成的代码结构因为单元测试的需要而变得松散（所谓“面向接口编程”嘛），而这么做的目的仅仅是为了满足“源码级的可测试性”，是不是有一点因小失大呢？（这里且暂时忽略虚函数和普通函数在性能上的些微差别。）对于不同的test
+case，可能还需要不同的mock对象，比如TcpServerMock和TcpServerFailureMock，这又增加了编码的工作量。</p>
+<p>此外，如果程序中用到的涉及IO的第三方库没有以interface方式暴露接口，而是直接提供的concrete
+class（这是对的，因为C++中应该“避免使用虚函数作为库的接口”，见<span class="math inline">\(\S11.3\)</span>），这也让编写单元变得困难，因为总不能自己换个wrapper一遍吧？难道用link-time的注入技术？</p>
+<h4 id="某些failure场景">某些failure场景</h4>
+<p>难以测试而考察这些场景对编写稳定的分布式系统有重要作用。比方说：网络连不上、数据库超时、系统资源不足。</p>
+<h4 id="对多线程程序无能为力">对多线程程序无能为力</h4>
+<p>如果一个程序的功能涉及多个线程合作，那么就比较难用单元测试来验证其正确性。</p>
+<p>如果程序涉及比较多的交互（指和其他程序交互，不是指图形用户界面），用单元测试来构造测试场景比较麻烦，每个场景要写一堆无趣的代码。而这正是分布式系统最需要测试的地方。</p>
+<p>总的来说，单元测试是一个值得掌握的技术，用在适当的地方确实能提高生产力。同时，在分布式系统中，我们还需要其他的自动化测试手段。</p>
+<h3 id="分布式系统测试的要点"><strong>7.2
+分布式系统测试的要点</strong></h3>
+<p>在分布式系统中，class与function级别的单元测试对整个系统的帮助不大。这种单元测试对单个程序的质量有帮助，但是，一堆砖头垒在一起是变不成天楼的。<strong>分布式系统测试的要点是测试进程间的交互</strong>：一个进程收到客户请求，该如何处理，然后转发给其他进程；收到响应之后，又修改并应答客户。测试这些多进程协作的场景才算测到了点子上。</p>
+<p>假设一个分布式系统由四五种进程组成，每个程序有各自的开发人员。对于整个系统，我们可以用脚本来模拟客户，自动化地测试系统的整体运作情况，这种测试通常由QA团队来执行，也可以作为系统的烟测试。</p>
+<p>对于其中每个程序的开发人员，上述测试方法对日常的开发帮助不大。因为测试要能通过，必须整个系统都正常运转才行，在开发阶段，这一点不是时时刻刻都能满足的（有可能你用到的新功能对方还没有实现，这反过来影响了你的进度）。另一方面，如果出现测试失败，开发人员不能立刻知道这是自己的程序出错（也有可能是环境原因造成的错误），这通常要去读程序日志才能判定。还有，作为开发者测试，我们希望它无副作用，每天反复多次运行也不会增加整个环境的负担，以整个QA系统为测试平台不可避免地要留下一些垃圾数据，而清理这些数据又会花一些宝贵的工作时间。（你得判断数据是自己的测试生成的还是别人的测试留下的，不能误删了别人的测试数据。）</p>
+<p>作为开发人员，我们需要一种单独针对自己编写的那个程序的自动化测试方案，一方面提高日常开发的效率，另一方面作为自己那个程序的功能验证测试集，以及回归测试（regression
+tests）。</p>
+<h3 id="分布系统的抽象观点"><strong>7.3 分布系统的抽象观点</strong></h3>
+<p>一台机器两根线</p>
+<p>形象地来看，一个分布式系统就是一堆机器，每台机器的“屁股”上拖着两根线：电源线和网线（不考虑SAN等存储设备），电源线插到电源插座上，网线插到交换机上。</p>
+<p><img src="/2025/01/03/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/9-%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/image-20250103191804596.png" srcset="/img/loading.gif" lazyload></p>
+<p>这个模型实际上说明，一台机器、一个程序表现出来的行为完全由它接出来的两根线展现，本书不谈电源线，只谈网线。（“在乎服务器的功耗”在我看来就是公司利润率很低的标志，要从电费上成本。）</p>
+<p>如果网络是普通的千兆以太网，那么吞吐量不大于125MB/s。这个吞吐量比起现在的CPU运算速度和内存带宽简直小得可怜。这里我想提的是，对于不特别在意latency的应用，只要能让千兆以太网的吞吐量饱和或接近饱和，用什么编程语言其实无所谓。Java做网络服务端开发也是很好的选择（不是指Web开发，而是做一些基础的分布式组件，例如ZooKeeper和Hadoop之类）。尽管可能C++只用了15%的CPU，而Java用了30%的CPU，Java还占用更多的内存，但是千兆网卡带宽都已经跑满，那些省下的资源也只能浪费了；对于外界（从网线上看来）而言，两种语言的效果是一样的，而通常Java的开发效率更高。Java比C++慢一些，但是通过千兆网络不一定能看得出这个区别来。同样的道理，单机程序的某些“性能优化”不一定真能提高系统整体表现出来的，能被观察到的性能，这也是本书基本不谈微观性能优化的主要原因。在弄清楚系统瓶颈之前贸然投入优化往往是浪费时间和精力，还耽误了项目进度，额外不值。</p>
+<h4 id="进程间通过tcp相互连接">进程间通过TCP相互连接</h4>
+<p>我在<span class="math inline">\(\S3.4\)</span>提倡仅使用TCP作为进程间通信的手段，此处这个观点将再次得到验证。</p>
+<p><img src="/2025/01/03/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/9-%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/image-20250103191926605.png" srcset="/img/loading.gif" lazyload></p>
+<p>HDFS有四个角色参与其中，NameNode（保存元数据）、DataNode（存储节点，多个）、Secondary
+NameNode（定期写checkpoint）、Client（客户，系统的使用者）。这些进程运行在多台机器上，之间通过TCP协议互联。程序的行为完全由它在TCP连接上的表现决定（TCP就好比前面提到的“网线”）。</p>
+<p>在这个系统中，一个程序其实不知道与自己打交道的到底是什么。比如，对于DataNode，它其实不在乎自己连接的是真的NameNode还是某个调皮的小孩用Telnet模拟的NameNode，它只管接受命令并执行。对于NameNode，它其实也不知道你DataNode是不是真的把用户数据存到磁盘上去了，它只需要根据DataNode的反馈更新自己的元数据就行。这已经为我们指明方向。</p>
+<h3 id="一种自动化的回归测试方案"><strong>7.4
+一种自动化的回归测试方案</strong></h3>
+<p>假如我是NameNode的开发者，为了能自动化测试NameNode，我可以为它写一个test
+harness（这是一个独立的进程），这个test
+harness仿冒（mock）了与被测进程打交道的全部程序。如图9-14所示，是不是有点像“缸中之脑”？</p>
+<p><img src="/2025/01/03/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/9-%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/image-20250103192002552.png" srcset="/img/loading.gif" lazyload></p>
+<p>对于DataNode的开发者，他们也可以写一个专门的test
+harness，模拟Client和NameNode。</p>
+<p><img src="/2025/01/03/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/9-%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/image-20250103192017712.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="test-harness的优点">test harness的优点</h4>
+<ul>
+<li>完全从外部观察被测程序，对被测程序没有侵人性，代码该怎么写就怎么写，不需要为测试留路。</li>
+<li>能测试真实环境下的表现，程序不是单独为测试编译的版本，而是将来真实运行的版本。数据也是从网络上读取，发送到网络上。</li>
+<li>允许被测程序做大的重构，以优化内部代码结构，只要其表现出来的行为不变，测试就不会失败。（在重构期间不用修改test
+case。）</li>
+<li>能比较方便地测试failure场景。比如，若要测试DataNode出错时NameNode的反应，只要让test
+harness模拟的那个mock
+DataNode返回我们想要的出错信息。要测试NameNode在某个DataNode失效之后的反应，只要让test
+harness断开对应的网络连接即可。要测量某请求超时的反应，只要让test
+harness不返回结果即可。这对构建可靠的分布式系统尤为重要。</li>
+<li>帮助开发人员从使用者的角度理解程序，程序的哪些行为在外部是看得到的，哪些行为是看不到的。</li>
+<li>有了一套比较完整的test
+cases之后，甚至可以换种语言重写被测程序（假设为了提高内存利用率，换用C++来重新实现NameNode），测试用例依旧可用。这时test
+harness起到知识传承的作用。</li>
+<li>发现bug之后，往test harness里添加能复现bug的test
+case，修复bug之后，test
+case继续留在harness中，防止出现回归（regression）。</li>
+</ul>
+<h4 id="实现要点">实现要点</h4>
+<ul>
+<li><p>test
+harness的要点在于隔断被测程序与其他程序的联系，它冒充了全部其他程序。这样被测程序就像被放到测试台上观察一样，让我们只关注它一个。</p></li>
+<li><p>test
+harness要能发起或接受多个TCP连接，可能需要用某个现成的NIO网络库，如果不想写成多线程程序的话。</p></li>
+<li><p>test
+harness可以与被测程序运行在同一台机器，也可以运行在两台机器上。在运行被测程序的时候，可能要用一个特殊的启动脚本把它依赖的host:port指向test
+harness。</p></li>
+<li><p>test
+harness只需要表现得跟它要mock的程序一样，不需要真的去实现复杂的逻辑。比如mock
+DataNode只需要对NameNode返回“Yessir，数据已存好”，而不需要真的把数据存到硬盘上。若要mock比较复杂的逻辑，可以用“记录+回放”的方式，把预设的响应放到test
+case里回放（replay）给被测程序。</p></li>
+<li><p>因为通信走TCP协议，test
+harness不一定要和被测程序用相同的语言，只要符合协议就行。试想如果用共享内存实现IPC，这是不可能的。本书S7.6提到利用Protobuf的跨语言特性，我们可以采用Java为C++服务程序编写test
+harnesses。其他跨语言的协议格式也行，比如XML或JSON。</p></li>
+<li><p>test
+harness运行起来之后，等待被测程序的连接，或者主动连接被测程序，或者兼而有之，取决于所用的通信方式。</p></li>
+<li><p>一切就绪之后，test harness依次执行test cases。一个NameNode test
+case的典型过程是：test
+harness模仿client向被测NameNode发送一个请求（如创建文件），NameNode可能会联络mock
+DataNode，test harness模仿DataNode应有的响应，NameNode收到mock
+DataNode的反馈之后发送响应给client，这时test
+harness检查响应是否符合预期。</p></li>
+<li><p>test harness中的test cases以配置文件（每个test
+case有一个或多个文本配置文件，每个test case占一个目录）方式指定。test
+harness和test cases连同程序代码一起用version
+control工具管理起来。这样能复现以外任何一个版本的应有行为。</p></li>
+<li><p>对于比较复杂的test case，可以用嵌入式脚本语言来描述场景。如果test
+harness是用Java写的，那么可以嵌入Groovy，就像笔者在《“过家家”版的移动离线计费系统实现》中用Groovy实现计费逻辑一样。Groovy调用test
+harness模拟多个程序分别发送多份数据并验证结果，Groovy本身就是程序代码，可以有逻辑判断甚至循环。这种动静结合的做法在不增加test
+harness复杂度的情况下提供了相当高的灵活性。</p></li>
+<li><p>test
+harness可以有一个命令行界面，程序员输入“run10”就选择执行第10号test
+case。</p></li>
+</ul>
+<h4 id="几个实例">几个实例</h4>
+<p>test
+harness这种测试方法适合测试有状态的、与多个进程通信的分布式程序，除了Hadoop中的NameNode与DataNode，我还能想到几个例子。</p>
+<h5 id="chat聊天服务器">chat聊天服务器</h5>
+<p>聊天服务器会与多个客户端打交道，我们可以用test
+harness模拟5个客户端，模拟用户上下线、发送消息等情况，自动测试聊天服务器的功能。</p>
+<h5 id="连接服务器登录服务器逻辑服务器">连接服务器、登录服务器、逻辑服务器</h5>
+<p>这是云风在他的blog中提到的三种网游服务器，我这里借用来举例子。</p>
+<p>如果要为连接服务器写test
+harness，那么需要模拟客户（发起连接）、登录服务器（验证客户资料）、逻辑服务器（收发网游数据），有了这样的test
+harness，可以方便地测试连接服务器的正确性，也可以方便地模拟其他各个服务器断开连接的情况，看看连接服务器是否应对自如。同样的思路，可以为登录服务器写test
+harness。（我估计不用为逻辑服务器再写了，因为肯定已经有自动测试了。）</p>
+<p>见S7.12的一个具体示例。</p>
+<h5 id="多master之间的二段提交">多master之间的二段提交</h5>
+<p>这是分布式容错的一个经典做法。用test harness能把primary
+master和secondary masters单独拎出来测试。在测试primary
+master的时候，test harness扮演name service和secondary
+masters。在测试secondary master的时候，test harness扮演name
+service、primary master、其他secondary
+masters。可以比较容易地测试各种failure情况。如果不这么做，而直接部署多个masters来测试，恐怕很难做到自动化测试。</p>
+<h5 id="paxos的实现">Paxos的实现</h5>
+<p>Pxos协议的实现肯定离不了单元测试，因为涉及多个角色中比较复杂的状态变迁。同时，如果我要写Paxos实现，那么test
+harness也是少不了的，它能自动测试Paxos节点在真实网络环境下的表现，并且轻松模拟各种failure场景。</p>
+<h4 id="局限性">局限性</h4>
+<p>如果被测程序有TCP之外的IO，或者其TCP协议不易模拟（比如通过TCP连接数据库），那么这种测试方案会受到干扰。</p>
+<p>对于数据库，如果被测程序只是简单地从数据库SELECT一些配置信息，那么或许可以在test
+harness里内嵌一个in-memory H2 DB
+engine，然后让被测程序从这里读取数据。当然，前提是被测程序的DB
+driver能连上H2（或许不是大问题，H2支持JDBC和部分ODBC）。如果被测程序有比较复杂的SQL代码，那么H2表现的行为不一定和生产环境的数据库一致，这时候恐怕还是要部署测试数据库（有可能为每个开发人员部署一个小的测试数据库，以免相互干扰）。</p>
+<p>如果被测程序有其他IO（写log不算），比如DataNode会访问文件系统，那么test
+harness没有能把DataNode完整地包裹起来，有些failure
+case不是那么容易测试的。这时或许可以把DataNode指向tmpfs，这样能比较容易地测试磁盘满的情况。当然，这样也有局限性，因为tmpfs没有真实磁盘那么大，也不能模拟磁盘读写错误。我不是分布式存储方面的专家，这些问题留给分布式文件系统的实现者去考虑吧。（测试Paxos节点似乎也可以用tmpfs来模拟persist
+storage，由test case填充所需的初始数据。）</p>
+<h3 id="其他用处"><strong>7.5 其他用处</strong></h3>
+<p>test harness除了实现features的回归测试外，还有其他的用处。</p>
+<h4 id="加速开发提高生产力">加速开发，提高生产力</h4>
+<p>前面提到，如果有个新功能（增加一种新的request
+type）需要改动两个程序，有可能造成相互等待：客户程序A说要先等服务程序B实现对应的功能响应，这样A才能发送新的请求，不然每次请求就会被拒绝，无法测试；服务程序B说要先等A能够发送新的请求，这样自己才能开始编码与测试，不然都不知道请求长什么样子，也触发不了新写的代码。（当然，这是我虚构的例子。）</p>
+<p>如果A和B都有各自的test
+harness，事情就好办了，双方大致商量一个协议格式，然后分头编码。程序A的作者在自己的harness里边添加一个test
+case，模拟他认为B应有的响应，这个响应可以hardcode某种最常见的响应，不必真的实现所需的判断逻辑（毕竟这是程序B的作者该干的事情），然后程序A的作者就可以编码并测试自己的程序了。同理，程序B的作者也不用等A拿出一个半成品来发送新请求，他往自己的harness添加一个test
+case，模拟他认为A应该发送的请求，然后就可以编码并测试自己的新功能了。双方齐头并进，减少扯皮。等功能实现得差不多了，两个程序互相连一连，如果发现协议不一致，检查一下harness中的新test
+cases（这代表了A/B程序对对方的预期），看看哪边改动比较方便，很快就能解决同题。</p>
+<h4 id="压力测试">压力测试</h4>
+<p>test
+harness稍加改进还可以变功能测试为压力测试，供程序员profiling用。比如反复不间断发送请求，向被测程序加压。不过，如果被测程序是用C++写的，而test
+harness是用Java写的，有可能出现test harness占100%
+CPU而被测程序还跑得优哉游哉的情况。这时候可以单独用C++写一个负载生成器。</p>
+<h4 id="小结-1">小结</h4>
+<p>以单独的进程作为test
+harness对于开发分布式程序相当有帮助，它能达到单元测试的自动化程度和细致程度，又避免了单元测试对功能代码结构的侵人与依赖。</p>
+<h2 id="分布式系统部署监控与进程管理的几重境界"><strong>8.
+分布式系统部署、监控与进程管理的几重境界</strong></h2>
+<p>约定：本节只考虑Linux系统，文中涉及的“服务程序”是以C++或Java编写的，编译成二进制可执行文件（binary或jar），程序启动的时候一般会读取配置文件（或者以其他方式获得配置信息），同一个程序每个服务进程的配置文件可能略有不同。“服务器”这个词有多重含义，为避免混淆，本节以host指代服务器硬件，以"服务端程序/进程"指代服务器软件（或者具体说Web
+Server和Sudoku Solver，这两个都是服务软件）。</p>
+<p>在进入正题之前，先看一个明显但典型的例子：Sudoku Solver。（Sudoku
+Solver是个均质的无状态服务，分布式系统中进程的状态迁移不是本节的主题。）</p>
+<p>假设你们公司的分布式系统中有一个专门求解数独（Sudoku）的服务程序，这个程序是你们团队开发并维护的。通常Web
+Server会使用这个Sudoku
+Solver提供服务，用户通过Web页面提交一个Sudoku谜题，Web
+Server转而向Sudoku Solver寻求答案。每个Web Server会同时跟多个Sudoku
+Solver联系，以实现负载均衡。系统的消息收发关系大致如图9-16所示，每个矩形是一个进程，运行在各自的host上。</p>
+<p><img src="/2025/01/03/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/9-%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/image-20250103192954370.png" srcset="/img/loading.gif" lazyload></p>
+<p>图9-16中的Web
+Server请不要简单理解为httpd+cgi，它其实泛指一切客户端，其本身可能是个stateful的服务程序。</p>
+<p>当然，系统不是一开始就是这样的，它经历了多步演化。</p>
+<ol type="1">
+<li>最开始的时候，Sudoku求解直接在Web
+Server内完成。后来为了提高负载能力，把Sudoku单独做成服务。一开始系统规模很小，只有一个Sudoku
+Solver，也只有一台Web
+Server，是个简单的一对一（1:1）的使用关系，如图9-17所示。</li>
+</ol>
+<p><img src="/2025/01/03/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/9-%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/image-20250103193017349.png" srcset="/img/loading.gif" lazyload></p>
+<ol start="2" type="1">
+<li>随后，随着业务量增加，一台host不堪重负，于是又部署了几台Sudoku
+Solver，变成了一对多（1:N）的使用关系，如图9-18所示。</li>
+</ol>
+<p><img src="/2025/01/03/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/9-%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/image-20250103193048812.png" srcset="/img/loading.gif" lazyload></p>
+<ol start="3" type="1">
+<li>再后来，一台Web Server撑不住了，于是部署了几台Web
+Server，形成了我们一开始看到的图9-16中的多对多（M:N）的使用关系。</li>
+</ol>
+<p>在分布式系统中部署并运行Sudoku Solver，需要考虑以下几个问题：</p>
+<ul>
+<li>Sudoku
+Solver如何部署到多台host上运行？是把可执行文件拷贝过去吗？程序用到的库怎么办？配置文件怎么办？</li>
+<li>如何启动服务程序Sudoku
+Solver？如果每个Solver的配置文件稍有不同（比如每个Solver有自己的service
+name），那么配置文件是自动生成吗？</li>
+<li>Sudoku Solver的listening
+port如何配置？如何保证它不与其他服务程序重复？</li>
+<li>如果程序crash，谁来重启？能否自动重启？开发/运维人员能否及时收到alert？</li>
+<li>如果想主动重启Sudoku
+Solver，要不要登录到那台host上去kill？还是能够远程控制？</li>
+<li>如果要升级Sudoku
+Solver程序，如何重新部署？如何（尽量）做到不中断服务？</li>
+<li>Web Server如何知道那些Sudoku Solver的地址？是不是静态写到Web
+Server的配置文件里？</li>
+<li>如果Sudoku
+Solver所在的host发生硬件故障，管理人员是否能立刻得知这一状况？Web
+Server能否自动failover到其他alive的Solver上？</li>
+<li>部署新的Sudoku Solver之后，Web
+Server能否自动开始使用新的Solver而无需重启？（重启Web
+Server似乎不是大问题，这里我们进一步考虑client是个有状态的服务，应该尽量避免无谓的重启。）</li>
+<li>程序可否安全地退役？比方说公司不再做求解Sudoku的业务，那么关闭全部Sudoku
+Solver会不会对其他业务造成影响？</li>
+</ul>
+<p>这些问题可以大致归结为几个方面：部署（含升级）可执行文件与配置文件、监控进程状态、管理服务进程，故障响应，这些合起来可称为运维（operation）。</p>
+<p>根据公司的规模和技术水平不同，分布式系统的运维分为几重境界，以下是我对各重境界的简要描述。</p>
+<h3 id="境界1全手工操作"><strong>8.1 境界1：全手工操作</strong></h3>
+<p>这个大概是高校实验室的水平，分布式系统的规模不大，可能十来台机器上下。分布式系统的实现者为在校学生。</p>
+<p>系统完全是手工搭起来的，host的IP地址采用静态配置。</p>
+<p><strong>部署</strong></p>
+<ul>
+<li>编译之后手工把可执行文件拷贝到各台机器上，或者放到公用的NFS目录下。配置文件也手工修改并拷贝到各台机器上（或者放到每个Sudoku
+Solver自已单独的NFS目录下）。</li>
+</ul>
+<p><strong>管理</strong></p>
+<ul>
+<li>手工启动进程，手工在命令行指定配置文件的路径。重启进程的时候需要登录到host上并kill进程。</li>
+</ul>
+<p><strong>升级</strong></p>
+<ul>
+<li>如果需要升级Sudoku
+Solver，则需要手工登录多台hosts，可以拷贝新的可执行文件覆盖原来的，并重启。</li>
+</ul>
+<p><strong>配置</strong></p>
+<ul>
+<li>Web Server的配置文件里写上Sudoku
+Solver的ip:port。如果部署了新的Sudoku Solver，多半要重启Web
+Server才能发挥作用。</li>
+</ul>
+<p><strong>监控</strong></p>
+<ul>
+<li>无。系统不是真实的商业应用，仅仅用作学习研究，发现哪儿不对劲了就登录到那台host上去看看，手工解决问题。</li>
+</ul>
+<p>这个级别可算是“过家家”，系统时灵时不灵，可以跑跑测试。发发paper。</p>
+<h3 id="境界2使用零散的自动化脚本和第三方组件"><strong>8.2
+境界2：使用零散的自动化脚本和第三方组件</strong></h3>
+<p>这大概是刚起步的公司的水平，系统已经投入商业应用。公司的开发重心放在实现核心业务、添加新功能方面，暂时还顾不上高效的运维，或许系统的运维任务由开发人员或网管人员兼任。公司已经有基本的开发流程，代码采用中心化的版本管理工具（比如SVN），有比较正式的QA
+sign-off流程。</p>
+<p>公司内网有DNS，可以把hostname解析为IP地址，host的IP地址由DHCP配置。公司内部的host的软硬件配置比较统一，比如硬件都是x86-64平台，操作系统统一使用Ubuntu
+10.04
+LTS，每天机器上安装的package和第三方library也是完全一样的（版本号也相同），这样任何一个程序在任何一台host上都能运行，不需要单独的配置。</p>
+<p>假设各台host已经配置好了SSH authentication
+key或者GSSAPI，不需要手工输入密码。如果要在host1、host2、host3、host4上运行md5sum命令，看一下各台机器上的Sudoku
+Solver可执行文件的内容是否相同，可以在本机执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-keyword">for</span> h <span class="hljs-keyword">in</span> host1 host2 host3 host4; <span class="hljs-keyword">do</span> ssh <span class="hljs-variable">$h</span> <span class="hljs-built_in">md5sum</span> /path/to/SudokuSolver/version/bin/sudoku-solver; <span class="hljs-keyword">done</span><br></code></pre></td></tr></table></figure>
+<p>公司的技术人员有能力配置使用cron、at、logrotate、rrdtool等标准的Linux工具来将部分运维任务自动化。</p>
+<p><strong>部署</strong></p>
+<p>可执行文件必须经过QA签署放行才能部署到生产环境（如有必要，QA要签署可执行文件的md5）。为了可靠性，可能不会把可执行文件放到NFS上（如果NFS发生故障，整个系统就瘫痪了）。有可能采用rsync把可执行文件拷贝到本机目录（考虑到可执行文件比较大，估计不适合直接放到版本管理库里），并且用md5sum检查拷贝之后的文件是否与源文件相同。部署可执行文件这一步骤应该可以用脚本自动执行。为了让C++可执行文件拷贝到host上就能用，通常采用静态链接，以避免.so版本不同造成故障。</p>
+<p>Sudoku Solver的配置文件会放到版本管理工具里，每个Solver
+instance可能有自己的branch，每次修改都必须入库。程序启动的时候用的配置文件必须从SVN里check-out，不能手工修改（减少人为错误）。</p>
+<p><strong>管理</strong></p>
+<p>第一次启动进程的时候，会从SVN
+check-out配置文件；以后重启进程的时候可以从本地working
+copy读取配置文件（以避免SVN服务器故障对系统造成影响），只在改过配置文件之后才要求svn
+update。服务进程使用daemon方式管理（/sbin/init或upstart工具），crash之后会立刻自动重启（利用respawn功能）。服务进程一般会随host启动而启动（放到/etc/init.d里），如果要重启hostA上的服务进程，可以通过SSH远程操作。进程管理是分散的，每台host运行的一些service完全由本机的/etc/init.d目录决定。把一个service从一台host迁移到另一台host，需要登录到这两台host上去做一些手工配置。</p>
+<p><strong>升级</strong></p>
+<p>可执行文件也有一套版本管理（不一定通过SVN），发布新版本的时候产品覆盖已有的可执行文件。比方说，现在运行的是<code>/path/to/SudokuSolver/1..@/bin/sudoku-solver</code>，那么新版本的Sudoku
+Solver会发布到<code>/path/to/SudokuSolver/1.1.@/bin/sudoku-solver</code>。这么做的原因是，对于C++服务程序，如果在程序运行的时候覆盖了原有的可执行文件，那么可能会在一段时间之后出现bus
+error，程序因SIGBus而crash。另外，如果程序发生core
+dump，那么验尸（postmortem）的时候必须用“产生core
+dump的可执行文件”配合core文件。如果覆盖了原来的可执行文件，postmortem将无法进行。</p>
+<p><strong>配置</strong></p>
+<p>Web Server的配置文件里写上Sudoku
+Solver的host:port（比境界1有所提高，这里依赖DNS，通常DNS有一主一备，可靠性足够高）。不过Web
+Server的配置文件和Sudoku Solver的配置文件是独立的，如果新增了Sudoku
+Solver或者迁移了host，除了修改Sudoku
+Solver的配置文件外，还要修改用到它的Web
+Server的配置文件。这在系统规模比较小的时候尚且可行，系统规模一大，这种服务之间的依赖关系会变得隐。如果关闭某个服务程序，就可能一不小心造成其他组的某个服务失灵。正如孟岩在《通过一个真实故事理解SOA监管》中举的那个例子一样。</p>
+<p><strong>监控</strong></p>
+<p>公司会使用一些开源的监控工具（以下以Monit为例）来监控每台host的资源使用情况（内存、CPU、磁盘空间、网络带宽等等）。必要的话可以写一些插件，使之能监控我们自己写的服务程序（Sudoku
+Solver）。但是这些监控工具通常只是观察者，它们写与进程管理工具是独立的，只能看，不能动。这些监控工具有自己的配置文件，这些配置需要与Sudoku
+Solver的配置同步修改。Monit可以管理进程，但是它判断服务进程是否能正常工作是通过定时轮询进行的，不一定能立刻（几秒之内）发现问题。</p>
+<p>在这个境界，分布式系统已经基本可用了，但也有一些隐患。</p>
+<p><strong>配置零散</strong></p>
+<p>每个服务程序有自已独立的配置，但是整个系统没有全局的部署配置文件（比如哪个服务程序应该运行在哪些hosts上）。</p>
+<p>服务程序的配置文件和用到此服务的客户端程序的配置是独立的，如果把Sudoku
+Solver迁移到另一台host，那么不仅要修改Sudoku
+Solver的配置，还要修改用到Sudoku Solver的Web
+Server的配置，以及监控Sudoku
+Solver的Monit的配置。如果忘记修改其中的一处，就会造成系统故障。</p>
+<p>分布式系统中服务程序的依赖关系是个令人头疼的问题，“依赖”还好办（程序的作者知道自已这个服务程序会依赖哪些其他服务），“被依赖”则比较棘手（如何才能知道停掉自已这个程序会不会让公司其他系统崩溃？）。这也从一个侧面证明<strong>使用TCP协议作为唯一的IPC手段的必要性</strong>。如果采用TCP通信，为了查出有哪些进程用了我的SudokuSolver（假设listening
+port是9981），那么我只要运行<code>netstat -tpn | grep 9981</code>就能找到现在的客户；或者让Sudoku
+Solver自己打印accept(2)
+log，连续检查一周或者一个月就能知道有哪些程序用到了Sudoku Solver。</p>
+<p><strong>进程管理分散</strong></p>
+<p>如果host
+A发生硬件故障，如何能快速地用一台备用服务器硬件顶替它？能否先把它上面原来运行的Sudoku
+Solver迁移到空闲的host B上，然后通知Web Server用host B上的Sudoku
+Solver？“通知Web Server”这一步要不要重启Web Server？</p>
+<h3 id="境界3自制机群管理系统集中化配置"><strong>8.3
+境界3：自制机群管理系统，集中化配置</strong></h3>
+<p>这可能是比较成熟的大公司的水平。</p>
+<p>境界2中的分散式进程管理已经不能满足业务灵活性方面的需求，公司开始整合现有的运维工具，开发一套自己的机群管理软件。我还没有找到一个开源的符合我的要求的机群管理软件，以下虚构一套名为Zurg的分布式系统管理软件。</p>
+<p>Zurg的架构很简单，典型的Master/Slave结构，见图9-19。图9-19中矩形为服务器，圆角矩形为进程，实线箭头表示TCP连接，虚线表示进程的父子关系。</p>
+<p><img src="/2025/01/03/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/9-%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/image-20250103195631488.png" srcset="/img/loading.gif" lazyload></p>
+<p>在《分布式系统的工程化开发方法》中谈到了Zurg的功能需求：</p>
+<ul>
+<li>典型的Master/Slave/Client结构。</li>
+<li>一个Master进程，兼做name
+service。可用冷热备份，或者用consensus多点状态同步。如果Master意外重启，全部Slave都会自动重连。</li>
+<li>每个节点运行一个Slave进程。定期向Master汇报该节点的资源使用率，控制其他服务进程的启停，捕获SIGCHLD信号，及时知道服务进程意外退出。</li>
+</ul>
+<p>到了这一境界，日常的管理运维工作已经不再需要反复执行ssh，常见任务都可以通过Zurg来完成。</p>
+<p><strong>部署</strong></p>
+<p>只需要向Master发一条指令，Master会命令Slaves从指定的地点rsync新的可执行文件到本地目录。</p>
+<p><strong>进程管理与监控</strong></p>
+<p>Zurg的主要功能就是进程管理和监控，比起一般的开源工具，Zurg更具备一些优势。由于Sudoku
+Solver是由Zurg Slave fork()而得的，那么当Sudoku Solver crash的时候，Zurg
+Slave会立刻收到SIGCHLD，从而能立刻向管理员报告状态并重启。这比Monit的轮询要迅速得多。</p>
+<p>为了安全起见，Zurg
+Slave在启动可执行文件的时候可以验证其md5，这样可以避免错误版本的服务程序运行在生产环境。</p>
+<p>Zurg
+Master可以提供一个Web页面以供查看本机群内各个服务程序是否正常运行，并且提供一个接口（可以是HTTP）让我们能编写脚本来控制Zurg
+Master。</p>
+<p><strong>升级</strong></p>
+<p>如果要主动重启Sudoku Solver，可以向Zurg Master发出指令，不需要用ssh
+&amp;
+kill。Zurg会保存每台host上服务进程的启动记录，以便事后分析。如果用境界2中的手动/etc/init.d管理方式，需要到每台机器上收集log才知道Sudoku
+Solver什么时候重启过。</p>
+<p>另外也可以单独开发GUI程序，运行在运维人员的桌面上，重启多台host上的Sudoku
+Solver只需要轻点下鼠标。</p>
+<p><strong>配置</strong></p>
+<p>零散的配置文件被集中的Zurg配置文件取代。</p>
+<p>Zurg配置文件会制定哪些service会在哪些host上运行，Zurg
+Master读取配置文件，然后命令各个Zurg
+Slave启动相应的服务程序。比方说配置文件指定Sudoku
+Solver运行在host1、host2、host3上，那么Zurg会通知在host1、host2、host3上的Zurg
+Slave启动Sudoku Solver。（当然，每台host上的Zurg
+Slave需要由/etc/init.d启动，其他的服务程序都由它负责启动。）</p>
+<p>更重要的是，<strong>服务程序之间的依赖关系在Zurg配置文件里直接体现出来</strong>。比方说，在Zurg配置文件里指明Web
+Server依赖Sudoku Solver，Web Server的配置文件由Zurg
+Master生成（可能会用到模板引擎，读入一个Web
+Server的配置模板），其中出现的Sudoku Solver的host:port由Zurg
+Master自动填上，这样如果把Sudoku Solver从host A迁移到host
+B，只需要改一处地方（Zurg的配置），而Sudoku Solver和Web
+Server的配置都由Zurg Master自动生成。这样大大降低了犯错误的机会。</p>
+<p>到了这一境界，分布式系统的日常管理已经基本成熟，但在容错与负载均衡方面有较大的提升空间。</p>
+<p>目前最大的障碍是DNS，它限制了快速failover。比方说，如果host
+A发生硬件故障，Zurg Master固然可以在host B上立刻启动Sudoku
+Solver，但是如何通知Web Server到host B上享用服务呢？修改DNS
+entry的话（把host A的域名解析到host
+B的IP），可能要好几分钟才能完成更新，因为DNS没有推送机制。</p>
+<p>如果思路受限制于host:port，那么会采取一些看似高级，实则拙劣的高可用（high
+availability）解决方案。比方说在内核里做手脚，设法让两台机器共享同一个IP，然后通过专门的心跳连线来控制哪台host对外提供服务，哪台是备用机。如果那台“主机”发生故障，则可以快速（几秒）切换到备用机，因为hostname和IP地址是相同的，客户端不用重新配置或重启，只要重新连接TCP就能完成failover。如果在错误的道路上走得更远一点，可能还会设法把TCP连接一同迁移到备用机，这样客户端甚至不需要断开并重连。</p>
+<p><strong>Load balance也受限于DNS</strong></p>
+<p>如果发现现有的4个Sudoku Solver不堪重负，又部署了4台Sudoku
+Solver，如何通知各个Web Server把新的Sudoku Solver加到连接池里？</p>
+<p>有一些adhoc的手段，比方说每个Web
+Server有一个管理接口，可以通过这个接口向它动态地增减Sudoku
+Solver的地址。借助这个管理接口，我们也可以做一些计划中的联机迁移。比方说要主动把某个Sudoku
+Solver从host A迁移到host B，我们可以先在host B上启动Sudoku
+Solver，然后通过Web Server的管理接口把host B:9981添加到Web
+Server的连接池中，再把host A:9981从连接池中删掉，最后停掉host
+A上的Sudoku Solver。这对计划中的Sudoku
+Solver升级是可行的，能做到避免中断Web
+Server服务。对于failover，这种做法似乎稍显不够方便，因为要让Zurg
+Master理解Web Server的管理接口，会给系统带来循环依赖。（正常情况下，Zurg
+Master不应该知道或访问它管理的服务程序的接口细节，这样Sudoku
+Solver升级的时候就不用升级Zurg Master。）</p>
+<p>这种做法要求Web Server在开发的时候留下适当的维修探查通道，见<span class="math inline">\(\S9.5\)</span>的推荐做法。</p>
+<p>另外一种ad hoc的手段，每个Sudoku
+Solver在启动的时候自己主动往某个数据库表里insert或update本程序的host:port。Web
+Server的配置里写的不是host:port而是一条SELECT语句，用于找出它依赖的Sudoku
+Solver的host:port。Web Server还可以通过数据库触发器来及时获知Sudoku
+Solver address list的变化。这样增加或减少Sudoku Server的话，Web
+Server几乎可以立刻应对，也不需要通过管理接口来手工增减Sudoku
+Solver地址。数据库在这里扮演了naming
+service的角色，它的可用性直接影响了整个系统的可用性。</p>
+<h3 id="境界4机群管理与naming-service结合"><strong>8.4
+境界4：机群管理与naming service结合</strong></h3>
+<p>这是业内领先的公司的水平。</p>
+<p>前面分析到，使用Zurg机群管理软件能大大简化分布式系统的日常运维，但是它也有很大的缺陷——不能实现快速failover。如果系统规模大到一定程度，机器出故障的频率会显著增加，这时候自动化的快速failover是必备的，否则运维人员就会疲于奔命地“救火”。</p>
+<p>实现简单而快速的failover不需要特殊的编程技巧，也不需要对kernel动手脚，只要抛弃传统的DNS观念，摆脱host:port的束缚，<strong>采用为分布式系统特制的naming
+service代替DNS</strong>即可。</p>
+<p>naming service是实现快速failover的必备条件。Host
+A上的服务S1崩溃了，failover到Host
+B上，如何把新的地址（或端口号）通知给S1的用户？为什么DNS不适合？DNS设计作为静态或缓慢变化的域名解析，<strong>DNS客户端与DNS服务器之间采用超时轮询而不是主动通知，不适合快速failover。</strong>DNS也不能解析端口号。<strong>解决办法：实现自己的名字服务，并在程序的配置中使用service
+name而不是host:port。</strong></p>
+<p>例子：Chubby、ZooKeeper、Eureka。</p>
+<p>naming service的功能是把一个service name解析成list of
+ip:port。比方说，查询sudoku_solver，返回host1:9981，host2:9981、host3:9981。</p>
+<p>naming
+service与DNS最大的不同在于它能把新的地址信息推送给客户端。比方说，Web
+Server订阅了"sudoku_solver"，每当sudoku_solver发生变化，Web
+Server就会立刻收到更新。Web Server不需要轮询，而是等候通知。</p>
+<h4 id="naming-service谁负责更新">naming service谁负责更新？</h4>
+<p>在境界2中，Sudoku Solver会自己主动去naming
+server注册。到了境界3，由于Sudoku
+Solver是由Zurg负责启动的，那么Zurg知道Sudoku
+Solver运行在哪些hosts上，它会主动更新naming service，不需要Sudoku
+Solver自己动手。</p>
+<h4 id="naming-service的可用性availability和一致性如何保证">naming
+service的可用性（availability）和一致性如何保证？</h4>
+<p>毫无疑问，一旦采用这种方案，naming
+service是系统正常运转的关键，它的可用性决定了系统的可用性。naming
+service绝对不能只run在一台服务器上，为了可靠性，应该用一组（通常是5台）服务器同时提供服务。当然，这需要解决一致性问题。目前实现高可用naming
+service的公认办法是Paxos算法，也有了一些开源的实现（ZooKeeper、KeySpace、Doozer）。</p>
+<h4 id="对程序设计的影响">对程序设计的影响</h4>
+<p>如果公司的网络库在设计的时候就考虑了naming
+service，那么对程序设计来说是透明的。配置文件里写的不再是host:port，而是service
+name，交给网络库去解析成ip:port地址列表。</p>
+<p>为什么muduo网络库没有封装DNS解析</p>
+<p>一方面因为gethostbyname()和getaddrinfo()解析DNS是阻塞的（除非用UDNS之类的异步DNS库）；另一方面，因为在大规模分布式系统中DNS的作用不大，我宁愿花时间实现一个naming
+service，并且为它编写name resolve library。</p>
+<p>在境界3中，每个项目组有自己的hosts，只运行本项目中的服务程序，每个服务程序的TCP端口可以静态分配（比如Sudoku
+Solver固定使用9981端口），不用担心端口冲突。如果公司规模继续扩大，迟早会把16-bit的port命名空间用完，这时候给新项目分配端口号将成为问题。</p>
+<p>到了境界4，这一限制将被打破，服务程序可以run在公司内任何一台host上，也不用担心端口冲突，因为Zurg会选择当前host的空闲端口来启动Sudoku
+Solver，并且把选中的端口保存在naming service中。这样一来，TCP
+port也实现了动态配置，Web Server完全能自动适应run在不同port的Sudoku
+Solver。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/c/" class="category-chain-item">c++</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/c/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="category-chain-item">muduo多线程服务器</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/muduo/" class="print-no-link">#muduo</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>9. 分布式系统工程实践</div>
+      <div>http://binbo-zappy.github.io/2025/01/03/muduo多线程/9-分布式系统工程实践/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年1月3日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/01/03/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/10-C++%E7%BC%96%E8%AF%91%E9%93%BE%E6%8E%A5%E6%A8%A1%E5%9E%8B%E7%B2%BE%E8%A6%81/" title="10. C++编译链接模型精要">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">10. C++编译链接模型精要</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/01/01/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/11-%E5%8F%8D%E6%80%9DC++%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E4%B8%8E%E8%99%9A%E5%87%BD%E6%95%B0/" title="11. 反思C++面向对象与虚函数">
+                        <span class="hidden-mobile">11. 反思C++面向对象与虚函数</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

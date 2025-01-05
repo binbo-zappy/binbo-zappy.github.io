@@ -1,0 +1,1500 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="第12章 C++经验谈 我对C++的基本态度是“练从难处练，用从易处用” 1. 用异或来交换变量是错误的 翻转一个字符串，例如把&quot;12345&quot;变成“54321”，这是一个最简单不过的编码任务，即便是C语言初学者也能毫不费力地写出类似如下的代码： Version 1 版本一，用中间变量交换两个数，好代码 1234567891011void reverse_by_swap(char* st">
+<meta property="og:type" content="article">
+<meta property="og:title" content="12. C++经验谈">
+<meta property="og:url" content="http://binbo-zappy.github.io/2025/01/05/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/12-C++%E7%BB%8F%E9%AA%8C%E8%B0%88/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="第12章 C++经验谈 我对C++的基本态度是“练从难处练，用从易处用” 1. 用异或来交换变量是错误的 翻转一个字符串，例如把&quot;12345&quot;变成“54321”，这是一个最简单不过的编码任务，即便是C语言初学者也能毫不费力地写出类似如下的代码： Version 1 版本一，用中间变量交换两个数，好代码 1234567891011void reverse_by_swap(char* st">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/muduo.jpg">
+<meta property="article:published_time" content="2025-01-05T02:32:33.000Z">
+<meta property="article:modified_time" content="2025-01-05T09:40:55.794Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="muduo">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/muduo.jpg">
+  
+  
+  
+  <title>12. C++经验谈 - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="12. C++经验谈"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-01-05 10:32" pubdate>
+          2025年1月5日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          19k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          161 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">12. C++经验谈</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="第12章-c经验谈">第12章 C++经验谈</h1>
+<p>我对C++的基本态度是“练从难处练，用从易处用”</p>
+<h2 id="用异或来交换变量是错误的">1. 用异或来交换变量是错误的</h2>
+<p>翻转一个字符串，例如把"12345"变成“54321”，这是一个最简单不过的编码任务，即便是C语言初学者也能毫不费力地写出类似如下的代码：</p>
+<h4 id="version-1-版本一用中间变量交换两个数好代码">Version 1
+版本一，用中间变量交换两个数，好代码</h4>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">reverse_by_swap</span><span class="hljs-params">(<span class="hljs-type">char</span>* str, <span class="hljs-type">int</span> n)</span> </span>&#123;<br>    <span class="hljs-type">char</span>* begin = str;<br>    <span class="hljs-type">char</span>* end = str + n - <span class="hljs-number">1</span>;<br>    <span class="hljs-keyword">while</span> (begin &lt; end) &#123;<br>        <span class="hljs-type">char</span> tmp = *begin;<br>        *begin = *end;<br>        *end = tmp;<br>        ++begin;<br>        --end;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>上面这段代码清晰，直白，没有任何高深的技巧。不知从什么时候开始，有人“发明”了不使用临时变量交换两个数的办法，用关键词“不用临时变量交换两个数”在Google上能搜到很多文章。下面是一个典型的实现：</p>
+<h4 id="version-2-版本二用异或运算交换两个数烂代码">Version 2
+版本二，用异或运算交换两个数，烂代码</h4>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">reverse_by_xor</span><span class="hljs-params">(<span class="hljs-type">char</span>* str, <span class="hljs-type">int</span> n)</span> </span>&#123;<br>    <span class="hljs-comment">// WARNING: BAD CODE</span><br>    <span class="hljs-type">char</span>* begin = str;<br>    <span class="hljs-type">char</span>* end = str + n - <span class="hljs-number">1</span>;<br>    <span class="hljs-keyword">while</span> (begin &lt; end) &#123;<br>        *begin ^= *end;<br>        *end ^= *begin;<br>        *begin ^= *end;<br>        ++begin;<br>        --end;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>受一些过时的教科书的误导，有人认为程序里少用一个变量，节省一个字节的空间，会让程序运行得更快。这是不对的，至少在这里不成立：</p>
+<ol type="1">
+<li>这个所谓的“技巧”在现代的机器上只会更慢（我甚至怀疑它从来就不可能比原始办法快）。原始办法是两次内存读和写，这个“技巧”是六读三写加三次异或（或许编译器可以优化成两读三写加三次异或）。</li>
+<li>同样也不能节省内存，因为中间变量tmp通常会是寄存器（稍后有汇编代码供分析）。就算它在函数的局部堆栈（stack）上，反正栈已经开在那儿了，也没有进一步的函数调用，根本节约不了一丁点内存。</li>
+<li>相反，由于计算步骤较多，会使用更多的指令，编译后的机器码长度会增加。（这不是什么大问题，短的代码不一定快，后面有另外一个例子。）</li>
+</ol>
+<p>这个技巧的意义完全在于应付无聊的面试，所以知道就行，但绝对不能放在产品代码中。我也想不出问这样的面试题意义何在。</p>
+<p>更有甚者，把其中三句：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs cpp">*begin ^= *end;<br>*end ^= *begin;<br>*begin ^= *end;<br></code></pre></td></tr></table></figure>
+<p>写成一句：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cpp">*begin ^= *end ^= *begin ^= *end; <span class="hljs-comment">// WRONG</span><br></code></pre></td></tr></table></figure>
+<p>这更是大有问题，会导致未定义的行为（undefined
+behavior）。在C/C++语言的一条语句中，一个变量的值只允许改变一次。（像x =
+x++这种代码都是未定义行为，因为x有两次写入。）在C/C++语言里没有哪条规则保证这两种写法是等价的。（致语言律师：我知道，黑话叫序列点，一个语句可能不止一个序列点，请允许我在这单使用不精确的表述。）</p>
+<p>这不是一个值得炫耀的技巧，只会丑化，劣化代码。</p>
+<p>C++对翻转字符串这个问题有更简单的解法——调用STL里的std::reverse()函数。有人担心调用函数会有开销，这种担心是多余的，现在的编译器会把std::reverse()这种简单函数自动内联展开，生成出来的优化汇编代码和“版本一”一样快。</p>
+<h4 id="version-3-版本三用stdreverse翻倒一个区间优质代码">Version 3
+版本三，用std::reverse翻倒一个区间，优质代码</h4>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">reverse_by_std</span><span class="hljs-params">(<span class="hljs-type">char</span>* str, <span class="hljs-type">int</span> n)</span> </span>&#123;<br>    std::<span class="hljs-built_in">reverse</span>(str, str + n);<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="编译器会分别生成什么代码">1.1 编译器会分别生成什么代码</h3>
+<p>注意：查看编译器生成的汇编代码固然是了解程序行为的一个重要手段，但是千万不要认为看到的东西是永恒真理，它只是一时一地的真相。将来换了硬件平台或编译器，情况可能会变化。重要的不是为什么版本一比版本二快，而是如何发现这个事实。不要“猜（guess）”，要“测（benchmark）”。</p>
+<p>以g++版本4.4.1，编译参数-02-march=core2，x86 Linux系统为例。</p>
+<h5 id="版本一编译得到的汇编代码是">版本一编译得到的汇编代码是：</h5>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs assembly">.L3:<br>movzbl (%edx), %ecx<br>movzbl (%eax), %ebx<br>movb %bl, (%edx)<br>movb %cl, (%eax)<br>incl %edx<br>decl %eax<br>cmpl %eax, %edx<br>jb .L3<br></code></pre></td></tr></table></figure>
+<p>我用C语言翻译一下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">register</span> <span class="hljs-type">char</span> bl, cl;<br><span class="hljs-keyword">register</span> <span class="hljs-type">char</span>* eax;<br><span class="hljs-keyword">register</span> <span class="hljs-type">char</span>* edx;<br>L3:<br>cl = *edx; <span class="hljs-comment">// 读</span><br>bl = *eax; <span class="hljs-comment">// 读</span><br>*edx = bl; <span class="hljs-comment">// 写</span><br>*eax = cl; <span class="hljs-comment">// 写</span><br>++edx;<br>--eax;<br><span class="hljs-keyword">if</span> (edx &lt; eax) <span class="hljs-keyword">goto</span> L3;<br></code></pre></td></tr></table></figure>
+<p>一共两读两写，临时变量没有使用内存，都在寄存器里完成。考虑指令级并行和cache的话，中间六条语句估计能在三四个周期执行完。</p>
+<h5 id="版本二">版本二：</h5>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs assembly">.L9:<br>movzbl (%edx), %ecx<br>xorb (%eax), %cl<br>movb %cl, (%eax)<br>xorb (%edx), %cl<br>movb %cl, (%edx)<br>decl %edx<br>xorb %cl, (%eax)<br>incl %eax<br>cmpl %edx, %eax<br>jb .L9<br></code></pre></td></tr></table></figure>
+<p>C语言翻译：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// 声明与前面一样</span><br>cl = *edx; <span class="hljs-comment">// 读</span><br>cl ^= *eax; <span class="hljs-comment">// 读，异或</span><br>*eax = cl; <span class="hljs-comment">// 写</span><br>cl ^= *edx; <span class="hljs-comment">// 读，异或</span><br>*edx = cl; <span class="hljs-comment">// 写</span><br>--edx;<br>*eax ^= cl; <span class="hljs-comment">// 读、写、异或</span><br>++eax;<br><span class="hljs-keyword">if</span> (eax &lt; edx) <span class="hljs-keyword">goto</span> L9;<br></code></pre></td></tr></table></figure>
+<p>一共六读三写三次异或，多了两条指令。指令多不一定就慢，但是这里异或版实测比临时变量版要慢许多，因为它的每条指令都用到了前面一条指令的计算结果，没法并行执行。</p>
+<h5 id="版本三生成的代码与版本一一样快">版本三生成的代码与“版本一”一样快：</h5>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs assembly">.L21:<br>movzbl (%eax), %ecx<br>movzbl (%edx), %ebx<br>movb %bl, (%eax)<br>movb %cl, (%edx)<br>incl %eax<br>.L23:<br>decl %edx<br>cmpl %edx, %eax<br>jb .L21<br></code></pre></td></tr></table></figure>
+<p>这告诉我们，不要想当然地优化，也不要低估编译器的能力。关于现在的编译器有多聪明，Felix
+von Leitner有一个不错的介绍。</p>
+<p>Bjarne
+Stroustrup说过：“我喜欢优雅和高效的代码。代码逻辑应当直裁了当，叫缺陷难以隐藏；尽量减少依赖关系，使之便于维护；以某种全局策略一以贯之地处理全部出错情况；性能调校至接近最优，省得引诱别人实施无原则的优化（unprincipled
+optimizations），摘出一团乱麻。整洁的代码只做好一件事。”</p>
+<p>这恐怕就是Bjarne提及的没有原则的优化，甚至根本连优化都不是。代码的清晰性是首要的。</p>
+<h3 id="为什么短的代码不一定快">1.2 为什么短的代码不一定快</h3>
+<p><span class="math inline">\(\S12.3\)</span>将会谈到负整数的除法运算，其中引用了一段把整数转为字符串的代码。函数反复计算一个整数除以10的商和余数。我原以为编译器会用一条DIV除法指令来算，实际生成的代码让我大吃一惊：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs assembly">L2:<br>movl $1717986919, %eax<br>imull %ebx<br>movl %ebx, %eax<br>sarl $31, %eax<br>sarl $2, %edx<br>subl %eax, %edx<br>movl %edx, %eax<br>leal (%edx, %edx, 4), %edx<br>addl %edx, %edx<br>subl %edx, %ebx<br>movl %ebx, %edx<br>movl %eax, %ebx<br>movzbl (%edi, %edx), %eax<br>movb %al, (%esi)<br>addl $1, %esi<br>testl %ebx, %ebx<br>jne L2<br></code></pre></td></tr></table></figure>
+<p>一条DIV指令被替换成了十来条指令，编译器不是傻子，必然有原因。这里我不详细解释到底是怎么算的，基本思路是把除法转换为乘法，用倒数来算。其中出现了一个魔数1717986919，转换成十六进制是0x66666667，等于（2^33+3）/5。</p>
+<p>现代处理器的乘法运算和加减法一样快，比除法快一个数量级左右，编译器生成这样的代码是有理由的。十多年前出版的巨著“程序设计实践”[TPoP]中介绍过如何做microbenchmarking，方法和结果都值得一读，当然里边的数据恐怕有点过时了。</p>
+<p>有本奇书《Hacker's
+Delight》（中译本《高效程序的奥秘》），展示了大量这种速算技巧。其中第10章专门讲整数常量的除法。我不会把其中如天书般的技巧应用到产品代码中，但是我相信现代编译器的作者是知道这些技巧的，他们会合理地使用这些技巧来提高生成代码的质量。现在已经不是那个懂点汇编就能打败C/C++编译器的时代了。</p>
+<p>Mark C. Chu-Carroll有一篇博客《The “C is Efficient” Language
+Fallacy》的观点我非常赞同，即用清晰的代码表达程序员的意图，让编译器容易实施优化。</p>
+<p>Making real applications run really fast is something that's done
+with the help of a compiler. Modern architectures have reached the point
+where people can't code effectively in assembler anymore - switching the
+order of two independent instructions can have a dramatic impact on
+performance in a modern machine, and the constraints that you need to
+optimize for are just more complicated than people can generally deal
+with.</p>
+<p>So for modern systems, writing an efficient program is sort of a
+partnership. The human needs to carefully choose algorithms - the
+machine can't possibly do that. And the machine needs to carefully
+compute instruction ordering, pipeline constraints, memory fetch delays,
+etc. The two together can build really fast systems. But the two parts
+aren't independent: the human needs to express the algorithm in a way
+that allows the compiler to understand it well enough to be able to
+really optimize it.</p>
+<p>最后，说说C++模板。假如要编写一个任意进制的转换程序。C语言的函数声明是：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">convert</span><span class="hljs-params">(<span class="hljs-type">char</span>* buf, <span class="hljs-type">size_t</span> bufsize, <span class="hljs-type">int</span> value, <span class="hljs-type">int</span> radix)</span></span>;<br></code></pre></td></tr></table></figure>
+<p>既然进制是编译期常量，C++可以用带非类型模板参数的函数模板来实现，函数的代码与C相同。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-type">int</span> radix&gt;</span><br><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">convert</span><span class="hljs-params">(<span class="hljs-type">char</span>* buf, <span class="hljs-type">size_t</span> bufsize, <span class="hljs-type">int</span> value)</span></span>;<br></code></pre></td></tr></table></figure>
+<p>模板确实会使代码膨胀，但是这样的膨胀有时候是好事情，编译器能针对不同的常数生成快速算法。滥用C++模板当然是错的，适当使用不会有问题。</p>
+<h2 id="不要重载全局operator-new">2. 不要重载全局::operator new()</h2>
+<p>本文只考虑Linux
+x86平台，服务端开发（不考虑Windows的跨DLL内存分配释放问题）。本文假定读者知道::operator
+new()和::operator
+delete()是干什么的，与通常用的new/delete表达式有何区别和联系，这方面的知识可参考侯捷先生的文章《池内春秋》，或者这篇文章：http://www.relisoft.com/book/tech/9new.html。</p>
+<p>C++的内存管理是个老生常谈的话题，我在<span class="math inline">\(\S1.7\)</span>“捕获：系统地避免各种指针错误”中简单回顾了一些常见的问题以及在现代C++中的解决办法。基本上，按现代C++的手法（RAII）来管理内存，你很难遇到什么内存方面的错误。“没有错误是基本要求，不代表‘足够好’”。我们常常会设法优化性能，如果profiling表明hot
+spot在内存分配和释放上，重载全局的::operator new()和::operator
+delete()似乎是一个一劳永逸的好办法（以下简写为“重载::operator
+new()”），本节试图说明这个办法往往行不通。</p>
+<h3 id="内存管理的基本要求">2.1 内存管理的基本要求</h3>
+<p>如果只考虑分配和释放，内存管理基本要求是“不重不漏”：既不重复delete，也不漏掉delete。也就是说我们常说的new/delete要配对，“配对”不仅是个数相等，还隐含了new和delete的调用本身要匹配，不要“东家借的东西西家还”。例如：</p>
+<ul>
+<li>用系统默认的malloc()分配的内存要交给系统默认的free去释放。</li>
+<li>用系统默认的new表达式创建的对象要交给系统默认的delete表达式去析构并释放。</li>
+<li>用系统默认的::operator new()分配的内存要交给系统默认的::operator
+delete()去释放。</li>
+<li>用placement new创建的对象要用placement
+delete（为了表述方便，姑且这么说吧）去析构（其实就是直接调用析构函数）。</li>
+<li>从某个内存池A分配的内存要还给这个内存池。</li>
+<li>如果定制new/delete，那么要按规矩来。见《Effective
+C++中文版（第3版）》[EC3]第8章“定制new和delete”。</li>
+</ul>
+<p>做到以上这些不难，是每个C++开发人员的基本功。不过，如果你想重载全局的::operator
+new()，事情就麻烦了。</p>
+<h3 id="重载operator-new的理由">2.2 重载::operator new()的理由</h3>
+<p>[EC3，条款50]列举了定制new/delete的几点理由：</p>
+<ul>
+<li>检测代码中的内存错误；</li>
+<li>优化性能；</li>
+<li>获得内存使用的统计数据。</li>
+</ul>
+<p>这些都是正当的需求，后面我们将会看到，不重载::operator
+new()也能达到同样的目的。</p>
+<h3 id="operator-new的两种重载方式">2.3 ::operator
+new()的两种重载方式</h3>
+<ol type="1">
+<li>不改变其签名，无缝直接替换系统原有的版本，例如：</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;new&gt;</span></span><br><span class="hljs-function"><span class="hljs-type">void</span>* <span class="hljs-keyword">operator</span> <span class="hljs-title">new</span><span class="hljs-params">(<span class="hljs-type">size_t</span> size)</span></span>;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-keyword">operator</span> <span class="hljs-title">delete</span><span class="hljs-params">(<span class="hljs-type">void</span>* p)</span></span>;<br></code></pre></td></tr></table></figure>
+<p>用这种方式的重载，使用方不需要包含任何特殊的头文件，也就是说不需要看见这两个函数声明。“性能优化”通常用这种方式。</p>
+<ol start="2" type="1">
+<li><p>增加新的参数，调用时也提供这些额外的参数，例如：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// 此函数返回的指针必须能被普通的::operator delete(void*)释放</span><br><span class="hljs-function"><span class="hljs-type">void</span>* <span class="hljs-keyword">operator</span> <span class="hljs-title">new</span><span class="hljs-params">(<span class="hljs-type">size_t</span> size, <span class="hljs-type">const</span> <span class="hljs-type">char</span>* file, <span class="hljs-type">int</span> line)</span></span>;<br><span class="hljs-comment">// 此函数只在构造函数抛异常的情况下才会被调用</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-keyword">operator</span> <span class="hljs-title">delete</span><span class="hljs-params">(<span class="hljs-type">void</span>* p, <span class="hljs-type">const</span> <span class="hljs-type">char</span>* file, <span class="hljs-type">int</span> line)</span></span>;<br></code></pre></td></tr></table></figure></li>
+</ol>
+<p>然后用的时候是</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cpp">Foo* p = <span class="hljs-built_in">new</span>(__FILE__, __LINE__) Foo; <span class="hljs-comment">// 这样能跟踪是哪个文件哪一行代码分配的内存</span><br></code></pre></td></tr></table></figure>
+<p>我们也可以用宏替换new来节打学。用这里的第二种方式重载，使用方需要看到这两个函数声明，也就是说要主动包含你提供的头文件。“检测内存错误”和“统计内存使用情况”通常会用这种方式重载。当然，这不是绝对的。</p>
+<p>在学习C++的阶段，每个人都可以写个一两百行的程序来验证教科书上的说法，重载::operator
+new()在这样的玩具程序里边不会造成什么麻烦。</p>
+<p>不过，我认为在现实的产品开发中，重载::operator
+new()乃是下策，我们有更简单、安全的办法来到达以上目标。</p>
+<h3 id="现实的开发环境">2.4 现实的开发环境</h3>
+<p>作为C++应用程序的开发人员，在编写具有一定规模的程序时，我们通常会用到一些library。我们可以根据library的提供方把它们大致分为这么几大类：</p>
+<ol type="1">
+<li>C语言的标准库，也包括Linux编程环境提供的glibc系列函数。</li>
+<li>第三方的C语言库，例如OpenSSL。</li>
+<li>C++语言的标准库，主要是STL。（我想没有人在产品中使用iostream吧？）</li>
+<li>第三方的通用C++库，例如Boost.Regex，或者某款XML库。</li>
+<li>公司其他团队的人开发的内部基础C++库，比如网络通信和日志等基础设施。</li>
+<li>本项目组的同事自己开发的针对本应用的基础库，比如某三维模型的仿射变换模块。</li>
+</ol>
+<p>在使用这些library的时候，不可避免地要在各个library之间交换数据。比方说library
+A的输出作为library B的输入，而library
+A的输出本身常常会用到动态分配的内存（比如std::vector&lt;double&gt;）。</p>
+<p>如果所有的C++
+library都用同一套内存分配器（就是系统默认的new/delete），那么内存的释放就很方便，直接交给delete去释放就行。如果不是这样，那就得时时刻刻记住“这一块内存是属于哪个分配器的，是系统默认的还是我们定制的，释放的时候不要还错了地方”。</p>
+<p>由于C语言不像C++一样提供了那么多的定制性，C
+library通常都会默认直接用malloc/free来分配和释放内存，不存在上面提到的“内存还错地方”问题。或者有的考虑更全面的C
+library会让你注册两个函数，用于其内部分配和释放内存，这就能完全掌控该library的内存使用。这种依赖注入的方式在C++里变得花哨而无用，见笔者写的《C++标准库中的allocator是多余的》。</p>
+<p>但是，如果重载了::operator new()，事情恐怕就没有这么简单了。</p>
+<p>能完全掌控该library的内存使用。这种依赖注入的方式在C++里变得花哨而无用，见笔者写的《C++标准库中的allocator是多余的》。</p>
+<p>但是，如果重载了::operator new()，事情恐怕就没有这么简单了。</p>
+<h3 id="重载operator-new的困境">2.5 重载::operator new()的困境</h3>
+<p>首先，重载::operator
+new()不会给C语言的库带来任何麻烦。当然，重载它得到的三点好处也无法让C语言的库享受到。以下仅考虑C++
+library和主程序。</p>
+<h4 id="规则1绝对不能在library里重载operator-new"><strong>规则1：绝对不能在library里重载::operator
+new()</strong></h4>
+<p>如果你是某个library的作者，你的library要提供给别人使用，那么你无权重载全局::operator
+new(size_t)（注意这是前面提到的第一种重载方式），因为这非常具有侵略性：任何用到你的library的程序都被迫使用了你重载的::operator
+new()，而别人很可能不愿意这么做。另外，如果有两个library都试图重载::operator
+new(size_t)，那么它们会打架，我估计会发生duplicated symbol link
+error。（这还算是好的，如果某个实现偷偷覆盖了另一个实现，会在运行时发生诡异的现象。）干脆，作为library的编写者，大家都不要重载::operator
+new(size_t)好了。</p>
+<p>那么第二种重载方式呢？</p>
+<p>首先，::operator new(size_t size, const char* file, int
+line)这种方式得到的void*指针必须同时能被::operator
+delete(void*)和::operator delete(void* p, const char* file, int
+line)这两个函数释放。这时候你需要决定，你的::operator new(size_t size,
+const char* file, int line)返回的指针是不是兼容系统默认的::operator
+delete(void*)。</p>
+<p>如果不兼容（也就是说不能用系统默认的::operator
+delete(void*)来释放内存），那么你得重载::operator
+delete(void*)，让它的行为与你的::operator new(size_t size, const char*
+file, int line)匹配。一旦你决定重载::operator
+delete(void*)，那么你必须重载::operator
+new(size_t)，这就回到了规则1：你无权重载全局::operator new(size_t)。</p>
+<p>如果选择兼容系统默认的::operator delete(void*)，那么你在::operator
+new(size_t size, const char* file, int
+line)里能做的事情非常有限，比方说你不能额外动态分配内存来做housekeeping或保存统计数据（无论显式还是隐式），因为系统默认的::operator
+delete(void*)不会释放你额外分配的内存。（这里隐式分配内存指的是往std::map这样的容器里添加元素。）看到这里，估计很多人已经晕了，但这还没完。</p>
+<p>其次，在library里重载::operator new(size_t size, const char* file,
+int
+line)还涉及你的重载要不要暴露给library的使用者（其他library或主程序）。这里“暴露”有两层意思：</p>
+<ol type="1">
+<li>包含你的头文件的代码会不会用你重载的::operator new()，</li>
+<li>重载之后的::operator
+new()分配的内存能不能在你的library之外被安全地释放。如果不行，那么你是不是要暴露某个接口函数来让使用者安全地释放内存？或者返回shared_ptr，利用其“捕获”析构动作（deleter）的特性？（s1.10）</li>
+</ol>
+<p>听上去好像挺复杂？这里就不一一展开讨论了。总之，作为library的作者，我建议你绝对不要动“重载::operator
+new()”的念头。</p>
+<h4 id="事实2在主程序里重载operator-new的作用不大"><strong>事实2：在主程序里重载::operator
+new()的作用不大</strong></h4>
+<p>这不是一条规则，而是我试图说明这么做没有多大意义。</p>
+<p>如果用第一种方式重载全局::operator
+new(size_t)，会影响本程序用到的所有C++
+library，这么做或许不会有什么问题，不过我建议你使用<span class="math inline">\(\S12.2.6\)</span>介绍的更简单的“替代办法”。</p>
+<p>如果用第二种方式重载::operator new(size_t size, const char* file, int
+line)，那么你的行为是否惠及本程序用到的其他C++
+library呢？比方说你要不要统计C++
+library中的内存使用情况？如果某个library会返回它自己用new分配的内存和对象，让你用完之后自己释放，那么是否打算对错误释放内存做检查？</p>
+<p>C++ library在代码组织上有两种形式：</p>
+<ol type="1">
+<li>以头文件方式提供（如以STL和Boost为代表的模板库）；</li>
+<li>以库文件+二进制库文件方式提供（大多数非模板库以此方式发布）。</li>
+</ol>
+<p>对于纯以头文件方式实现的library，可以在你的程序的每个.cpp文件的第一行包含重载::operator
+new()的头文件，这样程序里用到的其他C++ library也会转而使用你的::operator
+new()来分配内存。当然这是一种相当有侵略性的做法，如果运气好，编译和运行都没问题；如果运气差一点，可能会遇到编译错误，这其实还不算坏事；如果运气更差一点，编译没有错误，运行的时候时不时地出现非法访问间，导致segment
+fault；或者在某些情况下你定制的分配策略与library有冲突，内存数据损坏，出现莫名其妙的行为。</p>
+<p>对于以库文件方式实现的library，这么做并不能让其受惠，因为library的源代码已经编译成了二进制代码，它不会调用你新重载的::operator
+new。（想想看，已经编译的二进制代码怎么可能提供额外的new(<strong>FILE</strong>,
+<strong>LINE</strong>)参数呢？）更麻烦的是，如果某些头文件有inline
+function，还会引起异的“串扰”。即library有的部分用了你的分配器，有的部分用了系统默认的分配器，然后在释放内存的时候没有给对地方，造成分配器的数据结构被破坏。</p>
+<p>总之，第二种重载方式看似功能更丰富，但其实与程序里使用的其他C++
+library很难无缝配合。</p>
+<p>综上，对于现实生活中的C++项目，重载::operator
+new()几乎没有用武之地，因为很难处理好与程序所用的C++
+library的关系，毕竟大多数library在设计的时候没有考虑到你会重载::operator
+new()并强塞给它。</p>
+<p>如果确实需要定制内存分配，该如何办？</p>
+<h3 id="解决办法替换malloc">2.6 解决办法：替换malloc()</h3>
+<p>很简单，替换malloc()。如果需要，直接从malloc层面入手，通过LD_PRELOAD来加载一个.so，其中有malloc/free的替代实现（drop-in
+replacement），这样能同时为C和C++代码服务，而且避免C++重载::operator
+new()的阴暗角落。</p>
+<p>对于“检测内存错误”这一用法，我们可以用valgrind、dmalloc、efence来达到相同的目的，专业的除错工具比自己“山寨”一个内存检查器要靠谱。</p>
+<p>对于“统计内存使用数据”，替换malloc同样能得到足够的信息，因为我们可以用backtrace()函数来获得调用栈，这比new(__FILE__,
+<strong>LINE__)的信息更丰富。比方说你通过分析(__FILE</strong>,
+__LINE__)发现std::string大量分配释放内存，有超出预期的开销，但是你却不知道代码里哪一部分在反复创建和销毁std::string对象，因为(__FILE__,
+__LINE__)只能告诉你最内层的调用函数。用backtrace()能找到真正的发起调用者。</p>
+<p>对于“性能优化”这一用法，我认为在当前的多线程开发中，自己已实现一个能打败系统默认的malloc的内存分配器是不现实的。一个通用的内存分配器本来就有相当的难度，为多线程程序实现一个安全和高效的通用（全局）内存分配器超出了一般开发人员的能力。不如使用现有的针对多核多线程优化的malloc，例如Google
+tcmalloc和Intel
+TBB里的内存分配器。好在这些allocator都不是侵入式的，也无需重载::operator
+new()。</p>
+<h3 id="为单独的class重载operator-new有问题吗">2.7
+为单独的class重载::operator new()有问题吗</h3>
+<p>与全局::operator new()不同，per-class operator new()和operator
+delete()的影响面要小得多，它只影响本class及其派生类。似乎重载member::operator
+new()是可行的。我对此持反对态度。</p>
+<p>如果一个class Node需要重载member::operator
+new()，说明它用到了特殊的内存分配策略，常见的情况是使用了内存池或对象池。我宁愿把这一事实明显地摆出来，而不是改变new
+Node语句的默认行为。具体地说，是用factory来创建对象，比如static Node*
+Node::createNode()或者static shared_ptr&lt;Node&gt;
+Node::createNode()。</p>
+<p>这可以归结为最小惊讶原则：如果我在代码里读到Node* p = new
+Node，我会认为它在heap上分配了内存。如果Node class重载了member::operator
+new()，那么我要事先仔细阅读node.h才能发现其实这行代码使用了私有的内存池。为什么写得不明确一点呢？写成Node*
+p =
+NodeFactory::createNode()，那么我能猜到NodeFactory::createNode()肯定做了什么与new
+Node不一样的事情，免得将来大吃一惊。</p>
+<p>"The Zen of Python"说"explicit is better than
+implicit"，我深信不疑。</p>
+<h3 id="有必要自行定制内存分配器吗">2.8 有必要自行定制内存分配器吗</h3>
+<p>如果写一个简单的只能分配固定大小的allocator，确实很容易做到比系统的malloc更快，因为每次分配操作就是移动一下指针。但是我认为普通程序员很难写出可以与libc的malloc相媲美的通用内存分配器，在多核多线程时代更是如此。因为libc有专人维护，会不断把适合新硬件体系结构的分配算法与策略整合进去。</p>
+<h2 id="带符号整数的除法与余数">3. 带符号整数的除法与余数</h2>
+<p>最近研究整数到字符串的转换，读到了Matthew Wilson的《Efficient Integer
+to String
+Conversions》系列文章。他的巧妙之处在于，用一个对称的digits数组搞定了负数转换的边界条件（二进制补码的正负整数表示范围不对称）。代码大致如下，经过改写：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">const</span> <span class="hljs-type">char</span>* <span class="hljs-title">convert</span><span class="hljs-params">(<span class="hljs-type">char</span> buf[<span class="hljs-number">11</span>], <span class="hljs-type">int</span> value)</span> </span>&#123;<br>    <span class="hljs-type">static</span> <span class="hljs-type">char</span> digits[<span class="hljs-number">19</span>] = <span class="hljs-string">&quot;9876543210123456789&quot;</span>;<br>    <span class="hljs-type">static</span> <span class="hljs-type">const</span> <span class="hljs-type">char</span>* zero = digits + <span class="hljs-number">9</span>; <span class="hljs-comment">// zero 指向 &#x27;0&#x27;</span><br>    <span class="hljs-comment">// works for: -2147483648 to 2147483647</span><br>    <span class="hljs-type">int</span> i = value;<br>    <span class="hljs-type">char</span>* p = buf;<br>    <span class="hljs-keyword">do</span> &#123;<br>        <span class="hljs-comment">// lsd - least significant digit</span><br>        <span class="hljs-type">int</span> lsd = i % <span class="hljs-number">10</span>; <span class="hljs-comment">// lsd可能小于0</span><br>        i /= <span class="hljs-number">10</span>;<br>        <span class="hljs-comment">// 是向下取整还是向零取整？</span><br>        *p++ = zero[lsd]; <span class="hljs-comment">// 下标可能为负</span><br>    &#125; <span class="hljs-keyword">while</span> (i != <span class="hljs-number">0</span>);<br>    <span class="hljs-keyword">if</span> (value &lt; <span class="hljs-number">0</span>) &#123;<br>        *p++ = <span class="hljs-string">&#x27;-&#x27;</span>;<br>    &#125;<br>    *p = <span class="hljs-string">&#x27;\0&#x27;</span>;<br>    std::<span class="hljs-built_in">reverse</span>(buf, p);<br>    <span class="hljs-keyword">return</span> p; <span class="hljs-comment">// p - buf 为整数长度</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这段简短的代码对32-bit
+int的全部取值都是正确的（从-2147483648到2147483647）。<strong>可以视为itoa()的参考实现，算是面试的标准答案。</strong></p>
+<p>读到这份代码，我的心中顿时升起一个疑虑：《C Traps and
+Pitfalls》第7.7节讲到，C语言中的整数除法（/）和取模（%）运算在操作数为负的时候，结果是implementation-defined。</p>
+<p>也就是说，如果m、d都是整数，</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">int</span> q = m / d;<br><span class="hljs-type">int</span> r = m % d;<br></code></pre></td></tr></table></figure>
+<p>那么C语言只保证m = q × d +
+r。如果m、d当中有负数，那么q和r的正负号是由实现决定的。比如(-13)/4=(-3)或(-13)/4=(-4)都是合法的。如果采用后一种实现，那么这段转换代码就错了（因为将有(-1)%10=9）。只有商向0取整，代码才能正常工作。</p>
+<p>为了弄清这个问题，我研究了一番。</p>
+<h3 id="语言标准怎么说">3.1 语言标准怎么说</h3>
+<ul>
+<li><p><strong>C89</strong>：我手头没有ANSI
+C89的文稿，只好求助于[K&amp;R]，此书第41页第2.5节讲到“The direction of
+truncation for / and the sign of the result for % are machine dependent
+for negative
+operands...”确实是实现相关的。为此，C89专门提供了div函数，这个函数算出的商是向0取整的，便于编写可移植的程序。我得再去查C++标准。</p></li>
+<li><p><strong>C++98</strong>：第5.6.4节写道：“If the second operand of
+/ or % is zero the behavior is undefined; otherwise (a/b) * b + a % b is
+equal to a. If both operands are nonnegative then the remainder is
+nonnegative; if not, the sign of the remainder is
+implementation-defined.”
+C++也没有规定余数的正负号（C++03的叙述与此一模一样）。</p>
+<p>不过这里有一个注脚，提到“According to work underway toward the
+revision of ISO C, the preferred algorithm for integer division follows
+the rules defined in the ISO Fortran standard, ISO/IEC 1539:1991, in
+which the quotient is always rounded toward
+zero.”即C语言的修订标准会采用和Fortran一样的取整算法。我又去查了C99标准。</p></li>
+<li><p><strong>C99</strong>：第6.5.5.6节说“When integers are divided,
+the result of the / operator is the algebraic quotient with any
+fractional part discarded.”（脚注：This is often called "truncation
+toward zero"）</p>
+<p>C99明确规定了商是向0取整的，也就是意味着余数的符号与被除数相同，前面的转换算法能正常工作。C99
+Rationale提到了这个规定的原因：“In Fortran, however, the result will
+always truncate toward zero, and the overhead seems to be acceptable to
+the numeric programming community. Therefore, C99 now requires similar
+behavior, which should facilitate porting of code from Fortran to
+C.”既然Fortran在数值计算领域都做了如此规定，说明开销（如果有的话）是可以接受的。</p></li>
+<li><p><strong>C++11</strong>：标准第5.6.4节采用了与C99类似的表述：“For
+integral operands the / operator yields the algebraic quotient with any
+fractional part discarded; (This is often called truncation towards
+zero.)”可见C++还是尽力保持与C的兼容性。</p></li>
+</ul>
+<h4 id="小结">小结</h4>
+<p>C89和C++98都留给实现去决定，<strong>而C99和C++11都规定商向0取整</strong>，这算是语言的进步吧。</p>
+<h3 id="cc编译器的表现">3.2 C/C++编译器的表现</h3>
+<p>我主要关心G++和VC++这两个编译器。需要说明的是，用代码案例来探查编译器的行为是靠不住的，尽管前面的代码在两个编译器下都能正常工作。除非在文档里有明确表述，否则编译器可能会随时更改实现——毕竟我们关心的就是implementation-defined行为。</p>
+<ul>
+<li><p><strong>G++ 4.4.1</strong>：GCC always follows the C99
+requirement that the result of division is truncated towards zero.
+G++一直遵循C99规范，商向0取整，算法能正常工作。</p></li>
+<li><p><strong>Visual C++ 2008</strong>：The sign of the remainder is
+the same as the sign of the dividend.
+这个说法与商向0取整是等价的，算法也能正常工作。</p></li>
+</ul>
+<h3 id="其他语言的规定">3.3 其他语言的规定</h3>
+<p>既然C89/C++98/C99/C++11已经很有多样性了，索性弄清楚其他语言是怎么定义整数除法的。这里只列出笔者接触过的几种常用语言。</p>
+<ul>
+<li><p><strong>Java</strong>：Java语言规范明确说“Integer division rounds
+towards
+zero”。另外对于int整数除法溢出，特别规定不抛异常，且-2147483648/-1=-2147483648（以及相应的long版本）。</p></li>
+<li><p><strong>C#</strong>：C# 3.0语言规定“The division rounds the
+result towards
+zero”。对于溢出的情况，规定在checked上下文中抛ArithmeticException异常；在unchecked上下文中没有明确规定，可抛可不抛。（据了解，C#
+1.0/2.0可能有所不同。）</p></li>
+<li><p><strong>Python</strong>：Python在语言参考手册的显著位置标明，商是向负无穷取整。（Plain
+or long integer division yields an integer of the same type; the result
+is that of mathematical division with the 'floor' function applied to
+the result.）</p></li>
+<li><p><strong>Ruby</strong>：Ruby的语言手册没有明说，不过库的手册说明了也是向负无穷取整。（The
+quotient is rounded toward -infinity.）</p></li>
+<li><p><strong>Perl</strong>：Perl语言默认按浮点数来计算除法，所以没有这个问题。Perl的整数取模运算规则与Python/Ruby一致。</p></li>
+</ul>
+<p>不过要注意，use integer;有可能会改变运算结果，例如：</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs perl"><span class="hljs-keyword">print</span> -<span class="hljs-number">10</span> % <span class="hljs-number">3</span>; <span class="hljs-regexp">//</span> =&gt; <span class="hljs-number">2</span><br><span class="hljs-keyword">use</span> integer;<br><span class="hljs-keyword">print</span> -<span class="hljs-number">10</span> % <span class="hljs-number">3</span>; <span class="hljs-regexp">//</span> =&gt; -<span class="hljs-number">1</span><br></code></pre></td></tr></table></figure>
+<ul>
+<li><strong>Lua</strong>：Lua缺省没有整数类型，除法一律按浮点数来算，因此不涉及商的取整。</li>
+</ul>
+<h3 id="硬件实现">3.4 硬件实现</h3>
+<p>既然C/C++以效率著称，那么应该是贴近硬件实现的。我考察了几种常见的硬件平台，它们基本都支持C99/C++11的语义，也就是说新规定没有额外开销。列举如下。（其实我们只关心带符号除法，不过为了完整性，这里一并列出unsigned/signed整数除法指令。）</p>
+<ul>
+<li><p><strong>Intel x86/x64</strong>：Intel
+x86系列的DIV/IDIV指令明确提到是向0取整，与C99、C++11、Java、C#一致.</p></li>
+<li><p><strong>MIPS</strong>：很奇怪，我在MIPS的参考手册里没有查到DIV/DIVU指令的取整方向，不过根据Patterson
+&amp; Hennessy的讲解，似乎向0取整硬件上实现起来比较容易。</p></li>
+<li><p><strong>ARM/Cortex-M3</strong>：ARM没有硬件除法指令，所以不存在这个问题。Cortex-M3有硬件除法，SDIV/UDIV指令都是向0取整的。Cortex-M3的除法指令不能同时算出余数，这很特殊。</p></li>
+<li><p><strong>MMIX</strong>：MMIX是Donald Knuth设计的64-bit
+CPU，替换原来的MIX机器。DIV和DIVU指令都是向负无穷取整，这是我知道的唯一支持Python/Ruby语义的“硬件”平台。</p></li>
+</ul>
+<h5 id="总结">总结</h5>
+<p>想不到小小的整数除法都有这么多名堂。一段只涉及整数运算的代码，即便能在各种语法相似的语言里运行，结果也可能完全不同。把C语言里运行得好好的整数运算代码原样复制到Python里，也可能因为负数除法而出错。反之亦然，用Python编写的原型代码移植到C/C++单也可能出现行为异常，不可不察。</p>
+<p>在实际项目中，可以使用特定的指令加速，参见http://www.itepub.com/articles/sse-itoa.html。</p>
+<h2 id="在单元测试中mock系统调用">4. 在单元测试中mock系统调用</h2>
+<p>本书<span class="math inline">\(\S9.7\)</span>曾经谈到单元测试在分布式程序开发中的优缺点（主要是缺点）。但是，在某些情况下，单元测试是很有必要的，在测试failure场景的时候尤其重要，比如：</p>
+<ul>
+<li>在开发存储系统时，模拟read(2)/write(2)返回EIO错误（有可能是磁盘写满了，也有可能是磁盘出现了坏道读不出数据）。</li>
+<li>在开发网络库的时候，模拟write(2)返回EPIPE错误（对方意外断开连接）。</li>
+<li>在开发网络库的时候，模拟自连接（self-connection），网络库应该用getsockname(2)和getpeername(2)判断是否是自连接，然后断开之。</li>
+<li>在开发网络库的时候，模拟本地ephemeral
+port耗尽，connect(2)返回EAGAIN临时错误。</li>
+<li>让gethostbyname(2)返回我们预设的值，防止单元测试给公司的DNS
+Server带来太大压力。</li>
+</ul>
+<p>这些testcase恐怕很难用前文提到的test
+harness来测试，该单元测试上场了。</p>
+<p>现在的问题是，如何mock这些系统函数？或者换句话说，如何把对系统函数的依赖注入被测程序中？</p>
+<h3 id="系统函数的依赖注入">4.1 系统函数的依赖注入</h3>
+<p>在《修改代码的艺术》[WELC]一书第4.3.2节中，作者介绍了链接期接缝（link
+seam），正好可以解决我们的问题。另外，在StackOverflow的一个帖子里也总结了几种做法。</p>
+<p>如果程序（库）在编写的时候就考虑了可测试性，那么用不到上面的hack手段，我们可以从设计上解决依赖注入的问题。这里提供两个思路。</p>
+<ul>
+<li><strong>其一采用传统的面向对象的手法</strong>，借助运行期的迟绑定实现注入与替换。</li>
+</ul>
+<p>自己写一个System
+interface，把程序里用到的open、close、read、write、connect、bind、listen、accept、gethostname、getpeername、getsockname等等函数统统用虚函数封装一层。然后在代码里不要直接调用open，而是调用System::instance().open。这样代码主动把控制权交给了System
+interface，我们可以在这里动动手脚。在写单元测试的时候，把这个singleton
+instance替换为我们的mock object，这样就能模拟各种error code。</p>
+<ul>
+<li><strong>其二采用编译期或链接期的迟绑定</strong>。</li>
+</ul>
+<p>注意到在第一种做法中，运行期多态是不必要的，因为程序从生到死只会用到一个implementation
+object。为此付出虚函数调用的代价似乎有些不值。（其实，跟系统调用比起来，虚函数这点开销可忽略不计。）</p>
+<p>我们可以写一个system
+namespace头文件，在其中声明read()和write()等普通版函数，然后在.cc文件里转发给对应系统的系统函数::read()和::write等。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// muduo/net/SocketsOps.h</span><br><span class="hljs-keyword">namespace</span> sockets &#123;<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">connect</span><span class="hljs-params">(<span class="hljs-type">int</span> sockfd, <span class="hljs-type">const</span> <span class="hljs-keyword">struct</span> sockaddr_in&amp; addr)</span></span>;<br>&#125;<br><br><span class="hljs-comment">// muduo/net/SocketsOps.cc</span><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">sockets::connect</span><span class="hljs-params">(<span class="hljs-type">int</span> sockfd, <span class="hljs-type">const</span> <span class="hljs-keyword">struct</span> sockaddr_in&amp; addr)</span> </span>&#123;<br>    <span class="hljs-keyword">return</span> ::<span class="hljs-built_in">connect</span>(sockfd, <span class="hljs-built_in">sockaddr_cast</span>(&amp;addr), <span class="hljs-keyword">sizeof</span> addr);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>有了这么一层间接性，就可以在编写单元测试的时候动动手脚，链接我们的stub实现，以达到替换实现的目的：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// MockSocketsOps.cc</span><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">sockets::connect</span><span class="hljs-params">(<span class="hljs-type">int</span> sockfd, <span class="hljs-type">const</span> <span class="hljs-keyword">struct</span> sockaddr_in&amp; addr)</span> </span>&#123;<br>    errno = EAGAIN;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>一个C++程序只能有一个main()入口，所以要先把程序做成library，再用单元测试代码链接这个library。假设有一个mynetcat程序，为了编写C++单元测试，我们把它拆成两部分，即library和main()，源文件分别是mynetcat.cc和main.cc。</p>
+<p>在编译普通程序的时候：</p>
+<p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">g++ main.cc mynetcat.cc SocketsOps.cc -o mynetcat<br></code></pre></td></tr></table></figure></p>
+<p>在编译单元测试时这么写：</p>
+<p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">g++ test.cc mynetcat.cc MockSocketsOps.cc -o <span class="hljs-built_in">test</span><br></code></pre></td></tr></table></figure></p>
+<p>以上是最简单的例子。在实际开发中可以让stub功能更强大一些，比如根据不同的testcase返回不同的错误。</p>
+<p>第二种做法无须用到虚函数，代码写起来也比较简洁，只用前缀sockets::即可。例如在应用程序的代码里写sockets::connect(fd,
+addr)。</p>
+<p>namespace的好处在于它不是封闭的，我们可以随时打开往里添加新的函数，而不用改动原来的头文件。这也是以non-member
+non-friend函数为接口的优点。</p>
+<p>以上两种做法还有一个好处，即只mock我们关心的部分代码。如果程序用到了SQLite或BerkeleyDB这些会访问本地文件系统的第三方库，那么我们的System
+interface或system
+namespace不会拦截这些第三方库的open(2)、close(2)、read(2)、write(2)等系统调用。</p>
+<h3 id="链接期垫片link-seam">4.2 链接期垫片（link seam）</h3>
+<p>如果程序在一开始编码的时候没有考虑单元测试，那么又该如何注入mock系统调用呢？</p>
+<p>上面第二种做法已经给出了答案，那就是使用link seam（链接期垫片）。</p>
+<p>比方说要仿冒connect(2)函数，那么我们在单元测试程序里实现一个自己的connect函数，它遮盖了同名的系统函数。在链接的时候，linker会优先采用我们自己定义的函数。（这对动态链接是成立的；如果是静态链接，会报multiple
+definition错误。好在绝大多数情况下libc是动态链接的。）</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// mock connect(2)</span><br><span class="hljs-function"><span class="hljs-keyword">typedef</span> <span class="hljs-title">int</span> <span class="hljs-params">(*<span class="hljs-type">connect_func_t</span>)</span><span class="hljs-params">(<span class="hljs-type">int</span> sockfd,</span></span><br><span class="hljs-params"><span class="hljs-function">                              <span class="hljs-type">const</span> <span class="hljs-keyword">struct</span> sockaddr* addr,</span></span><br><span class="hljs-params"><span class="hljs-function">                              <span class="hljs-type">socklen_t</span> addrlen)</span></span>;<br><br><span class="hljs-type">connect_func_t</span> connect_func = <span class="hljs-built_in">dlsym</span>(RTLD_NEXT, <span class="hljs-string">&quot;connect&quot;</span>);<br><span class="hljs-type">bool</span> mock_connect;<br><span class="hljs-type">int</span> mock_connect_errno;<br><br><span class="hljs-comment">// mock connect</span><br><span class="hljs-keyword">extern</span> <span class="hljs-string">&quot;C&quot;</span> <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">connect</span><span class="hljs-params">(<span class="hljs-type">int</span> sockfd,</span></span><br><span class="hljs-params"><span class="hljs-function">                        <span class="hljs-type">const</span> <span class="hljs-keyword">struct</span> sockaddr* addr,</span></span><br><span class="hljs-params"><span class="hljs-function">                        <span class="hljs-type">socklen_t</span> addrlen)</span> </span>&#123;<br>    <span class="hljs-keyword">if</span> (mock_connect) &#123;<br>        errno = mock_connect_errno;<br>        <span class="hljs-keyword">return</span> errno == <span class="hljs-number">0</span> ? <span class="hljs-number">0</span> : <span class="hljs-number">-1</span>;<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">connect_func</span>(sockfd, addr, addrlen);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>如果程序真的要调用connect(2)怎么办？在我们自己的mock
+connect(2)里不能再调用connect()了，否则会出现无限递归。为了防止这种情况，我们用dlsym(RTLD_NEXT,
+"connect")获得connect(2)系统函数的真实地址，然后通过函数指针connect_func来调用它。</p>
+<p>例子：ZooKeeper的C client library</p>
+<p>ZooKeeper的C client library正是采用了link
+seams来编写单元测试，代码见：</p>
+<ul>
+<li>http://svn.apache.org/repos/asf/zookeeper/tags/release-3.3.3/src/c/tests/LibCMocks.h</li>
+<li>http://svn.apache.org/repos/asf/zookeeper/tags/release-3.3.3/src/c/tests/LibCMocks.cc</li>
+</ul>
+<p>其他做法</p>
+<p>StackOverflow的帖子里还提到了一个做法，可以方便地替换动态库里的函数，即使用ld(1)的--wrap参数，文档里说得很清楚，这里不再赘述。</p>
+<p>第三方C++库</p>
+<p>Link seam同样适用于第三方C++库。比方说公司的某个基础库团队提供了File
+class，但是这个class没有使用虚函数，我们无法通过sub-classing的办法来实现mock
+object。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// File.h</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">File</span> : boost::noncopyable &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">File</span>(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* filename);<br>    ~<span class="hljs-built_in">File</span>();<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">readn</span><span class="hljs-params">(<span class="hljs-type">void</span>* data, <span class="hljs-type">int</span> len)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">writen</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">void</span>* data, <span class="hljs-type">int</span> len)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">size_t</span> <span class="hljs-title">getsize</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;<br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-comment">// ...</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>如果需要为用到File
+class的程序编写单元测试，那么我们可以自己定义其成员函数的实现，这样可以注入任何我们想要的结果。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// MockFile.cc</span><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">File::readn</span><span class="hljs-params">(<span class="hljs-type">void</span>* data, <span class="hljs-type">int</span> len)</span> </span>&#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这个做法对动态库是可行的，但对于静态库则会报错。我们要么让对方提供专供单元测试的动态库，要么拿过源码来自己编译一个。</p>
+<p>Java也有类似的做法，在classpath里替换我们自己的stub
+jar文件，以实现link seam。不过Java有很强的反射机制，很少用得着link
+seam来实现依赖注入。</p>
+<h2 id="慎用匿名namespace">5. 慎用匿名namespace</h2>
+<p>匿名namespace（anonymous namespace或称unnamed
+namespace）是C++语言的一项非常有用的功能，其主要目的是让该namespace中的成员（变量或函数）具有独一无二的全局名称，避免名字碰撞（name
+collisions）。一般在编写.cpp文件时，如果需要写一些小的helper函数，我们常常会放到匿名namespace里。muduo
+0.1.7中的muduo/base/Date.cc和muduo/base/Thread.cc等处就用到了匿名namespace。</p>
+<p>我最近在工作中遇到并重新思考了这一问题，发现匿名namespace并不是多多益善。</p>
+<h3 id="c语言的static关键字的两种用法">5.1
+C语言的static关键字的两种用法</h3>
+<p>C语言的static关键字有两种用途：</p>
+<ul>
+<li><p><strong>第1种用于函数内部修饰变量</strong>，即函数内的静态变量。这种变量的生存期长于该函数，使得函数具有一定的“状态”。使用静态变量的函数一般是不可重入的，也不是线程安全的，比如strtok(3)。</p></li>
+<li><p><strong>第2种用在文件级别（函数体之外）</strong>，修饰变量或函数，表示该变量或函数只在本文件可见，其他文件看不到、也访问不到该变量或函数。专业的说法叫“具有internal
+linkage”（简言之：不暴露给别的translation unit）。</p></li>
+</ul>
+<p>C语言的这两种用法很明确，一般也不容易混淆。</p>
+<h3 id="c语言的static关键字的四种用法">5.2
+C++语言的static关键字的四种用法</h3>
+<p>由于C++引入了class，在保持与C语言兼容的同时，static关键字又有了两种新用法：</p>
+<ul>
+<li><p><strong>第3种用于修饰class的数据成员</strong>，即所谓“静态成员”。这种数据成员的生存期大于class的对象（实体/instance）。静态数据成员是每个class有一份，普通数据成员是每个instance有一份，因此也分别叫做class
+variable和instance variable。</p></li>
+<li><p><strong>第4种用于修饰class的成员函数</strong>，即所谓“静态成员函数”。这种成员函数只能访问class
+variable和其他静态成员函数，不能访问instance variable或instance
+method.</p></li>
+</ul>
+<p>当然，这四种用法可以相互组合，比如C++的成员函数（无论static还是instance）都可以有其局部的静态变量（上面的用法1）。对于class
+template和function template，其中的static对象的真正个数跟template
+instantiation（模板具现化）有关，相信学过C++模板的人不会陌生。</p>
+<p>可见在C++里static被overload了多次。匿名namespace的引入是为了减轻static的负担，它替换了static的第2种用途。也就是说，在C++里不必使用文件级的static关键字，我们可以用匿名namespace达到相同的效果。（其实严格地说，linkage或许稍有不同，这里不展开讨论了。）</p>
+<h3 id="匿名namespace的不利之处">5.3 匿名namespace的不利之处</h3>
+<p>在工程实践中，匿名namespace有两大不利之处：</p>
+<ol type="1">
+<li><p><strong>匿名namespace中的函数是“匿名”的</strong>，那么在确实需要引用它的时候就比较麻烦。比如在调试的时候不使给其中的函数设断点，如果你像我一样使用的是gdb这样的文本模式debugger；又比如profiler的输出结果也不容易判别到底是哪个文件中的calculate()函数需要优化。</p></li>
+<li><p><strong>使用某些版本的g++时，同一个文件每次编译出来的二进制文件会变化</strong>。比如说拿到一个会发生coredump的二进制可执行文件，无法确定它是由哪个revision的代码编译出来的。毕竟编译结果不可复现，具有一定的随机性。（当然，在正式场合，这应该由软件配置管理（SCM）流程来解决。）</p></li>
+</ol>
+<p>另外这也可能让某些build
+tool失灵，如果该工具用到了编译出来的二进制文件的MD5的话。</p>
+<p>考虑下面这段简短的代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// anon.cc</span><br><span class="hljs-keyword">namespace</span> &#123;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">foo</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-comment">// ...</span><br>    &#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-built_in">foo</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>对于问题1：gdb的&lt;tab&gt;键自动补全功能能帮我们设定断点，不是什么大问题。前提是你知道那个“(anonymous
+namespace)::foo()”正是你想要的函数。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ gdb ./a.out<br>GNU gdb (GDB) 7.0.1-debian<br>(gdb) b <span class="hljs-string">&quot;&lt;tab&gt;&quot;</span><br>(anonymous namespace)::foo()<br>(gdb) b (anonymous namespace)::foo()<br>Breakpoint 1 at 0x400588: file anon.cc, line 4.<br></code></pre></td></tr></table></figure>
+<p>麻烦的是，如果两个文件anon.cc和anonlib.cc都定义了匿名空间中的foo()函数（这不会冲突），那么gdb无法区分这两个函数，你只能给其中一个设断点。或者你使用文件名：行号的方式来分别设断点。（从技术上说，匿名namespace中的函数是weak
+text，链接的时候如果发生符号重名，linker不会报错。）</p>
+<p>从根本上解决的办法是使用普通具名namespace，如果怕重名，可以把源文件名（必要时加上路径）作为namespace名字的一部分。</p>
+<p>对于问题2：把anon.cc编译两次，分别生成a.out和b.out：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ g++ --version<br>g++ (Ubuntu 4.2.4-1ubuntu4) 4.2.4<br>$ g++ -g -o a.out anon.cc<br>$ g++ -g -o b.out anon.cc<br>$ <span class="hljs-built_in">md5sum</span> a.out b.out<br>0f7a9cc15af7ab1e57af17ba16afcd70 a.out<br>8f22fc2bbfc27beb922aefa97d174e3b b.out<br>$ diff -u &lt;(nm a.out) &lt;(nm b.out)<br>--- /dev/fd/63 2011-02-15 22:27:58.960754999 +0800<br>+++ /dev/fd/62 2011-02-15 22:27:58.960754999 +0800<br>@@ -2,7 +2,7 @@<br>0000000000600940 d _GLOBAL_OFFSET_TABLE_<br>0000000000400634 R _IO_stdin_used<br>w _Jv_RegisterClasses<br>-0000000000400538 t _ZN36_GLOBAL__N_anon.cc_00000000_E2CEEB513fooEv<br>+0000000000400538 t _ZN36_GLOBAL__N_anon.cc_00000000_CB51498D3fooEv<br>0000000000600748 d _CTOR_END_<br>0000000000600740 d _CTOR_LIST_<br>0000000000600758 d _DTOR_END_<br></code></pre></td></tr></table></figure>
+<p>由上可见，g++
+4.2.4会随机地给匿名namespace生成一个唯一的名字（foo()函数的mangled
+name中的E2CEEB51和CB51498D是随机的），以保证名字不冲突。也就是说，同样的源文件，两次编译得到的二进制文件内容不相同，这有时候会造成问题或困惑。</p>
+<p>这可以用gcc的-frandom-seed参数解决，具体见gcc文档。</p>
+<p>这个现象在gcc 4.2.4中存在（之前的版本估计类似），在gcc
+4.4.5中不存在。</p>
+<h3 id="替代办法">5.4 替代办法</h3>
+<p>如果前面的“不利之处”给你带来了困扰，解决办法也很简单，就是使用普通具名namespace。当然，要起一个好的名字，比如Boost里就常常用boost::detail来放那些“不应该暴露给客户，但又不得不放到头文件里”的函数或class。</p>
+<p>总而言之，匿名namespace没什么大问题，使用它也不是什么过错。万一它碍事了，可以用普通具名namespace替代之。</p>
+<h2 id="采用有利于版本管理的代码格式">6.
+采用有利于版本管理的代码格式</h2>
+<p>版本管理（version
+controlling）是每个程序员的基本技能，C++程序员也不例外。版本管理的基本功能之一是追踪代码变化，让你能清楚地知道代码是如何一步步变成现在的这个样子的，以及每次check-in都具体改动了哪些内部。无论是传统的集中式版本管理工具，如Subversion，还是新型的分布式管理工具，如Git/Hg，比较两个版本（revision）的差异都是其基本功能，即俗称“做一下diff”。</p>
+<p>diff的输出是个窥孔（peephole），它的上下文有限（diff-u默认显示前后3行）。在做code
+review的时候，如果仅凭这“一孔之见”就能发现代码改动有问题，那就再好不过了。</p>
+<p>C和C++都是自由格式的语言，代码中的换行符被当做white
+space来对待。（当然，我们说的是预处理（preprocess）之后的情况）。对编译器来说一模一样的代码可以有多种写法，比如</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-built_in">foo</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>);<br></code></pre></td></tr></table></figure>
+<p>和</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-built_in">foo</span>(<span class="hljs-number">1</span>,<br>    <span class="hljs-number">2</span>,<br>    <span class="hljs-number">3</span>,<br>    <span class="hljs-number">4</span>);<br></code></pre></td></tr></table></figure>
+<p>词法分析的结果是一样的，语意也完全一样。</p>
+<p>对人来说，这两种写法读起来不一样，对于版本管理工具来说，同样功能的修改造成的差异（diff）也往往不一样。所谓“有利于版本管理”，就是指在代码中合理使用换行符，对diff工具友好，让diff的结果清晰明了地表达代码的改动。diff一般以行为单位，也可以以单词为单位，本文只考虑最常见的逐行比较（diff
+by lines）。</p>
+<h3 id="对diff友好的代码格式">6.1 对diff友好的代码格式</h3>
+<ul>
+<li>**多行注释也用//，不用/* */**</li>
+</ul>
+<p>Scott Meyers写的《Effective
+C++（第2版）》第4条建议使用C++风格注释，我这里为他补充一条理由：对diff友好。比如，我要注释一大段代码（其实这不是个好的做法，但是在实践中有时会遇到），如果用/**/，那么得到的diff是：</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs diff"><span class="hljs-deletion">--a/examples/asio/tutorial/timer5/timer.cc</span><br><span class="hljs-comment">+++b/examples/asio/tutorial/timer5/timer.cc</span><br><span class="hljs-meta">@@ -18,6 +18,7 @@</span><br>class Printer : boost::noncopyable &#123;<br><span class="hljs-addition">+/*</span><br>printer<br><span class="hljs-meta">@@ -38,6 +39,7 @@</span><br>class Printer : boost::noncopyable &#123;<br>    void print2() &#123;<br></code></pre></td></tr></table></figure>
+<p>从这样的diff output能看出注释了哪些代码吗？</p>
+<p>如果用//，结果会清晰很多,同样的道理，取消注释的时候//也比/*
+*/更清晰。</p>
+<p>另外，如果用/**/来做多行注释，从df不一定能看出来你是在修改代码还是修改注释。</p>
+<ul>
+<li><strong>局部变量与成员变量的定义</strong></li>
+</ul>
+<p>基本原则是，一行代码只定义一个变量，比如</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">double</span> x;<br><span class="hljs-type">double</span> y;<br></code></pre></td></tr></table></figure>
+<p>将来代码增加一个double z的时候，diff输出一眼就能看出改了什么：</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs diff"><span class="hljs-meta">@@ -63,6 +63,7 @@</span><br>private:<br>    int count_;<br>    double x;<br>    double y;<br><span class="hljs-addition">+   double z;</span><br></code></pre></td></tr></table></figure>
+<p>如果把x和y写在一行，diff的输出就得多看几眼才知道：</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs diff"><span class="hljs-meta">@@ -61,7 +61,7 @@</span><br>private:<br>    muduo::net::EventLoop* loop1_;<br>    muduo::net::EventLoop* loop2_;<br>    int count_;<br>    double x, y;<br><span class="hljs-addition">+   double x, y, z;</span><br></code></pre></td></tr></table></figure>
+<p>所以，另外，如果用/**/来做多行注释，从df不一定能看出来你是在修改代码还是
+修改注释。比如以下diff似乎修改了muduo::EventLoop:runAfter()的调用参数：。同样的道理适用于enum成员的定义、数组的初始化列表等。</p>
+<ul>
+<li><strong>函数声明中的参数</strong></li>
+</ul>
+<p>如果函数的参数大于3个，那么在逗号后面换行，这样每个参数占一行，便于diff。以muduo::net::TcpClient为例：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// muduo/net/TcpClient.h</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">TcpClient</span> : boost::noncopyable &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">TcpClient</span>(EventLoop* loop,<br>              <span class="hljs-type">const</span> InetAddress&amp; serverAddr,<br>              <span class="hljs-type">const</span> string&amp; name);<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>如果将来TcpClient的构造函数增加或修改一个参数，那么很容易从diff看出。</p>
+<p>这恐怕比在一行长代码里数逗号要高效一些。</p>
+<ul>
+<li><p><strong>函数调用时的参数</strong></p>
+<p>在函数调用的时候，如果参数大于3个，那么把实参分行写。</p>
+<p>以muduo::net::EPollPoller为例：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// muduo/net/poller/EPollPoller.cc</span><br><span class="hljs-function">Timestamp <span class="hljs-title">EPollPoller::poll</span><span class="hljs-params">(<span class="hljs-type">int</span> timeoutMs, ChannelList* activeChannels)</span> </span>&#123;<br>    <span class="hljs-type">int</span> numEvents = ::<span class="hljs-built_in">epoll_wait</span>(epollfd_,<br>                                  &amp;*events_.<span class="hljs-built_in">begin</span>(),<br>                                  <span class="hljs-built_in">static_cast</span>&lt;<span class="hljs-type">int</span>&gt;(events_.<span class="hljs-built_in">size</span>()),<br>                                  timeoutMs);<br>    <span class="hljs-function">Timestamp <span class="hljs-title">now</span><span class="hljs-params">(Timestamp::now())</span></span>;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+<p>这样一来，如果将来重构引入了一个新参数（当然，epoll_wait不会有这个问题），那么函数定义和函数调用的地方的diff具有相同的形式（比方说都是在倒数第二行加了一行内容），很容易肉眼验证有没有错位。如果参数写在一行里边，就得静大眼睛数逗号了。</p>
+<ul>
+<li><strong>class初始化列表的写法</strong></li>
+</ul>
+<p>同样的道理，class初始化列表（initializer
+list）也遵循一行一个的原则，这样将来如果加入新的成员变量，那么两处（class定义和ctor定义）的diff具有相同的形式，让错误无所遁形。以muduo::net::Buffer为例：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// muduo/net/Buffer.h</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Buffer</span> : <span class="hljs-keyword">public</span> muduo::copyable &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-type">static</span> <span class="hljs-type">const</span> <span class="hljs-type">size_t</span> kCheapPrepend = <span class="hljs-number">8</span>;<br>    <span class="hljs-type">static</span> <span class="hljs-type">const</span> <span class="hljs-type">size_t</span> kInitialSize = <span class="hljs-number">1024</span>;<br>    <span class="hljs-built_in">Buffer</span>()<br>        : <span class="hljs-built_in">buffer_</span>(kCheapPrepend + kInitialSize),<br>          <span class="hljs-built_in">readerIndex_</span>(kCheapPrepend),<br>          <span class="hljs-built_in">writerIndex_</span>(kCheapPrepend) &#123;<br>    &#125;<br>    <span class="hljs-comment">// ...</span><br><span class="hljs-keyword">private</span>:<br>    std::vector&lt;<span class="hljs-type">char</span>&gt; buffer_;<br>    <span class="hljs-type">size_t</span> readerIndex_;<br>    <span class="hljs-type">size_t</span> writerIndex_;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>注意，初始化列表的顺序必须和数据成员声明的顺序相同。</p>
+<ul>
+<li><strong>与namespace有关的缩进</strong></li>
+</ul>
+<p><strong>Google的C++编程规范明确指出，namespace不增加缩进</strong>。这么做非常有道理，方便diff把函数名显示在每个diff
+chunk的头上。</p>
+<p>diff原本是为C语言设计的，C语言没有namespace缩进一说，所以它默认会找到“顶格写”的函数作为一个diff
+chunk的名字。如果函数名前面有空格，它就不认得了。muduo的代码都遵循这一规则，</p>
+<p>相反，Boost中的某些库的代码是按namespace来缩进的，这样的话看diff往往不知道改动的是哪个class的哪个成员函数。</p>
+<p>这个或许可以通过设置diff取函数名的正则表达式来解决，但是如果我们写代码的时候就注意把函数名“顶格写”，那么就不用去动diff的默认设置了。另外，正则表达式不能完全匹配函数名，因为函数名属于上下文无关语法（context-free
+syntax），你没办法写一个正则语法去匹配上下文无关语法。我总能写出某种函数声明，让你的正则表达式失效（想想函数的返回类型，它可能是一个非常复杂的东西，更别说参数了）。更何况C++的语法是上下文相关的，比如，你猜Foo&lt;Bar&gt;qux;是个表达式还是变量定义？</p>
+<ul>
+<li><strong>public与private</strong></li>
+</ul>
+<p>我认为这是C++语法的一个缺陷，如果我把一个成员函数从public区移到private区，那么从diff上看不出来我做了什么，对此我也没有好的解决办法，总不能在每个函数前面都写上public:或private:吧？</p>
+<p>对此Java和C#都做得比较好，它们把public/private等修饰符放到每个成员函数的定义中。这么做增加了信息的冗余度，让diff的结果更直观。</p>
+<ul>
+<li><strong>避免使用版本控制软件的keyword substitution功能</strong></li>
+</ul>
+<p>这么做是为了避免diff噪声。</p>
+<p>比方说，如果我想比较0.1.1和0.1.2两个代码分支有哪些改动，我通常会在branches目录执行diff
+0.1.1 0.1.2
+-ru。两个branch中的muduo/net/EventLoop.h其实是一样的（先后从同一个revision分支出来）。但是如果这个文件使用了Svn的keyword
+substitution功能（比如<span class="math inline">\(Id\)</span>），diff会报告这两个branches中的文件不一样，如下所示。</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs diff">diff -rup 0.1.1/muduo/net/EventLoop.h 0.1.2/muduo/net/EventLoop.h<br><span class="hljs-comment">---0.1.1/muduo/net/EventLoop.h 2011-05-02 23:11:02.000000000 +0800</span><br><span class="hljs-comment">+++0.1.2/muduo/net/EventLoop.h 2011-05-02 23:12:22.000000000 +0800</span><br><span class="hljs-meta">@@ -8,7 +8,7 @@</span><br>// This is a public header file, it must only include public header files.<br><span class="hljs-deletion">-// $Id: EventLoop.h 4 2011-05-01 10:11:02Z schen$</span><br><span class="hljs-addition">+// $Id: EventLoop.h 5 2011-05-02 15:12:22Z schen$</span><br>#ifndef MUDUO_NET_EVENTLOOP_H<br>#define MUDUO_NET_EVENTLOOP_H<br></code></pre></td></tr></table></figure>
+<p>这样纯粹增加了噪声，这是RCS/CVS时代的过时做法。文件的Id不应该在文件内容中出现，这些metadata跟源文件的内容无关，应该由版本管理软件额外提供。</p>
+<h3 id="对grep友好的代码风格">6.2 对grep友好的代码风格</h3>
+<ul>
+<li><strong>操作符重载</strong></li>
+</ul>
+<p>C++工具匮乏，在一个项目里，要找到一个函数的定义或许不算太难（最多就是分析一下重载和模板特化），但是要找到一个函数的使用就难多了。不比Java，在Eclipse里按Ctrl+Shift+G组合键就能找到所有的引用点。</p>
+<p>假如我要做一个重构，想先找到代码里所有用到muduo::timeDifference的地方，判断一下工作是否可行，基本上唯一的办法是grep。用grep还不能排除同名的函数和注释里的内容。这也说明了为什么要用//来引导注释，因为在grep的时候，一眼就能看出这行代码是在注释里的。</p>
+<p>在我看来，operator overloading应仅限于和STL
+algorithm/container配合时使用，比如std::transform()和map&lt;Key,
+Value&gt;，其他情况都用具名函数为宜。原因之一是，我根本用grep找不到在哪儿用到了减号operator-()。这也是muduo::Timestamp
+class只提供operator&lt;()而不提供operator+
+operator-()的原因。我提供了两个函数timeDifference()和addTime()来实现所需的功能。
+又比如，Google Protocol Buffers的回调是closure
+class，它的接口用的是virtual function Run()而不是virtual
+operator()。</p>
+<h4 id="static_cast与c-style-cast">static_cast与C-style cast</h4>
+<p>为什么C++要引入static_cast之类的转型操作符，原因之一就是像(int*)
+pBuffer这样的表达式基本上没办法用grep判断出它是个强制类型转换，写不出一个刚好只匹配类型转换的正则表达式。（其语法是上下文无关的，无法用正则搞定。）
+如果类型转换都用*_cast，那只要grep一下，我就能知道代码里哪儿用了reinterpret_cast转换，便于迅速地检查有没有用错。为了强调这一点，muduo开启了编译选项-Wold-style-cast来帮助查找C-style
+casting，这样在编译时就能帮我们找到问题。</p>
+<h3 id="一切为了效率">6.3 一切为了效率</h3>
+<p>如果用图形化的文件比较工具，似乎能避免上面列举的问题。但无论是Web还是客户端，无论是diff
+by words还是diff by lines都不能解决全部问题，效率也不一定更高。</p>
+<p>对于p.533举的例子，如果想知道是谁在什么时候增加的double
+z，在分行写的情况下，用git blame或svn
+blame立刻就能找到始作俑者。如果写成一行，那就得把文件的revisions拿来一个个人工比较，因为这一行double
+x=0., y=1.,
+z=-1.;可能修改过多次，你得一个个看才知道什么时候加入了变量z。另外几种情况也使得blame的输出更易读。</p>
+<h2 id="再探stdstring">7. 再探std::string</h2>
+<p>Scott Meyers在《Effective
+STL》[ESTL]第15条提到std::string有多种实现方式，归纳起来有三类，而每类又有多种变化。
+1. 无特殊处理（eager
+copy），采用类似std::vector的数据结构。现在很少有实现采用这种方式。 2.
+Copy-on-Write（COW）。g++的std::string一直采用这种方式实现。</p>
+<p>短字符串优化（SSO），利用string对象本身的空间来存储短字符串。Visual
+C++用的是这种实现方式。</p>
+<p>表12-1总结了我知道的各个库的string实现方式和string对象分别在32-bit/64-bit
+x86系统中的大小。</p>
+<table>
+<thead>
+<tr>
+<th>库</th>
+<th>32-bit</th>
+<th>64-bit</th>
+<th>实现方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>g++ std::string</td>
+<td>4</td>
+<td>8</td>
+<td>COW</td>
+</tr>
+<tr>
+<td>gnu_cxx_sso_string</td>
+<td>24</td>
+<td>32</td>
+<td>SSO</td>
+</tr>
+<tr>
+<td>gnu_cxx_rc_string</td>
+<td>4</td>
+<td>8</td>
+<td>COW</td>
+</tr>
+<tr>
+<td>clang libc++</td>
+<td>12</td>
+<td>24</td>
+<td>SSO</td>
+</tr>
+<tr>
+<td>SGI STL</td>
+<td>12</td>
+<td>24</td>
+<td>eager copy</td>
+</tr>
+<tr>
+<td>STLPort</td>
+<td>24</td>
+<td>48</td>
+<td>SSO</td>
+</tr>
+<tr>
+<td>Apache libstdcxx</td>
+<td>4</td>
+<td>8</td>
+<td>COW</td>
+</tr>
+<tr>
+<td>Visual C++ 2010</td>
+<td>28/32</td>
+<td>40/48</td>
+<td>SSO</td>
+</tr>
+</tbody>
+</table>
+<p>Visual
+C++的string的大小跟编译模式有关，表12-1中小的那个数字是release编译，大的是debug编译。因此debug库和release库不能混用。除此之外，其他库的string大小是固定的。</p>
+<p>以下分别介绍这儿种实现方式的代码骨架和数据结构示意图，无论哪种实现方式都要保存三个数据：1.字符串本身（char[门），2.字符串的长度（size），3.字符串的容量（capacity）。</p>
+<h3 id="直接拷贝eager-copy">7.1 直接拷贝（eager copy）</h3>
+<p>类似std::vector的“三指针”结构。代码骨架（省略模板）如下，数据结构示意图如图12-1所示。
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// .http://www.sgi.com/tech/stl/string</span><br><span class="hljs-comment">// class invariants:</span><br><span class="hljs-comment">// (1) [start,finish) is a valid range.</span><br><span class="hljs-comment">// (2) Each iterator in [start,finish) points to a valid object of type value_type.</span><br><span class="hljs-comment">// (3) *finish is a valid object of type value_type; in particular, it is value_type.</span><br><span class="hljs-comment">//(4) [finish +1,end_of_storage) is a valid range</span><br><span class="hljs-comment">// (5) Each iterator in [finish +1,end_of_storage) points to uninitialized memory.</span><br><span class="hljs-comment">// Note one important consequence: a string of length n must manage</span><br><span class="hljs-comment">// a block of memory whose size is at least n + 1.</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">string</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">const_pointer <span class="hljs-title">data</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> start; &#125;<br>    <span class="hljs-function">iterator <span class="hljs-title">begin</span><span class="hljs-params">()</span> </span>&#123; <span class="hljs-keyword">return</span> start; &#125;<br>    <span class="hljs-function">iterator <span class="hljs-title">end</span><span class="hljs-params">()</span> </span>&#123; <span class="hljs-keyword">return</span> finish; &#125;<br>    <span class="hljs-function">size_type <span class="hljs-title">size</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> finish - start; &#125;<br>    <span class="hljs-function">size_type <span class="hljs-title">capacity</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> end_of_storage - start; &#125;<br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-type">char</span>* start;<br>    <span class="hljs-type">char</span>* finish;<br>    <span class="hljs-type">char</span>* end_of_storage;<br>&#125;;<br></code></pre></td></tr></table></figure> <img src="/2025/01/05/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/12-C++%E7%BB%8F%E9%AA%8C%E8%B0%88/image-20250105171537086.png" srcset="/img/loading.gif" lazyload></p>
+<p>对象的大小是3个指针，在32-bit中是12字节，在64-bit中是24字节。</p>
+<p>Eager copy
+string的另一种实现方式是把后两个成员变量替换成整数，表示字符串的长度和容量，代码骨架如下，数据结构示意图如图12-2所示。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">string</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">const_pointer <span class="hljs-title">data</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> start; &#125;<br>    <span class="hljs-function">iterator <span class="hljs-title">begin</span><span class="hljs-params">()</span> </span>&#123; <span class="hljs-keyword">return</span> start; &#125;<br>    <span class="hljs-function">iterator <span class="hljs-title">end</span><span class="hljs-params">()</span> </span>&#123; <span class="hljs-keyword">return</span> start + size_; &#125;<br>    <span class="hljs-function">size_type <span class="hljs-title">size</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> size_; &#125;<br>    <span class="hljs-function">size_type <span class="hljs-title">capacity</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> capacity_; &#125;<br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-type">char</span>* start;<br>    <span class="hljs-type">size_t</span> size_;<br>    <span class="hljs-type">size_t</span> capacity_;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p><img src="/2025/01/05/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/12-C++%E7%BB%8F%E9%AA%8C%E8%B0%88/image-20250105171619487.png" srcset="/img/loading.gif" lazyload>
+这种做法并没有多大改变，因为size_t和char*是一样大的。但是，我们通常用不到单个儿百兆字节的字符串28，那么可以再改变一下长度和容量的类型（从64-bit整数改成32-bit整数），这样在64-bit下可以减小对象的大小，如图12-3所示。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">string</span> &#123;<br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-type">char</span>* start;<br>    <span class="hljs-type">uint32_t</span> size;<br>    <span class="hljs-type">uint32_t</span> capacity;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p><img src="/2025/01/05/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/12-C++%E7%BB%8F%E9%AA%8C%E8%B0%88/image-20250105171642509.png" srcset="/img/loading.gif" lazyload></p>
+<p>新的string结构在64-bit中是16字节，比原来的24字节小了一些。</p>
+<h3 id="写时复制copy-on-write">7.2 写时复制（copy-on-write）</h3>
+<p>string对象里只放一个指针，如图12-4所示。值得一提的是COW对多线程不友好，提倡在多核时代改用eager
+copy string <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">cow_string</span> <span class="hljs-comment">// libstdc++-v3</span><br>&#123;<br>    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">Rep</span> &#123;<br>        <span class="hljs-type">size_t</span> size;<br>        <span class="hljs-type">size_t</span> capacity;<br>        <span class="hljs-type">size_t</span> refcount;<br>        <span class="hljs-type">char</span>* data[<span class="hljs-number">1</span>]; <span class="hljs-comment">// variable length</span><br>    &#125;;<br>    <span class="hljs-type">char</span>* start;<br>&#125;;<br></code></pre></td></tr></table></figure> <img src="/2025/01/05/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/12-C++%E7%BB%8F%E9%AA%8C%E8%B0%88/image-20250105171800571.png" srcset="/img/loading.gif" lazyload></p>
+<p>这种数据结构没啥好说的，在64-bit中似乎也没有优化空间。另外COW的操作复杂度不一定符合直觉，它拷贝字符串是O(1）时间，但是拷贝之后的第一次operator[]有可能是O(N)时间。</p>
+<h3 id="短字符串优化sso">7.3 短字符串优化（SSO）</h3>
+<p>string对象比前面两个都大，因为有本地缓冲区（local buffer）。
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">sso_string</span> <span class="hljs-comment">// --gnu_ext::-sso_string</span><br>&#123;<br>    <span class="hljs-type">char</span>* start;<br>    <span class="hljs-type">size_t</span> size;<br>    <span class="hljs-type">static</span> <span class="hljs-type">const</span> <span class="hljs-type">int</span> kLocalSize = <span class="hljs-number">15</span>;<br>    <span class="hljs-keyword">union</span> &#123;<br>        <span class="hljs-type">char</span> buffer[kLocalSize + <span class="hljs-number">1</span>];<br>        <span class="hljs-type">size_t</span> capacity;<br>    &#125; data;<br>&#125;;<br></code></pre></td></tr></table></figure>
+内存布局如图12-5（左图）所示。如果字符串比较短（通常的國值是15字节），那么直接存放在对象的buffer里，如图12-5（右图）所示。start指向data，buffer。</p>
+<p><img src="/2025/01/05/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/12-C++%E7%BB%8F%E9%AA%8C%E8%B0%88/image-20250105171910087.png" srcset="/img/loading.gif" lazyload>
+如果字符串超过15字节，那么就变成类似图12-2的eager copy
+2结构，start指向堆上分配的空间（见图12-6）。</p>
+<p><img src="/2025/01/05/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/12-C++%E7%BB%8F%E9%AA%8C%E8%B0%88/image-20250105171947802.png" srcset="/img/loading.gif" lazyload></p>
+<p>短字符串优化的实现方式不止一种，主要区别是把那三个指针/整数中的哪一个与本地缓冲重合。例如《Effective
+STL》[ESTL]第15条展现的“实现D”是将buffer与start指针重合，这正是Visual
+C++的做法。而STLPort的string是将buffer与end_of_storage指针重合。</p>
+<p>SSO
+string在64-bit中有一个小小的优化空间：如果允许字符申max_size()不大于4GiB的话，我们可以用32-bit整数来表示长度和容量，这样同样是32字节的string对象，local
+buffer可以增大至19字节。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">sso_string</span> <span class="hljs-comment">// optimized for 64-bit</span><br>&#123;<br>    <span class="hljs-type">char</span>* start;<br>    <span class="hljs-type">uint32_t</span> size;<br>    <span class="hljs-type">static</span> <span class="hljs-type">const</span> <span class="hljs-type">int</span> kLocalSize = <span class="hljs-built_in">sizeof</span>(<span class="hljs-type">void</span>*) == <span class="hljs-number">8</span> ? <span class="hljs-number">19</span> : <span class="hljs-number">15</span>;<br>    <span class="hljs-keyword">union</span> &#123;<br>        <span class="hljs-type">char</span> buffer[kLocalSize + <span class="hljs-number">1</span>];<br>        <span class="hljs-type">uint32_t</span> capacity;<br>    &#125; data;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p><img src="/2025/01/05/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/12-C++%E7%BB%8F%E9%AA%8C%E8%B0%88/image-20250105172245856.png" srcset="/img/loading.gif" lazyload></p>
+<p>llvm/clang/libc++采用了与众不同的SSO实现，空间利用率最高。其local
+buffer几乎与三个指针/整数完全重合，在64-bit上对象大小是24字节，本地缓冲区可达22字节。数据结构如图12-8所示。</p>
+<p><img src="/2025/01/05/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/12-C++%E7%BB%8F%E9%AA%8C%E8%B0%88/image-20250105172304695.png" srcset="/img/loading.gif" lazyload></p>
+<p>Andrei
+Alexandrescu建议[Alex10l针对不同的应用负载选用不同的string，对于短字符串，用SSO
+string；对于中等长度的字符串，用eager
+copy；对于长字符串用COW。具体分界点需要靠profiling来确定，选用合适的字符串可能提高10%的整体性能。</p>
+<p>从实现的复杂度上看，eager
+copy是最简单的，SSO稍微复杂一些，COW最难。</p>
+<h2 id="用stl-algorithm轻松解决几道算法面试题">8. 用STL
+algorithm轻松解决几道算法面试题</h2>
+<p>C++
+STL的algorithm配合自定义的functor（仿函数、函数对象）可以轻松解决不少面试题，代码简洁，正确性也容易验证。本节仍旧采用C++03的functor写法，没有采用C++11的Lambda表达式写法，尽管后者会简洁得多。完整代码及测试用例见recipes/algorithm。
+### 8.1 用next_permutation()生成排列与组合</p>
+<p>本小节的内容源自10年前我写的一需博客35，这篇博客还找到了Visual C++
+7.0的STL的一个疑似bug（或者叫feature）。生成排列、组合、整数划分的具体算法见Donald
+Knuth的（The Art of Computer Programming，Volume 4A）36第7.2.1节。</p>
+<p>本处只给出使用STL的实现代码。</p>
+<h4 id="生成n个不同元素的全排列">生成N个不同元素的全排列</h4>
+<p>这是next_permutation()的基本用法，把元素从小到大放好（即字典序最小的排列），然后反复调用next_permutation()就行了。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-type">int</span> elements[] = &#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>&#125;;<br>    <span class="hljs-type">const</span> <span class="hljs-type">size_t</span> N = <span class="hljs-built_in">sizeof</span>(elements) / <span class="hljs-built_in">sizeof</span>(elements[<span class="hljs-number">0</span>]);<br>    <span class="hljs-function">std::vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">vec</span><span class="hljs-params">(elements, elements + N)</span></span>;<br>    <span class="hljs-type">int</span> count = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">do</span> &#123;<br>        std::cout &lt;&lt; ++count &lt;&lt; <span class="hljs-string">&quot;:&quot;</span>;<br>        std::<span class="hljs-built_in">copy</span>(vec.<span class="hljs-built_in">begin</span>(), vec.<span class="hljs-built_in">end</span>(), std::<span class="hljs-built_in">ostream_iterator</span>&lt;<span class="hljs-type">int</span>&gt;(std::cout, <span class="hljs-string">&quot;,&quot;</span>));<br>        std::cout &lt;&lt; std::endl;<br>    &#125; <span class="hljs-keyword">while</span> (<span class="hljs-built_in">next_permutation</span>(vec.<span class="hljs-built_in">begin</span>(), vec.<span class="hljs-built_in">end</span>()));<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>类似的代码还能生成多重排列，比如2个a、3个b的全部排列，代码见permutation2.cC。输出如下：
+#### 生成从N个元素中取出M个的所有组合</p>
+<p>题目：输出从7个不同元素中取出3个元素的所有组合。</p>
+<p>思路：对序列[1,1,1,0,0,0,0)做全排列。对于每个排列，输出数字1对应的位置上的元素。代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-type">int</span> values[] = &#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>&#125;;<br>    <span class="hljs-type">int</span> elements[] = &#123;<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>&#125;;<br>    <span class="hljs-type">const</span> <span class="hljs-type">size_t</span> N = <span class="hljs-built_in">sizeof</span>(elements) / <span class="hljs-built_in">sizeof</span>(elements[<span class="hljs-number">0</span>]);<br>    <span class="hljs-built_in">assert</span>(N == <span class="hljs-built_in">sizeof</span>(values) / <span class="hljs-built_in">sizeof</span>(values[<span class="hljs-number">0</span>]));<br>    <span class="hljs-function">std::vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">selectors</span><span class="hljs-params">(elements, elements + N)</span></span>;<br>    <span class="hljs-type">int</span> count = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">do</span> &#123;<br>        std::cout &lt;&lt; ++count &lt;&lt; <span class="hljs-string">&quot;:&quot;</span>;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">size_t</span> i = <span class="hljs-number">0</span>; i &lt; selectors.<span class="hljs-built_in">size</span>(); ++i) &#123;<br>            <span class="hljs-keyword">if</span> (selectors[i]) &#123;<br>                std::cout &lt;&lt; values[i] &lt;&lt; <span class="hljs-string">&quot;,&quot;</span>;<br>            &#125;<br>        &#125;<br>        std::cout &lt;&lt; std::endl;<br>    &#125; <span class="hljs-keyword">while</span> (<span class="hljs-built_in">prev_permutation</span>(selectors.<span class="hljs-built_in">begin</span>(), selectors.<span class="hljs-built_in">end</span>()));<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="用unique去除连续重复空白">8.2 用unique()去除连续重复空白</h3>
+<p>孟岩在谈《C++程序设计原理与实践》时曾说：“比如对我来说，C++这个语言最强的地方在于它的模板技术提供了足够复杂的程序库开发机制，可以把复杂性高度集中在程序库里。做得好的话，在应用代码部分我连一个for循环都不用写，犯错误的机会就少，效率还不打折扣，关键是看着代码心里爽。”这儿小节可算是他这番话的一个注脚。C++11有了Lambda表达式，Scott
+Meyers提倡的“Prefer algorithm calls to hand-written
+loops”就更容易落实了。</p>
+<p>题目给你一个字符串，要求原地（in-place）把相邻的多个空格替换为一个。</p>
+<p>例如，输人"a. b"，输出"ab"；输人"aaa. bbb."，输出"aaa_bbb”。</p>
+<p>这道题目不难，手写的话也就是单重循环，复杂度是O(N）时间和O(1）空间。</p>
+<p>这里展示用std::unique()的解法，思路很简单：std::unique()的作用是去除相邻的重复元素，我们只要把“重复元素”定义为“两个元素都是空格”即可。注意所有针对区间的STL
+algorithm都只能调换区间内元素的顺序，不能真正删除容器内的元素。关键代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">AreBothSpaces</span> &#123;<br>    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">operator</span><span class="hljs-params">()</span><span class="hljs-params">(<span class="hljs-type">char</span> x, <span class="hljs-type">char</span> y)</span> <span class="hljs-type">const</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> x == <span class="hljs-string">&#x27; &#x27;</span> &amp;&amp; y == <span class="hljs-string">&#x27; &#x27;</span>;<br>    &#125;<br>&#125;;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">removeContinuousSpaces</span><span class="hljs-params">(std::string&amp; str)</span> </span>&#123;<br>    std::string::iterator last = std::<span class="hljs-built_in">unique</span>(str.<span class="hljs-built_in">begin</span>(), str.<span class="hljs-built_in">end</span>(), <span class="hljs-built_in">AreBothSpaces</span>());<br>    str.<span class="hljs-built_in">erase</span>(last, str.<span class="hljs-built_in">end</span>());<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="用makepushpop_heap实现多路归并">8.3
+用(make,push,pop)_heap()实现多路归并</h3>
+<p>题目用一台4GiB内存的机器对磁盘上的单个100GB文件排序。</p>
+<p>这种单机外部排序题自的标准思路是先分块排序，然后多路归并成输出文件。</p>
+<p>多路归并很容易用heap排序实现，比方说要归并已经按从小到大的顺序排好序的32个文件，我们可以构造一个32元素的minheap，每个元素是std::pair&lt;Record,
+FILE*&gt;。然后每次取出堆顶的元素，将其Record写人输出文件；如果FILE*还可读，就读人一条Record，再向heap中添加std::pair&lt;Record,
+FILE*&gt;。这样当heap为空的时候，多路归并就完成了。注意在这个过程中heap的大小通常会慢慢变小，因为有可能某个输人文件已经全部读完了。</p>
+<p>这种方法比传统的二路归并要节省很多遍磁盘读写，假如用教科书上的二路归并来做外部排序41，那么我们要先读一遍这32个文件，两两归并输出16个稍大的已排序中间文件：然后再读一遍这16个中间文件，两两归并输出8个更大的中间文件：如此往复，最后归并两个已经排好序的大文件，输出最终的结果。读者可以算算这比直接多路归并要多读写多少追磁盘。</p>
+<p>完整的外部排序代码见recipes/esort/sort02.cc及其改进版sort03.04].cc。这里展示一个内存里的多路归并，以说明基本思路。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function">File <span class="hljs-title">mergeN</span><span class="hljs-params">(<span class="hljs-type">const</span> std::vector&lt;File&gt;&amp; files)</span> </span>&#123;<br>    File output;<br>    std::vector&lt;Input&gt; inputs;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">size_t</span> i = <span class="hljs-number">0</span>; i &lt; files.<span class="hljs-built_in">size</span>(); ++i) &#123;<br>        <span class="hljs-function">Input <span class="hljs-title">input</span><span class="hljs-params">(&amp;files[i])</span></span>;<br>        <span class="hljs-keyword">if</span> (input.<span class="hljs-built_in">next</span>()) &#123;<br>            inputs.<span class="hljs-built_in">push_back</span>(input);<br>        &#125;<br>    &#125;<br>    std::<span class="hljs-built_in">make_heap</span>(inputs.<span class="hljs-built_in">begin</span>(), inputs.<span class="hljs-built_in">end</span>());<br>    <span class="hljs-keyword">while</span> (!inputs.<span class="hljs-built_in">empty</span>()) &#123;<br>        std::<span class="hljs-built_in">pop_heap</span>(inputs.<span class="hljs-built_in">begin</span>(), inputs.<span class="hljs-built_in">end</span>());<br>        output.<span class="hljs-built_in">push_back</span>(inputs.<span class="hljs-built_in">back</span>().value);<br>        <span class="hljs-keyword">if</span> (inputs.<span class="hljs-built_in">back</span>().<span class="hljs-built_in">next</span>()) &#123;<br>            std::<span class="hljs-built_in">push_heap</span>(inputs.<span class="hljs-built_in">begin</span>(), inputs.<span class="hljs-built_in">end</span>());<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            inputs.<span class="hljs-built_in">pop_back</span>();<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> output;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>构造一个binary
+heap，while循环反复取出堆顶元素（std::pop_heap()会把堆顶元素放到序列末尾，即inputs.back()处），把取出的元素（当前最小值）输出。从堆顶元素所属的文件读人下一条记录，如果成功，就把它放回堆中。当循环结束的时候，堆为空，说明每个文件都读完了。
+其中用到的Input类型定义如下。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">typedef</span> <span class="hljs-type">int</span> Record;<br><span class="hljs-keyword">typedef</span> std::vector&lt;Record&gt; File;<br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Input</span> &#123;<br>    Record value;<br>    <span class="hljs-type">const</span> File* file;<br>    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">Input</span><span class="hljs-params">(<span class="hljs-type">const</span> File* f)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">next</span><span class="hljs-params">()</span></span>;<br>    <span class="hljs-type">bool</span> <span class="hljs-keyword">operator</span>&lt;(<span class="hljs-type">const</span> Input&amp; rhs) <span class="hljs-type">const</span> &#123;<br>        <span class="hljs-keyword">return</span> value &gt; rhs.value;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>以上是多路归并的实现，再来考虑第阶段分块排序的流水线设计。先做一个简化的假设：普通机械硬盘的顺序读写速度是100MB/s，既然可用内存为4GB，那么分块（chunk）的大小就选定为1GB，这样读人和写出一个分块均耗时10秒。再假设在内存中排序1GB数据耗时10秒。为了编程方便，磁盘IO用阻塞方式。按照这些假设，如果用单线程的方式实现外部排序，第一阶段的耗时是30NV秒，其中N是分块数目。对一个6GB的文件排序，单线程程序（sort02.cc）的执行过程如图12-10所示，第一阶段将耗时180秒（只画出前120秒）。内存消耗为1GB。</p>
+<p>注意到，在程序执行时，要么CPU繁忙，要么硬盘紧忙（BuSy行的D表示磁盘，C表示CPU），资源并没有充分利用起来。为了加快排序速度，我们考虑用多线程，让计算和1O重叠，减少整体运行时间。注意这里我们不能简单地起多个进程，每个进程分别排序一个chunk，因为这样势必会造成多个进程争抢磁盘IO，而机械硬盘的随机读取比顺序读取慢得多。</p>
+<p>种解决办法是把IO放人一个单独的线程，避免争抢，然后用另外的线程（s）来排序内存中的数据块。换句话说，一个线程做IO（由于只有一块硬盘，那么不必便用多个IO线程），再用一个线程池做计算，以实现IO和计算重叠。我们预计这种方式完成分块排序将会耗时120秒，比单线程快33%.预计执行流程（流水线）。</p>
+<p>注意到同一时刻磁盘要么顺序读，要么顺序写，避免反复寻道的开销。这种方案会让CPU和磁盘同时繁忙，提高了资源利用率，内存消耗为2GB。这种思路的代码见Sort03.cc。图12-12是一次实际运行的情况，方块的宽度与时间成正比。这单实际的磁盘和CPU的速度比前面的假设要快，因此第一阶段总耗时90秒。</p>
+<p>注意到CPU的吞吐量（每秒排序100MB数据）大于单块磁盘吞吐量（读写100MB共耗时2秒），因此仍然会出现CPU等待IO的情况。如果有不止一块磁盘，可以重新设计流水线，进一步压缩运行时间。比方说把输人数据全部放在S盘（source），把分块排序的中间结果放到T盘（temporary），这样两块磁盘一读一写，可以相互重叠。在归并阶段，自然可以从T盘读数据写到S盘。这需要用到两个IO线程，每个磁盘配一个IO线程，确保每个磁盘都是顺序访问的，以保证吞吐量。这种方案的分块排序预计用时80秒，预计执行流程如图12-13所示，比第一种快50%
+以上，内存消耗也增长到3GB。（这种方案的实现留作练习。）</p>
+<p>还有一个简单的优化措施：最后的两三个排序结果不必写人磁盘，而是直接在内存中参与多路归并，这样天约可以再节约10秒。</p>
+<p>类似的题目：有a、b两个文件，大小各是100GB左右，每行长度不超过1kB，这两个文件有少量（几百个）重复的行，要求用一台4G内存的机器找出这些重复行。</p>
+<p>解这道题自有两个方向，一是hash，把a、b两个文件按行的hash取模分成儿百个小文件，每个小文件都在1GB以内，然后对a1、b求交集c1，对a2、b2求交集C2，这样就能在内存里解决了。</p>
+<p>第二个思路是外部排序，但是跟前面完整的外部排序不同，我们并不需要得到两个已排序的文件（a和b）再求交集，只需要把a分块排序成100个小文件，再把b分块排序成100个小文件。剩下的工作就是边读这些小文件，一边在内存中同时归并出aα和b，一边求出交集。内存中的两个多路归并需要两个heap，分别对应a和b的小文件(s)。内存中的运算流程如图12-14所示。</p>
+<p>代码写起来估计比单个heap归并要复杂一些，特别是C++不支持类似C#的yield关键字来方便地实现选代。假如C++有yield，那么“求交集”这一步我们直接调用std::set_intersection()并配合适当的选代器就行了，但是在没有yield的情况下要实现这样的送代器恐怕要费事得多，因为每个送代器要维护更多的状态。这算是coroutine的一个使用场景。</p>
+<p>上面两种解法的代价都是额外200GB磁盘空间，请读者思考有没有大大节省磁盘空间的做法。另外一个延伸的题目是：有几个巨大的文本文件，每行存放一个查询（query），将所有query按出现次数排序（代码https://gist.github.com/4009225）.</p>
+<h3 id="用partition实现重排数组让奇数位于偶数前面">8.4
+用partition()实现“重排数组，让奇数位于偶数前面”</h3>
+<p>std::partition()的作用是把符合条件的元素放到区间首部，不符合条件的元素放到区间后部，我们只需把“符合条件”定义为“元素是奇数”就能解决这道题。复杂度是O(N)时间和O(1)空间。为节省篇幅，isOdd()直接做成了函数，而不是函数对象，缺点是有可能阻碍编译器实施inlining.
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">isOdd</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span> </span>&#123;<br>    <span class="hljs-keyword">return</span> x % <span class="hljs-number">2</span> != <span class="hljs-number">0</span>; <span class="hljs-comment">// x % 2 == 1 is WRONG</span><br>&#125;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">moveOddsBeforeEvens</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-type">int</span> oddEven[] = &#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>&#125;;<br>    std::<span class="hljs-built_in">partition</span>(oddEven, oddEven + <span class="hljs-number">6</span>, &amp;isOdd);<br>    std::<span class="hljs-built_in">copy</span>(oddEven, oddEven + <span class="hljs-number">6</span>, std::<span class="hljs-built_in">ostream_iterator</span>&lt;<span class="hljs-type">int</span>&gt;(std::cout, <span class="hljs-string">&quot;,&quot;</span>));<br>    std::cout &lt;&lt; std::endl;<br>&#125;<br></code></pre></td></tr></table></figure>
+输出如下，注意确实满足“奇数位于偶数之前”，但奇数元素之间的相对位置有变化，偶数元素亦是如此。
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">1</span>,<span class="hljs-number">5</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">2</span>,<span class="hljs-number">6</span>,<br></code></pre></td></tr></table></figure>
+如果题目要求改成“调整数组顺序使奇数位于偶数前面，并且保持奇数的先后顺序不变，偶数的先后顺序不变”，解决办法也一样简单，改用std::stable_partition()即可，代码及输出如下：
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">int</span> oddEven[] = &#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>&#125;;<br>std::<span class="hljs-built_in">stable_partition</span>(oddEven, oddEven + <span class="hljs-number">6</span>, &amp;isOdd);<br>std::<span class="hljs-built_in">copy</span>(oddEven, oddEven + <span class="hljs-number">6</span>, std::<span class="hljs-built_in">ostream_iterator</span>&lt;<span class="hljs-type">int</span>&gt;(std::cout, <span class="hljs-string">&quot;,&quot;</span>));<br>std::cout &lt;&lt; std::endl;<br><span class="hljs-comment">// 输出1，3，5，2，4，6，</span><br></code></pre></td></tr></table></figure>
+注意，stable_partition()的复杂度较特殊：在内存充足的情况下，开辟与原数组一样大的空间，复杂度是O(N)时间和O(N)空间；在内存不足的情况下，要做in-place位置调换，复杂度是O(NlogN)时间和O(1)空间。
+类似的题目还有“调整数组顺序使负数位于非负数前面”，读者应能举一反三。 ###
+8.5 用lower_bound()查找IP地址所属的城市
+题目已知N个IP地址区间和它们对应的城市名称，写一个程序，能从IP地址找到它所在的城市。注意这些IP地址区间互不重登.</p>
+<p>这道题目的naive解法是O(N)，借助std::lower_bound()可以轻易做到O(logN)查找，代价是事先做一遍O(NlogN)的排序。如果区间相对固定而查找很频繁，这么做是值得的。</p>
+<p>基本思路是按IP区间的首地址排好序，再进行二分查找。比如说有两个区间[300,500]、[600,750]，分别对应北京和香港两个城市，那么std::lower_bound()查找299、300、301、499、500、501、599、600、601、749、750、751等“IP地址”返回的选代器如图12-15所示。</p>
+<p>我们需要对返回的结果微调，使得选代器it所指的区间是唯一有可能包含该IP地址的区间，如图12-16所示。</p>
+<p>最后判断一下IP地址是否位于这个区间就行了。完整代码如下，为了简化，“城市”用整数表示，-1表示未找到。另外，这个实现对于整个IP地址空间都是正确的，即便区间中包括[255.255.255.0,255.255.255.255]这种边界条件。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">IPrange</span> &#123;<br>    <span class="hljs-type">uint32_t</span> startIp; <span class="hljs-comment">// inclusive</span><br>    <span class="hljs-type">uint32_t</span> endIp;   <span class="hljs-comment">// inclusive</span><br>    <span class="hljs-type">int</span> value;        <span class="hljs-comment">// &gt;=0</span><br>    <span class="hljs-type">bool</span> <span class="hljs-keyword">operator</span>&lt;(<span class="hljs-type">const</span> IPrange&amp; rhs) <span class="hljs-type">const</span> &#123;<br>        <span class="hljs-keyword">return</span> startIp &lt; rhs.startIp;<br>    &#125;<br>&#125;;<br><span class="hljs-comment">// REQUIRE: ranges is sorted.</span><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">findIpValue</span><span class="hljs-params">(<span class="hljs-type">const</span> std::vector&lt;IPrange&gt;&amp; ranges, <span class="hljs-type">uint32_t</span> ip)</span> </span>&#123;<br>    <span class="hljs-type">int</span> result = <span class="hljs-number">-1</span>;<br>    <span class="hljs-keyword">if</span> (!ranges.<span class="hljs-built_in">empty</span>()) &#123;<br>        IPrange needle = &#123;ip, <span class="hljs-number">0</span>&#125;;<br>        std::vector&lt;IPrange&gt;::const_iterator it =<br>            std::<span class="hljs-built_in">lower_bound</span>(ranges.<span class="hljs-built_in">begin</span>(), ranges.<span class="hljs-built_in">end</span>(), needle);<br>        <span class="hljs-keyword">if</span> (it == ranges.<span class="hljs-built_in">end</span>()) &#123;<br>            --it;<br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (it != ranges.<span class="hljs-built_in">begin</span>() &amp;&amp; it-&gt;startIp &gt; ip) &#123;<br>            --it;<br>        &#125;<br>        <span class="hljs-keyword">if</span> (it-&gt;startIp &lt;= ip &amp;&amp; it-&gt;endIp &gt;= ip) &#123;<br>            result = it-&gt;value;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> result;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>说明：如果IP地址区间有重复，那么我们通常要用线段树来实现高效的查询。另外，在真实的场景中，IP地址区间通常适用专门的longest
+prefix match算法，这会比本节的通用算法更快。 ## 小结
+想到正确的思路是一码事，写出正确的、经得起推敲的代码是另一码事。例如<span class="math inline">\(\S12.8.4\)</span>用（x%2!=0）来判断int
+x是否为奇数，如果写成（x%2==1）就是错的，因为x可能是负数，负数的取模运算的规则见s12.3。常见的错误还包括误用char的值作为数组下标（面试题目：统计文件中每个字符出现的次数），但是没有考虑char可能是负数，造成访问越界。有的人考虑到了char可能是负数，因此先强制转型为unsigned
+int再用作下标，这仍然是错的。正确的做法是强制转型为unsigned
+char再用作下标，这涉及C/C++整型提升的规则，就不详述了。这些细节往往是面试官的考察点。本节给出的解法在正确性方面应该是没问题的；在效率方面，可以说在Big-O意义下是最优的，但不一定是运行最快的。</p>
+<p>另外，面试题的目的可能就是让你动手实现一些STL
+algorithm，例如求两个有序集合的交集（set_intersection()）、洗牌（random_shuffle()）等等，这就不属于本节所讨论的范围了。从“算法”本身的难度上看，我个人把STL
+algorithm分为三类，面试时要求手写的往往是第二类算法。</p>
+<ul>
+<li>容易，即闭着眼睛一想就知道是如何实现的，自己手写一遍的难度跟strlen()和strcpy()差不多。这类算法基本上就是遍历一遍输入区间，对每个元素做些判断或操作，一个for循环就解决问题。一半左右的STL
+algorithm属于此类，例如for_each()、transform()、accumulate()等等。</li>
+<li>较难，知道思路，但是要写出正确的实现要考虑清楚各种边界条件。例如merge()、unique()、remove()、random_shuffle()、lower_bound()、partition()等等，三成左右的STL
+algorithm属于此类。</li>
+<li>难，要在一个小时内写出正确的、健壮的实现基本不现实，例如sort()、nth_element()、next_permutation()、inplace_merge()等等，约有两成STL
+algorithm属于此类。</li>
+</ul>
+<p>注意，“容易”级别的算法是指写出正确的实现很容易，但不一定意味着写出高效的实现也同样容易，例如std::copy()拷贝POD类型的效率可媲美memcpy，这需要用一点模板技巧。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/c/" class="category-chain-item">c++</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/c/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="category-chain-item">muduo多线程服务器</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/muduo/" class="print-no-link">#muduo</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>12. C++经验谈</div>
+      <div>http://binbo-zappy.github.io/2025/01/05/muduo多线程/12-C++经验谈/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年1月5日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/01/05/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/13-%E8%B0%88%E4%B8%80%E8%B0%88%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E5%AD%A6%E4%B9%A0%E7%BB%8F%E9%AA%8C/" title="13. 谈一谈网络编程学习经验">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">13. 谈一谈网络编程学习经验</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/01/03/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/10-C++%E7%BC%96%E8%AF%91%E9%93%BE%E6%8E%A5%E6%A8%A1%E5%9E%8B%E7%B2%BE%E8%A6%81/" title="10. C++编译链接模型精要">
+                        <span class="hidden-mobile">10. C++编译链接模型精要</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
