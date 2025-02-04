@@ -1,0 +1,816 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1. 数组 在日常开发中，使用最广的数据结构之一就是数组，在 Rust 中，最常用的数组有两种，第一种是速度很快但是长度固定的 array，第二种是可动态增长的但是有性能损耗的 Vector，在本书中，我们称 array 为数组，Vector 为动态数组。 不知道你们发现没，这两个数组的关系跟 &amp;str 与 String 的关系很像，前者是长度固定的字符串切片，后者是可动态">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2.4.5 数组">
+<meta property="og:url" content="http://binbo-zappy.github.io/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-4-5-%E6%95%B0%E7%BB%84/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="1. 数组 在日常开发中，使用最广的数据结构之一就是数组，在 Rust 中，最常用的数组有两种，第一种是速度很快但是长度固定的 array，第二种是可动态增长的但是有性能损耗的 Vector，在本书中，我们称 array 为数组，Vector 为动态数组。 不知道你们发现没，这两个数组的关系跟 &amp;str 与 String 的关系很像，前者是长度固定的字符串切片，后者是可动态">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/rust.jpg">
+<meta property="article:published_time" content="2025-01-05T14:37:11.000Z">
+<meta property="article:modified_time" content="2025-01-06T14:35:06.524Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="rust">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/rust.jpg">
+  
+  
+  
+  <title>2.4.5 数组 - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="2.4.5 数组"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-01-05 22:37" pubdate>
+          2025年1月5日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          19 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">2.4.5 数组</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="数组">1. 数组</h1>
+<p>在日常开发中，使用最广的数据结构之一就是数组，在 Rust
+中，最常用的数组有两种，第一种是速度很快但是长度固定的
+<code>array</code>，第二种是可动态增长的但是有性能损耗的
+<code>Vector</code>，在本书中，我们称 <code>array</code>
+为数组，<code>Vector</code> 为动态数组。</p>
+<p>不知道你们发现没，这两个数组的关系跟 <code>&amp;str</code> 与
+<code>String</code>
+的关系很像，前者是长度固定的字符串切片，后者是可动态增长的字符串。其实，在
+Rust 中无论是 <code>String</code> 还是 <code>Vector</code>，它们都是
+Rust 的高级类型：集合类型，在后面章节会有详细介绍。</p>
+<p>数组的具体定义很简单：将多个类型相同的元素依次组合在一起，就是一个数组。数组的三要素：</p>
+<ul>
+<li>长度固定</li>
+<li>元素必须有相同的类型</li>
+<li>依次线性排列</li>
+</ul>
+<p><strong>我们这里说的数组是 Rust
+的基本类型，是固定长度的，这点与其他编程语言不同，其它编程语言的数组往往是可变长度的，与
+Rust 中的动态数组 <code>Vector</code> 类似</strong>。</p>
+<h2 id="创建数组">1.1 创建数组</h2>
+<p>在 Rust 中，数组是这样定义的：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">a</span> = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>];<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>元素类型大小固定，且长度也是固定，因此<strong>数组 <code>array</code>
+是存储在栈上</strong>，性能也会非常优秀。与此对应，<strong>动态数组
+<code>Vector</code>
+是存储在堆上</strong>，因此长度可以动态改变。当你不确定是使用数组还是动态数组时，那就应该使用后者，具体见<a target="_blank" rel="noopener" href="https://course.rs/basic/collections/vector.html">动态数组
+Vector</a>。</p>
+<p>举个例子，在需要知道一年中各个月份名称的程序中，你很可能希望使用的是数组而不是动态数组。因为月份是固定的，它总是只包含
+12 个元素：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">months</span> = [<span class="hljs-string">&quot;January&quot;</span>, <span class="hljs-string">&quot;February&quot;</span>, <span class="hljs-string">&quot;March&quot;</span>, <span class="hljs-string">&quot;April&quot;</span>, <span class="hljs-string">&quot;May&quot;</span>, <span class="hljs-string">&quot;June&quot;</span>, <span class="hljs-string">&quot;July&quot;</span>,<br>              <span class="hljs-string">&quot;August&quot;</span>, <span class="hljs-string">&quot;September&quot;</span>, <span class="hljs-string">&quot;October&quot;</span>, <span class="hljs-string">&quot;November&quot;</span>, <span class="hljs-string">&quot;December&quot;</span>];<br></code></pre></td></tr></table></figure>
+<p>在一些时候，还需要为<strong>数组声明类型</strong>，如下所示：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">a</span>: [<span class="hljs-type">i32</span>; <span class="hljs-number">5</span>] = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>];<br></code></pre></td></tr></table></figure>
+<p>这里，数组类型是通过方括号语法声明，<code>i32</code>
+是元素类型，分号后面的数字 <code>5</code>
+是数组长度，数组类型也从侧面说明了<strong>数组的元素类型要统一，长度要固定</strong>。</p>
+<p>还可以使用下面的语法初始化一个<strong>某个值重复出现 N
+次的数组</strong>：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">a</span> = [<span class="hljs-number">3</span>; <span class="hljs-number">5</span>];<br></code></pre></td></tr></table></figure>
+<p><code>a</code> 数组包含 <code>5</code> 个元素，这些元素的初始化值为
+<code>3</code>，聪明的读者已经发现，这种语法跟数组类型的声明语法其实是保持一致的：<code>[3; 5]</code>
+和 <code>[类型; 长度]</code>。</p>
+<p>在元素重复的场景，这种写法要简单的多，否则你就得疯狂敲击键盘：<code>let a = [3, 3, 3, 3, 3];</code></p>
+<h2 id="访问数组元素">1.2 访问数组元素</h2>
+<p>因为数组是连续存放元素的，因此可以通过索引的方式来访问存放其中的元素：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">a</span> = [<span class="hljs-number">9</span>, <span class="hljs-number">8</span>, <span class="hljs-number">7</span>, <span class="hljs-number">6</span>, <span class="hljs-number">5</span>];<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">first</span> = a[<span class="hljs-number">0</span>]; <span class="hljs-comment">// 获取a数组第一个元素</span><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">second</span> = a[<span class="hljs-number">1</span>]; <span class="hljs-comment">// 获取第二个元素</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>与许多语言类似，数组的索引下标是从 0 开始的。此处，<code>first</code>
+获取到的值是 <code>9</code>，<code>second</code> 是 <code>8</code>。</p>
+<h3 id="a.-越界访问">a. 越界访问</h3>
+<p>如果使用超出数组范围的索引访问数组元素，会怎么样？下面是一个接收用户的控制台输入，然后将其作为索引访问数组元素的例子：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">use</span> std::io;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">a</span> = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>];<br><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Please enter an array index.&quot;</span>);<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">index</span> = <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">new</span>();<br>    <span class="hljs-comment">// 读取控制台的输出</span><br>    io::<span class="hljs-title function_ invoke__">stdin</span>()<br>        .<span class="hljs-title function_ invoke__">read_line</span>(&amp;<span class="hljs-keyword">mut</span> index)<br>        .<span class="hljs-title function_ invoke__">expect</span>(<span class="hljs-string">&quot;Failed to read line&quot;</span>);<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">index</span>: <span class="hljs-type">usize</span> = index<br>        .<span class="hljs-title function_ invoke__">trim</span>()<br>        .<span class="hljs-title function_ invoke__">parse</span>()<br>        .<span class="hljs-title function_ invoke__">expect</span>(<span class="hljs-string">&quot;Index entered was not a number&quot;</span>);<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">element</span> = a[index];<br><br>    <span class="hljs-built_in">println!</span>(<br>        <span class="hljs-string">&quot;The value of the element at index &#123;&#125; is: &#123;&#125;&quot;</span>,<br>        index, element<br>    );<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>使用 <code>cargo run</code> 来运行代码，因为数组只有 5
+个元素，如果我们试图输入 <code>5</code> 去访问第 6
+个元素，则会访问到不存在的数组元素，最终程序会崩溃退出：</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs console">Please enter an array index.<br>5<br>thread &#x27;main&#x27; panicked at &#x27;index out of bounds: the len is 5 but the index is 5&#x27;, src/main.rs:19:19<br>note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace<br></code></pre></td></tr></table></figure>
+<p>这就是数组访问越界，访问了数组中不存在的元素，导致 Rust
+运行时错误。程序因此退出并显示错误消息，未执行最后的
+<code>println!</code> 语句。</p>
+<p>当你尝试使用索引访问元素时，Rust
+将检查你指定的索引是否小于数组长度。如果索引大于或等于数组长度，Rust
+会出现
+<strong>panic</strong>。这种检查只能在运行时进行，比如在上面这种情况下，编译器无法在编译期知道用户运行代码时将输入什么值。</p>
+<p>这种就是 Rust
+的安全特性之一。在很多系统编程语言中，并不会检查数组越界问题，你会访问到无效的内存地址获取到一个风马牛不相及的值，最终导致在程序逻辑上出现大问题，而且这种问题会非常难以检查。</p>
+<h3 id="b.-数组元素为非基础类型">b. 数组元素为非基础类型</h3>
+<p>学习了上面的知识，很多朋友肯定觉得已经学会了 Rust
+的数组类型，但现实会给我们一记重锤，实际开发中还会碰到一种情况，就是<strong>数组元素是非基本类型</strong>的，这时候大家一定会这样写。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">array</span> = [<span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;rust is good!&quot;</span>); <span class="hljs-number">8</span>];<br><br><span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;:#?&#125;&quot;</span>, array);<br></code></pre></td></tr></table></figure>
+<p>然后你会惊喜的得到编译错误。</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs console">error[E0277]: the trait bound `String: std::marker::Copy` is not satisfied<br><span class="hljs-meta prompt_"> --&gt; </span><span class="language-bash">src/main.rs:7:18</span><br>  |<br>7 |     let array = [String::from(&quot;rust is good!&quot;); 8];<br>  |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `std::marker::Copy` is not implemented for `String`<br>  |<br>  = note: the `Copy` trait is required because this value will be copied for each element of the array<br></code></pre></td></tr></table></figure>
+<p>有些还没有看过特征的小伙伴，有可能不太明白这个报错，不过这个目前可以不提，我们就拿之前所学的<a target="_blank" rel="noopener" href="https://course.rs/basic/ownership/ownership.html">所有权</a>知识，就可以思考明白，前面几个例子都是
+Rust 的基本类型，而<strong>基本类型在 Rust 中赋值是以 Copy
+的形式</strong>，这时候你就懂了吧，<code>let array=[3;5]</code>底层就是不断的Copy出来的，但很可惜复杂类型都没有深拷贝，只能一个个创建。</p>
+<p>接着就有小伙伴会这样写。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">array</span> = [<span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;rust is good!&quot;</span>),<span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;rust is good!&quot;</span>),<span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;rust is good!&quot;</span>)];<br><br><span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;:#?&#125;&quot;</span>, array);<br></code></pre></td></tr></table></figure>
+<p>作为一个追求极致完美的Rust开发者，怎么能容忍上面这么难看的代码存在！</p>
+<p><strong>正确的写法</strong>，应该调用<code>std::array::from_fn</code></p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">array</span>: [<span class="hljs-type">String</span>; <span class="hljs-number">8</span>] = std::array::<span class="hljs-title function_ invoke__">from_fn</span>(|_i| <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;rust is good!&quot;</span>));<br><br><span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;:#?&#125;&quot;</span>, array);<br></code></pre></td></tr></table></figure>
+<h1 id="数组切片">2. 数组切片</h1>
+<p>在之前的<a target="_blank" rel="noopener" href="https://course.rs/basic/compound-type/string-slice.html#切片slice">章节</a>，我们有讲到
+<code>切片</code>
+这个概念，它允许你引用集合中的部分连续片段，而不是整个集合，对于数组也是，数组切片允许我们引用数组的一部分：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">a</span>: [<span class="hljs-type">i32</span>; <span class="hljs-number">5</span>] = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>];<br><br><span class="hljs-keyword">let</span> <span class="hljs-variable">slice</span>: &amp;[<span class="hljs-type">i32</span>] = &amp;a[<span class="hljs-number">1</span>..<span class="hljs-number">3</span>];<br><br><span class="hljs-built_in">assert_eq!</span>(slice, &amp;[<span class="hljs-number">2</span>, <span class="hljs-number">3</span>]);<br></code></pre></td></tr></table></figure>
+<p>上面的数组切片 <code>slice</code>
+的类型是<code>&amp;[i32]</code>，与之对比，数组的类型是<code>[i32;5]</code>，简单总结下切片的特点：</p>
+<ul>
+<li>切片的长度可以与数组不同，并不是固定的，而是取决于你使用时指定的起始和结束位置</li>
+<li>创建切片的代价非常小，因为切片只是针对底层数组的一个引用</li>
+<li>切片类型 [T] 拥有不固定的大小，而切片引用类型 &amp;[T]
+则具有固定的大小，因为 Rust 很多时候都需要固定大小数据类型，因此
+&amp;[T] 更有用，<code>&amp;str</code> 字符串切片也同理</li>
+</ul>
+<h1 id="总结">3. 总结</h1>
+<p>最后，让我们以一个综合性使用数组的例子，来结束本章节的学习：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>  <span class="hljs-comment">// 编译器自动推导出one的类型</span><br>  <span class="hljs-keyword">let</span> <span class="hljs-variable">one</span>             = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>];<br>  <span class="hljs-comment">// 显式类型标注</span><br>  <span class="hljs-keyword">let</span> <span class="hljs-variable">two</span>: [<span class="hljs-type">u8</span>; <span class="hljs-number">3</span>]    = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>];<br>  <span class="hljs-keyword">let</span> <span class="hljs-variable">blank1</span>          = [<span class="hljs-number">0</span>; <span class="hljs-number">3</span>];<br>  <span class="hljs-keyword">let</span> <span class="hljs-variable">blank2</span>: [<span class="hljs-type">u8</span>; <span class="hljs-number">3</span>] = [<span class="hljs-number">0</span>; <span class="hljs-number">3</span>];<br><br>  <span class="hljs-comment">// arrays是一个二维数组，其中每一个元素都是一个数组，元素类型是[u8; 3]</span><br>  <span class="hljs-keyword">let</span> <span class="hljs-variable">arrays</span>: [[<span class="hljs-type">u8</span>; <span class="hljs-number">3</span>]; <span class="hljs-number">4</span>]  = [one, two, blank1, blank2];<br><br>  <span class="hljs-comment">// 借用arrays的元素用作循环中</span><br>  <span class="hljs-keyword">for</span> <span class="hljs-variable">a</span> <span class="hljs-keyword">in</span> &amp;arrays &#123;<br>    <span class="hljs-built_in">print!</span>(<span class="hljs-string">&quot;&#123;:?&#125;: &quot;</span>, a);<br>    <span class="hljs-comment">// 将a变成一个迭代器，用于循环</span><br>    <span class="hljs-comment">// 你也可以直接用for n in a &#123;&#125;来进行循环</span><br>    <span class="hljs-keyword">for</span> <span class="hljs-variable">n</span> <span class="hljs-keyword">in</span> a.<span class="hljs-title function_ invoke__">iter</span>() &#123;<br>      <span class="hljs-built_in">print!</span>(<span class="hljs-string">&quot;\t&#123;&#125; + 10 = &#123;&#125;&quot;</span>, n, n+<span class="hljs-number">10</span>);<br>    &#125;<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">sum</span> = <span class="hljs-number">0</span>;<br>    <span class="hljs-comment">// 0..a.len,是一个 Rust 的语法糖，其实就等于一个数组，元素是从0,1,2一直增加到到a.len-1</span><br>    <span class="hljs-keyword">for</span> <span class="hljs-variable">i</span> <span class="hljs-keyword">in</span> <span class="hljs-number">0</span>..a.<span class="hljs-title function_ invoke__">len</span>() &#123;<br>      sum += a[i];<br>    &#125;<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;\t(&#123;:?&#125; = &#123;&#125;)&quot;</span>, a, sum);<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>做个总结，数组虽然很简单，但是其实还是存在几个要注意的点：</p>
+<ul>
+<li><strong>数组类型容易跟数组切片混淆</strong>，[T;n]
+描述了一个数组的类型，而 [T] 描述了切片的类型，
+因为切片是运行期的数据结构，它的长度无法在编译期得知，因此不能用 [T;n]
+的形式去描述</li>
+<li><code>[u8; 3]</code>和<code>[u8; 4]</code>是不同的类型，数组的长度也是类型的一部分</li>
+<li><strong>在实际开发中，使用最多的是数组切片[T]</strong>，我们往往通过引用的方式去使用<code>&amp;[T]</code>，因为后者有固定的类型大小</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/rust/" class="category-chain-item">rust</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/rust/rust%E5%9C%A3%E7%BB%8F/" class="category-chain-item">rust圣经</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/rust/rust%E5%9C%A3%E7%BB%8F/rust%E5%9F%BA%E7%A1%80/" class="category-chain-item">rust基础</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/rust/" class="print-no-link">#rust</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>2.4.5 数组</div>
+      <div>http://binbo-zappy.github.io/2025/01/05/rust圣经/2-4-5-数组/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年1月5日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-5-%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6/" title="2.5 流程控制">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">2.5 流程控制</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-4-4-%E6%9E%9A%E4%B8%BE/" title="2.4.4 枚举">
+                        <span class="hidden-mobile">2.4.4 枚举</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

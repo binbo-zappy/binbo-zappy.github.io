@@ -1,0 +1,1677 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="第11章 反思C++面向对象与虚函数 C++的面向对象语言设施相比其他现代语言可算得上“简陋”，而且与语言的其他部分（better C、数据抽象、泛型）融合度较差（见电子工业出版社出版的《C++ Primer（第4版）（评注版）》第15章）。在C++中进行面向对象编程会遇到其他语言中不存在的问题，其本质原因是C++ class是值语义，而非对象语义。 1. 朴实的C++设计 C++是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="11. 反思C++面向对象与虚函数">
+<meta property="og:url" content="http://binbo-zappy.github.io/2025/01/03/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/11-%E5%8F%8D%E6%80%9DC++%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E4%B8%8E%E8%99%9A%E5%87%BD%E6%95%B0/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="第11章 反思C++面向对象与虚函数 C++的面向对象语言设施相比其他现代语言可算得上“简陋”，而且与语言的其他部分（better C、数据抽象、泛型）融合度较差（见电子工业出版社出版的《C++ Primer（第4版）（评注版）》第15章）。在C++中进行面向对象编程会遇到其他语言中不存在的问题，其本质原因是C++ class是值语义，而非对象语义。 1. 朴实的C++设计 C++是">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/muduo.jpg">
+<meta property="article:published_time" content="2025-01-03T02:32:32.000Z">
+<meta property="article:modified_time" content="2025-01-05T13:33:54.067Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="muduo">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/muduo.jpg">
+  
+  
+  
+  <title>11. 反思C++面向对象与虚函数 - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="11. 反思C++面向对象与虚函数"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-01-03 10:32" pubdate>
+          2025年1月3日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          30k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          249 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">11. 反思C++面向对象与虚函数</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="第11章-反思c面向对象与虚函数">第11章
+反思C++面向对象与虚函数</h1>
+<p>C++的面向对象语言设施相比其他现代语言可算得上“简陋”，而且与语言的其他部分（better
+C、数据抽象、泛型）融合度较差（见电子工业出版社出版的《C++
+Primer（第4版）（评注版）》第15章）。在C++中进行面向对象编程会遇到其他语言中不存在的问题，其本质原因是C++
+class是值语义，而非对象语义。</p>
+<h2 id="朴实的c设计">1. 朴实的C++设计</h2>
+<p>C++是一门（最）复杂的编程语言，语言虽复杂，不代表一定要用复杂的方式来使用它。对于一个金融交易系统，正确性是首要的，价格/数量/交割日期弄错了就会赔钱。在编写代码时，我们特别注意把代码写得尽量简单直白，让人一看就懂。为了控制代码的复杂度，我们采用了基于对象的风格，也就是具体类加全局函数，把C++程序写得如C语言一般清晰，同时使用一些C++特性和库来减少代码。</p>
+<p>项目中基本没有用到面向对象，或者说没有用到继承和多态的那种面向对象（不一定非得有基类和派生类的设计才是好设计）。引入基类和派生类，或许能带来灵活性，但是代码就不如原来透彻了。在不需要这种灵活性的场合，为什么要付出这样的代价呢？我宁愿花一天时间把几千行C代码弄懂，也不愿在几千个类组成的继承体系里绕来绕去浪费脑力。定义并使用清晰一致的接口很重要，但“接口”不一定非得是抽象基类，一个类的成员函数就是它的接口。如果看头文件就能明白这个类在干什么、该怎么用固然很好，但如果不明白，打开实现文件，东西都在那儿摆着呢，一望而知。没必要非得用个抽象的接口类把使用者和实现隔开，再把实现隐藏起来，这除了让查找并理解代码变麻烦之外没有任何好处。一个进程内部的解耦意义不大：相反，<strong>函数调用是最直接有效的通信方式</strong>。或许采用接口类/实现类的一个可能的好处是依赖注入，便于单元测试。经过权衡比较，我们发现针对各个类写测试的意义不大。另外，如果用黑盒测试，那么功能代码和测试代码就得同步更新，会增加不少工作量，碍手碍脚。</p>
+<p>程序里边有一处用到了继承，因为它能简化设计。这是一个strategy，涉及一个基类和三四个派生类，所有的类都没有数据成员，只有虚函数。这几个类的代码加起来不到200行。这个设计不是一开始就有的，而是在项目进行了一大半的时候，我们发现代码里有若干处针对请求类型的switch-case，于是提炼出了一个strategy，把好几处switch-case替换为了strategy对象的虚函数调用，从而简化了代码。这里我们是把OO纯粹当做函数指针表来用的。</p>
+<p>程序里还有几处用了模板，甚至为了简化与第三方库的交互而动用了type_traits，这都是为了简化代码，最少键盘。这些代码都藏在一个角落里，对外只暴露出一个全局函数的接口，使用者不会被其困扰。</p>
+<p>项目里，我们唯一仰仗的C++特性是<strong>确定性析构</strong>，<strong>即一个对象在离开其作用域之后会保证调用析构函数</strong>。我们利用这点大大简化了代码，并确保资源和内存的回收。在我看来，确定性析构是C++区别其他主流开发语言（Java/C#/C/动态脚本语言）的最主要特性。</p>
+<p>为了确保正确性，我们另外用Java写了一个测试夹具（test
+harness）来测试我们这个C++程序。这个测试夹具模拟了所有与我们这个C++程序打交道的其他程序，能够测试各种正常或异常的情况。基本上任何代码改动和bug修复都在这个夹具中有体现。如果要新加一个功能，会有对应的测试用例来验证其行为。如果发现了一个bug，先往夹具里加一个或几个能复现bug的测试用例，然后修复代码，让测试通过。我们积累了几百个测试用例，这些用例表示了我们对程序行为的预期，是一份可以运行的文档。每次代码改动提交之前，我们都会执行一通测试，以防低级错误发生。（见本书<span class="math inline">\(\S9.7\)</span>的详细论述和S7.12的例子。）</p>
+<p>我们让每个类有明确的职责范围，一个类代表一个概念，不能像个杂货铺一样什么都装。在增加或修改功能的时候，仔细考虑在哪儿下手才最合理。必要时可以动大手脚，而不是每次都选择最简单的修补方式，那样只会使代码越来越臭，积重难返，重蹈上一个版本的覆辙。有时我们会提炼出一个新的类，把原来分散在多个类里的代码集中到一起，从而优化结构。我们有测试夹具保障，并不担心修改会破坏什么。</p>
+<p>设计不是一开始就形成的，而是随着项目进展逐步演化出来的。我们的设计是基于类的，而不是基于类的继承体系的。我们是在写应用，不是在写框架，在C++重用那么多继承对我们没好处。一开始我们只有三四个类，实现了基本的报价功能，然后增加了一个类，实现了下单功能。这时我们把报价和下单的共同数据结构提炼成一个新的类，作为原来两个类的成员（而不是基类！），并把解析客户输入的代码移到这个类里。我们的原则是，可以有特别简单的类，但不宜有特别复杂的类，更不能有“大类”。一个类太大，我们就看看能不能把它拆成两个，把责任分开。两个类有共同的代码逻辑，我们会考虑提炼出一个工具类来用，输入数据的验证就是这么提炼出来的一个类。勿以善小而不为，应始终让代码保持清晰易懂。</p>
+<p>让代码保持清晰，给我们带来了显而易见的好处。错误更容易暴露，在发布前多修复一个错误，发布后就少一次半夜被从被窝里叫醒查错的机会。</p>
+<p>不要因为某个技术流行而去用它，除非它确实能降低程序的复杂性。毕竟，软件开发的首要技术使命是控制复杂度，防止脑袋爆掉。对于继承要特别小心，这条“贼船”上去就下不来，除非你是继承boost::noncopyable。在讲解面向对象的书里，总会举一些用继承的精巧的例子，比如矩形、正方形、圆形继承自形状，飞机和麻雀继承自“能飞的”，这不意味着继承处处适用。我认为在C++这样需要自己管理内存和对象生命周期的语言里，大规模使用面向对象、继承、多态多是自讨苦吃。还不如用C语言的思路来设计，在局部用一用继承来代替函数指针表。而《设计模式》与其说是常见问题的解决方案，不如说是绕过（workaround）C++语言限制的技巧。当然，也是一些人挂在嘴边用来忽悠别人或麻痹自己的灵丹妙药。</p>
+<h2 id="程序库的二进制兼容性">2. 程序库的二进制兼容性</h2>
+<p>本节主要讨论Linux x86/x86-64平台，偶尔会举Windows作为反面教材。</p>
+<p>C++程序员有不同的角色，比如有主要编写应用程序的（application），也有主要编写程序库的（library），有的程序员或许还身兼多职。如果公司的规模比较大，会出现更细致和明确的分工。比如有的团队专门负责一两个公用的library：有的团队负责某个application，并使用了前一个团队的library。</p>
+<p>举一个具体的例子。假设你负责一个图形库，这个图形库功能强大，且经过了充分测试，于是在公司内慢慢推广开来。目前已经有二三十个内部项目用到了你的图形库，大家日子过得挺好。前几天，公司新买了一批大屏幕显示器（分辨率为2560×1600像素），不巧你的图形库不能支持这么高的分辨率。（这其实不怪你，因为在你当年编写这个库的时候，市面上显示器的最高分辨率是1920×1200像素。）结果用到了你的图形库的应用程序在2560×1600分辨率下不能正常工作，你该怎么办？你可以发布一个新版的图形库，并要求那二三十个项目组用你的新库重新编译他们的程序，然后让他们重新发布应用程序。或者，你提供一个新的库文件，直接替换现有的库文件，应用程序的可执行文件保持不变。</p>
+<p>这两种做法各有优劣。第一种做法声势浩大，凡是用到你的库的团队都要经历一个release
+cycle。后一种做法似乎节省人力，但是有风险：如果新的库文件和原有的应用程序可执行文件不兼容怎么办？</p>
+<p>所以，作为C++程序员，<strong>只要工作涉及二进制的程序库（特别是动态库），都需要了解二进制兼容性方面的知识。</strong></p>
+<p>C/C++的二进制兼容性（binary
+compatibility）有多重含义，本文主要在“<strong>库文件单独升级，现有可执行文件是否受影响</strong>”这个意义下讨论，我称之为library（主要是shared
+library，即动态链接库）的ABI（application binary
+interface）。至于编译器与操作系统的ABI见第10章。</p>
+<h3 id="什么是二进制兼容性">2.1 什么是二进制兼容性</h3>
+<p>在解释这个定义之前，先看看Unix和C语言的一个历史问题：open()的flags参数的取值。open(2)函数的原型如下，其中flags的取值有三个：O_RDONLY、O_WRONLY、O_RDWR。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">open</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *pathname, <span class="hljs-type">int</span> flags)</span></span>;<br></code></pre></td></tr></table></figure>
+<p>与人们通常的直觉相反，这几个常数值不满足按位或（bitwise-OR）的关系，即<code>(O_RDONLY | O_WRONLY) != O_RDWR</code>。如果你想以读写方式打开文件，必须用<code>O_RDWR</code>，而不能用<code>(O_RDONLY | O_WRONLY)</code>。为什么？因为<code>O_RDONLY</code>、<code>O_WRONLY</code>、<code>O_RDWR</code>的值分别是0、1、2。它们不满足按位或。</p>
+<p>那么为什么Unix/C语言从诞生到现在一直没有纠正这个小小的缺陷？比方说把<code>O_RDONLY</code>、<code>O_WRONLY</code>、<code>O_RDWR</code>分别定义为1、2、3这样（<code>O_RDONLY | O_WRONLY</code>）<code>O_RDWR</code>，符合直觉。而且这三个值都是宏定义，也不需要修改现有的源代码，只需要改改系统的头文件就行了。</p>
+<p>这么做会破坏二进制兼容性。对于已经编译好的可执行文件，它调用<code>open(2)</code>的参数是写死的，更改头文件并不能影响已经编译好的可执行文件。比方说这个可执行文件会调用<code>open(path, 1)</code>来写文件，而在新规定中，这表示读文件，程序就错乱了。</p>
+<p>以上这个例子说明，如果以shared
+library方式提供函数库，那么头文件和库文件不能轻易修改，否则容易破坏已有的二进制可执行文件，或者其他用到这个shared
+library的library。</p>
+<p>操作系统的system
+call可以看成Kernel与Userspace的interface，kernel在这个意义下也可以当成shared
+library，你可以把内核从2.6.30升级到2.6.35，而不需要重新编译所有用户态的程序。</p>
+<p>本章所指的“二进制兼容性”是在升级（也可能是bug
+fix）库文件的时候，不必重新编译使用了这个库的可执行文件或其他库文件，并且程序的功能不被破坏。见QT
+FAQ的有关条款。</p>
+<p>在Windows有臭名昭著的DLL
+Hell问题，比如MFC有一堆DLL：mfc40.dll、mfc42.dll、mfc71.dll、mfc80.dll、mfc90.dll等，这其实是动态链接库的本质问题，怪不到MFC头上。</p>
+<h3 id="有哪些情况会破坏库的abi">2.2 有哪些情况会破坏库的ABI</h3>
+<p>到底如何判断一个改动是不是二进制兼容呢？这跟C++的实现方式直接相关，虽然C++标准没有规定C++的ABI，但是几乎所有主流平台都有明文或事实上的ABI标准。比方说ARM有EABI，Intel
+Itanium有Itanium
+ABI，x86-64有仿Itanium的ABI，SPARC和MIPS也都有明文规定的ABI，等等。x86是个例外，它只有事实上的ABI，比如Windows就是Visual
+C++，Linux是G++（G++的ABI还有多个版本，目前最新的是G++3.4的版本），Intel的C++编译器也得按照Visual
+C++或G++的ABI来生成代码，否则就不能与系统的其他部件兼容。</p>
+<p>C++编译器ABI的主要内容包括以下几个方面：</p>
+<ul>
+<li>函数参数传递的方式，比如x86-64用寄存器来传函数的前4个整数参数；</li>
+<li>虚函数的调用方式，通常是vptr/vtbl机制，然后用vtbl[offset]来调用；</li>
+<li>struct和class的内存布局，通过偏移量来访问数据成员；</li>
+<li>name mangling；</li>
+<li>RTTI和异常处理的实现（以下本文不考虑异常处理）。</li>
+</ul>
+<p>C/C++通过头文件暴露出动态库的使用方法（主要是函数调用和对象布局），这个“使用方法”主要是给编译器看的，编译器会据此生成二进制代码，然后在运行的时候通过装载器（loader）把可执行文件和动态库绑到一起。如何判断一个改动是不是二进制兼容，主要就是看头文件暴露的这份“使用说明”能否与新版本的动态库的实际使用方法兼容。因为新的库必然有新的头文件，但是现有的二进制可执行文件还是按旧的头文件中的“使用说明”来调用动态库。</p>
+<p>先说修改动态库导致二进制不兼容的例子。比如原来动态库里定义了non-virtual函数<code>void foo(int)</code>，新版的库把参数改成了<code>double</code>。那么现有的可执行文件就无法启动，会发生undefined
+symbol错误，因为这两个函数的mangled
+name不同。但是对于virtual函数<code>foo(int)</code>，修改其参数类型并不会导致加载错误，而是会发生异的运行时错误。因为虚函数的决议（resolution）是靠偏移量，并不是靠符号名。</p>
+<p>再举一些源代码兼容但是二进制代码不兼容的例子：</p>
+<ul>
+<li><p>给函数增加默认参数，现有的可执行文件无法传这个额外的参数。</p></li>
+<li><p>增加成员函数，会造成vtbl重的排列变化。（不要考虑“只在未尾增加”这种取巧行为，因为你的class可能已被继承。）</p></li>
+<li><p>增加默认模板类型参数，比方说<code>Foo&lt;T&gt;</code>改为<code>Foo&lt;T, Alloc = alloc&lt;T&gt;&gt;</code>，这会改变name
+mangling。</p></li>
+<li><p>改变enum的值，把<code>enum Color &#123; Red = 3 &#125;;</code>改为<code>Red = 4</code>。这会造成错位。当然，由于enum自动排列取值，添加enum项也是不安全的（在未尾添加除外）。</p></li>
+<li><p>给class
+Bar增加数据成员，造成<code>sizeof(Bar)</code>变大，以及内部数据成员的offset变化，这是不是安全的？通常不是安全的，但也有例外。</p>
+<ul>
+<li>如果客户代码里有<code>new Bar</code>，那么肯定不安全，因为new的字节数不够装下新Bar对象。相反，如果library通过factory返回<code>Bar*</code>（并通过factory来销毁对象）或者直接返回<code>shared_ptr&lt;Bar&gt;</code>，客户端不需要用到<code>sizeof(Bar)</code>，那么可能是安全的。</li>
+<li>如果客户代码里有<code>Bar* pBar; pBar-&gt;memberA = xx;</code>，那么肯定不安全，因为<code>memberA</code>的新Bar的偏移可能会变。相反，如果只通过成员函数来访问对象的数据成员，客户端不需要用到data
+member的offsets，那么可能是安全的。</li>
+<li>如果客户调用<code>pBar-&gt;setMemberA(xx);</code>，而<code>Bar::setMemberA()</code>是个inline
+function，那么肯定不安全，因为偏移量已经被inline到客户的二进制代码里了。如果<code>setMemberA()</code>是outline
+function，其实现位于shared
+library中，会随着Bar的更新而更新，那么可能是安全的。</li>
+</ul></li>
+<li><p>那么只使用header-only的库文件是不是安全呢？不一定。如果你的程序用了boost
+1.36.0，而你依赖的某个library在编译的时候用的是1.33.1，那么你的程序和这个library就不能正常工作。因为1.36.0和1.33.1的<code>boost::function</code>的模板参数类型的个数不一样，后者多了一个allocator。</p></li>
+</ul>
+<p>这里有一份黑名单，列在这里的肯定是二进制不兼容的，没有列出的也可能是二进制不兼容的，见KDE的文档。</p>
+<h3 id="哪些做法多半是安全的">2.3 哪些做法多半是安全的</h3>
+<p>前面我说“不能轻易修改”，暗示有些改动多半是安全的，这里有一份白名单，欢迎添加更多内容。</p>
+<p>只要库改动不影响现有的可执行文件的二进制代码的正确性，那么就是安全的，我们可以先部署新的库，让现有的二进制程序受益。</p>
+<ul>
+<li>增加新的class。</li>
+<li>增加non-virtual成员函数或static成员函数。</li>
+<li>修改数据成员的名称，因为生产的二进制代码是按偏移量来访问的。当然，这会造成源码级的不兼容。</li>
+</ul>
+<h3 id="反面教材com">2.4 反面教材：COM</h3>
+<p><strong>在C++中以虚函数作为接口基本上就跟二进制兼容性说“bye-bye”了</strong>。具体地说，以只包含虚函数的class（称为interface
+class）作为程序库的接口，这样的接口是僵硬的，一旦发布，无法修改。</p>
+<p>另外，Windows下，<strong>Visual
+C++编译的时候要选择Release或Debug模式，而且Debug模式编译出来的library通常不能在Release
+binary中使用</strong>（反之亦然），这也是因为两种模式下的CRT二进制不兼容（主要是内存分配方面，Debug有自己的簿记（bookkeeping））。Linux就没有这个麻烦，可以混用。</p>
+<h3 id="解决办法">2.5 解决办法</h3>
+<ul>
+<li><p>采用静态链接</p>
+<p>这种静态链接不是指使用静态库（.a），而是指完全从源码编译出可执行文件（<span class="math inline">\(\S10.5.3\)</span>）。在分布式系统中，采用静态链接也带来部署上的好处，只要把可执行文件放到机器上就能运行，不用考虑它依赖的libraries。目前muduo就是采用静态链接。</p></li>
+<li><p>通过动态库的版本管理来控制兼容性</p>
+<p>这需要非常小心地检查每次改动的二进制兼容性并做好发布计划，比如1.0.x版本系列之间做到二进制兼容，1.1.x版本系列之间做到二进制兼容，而1.0.x和1.1.x不必二进制兼容。《程序员的自我修养》[LLLI]讲了.so文件的命名与二进制兼容性相关的话题，值得一读。</p></li>
+<li><p>用pimpl技法，编译器防火墙</p>
+<p>在头文件中只暴露non-virtual接口，并且class的大小固定为sizeof(Impl*)，这样可以随意更新库文件而不影响可执行文件。具体做法见<span class="math inline">\(\S11.4\)</span>。当然，这么做又多了一道间接性，可能有一定的性能损失。另见《Exceptional
+C++》的有关条款和《C++编程规范》[CCS，条款43]。</p></li>
+</ul>
+<h2 id="避免使用虚函数作为库的接口">3. 避免使用虚函数作为库的接口</h2>
+<p>作为C++动态库的作者，应当避免使用虚函数作为库的接口。这么做会给保持二进制兼容性带来很大麻烦，不得不增加很多不必要的interfaces，最终重蹈COM的覆辙。</p>
+<p>本节主要讨论Linux
+x86/x86-64平台，下面会继续举Windows/COM作为反面教材。本节是s11.2“程序库的二进制兼容性”的延续，在初次发表<span class="math inline">\(\S11.2\)</span>内容的时候，我原本以为大家都对“以C++虚函数作为接口”的害处达成了共识，因此就写得比较简略，但现在看来情况并非如此，我还得展开谈一谈。</p>
+<p>“接口”有广义和狭义之分，本节用中文“接口”表示广义的接口，即一个库的代码界面；用英文interface表示狭义的接口，即只包含virtual
+function的class，这种class通常没有data
+member，在Java里有一个专门的关键字interface来表示它。</p>
+<h3 id="c程序库的作者的生存环境">3.1 C++程序库的作者的生存环境</h3>
+<p>假设你是一个shared
+library的维护者，你的library被公司另外的两三个团队使用了。你发现了一个安全漏洞，或者某个会导致crash的bug需要紧急修复，那么你修复之后，能不能直接部署library的二进制文件？有没有破坏二进制兼容性？会不会破坏别人团队已经编译好的投入生产环境的可执行文件？是不是要强迫别的团队重新编译链接，把可执行文件也发布新版本？会不会打乱别人的release
+cycle？这些都是工程开发中经常要遇到的问题。</p>
+<p>如果你打算新写一个C++ library，那么通常要做以下几个决策：</p>
+<ul>
+<li>以什么方式发布？动态库还是静态库？（本节不考虑源代码发布这种情况，这其实和静态库类似。）</li>
+<li>以什么方式暴露库的接口？可选的做法有：以全局（含namespace级别）函数为接口、以class的non-virtual成员函数为接口、以virtual函数为接口。</li>
+</ul>
+<p>Java程序员不需要考虑这么多，直接写class成员函数就行，最多考虑一下要不要给method或class标上final。也不必考虑什么动态库，静态库，都是.jar文件。</p>
+<p>在作出上面两个决策之前，我们考虑两个基本假设：</p>
+<ul>
+<li>代码会有bug，库也不例外。将来可能会发布bug fixes。</li>
+<li>会有新的功能需求。写代码不是一锤子买卖，总是会有新的需求冒出来，需要程序员往库中增加东西。这是好事情，让程序员不去饭碗。</li>
+</ul>
+<p>也就是说，在设计库的时候必须要考虑将来如何升级。如果你的代码第一次发布的时候就已经做到完美，将来不需要任何修改，那么怎么做都行，也就不必继续阅读本节内容了。</p>
+<p>基于以上两个基本假设来做决定。第一个决定很好做，如果需要hotfix，那么只能用动态库；否则，在分布式系统中使用静态库更容易部署，这在前面已经谈过。“动态库比静态库节约内存”这种优势在今天看来已不太重要。</p>
+<p>下面假定你或者你的老板选择以动态库方式发布，即发布.so或.dll文件，来看看第二个决定怎么做。再说一句，如果你能够以静态库方式发布，后面的麻烦都不会遇到。</p>
+<h3 id="虚函数作为库的接口的两大用途">3.2
+虚函数作为库的接口的两大用途</h3>
+<p>虚函数作为接口大致有这么两种用法：</p>
+<ul>
+<li>调用，也就是库提供一个什么功能（比如绘图Graphics），以虚函数为接口方式暴露给客户端代码。客户端代码一般不需要继承这个interface，而是直接调用其member
+function。这么做据说是有利于接口和实现分离，我认为纯属多此一举、自欺欺人。</li>
+<li>回调，也就是事件通知，比如网络库的“连接建立”、“数据到达”、“连接断开”等等。客户端代码一般会继承这个interface，然后把对象实体注册到库里面，等库来回调自己。一般来说客户端不会自己去调用这些member
+function，除非是为了写单元测试模拟库的行为。</li>
+<li>混合，一个class既可以被客户端代码继承用作回调，又可以被客户端直接调用。说实话我没看出这么做的好处，但实际中某些面向对象的C++库就是这么设计的。</li>
+</ul>
+<p>对于“回调”方式，现代C++有更好的做法，即boost::function+boost::bind。muduo的回调即采用这种新方法（<span class="math inline">\(\S11.5\)</span>）。以下不考虑以虚函数为回调的过时做法。</p>
+<p>对于“调用”方式，这里举一个虚构的图形库来说明问题。这个库的功能是画线、画矩形、画圆弧：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Point</span> &#123;<br>    <span class="hljs-type">int</span> x;<br>    <span class="hljs-type">int</span> y;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Graphics</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">drawLine</span><span class="hljs-params">(<span class="hljs-type">int</span> x0, <span class="hljs-type">int</span> y0, <span class="hljs-type">int</span> x1, <span class="hljs-type">int</span> y1)</span></span>;<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">drawLine</span><span class="hljs-params">(Point p0, Point p1)</span></span>;<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">drawRectangle</span><span class="hljs-params">(<span class="hljs-type">int</span> x0, <span class="hljs-type">int</span> y0, <span class="hljs-type">int</span> x1, <span class="hljs-type">int</span> y1)</span></span>;<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">drawRectangle</span><span class="hljs-params">(Point p0, Point p1)</span></span>;<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">drawArc</span><span class="hljs-params">(<span class="hljs-type">int</span> x, <span class="hljs-type">int</span> y, <span class="hljs-type">int</span> r)</span></span>;<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">drawArc</span><span class="hljs-params">(Point p, <span class="hljs-type">int</span> r)</span></span>;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>这里略去了很多与本文主题无关的细节，比如Graphics的构造与析构、draw*()函数应该是public、Graphics应该不允许复制，还比如Graphics可能会用pure
+virtual functions等等，这些都不影响本文的讨论。</p>
+<p>这个Graphics库的使用很简单，客户端起来是这个样子。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs cpp">Graphics* g = <span class="hljs-built_in">getGraphics</span>();<br>g-&gt;<span class="hljs-built_in">drawLine</span>(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">100</span>, <span class="hljs-number">200</span>);<br><span class="hljs-built_in">releaseGraphics</span>(g);<br></code></pre></td></tr></table></figure>
+<p>似乎一切都很好，阳光明媚，符合“面向对象的原则”，但是一旦考虑升级，前景立刻变得昏暗。</p>
+<h3 id="虚函数作为接口的弊端">3.3 虚函数作为接口的弊端</h3>
+<p>以虚函数作为接口在二进制兼容性方面有本质困难：“一旦发布，不能修改。”</p>
+<p>假如我需要给Graphics增加几个绘图函数，同时保持二进制兼容性。这几个新函数的坐标以浮点数表示，我理想中的新接口是：</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs diff"><span class="hljs-comment">--- old/graphics.h 2011-03-12 13:12:44.000000000 +0800</span><br><span class="hljs-comment">+++ new/graphics.h 2011-03-12 13:13:30.000000000 +0800</span><br>class Graphics &#123;<br>    virtual void drawLine(int x0, int y0, int x1, int y1);<br><span class="hljs-addition">+   virtual void drawLine(double x0, double y0, double x1, double y1);</span><br>    virtual void drawLine(Point p0, Point p1);<br>    virtual void drawRectangle(int x0, int y0, int x1, int y1);<br><span class="hljs-addition">+   virtual void drawRectangle(double x0, double y0, double x1, double y1);</span><br>    virtual void drawRectangle(Point p0, Point p1);<br>    virtual void drawArc(int x, int y, int r);<br><span class="hljs-addition">+   virtual void drawArc(double x, double y, double r);</span><br>    virtual void drawArc(Point p, int r);<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>受C++二进制兼容性方面的限制，我们不能这么做。其本质问题在于C++以vtable[offset]方式实现虚函数调用，而offset又是根据虚函数声明的位置隐式确定的，这造成了脆弱性。我增加了<code>drawLine(double x0, double y0, double x1, double y1)</code>，造成vtable的排列发生了变化，现有的二进制可执行文件无法再用旧的offset调用到正确的函数。</p>
+<p>怎么办呢？有一种危险且丑陋的做法，即把新的虚函数放到interface的末尾：</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs diff"><span class="hljs-comment">--- old/graphics.h 2011-03-12 13:12:44.000000000 +0800</span><br><span class="hljs-comment">+++ new/graphics.h 2011-03-12 13:58:22.000000000 +0800</span><br>class Graphics &#123;<br>    virtual void drawLine(int x0, int y0, int x1, int y1);<br>    virtual void drawLine(Point p0, Point p1);<br>    virtual void drawRectangle(int x0, int y0, int x1, int y1);<br>    virtual void drawRectangle(Point p0, Point p1);<br>    virtual void drawArc(int x, int y, int r);<br>    virtual void drawArc(Point p, int r);<br><span class="hljs-addition">+   virtual void drawLine(double x0, double y0, double x1, double y1);</span><br><span class="hljs-addition">+   virtual void drawRectangle(double x0, double y0, double x1, double y1);</span><br><span class="hljs-addition">+   virtual void drawArc(double x, double y, double r);</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>这么做很丑陋，因为新的<code>drawLine(double x0, double y0, double x1, double y1)</code>函数没有和原来的<code>drawLine()</code>函数得在一起，造成了阅读上的不便。这么做同时很危险，因为Graphics如果被继承，那么新增虚函数会改变派生类中的vtable
+offset变化，同样不是二进制兼容的。</p>
+<p>另外有两种似乎安全的做法，这也是COM采用的办法：</p>
+<ol type="1">
+<li>通过链式继承来扩展现有的interface，例如从Graphics派生出Graphics2。</li>
+</ol>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs diff"><span class="hljs-comment">--- graphics.h 2011-03-12 13:12:44.000000000 +0800</span><br><span class="hljs-comment">+++ graphics2.h 2011-03-12 13:58:35.000000000 +0800</span><br>class Graphics &#123;<br>    virtual void drawLine(int x0, int y0, int x1, int y1);<br>    virtual void drawLine(Point p0, Point p1);<br>    virtual void drawRectangle(int x0, int y0, int x1, int y1);<br>    virtual void drawRectangle(Point p0, Point p1);<br>    virtual void drawArc(int x, int y, int r);<br>    virtual void drawArc(Point p, int r);<br>&#125;;<br><br><span class="hljs-addition">+class Graphics2 : public Graphics &#123;</span><br><span class="hljs-addition">+    using Graphics::drawLine;</span><br><span class="hljs-addition">+    using Graphics::drawRectangle;</span><br><span class="hljs-addition">+    using Graphics::drawArc;</span><br><span class="hljs-addition">+</span><br><span class="hljs-addition">+    // added in version 2</span><br><span class="hljs-addition">+    virtual void drawLine(double x0, double y0, double x1, double y1);</span><br><span class="hljs-addition">+    virtual void drawRectangle(double x0, double y0, double x1, double y1);</span><br><span class="hljs-addition">+    virtual void drawArc(double x, double y, double r);</span><br><span class="hljs-addition">+&#125;;</span><br></code></pre></td></tr></table></figure>
+<p>将来如果继续增加功能，那么还会有class Graphics3 : public
+Graphics2以及class Graphics4 : public
+Graphics3等等。这么做和前面的做法一样丑陋，因为新的<code>drawLine(double x0, double y0, double x1, double y1)</code>函数位于派生Graphics2
+interface中，没有和原来的<code>drawLine()</code>函数待在一起，造成了割裂。</p>
+<ol start="2" type="1">
+<li>通过多重继承来扩展现有的interface，例如定义一个与Graphics
+class有同样成员的Graphics2，再让实现同时继承这两个interface。</li>
+</ol>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs diff"><span class="hljs-comment">--- graphics.h 2011-03-12 13:12:44.000000000 +0800</span><br><span class="hljs-comment">+++ graphics2.h 2011-03-12 13:16:45.000000000 +0800</span><br>class Graphics &#123;<br>    virtual void drawLine(int x0, int y0, int x1, int y1);<br>    virtual void drawLine(Point p0, Point p1);<br>    virtual void drawRectangle(int x0, int y0, int x1, int y1);<br>    virtual void drawRectangle(Point p0, Point p1);<br>    virtual void drawArc(int x, int y, int r);<br>    virtual void drawArc(Point p, int r);<br>&#125;;<br><br><span class="hljs-addition">+class Graphics2 &#123;</span><br><span class="hljs-addition">+    virtual void drawLine(int x0, int y0, int x1, int y1);</span><br><span class="hljs-addition">+    virtual void drawLine(double x0, double y0, double x1, double y1);</span><br><span class="hljs-addition">+    virtual void drawLine(Point p0, Point p1);</span><br><span class="hljs-addition">+</span><br><span class="hljs-addition">+    virtual void drawRectangle(int x0, int y0, int x1, int y1);</span><br><span class="hljs-addition">+    virtual void drawRectangle(double x0, double y0, double x1, double y1);</span><br><span class="hljs-addition">+    virtual void drawRectangle(Point p0, Point p1);</span><br><span class="hljs-addition">+</span><br><span class="hljs-addition">+    virtual void drawArc(int x, int y, int r);</span><br><span class="hljs-addition">+    virtual void drawArc(double x, double y, double r);</span><br><span class="hljs-addition">+    virtual void drawArc(Point p, int r);</span><br><span class="hljs-addition">+&#125;;</span><br><br>// 在实现中采用多重接口继承<br><span class="hljs-addition">+class GraphicsImpl : public Graphics, // version 1</span><br><span class="hljs-addition">+                    public Graphics2 // version 2</span><br><span class="hljs-addition">+&#123;</span><br><span class="hljs-addition">+    // ...</span><br><span class="hljs-addition">+&#125;;</span><br></code></pre></td></tr></table></figure>
+<p>这种带版本的interface的做法在COM使用者的眼中看起来是很正常的（比如IXMLDOMDocument、IXMLDOMDocument2、IXMLDOMDocument3，文比如ITaskbarList、ITaskbarList2、ITaskbarList3、ITaskbarList4等等），这解决了二进制兼容性的问题，客户端源代码也不受影响。</p>
+<p>在我看来带版本的interface实在是很丑陋，因为每次改动都引入了新的interface
+class，会造成日后客户端代码难以管理。比如，如果新版应用程序的代码使用了Graphics3的功能，要不要把现有代码中出现的Graphics2都替换掉？</p>
+<ul>
+<li>如果不替换，一个程序同时依赖多个版本的Graphics，一直背着历史包袱。依赖的Graphics版本越积越多，将来如何管理得过来？</li>
+<li>如果要替换，为什么不相干的代码（现有的运行得好好的使用Graphics2的代码）也会因为别处用到了Graphics3而被修改？</li>
+</ul>
+<p>这种两难境地纯粹是“以函数为库的接口”造成的。<strong>如果我们能直接原地扩充class
+Graphics，</strong>就不会有这些麻烦事，见s11.4“动态库接口的推荐做法”。</p>
+<h3 id="假如linux系统调用以com接口方式实现">3.4
+假如Linux系统调用以COM接口方式实现</h3>
+<p>或许上面这个Graphics的例子太简单，没有让“以虚函数为接口”的缺点充分暴露出来，下面让我们看一个真实的案例：Linux
+Kernel。</p>
+<p>Linux kernel从0.01的67个系统调用发展到2.6.37的340个系统调用，kernel
+interface一直在扩充，而且保持良好的兼容性，它保持兼容性的办法很土，就是给每个system
+call赋予一个终身不变的数字代号，等于把虚函数表的排列固定下来。打开脚注中的两个链接，你就能看到fork(在Linux
+0.01和Linux
+2.6.37里的代号都是2。（系统调用的编号跟硬件平台有关，这里我们看的是x86
+32-bit平台。）</p>
+<p>试想假如Linus当初选择用COM接口的链式继承风格来描述，将会是怎样一种壮观的景象？为了避免扰乱视线，请移步观看近百层继承的代码。</p>
+<p>不要误认为“接口一旦发布就不能更改”是天经地义的，那不过是“以C++虚函数为接口”的固有弊端，如果跳出这个框框去思考，其实C++库的接口很容易做得更好。为什么不能改？还不是因为用了C++虚函数作为接口。Java的interface可以添加新函数，C语言的库也可以添加新的全局函数，C++class也可以添加新non-virtual成员函数和namespace级别的non-member函数，这些都不需要继承出新interface就能扩充原有接口。偏偏COM的interface不能原地扩充，只能通过继承来workaround,产生一堆带版本的interfaces。有人说COM是二进制兼容性的正面例子，某深不以为然。COM确实以一种最丑陋的方式做到了“二进制兼容”。脆弱和僵硬就是以C++虚函数为接口的宿命。</p>
+<p>相反，Liux系统调用的编号以编译期常数方式固定下来，万年不变，轻而易举地解决了这个问题。在其他面向对象语言(Java/C#)中，我也没有见过每改动一次就给interface递增版本号的诡异做法。还是应了《The
+Zen of Python》中的那句话：“Explicit is better than implicit,Flat is
+better than nested."</p>
+<h3 id="java是如何应对的">3.5 Java是如何应对的</h3>
+<p>Java实际上把C/C++的linking这一步骤推迟到class
+loading的时候来做。就不存在“不能增加虚函数，“不能修改data
+member”等问题。在Java中用面向interface编程远比C++更通用和自然，也没有上面提到的“僵硬的接口”问题。</p>
+<h2 id="动态库接口的推荐做法">4. 动态库接口的推荐做法</h2>
+<p>取决于动态库的使用范围，有两类做法。</p>
+<p>其一，如果动态库的使用范围比较窄，比如本团队内部的两三个程序在用，用户都是受控的，要发布新版本也比较容易协调，那么不用太费事，只要做好发布的版本管理就行了。再在可执行文件中使用rpath把库的完整路径确定下来。</p>
+<p>比如现在Graphics库发布了1.1.0和1.2.0两个版本，这两个版本可以不必是二进制兼容的。用户的代码从1.1.0升级到1.2.0的时候要重新编译一下，反正他们要用新功能都是要重新编译代码的。如果要原地打补丁，那么1.1.1应该和1.1.0二进制兼容，而1.2.1应该和1.2.0兼容。如果要加入新的功能，而新的功能与1.2.0不兼容，那么应该发布到1.3.0版本。</p>
+<p>为了便于检查二进制兼容性，可考虑把库的代码的暴露情况分辨清楚。muduo的头文件和class就有意识地分为用户可见和用户不可见两部分（s6.3）。对于用户可见的部分，升级时要注意二进制兼容性，选用合理的版本号：对于用户不可见的部分，在升级库的时候就不必在意。另外muduo本身设计来是以源文件方式发布的，在二进制兼容性方面没有做太多的考虑。</p>
+<p>其二，如果库的使用范围很广，用户很多，各家的release
+cycle不尽相同，那么推荐pimpl技法[CCS，条款43]，并考虑多采用non-member
+non-friend function。</p>
+<ol type="1">
+<li>暴露的接口里边不要有虚函数，要显式声明构造函数、析构函数，并且不能inline，原因见<span class="math inline">\(\S10.3.2\)</span>。另外sizeof(Graphics) ==
+sizeof(Graphics::Impl*)。</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// graphics.h</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Graphics</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">Graphics</span>(); <span class="hljs-comment">// outline ctor</span><br>    ~<span class="hljs-built_in">Graphics</span>(); <span class="hljs-comment">// outline dtor</span><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">drawLine</span><span class="hljs-params">(<span class="hljs-type">int</span> x0, <span class="hljs-type">int</span> y0, <span class="hljs-type">int</span> x1, <span class="hljs-type">int</span> y1)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">drawLine</span><span class="hljs-params">(Point p0, Point p1)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">drawRectangle</span><span class="hljs-params">(<span class="hljs-type">int</span> x0, <span class="hljs-type">int</span> y0, <span class="hljs-type">int</span> x1, <span class="hljs-type">int</span> y1)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">drawRectangle</span><span class="hljs-params">(Point p0, Point p1)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">drawArc</span><span class="hljs-params">(<span class="hljs-type">int</span> x, <span class="hljs-type">int</span> y, <span class="hljs-type">int</span> r)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">drawArc</span><span class="hljs-params">(Point p, <span class="hljs-type">int</span> r)</span></span>;<br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-keyword">class</span> <span class="hljs-title class_">Impl</span>; <span class="hljs-comment">// 头文件只放声明</span><br>    boost::scoped_ptr&lt;Impl&gt; impl;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<ol start="2" type="1">
+<li>在库的实现中把调用转发（forward）给实现Graphics::Impl，这部分代码位于.so/.dll中，随库的升级一起变化。</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// graphics.cc</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;graphics.h&gt;</span></span><br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Graphics</span>::Impl &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">drawLine</span><span class="hljs-params">(<span class="hljs-type">int</span> x0, <span class="hljs-type">int</span> y0, <span class="hljs-type">int</span> x1, <span class="hljs-type">int</span> y1)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">drawLine</span><span class="hljs-params">(Point p0, Point p1)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">drawRectangle</span><span class="hljs-params">(<span class="hljs-type">int</span> x0, <span class="hljs-type">int</span> y0, <span class="hljs-type">int</span> x1, <span class="hljs-type">int</span> y1)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">drawRectangle</span><span class="hljs-params">(Point p0, Point p1)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">drawArc</span><span class="hljs-params">(<span class="hljs-type">int</span> x, <span class="hljs-type">int</span> y, <span class="hljs-type">int</span> r)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">drawArc</span><span class="hljs-params">(Point p, <span class="hljs-type">int</span> r)</span></span>;<br>&#125;;<br><br>Graphics::<span class="hljs-built_in">Graphics</span>() : <span class="hljs-built_in">impl</span>(<span class="hljs-keyword">new</span> Impl) &#123;&#125;<br>Graphics::~<span class="hljs-built_in">Graphics</span>() &#123;&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Graphics::drawLine</span><span class="hljs-params">(<span class="hljs-type">int</span> x0, <span class="hljs-type">int</span> y0, <span class="hljs-type">int</span> x1, <span class="hljs-type">int</span> y1)</span> </span>&#123;<br>    impl-&gt;<span class="hljs-built_in">drawLine</span>(x0, y0, x1, y1);<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Graphics::drawLine</span><span class="hljs-params">(Point p0, Point p1)</span> </span>&#123;<br>    impl-&gt;<span class="hljs-built_in">drawLine</span>(p0, p1);<br>&#125;<br></code></pre></td></tr></table></figure>
+<ol start="3" type="1">
+<li>如果要加入新的功能，不必通过继承来扩展，可以原地修改，且很容易保持二进制兼容性。先动头文件：</li>
+</ol>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs diff"><span class="hljs-comment">--- old/graphics.h 2011-03-12 15:34:06.000000000 +0800</span><br><span class="hljs-comment">+++ new/graphics.h 2011-03-12 15:14:12.000000000 +0800</span><br>class Graphics &#123;<br>public:<br>    Graphics(); // outline ctor<br>    ~Graphics(); // outline dtor<br>    void drawLine(int x0, int y0, int x1, int y1);<br><span class="hljs-addition">+   void drawLine(double x0, double y0, double x1, double y1);</span><br>    void drawLine(Point p0, Point p1);<br>    void drawRectangle(int x0, int y0, int x1, int y1);<br><span class="hljs-addition">+   void drawRectangle(double x0, double y0, double x1, double y1);</span><br>    void drawRectangle(Point p0, Point p1);<br>    void drawArc(int x, int y, int r);<br><span class="hljs-addition">+   void drawArc(double x, double y, double r);</span><br>    void drawArc(Point p, int r);<br>private:<br>    class Impl;<br>    boost::scoped_ptr&lt;Impl&gt; impl;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>然后在实现文件里增加forward，这么做不会破坏二进制兼容性，因为增加non-virtual函数不影响现有的可执行文件。</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs diff"><span class="hljs-comment">--- old/graphics.cc 2011-03-12 15:15:20.000000000 +0800</span><br><span class="hljs-comment">+++ new/graphics.cc 2011-03-12 15:15:26.000000000 +0800</span><br><span class="hljs-meta">@@ -1,35 +1,43 @@</span><br>#include &lt;graphics.h&gt;<br><br>class Graphics::Impl &#123;<br>public:<br>    void drawLine(int x0, int y0, int x1, int y1);<br><span class="hljs-addition">+   void drawLine(double x0, double y0, double x1, double y1);</span><br>    void drawLine(Point p0, Point p1);<br>    void drawRectangle(int x0, int y0, int x1, int y1);<br><span class="hljs-addition">+   void drawRectangle(double x0, double y0, double x1, double y1);</span><br>    void drawRectangle(Point p0, Point p1);<br>    void drawArc(int x, int y, int r);<br>    void drawArc(double x, double y, double r);<br>    void drawArc(Point p, int r);<br>&#125;;<br><br>Graphics::Graphics() : impl(new Impl) &#123;&#125;<br>Graphics::~Graphics() &#123;&#125;<br><br>void Graphics::drawLine(int x0, int y0, int x1, int y1) &#123;<br>    impl-&gt;drawLine(x0, y0, x1, y1);<br>&#125;<br><br><span class="hljs-addition">+void Graphics::drawLine(double x0, double y0, double x1, double y1) &#123;</span><br><span class="hljs-addition">+    impl-&gt;drawLine(x0, y0, x1, y1);</span><br><span class="hljs-addition">+&#125;</span><br><br>void Graphics::drawLine(Point p0, Point p1) &#123;<br>    impl-&gt;drawLine(p0, p1);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><strong>采用pimpl多了一道explicit
+forward的手续，带来的好处是可扩展性与二进制兼容性，这通常是划算的。pimpl扮演了编译器防火墙的作用。</strong></p>
+<p>pimpl不仅C++语言可以用，C语言的库同样可以用，一样带来二进制兼容性的好处，比如libevent2中的struct
+event_base是个opaque
+pointer，客户端看不到其成员，都是通过libevent的函数和它打交道，这样库的版本升级比较容易做到二进制兼容。</p>
+<p>为什么non-virtual函数比virtual函数更健壮？因为virtual
+function是bind-by-vtable-offset，而non-virtual
+function是bind-by-name。加载器（loader）会在程序启动时做决议（resolution），通过mangled
+name把可执行文件和动态库链接到一起。就像使用Internet域名比使用IP地址更能适应变化一样。</p>
+<p>万一要跨语言怎么办？很简单，暴露C语言的接口。Java有JNI可以调用C语言的代码；Python/Perl/Ruby等的解释器都是C语言编写的，使用C函数也不在话下。C函数是Linux下的能接口。</p>
+<p>本节只谈了使用class为接口，其实用free
+function有时候更好（比如muduo/base/Timestamp.h除了定义class
+Timestamp外，还定义了muduo::timeDifference()等free
+function），这也是C++比Java等纯面向对象语言优越的地方。</p>
+<h2 id="以boostfunction和boostbind取代虚函数">5.
+以boost::function和boost::bind取代虚函数</h2>
+<p>本节的中心思想是“面向对象的继承就像一条贼船，上去就下不来了”，而借助boost::function和boost::bind，大多数情况下，你都不用上“贼”。</p>
+<p>boost::function和boost::bind已经纳入了std::tr1，这或许是C++11最值得期待的功能，它将彻底改变C++库的设计方式，以及应用程序的编写方式。</p>
+<p>Scott
+Meyers的[EC3，条款35]提到了以boost::function和boost::bind取代虚函数的做法，另见孟岩的《function/bind的救赎（上）》、《回复几个问题》中的“四个半抽象”，这里谈谈我自己使用的感受。</p>
+<p>我对面向对象的“继承”和“多态”的态度是能不用就不用，因为很难纠正错误。如果有一棵类型继承树（class
+hierarchy），人们在一开始设计时就得考虑各个class在树上的位置。随着时间的推移，原来正确的决定有可能变成错误的。但是更正这个错误的代价可能很高。要想把这个class在继承树上从一个节点挪到另一个节点，可能要触及所有用到这个class的客户代码，所有用到其各层基类的客户代码，以及从这个class派生出来的全部class的代码。简直是牵一发而动全身，在C++缺乏良好重构工具的语言下，有时候只好保留错误，用些wrapper或者adapter来掩盖之。久而久之，设计越来越烂，最后只好推倒重来。解决办法之一就是不采用基于继承的设计，而是写一些容易使用也容易修改的具体类。</p>
+<p>总之，继承和虚函数是万恶之源，这条“贼船”上去就不容易下来。不过还好，在C++里我们有别的办法：以boost::function和boost::bind取代虚函数。</p>
+<p>用“继承树”这种方式来建模，确实是基于概念分类的思想。“分类”似乎是西方哲学一早就有的思想，影响深远，这种思想估计可以上溯到古希腊时期。</p>
+<ul>
+<li>比如电影，同以分为科幻片、爱情片、伦理片、战争片、灾难片、恐怖片等等。</li>
+<li>比如生物，按小学知识可以分为动物和植物，动物又可以分为有脊椎动物和无脊椎动物，有脊椎动物又分为鱼类、两栖类、爬行类、鸟类和哺乳类等。</li>
+<li>又比如技术书籍分为电子类、通信类、计算机类等等，计算机书籍又可分为编程语言、操作系统、数据结构、数据库、网络技术等等。</li>
+</ul>
+<p>这种分类法或许是早期面向对象方法的模仿对象。这种思考方式的本质困难在于：某些物体很难准确分类，似乎有不止一个分类适合它。而且不同的人看法可能不同，比如一部科幻悬疑片到底科幻的成分重还是悬疑的成分重，到底该归入哪一类。</p>
+<p>在缩程方面，情况更糟，因为这个“物体x”是变化的，一开始分入A类可能是合理的（x
+"is-a" A），随着功能演化，分入B类或许更合适（x is more like a
+B），但是这种改动对现有代码的代价已经太高了（特别是对C++）。</p>
+<p>在传统的面向对象语言中，可以用继承多个interfaces来缓解分错类的代价，使得一物多用。但是某些语言限制了基类只能有一个，在新增类型时可能会遇到麻烦，见星巴克卖豆浆奶茶的例子。</p>
+<p>现代编程语言这一步走得更远，Ruby的duck typing和Google
+Go的无继承都可以视作以tag取代分类（层次化的类型）的代表。一个object只要提供了相应的operations，就能当做某种东西来用，不需要显式地继承或实现某个接口。这确实是进步。</p>
+<p>对于C++的四种范式，我现在基本只把它当better C和data
+abstraction来用。OO和GP可以在非常小的范围内使用，只要暴露的接口是object-based（甚至global
+function）就行。</p>
+<p>以上谈了设计层面，再来说一说实现层面。</p>
+<p>在传统的C++程序中，事件回调是通过虚函数进行的。网络库往往会定义一个或几个抽象基类（Handler
+class），其中声明了一些（纯）虚函数，如onConnect()、onDisconnect、onMessage()、onTimer()等等。使用者需要继承这些基类，并覆写（override）这些虚函数，以获得事件回调通知。由于C++的动态绑定只能通过指针和引用实现，使用者必须把派生类（MyHandler）对象的指针或引用隐式转换为基类（Handler）的指针或引用，再注册到网络库中。MyHandler对象通常是动态创建的位于堆上，用完后需要delete。网络库调用基类的虚函数，通过动态绑定机制实际调用的是用户在派生类中override的虚函数，这也是各种OO
+framework的通行做法。</p>
+<p>这种方式在Java这种纯面向对象语言中是正当做法。但是在C++这种非GC语言中，使用虚函数作为事件回调接口有本质困难，即如何管理派生类对象的生命期。</p>
+<p>在这种接口风格中，MyHandler对象的所有权和生命期很模糊，到底谁（用户还是网络库）有权力释放它呢？有的网络库甚至出现了delete
+this；这种代码，让人捏一把汗：如何才能保证此刻程序的其他地方没有保存着这个即将销毁的对象的指针呢？</p>
+<p>另外，如果网络库需要自己创建MyHandler对象（比方说需要为每个TCP连接创建一个MyHandler对象），那么就得定义另外一个抽象基类HandlerFactory，用户要从它派生出MyHandlerFactory，再把后者的指针或引用注册到网络库中。以上这些都</p>
+<p>是面向对象编程的常规思路，或许大家已经习以为常。</p>
+<p>在现代C++中（指2005年TR1之后，不是最新的C++11），事件回调有了新的推荐做法，即boost::function+boost::bind（即std::tr1::function+std::tr1::bind，也是最新C++11中的std::function+std::bind），这种方式的一个明显优点是不必担心对象的生存期。muduo正是用boost::function来表示事件回调的：包括TCP网络编程的三个半IO事件和定时器事件等。用户代码可以传入签名相同的全局函数，也可以借助boost::bind把对象的成员函数传给网络库作为事件回调的接受方。这种接口方式对用户代码的class类型没有限制（不必从特定的基类派生），对成员函数名也没有限制，只对函数签名有部分限制。这样自然也解决了空悬指针的难题，因为传给网络库的都是具有值语义的boost::function对象。从这个意义上说，muduo不是一个面向对象的库，而是一个基于对象的库。因为muduo暴露的接口都是一个个的具体类，完全没有虚函数（无论是调用还是回调）。</p>
+<p>Java 8也有新的Closure语法，C#从一诞生就有delegate。</p>
+<h3 id="基本用途">5.1 基本用途</h3>
+<p>boost::function就像C#里的delegate，可以指向任何函数，包括成员函数。当用bind把某个成员函数绑到某个对象上时，我们得到了一个closure（闭包）。例如：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Foo</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">methodA</span><span class="hljs-params">()</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">methodInt</span><span class="hljs-params">(<span class="hljs-type">int</span> a)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">methodString</span><span class="hljs-params">(<span class="hljs-type">const</span> string&amp; str)</span></span>;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Bar</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">methodB</span><span class="hljs-params">()</span></span>;<br>&#125;;<br><br>boost::function&lt;<span class="hljs-type">void</span>()&gt; f1; <span class="hljs-comment">// 无参数，无返回值</span><br>Foo foo;<br>f1 = boost::<span class="hljs-built_in">bind</span>(&amp;Foo::methodA, &amp;foo);<br><span class="hljs-built_in">f1</span>(); <span class="hljs-comment">// 调用foo.methodA();</span><br><br>Bar bar;<br>f1 = boost::<span class="hljs-built_in">bind</span>(&amp;Bar::methodB, &amp;bar);<br><span class="hljs-built_in">f1</span>(); <span class="hljs-comment">// 调用bar.methodB();</span><br><br>f1 = boost::<span class="hljs-built_in">bind</span>(&amp;Foo::methodInt, &amp;foo, <span class="hljs-number">42</span>);<br><span class="hljs-built_in">f1</span>(); <span class="hljs-comment">// 调用foo.methodInt(42);</span><br><br>f1 = boost::<span class="hljs-built_in">bind</span>(&amp;Foo::methodString, &amp;foo, <span class="hljs-string">&quot;hello&quot;</span>);<br><span class="hljs-built_in">f1</span>(); <span class="hljs-comment">// 谁调用foo.methodString(&quot;hello&quot;)</span><br><span class="hljs-comment">// 注意，bind拷贝的是实参类型（const char*），不是形参类型（string）</span><br><span class="hljs-comment">// 这里形参中的string对象的构造发生在调用f1的时候，而非bind的时候，</span><br><span class="hljs-comment">// 因此要留意bind的实参（const char*）的生命期，它应该不短于f1的生命期。</span><br><span class="hljs-comment">// 必要时可通过bind(&amp;Foo::methodString, &amp;foo, string(aTempBuf))来保证安全</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs cpp">boost::function&lt;<span class="hljs-type">void</span>(<span class="hljs-type">int</span>)&gt; f2; <span class="hljs-comment">// int参数，无返回值</span><br>f2 = boost::<span class="hljs-built_in">bind</span>(&amp;Foo::methodInt, &amp;foo, _1);<br><span class="hljs-built_in">f2</span>(<span class="hljs-number">53</span>); <span class="hljs-comment">// 调用foo.methodInt(53);</span><br></code></pre></td></tr></table></figure>
+<p>如果没有boost::bind，那么boost::function就什么都不是；而有了bind，“同一个类的不同对象可以delegate给不同的实现，从而实现不同的行为”（孟岩），简直就无敌了。</p>
+<h3 id="对程序库的影响">5.2 对程序库的影响</h3>
+<p>程序库的设计不应该给使用者带来不必要的限制（耦合），而继承是第二强的一种耦合（最强耦合的是全局变量）。如果一个程序库限制其使用者必须从某个class派生，那么我觉得这是一个糟糕的设计。不巧的是，目前不少C++程序库就是这么做的。</p>
+<h4 id="例1线程库">例1：线程库</h4>
+<p>常规OO设计写一个Thread base
+class，含有（纯）虚函数Thread::run，然后应用程序派生一个derived
+class，覆写run()。程序里的每一种线程对应一个Thread的派生类。例如Java的Thread
+class可以这么用。</p>
+<p>缺点：如果一个class的三个method需要在三个不同的线程中执行，就得写helper
+class(es)并玩一些OO把戏。</p>
+<p>基于boost::function的设计令Thread是一个具体类，其构造函数接受ThreadCallback对象。应用程序只需提供一个能转换为ThreadCallback的对象（可以是函数），即可创建一个Thread实体，然后调用Thread::start即可。Java的Thread也可以这么用，传入一个Runnable对象。C#的Thread只支持这一种用法，构造函数的参数是delegate
+ThreadStart。boost::thread也只支持这种用法。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// 一个基于boost::function的 Thread class 基本结构</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Thread</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-keyword">typedef</span> boost::function&lt;<span class="hljs-type">void</span>()&gt; ThreadCallback;<br>    <span class="hljs-built_in">Thread</span>(ThreadCallback cb) : <span class="hljs-built_in">cb_</span>(cb) &#123;&#125;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">start</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-comment">// some magic to call run() in new created thread</span><br>    &#125;<br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-built_in">cb_</span>();<br>    &#125;<br>    ThreadCallback cb_;<br>    ...<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>使用方式：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Foo</span> &#123; <span class="hljs-comment">// 不需要继承</span><br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">runInThread</span><span class="hljs-params">()</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">runInAnotherThread</span><span class="hljs-params">(<span class="hljs-type">int</span>)</span></span>;<br>&#125;;<br><br>Foo foo;<br><span class="hljs-function">Thread <span class="hljs-title">thread1</span><span class="hljs-params">(boost::bind(&amp;Foo::runInThread, &amp;foo))</span></span>;<br><span class="hljs-function">Thread <span class="hljs-title">thread2</span><span class="hljs-params">(boost::bind(&amp;Foo::runInAnotherThread, &amp;foo, <span class="hljs-number">43</span>))</span></span>;<br>thread<span class="hljs-number">1.</span><span class="hljs-built_in">start</span>(); <span class="hljs-comment">// 在两个线程中分别运行两个成员函数</span><br>thread<span class="hljs-number">2.</span><span class="hljs-built_in">start</span>();<br></code></pre></td></tr></table></figure>
+<h4 id="例2网络库">例2：网络库</h4>
+<p>以boost::function作为桥梁，NetServer
+class对其使用者没有任何类型上的限制，只对成员函数的参数和返回类型有限制。使用者EchoService也完全不知道NetServer的存在，只要在main()里把两者装配到一起，程序就跑起来了。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// network library</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Connection</span>;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">NetServer</span> : boost::noncopyable &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-keyword">typedef</span> boost::function&lt;<span class="hljs-type">void</span> (Connection*)&gt; ConnectionCallback;<br>    <span class="hljs-keyword">typedef</span> boost::function&lt;<span class="hljs-type">void</span> (Connection*, <span class="hljs-type">const</span> <span class="hljs-type">void</span>*, <span class="hljs-type">int</span> len)&gt; MessageCallback;<br>    <span class="hljs-built_in">NetServer</span>(<span class="hljs-type">uint16_t</span> port);<br>    ~<span class="hljs-built_in">NetServer</span>();<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">registerConnectionCallback</span><span class="hljs-params">(<span class="hljs-type">const</span> ConnectionCallback&amp;)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">registerMessageCallback</span><span class="hljs-params">(<span class="hljs-type">const</span> MessageCallback&amp;)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">sendMessage</span><span class="hljs-params">(Connection*, <span class="hljs-type">const</span> <span class="hljs-type">void</span>* buf, <span class="hljs-type">int</span> len)</span></span>;<br><span class="hljs-keyword">private</span>:<br>    ...<br>&#125;;<br><br><span class="hljs-comment">// user code</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">EchoService</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-comment">// 符合NetServer::sendMessage 的原型</span><br>    <span class="hljs-keyword">typedef</span> boost::function&lt;<span class="hljs-type">void</span>(Connection*, <span class="hljs-type">const</span> <span class="hljs-type">void</span>*, <span class="hljs-type">int</span>)&gt; SendMessageCallback;<br>    <span class="hljs-built_in">EchoService</span>(<span class="hljs-type">const</span> SendMessageCallback&amp; sendMsgCb)<br>        : <span class="hljs-built_in">sendMessageCb_</span>(sendMsgCb) <span class="hljs-comment">// 保存boost::function</span><br>    &#123;<br>    &#125;<br><br>    <span class="hljs-comment">// 符合NetServer::MessageCallback的原型</span><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">onMessage</span><span class="hljs-params">(Connection* conn, <span class="hljs-type">const</span> <span class="hljs-type">void</span>* buf, <span class="hljs-type">int</span> size)</span> </span>&#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Received Msg from Connection %d: %.*s\n&quot;</span>,<br>               conn-&gt;<span class="hljs-built_in">id</span>(), size, (<span class="hljs-type">const</span> <span class="hljs-type">char</span>*)buf);<br>        <span class="hljs-built_in">sendMessageCb_</span>(conn, buf, size); <span class="hljs-comment">// echo back</span><br>    &#125;<br><br>    <span class="hljs-comment">// 符合NetServer::ConnectionCallback的原型</span><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">onConnection</span><span class="hljs-params">(Connection* conn)</span> </span>&#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Connection from %s:%d is %s\n&quot;</span>, conn-&gt;<span class="hljs-built_in">ipAddr</span>(), conn-&gt;<span class="hljs-built_in">port</span>(),<br>               conn-&gt;<span class="hljs-built_in">connected</span>() ? <span class="hljs-string">&quot;UP&quot;</span> : <span class="hljs-string">&quot;DOWN&quot;</span>);<br>    &#125;<br><br><span class="hljs-keyword">private</span>:<br>    SendMessageCallback sendMessageCb_;<br>&#125;;<br><br><span class="hljs-comment">// 扮演上帝的角色，把各部件拼起来</span><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-function">NetServer <span class="hljs-title">server</span><span class="hljs-params">(<span class="hljs-number">7</span>)</span></span>;<br>    <span class="hljs-function">EchoService <span class="hljs-title">echo</span><span class="hljs-params">(bind(&amp;NetServer::sendMessage, &amp;server, _1, _2, _3))</span></span>;<br>    server.<span class="hljs-built_in">registerMessageCallback</span>(<span class="hljs-built_in">bind</span>(&amp;EchoService::onMessage, &amp;echo, _1, _2, _3));<br>    server.<span class="hljs-built_in">registerConnectionCallback</span>(<span class="hljs-built_in">bind</span>(&amp;EchoService::onConnection, &amp;echo, _1));<br>    server.<span class="hljs-built_in">run</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="对面向对象程序设计的影响">5.3 对面向对象程序设计的影响</h3>
+<p>一直以来，我对面向对象都有一种厌恶感，叠床架屋，绕来绕去的，一拳拳打在棉花上，不解决实际问题。面向对象的三要素是封装、继承和多态。我认为封装是根本的，继承和多态则是可有可无的。用class来表示concept，这是根本的；至于继承和多态，其耦合性太强，往往不划算。</p>
+<p>继承和多态不仅规定了函数的名称、参数、返回类型，还规定了类的继承关系。在现代的OO编程语言里，借助反射和attribute/annotation，已经大大放宽了限制。举例来说，JUnit
+3.x是用反射，找出派生类里的名字符合void
+test*()的函数来执行的，这里就没继承什么事，只是对函数的名称有部分限制（继承是全面限制，一字不差）。至于JUnit
+4.x和NUnit 2.x则更进一步，以annotation/attribute来标明test
+case，更没继承什么事了。</p>
+<p>我的猜测是，当初提出面向对象的时候，closure还没有一个通用的实现，所以它没能算作基本的抽象工具之一。现在既然closure已经这么方便了，或许我们应该重新审视面向对象设计，至少不要那么滥用继承。</p>
+<p>自从找到了boost::function+boost::bind这对“神兵利器”，不用再考虑class之间的继承关系，只需要基于对象的设计（object-based），拳拳到肉，程序写起来顿时顺手了很多。</p>
+<h4 id="对面向对象设计模式的影响">对面向对象设计模式的影响</h4>
+<p>既然虚函数能用closure代替，那么很多OO设计模式，尤其是行为模式，就失去了存在的必要。另外，既然没有继承体系，那么很多创建型模式似乎也没啥用了（比如Factory
+Method可以用boost::function&lt;Base*()&gt;替代）。</p>
+<p>最明显的是Strategy，不用累赘的Strategy基类和ConcreteStrategyA,
+ConcreteStrategyB等派生类，一个boost::function成员就能解决问题。另外一个例子是Command模式，有了boost::function，函数调用可以直接变成对象，似乎就没Command什么事了。同样的道理，Template
+Method可以不必使用基类与继承，只要传入几个boost::function对象，在原来调用虚函数的地方换成调用boost::function对象就能解决问题。</p>
+<p>在《设计模式》这本书中提到了23个模式，在我看来其更多的是弥补了C++这种静态类型语言在动态性方面的不足。在动态语言中，由于语言内置了一等公民的类型和函数，这使得很多模式失去了存在的必要。或许它们解决了面向对象中的常见问题，不过要是我的程序连面向对象（指继承和多态）都不用，那似乎也不用考虑面向对象设计模式了。</p>
+<p>或许基于closure的编程将作为一种新的编程范式（paradigm）而流行起来。</p>
+<h4 id="依赖注入与单元测试">依赖注入与单元测试</h4>
+<p>前面的EchoService可算是依赖注入的例子。EchoService需要一个什么东西来发送消息，它对这个“东西”的要求只是函数原型满足SendMessageCallback，而不关心数据到底发到网络上还是发到控制台。在正常使用的时候，数据应该发给网络；而在做单元测试的时候，数据应该发给某个Datasink。</p>
+<p>按照面向对象的思路，先写一个AbstractDataSink
+interface，包含sendMessage()这个虚函数，然后派生出两个class：NetDataSink和MockDataSink，前面那个正常使用，后面那个单元测试用。EchoService的构造函数应该以AbstractDataSink*为参数，这样就实现了所谓的接口与实现分离。</p>
+<p>我认为这么做纯粹是多此一举，因为直接传入一个SendMessageCallback对象就能解决问题。在单元测试的时候，可以boost::bind到MockServer上，或某个全局函数上，完全不用继承和虚函数，也不会影响现有的设计。</p>
+<h4 id="什么时候使用继承">什么时候使用继承</h4>
+<p>如果是指OO中的public继承，即为了接口与实现分离，那么我只会在派生类的数目和功能完全确定的情况下使用。换句话说，不为将来的扩展考虑，这时候面向对象或许是一种不错的描述方法。一旦要考虑扩展，什么办法都没用，还不如把程序写简单点，将来好大改或重写。</p>
+<p>如果是功能继承，那么我会考虑继承boost::noncopyable或boost::enable_shared_from_this，S1.11讲到了enable_shared_from_this在实现多线程安全的对象回调时的妙用。</p>
+<p>例如，IO
+multiplexing在不同的操作系统下有不同的推荐实现，最通用的select()、POSIX的poll()、Linux的epoll()、FreeBSD的kqueue()等，数目固定，功能也完全确定，不用考虑扩展。那么设计一个NetLoop
+base
+class加若干具体classes就是不错的解决办法。换句话说，用多态来代替switch-case以达到简化代码的目的。</p>
+<h4 id="基于接口的设计">基于接口的设计</h4>
+<p>这个问题来自那个经典的讨论：不会飞的企鹅（Penguin）究竟应不应该继承自鸟（Bird），如果Bird定义了virtual
+function
+fly()的话。讨论的结果是，把具体的行为提出来，作为interface，比如Flyable（能飞的），Runnable（能跑的），然后让企鹅实现Runnable，麻雀实现Flyable和Runnable。（其实麻雀只能双脚跳，不能跑，这里不作深究。）</p>
+<p>进一步的讨论表明，interface的粒度应足够小，或许包含一个method就够了，那么interface实际上退化成了给类型打的标签（tag）。在这种情况下，完全可以使用boost::function来代替，比如：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Penguin</span> &#123; <span class="hljs-comment">// 企鹅能游泳，也能跑</span><br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">swim</span><span class="hljs-params">()</span></span>;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Sparrow</span> &#123; <span class="hljs-comment">// 麻雀能飞，也能跑</span><br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">fly</span><span class="hljs-params">()</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span></span>;<br>&#125;;<br><br><span class="hljs-comment">// 以boost::function 作为接口</span><br><span class="hljs-keyword">typedef</span> boost::function&lt;<span class="hljs-type">void</span>()&gt; FlyCallback;<br><span class="hljs-keyword">typedef</span> boost::function&lt;<span class="hljs-type">void</span>()&gt; RunCallback;<br><span class="hljs-keyword">typedef</span> boost::function&lt;<span class="hljs-type">void</span>()&gt; SwimCallback;<br><br><span class="hljs-comment">// 一个既用到run，也用到fly的客户class</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Foo</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">Foo</span>(FlyCallback flyCb, RunCallback runCb)<br>        : <span class="hljs-built_in">flyCb_</span>(flyCb), <span class="hljs-built_in">runCb_</span>(runCb) &#123;&#125;<br><span class="hljs-keyword">private</span>:<br>    FlyCallback flyCb_;<br>    RunCallback runCb_;<br>&#125;;<br><br><span class="hljs-comment">// 一个既用到run，也用到swim的客户class</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Bar</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">Bar</span>(SwimCallback swimCb, RunCallback runCb)<br>        : <span class="hljs-built_in">swimCb_</span>(swimCb), <span class="hljs-built_in">runCb_</span>(runCb) &#123;&#125;<br><span class="hljs-keyword">private</span>:<br>    SwimCallback swimCb_;<br>    RunCallback runCb_;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    Sparrow s;<br>    Penguin p;<br>    <span class="hljs-comment">// 装配起来，Foo要麻雀，Bar要企鹅。</span><br>    <span class="hljs-function">Foo <span class="hljs-title">foo</span><span class="hljs-params">(bind(&amp;Sparrow::fly, &amp;s), bind(&amp;Sparrow::run, &amp;s))</span></span>;<br>    <span class="hljs-function">Bar <span class="hljs-title">bar</span><span class="hljs-params">(bind(&amp;Penguin::swim, &amp;p), bind(&amp;Penguin::run, &amp;p))</span></span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="iostream的用途与局限">6. iostream的用途与局限</h2>
+<p>本节主要考虑x86
+Linux平台，不考虑跨平台的可移植性，也不考虑国际化（i18n），但是要考虑32-bit和64-bit的兼容性。本节以stdio指代C语言的scanf/printf系列格式化输入输出函数。本节提及的“C语言”（包括库函数和线程安全性），指的是Linux下gcc+glibc这一套编译器和库的具体实现，也可以认为是符合POSIX.1-2001的实现。本节要注意区分“编程初学者”和“C++初学者”，二者含义不同。</p>
+<p>C++
+iostream的主要作用是让初学者有一个方便的命令行输入输出试验环境，在真实的项目中很少用到iostream，因此不必把精力花在深究iostream的格式化与manipulator（格式操控符）上。iostream的设计初衷是提供一个可扩展的类型安全的IO机制，但是后来莫名其妙地加入了locale和facet等累赘。其整个设计复杂不堪，多重+虚拟继承的结构也很“巴洛克”，性能方面几无亮点。iostream在实际项目中的用处非常有限，为此投入过多的学习精力实在不值。</p>
+<h3 id="stdio格式化输入输出的缺点">6.1 stdio格式化输入输出的缺点</h3>
+<ul>
+<li><p><strong>对编程初学者不友好</strong></p>
+<p>看看下面这段简单的输入输出代码，这是C语言教学的基本示例。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-type">int</span> i;<br>    <span class="hljs-type">short</span> s;<br>    <span class="hljs-type">float</span> f;<br>    <span class="hljs-type">double</span> d;<br>    <span class="hljs-type">char</span> name[<span class="hljs-number">80</span>];<br>    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%hd%f%lf%s&quot;</span>, &amp;i, &amp;s, &amp;f, &amp;d, name);<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d %hd %f %lf %s\n&quot;</span>, i, s, f, d, name);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>注意到其中输入和输出用的格式字符串不一样。输入short要用%hd，输出用%d；输入double要用%lf，输出用%f。</p>
+<ul>
+<li><p>输入的参数不统一。对于i、s、f、d等变量，在传入scanf()的时候要取地址（&amp;）；而对于字符数组name，则不用取地址。读者可以试一试如何用几句话向刚开始学编程的初学者解释上面两条背后的原因（涉及传递函数不定参数时的类型转换、函数调用栈的内存布局、指针的意义、字符数组退化为字符指针等等）。如果一开始解释不清，只好告诉初学者“这是规定”，弄得人一头雾水。</p></li>
+<li><p>缓冲区溢出的危险。上面的例子在读入name的时候没有指定大小，这是用C语言编程的安全漏洞的主要来源。应该在一开始就强调正确的做法，避免养成错误的习惯。</p>
+<p>正确而安全的做法如下所示：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-type">const</span> <span class="hljs-type">int</span> max_name = <span class="hljs-number">80</span>;<br>    <span class="hljs-type">char</span> name[max_name];<br>    <span class="hljs-type">char</span> fmt[<span class="hljs-number">10</span>];<br>    <span class="hljs-built_in">sprintf</span>(fmt, <span class="hljs-string">&quot;%%%ds&quot;</span>, max_name - <span class="hljs-number">1</span>);<br>    <span class="hljs-built_in">scanf</span>(fmt, name);<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%s\n&quot;</span>, name);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这个动态构造格式化字符串的做法恐怕更难向初学者解释。</p></li>
+</ul></li>
+<li><p><strong>安全性（security）</strong></p>
+<p>C语言的安全性问题近十几年来引起了广泛的注意，C99增加了snprintf()等能够指定输出缓冲区大小的函数，输出方面的安全性问题已经得到解决；输入方面似乎没有太大进展，还要靠程序员自己动手。</p>
+<p>考虑一个简单的编程任务：从文件或标准输入读入一行字符串，行的长度不确定。我发现竟然没有哪个C语言标准库函数能完成这个任务，除非自己动手。</p>
+<ul>
+<li>首先，gets()是错误的，因为不能指定缓冲区的长度。</li>
+<li>其次，fgets()也有问题。它能指定缓冲区的长度，所以是安全的。但是程序必须预设一个长度的最大值，这不满足题目要求“行的长度不确定”。另外，程序无法判断fgets()到底读了多少个字节。为什么？考虑一个文件的内容是9个字节的字符串“Chen\000Shuo”，注意中间出现了"\0"字符，如果用fgets来读取，客户端如何知道"\000Shuo"也是输入的一部分？毕竟strlen只返回4，而且整个字符串里没有""字符。</li>
+<li>最后，可以用glibc定义的getline(3)函数来读取不定长的“行”。这个函数能正确处理各种情况，不过它返回的是malloc分配的内存，要求调用端自己已free()。</li>
+</ul></li>
+<li><p><strong>类型安全（type-safety）</strong></p>
+<p>如果printf()的整数参数类型是int、long等内置类型，那么printf()的格式化字符串很容易写。但是如果参数类型是系统头文件里typedef的类型呢？</p>
+<p>如果你想在程序中用printf()来打印日志，你能一眼看出下面这些类型该用"%d"、"%ld"、"%lld"中的哪一个来输出吗？你的选择是否同时兼容32-bit和64-bit平台？</p>
+<ul>
+<li>clock_t。这是clock(3)的返回类型。</li>
+<li>dev_t。这是mknod(3)的参数类型。</li>
+<li>in_addr_t、in_port_t。这是struct sockaddr_in的成员类型。</li>
+<li>nfds_t。这是poll(2)的参数类型。</li>
+<li>off_t。这是lseek(2)的参数类型，麻烦的是，这个类型与宏定义_FILE_OFFSET_BITS有关。</li>
+<li>pid_t、uid_t、gid_t。这是getpid(2)/getuid(2)/getgid(2)的返回类型。</li>
+<li>ptrdiff_t。printf()专门定义了"t"前缀来支持这一类型（即使用"%td"）。</li>
+<li>size_t、ssize_t。这两个类型到处都在用。printf()为此专门定义了"z"前缀来支持这两个类型（即使用"%zu"或"%zd"来打印）。</li>
+<li>socklen_t。这是bind(2)和connect(2)的参数类型。</li>
+<li>time_t。这是time(2)的返回类型，也是gettimeofday(2)和clock_gettime(2)的结构体参数的成员类型。</li>
+</ul></li>
+</ul>
+<p>如果在C程序中正确打印以上类型的整数，恐怕要费一番脑筋。《The Linux
+Programming
+Interface》的作者建议（3.6.2节）先统一转换为long类型，再用"%ld"来打印；对于某些类型仍然需要特殊处理，比如off_t的类型可能是long
+long。</p>
+<p>另外，int64_t在32-bit和64-bit平台上是不同的类型，为此，如果程序要打印int64_t变量，需要包含&lt;inttypes.h&gt;头文件，并且使用PRId64宏：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> _STDC_FORMAT_MACROS</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;inttypes.h&gt;</span></span><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-type">int64_t</span> x = <span class="hljs-number">100</span>;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%&quot;</span>PRId64<span class="hljs-string">&quot;\n&quot;</span>, x);<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%06&quot;</span>PRId64<span class="hljs-string">&quot;\n&quot;</span>, x);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>muduo的Timestamp class使用了PRId64。Google
+C++编码规范也提到了64-bit兼容性。</p>
+<p>这些问题在C++里都不存在，在这方面iostream是个进步。</p>
+<p><strong>Cstdio在类型安全方面原本还有一个缺点，即格式化字符串与参数类型不匹配会造成难以发现的bug，不过现在的编译器已经能够检测很多这种错误（使用-Wall编译选项）：</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-type">double</span> d = <span class="hljs-number">100.0</span>;<br>    <span class="hljs-comment">// warning: format &#x27;%d&#x27; expects type &#x27;int&#x27;, but argument 2 has type &#x27;double&#x27;</span><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>, d);<br>    <span class="hljs-type">short</span> s;<br>    <span class="hljs-comment">// warning: format &#x27;%d&#x27; expects type &#x27;int*&#x27;, but argument 2 has type &#x27;short int*&#x27;</span><br>    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;s);<br>    <span class="hljs-type">size_t</span> sz = <span class="hljs-number">1</span>;<br>    <span class="hljs-comment">// no warning</span><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%zd\n&quot;</span>, sz);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><strong>不可扩展</strong></p>
+<p>Cstdio的另外一个缺点是无法支持自定义的类型，比如我写了一个Date
+class，我无法像打印int那样用printf来直接打印Date对象。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Date</span> &#123;<br>    <span class="hljs-type">int</span> year, month, day;<br>&#125;;<br>Date date;<br><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%D&quot;</span>, &amp;date); <span class="hljs-comment">// WRONG</span><br></code></pre></td></tr></table></figure>
+<p>glibc放宽了这个限制，允许用户调用register_printf_function(3)注册自己的类型。当然，前提是与现有的格式化符不冲突（这其实大大限制了这个功能的用处，现实中也几乎没有人真的去用它）。</p>
+<p><strong>性能</strong></p>
+<p>Cstdio的性能方面有两个弱点。</p>
+<ol type="1">
+<li>使用一种little
+language（现在流行叫DSL）来配置格式。这固然有利于紧凑性和灵活性，但损失了一点点效率。每次打印一个整数都要先解析“%d”字符串，大多数情况下这不是问题，某些场合则需要自己写整数到字符串的转换。</li>
+<li>C
+locale的负担。locale指的是不同语种对“什么是空白”、“什么是字母”，“什么是小数点”有不同的定义德语中小数点是逗号，不是句点。C语言的printf、scanf、isspace()、isalpha()、ispunct()、strtod()等等函数都和locale有关，而且可以在运行时动态更改locale。就算是程序只使用默认的"C"
+locale，仍然要为这个灵活性付出代价。</li>
+</ol>
+<h3 id="iostream的设计初衷">6.2 iostream的设计初衷</h3>
+<p>iostream的设计初衷包括克服Cstdio的缺点，提供一个高效的可扩展的类型安全的IO机制。“可扩展”有两层意思：一是可以扩展到用户自定义类型，二是通过继承iostream来定义自己的stream。本文把前一种称为“类型可扩展”，把后一种称为“功能可扩展”。</p>
+<p><strong>类型可扩展和类型安全</strong></p>
+<p>“类型可扩展”和“类型安全”都是通过函数重载来实现的。</p>
+<p>iostream对初学者很友好，用iostream重写与前面同样功能的代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-type">int</span> i;<br>    <span class="hljs-type">short</span> s;<br>    <span class="hljs-type">float</span> f;<br>    <span class="hljs-type">double</span> d;<br>    string name;<br>    cin &gt;&gt; i &gt;&gt; s &gt;&gt; f &gt;&gt; d &gt;&gt; name;<br>    cout &lt;&lt; i &lt;&lt; <span class="hljs-string">&quot; &quot;</span> &lt;&lt; s &lt;&lt; <span class="hljs-string">&quot; &quot;</span> &lt;&lt; f &lt;&lt; <span class="hljs-string">&quot; &quot;</span> &lt;&lt; d &lt;&lt; <span class="hljs-string">&quot; &quot;</span> &lt;&lt; name &lt;&lt; endl;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这段代码恐怕比scanf/printf版本容易解释得多，而且没有安全性（security）方面的问题。</p>
+<p>我们自己的类型也可以融入iostream，使用起来与built-in类型没有区别。这主要得力于C++可以定义non-member
+functions/operators。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;ostream&gt;</span></span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Date</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">Date</span>(<span class="hljs-type">int</span> year, <span class="hljs-type">int</span> month, <span class="hljs-type">int</span> day)<br>        : <span class="hljs-built_in">year_</span>(year), <span class="hljs-built_in">month_</span>(month), <span class="hljs-built_in">day_</span>(day) &#123;&#125;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">writeTo</span><span class="hljs-params">(std::ostream&amp; os)</span> <span class="hljs-type">const</span> </span>&#123;<br>        os &lt;&lt; year_ &lt;&lt; <span class="hljs-string">&quot;-&quot;</span> &lt;&lt; month_ &lt;&lt; <span class="hljs-string">&quot;-&quot;</span> &lt;&lt; day_;<br>    &#125;<br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-type">int</span> year_, month_, day_;<br>&#125;;<br>std::ostream&amp; <span class="hljs-keyword">operator</span>&lt;&lt;(std::ostream&amp; os, <span class="hljs-type">const</span> Date&amp; date) &#123;<br>    date.<span class="hljs-built_in">writeTo</span>(os);<br>    <span class="hljs-keyword">return</span> os;<br>&#125;<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-function">Date <span class="hljs-title">date</span><span class="hljs-params">(<span class="hljs-number">2011</span>, <span class="hljs-number">4</span>, <span class="hljs-number">3</span>)</span></span>;<br>    std::cout &lt;&lt; date &lt;&lt; std::endl;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>iostream凭借这两点（类型安全和类型可扩展），基本克服了stdio在使用上的不便与不安全。如果iostream止步于此，那它将是一个非常便利的库，可惜它前进了另外一步。</p>
+<p>iostream的演变大致可分为三个阶段。第一阶段是Bjarne Stroustrup在CFront
+1.0里实现的streams库。这个库符合前述“类型安全、可扩展、高效”等特征，Bjarne发明了用移位操作符（&lt;<和>&gt;）做I/O的办法，istream和ostream都是具体类，也没有manipulator。第二阶段，Jerry
+Schwarz设计了“经典”iostream，在CFront
+2.0中他的设计大部分得以体现。他发明了manipulator，实现手法是以函数指针参数来重载输入输出操作符；他还采用多重继承和虚拟继承手法，设计了我们现在看到的ios菱形继承体系；此外，istream有了基类ios，也有了派生类ifstream和istrstream，ostream也是如此。第三阶段，在C++标准化的过程中，iostream有大幅更新，Nathan
+Myers设计了Locale/Facet体系，iostream被模板化以适应宽窄两种字符，以及以stringstream替换strstream等。</和></p>
+<h3 id="iostream与标准库其他组件的交互">6.3
+iostream与标准库其他组件的交互</h3>
+<p><strong>“值语义”与“对象语义”</strong></p>
+<p>不同于标准库其他class的“值语义（value
+semantics）”，iostream是“对象语义（object
+semantics）”，即iostream是non-copyable。这是正确的，因为如果fstream代表一个打开的文件的话，拷贝一个fstream对象意味着什么呢？表示打开了两个文件吗？如果销毁一个fstream对象，它会关闭文件句柄，那么另一个fstream对象副本会因此受影响吗？</p>
+<p>iostream禁止拷贝，利用对象的生命期来明确管理资源（如文件），很自然地就避免了这些问题。这就是RAII，一种重要且独特的C++编程手法。</p>
+<p>C++同时支持“数据抽象（data
+abstraction）”和“面向对象编程（object-oriented）”，其实主要就是“值语义”与“对象语义”的区别，这是一个比较大的主题，见11.7。</p>
+<p><strong>std::string</strong></p>
+<p>iostream可以与std::string配合得很好。但是有一个问题：谁依赖谁？</p>
+<p>std::string的operator&lt;<和operator>&gt;是如何声明的？注意operator&lt;&lt;是个二元操作符，它的参数是std::ostream和std::string。&lt;string&gt;头文件在声明这两个operator的时候要不要#include&lt;iostream&gt;？</和operator></p>
+<p>iostream和std::string都可以单独include来使用，显然iostream头文件里不会定义std::string的&lt;<和>&gt;操作。但是，如果&lt;string&gt;要#include&lt;iostream&gt;，岂不是让string的用户被迫也用了iostream？编译iostream头文件可是相当的慢啊（因为iostream是template，其实现代码都放到了头文件中）。</和></p>
+<p>标准库的解决办法是定义&lt;iosfwd&gt;头文件，其中包含istream和ostream等的前向声明（forward
+declarations），这样&lt;string&gt;头文件在定义输入输出操作符时就可以不必包含&lt;iostream&gt;，只需要包含简短得多的&lt;iosfwd&gt;，避免引入不必要的依赖。我们自己写程序也可借此学习如何支持可选的功能。</p>
+<p>另外值得注意的是，istream::getline成员函数的参数类型是char，因为&lt;istream&gt;没有包含&lt;string&gt;，而我们常用的std::getline()函数是个non-member
+function，定义在&lt;string&gt;里边。</p>
+<p><strong>std::complex</strong></p>
+<p>标准库的复数类std::complex的情况比较复杂。&lt;complex&gt;头文件会自动包含&lt;sstream&gt;，后者会包含&lt;istream&gt;和&lt;ostream&gt;，这是个不小的负担。问题是，为什么这么实现？</p>
+<p>它的operator&gt;&gt;操作比string复杂得多，如何应对格式不正确的情况？输入字符串不会遇到格式不正确，但是输入一个复数则可能遇到各种问题，比如数字的格式不对等。有谁会真的在产品项目里用operator&gt;&gt;来读入字符方式表示的复数，这样的代码的健壮性如何保证？基于同样的理由，我认为产品代码中应该避免用istream来读取带格式的内容，后面也不再谈istream格式化输入的缺点，它已经落选。</p>
+<p>它的operator&lt;&lt;也很奇怪，它不是直接使用参数ostream&amp;os对象来输出，而是先构造ostringstream，输出到该stringstream，再把结果字符串输出到ostream。</p>
+<p>简化后的代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;<br>std::ostream&amp; <span class="hljs-keyword">operator</span>&lt;&lt;(std::ostream&amp; os, <span class="hljs-type">const</span> std::complex&lt;T&gt;&amp; x) &#123;<br>    std::ostringstream s;<br>    s &lt;&lt; x.<span class="hljs-built_in">real</span>() &lt;&lt; <span class="hljs-string">&quot;,&quot;</span> &lt;&lt; x.<span class="hljs-built_in">imag</span>() &lt;&lt; <span class="hljs-string">&quot;)&quot;</span>;<br>    <span class="hljs-keyword">return</span> os &lt;&lt; s.<span class="hljs-built_in">str</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>注意到ostringstream会用到动态分配内存。也就是说，每输出一个complex对象就会分配释放一次内存，效率堪忧。</p>
+<p>根据以上分析，我认为iostream和complex配合得不好，但是它们耦合得更紧密（与string/iostream相比），这可能是个不得已的技术限制吧（complex是class
+template，其operator&lt;&lt;必须在头文件中定义，而这个定义又用到了ostringstream，不得已包含了sstream的实现）。</p>
+<p>如果程序要对complex做IO.从效率和健壮性方面考虑，建议不要使用iostream。</p>
+<h3 id="iostream在使用方面的缺点">6.4 iostream在使用方面的缺点</h3>
+<p>在简单使用iostream的时候，它确实比stdio方便，但是深入一点就会发现，二者可说各擅胜场。下面谈一谈iostream在使用方面的缺点。</p>
+<p><strong>格式化输出很烦琐</strong></p>
+<p>iostream采用manipulator来格式化，如果我想按照2010-04-03的格式输出前面定义的Date
+class，那么代码要改成：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Date</span> &#123;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">writeTo</span><span class="hljs-params">(std::ostream&amp; os)</span> <span class="hljs-type">const</span> </span>&#123;<br>        os &lt;&lt; year_ &lt;&lt; <span class="hljs-string">&#x27;-&#x27;</span> &lt;&lt; std::<span class="hljs-built_in">setw</span>(<span class="hljs-number">2</span>) &lt;&lt; std::<span class="hljs-built_in">setfill</span>(<span class="hljs-string">&#x27;0&#x27;</span>) &lt;&lt; month_ &lt;&lt; <span class="hljs-string">&#x27;-&#x27;</span><br>           &lt;&lt; std::<span class="hljs-built_in">setw</span>(<span class="hljs-number">2</span>) &lt;&lt; std::<span class="hljs-built_in">setfill</span>(<span class="hljs-string">&#x27;0&#x27;</span>) &lt;&lt; day_;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>假如用stdio，会简短得多，因为printf采用了一种表达能力较强的小语言来描述输出格式。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Date</span> &#123;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">writeTo</span><span class="hljs-params">(std::ostream&amp; os)</span> <span class="hljs-type">const</span> </span>&#123;<br>        <span class="hljs-type">char</span> buf[<span class="hljs-number">32</span>];<br>        <span class="hljs-built_in">snprintf</span>(buf, <span class="hljs-keyword">sizeof</span> buf, <span class="hljs-string">&quot;%d-%02d-%02d&quot;</span>, year_, month_, day_);<br>        os &lt;&lt; buf;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>使用小语言来描述格式还带来了另外一个好处：外部可配置。</p>
+<p><strong>外部可配置性</strong></p>
+<p>能不能用外部的配置文件来定义程序中日期的格式？在Cstdio中很好办，把格式字符串"%d-%02d-%02d"保存到配置里就行。但是iostream呢？它的格式是写死在代码里的，灵活性大打折扣。</p>
+<p>再举个例子，程序的message的多语言化。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">const</span> <span class="hljs-type">char</span>* name = <span class="hljs-string">&quot;Shuo Chen&quot;</span>;<br><span class="hljs-type">int</span> age = <span class="hljs-number">29</span>;<br><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;My name is %1$s, I am %2$d years old.\n&quot;</span>, name, age);<br>cout &lt;&lt; <span class="hljs-string">&quot;My name is &quot;</span> &lt;&lt; name &lt;&lt; <span class="hljs-string">&quot;, I am &quot;</span> &lt;&lt; age &lt;&lt; <span class="hljs-string">&quot; years old.&quot;</span> &lt;&lt; endl;<br></code></pre></td></tr></table></figure>
+<p>对于stdio，要让这段程序支持中文的话，把代码中的"My name is
+..."，替换为“我叫%1s，今年%2$d岁。”即可。也可以把这段提示语做成资源文件，在运行时读入。而对于iostream，恐怕没有这么方便，因为代码是支离破碎的。</p>
+<p>Cstdio的格式化字符串体现了重要的“数据就是代码”的思想，这种“数据”与“代码”之间的相互转换是程序灵活性的根源，远比OO更为灵活。</p>
+<p><strong>stream的状态</strong></p>
+<p>如果我想用十六进制方式输出一个整数x，那么可以用hex操控符，但是这会改变ostream的状态。比如说</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">int</span> x = <span class="hljs-number">8888</span>;<br>cout &lt;&lt; hex &lt;&lt; showbase &lt;&lt; x &lt;&lt; endl; <span class="hljs-comment">// print 0x22b8</span><br>cout &lt;&lt; <span class="hljs-number">123</span> &lt;&lt; endl;<br><span class="hljs-comment">// print 0x7b</span><br></code></pre></td></tr></table></figure>
+<p>这段代码会把123也按照十六进制方式输出，这恐怕不是我们想要的。</p>
+<p>再举一个例子，setprecision()也会造成持续影响：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">double</span> d = <span class="hljs-number">123.45</span>;<br><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%8.3f\n&quot;</span>, d);<br>cout &lt;&lt; d &lt;&lt; endl;<br>cout &lt;&lt; <span class="hljs-built_in">setw</span>(<span class="hljs-number">8</span>) &lt;&lt; fixed &lt;&lt; <span class="hljs-built_in">setprecision</span>(<span class="hljs-number">3</span>) &lt;&lt; d &lt;&lt; endl;<br>cout &lt;&lt; d &lt;&lt; endl;<br></code></pre></td></tr></table></figure>
+<p>输出是：</p>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs dns">$ ./a.out<br><span class="hljs-number">123.450</span><br>%<span class="hljs-number">8</span>.<span class="hljs-number">3</span>f的输出<br><span class="hljs-number">123</span>.<span class="hljs-number">45</span><br>默认cout格式<br><span class="hljs-number">123.450</span>我们设置的精度<br><span class="hljs-number">123.450</span>精度持续影响后续输出<br></code></pre></td></tr></table></figure>
+<p>可见代码中的setprecision()影响了后续输出的精度。注意setw()不会造成影响，它只对下一个输出有效。</p>
+<p>这说明，如果使用manipulator来控制格式，需要时刻小心以防影响了后续代码；而使用Cstdio就没有这个问题，它是“上下文无关的”。</p>
+<p><strong>知识的通用性</strong></p>
+<p>在C语言之外，有其他很多语言也支持printf风格的格式化，例如Java、Perl、Ruby等等。学会printf()的格式化方法，这个知识还可以用到其他语言中。</p>
+<p>但是C++
+iostream“只此一家，别无分店”。反正都是格式化输出，学习stdio投资回报率更高。</p>
+<p><strong>线程安全与原子性</strong></p>
+<p>iostream的另外一个问题是线程安全性。POSIX.1-2001明确要求stdio函数是线程安全的，而且还提供了flockfile(3)/funlockfile(3)之类的函数来明确控制FILE*的加锁与解锁。</p>
+<p>iostream在线程安全方面没有保证，就算单个operator&lt;&lt;是线程安全的，也不能保证原子性。因为cout
+&lt;&lt; a &lt;&lt;
+b;是两次函数调用，相当于cout.operator&lt;&lt;(a).operator&lt;&lt;(b)。两次调用中间可能会被打断进行上下文切换，造成输出内容不连续，插入了其他线程打印的字符。而fprintf(stdout,
+"%s%d", a,
+b);是一次函数调用，而且是线程安全的，打印的内容不会受其他线程影响。因此，iostream并不适合在多线程程序中做logging。</p>
+<h3 id="iostream的局限">6.5 iostream的局限</h3>
+<p>根据以上分析，我们可以归纳iostream的局限：</p>
+<ul>
+<li>输入方面，istream不适合输入带格式的数据，因为“纠错”能力不强，进一步的分析请见孟岩写的《契约式设计的一个反面案例》，孟岩说“复杂的设计必然带来复杂的使用规则，而面对复杂的使用规则，用户是可以投票的，那就是你做你的，我不用！”可谓鞭辟入里。如果要用istream，我推荐的做法是用std::getline()读入一行数据到std::string，然后用正则表达式来判断内容正误，并做分组，最后用strtod()/strtol()之类的函数做类型转换。这样似乎更容易写出健壮的程序。</li>
+<li>输出方面，ostream的格式化输出非常烦琐，而且写死在代码里，不如stdio的小语言那么灵活通用。建议只用作简单的无格式输出。</li>
+<li>log方面，由于ostream没有办法在多线程程序中保证一行输出的完整性，建议不要直接用它来写log。如果是简单的单线程程序，输出数据量较少的情况下可以情使用。产品代码应该用成熟的logging库，见第5章。</li>
+<li>in-memory格式化方面，由于ostringstream会动态分配内存，它不适合性能要求较高的场合。</li>
+<li>文件IO方面，如果用作文本文件的输入或输出，fstream有上述的缺点；如果用作二进制数据的输入输出，那么自己简单封装一个File
+class似乎更好用，也不必为用不到的功能付出代价（后文还有具体例子）。ifstream的一个用处是在程序启动时读入简单的文本配置文件。如果配置文件是其他文本格式的（XML或JSON），那么用相应的库来读，也用不到ifstream。</li>
+<li>性能方面，iostream没有兑现“高效性”诺言。iostream在某些场合比stdio快，在某些场合比stdio慢，对于性能要求较高的场合，我们应该自己实现字符串转换（见后文的代码与测试）。</li>
+</ul>
+<p>既然有这么多局限，iostream在实际项目中的应用就大为受限了，在这上面投入太多的精力实在不值得。说实话，我没有见过哪个C++产品代码使用iostream来作为输入输出设施。Google的C++编程规范也对stream的使用做了明确的限制。</p>
+<h3 id="iostream在设计方面的缺点">6.6 iostream在设计方面的缺点</h3>
+<p>iostream的设计有相当多的WTFs，stackoverflow有人抱怨说：“If you had to
+judge by today's software engineering standards, would C++'s IOStreams
+still be considered well-designed?”</p>
+<p><strong>面向对象的设计</strong></p>
+<p>iostream是个面向对象的IO类库，本节简单介绍它的继承体系。对iostream略有了解的人会知道它用了多重继承和虚拟继承，简单地画个类图如下（见图11-1）：</p>
+<p><img src="/2025/01/03/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/11-%E5%8F%8D%E6%80%9DC++%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E4%B8%8E%E8%99%9A%E5%87%BD%E6%95%B0/image-20250104124259686.png" srcset="/img/loading.gif" lazyload></p>
+<p>这是典型的菱形继承。</p>
+<p>如果加深一点了解，会发现iostream现在是模板化的，同时支持窄字符和宽字符。图11-2是现在的继承体系，同时画出了fstream(s)和stringstream(s)。图11-2中方框的第二三行是模板的具现化类型，即我们代码里常用的具体类型（通过typedef定义）。这个继承体系揉合了面向对象与泛型编程，但可惜它两方面都不讨好。</p>
+<p>再进一步加深了解，发现还有一个平行的streambuf继承体系（见图11-3）：</p>
+<p><img src="/2025/01/03/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/11-%E5%8F%8D%E6%80%9DC++%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E4%B8%8E%E8%99%9A%E5%87%BD%E6%95%B0/image-20250104124318544.png" srcset="/img/loading.gif" lazyload></p>
+<p>fstream和stringstream的主要区别在于使用了不同的streambuf派生类型。</p>
+<p>再把这两个继承体系画到一幅图里，如图11-4所示。</p>
+<p>注意到basic_ios持有了streambuf的指针；而fstream(s)和stringstream(s)则分别包含filebuf和stringbuf的对象。看上去有点像Bridge模式。</p>
+<p>看了这样“巴洛克”的设计，有没有人还打算在自己的项目中通过继承iostream来实现自己的stream，以实现功能扩展呢？</p>
+<p><strong>面向对象方面的设计缺陷</strong></p>
+<p>本节我们分析一下iostream的设计违反了哪些OO准则。</p>
+<p>我们知道，面向对象中的public继承需要满足Liskov替换原则，继承非为复用，乃为被复用。在程序里需要用到ostream的地方（例如operator&lt;&lt;），我传入ofstream或ostringstream都应该能按预期工作，这就是OO继承强调的“可替换性”，派生类的对象可以替换基类对象，从而被客户端代码operator&lt;&lt;复用。</p>
+<p>iostream的继承体系多次违反了Liskov原则，这些地方继承的目的是为了复用基类的代码，图11-5中我把违规的继承关系用虚线标出。</p>
+<p>在现有的继承体系中（见图11-5），合理的有：</p>
+<ul>
+<li>ifstream is-a istream</li>
+<li>istringstream is-a istream</li>
+<li>ofstream is-a ostream</li>
+<li>ostringstream is-a ostream</li>
+<li>fstream is-a iostream</li>
+<li>stringstream is-a iostream</li>
+</ul>
+<p>我认为不怎么合理的有：</p>
+<ul>
+<li>ios继承ios_base。有没有哪种情况下函数期待ios_base对象，但是客户可以传入一个ios对象替代之？如果没有，这里用public继承是不是违反OO原则？</li>
+<li>istream继承ios。有没有哪种情况下函数期待ios对象，但是客户可以传入一个istream对象替代之？如果没有，这里用public继承是不是违反OO原则？</li>
+<li>ostream继承ios。有没有哪种情况下函数期待ios对象，但是客户可以传入一个ostream对象替代之？如果没有，这里用public继承是不是违反OO原则？</li>
+<li>iostream多重继承istream和ostream。为什么iostream要同时继承两个non-interface
+class？这是接口继承还是实现继承？是不是可以用组合（composition）来替代？</li>
+</ul>
+<p>用组合替换继承之后的体系如图11-6所示。</p>
+<p>注意到在新的设计中，只有真正的is-a关系采用了public继承，其他均以组合来代替，组合关系以菱形箭头表示。新的设计没有使用虚拟继承或多重继承。</p>
+<p>其中iostream的新实现值得一提，代码结构如下：</p>
+<p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">istream</span>;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">ostream</span>;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">iostream</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">istream&amp; <span class="hljs-title">get_istream</span><span class="hljs-params">()</span></span>;<br>    <span class="hljs-function">ostream&amp; <span class="hljs-title">get_ostream</span><span class="hljs-params">()</span></span>;<br>    <span class="hljs-keyword">virtual</span> ~<span class="hljs-built_in">iostream</span>();<br>&#125;;<br></code></pre></td></tr></table></figure></p>
+<p>这样一来，在需要iostream对象表现得像istream的地方，调用get_istream()函数返回一个istream的引用；在需要iostream对象表现得像ostream的地方，调用get_ostream()函数返回一个ostream的引用。功能不受影响，而且代码更清晰，istream和ostream也不必使用虚拟继承了。（我非常怀疑iostream
+class的真正价值，一个东西既可读又可写，说明它是一个sophisticated
+IO对象，为什么还用这么厚的封装？）</p>
+<p><strong>阳春的locale</strong></p>
+<p>iostream的故事还不止这些，它还包含一套阳春的locale/facet实现，这套实践中没人用的东西进一步增加了iostream的复杂度，而且不可避免地影响其性能。</p>
+<p>Nathan Myers正是其始作俑者。</p>
+<p>ostream自身定义的针对整数和浮点数的operator&lt;&lt;成员函数的函数体是：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs cpp">ostream&amp; ostream::<span class="hljs-keyword">operator</span>&lt;&lt;(<span class="hljs-type">int</span> val) <span class="hljs-comment">// 或 double val</span><br>&#123;<br>    <span class="hljs-type">bool</span> failed =<br>        <span class="hljs-built_in">use_facet</span>&lt;num_put&gt;(<span class="hljs-built_in">getloc</span>()).<span class="hljs-built_in">put</span>(<br>            <span class="hljs-built_in">ostreambuf_iterator</span>(*<span class="hljs-keyword">this</span>), *<span class="hljs-keyword">this</span>, <span class="hljs-built_in">fill</span>(), val).<span class="hljs-built_in">failed</span>();<br>    ...<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>它会调用num_put::put()，后者会去调用num_put::do_put()，而do_put()是个虚函数，没办法inline。iostream在性能方面的不足恐怕部分来自于此。这个虚函数白白浪费了把template的实现放到头文件应得的好处，编译和运行速度都快不起来。这就是我说iostream在泛型方面不讨好的原因。</p>
+<p>我没有深入挖掘其中的细节，感兴趣的读者可以移步观看facet的继承体系：</p>
+<p><strong>臆造抽象</strong></p>
+<p>孟岩评价“iostream最大的缺点是臆造抽象”，我非常赞同他的观点。</p>
+<p>这个评价同样适用于Java那一套“叠床架屋”的InputStream、OutputStream、Reader、Writer继承体系，NET也搞了这么一套繁文缛节。</p>
+<p>乍看之下，用InputStream表示一个可以“读”的数据流，用OutputStream表示一个可以“写”的数据流，屏蔽底层细节，面向接口编程，“符合面向对象原则”，似乎是一件美妙的事情。但是，真实的世界要残酷得多。</p>
+<p>IO是个极度复杂的东西，就拿最常见的memory stream、file stream、socket
+stream来说，它们之间的差异极大：</p>
+<ul>
+<li>是单向IO还是双向IO。只读或者只写？还是既可读又可写？</li>
+<li>顺序访问还是随机访问。可不可以seek？可不可以退回n字节？</li>
+<li>文本数据还是二进制数据。输入数据格式有误怎么办？如何编写健壮的处理输入的代码？</li>
+<li>有无缓冲。write
+500字节是否能保证完全写入？有没有可能只写入了300字节？余下200字节怎么办？</li>
+<li>是否阻塞。会不会返回EWOULDBLOCK错误？</li>
+<li>有哪些出错的情况。这是最难的，memory stream几乎不可能出错，file
+stream和socket stream的出错情况完全不同。socket
+stream可能遇到对方断开连接，file stream可能遇到超出磁盘配额。</li>
+</ul>
+<p>根据以上列举的初步分析，我不认为有办法设计一个公共的基类把各方面的情况都考虑周全。各种IO设施之间共性太小，差异太大，例外太多。如果硬要用面向对象来建模，基类要么太瘦（只放共性，这个基类包含的interface
+functions没多大用），要么太肥（把各种IO设施的特性都包含进来，这个基类包含的interface
+functions很多，但是不是每一个都能调用）。</p>
+<p>一个基类设计得好，大家才愿意去继承它。比如Runnable是个很好的抽象，有不计其数的实现。InputStream/OutputStream也好，也有若干个实现（见图11-7）。反观istream/ostream，只有标准库提供的两套默认实现，在项目中极少有人会去继承并扩展它，是不是说明istream/ostream这一套抽象不怎么好使呢？</p>
+<p>当然，假如Java有C++那样强大的template机制，图11-7中的继承体系能简化不少。</p>
+<p>若要在C语言里解决这个问题，通常的办法是用一个int表示IO对象（file或PIPE或socket），然后配以read()/write()/lseek()/fcntl()等一系列全局函数，程序员自己搭配组合。这个做法我认为比面向对象的方案要简洁高效。</p>
+<p>iostream在性能方面没有比stdio高多少，在健壮性方面多半不如stdio，在灵活性方面受制于本身的复杂设计而难以让使用者自行扩展。目前看起来只适合一些简单的、要求不高的应用，但是我们不得不为它的复杂设计付出运行时代的代价，总之，其定位有点不上不下。</p>
+<p>在实际的项目中，我们可以提炼出一些简单高效的strip-down版本，在获得便利性的同时避免付出不必要的代价。</p>
+<h3 id="一个300行的memory-buffer-output-stream">6.7 一个300行的memory
+buffer output stream</h3>
+<p>我认为以operator&lt;&lt;来输出数据不太适合logging（见第5章），因此写了一个简单的muduo::LogStream
+class。代码不到300行，完全独立于iostream，位于muduo/base/LogStream.(h,cc)。</p>
+<p>这个LogStream做到了类型安全和类型可扩展，效率也较高。它不支持定制格式化、不支持locale/facet、没有继承、buffer也没有继承与虚函数、没有动态分配内存、buffer大小固定。简单地说，适合logging以及简单的字符串转换。这基本上是Bjarne在1984年写的ostream的翻版。</p>
+<p>LogStream的接口定义如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Buffer</span>;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">LogStream</span> : boost::noncopyable &#123;<br>    <span class="hljs-keyword">typedef</span> LogStream self;<br><span class="hljs-keyword">public</span>:<br>    self&amp; <span class="hljs-keyword">operator</span>&lt;&lt;(<span class="hljs-type">bool</span>);<br>    self&amp; <span class="hljs-keyword">operator</span>&lt;&lt;(<span class="hljs-type">short</span>);<br>    self&amp; <span class="hljs-keyword">operator</span>&lt;&lt;(<span class="hljs-type">unsigned</span> <span class="hljs-type">short</span>);<br>    self&amp; <span class="hljs-keyword">operator</span>&lt;&lt;(<span class="hljs-type">int</span>);<br>    self&amp; <span class="hljs-keyword">operator</span>&lt;&lt;(<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span>);<br>    self&amp; <span class="hljs-keyword">operator</span>&lt;&lt;(<span class="hljs-type">long</span>);<br>    self&amp; <span class="hljs-keyword">operator</span>&lt;&lt;(<span class="hljs-type">unsigned</span> <span class="hljs-type">long</span>);<br>    self&amp; <span class="hljs-keyword">operator</span>&lt;&lt;(<span class="hljs-type">long</span> <span class="hljs-type">long</span>);<br>    self&amp; <span class="hljs-keyword">operator</span>&lt;&lt;(<span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> <span class="hljs-type">long</span>);<br>    self&amp; <span class="hljs-keyword">operator</span>&lt;&lt;(<span class="hljs-type">const</span> <span class="hljs-type">void</span>*);<br>    self&amp; <span class="hljs-keyword">operator</span>&lt;&lt;(<span class="hljs-type">float</span>);<br>    self&amp; <span class="hljs-keyword">operator</span>&lt;&lt;(<span class="hljs-type">double</span>);<br>    <span class="hljs-comment">// self&amp; operator&lt;&lt;(long double);</span><br>    self&amp; <span class="hljs-keyword">operator</span>&lt;&lt;(<span class="hljs-type">char</span>);<br>    <span class="hljs-comment">// self&amp; operator&lt;&lt;(signed char);</span><br>    <span class="hljs-comment">// self&amp; operator&lt;&lt;(unsigned char);</span><br>    self&amp; <span class="hljs-keyword">operator</span>&lt;&lt;(<span class="hljs-type">const</span> <span class="hljs-type">char</span>*);<br>    self&amp; <span class="hljs-keyword">operator</span>&lt;&lt;(<span class="hljs-type">const</span> string&amp;);<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">append</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* data, <span class="hljs-type">int</span> len)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">const</span> Buffer&amp; <span class="hljs-title">buffer</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> buffer_; &#125;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">resetBuffer</span><span class="hljs-params">()</span> </span>&#123; buffer_.<span class="hljs-built_in">reset</span>(); &#125;<br><span class="hljs-keyword">private</span>:<br>    Buffer buffer_;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>LogStream本身不是线程安全的，它不适合做线程间的共享对象。正确的使用方式是每条log消息构造一个LogStream，用完就扔。LogStream的成本极低，这么做不会有什么性能损失。</p>
+<p><strong>整数到字符串的高效转换</strong></p>
+<p>muduo::LogStream的整数转换是自己已写的，用的是Matthew
+Wilson的算法，见12.3“带符号整数的除法与余数”。这个算法比stdio和iostream都要快。</p>
+<p><strong>浮点数到字符串的高效转换</strong></p>
+<p>目前muduo::LogStream的浮点数格式化采用的是snprintf()。所以从性能上与stdio持平，比ostream快一些。</p>
+<p>浮点数到字符串的转换是个复杂的话题，这个领域20年以来没有什么进展（目前的实现大都基于David
+M. Gay在1990年的工作：《Correctly Rounded Binary-Decimal and
+Decimal-Binary
+Conversions》，代码：http://netlib.org/fp/），直到2010年才有突破。</p>
+<p>Florian Loitsch发明了新的更快的算法Grisu3，他的论文《Printing
+floating point numbers quickly and accurately with
+integers》发表在PLDI2010，代码见Google
+V8引擎以及http://code.google.com/p/double-conversion/。有兴趣的读者可以阅读这篇博客。</p>
+<p>将来muduo::LogStream可能会改用Grisu3算法实现浮点数转换。</p>
+<h4 id="性能对比">性能对比</h4>
+<p>由于muduo::LogStream抛掉了很多负担，因此可以预见它的性能好于ostringstream和stdio。我做了一个简单的性能测试，结果如表11-1和表11-2所示。表11-1和表11-2中的数字是打印1000000次的用时，以毫秒为单位，越小越好。</p>
+<p><strong>表11-1 64-bit测试结果</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>snprintf</th>
+<th>ostringstream</th>
+<th>LogStream</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>int</td>
+<td>499</td>
+<td>363</td>
+<td>113</td>
+</tr>
+<tr>
+<td>double</td>
+<td>2315</td>
+<td>3835</td>
+<td>2338</td>
+</tr>
+<tr>
+<td>int64_t</td>
+<td>486</td>
+<td>347</td>
+<td>145</td>
+</tr>
+<tr>
+<td>void*</td>
+<td>419</td>
+<td>330</td>
+<td>47</td>
+</tr>
+</tbody>
+</table>
+<p><strong>表11-2 32-bit测试结果</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>snprintf</th>
+<th>ostringstream</th>
+<th>LogStream</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>int</td>
+<td>544</td>
+<td>453</td>
+<td>116</td>
+</tr>
+<tr>
+<td>double</td>
+<td>2241</td>
+<td>4030</td>
+<td>2267</td>
+</tr>
+<tr>
+<td>int64_t</td>
+<td>725</td>
+<td>958</td>
+<td>654</td>
+</tr>
+<tr>
+<td>void*</td>
+<td>690</td>
+<td>425</td>
+<td>65</td>
+</tr>
+</tbody>
+</table>
+<p>从表11-1和表11-2看出，ostringstream有时候比snprintf()快，有时候比它慢，muduo::LogStream比它们两个都快得多（double类型除外）。</p>
+<h4 id="泛型编程">泛型编程</h4>
+<p>其他程序库如何使用LogStream作为输出呢？办法很简单，用模板。</p>
+<p>前面我们定义了Date
+class针对std::ostream的operator&lt;&lt;，只要稍作修改就能同时适用于std::ostream和LogStream。而且Date的头文件不再需要#include
+&lt;ostream&gt;，降低了耦合。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// 不必包含LogStream 或 ostream头文件</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Date</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">Date</span>(<span class="hljs-type">int</span> year, <span class="hljs-type">int</span> month, <span class="hljs-type">int</span> day);<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">writeTo</span><span class="hljs-params">(std::ostream&amp; os)</span> <span class="hljs-type">const</span></span>;<br>    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> OStream&gt;</span><br><span class="hljs-function">    <span class="hljs-type">void</span> <span class="hljs-title">writeTo</span><span class="hljs-params">(OStream&amp; os)</span> <span class="hljs-type">const</span> </span>&#123;<br>        <span class="hljs-type">char</span> buf[<span class="hljs-number">32</span>];<br>        <span class="hljs-built_in">snprintf</span>(buf, <span class="hljs-keyword">sizeof</span> buf, <span class="hljs-string">&quot;%d-%02d-%02d&quot;</span>, year_, month_, day_);<br>        os &lt;&lt; buf;<br>    &#125;<br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-type">int</span> year_, month_, day_;<br>&#125;;<br>std::ostream&amp; <span class="hljs-keyword">operator</span>&lt;&lt;(std::ostream&amp; os, <span class="hljs-type">const</span> Date&amp; date);<br><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> OStream&gt;<br>OStream&amp; <span class="hljs-keyword">operator</span>&lt;&lt;(OStream&amp; os, <span class="hljs-type">const</span> Date&amp; date) &#123;<br>    date.<span class="hljs-built_in">writeTo</span>(os);<br>    <span class="hljs-keyword">return</span> os;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="格式化">格式化</h4>
+<p>muduo::LogStream本身不支持格式化，不过我们很容易为它做扩展，定义一个简单的Fmt
+class就行，而且不影响stream的状态。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Fmt</span> : boost::noncopyable &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;</span><br><span class="hljs-function">    <span class="hljs-title">Fmt</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* fmt, T val)</span> </span>&#123;<br>        <span class="hljs-built_in">BOOST_STATIC_ASSERT</span>(boost::is_arithmetic&lt;T&gt;::value == <span class="hljs-literal">true</span>);<br>        length_ = <span class="hljs-built_in">snprintf</span>(buf_, <span class="hljs-keyword">sizeof</span> buf_, fmt, val);<br>    &#125;<br>    <span class="hljs-function"><span class="hljs-type">const</span> <span class="hljs-type">char</span>* <span class="hljs-title">data</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> buf_; &#125;<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">length</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>&#123; <span class="hljs-keyword">return</span> length_; &#125;<br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-type">char</span> buf_[<span class="hljs-number">32</span>];<br>    <span class="hljs-type">int</span> length_;<br>&#125;;<br><span class="hljs-keyword">inline</span> LogStream&amp; <span class="hljs-keyword">operator</span>&lt;&lt;(LogStream&amp; os, <span class="hljs-type">const</span> Fmt&amp; fmt) &#123;<br>    os.<span class="hljs-built_in">append</span>(fmt.<span class="hljs-built_in">data</span>(), fmt.<span class="hljs-built_in">length</span>());<br>    <span class="hljs-keyword">return</span> os;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>使用方法：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs cpp">LogStream os;<br><span class="hljs-type">double</span> x = <span class="hljs-number">19.82</span>;<br><span class="hljs-type">int</span> y = <span class="hljs-number">43</span>;<br>os &lt;&lt; <span class="hljs-built_in">Fmt</span>(<span class="hljs-string">&quot;%8.3f&quot;</span>, x) &lt;&lt; <span class="hljs-built_in">Fmt</span>(<span class="hljs-string">&quot;%4d&quot;</span>, y);<br></code></pre></td></tr></table></figure>
+<h3 id="现实的c程序如何做文件io">6.8 现实的C++程序如何做文件IO</h3>
+<p>下面举三个例子，Google Protobuf Compiler，Google leveldb，Kyoto
+Cabinet。</p>
+<p><strong>Google Protobuf Compiler</strong></p>
+<p>Google
+Protobuf是一种高效的网络传输格式，它用一种协议描述语言来定义消息格式，并且自动生成序列化代码。Protobuf
+Compiler是这种“协议描述语言”的编译器，它读入协议文件.proto，编译生成C++、Java、Python代码。proto文件是个文本文件，然而Protobuf
+Compiler并没有使用ifstream来读取它，而是使用了自己的FileInputStream来读取文件。</p>
+<p>大致代码流程如下：</p>
+<ol type="1">
+<li>ZeroCopyInputStream是一个抽象基类。</li>
+<li>FileInputStream继承并实现了ZeroCopyInputStream。</li>
+<li>Tokenizer是词法分析器，它把proto文件分解为一个个字元（token）。
+Tokenizer的构造函数以ZeroCopyInputStream为参数，从该stream读入文本。</li>
+<li>Parser是语法分析器，它把proto文件解析为语法树，以FileDescriptorProto表示。
+Parser的构造函数以Tokenizer为参数，从它读入字元。</li>
+</ol>
+<p>可见，即使是读取文本文件，C++程序也不一定要用ifstream。</p>
+<p><strong>Google leveldb</strong></p>
+<p>Google leveldb是一个高效的持久化key-value
+db。它定义了三个精简的interface用于文件输入输出：</p>
+<ul>
+<li>SequentialFile</li>
+<li>RandomAccessFile</li>
+<li>WritableFile</li>
+</ul>
+<p>接口函数如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Slice</span> &#123;<br>    <span class="hljs-type">const</span> <span class="hljs-type">char</span>* data_;<br>    <span class="hljs-type">size_t</span> size_;<br>&#125;;<br><br><span class="hljs-comment">// A file abstraction for reading sequentially through a file.</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">SequentialFile</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">SequentialFile</span>() &#123;&#125;<br>    <span class="hljs-keyword">virtual</span> ~<span class="hljs-built_in">SequentialFile</span>();<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> Status <span class="hljs-title">Read</span><span class="hljs-params">(<span class="hljs-type">size_t</span> n, Slice* result, <span class="hljs-type">char</span>* scratch)</span> </span>= <span class="hljs-number">0</span>;<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> Status <span class="hljs-title">Skip</span><span class="hljs-params">(<span class="hljs-type">uint64_t</span> n)</span> </span>= <span class="hljs-number">0</span>;<br>&#125;;<br><br><span class="hljs-comment">// A file abstraction for randomly reading the contents of a file.</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">RandomAccessFile</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">RandomAccessFile</span>() &#123;&#125;<br>    <span class="hljs-keyword">virtual</span> ~<span class="hljs-built_in">RandomAccessFile</span>();<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> Status <span class="hljs-title">Read</span><span class="hljs-params">(<span class="hljs-type">uint64_t</span> offset, <span class="hljs-type">size_t</span> n, Slice* result,</span></span><br><span class="hljs-params"><span class="hljs-function">                        <span class="hljs-type">char</span>* scratch)</span> <span class="hljs-type">const</span> </span>= <span class="hljs-number">0</span>;<br>&#125;;<br><br><span class="hljs-comment">// A file abstraction for sequential writing. The implementation</span><br><span class="hljs-comment">// must provide buffering since callers may append small fragments</span><br><span class="hljs-comment">// at a time to the file.</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">WritableFile</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">WritableFile</span>() &#123;&#125;<br>    <span class="hljs-keyword">virtual</span> ~<span class="hljs-built_in">WritableFile</span>();<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> Status <span class="hljs-title">Append</span><span class="hljs-params">(<span class="hljs-type">const</span> Slice&amp; data)</span> </span>= <span class="hljs-number">0</span>;<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> Status <span class="hljs-title">Close</span><span class="hljs-params">()</span> </span>= <span class="hljs-number">0</span>;<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> Status <span class="hljs-title">Flush</span><span class="hljs-params">()</span> </span>= <span class="hljs-number">0</span>;<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> Status <span class="hljs-title">Sync</span><span class="hljs-params">()</span> </span>= <span class="hljs-number">0</span>;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p><strong>leveldb明确区分input和output</strong>，并进一步把input分为sequential和random
+access，然后提炼出了三个简单的接口，每个接口只有屈指可数的几个函数。这几个接口在各个平台下的实现也非常简单明了，一看就懂。</p>
+<p>注意这三个接口使用了虚函数，我认为这是正当的，因为一次IO往往伴随着系统调用和context
+switch，虚函数的开销比起context
+switch来可以忽略不计。相反，iostream每次operator&lt;&lt;()就调用虚函数，似乎不太明智。</p>
+<p><strong>Kyoto Cabinet</strong></p>
+<p>Kyoto Cabinet也是一个key-value db，是前几年流行的Tokyo
+Cabinet的升级版。它采用了与leveldb不同的文件抽象。KC定义了一个File
+class，同时包含了读写操作，这是一个fat
+interface。在具体实现方面，它没有使用虚函数，而是采用#ifdef来区分不同的平台，等于把两份独立的代码写到了同一个文件中。</p>
+<p>相比之下，Google leveldb的做法更高明一些。</p>
+<h4 id="小结">小结</h4>
+<p>在C++项目中，自己写个File
+class，把项目用到的文件IO功能简单封装一下（以RAII手法封装FILE*或者file
+descriptor都可以，视情况而定），通常就能满足需要。记得把拷贝构造和赋值操作符禁用，在析构函数里释放资源，避免泄露内部的handle，这样就能自动避免很多C语言文件操作的常见错误。</p>
+<p>如果要用stream方式做logging，可以抛开繁重的iostream，自己写一个简单的LogStream，重载几个operator&lt;&lt;操作符，用起来一样方便；而且可以用stack
+buffer，轻松做到线程安全与高效。见第5章。</p>
+<h2 id="值语义与数据抽象">7. 值语义与数据抽象</h2>
+<p>本文是11.6“iostream的用途与局限”的后续，在11.6.3“iostream与标准库其他组件的交互”中，我简单地提到了iostream对象和C++标准库中的其他对象（主要是容器和string）具有不同的语义，主要体现在iostream不能拷贝或赋值。下面具体谈一谈我对这个问题的理解。</p>
+<p>本文的“对象”定义较为宽泛：a region of memory that has a
+type，在这个定义下，int、double、bool变量都是对象。</p>
+<h3 id="什么是值语义">7.1 什么是值语义</h3>
+<p>值语义（value
+semantics）指的是<strong>对象的拷贝与原对象无关</strong>，就像拷贝int一样。C++的内置类型（bool/int/double/char）都是值语义，标准库里的complex&lt;&gt;
+、pair&lt;&gt;、vector、map&lt;&gt;、string等等类型也都是值语义，拷贝之后就与原对象脱离关系。Java语言的primitive
+types也是值语义。</p>
+<p>与值语义对应的是“对象语义（object
+semantics）”，或者叫做引用语义（reference
+semantics），由于“引用”一词在C++里有特殊含义，所以我在本文中使用“对象语义”这个术语。对象语义指的是面向对象意义下的对象，对象拷贝是禁止的。例如muduo里的Thread是对象语义，拷贝Thread是无意义的，也是被禁止的：因为Thread代表线程，拷贝一个Thread对象并不能让系统增加一个一模一样的线程。</p>
+<p>同样的道理，拷贝一个Employee对象是没有意义的，一个雇员不会变成两个雇员，他也不会领两份薪水。拷贝TcpConnection对象也没有意义，系统中只有一个TCP连接，拷贝TcpConnection对象不会让我们拥有两个连接。Printer也是不能拷贝的，系统只连接了一个打印机，拷贝Printer并不能凭空增加打印机。凡此种种，<strong>面向对象意义下的“对象”是non-copyable</strong>。</p>
+<p>Java中的class对象都是对象语义/引用语义。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java">ArrayList&lt;Integer&gt; a = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;Integer&gt;();<br>ArrayList&lt;Integer&gt; b = a;<br></code></pre></td></tr></table></figure>
+<p>那么a和b指向的是同一个ArrayList对象，修改a同时也会影响b。</p>
+<p>值语义与immutable无关。Java有value
+object一说，按（PoEAA486）的定义，它实际上是immutable
+object，例如String、Integer、BigInteger、joda.time.DateTime等等（因为Java没有办法实现真正的值语义class，只好用immutable
+object来模拟）。尽管immutable
+object有其自身的用处，但不是本文的主题。muduo中的Date、Timestamp也都是immutable的。</p>
+<p>C++中的值语义对象也可以是mutable，比如complex&lt;&gt;、pair&lt;&gt;、vector、map&lt;&gt;、string都是可以修改的。muduo的InetAddress和Buffer都具有值语义，它们都是可以修改的。</p>
+<p>值语义的对象不一定是POD，例如string就不是POD，但它是值语义的。</p>
+<p>值语义的对象不一定小，例如vector&lt;int&gt;的元素可多可少，但它始终是值语义的。当然，很多值语义的对象都是小的，例如complex&lt;&gt;、muduo::Date、muduo::Timestamp。</p>
+<h3 id="值语义与生命期">7.2 值语义与生命期</h3>
+<p><strong>值语义的一个巨大好处是生命期管理很简单</strong>，就跟int一样你不需要操心int的生命期。值语义的对象要么是stack
+object，要么直接作为其他object的成员，因此我们不用担心它的生命期（一个函数使用自己的stack上的对象，一个成员函数使用自己的数据成员对象）。相反，对象语义的object由于不能拷贝，因此我们只能通过指针或引用来使用它。</p>
+<p>一旦使用指针和引用来操作对象，那么就要担心所指的对象是否已被释放，这曾是C++程序bug的一大来源。此外，由于C++只能通过指针或引用来获得多态性，那么在C++里从事基于继承和多态的面向对象编程有其本质的困难——对象生命期管理（资源管理）。</p>
+<p>考虑一个简单的对象建模——家长与子女：a Parent has a Child，a Child
+knows its
+Parent。在Java中很好写，不用担心内存泄漏，也不用担心空悬指针：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Parent</span> &#123;<br>    <span class="hljs-keyword">private</span> Child myChild;<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Child</span> &#123;<br>    <span class="hljs-keyword">private</span> Parent myParent;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>只要正确初始化myChild和myParent，那么Java程序员就不用担心出现访问错误。一个handle是否有效，只需要判断其是否non
+null。</p>
+<p>在C++中就要为资源管理费一番脑筋：Parent和Child都代表的是真人，必定是不能拷贝的，因此具有对象语义。Parent是直接持有Child吗？抑或Parent和Child通过指针互指？Child的生命期由Parent控制吗？如果还有ParentClub和School两个class，分别代表家长俱乐部和学校：ParentClub
+has many Parents，School has many
+Children，那么如何保证它们始终持有有效的Parent对象和Child对象？何时才能安全地释放Parent和Child？</p>
+<p>直接但是易错的写法：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Child</span>;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Parent</span> : boost::noncopyable &#123;<br>    Child* myChild;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Child</span> : boost::noncopyable &#123;<br>    Parent* myParent;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>如果直接使用指针作为成员，那么如何确保指针的有效性？如何防止出现空悬指针？Child和Parent由谁负责释放？在释放某个Parent对象的时候，如何确保程序中没有指向它的指针？那么释放某个Child对象的时候呢？</p>
+<p>这一系列问题曾是C++面向对象编程头疼的问题，不过现在有了smart
+pointer，我们可以<strong>借助smart
+pointer把对象语义转换为值语义，从而轻松解决对象生命期问题</strong>：让Parent持有Child的smart
+pointer，同时让Child持有Parent的smart
+pointer，这样始终引用对方的时候就不用担心出现空悬指针。当然，其中一个smart
+pointer应该是weak
+reference，否则会出现循环引用，导致内存泄漏。到底哪一个是weak
+reference，则取决于具体应用场景。</p>
+<p>如果Parent拥有Child，Child的生命期由其Parent控制，Child的生命期小于Parent，那么代码就比较简单：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Parent</span>;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Child</span> : boost::noncopyable &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">Child</span><span class="hljs-params">(Parent* myParent_)</span></span><br><span class="hljs-function">        : myParent(myParent_) &#123;</span>&#125;<br><span class="hljs-keyword">private</span>:<br>    Parent* myParent;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Parent</span> : boost::noncopyable &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">Parent</span>() : <span class="hljs-built_in">myChild</span>(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Child</span>(<span class="hljs-keyword">this</span>)) &#123;&#125;<br><span class="hljs-keyword">private</span>:<br>    boost::scoped_ptr&lt;Child&gt; myChild;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>在上面这个设计中，Child的指针不能泄露给外界，否则仍然有可能出现空悬指针。</p>
+<p>如果Parent与Child的生命期相互独立，就要麻烦一些：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Parent</span>;<br><span class="hljs-keyword">typedef</span> boost::shared_ptr&lt;Parent&gt; ParentPtr;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Child</span> : boost::noncopyable &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">Child</span><span class="hljs-params">(<span class="hljs-type">const</span> ParentPtr&amp; myParent_)</span></span><br><span class="hljs-function">        : myParent(myParent_) &#123;</span>&#125;<br><span class="hljs-keyword">private</span>:<br>    boost::weak_ptr&lt;Parent&gt; myParent;<br>&#125;;<br><br><span class="hljs-keyword">typedef</span> boost::shared_ptr&lt;Child&gt; ChildPtr;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Parent</span> : <span class="hljs-keyword">public</span> boost::enable_shared_from_this&lt;Parent&gt;, <span class="hljs-keyword">private</span> boost::noncopyable &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">Parent</span>() &#123;&#125;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">addChild</span><span class="hljs-params">()</span> </span>&#123;<br>        myChild.<span class="hljs-built_in">reset</span>(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Child</span>(<span class="hljs-built_in">shared_from_this</span>()));<br>    &#125;<br><span class="hljs-keyword">private</span>:<br>    ChildPtr myChild;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>上面这个shared_ptr+weak_ptr的做法似乎有点小题大做。</p>
+<p>考虑一个稍微复杂一点的对象模型：“a Child has parents: mom and dad; a
+Parent has one or more Child(ren); a Parent knows his/her
+spouse.”这个对象模型用Java表述一点都不复杂，垃圾收集会帮我们搞定对象生命期。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Parent</span> &#123;<br>    <span class="hljs-keyword">private</span> Parent mySpouse;<br>    <span class="hljs-keyword">private</span> ArrayList&lt;Child&gt; myChildren;<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Child</span> &#123;<br>    <span class="hljs-keyword">private</span> Parent myMom;<br>    <span class="hljs-keyword">private</span> Parent myDad;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>如果用C++来实现，如何才能避免出现空悬指针，同时避免出现内存泄漏呢？</p>
+<p>借助shared_ptr把裸指针转换为值语义，我们就不用担心这两个问题了：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Parent</span>;<br><span class="hljs-keyword">typedef</span> boost::shared_ptr&lt;Parent&gt; ParentPtr;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Child</span> : boost::noncopyable &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">Child</span><span class="hljs-params">(<span class="hljs-type">const</span> ParentPtr&amp; myMom, <span class="hljs-type">const</span> ParentPtr&amp; myDad)</span></span><br><span class="hljs-function">        : myMom(myMom_), myDad(myDad_) &#123;</span>&#125;<br><span class="hljs-keyword">private</span>:<br>    boost::weak_ptr&lt;Parent&gt; myMom;<br>    boost::weak_ptr&lt;Parent&gt; myDad;<br>&#125;;<br><br><span class="hljs-keyword">typedef</span> boost::shared_ptr&lt;Child&gt; ChildPtr;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Parent</span> : boost::noncopyable &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">Parent</span>() &#123;&#125;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setSpouse</span><span class="hljs-params">(<span class="hljs-type">const</span> ParentPtr&amp; spouse)</span> </span>&#123;<br>        mySpouse = spouse;<br>    &#125;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">addChild</span><span class="hljs-params">(<span class="hljs-type">const</span> ChildPtr&amp; child)</span> </span>&#123;<br>        myChildren.<span class="hljs-built_in">push_back</span>(child);<br>    &#125;<br><span class="hljs-keyword">private</span>:<br>    boost::weak_ptr&lt;Parent&gt; mySpouse;<br>    std::vector&lt;ChildPtr&gt; myChildren;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>如果不使用smart pointer，用C++做面向对象编程将会困难重重。</p>
+<h3 id="值语义与标准库">7.3 值语义与标准库</h3>
+<p>C++要求凡是能放入标准容器的类型必须具有值语义。准确地说：type必须是SGIAssignable
+concept的model。但是，由于C++编译器会为class默认提供copy
+constructor和assignment
+operator，因此除非明确禁止，否则class总是可以作为标准库的元素类型——尽管程序可以编译通过，但是隐藏了资源管理方面的bug。</p>
+<p>因此，<strong>在写一个C++
+class的时候，让它默认继承boost::noncopyable，几乎总是正确的。</strong></p>
+<p>在现代C++中，一般不需要自己编写copy constructor或assignment
+operator，因为只要每个数据成员都具有值语义的话，编译器自动生成的member-wise
+copying &amp; assigning就能正常工作；如果以smart
+ptr为成员来持有其他对象，那么就能自动启用或禁用copying &amp;
+assigning。例外：编写HashMap这类底层库时还是需要自己实现copy
+control。</p>
+<h3 id="值语义与c语言">7.4 值语义与C++语言</h3>
+<p>C++的class本质上是值语义的，这才会出现object
+slicing这种语言独有的问题，也才会需要程序员注意pass-by-value和pass-by-const-reference的取舍。在其他面向对象编程语言中，这都不需要费脑筋。</p>
+<p>值语义是C++语言三大约束之一，C++的设计初衷是让用户定义的类型（class）能像内置类型（int）一样工作，具有同等的地位。为此C++做了以下设计（妥协）：</p>
+<ul>
+<li>class的layout与C
+struct一样，没有额外的开销。定义一个“只包含一个int成员的class”的对象开销和定义一个int一样。</li>
+<li>甚至class data
+member都默认是uninitialized，因为函数局部的int也是如此。</li>
+<li>class可以在stack上创建，也可以在heap上创建。因为int可以是stack
+variable.</li>
+<li>class的数组就是一个个class对象挨着，没有额外的indirection。因为int数组就是这样的。因此派生类数组的指针不能安全转换为基类指针。</li>
+<li>编译器会为class默认生成copy constructor和assignment
+operator。其他语言没有copy constructor一说，也不允许重载assignment
+operator。C++的对象默认是可以拷贝的，这是一个尴尬的特性。</li>
+<li>当class type传入函数时，默认是make a
+copy（除非参数声明为reference）因为把int传入函数时是make a copy。</li>
+<li>当函数返回一个class type时，只能通过make a
+copy（C++不得不定义RVO来解决性能问题）。因为函数返回int时是make a
+copy。</li>
+<li>以class
+type为成员时，数据成员是嵌入的。例如pair&lt;complex&lt;double&gt;,
+size_t&gt;的layout就是complex&lt;double&gt;挨着size_t。</li>
+</ul>
+<p>这些设计带来了性能上的好处，原因是memory
+locality。比方说我们在C++里定义complex&lt;double&gt; class，array of
+complex&lt;double&gt;，vector&lt;complex&lt;double&gt;&gt;，它们的layout如图11-8所示。（re和im分别是复数的实部和虚部。）</p>
+<p>而如果我们在Java里干同样的事情，layout大不一样，memory
+locality也差很多（见图11-9）。</p>
+<p>在Java中每个object都有head，在常见的JVM中至少有两个word的开销。对比Java和C++，可见C++的对象模型要紧凑得多。</p>
+<h3 id="什么是数据抽象">7.5 什么是数据抽象</h3>
+<p>本节谈一谈与值语义紧密相关的数据抽象（data
+abstraction），解释为什么它是与面向对象并列的一种编程范式，为什么支持面向对象的编程语言不一定支持数据抽象。C++在最初的时候以data
+abstraction为卖点，不过随着时间的流逝，现在似乎很多人只知Object-Oriented，不知data
+abstraction了。C++的强大之处在于“抽象”不以性能损失为代价，本节我们将看到具体例子。</p>
+<p>数据抽象（data
+abstraction）是与面向对象（object-oriented）并列的一种编程范式（programming
+paradigm）。说“数据抽象”或许显得陌生，它的另外一个名字“抽象数据类型（abstract
+data type，ADT）”想必如雷贯耳。</p>
+<p>“支持数据抽象”一直是C++语言的设计目标，Bjarne Stroustrup在他的《The
+C++ Programming Language（第2版）》（1991年出版）中写道：</p>
+<p>"The C++ programming language is designed to - be a better C -
+support data abstraction - support object-oriented programming"</p>
+<p>这本书的第3版（1997年出版）增加了一条：</p>
+<p>"C++ is a general-purpose programming language with a bias towards
+systems programming that - is a better C, - supports data abstraction, -
+supports object-oriented programming, and - supports generic
+programming."</p>
+<p>在C++的早期文献中有一篇Bjarne Stroustrup于1984年写的《Data
+Abstraction in
+C++》。在这个页面还能找到Bjarne写的关于C++操作符重载和复数运算的文章，作为数据抽象的详解与范例。可见C++早期是以数据抽象为卖点的，支持数据抽象是C++相对于C的一大优势。</p>
+<p>作为语言的设计者，Bjarne把数据抽象作为C++的四个子语言之一。这个观点不是被普遍接受的，比如作为语言的使用者，Scott
+Meyers在[EC3]中把C++分为四个子语言：C、Object-Oriented C++，Template
+C++、STL。在Scott
+Meyers的分类法中，就没有出现数据抽象，而是归入了Object-Oriented
+C++。</p>
+<p>那么到底什么是数据抽象？简单地说，数据抽象是用来描述（抽象）数据结构的。数据抽象就是ADT。一个ADT主要表现为它支持的一些操作，比方说stack::push()、stack::pop()，这些操作应该具有明确的时间和空间复杂度。另外，一个ADT可以隐藏其实现细节，例如stack既可以用动态数组实现，又可以用链表实现。</p>
+<p>按照这个定义，数据抽象和基于对象（object-based）很像，那么它们的区别在哪里？语义不同。ADT通常是值语义，而object-based是对象语义。（这两种语义的定义见11.7.1“什么是值语义”）。<strong>ADT
+class是可以拷贝的，拷贝之后的instance与原instance脱离关系。</strong></p>
+<p>比方说</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs cpp">stack&lt;<span class="hljs-type">int</span>&gt; a;<br>a.<span class="hljs-built_in">push</span>(<span class="hljs-number">10</span>);<br>stack&lt;<span class="hljs-type">int</span>&gt; b = a;<br>b.<span class="hljs-built_in">pop</span>();<br></code></pre></td></tr></table></figure>
+<p>这时候a里仍然有元素10。</p>
+<h4 id="c标准库中的数据抽象">C++标准库中的数据抽象</h4>
+<p>C++标准库中的complex、pair&lt;&gt;、vector&lt;&gt;、list&lt;&gt;、map、set、string、stack、queue都是数据抽象的例子。vector是动态数组，它的主要操作有size()、begin()、end()、push_back()等等，这些操作不仅含义清晰，而且计算复杂度都是常数。类似地，list是链表，map是有序关联数组，set是有序集合、stack是FILO栈、queue是FIFO队列。“动态数组”、“链表”、“有序集合”、“关联数组”、“栈”、“队列”都是定义明确（操作、复杂度）的抽象数据类型。</p>
+<h4 id="数据抽象与面向对象的区别">数据抽象与面向对象的区别</h4>
+<p>本文把data
+abstraction、object-based、object-oriented视为三个编程范式。这种细致的分类或许有助于理解区分它们之间的差别。</p>
+<p>通俗地讲，面向对象（object-oriented）有三大特征：封装、继承、多态。而基于对象（object-based）则只有封装，没有继承和多态，即只有具体类，没有抽象接口。它们两个都是对象语义。</p>
+<p>面向对象真正核心的思想是消息传递（messaging），“封装继承多态”只是表象。关于这一点，孟岩和王益都有精彩的论述，笔者不再赘言。</p>
+<p>数据抽象与它们两个的界限在于“语义”，数据抽象不是对象语义，而是值语义。比方说muduo里的TcpConnection和Buffer都是具体类，但前者是基于对象的（object-based），而后者是数据抽象。</p>
+<p>类似地，muduo::Date、muduo::Timestamp都是数据抽象。尽管这两个class简单到只有一个int/long数据成员，但是它们各自定义了一套操作（operation），并隐藏了内部数据，从而让它从data
+aggregation变成了data abstraction.</p>
+<p>数据抽象是针对“数据”的，这意味着ADT
+class应该可以拷贝，只要把数据复制一份就行了。如果一个class代表了其他资源（文件、员工、打印机、账号），那么它通常就是object-based或object-oriented，而不是数据抽象。</p>
+<p>ADT class可以作为Object-based/object-oriented
+class的成员，但反过来不成，因为这样一来ADT class的拷贝就失去意义了。</p>
+<h3 id="数据抽象所需的语言设施">7.6 数据抽象所需的语言设施</h3>
+<p>不是每个语言都支持数据抽象，下面简要列出“数据抽象”所需的语言设施。</p>
+<h4 id="支持数据聚合"><strong>支持数据聚合</strong></h4>
+<p>数据聚合即data aggregation，或者叫value aggregates。即定义C-style
+struct，把有关数据放到同一个struct里。FORTRAN 77没有这个能力，FORTRAN
+77无法实现ADT。这种数据聚合struct是ADT的基础，struct List、struct
+HashTable等能把链表和哈希表结构的数据放到一起，而不是用几个零散的变量来表示它。</p>
+<h4 id="全局函数与重载"><strong>全局函数与重载</strong></h4>
+<p>例如我定义了complex，那么我可以同时定义complex sin(const complex&amp;
+x)和complex exp(const complex&amp;
+x)等等全局函数来实现复数的三角函数和指数运算。sin()和exp()不是complex的成员，而是全局函数double
+sin(double)和double exp(double)的重载。这样能让double a =
+sin(b);和complex a = sin(b);具有相同的代码形式，而不必写成complex a =
+b.sin()。</p>
+<p>C语言可以定义全局函数，但是不能与已有的函数重名，也就没有重载。Java没有全局函数，而且Math
+class是封闭的，并不能往其中添加sin(Complex)。</p>
+<h4 id="成员函数与private数据"><strong>成员函数与private数据</strong></h4>
+<p><strong>数据也可以声明为private，防止外界意外修改。</strong>不是每个ADT都适合把数据声明为private，例如complex、Point、pair&lt;&gt;这样的ADT使用public
+data更加合理。</p>
+<p>要能够在struct里定义操作，而不是只能用全局函数来操作struct。比方说vector有push_back()操作，push_back是vector的一部分，它必须直接修改vector的private
+data members，因此无法定义为全局函数。</p>
+<p>这两点其实就是定义class，现在的语言都能直接支持，C语言除外。</p>
+<h4 id="拷贝控制copy-control"><strong>拷贝控制（copy
+control）</strong></h4>
+<p>copy control是拷贝stack a; stack b = a;和赋值stack b; b =
+a;的合称。</p>
+<p>当拷贝一个ADT时会发生什么？比方说拷贝一个stack，是不是应该把它的每个元素按值拷贝到新stack？</p>
+<p>如果语言支持显示控制对象的生命期（比方说C++的确定性析构），而ADT用到了动态分配的内存，那么copy
+control更为重要，可防止访问已经失效的对象。</p>
+<p><strong>由于C++ class是值语义，copy
+control是实现深拷贝的必要手段</strong>，而且ADT用到的资源只涉及动态分配的内存，所以深拷贝是可行的。相反，object-based编程风格中的class往往代表某样真实的事物（Employee、Account、File等等），深拷贝无意义。</p>
+<p>C语言没有copy
+control，也没有办法防止拷贝，一切要靠程序员自己小心在意。</p>
+<p>FILE*可以随意拷贝，但是只要关闭其中一个copy，其他copy也都失效了，跟空悬指针一般。整个C语言对待资源（malloc得到的内存，open()打开的文件，socket()打开的连接）都是这样的，用整数或指针来代表（即“句柄”）。而整数和指针类型的“句柄”是可以随意拷贝的，很容易就造成重复释放、遗漏释放、使用已经释放的资源等等常见错误。这方面C++是一个显著的进步，我认为boost::noncopyable是Boost里最值得推广的库。</p>
+<h4 id="操作符重载"><strong>操作符重载</strong></h4>
+<p>如果要写动态数组，我们希望能像使用内置数组一样使用它，比如支持下标操作。C++可以重载operator[]来做到这一点。</p>
+<p>如果要写复数，我们希望能像使用内置的double一样使用它，比如支持加减乘除。C++可以重载operator+等操作符来做到这一点。</p>
+<p>如果要写日期与时间，我们希望它能直接用大于或小于号来比较先后，用==来判断是否相等。C++可以重载operator&lt;等操作符来做到这一点。</p>
+<p>这要求语言能重载成员与全局操作符。操作符重载是C++与生俱来的特性，1984年的CFront
+1.0就支持操作符重载，并且提供了一个complex
+class，这个class与目前标准库的complex&lt;&gt;在使用上无区别。</p>
+<p>如果没有操作符重载，那么用户定义的ADT与内置类型用起来就不一样了（想想有的语言要区分==和equals，代码写起来实在很累赘）。Java里有BigInteger，但是BigInteger用起来和普通int/long大不相同：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> BigInteger <span class="hljs-title function_">mean</span><span class="hljs-params">(BigInteger x, BigInteger y)</span> &#123;<br>    <span class="hljs-type">BigInteger</span> <span class="hljs-variable">two</span> <span class="hljs-operator">=</span> BigInteger.valueOf(<span class="hljs-number">2</span>);<br>    <span class="hljs-keyword">return</span> x.add(y).divide(two);<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">long</span> <span class="hljs-title function_">mean</span><span class="hljs-params">(<span class="hljs-type">long</span> x, <span class="hljs-type">long</span> y)</span> &#123;<br>    <span class="hljs-keyword">return</span> (x + y) / <span class="hljs-number">2</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>当然，操作符重载容易被滥用，因为这样显得很“酷”。我认为只在ADT表示一个“数值”的时候才适合重载加减乘除，其他情况下用具名函数为好，因此muduo::Timestamp只重载了关系操作符，没有重载加减操作符。另外一个理由见12.6“采用有利于版本管理的代码格式”。</p>
+<h4 id="效率无损"><strong>效率无损</strong></h4>
+<p>“抽象”不代表低效。在C++中，提高抽象的层次并不会降低效率。不然的话，人们宁可在低层次上编程，而不愿使用更便利的抽象，数据抽象也就失去了市场。后面我们将看到一个具体的例子。</p>
+<h4 id="模板与泛型"><strong>模板与泛型</strong></h4>
+<p>如果我写了一个IntVector，那么我不想为double和string再实现一遍同样的代码。我应该把vector写成template，然后用不同的类型来具现化它，从而得到vector&lt;int&gt;、vector&lt;double&gt;、vector&lt;complex&gt;、vector&lt;string&gt;等具体类型。</p>
+<p>不是每个ADT都需要这种泛型能力，一个Date
+class就没必要让用户指定该用哪种类型的整数，int32_t足够了。</p>
+<p>根据上面的要求，不是每个面向对象语言都能原生支持数据抽象，也说明数据抽象不是面向对象的子集。</p>
+<h3 id="数据抽象的例子">7.7 数据抽象的例子</h3>
+<p>下面我们看看数值模拟N-body问题的两个程序，前一个是用C语言，后一个是用C++语言。这个例子来自编程语言的性能对比网站。两个程序使用的算法相同。</p>
+<h4 id="c语言版"><strong>C语言版</strong></h4>
+<p>完整代码见recipes/puzzle/file_nbody.c，下面是核心代码。struct
+planet保存行星位置、速度、质量，位置和速度各有三个分量。程序模拟几大行星在三维空间中受引力支配的运动。</p>
+<p>其中最核心的算法是advance()函数实现的数值积分，它根据各个星球之间的距离和引力，算出加速度，再修正速度，然后更新星球的位置。这个naive算法的复杂度是O(N^2)。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">planet</span> &#123;</span><br>    <span class="hljs-type">double</span> x, y, z;<br>    <span class="hljs-type">double</span> vx, vy, vz;<br>    <span class="hljs-type">double</span> mass;<br>&#125;;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">advance</span><span class="hljs-params">(<span class="hljs-type">int</span> nbodies, <span class="hljs-keyword">struct</span> planet *bodies, <span class="hljs-type">double</span> dt)</span> &#123;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; nbodies; i++) &#123;<br>        <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">planet</span> *<span class="hljs-title">p1</span> =</span> &amp;(bodies[i]);<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = i + <span class="hljs-number">1</span>; j &lt; nbodies; j++) &#123;<br>            <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">planet</span> *<span class="hljs-title">p2</span> =</span> &amp;(bodies[j]);<br>            <span class="hljs-type">double</span> dx = p1-&gt;x - p2-&gt;x;<br>            <span class="hljs-type">double</span> dy = p1-&gt;y - p2-&gt;y;<br>            <span class="hljs-type">double</span> dz = p1-&gt;z - p2-&gt;z;<br>            <span class="hljs-type">double</span> distance_squared = dx * dx + dy * dy + dz * dz;<br>            <span class="hljs-type">double</span> distance = <span class="hljs-built_in">sqrt</span>(distance_squared);<br>            <span class="hljs-type">double</span> mag = dt / (distance * distance_squared);<br>            p1-&gt;vx -= dx * p2-&gt;mass * mag;<br>            p1-&gt;vy -= dy * p2-&gt;mass * mag;<br>            p1-&gt;vz -= dz * p2-&gt;mass * mag;<br>            p2-&gt;vx += dx * p1-&gt;mass * mag;<br>            p2-&gt;vy += dy * p1-&gt;mass * mag;<br>            p2-&gt;vz += dz * p1-&gt;mass * mag;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; nbodies; i++) &#123;<br>        <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">planet</span> *<span class="hljs-title">p</span> =</span> &amp;(bodies[i]);<br>        p-&gt;x += dt * p-&gt;vx;<br>        p-&gt;y += dt * p-&gt;vy;<br>        p-&gt;z += dt * p-&gt;vz;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="c数据抽象版"><strong>C++数据抽象版</strong></h4>
+<p>完整代码见recipes/puzzle/file_nbody.cc，下面是其代码骨架。首先定义Vector3这个抽象，代表三维向量，它既可以是位置，又可以是速度。本处略去了Vector3的操作符重载（Vector3支持常见的向量加减乘除运算）。然后定义Planet这个抽象，代表一个行星，它有两个Vector3成员：位置和速度。需要说明的是，按照语义，Vector3是数据抽象，而Planet是object-based。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Vector3</span> &#123;<br>    <span class="hljs-built_in">Vector3</span>(<span class="hljs-type">double</span> x, <span class="hljs-type">double</span> y, <span class="hljs-type">double</span> z) : <span class="hljs-built_in">x</span>(x), <span class="hljs-built_in">y</span>(y), <span class="hljs-built_in">z</span>(z) &#123;&#125;<br>    <span class="hljs-type">double</span> x;<br>    <span class="hljs-type">double</span> y;<br>    <span class="hljs-type">double</span> z;<br>&#125;;<br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Planet</span> &#123;<br>    <span class="hljs-built_in">Planet</span>(<span class="hljs-type">const</span> Vector3&amp; position, <span class="hljs-type">const</span> Vector3&amp; velocity, <span class="hljs-type">double</span> mass)<br>        : <span class="hljs-built_in">position</span>(position), <span class="hljs-built_in">velocity</span>(velocity), <span class="hljs-built_in">mass</span>(mass) &#123;&#125;<br>    Vector3 position;<br>    Vector3 velocity;<br>    <span class="hljs-type">const</span> <span class="hljs-type">double</span> mass;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>相同功能的advance()代码则简短得多，而且更容易验证其正确性。（设想假如把C语言版的advance()中的vx、vy、vz、dx、dy、dz写错位了，这种错误较难发现。）</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">advance</span><span class="hljs-params">(<span class="hljs-type">int</span> nbodies, Planet* bodies, <span class="hljs-type">double</span> delta_time)</span> </span>&#123;<br>    <span class="hljs-keyword">for</span> (Planet* p1 = bodies; p1 != bodies + nbodies; ++p1) &#123;<br>        <span class="hljs-keyword">for</span> (Planet* p2 = p1 + <span class="hljs-number">1</span>; p2 != bodies + nbodies; ++p2) &#123;<br>            Vector3 difference = p1-&gt;position - p2-&gt;position;<br>            <span class="hljs-type">double</span> distance_squared = <span class="hljs-built_in">magnitude_squared</span>(difference);<br>            <span class="hljs-type">double</span> distance = std::<span class="hljs-built_in">sqrt</span>(distance_squared);<br>            <span class="hljs-type">double</span> magnitude = delta_time / (distance * distance_squared);<br>            p1-&gt;velocity -= difference * p2-&gt;mass * magnitude;<br>            p2-&gt;velocity += difference * p1-&gt;mass * magnitude;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">for</span> (Planet* p = bodies; p != bodies + nbodies; ++p) &#123;<br>        p-&gt;position += delta_time * p-&gt;velocity;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>尽管C++使用了更高层的抽象Vector3，但它的性能和C语言一样快。看看memory
+layout就会明白。</p>
+<p>C struct的成员是连续存储的，struct数组也是连续的。</p>
+<p>尽管C++定义了Vector3这个抽象，但它的内存布局并没有改变。C++
+Planet的布局和C planet一模一样，Planet[]的布局也和C数组一样。</p>
+<p>另一方面，C++的inline函数在这里也起了巨大作用，我们可以放心地调用Vector3::operator+=（等操作符，编译器会生成和C一样高效的代码。</p>
+<p>不是每个编程语言都能做到在提升抽象的时候不影响性能，来看看Java的内存布局。如果我们用class
+Vector3、class
+Planet、Planet[]的方式写一个Java版的N-body程序，内存布局将会是如图11-12所示的样子。这样大大降低了memory
+locality，有兴趣的读者可以对比Java和C++的实现效率。</p>
+<p>用更高级和底层的优化，复杂度是O(NlogN)，在大规模模拟时其运行速度也比本naive算法快得多。</p>
+<h4 id="更多的例子">更多的例子</h4>
+<ul>
+<li><strong>Date与Timestamp</strong></li>
+</ul>
+<p>这两个class的“数据”都是整数，各定义了一套操作，用于表达日期与时间这两个概念。</p>
+<ul>
+<li><strong>BigInteger</strong></li>
+</ul>
+<p>它本身就是一个“数”。如果用C++实现BigInteger，那么阶乘函数写出来十分自然。下面第二个函数是Java语言的版本。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// C++ code</span><br><span class="hljs-function">BigInteger <span class="hljs-title">factorial</span><span class="hljs-params">(<span class="hljs-type">int</span> n)</span> </span>&#123;<br>    <span class="hljs-function">BigInteger <span class="hljs-title">result</span><span class="hljs-params">(<span class="hljs-number">1</span>)</span></span>;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; ++i) &#123;<br>        result *= i;<br>    &#125;<br>    <span class="hljs-keyword">return</span> result;<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// Java code</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> BigInteger <span class="hljs-title function_">factorial</span><span class="hljs-params">(<span class="hljs-type">int</span> n)</span> &#123;<br>    <span class="hljs-type">BigInteger</span> <span class="hljs-variable">result</span> <span class="hljs-operator">=</span> BigInteger.ONE;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">1</span>; i &lt;= n; ++i) &#123;<br>        result = result.multiply(BigInteger.valueOf(i));<br>    &#125;<br>    <span class="hljs-keyword">return</span> result;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>高精度运算库gmp有一套高质量的C++封装。</p>
+<ul>
+<li><p><strong>图形学中的三维齐次坐标Vector4和对应的4×4变换矩阵Matrix4</strong></p></li>
+<li><p><strong>金融领域中经常成对出现的“买入价/卖出价”</strong></p></li>
+</ul>
+<p>可以封装为BidOffer
+struct，这个struct的成员可以有mid()（中间价）、spread()（买卖差价）、加减操作符等等。</p>
+<h4 id="小结-1">小结</h4>
+<p>数据抽象是C++的重要抽象手段，适合封装“数据”，它的语义简单，容易使用。数据抽象能简化代码书写，减少偶然错误。</p>
+<p>在新写一个class的时候，先想清楚它是值语义还是对象语义。一般来说，一个项目里只有少量的class是值语义，比如一些snapshot的数据，而大多数class都是对象语义。</p>
+<p><strong>如果是对象语义的class，那么应该立刻继承boost::noncopyable，防止编译器自动生成的拷贝构造函数和赋值操作符在无意中破坏程序行为。</strong></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/c/" class="category-chain-item">c++</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/c/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="category-chain-item">muduo多线程服务器</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/muduo/" class="print-no-link">#muduo</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>11. 反思C++面向对象与虚函数</div>
+      <div>http://binbo-zappy.github.io/2025/01/03/muduo多线程/11-反思C++面向对象与虚函数/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年1月3日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/01/05/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/12-C++%E7%BB%8F%E9%AA%8C%E8%B0%88/" title="12. C++经验谈">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">12. C++经验谈</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/01/03/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/10-C++%E7%BC%96%E8%AF%91%E9%93%BE%E6%8E%A5%E6%A8%A1%E5%9E%8B%E7%B2%BE%E8%A6%81/" title="10. C++编译链接模型精要">
+                        <span class="hidden-mobile">10. C++编译链接模型精要</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

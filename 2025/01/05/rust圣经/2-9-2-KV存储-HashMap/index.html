@@ -1,0 +1,884 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="KV 存储 HashMap 和动态数组一样，HashMap 也是 Rust 标准库中提供的集合类型，但是又与动态数组不同，HashMap 中存储的是一一映射的 KV 键值对，并提供了平均复杂度为 O(1) 的查询方法，当我们希望通过一个 Key 去查询值时，该类型非常有用，以致于 Go 语言将该类型设置成了语言级别的内置特性。 Rust 中哈希类型（哈希映射）为 HashMap&amp;l">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2.9.2 KV存储 HashMap">
+<meta property="og:url" content="http://binbo-zappy.github.io/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-9-2-KV%E5%AD%98%E5%82%A8-HashMap/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="KV 存储 HashMap 和动态数组一样，HashMap 也是 Rust 标准库中提供的集合类型，但是又与动态数组不同，HashMap 中存储的是一一映射的 KV 键值对，并提供了平均复杂度为 O(1) 的查询方法，当我们希望通过一个 Key 去查询值时，该类型非常有用，以致于 Go 语言将该类型设置成了语言级别的内置特性。 Rust 中哈希类型（哈希映射）为 HashMap&amp;l">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/rust.jpg">
+<meta property="article:published_time" content="2025-01-05T14:37:33.000Z">
+<meta property="article:modified_time" content="2025-01-17T07:33:35.768Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="rust">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/rust.jpg">
+  
+  
+  
+  <title>2.9.2 KV存储 HashMap - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="2.9.2 KV存储 HashMap"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-01-05 22:37" pubdate>
+          2025年1月5日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          27 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">2.9.2 KV存储 HashMap</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="kv-存储-hashmap">KV 存储 HashMap</h1>
+<p>和动态数组一样，<code>HashMap</code> 也是 Rust
+标准库中提供的集合类型，但是又与动态数组不同，<code>HashMap</code>
+中存储的是一一映射的 <code>KV</code> 键值对，并提供了平均复杂度为
+<code>O(1)</code> 的查询方法，当我们希望通过一个 <code>Key</code>
+去查询值时，该类型非常有用，以致于 Go
+语言将该类型设置成了语言级别的内置特性。</p>
+<p>Rust 中哈希类型（哈希映射）为
+<code>HashMap&lt;K,V&gt;</code>，在其它语言中，也有类似的数据结构，例如
+<code>hash map</code>，<code>map</code>，<code>object</code>，<code>hash table</code>，<code>字典</code>
+等等，引用小品演员孙涛的一句台词：大家都是本地狐狸，别搁那装貂 :)。</p>
+<h2 id="创建-hashmap">1. 创建 HashMap</h2>
+<p>跟创建动态数组 <code>Vec</code> 的方法类似，可以使用 <code>new</code>
+方法来创建 <code>HashMap</code>，然后通过 <code>insert</code>
+方法插入键值对。</p>
+<h3 id="使用-new-方法创建">1.1 使用 new 方法创建</h3>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">use</span> std::collections::HashMap;<br><br><span class="hljs-comment">// 创建一个HashMap，用于存储宝石种类和对应的数量</span><br><span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">my_gems</span> = HashMap::<span class="hljs-title function_ invoke__">new</span>();<br><br><span class="hljs-comment">// 将宝石类型和对应的数量写入表中</span><br>my_gems.<span class="hljs-title function_ invoke__">insert</span>(<span class="hljs-string">&quot;红宝石&quot;</span>, <span class="hljs-number">1</span>);<br>my_gems.<span class="hljs-title function_ invoke__">insert</span>(<span class="hljs-string">&quot;蓝宝石&quot;</span>, <span class="hljs-number">2</span>);<br>my_gems.<span class="hljs-title function_ invoke__">insert</span>(<span class="hljs-string">&quot;河边捡的误以为是宝石的破石头&quot;</span>, <span class="hljs-number">18</span>);<br></code></pre></td></tr></table></figure>
+<p>很简单对吧？跟其它语言没有区别，聪明的同学甚至能够猜到该
+<code>HashMap</code>
+的类型：<code>HashMap&lt;&amp;str,i32&gt;</code>。</p>
+<p>但是还有一点，你可能没有注意，那就是使用 <code>HashMap</code>
+需要手动通过 <code>use ...</code>
+从标准库中引入到我们当前的作用域中来，仔细回忆下，之前使用另外两个集合类型
+<code>String</code> 和 <code>Vec</code> 时，我们是否有手动引用过？答案是
+<strong>No</strong>，因为 <code>HashMap</code> 并没有包含在 Rust 的 <a target="_blank" rel="noopener" href="https://course.rs/appendix/prelude.html"><code>prelude</code></a>
+中（Rust 为了简化用户使用，提前将最常用的类型自动引入到作用域中）。</p>
+<p>所有的集合类型都是动态的，意味着它们没有固定的内存大小，因此它们底层的数据都存储在内存堆上，然后通过一个存储在栈中的引用类型来访问。同时，跟其它集合类型一致，<code>HashMap</code>
+也是内聚性的，即所有的 <code>K</code> 必须拥有同样的类型，<code>V</code>
+也是如此。</p>
+<blockquote>
+<p>跟 <code>Vec</code> 一样，如果预先知道要存储的 <code>KV</code>
+对个数，可以使用 <code>HashMap::with_capacity(capacity)</code>
+创建指定大小的
+<code>HashMap</code>，避免频繁的内存分配和拷贝，提升性能。</p>
+</blockquote>
+<h3 id="使用迭代器和-collect-方法创建">1.2 使用迭代器和 collect
+方法创建</h3>
+<p>在实际使用中，不是所有的场景都能 <code>new</code>
+一个哈希表后，然后悠哉悠哉的依次插入对应的键值对，而是可能会从另外一个数据结构中，获取到对应的数据，最终生成
+<code>HashMap</code>。</p>
+<p>例如考虑一个场景，有一张表格中记录了足球联赛中各队伍名称和积分的信息，这张表如果被导入到
+Rust 项目中，一个合理的数据结构是 <code>Vec&lt;(String, u32)&gt;</code>
+类型，该数组中的元素是一个个元组，该数据结构跟表格数据非常契合：表格中的数据都是逐行存储，每一个行都存有一个
+<code>(队伍名称, 积分)</code> 的信息。</p>
+<p>但是在很多时候，又需要通过队伍名称来查询对应的积分，此时动态数组就不适用了，因此可以用
+<code>HashMap</code> 来保存相关的<strong>队伍名称 -&gt;
+积分</strong>映射关系。 理想很丰满，现实很骨感，如何将
+<code>Vec&lt;(String, u32)&gt;</code> 中的数据快速写入到
+<code>HashMap&lt;String, u32&gt;</code> 中？</p>
+<p>一个动动脚趾头就能想到的笨方法如下：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">use</span> std::collections::HashMap;<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">teams_list</span> = <span class="hljs-built_in">vec!</span>[<br>        (<span class="hljs-string">&quot;中国队&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>(), <span class="hljs-number">100</span>),<br>        (<span class="hljs-string">&quot;美国队&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>(), <span class="hljs-number">10</span>),<br>        (<span class="hljs-string">&quot;日本队&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>(), <span class="hljs-number">50</span>),<br>    ];<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">teams_map</span> = HashMap::<span class="hljs-title function_ invoke__">new</span>();<br>    <span class="hljs-keyword">for</span> <span class="hljs-variable">team</span> <span class="hljs-keyword">in</span> &amp;teams_list &#123;<br>        teams_map.<span class="hljs-title function_ invoke__">insert</span>(&amp;team.<span class="hljs-number">0</span>, team.<span class="hljs-number">1</span>);<br>    &#125;<br><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;:?&#125;&quot;</span>,teams_map)<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>遍历列表，将每一个元组作为一对 <code>KV</code>插入到
+<code>HashMap</code> 中，很简单，但是……也不太聪明的样子，换个词说就是 ——
+不够 rusty。</p>
+<p>好在，Rust 为我们提供了一个非常精妙的解决办法：先将 <code>Vec</code>
+转为迭代器，接着通过 <code>collect</code>
+方法，将迭代器中的元素收集后，转成 <code>HashMap</code>：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">use</span> std::collections::HashMap;<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">teams_list</span> = <span class="hljs-built_in">vec!</span>[<br>        (<span class="hljs-string">&quot;中国队&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>(), <span class="hljs-number">100</span>),<br>        (<span class="hljs-string">&quot;美国队&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>(), <span class="hljs-number">10</span>),<br>        (<span class="hljs-string">&quot;日本队&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>(), <span class="hljs-number">50</span>),<br>    ];<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">teams_map</span>: HashMap&lt;_,_&gt; = teams_list.<span class="hljs-title function_ invoke__">into_iter</span>().<span class="hljs-title function_ invoke__">collect</span>();<br>    <br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;:?&#125;&quot;</span>,teams_map)<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>代码很简单，<code>into_iter</code> 方法将列表转为迭代器，接着通过
+<code>collect</code> 进行收集，不过需要注意的是，<code>collect</code>
+方法在内部实际上支持生成多种类型的目标集合，因此我们需要通过类型标注
+<code>HashMap&lt;_,_&gt;</code> 来告诉编译器：请帮我们收集为
+<code>HashMap</code> 集合类型，具体的 <code>KV</code>
+类型，麻烦编译器您老人家帮我们推导。</p>
+<p>由此可见，Rust
+中的编译器时而小聪明，时而大聪明，不过好在，它大聪明的时候，会自家人知道自己事，总归会通知你一声：</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs console">error[E0282]: type annotations needed // 需要类型标注<br><span class="hljs-meta prompt_">  --&gt; </span><span class="language-bash">src/main.rs:10:9</span><br>   |<br>10 |     let teams_map = teams_list.into_iter().collect();<br>   |         ^^^^^^^^^ consider giving `teams_map` a type // 给予 `teams_map` 一个具体的类型<br></code></pre></td></tr></table></figure>
+<h2 id="所有权转移">2. 所有权转移</h2>
+<p><code>HashMap</code> 的所有权规则与其它 Rust 类型没有区别：</p>
+<ul>
+<li>若类型实现 <code>Copy</code> 特征，该类型会被复制进
+<code>HashMap</code>，因此无所谓所有权</li>
+<li>若没实现 <code>Copy</code> 特征，所有权将被转移给
+<code>HashMap</code> 中</li>
+</ul>
+<p>例如我参选帅气男孩时的场景再现：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">use</span> std::collections::HashMap;<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">name</span> = <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;Sunface&quot;</span>);<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">age</span> = <span class="hljs-number">18</span>;<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">handsome_boys</span> = HashMap::<span class="hljs-title function_ invoke__">new</span>();<br>    handsome_boys.<span class="hljs-title function_ invoke__">insert</span>(name, age);<br><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;因为过于无耻，&#123;&#125;已经被从帅气男孩名单中除名&quot;</span>, name);<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;还有，他的真实年龄远远不止&#123;&#125;岁&quot;</span>, age);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>运行代码，报错如下：</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs console">error[E0382]: borrow of moved value: `name`<br><span class="hljs-meta prompt_">  --&gt; </span><span class="language-bash">src/main.rs:10:32</span><br>   |<br>4  |     let name = String::from(&quot;Sunface&quot;);<br>   |         ---- move occurs because `name` has type `String`, which does not implement the `Copy` trait<br>...<br>8  |     handsome_boys.insert(name, age);<br>   |                          ---- value moved here<br>9  |<br>10 |     println!(&quot;因为过于无耻，&#123;&#125;已经被除名&quot;, name);<br>   |                                            ^^^^ value borrowed here after move<br></code></pre></td></tr></table></figure>
+<p>提示很清晰，<code>name</code> 是 <code>String</code>
+类型，因此它受到所有权的限制，在 <code>insert</code>
+时，它的所有权被转移给
+<code>handsome_boys</code>，所以最后在使用时，会遇到这个无情但是意料之中的报错。</p>
+<p><strong>如果你使用引用类型放入 HashMap
+中</strong>，请确保该引用的生命周期至少跟 <code>HashMap</code>
+活得一样久：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">use</span> std::collections::HashMap;<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">name</span> = <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;Sunface&quot;</span>);<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">age</span> = <span class="hljs-number">18</span>;<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">handsome_boys</span> = HashMap::<span class="hljs-title function_ invoke__">new</span>();<br>    handsome_boys.<span class="hljs-title function_ invoke__">insert</span>(&amp;name, age);<br><br>    std::mem::<span class="hljs-title function_ invoke__">drop</span>(name);<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;因为过于无耻，&#123;:?&#125;已经被除名&quot;</span>, handsome_boys);<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;还有，他的真实年龄远远不止&#123;&#125;岁&quot;</span>, age);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>上面代码，我们借用 <code>name</code> 获取了它的引用，然后插入到
+<code>handsome_boys</code> 中，至此一切都很完美。但是紧接着，就通过
+<code>drop</code> 函数手动将 <code>name</code>
+字符串从内存中移除，再然后就报错了：</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs console"> handsome_boys.insert(&amp;name, age);<br>   |                          ----- borrow of `name` occurs here // name借用发生在此处<br>9  |<br>10 |     std::mem::drop(name);<br>   |                    ^^^^ move out of `name` occurs here // name的所有权被转移走<br>11 |     println!(&quot;因为过于无耻，&#123;:?&#125;已经被除名&quot;, handsome_boys);<br>   |                                              ------------- borrow later used here // 所有权转移后，还试图使用name<br></code></pre></td></tr></table></figure>
+<p>最终，某人因为过于无耻，真正的被除名了 :)</p>
+<h2 id="查询-hashmap">3. 查询 HashMap</h2>
+<p>通过 <code>get</code> 方法可以获取元素：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">use</span> std::collections::HashMap;<br><br><span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">scores</span> = HashMap::<span class="hljs-title function_ invoke__">new</span>();<br><br>scores.<span class="hljs-title function_ invoke__">insert</span>(<span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;Blue&quot;</span>), <span class="hljs-number">10</span>);<br>scores.<span class="hljs-title function_ invoke__">insert</span>(<span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;Yellow&quot;</span>), <span class="hljs-number">50</span>);<br><br><span class="hljs-keyword">let</span> <span class="hljs-variable">team_name</span> = <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;Blue&quot;</span>);<br><span class="hljs-keyword">let</span> <span class="hljs-variable">score</span>: <span class="hljs-type">Option</span>&lt;&amp;<span class="hljs-type">i32</span>&gt; = scores.<span class="hljs-title function_ invoke__">get</span>(&amp;team_name);<br></code></pre></td></tr></table></figure>
+<p>上面有几点需要注意：</p>
+<ul>
+<li><code>get</code> 方法返回一个 <code>Option&lt;&amp;i32&gt;</code>
+类型：当查询不到时，会返回一个 <code>None</code>，查询到时返回
+<code>Some(&amp;i32)</code></li>
+<li><code>&amp;i32</code> 是对 <code>HashMap</code>
+中值的借用，如果不使用借用，可能会发生所有权的转移</li>
+</ul>
+<p>还可以继续拓展下，上面的代码中，如果我们想直接获得值类型的
+<code>score</code> 该怎么办，答案简约但不简单：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">score</span>: <span class="hljs-type">i32</span> = scores.<span class="hljs-title function_ invoke__">get</span>(&amp;team_name).<span class="hljs-title function_ invoke__">copied</span>().<span class="hljs-title function_ invoke__">unwrap_or</span>(<span class="hljs-number">0</span>);<br></code></pre></td></tr></table></figure>
+<p>这里留给大家一个小作业：去官方文档中查询下 <code>Option</code> 的
+<code>copied</code> 方法和 <code>unwrap_or</code>
+方法的含义及该如何使用。</p>
+<p>还可以通过循环的方式依次遍历 <code>KV</code> 对：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">use</span> std::collections::HashMap;<br><br><span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">scores</span> = HashMap::<span class="hljs-title function_ invoke__">new</span>();<br><br>scores.<span class="hljs-title function_ invoke__">insert</span>(<span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;Blue&quot;</span>), <span class="hljs-number">10</span>);<br>scores.<span class="hljs-title function_ invoke__">insert</span>(<span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;Yellow&quot;</span>), <span class="hljs-number">50</span>);<br><br><span class="hljs-keyword">for</span> (key, value) <span class="hljs-keyword">in</span> &amp;scores &#123;<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;&#125;: &#123;&#125;&quot;</span>, key, value);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>最终输出：</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs console">Yellow: 50<br>Blue: 10<br></code></pre></td></tr></table></figure>
+<h2 id="更新-hashmap-中的值">4. 更新 HashMap 中的值</h2>
+<p>更新值的时候，涉及多种情况，咱们在代码中一一进行说明：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">use</span> std::collections::HashMap;<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">scores</span> = HashMap::<span class="hljs-title function_ invoke__">new</span>();<br><br>    scores.<span class="hljs-title function_ invoke__">insert</span>(<span class="hljs-string">&quot;Blue&quot;</span>, <span class="hljs-number">10</span>);<br><br>    <span class="hljs-comment">// 覆盖已有的值</span><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">old</span> = scores.<span class="hljs-title function_ invoke__">insert</span>(<span class="hljs-string">&quot;Blue&quot;</span>, <span class="hljs-number">20</span>);<br>    <span class="hljs-built_in">assert_eq!</span>(old, <span class="hljs-title function_ invoke__">Some</span>(<span class="hljs-number">10</span>));<br><br>    <span class="hljs-comment">// 查询新插入的值</span><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">new</span> = scores.<span class="hljs-title function_ invoke__">get</span>(<span class="hljs-string">&quot;Blue&quot;</span>);<br>    <span class="hljs-built_in">assert_eq!</span>(new, <span class="hljs-title function_ invoke__">Some</span>(&amp;<span class="hljs-number">20</span>));<br><br>    <span class="hljs-comment">// 查询Yellow对应的值，若不存在则插入新值</span><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">v</span> = scores.<span class="hljs-title function_ invoke__">entry</span>(<span class="hljs-string">&quot;Yellow&quot;</span>).<span class="hljs-title function_ invoke__">or_insert</span>(<span class="hljs-number">5</span>);<br>    <span class="hljs-built_in">assert_eq!</span>(*v, <span class="hljs-number">5</span>); <span class="hljs-comment">// 不存在，插入5</span><br><br>    <span class="hljs-comment">// 查询Yellow对应的值，若不存在则插入新值</span><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">v</span> = scores.<span class="hljs-title function_ invoke__">entry</span>(<span class="hljs-string">&quot;Yellow&quot;</span>).<span class="hljs-title function_ invoke__">or_insert</span>(<span class="hljs-number">50</span>);<br>    <span class="hljs-built_in">assert_eq!</span>(*v, <span class="hljs-number">5</span>); <span class="hljs-comment">// 已经存在，因此50没有插入</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>具体的解释在代码注释中已有，这里不再进行赘述。</p>
+<h3 id="在已有值的基础上更新">4.1 在已有值的基础上更新</h3>
+<p>另一个常用场景如下：查询某个 <code>key</code>
+对应的值，若不存在则插入新值，若存在则对已有的值进行更新，例如在文本中统计词语出现的次数：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">use</span> std::collections::HashMap;<br><br><span class="hljs-keyword">let</span> <span class="hljs-variable">text</span> = <span class="hljs-string">&quot;hello world wonderful world&quot;</span>;<br><br><span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">map</span> = HashMap::<span class="hljs-title function_ invoke__">new</span>();<br><span class="hljs-comment">// 根据空格来切分字符串(英文单词都是通过空格切分)</span><br><span class="hljs-keyword">for</span> <span class="hljs-variable">word</span> <span class="hljs-keyword">in</span> text.<span class="hljs-title function_ invoke__">split_whitespace</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">count</span> = map.<span class="hljs-title function_ invoke__">entry</span>(word).<span class="hljs-title function_ invoke__">or_insert</span>(<span class="hljs-number">0</span>);<br>    *count += <span class="hljs-number">1</span>;<br>&#125;<br><br><span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;:?&#125;&quot;</span>, map);<br></code></pre></td></tr></table></figure>
+<p>上面代码中，新建一个 <code>map</code>
+用于保存词语出现的次数，插入一个词语时会进行判断：若之前没有插入过，则使用该词语作
+<code>Key</code>，插入次数 0 作为
+<code>Value</code>，若之前插入过则取出之前统计的该词语出现的次数，对其加一。</p>
+<p>有两点值得注意：</p>
+<ul>
+<li><code>or_insert</code> 返回了 <code>&amp;mut v</code>
+引用，因此可以通过该可变引用直接修改 <code>map</code> 中对应的值</li>
+<li>使用 <code>count</code> 引用时，需要先进行解引用
+<code>*count</code>，否则会出现类型不匹配</li>
+</ul>
+<h2 id="哈希函数">5. 哈希函数</h2>
+<p>你肯定比较好奇，为何叫哈希表，到底什么是哈希。</p>
+<p>先来设想下，如果要实现 <code>Key</code> 与 <code>Value</code>
+的一一对应，是不是意味着我们要能比较两个 <code>Key</code> 的相等性？例如
+"a" 和 "b"，1 和 2，当这些类型做 <code>Key</code>
+且能比较时，可以很容易知道 <code>1</code> 对应的值不会错误的映射到
+<code>2</code> 上，因为 <code>1</code> 不等于
+<code>2</code>。因此，一个类型能否作为 <code>Key</code>
+的关键就是是否能进行相等比较，或者说该<strong>类型是否实现了
+<code>std::cmp::Eq</code> 特征</strong>。</p>
+<blockquote>
+<p>f32 和 f64 浮点数，没有实现 <code>std::cmp::Eq</code>
+特征，因此不可以用作 <code>HashMap</code> 的 <code>Key</code>。</p>
+</blockquote>
+<p>好了，理解完这个，再来设想一点，若一个复杂点的类型作为
+<code>Key</code>，那怎么在底层对它进行存储，怎么使用它进行查询和比较？
+是不是很棘手？好在我们有哈希函数：通过它把 <code>Key</code>
+计算后映射为哈希值，然后使用该哈希值来进行存储、查询、比较等操作。</p>
+<p>但是问题又来了，如何保证不同 <code>Key</code>
+通过哈希后的两个值不会相同？如果相同，那意味着我们使用不同的
+<code>Key</code>，却查到了同一个结果，这种明显是错误的行为。
+此时，就涉及到安全性跟性能的取舍了。</p>
+<p>若要追求安全，尽可能减少冲突，同时防止拒绝服务（Denial of Service,
+DoS）攻击，就要使用密码学安全的哈希函数，<code>HashMap</code>
+就是使用了这样的哈希函数。反之若要追求性能，就需要使用没有那么安全的算法。</p>
+<h3 id="高性能三方库">5.1 高性能三方库</h3>
+<p>因此若性能测试显示当前标准库默认的哈希函数不能满足你的性能需求，就需要去
+<a target="_blank" rel="noopener" href="https://crates.io/"><code>crates.io</code></a>
+上寻找其它的哈希函数实现，使用方法很简单：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">use</span> std::hash::BuildHasherDefault;<br><span class="hljs-keyword">use</span> std::collections::HashMap;<br><span class="hljs-comment">// 引入第三方的哈希函数</span><br><span class="hljs-keyword">use</span> twox_hash::XxHash64;<br><br><span class="hljs-comment">// 指定HashMap使用第三方的哈希函数XxHash64</span><br><span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">hash</span>: HashMap&lt;_, _, BuildHasherDefault&lt;XxHash64&gt;&gt; = <span class="hljs-built_in">Default</span>::<span class="hljs-title function_ invoke__">default</span>();<br>hash.<span class="hljs-title function_ invoke__">insert</span>(<span class="hljs-number">42</span>, <span class="hljs-string">&quot;the answer&quot;</span>);<br><span class="hljs-built_in">assert_eq!</span>(hash.<span class="hljs-title function_ invoke__">get</span>(&amp;<span class="hljs-number">42</span>), <span class="hljs-title function_ invoke__">Some</span>(&amp;<span class="hljs-string">&quot;the answer&quot;</span>));<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>目前，<code>HashMap</code> 使用的哈希函数是
+<code>SipHash</code>，它的性能不是很高，但是安全性很高。<code>SipHash</code>
+在中等大小的 <code>Key</code> 上，性能相当不错，但是对于小型的
+<code>Key</code> （例如整数）或者大型 <code>Key</code>
+（例如字符串）来说，性能还是不够好。若你需要极致性能，例如实现算法，可以考虑这个库：<a target="_blank" rel="noopener" href="https://github.com/tkaitchuck/ahash">ahash</a>。</p>
+</blockquote>
+<p>最后，如果你想要了解 <code>HashMap</code>
+更多的用法，请参见本书的标准库解析章节：<a target="_blank" rel="noopener" href="https://course.rs/std/hashmap.html">HashMap 常用方法</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/rust/" class="category-chain-item">rust</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/rust/rust%E5%9C%A3%E7%BB%8F/" class="category-chain-item">rust圣经</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/rust/rust%E5%9C%A3%E7%BB%8F/rust%E5%9F%BA%E7%A1%80/" class="category-chain-item">rust基础</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/rust/" class="print-no-link">#rust</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>2.9.2 KV存储 HashMap</div>
+      <div>http://binbo-zappy.github.io/2025/01/05/rust圣经/2-9-2-KV存储-HashMap/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年1月5日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-10-%E8%AE%A4%E8%AF%86%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" title="2.10 认识生命周期">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">2.10 认识生命周期</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-9-1-%E5%8A%A8%E6%80%81%E6%95%B0%E7%BB%84-Vector/" title="2.9.1 动态数组 Vector">
+                        <span class="hidden-mobile">2.9.1 动态数组 Vector</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

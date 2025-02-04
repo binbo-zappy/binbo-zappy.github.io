@@ -1,0 +1,894 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="动态数组 Vector 动态数组类型用 Vec&lt;T&gt; 表示，事实上，在之前的章节，它的身影多次出现，我们一直没有细讲，只是简单的把它当作数组处理。 动态数组允许你存储多个值，这些值在内存中一个紧挨着另一个排列，因此访问其中某个元素的成本非常低。动态数组只能存储相同类型的元素，如果你想存储不同类型的元素，可以使用之前讲过的枚举类型或者特征对象。 总之，当我们想拥有一个列表，里面都">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2.9.1 动态数组 Vector">
+<meta property="og:url" content="http://binbo-zappy.github.io/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-9-1-%E5%8A%A8%E6%80%81%E6%95%B0%E7%BB%84-Vector/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="动态数组 Vector 动态数组类型用 Vec&lt;T&gt; 表示，事实上，在之前的章节，它的身影多次出现，我们一直没有细讲，只是简单的把它当作数组处理。 动态数组允许你存储多个值，这些值在内存中一个紧挨着另一个排列，因此访问其中某个元素的成本非常低。动态数组只能存储相同类型的元素，如果你想存储不同类型的元素，可以使用之前讲过的枚举类型或者特征对象。 总之，当我们想拥有一个列表，里面都">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/rust.jpg">
+<meta property="article:published_time" content="2025-01-05T14:37:32.000Z">
+<meta property="article:modified_time" content="2025-01-17T02:41:06.057Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="rust">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/rust.jpg">
+  
+  
+  
+  <title>2.9.1 动态数组 Vector - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="2.9.1 动态数组 Vector"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-01-05 22:37" pubdate>
+          2025年1月5日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          34 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">2.9.1 动态数组 Vector</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="动态数组-vector">动态数组 Vector</h1>
+<p>动态数组类型用 <code>Vec&lt;T&gt;</code>
+表示，事实上，在之前的章节，它的身影多次出现，我们一直没有细讲，只是简单的把它当作数组处理。</p>
+<p>动态数组允许你存储多个值，这些值在内存中一个紧挨着另一个排列，因此访问其中某个元素的成本非常低。动态数组只能存储相同类型的元素，如果你想存储不同类型的元素，可以使用之前讲过的枚举类型或者特征对象。</p>
+<p>总之，当我们想拥有一个列表，里面都是相同类型的数据时，动态数组将会非常有用。</p>
+<h2 id="创建动态数组">1. 创建动态数组</h2>
+<p>在 Rust 中，有多种方式可以创建动态数组。</p>
+<h3 id="vecnew">1.1 Vec::new</h3>
+<p>使用 <code>Vec::new</code> 创建动态数组是最 rusty 的方式，它调用了
+<code>Vec</code> 中的 <code>new</code> 关联函数：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">v</span>: <span class="hljs-type">Vec</span>&lt;<span class="hljs-type">i32</span>&gt; = <span class="hljs-type">Vec</span>::<span class="hljs-title function_ invoke__">new</span>();<br></code></pre></td></tr></table></figure>
+<p>这里，<code>v</code> 被显式地声明了类型
+<code>Vec&lt;i32&gt;</code>，这是因为 Rust 编译器无法从
+<code>Vec::new()</code> 中得到任何关于类型的暗示信息，因此也无法推导出
+<code>v</code>
+的具体类型，但是当你向里面增加一个元素后，一切又不同了：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">v</span> = <span class="hljs-type">Vec</span>::<span class="hljs-title function_ invoke__">new</span>();<br>v.<span class="hljs-title function_ invoke__">push</span>(<span class="hljs-number">1</span>);<br></code></pre></td></tr></table></figure>
+<p>此时，<code>v</code> 就无需手动声明类型，因为编译器通过
+<code>v.push(1)</code>，推测出 <code>v</code> 中的元素类型是
+<code>i32</code>，因此推导出 <code>v</code> 的类型是
+<code>Vec&lt;i32&gt;</code>。</p>
+<blockquote>
+<p>如果预先知道要存储的元素个数，可以使用
+<code>Vec::with_capacity(capacity)</code>
+创建动态数组，这样可以避免因为插入大量新数据导致频繁的内存分配和拷贝，提升性能</p>
+</blockquote>
+<h3 id="vec">1.2 vec!</h3>
+<p>还可以使用宏 <code>vec!</code> 来创建数组，与 <code>Vec::new</code>
+有所不同，前者能在创建同时给予初始化值：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">v</span> = <span class="hljs-built_in">vec!</span>[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>];<br></code></pre></td></tr></table></figure>
+<p>同样，此处的 <code>v</code>
+也无需标注类型，编译器只需检查它内部的元素即可自动推导出 <code>v</code>
+的类型是 <code>Vec&lt;i32&gt;</code> （Rust 中，整数默认类型是
+<code>i32</code>，在<a target="_blank" rel="noopener" href="https://course.rs/basic/base-type/numbers.html#整数类型">数值类型</a>中有详细介绍）。</p>
+<h2 id="更新-vector">2. 更新 Vector</h2>
+<p>向数组尾部添加元素，可以使用 <code>push</code> 方法：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">v</span> = <span class="hljs-type">Vec</span>::<span class="hljs-title function_ invoke__">new</span>();<br>v.<span class="hljs-title function_ invoke__">push</span>(<span class="hljs-number">1</span>);<br></code></pre></td></tr></table></figure>
+<p>与其它类型一样，必须将 <code>v</code> 声明为 <code>mut</code>
+后，才能进行修改。</p>
+<h2 id="vector-与其元素共存亡">3. Vector 与其元素共存亡</h2>
+<p>跟结构体一样，<code>Vector</code>
+类型在超出作用域范围后，会被自动删除：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs rust">&#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">v</span> = <span class="hljs-built_in">vec!</span>[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>];<br><br>    <span class="hljs-comment">// ...</span><br>&#125; <span class="hljs-comment">// &lt;- v超出作用域并在此处被删除</span><br></code></pre></td></tr></table></figure>
+<p>当 <code>Vector</code>
+被删除后，它内部存储的所有内容也会随之被删除。目前来看，这种解决方案简单直白，但是当
+<code>Vector</code> 中的元素被引用后，事情可能会没那么简单。</p>
+<h2 id="从-vector-中读取元素">4. 从 Vector 中读取元素</h2>
+<p>读取指定位置的元素有两种方式可选：</p>
+<ul>
+<li>通过下标索引访问。</li>
+<li>使用 <code>get</code> 方法。</li>
+</ul>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">v</span> = <span class="hljs-built_in">vec!</span>[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>];<br><br><span class="hljs-keyword">let</span> <span class="hljs-variable">third</span>: &amp;<span class="hljs-type">i32</span> = &amp;v[<span class="hljs-number">2</span>];<br><span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;第三个元素是 &#123;&#125;&quot;</span>, third);<br><br><span class="hljs-keyword">match</span> v.<span class="hljs-title function_ invoke__">get</span>(<span class="hljs-number">2</span>) &#123;<br>    <span class="hljs-title function_ invoke__">Some</span>(third) =&gt; <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;第三个元素是 &#123;third&#125;&quot;</span>),<br>    <span class="hljs-literal">None</span> =&gt; <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;去你的第三个元素，根本没有！&quot;</span>),<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>和其它语言一样，集合类型的索引下标都是从 <code>0</code>
+开始，<code>&amp;v[2]</code> 表示借用 <code>v</code>
+中的第三个元素，最终会获得该元素的引用。而 <code>v.get(2)</code>
+也是访问第三个元素，但是有所不同的是，它返回了
+<code>Option&lt;&amp;T&gt;</code>，因此还需要额外的 <code>match</code>
+来匹配解构出具体的值。</p>
+<blockquote>
+<p>细心的同学会注意到这里使用了两种格式化输出的方式，其中第一种我们在之前已经见过，而第二种是后续新版本中引入的写法，也是更推荐的用法，具体介绍请参见<a target="_blank" rel="noopener" href="https://course.rs/basic/formatted-output.html">格式化输出章节</a>。</p>
+</blockquote>
+<h3 id="下标索引与-.get-的区别">4.1 下标索引与 <code>.get</code>
+的区别</h3>
+<p>这两种方式都能成功的读取到指定的数组元素，既然如此为什么会存在两种方法？何况
+<code>.get</code>
+还会增加使用复杂度，这就涉及到数组越界的问题了，让我们通过示例说明：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">v</span> = <span class="hljs-built_in">vec!</span>[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>];<br><br><span class="hljs-keyword">let</span> <span class="hljs-variable">does_not_exist</span> = &amp;v[<span class="hljs-number">100</span>];<br><span class="hljs-keyword">let</span> <span class="hljs-variable">does_not_exist</span> = v.<span class="hljs-title function_ invoke__">get</span>(<span class="hljs-number">100</span>);<br></code></pre></td></tr></table></figure>
+<p>运行以上代码，<code>&amp;v[100]</code>
+的访问方式会导致程序无情报错退出，因为发生了数组越界访问。 但是
+<code>v.get</code> 就不会，它在内部做了处理，有值的时候返回
+<code>Some(T)</code>，无值的时候返回 <code>None</code>，因此
+<code>v.get</code> 的使用方式非常安全。</p>
+<p>既然如此，为何不统一使用 <code>v.get</code>
+的形式？因为实在是有些啰嗦，Rust
+语言的设计者和使用者在审美这方面还是相当统一的：简洁即正义，何况性能上也会有轻微的损耗。</p>
+<p>既然有两个选择，肯定就有如何选择的问题，答案很简单，当你确保索引不会越界的时候，就用索引访问，否则用
+<code>.get</code>。例如，访问第几个数组元素并不取决于我们，而是取决于用户的输入时，用
+<code>.get</code>
+会非常适合，天知道那些可爱的用户会输入一个什么样的数字进来！</p>
+<h2 id="同时借用多个数组元素">5. 同时借用多个数组元素</h2>
+<p>既然涉及到借用数组元素，那么很可能会遇到同时借用多个数组元素的情况，还记得在<a target="_blank" rel="noopener" href="https://course.rs/basic/ownership/borrowing.html#借用规则总结">所有权和借用</a>章节咱们讲过的借用规则嘛？如果记得，就来看看下面的代码
+:)</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">v</span> = <span class="hljs-built_in">vec!</span>[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>];<br><br><span class="hljs-keyword">let</span> <span class="hljs-variable">first</span> = &amp;v[<span class="hljs-number">0</span>];<br><br>v.<span class="hljs-title function_ invoke__">push</span>(<span class="hljs-number">6</span>);<br><br><span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;The first element is: &#123;first&#125;&quot;</span>);<br></code></pre></td></tr></table></figure>
+<p>先不运行，来推断下结果，首先 <code>first = &amp;v[0]</code>
+进行了不可变借用，<code>v.push</code> 进行了可变借用，如果
+<code>first</code> 在 <code>v.push</code>
+之后不再使用，那么该段代码可以成功编译（原因见<a target="_blank" rel="noopener" href="https://course.rs/basic/ownership/borrowing.html#可变引用与不可变引用不能同时存在">引用的作用域</a>）。</p>
+<p>可是上面的代码中，<code>first</code> 这个不可变借用在可变借用
+<code>v.push</code> 后被使用了，那么妥妥的，编译器就会报错：</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs console"><span class="hljs-meta prompt_">$ </span><span class="language-bash">cargo run</span><br>Compiling collections v0.1.0 (file:///projects/collections)<br>error[E0502]: cannot borrow `v` as mutable because it is also borrowed as immutable 无法对v进行可变借用，因此之前已经进行了不可变借用<br><span class="hljs-meta prompt_">--&gt; </span><span class="language-bash">src/main.rs:6:5</span><br>|<br>4 |     let first = &amp;v[0];<br>|                  - immutable borrow occurs here // 不可变借用发生在此处<br>5 |<br>6 |     v.push(6);<br>|     ^^^^^^^^^ mutable borrow occurs here // 可变借用发生在此处<br>7 |<br>8 |     println!(&quot;The first element is: &#123;&#125;&quot;, first);<br>|                                          ----- immutable borrow later used here // 不可变借用在这里被使用<br><br>For more information about this error, try `rustc --explain E0502`.<br>error: could not compile `collections` due to previous error<br></code></pre></td></tr></table></figure>
+<p>其实，按理来说，这两个引用不应该互相影响的：一个是查询元素，一个是在数组尾部插入元素，完全不相干的操作，为何编译器要这么严格呢？</p>
+<p>原因在于：数组的大小是可变的，当旧数组的大小不够用时，Rust
+会重新分配一块更大的内存空间，然后把旧数组拷贝过来。这种情况下，之前的引用显然会指向一块无效的内存，这非常
+rusty —— 对用户进行严格的教育。</p>
+<p>其实想想，<strong>在长大之后，我们感激人生路上遇到过的严师益友，正是因为他们，我们才在正确的道路上不断前行，虽然在那个时候，并不能理解他们</strong>，而
+Rust
+就如那个良师益友，它不断的在纠正我们不好的编程习惯，直到某一天，你发现自己能写出一次性通过的漂亮代码时，就能明白它的良苦用心。</p>
+<blockquote>
+<p>若读者想要更深入的了解 <code>Vec&lt;T&gt;</code>，可以看看<a target="_blank" rel="noopener" href="https://nomicon.purewhite.io/vec/vec.html">Rustonomicon</a>，其中从零手撸一个动态数组，非常适合深入学习。6.</p>
+</blockquote>
+<h2 id="迭代遍历-vector-中的元素">6. 迭代遍历 Vector 中的元素</h2>
+<p>如果想要依次访问数组中的元素，可以使用迭代的方式去遍历数组，这种方式比用下标的方式去遍历数组更安全也更高效（每次下标访问都会触发数组边界检查）：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">v</span> = <span class="hljs-built_in">vec!</span>[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>];<br><span class="hljs-keyword">for</span> <span class="hljs-variable">i</span> <span class="hljs-keyword">in</span> &amp;v &#123;<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;i&#125;&quot;</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>也可以在迭代过程中，修改 <code>Vector</code> 中的元素：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">v</span> = <span class="hljs-built_in">vec!</span>[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>];<br><span class="hljs-keyword">for</span> <span class="hljs-variable">i</span> <span class="hljs-keyword">in</span> &amp;<span class="hljs-keyword">mut</span> v &#123;<br>    *i += <span class="hljs-number">10</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="存储不同类型的元素">7. 存储不同类型的元素</h2>
+<p>在本节开头，有讲到数组的元素必须类型相同，但是也提到了解决方案：那就是通过使用枚举类型和特征对象来实现不同类型元素的存储。先来看看通过枚举如何实现：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-meta">#[derive(Debug)]</span><br><span class="hljs-keyword">enum</span> <span class="hljs-title class_">IpAddr</span> &#123;<br>    <span class="hljs-title function_ invoke__">V4</span>(<span class="hljs-type">String</span>),<br>    <span class="hljs-title function_ invoke__">V6</span>(<span class="hljs-type">String</span>)<br>&#125;<br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">v</span> = <span class="hljs-built_in">vec!</span>[<br>        IpAddr::<span class="hljs-title function_ invoke__">V4</span>(<span class="hljs-string">&quot;127.0.0.1&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>()),<br>        IpAddr::<span class="hljs-title function_ invoke__">V6</span>(<span class="hljs-string">&quot;::1&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>())<br>    ];<br><br>    <span class="hljs-keyword">for</span> <span class="hljs-variable">ip</span> <span class="hljs-keyword">in</span> v &#123;<br>        <span class="hljs-title function_ invoke__">show_addr</span>(ip)<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">show_addr</span>(ip: IpAddr) &#123;<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;:?&#125;&quot;</span>,ip);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>数组 <code>v</code> 中存储了两种不同的 <code>ip</code>
+地址，但是这两种都属于 <code>IpAddr</code>
+枚举类型的成员，因此可以存储在数组中。</p>
+<p>再来看看特征对象的实现：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">trait</span> <span class="hljs-title class_">IpAddr</span> &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">display</span>(&amp;<span class="hljs-keyword">self</span>);<br>&#125;<br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">V4</span>(<span class="hljs-type">String</span>);<br><span class="hljs-keyword">impl</span> <span class="hljs-title class_">IpAddr</span> <span class="hljs-keyword">for</span> <span class="hljs-title class_">V4</span> &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">display</span>(&amp;<span class="hljs-keyword">self</span>) &#123;<br>        <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;ipv4: &#123;:?&#125;&quot;</span>,<span class="hljs-keyword">self</span>.<span class="hljs-number">0</span>)<br>    &#125;<br>&#125;<br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">V6</span>(<span class="hljs-type">String</span>);<br><span class="hljs-keyword">impl</span> <span class="hljs-title class_">IpAddr</span> <span class="hljs-keyword">for</span> <span class="hljs-title class_">V6</span> &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">display</span>(&amp;<span class="hljs-keyword">self</span>) &#123;<br>        <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;ipv6: &#123;:?&#125;&quot;</span>,<span class="hljs-keyword">self</span>.<span class="hljs-number">0</span>)<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">v</span>: <span class="hljs-type">Vec</span>&lt;<span class="hljs-type">Box</span>&lt;<span class="hljs-keyword">dyn</span> IpAddr&gt;&gt; = <span class="hljs-built_in">vec!</span>[<br>        <span class="hljs-type">Box</span>::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-title function_ invoke__">V4</span>(<span class="hljs-string">&quot;127.0.0.1&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>())),<br>        <span class="hljs-type">Box</span>::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-title function_ invoke__">V6</span>(<span class="hljs-string">&quot;::1&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>())),<br>    ];<br><br>    <span class="hljs-keyword">for</span> <span class="hljs-variable">ip</span> <span class="hljs-keyword">in</span> v &#123;<br>        ip.<span class="hljs-title function_ invoke__">display</span>();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>比枚举实现要稍微复杂一些，我们为 <code>V4</code> 和 <code>V6</code>
+都实现了特征 <code>IpAddr</code>，然后将它俩的实例用
+<code>Box::new</code> 包裹后，存在了数组 <code>v</code>
+中，需要注意的是，这里必须手动地指定类型：<code>Vec&lt;Box&lt;dyn IpAddr&gt;&gt;</code>，表示数组
+<code>v</code> 存储的是特征 <code>IpAddr</code>
+的对象，这样就实现了在数组中存储不同的类型。</p>
+<p>在实际使用场景中，<strong>特征对象数组要比枚举数组常见很多</strong>，主要原因在于<a target="_blank" rel="noopener" href="https://course.rs/basic/trait/trait-object.html">特征对象</a>非常灵活，而编译器对枚举的限制较多，且无法动态增加类型。</p>
+<h2 id="vector-常用方法">8. Vector 常用方法</h2>
+<p>初始化 vec 的更多方式：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">v</span> = <span class="hljs-built_in">vec!</span>[<span class="hljs-number">0</span>; <span class="hljs-number">3</span>];   <span class="hljs-comment">// 默认值为 0，初始长度为 3</span><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">v_from</span> = <span class="hljs-type">Vec</span>::<span class="hljs-title function_ invoke__">from</span>([<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]);<br>    <span class="hljs-built_in">assert_eq!</span>(v, v_from);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>动态数组意味着我们增加元素时，如果<strong>容量不足就会导致 vector
+扩容</strong>（目前的策略是重新申请一块 2
+倍大小的内存，再将所有元素拷贝到新的内存位置，同时更新指针数据），显然，当频繁扩容或者当元素数量较多且需要扩容时，大量的内存拷贝会降低程序的性能。</p>
+<p>可以考虑在初始化时就指定一个实际的预估容量，尽量减少可能的内存拷贝：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">v</span> = <span class="hljs-type">Vec</span>::<span class="hljs-title function_ invoke__">with_capacity</span>(<span class="hljs-number">10</span>);<br>    v.<span class="hljs-title function_ invoke__">extend</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]);    <span class="hljs-comment">// 附加数据到 v</span><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Vector 长度是: &#123;&#125;, 容量是: &#123;&#125;&quot;</span>, v.<span class="hljs-title function_ invoke__">len</span>(), v.<span class="hljs-title function_ invoke__">capacity</span>());<br><br>    v.<span class="hljs-title function_ invoke__">reserve</span>(<span class="hljs-number">100</span>);        <span class="hljs-comment">// 调整 v 的容量，至少要有 100 的容量</span><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Vector（reserve） 长度是: &#123;&#125;, 容量是: &#123;&#125;&quot;</span>, v.<span class="hljs-title function_ invoke__">len</span>(), v.<span class="hljs-title function_ invoke__">capacity</span>());<br><br>    v.<span class="hljs-title function_ invoke__">shrink_to_fit</span>();     <span class="hljs-comment">// 释放剩余的容量，一般情况下，不会主动去释放容量</span><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Vector（shrink_to_fit） 长度是: &#123;&#125;, 容量是: &#123;&#125;&quot;</span>, v.<span class="hljs-title function_ invoke__">len</span>(), v.<span class="hljs-title function_ invoke__">capacity</span>());<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>Vector 常见的一些方法示例：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">v</span> =  <span class="hljs-built_in">vec!</span>[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>];<br><span class="hljs-built_in">assert!</span>(!v.<span class="hljs-title function_ invoke__">is_empty</span>());         <span class="hljs-comment">// 检查 v 是否为空</span><br><br>v.<span class="hljs-title function_ invoke__">insert</span>(<span class="hljs-number">2</span>, <span class="hljs-number">3</span>);                 <span class="hljs-comment">// 在指定索引插入数据，索引值不能大于 v 的长度， v: [1, 2, 3] </span><br><span class="hljs-built_in">assert_eq!</span>(v.<span class="hljs-title function_ invoke__">remove</span>(<span class="hljs-number">1</span>), <span class="hljs-number">2</span>);     <span class="hljs-comment">// 移除指定位置的元素并返回, v: [1, 3]</span><br><span class="hljs-built_in">assert_eq!</span>(v.<span class="hljs-title function_ invoke__">pop</span>(), <span class="hljs-title function_ invoke__">Some</span>(<span class="hljs-number">3</span>));   <span class="hljs-comment">// 删除并返回 v 尾部的元素，v: [1]</span><br><span class="hljs-built_in">assert_eq!</span>(v.<span class="hljs-title function_ invoke__">pop</span>(), <span class="hljs-title function_ invoke__">Some</span>(<span class="hljs-number">1</span>));   <span class="hljs-comment">// v: []</span><br><span class="hljs-built_in">assert_eq!</span>(v.<span class="hljs-title function_ invoke__">pop</span>(), <span class="hljs-literal">None</span>);      <span class="hljs-comment">// 记得 pop 方法返回的是 Option 枚举值</span><br>v.<span class="hljs-title function_ invoke__">clear</span>();                      <span class="hljs-comment">// 清空 v, v: []</span><br><br><span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">v1</span> = [<span class="hljs-number">11</span>, <span class="hljs-number">22</span>].<span class="hljs-title function_ invoke__">to_vec</span>(); <span class="hljs-comment">// append 操作会导致 v1 清空数据，增加可变声明</span><br>v.<span class="hljs-title function_ invoke__">append</span>(&amp;<span class="hljs-keyword">mut</span> v1);              <span class="hljs-comment">// 将 v1 中的所有元素附加到 v 中, v1: []</span><br>v.<span class="hljs-title function_ invoke__">truncate</span>(<span class="hljs-number">1</span>);                  <span class="hljs-comment">// 截断到指定长度，多余的元素被删除, v: [11]</span><br>v.<span class="hljs-title function_ invoke__">retain</span>(|x| *x &gt; <span class="hljs-number">10</span>);          <span class="hljs-comment">// 保留满足条件的元素，即删除不满足条件的元素</span><br><br><span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">v</span> = <span class="hljs-built_in">vec!</span>[<span class="hljs-number">11</span>, <span class="hljs-number">22</span>, <span class="hljs-number">33</span>, <span class="hljs-number">44</span>, <span class="hljs-number">55</span>];<br><span class="hljs-comment">// 删除指定范围的元素，同时获取被删除元素的迭代器, v: [11, 55], m: [22, 33, 44]</span><br><span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">m</span>: <span class="hljs-type">Vec</span>&lt;_&gt; = v.<span class="hljs-title function_ invoke__">drain</span>(<span class="hljs-number">1</span>..=<span class="hljs-number">3</span>).<span class="hljs-title function_ invoke__">collect</span>();    <br><br><span class="hljs-keyword">let</span> <span class="hljs-variable">v2</span> = m.<span class="hljs-title function_ invoke__">split_off</span>(<span class="hljs-number">1</span>);        <span class="hljs-comment">// 指定索引处切分成两个 vec, m: [22], v2: [33, 44]</span><br></code></pre></td></tr></table></figure>
+<p>当然也可以像<a target="_blank" rel="noopener" href="https://course.rs/basic/compound-type/array.html#数组切片">数组切片</a>的方式获取
+vec 的部分元素：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">v</span> = <span class="hljs-built_in">vec!</span>[<span class="hljs-number">11</span>, <span class="hljs-number">22</span>, <span class="hljs-number">33</span>, <span class="hljs-number">44</span>, <span class="hljs-number">55</span>];<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">slice</span> = &amp;v[<span class="hljs-number">1</span>..=<span class="hljs-number">3</span>];<br>    <span class="hljs-built_in">assert_eq!</span>(slice, &amp;[<span class="hljs-number">22</span>, <span class="hljs-number">33</span>, <span class="hljs-number">44</span>]);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>更多细节，阅读 Vector 的<a target="_blank" rel="noopener" href="https://doc.rust-lang.org/std/vec/struct.Vec.html#">标准库文档</a>。</p>
+<h2 id="vector-的排序">9. Vector 的排序</h2>
+<p>在 rust 里，实现了两种排序算法，分别为稳定的排序 <code>sort</code> 和
+<code>sort_by</code>，以及非稳定排序 <code>sort_unstable</code> 和
+<code>sort_unstable_by</code>。</p>
+<p>当然，这个所谓的 <code>非稳定</code>
+并不是指排序算法本身不稳定，而是指在排序过程中对相等元素的处理方式。在
+<code>稳定</code> 排序算法里，对相等的元素，不会对其进行重新排序。而在
+<code>不稳定</code> 的算法里则不保证这点。</p>
+<p>总体而言，<code>非稳定</code> 排序的算法的速度会优于
+<code>稳定</code> 排序算法，同时，<code>稳定</code>
+排序还会额外分配原数组一半的空间。</p>
+<h3 id="整数数组的排序">9.1 整数数组的排序</h3>
+<p>以下是对整数列进行排序的例子。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">vec</span> = <span class="hljs-built_in">vec!</span>[<span class="hljs-number">1</span>, <span class="hljs-number">5</span>, <span class="hljs-number">10</span>, <span class="hljs-number">2</span>, <span class="hljs-number">15</span>];    <br>    vec.<span class="hljs-title function_ invoke__">sort_unstable</span>();    <br>    <span class="hljs-built_in">assert_eq!</span>(vec, <span class="hljs-built_in">vec!</span>[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">5</span>, <span class="hljs-number">10</span>, <span class="hljs-number">15</span>]);<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="浮点数数组的排序">9.2 浮点数数组的排序</h3>
+<p>我们尝试使用上面的方法来对浮点数进行排序：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">vec</span> = <span class="hljs-built_in">vec!</span>[<span class="hljs-number">1.0</span>, <span class="hljs-number">5.6</span>, <span class="hljs-number">10.3</span>, <span class="hljs-number">2.0</span>, <span class="hljs-number">15f32</span>];    <br>    vec.<span class="hljs-title function_ invoke__">sort_unstable</span>();    <br>    <span class="hljs-built_in">assert_eq!</span>(vec, <span class="hljs-built_in">vec!</span>[<span class="hljs-number">1.0</span>, <span class="hljs-number">2.0</span>, <span class="hljs-number">5.6</span>, <span class="hljs-number">10.3</span>, <span class="hljs-number">15f32</span>]);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>结果，居然报错了，</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs rust">error[E0277]: the <span class="hljs-keyword">trait</span> <span class="hljs-title class_">bound</span> `<span class="hljs-type">f32</span>: <span class="hljs-built_in">Ord</span>` is not satisfied<br>    -<span class="hljs-punctuation">-&gt;</span> src/main.rs:<span class="hljs-number">29</span>:<span class="hljs-number">13</span><br>     |<br><span class="hljs-number">29</span>   |         vec.<span class="hljs-title function_ invoke__">sort_unstable</span>();<br>     |             ^^^^^^^^^^^^^ the <span class="hljs-keyword">trait</span> `<span class="hljs-built_in">Ord</span>` is not implemented <span class="hljs-keyword">for</span> `<span class="hljs-type">f32</span>`<br>     |<br>     = help: the following other types implement <span class="hljs-keyword">trait</span> `<span class="hljs-built_in">Ord</span>`:<br>               <span class="hljs-type">i128</span><br>               <span class="hljs-type">i16</span><br>               <span class="hljs-type">i32</span><br>               <span class="hljs-type">i64</span><br>               <span class="hljs-type">i8</span><br>               <span class="hljs-type">isize</span><br>               <span class="hljs-type">u128</span><br>               <span class="hljs-type">u16</span><br>             and <span class="hljs-number">4</span> others<br>note: required by a bound <span class="hljs-keyword">in</span> `core::slice::&lt;<span class="hljs-keyword">impl</span> [T]&gt;::sort_unstable`<br>    -<span class="hljs-punctuation">-&gt;</span> /home/keijack/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/<span class="hljs-keyword">mod</span>.rs:<span class="hljs-number">2635</span>:<span class="hljs-number">12</span><br>     |<br><span class="hljs-number">2635</span> |         T: <span class="hljs-built_in">Ord</span>,<br>     |            ^^^ required by this bound <span class="hljs-keyword">in</span> `core::slice::&lt;<span class="hljs-keyword">impl</span> [T]&gt;::sort_unstable`<br><br>For more information about this error, <span class="hljs-keyword">try</span> `rustc --explain E0277`.<br></code></pre></td></tr></table></figure>
+<p>原来，<strong>在浮点数当中，存在一个 <code>NAN</code>
+的值，这个值无法与其他的浮点数进行对比，因此，浮点数类型并没有实现全数值可比较
+<code>Ord</code> 的特性，而是实现了部分可比较的特性
+<code>PartialOrd</code>。</strong></p>
+<p>如此，如果我们确定在我们的浮点数数组当中，不包含 <code>NAN</code>
+值，那么我们可以使用 <code>partial_cmp</code> 来作为大小判断的依据。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">vec</span> = <span class="hljs-built_in">vec!</span>[<span class="hljs-number">1.0</span>, <span class="hljs-number">5.6</span>, <span class="hljs-number">10.3</span>, <span class="hljs-number">2.0</span>, <span class="hljs-number">15f32</span>];    <br>    vec.<span class="hljs-title function_ invoke__">sort_unstable_by</span>(|a, b| a.<span class="hljs-title function_ invoke__">partial_cmp</span>(b).<span class="hljs-title function_ invoke__">unwrap</span>());    <br>    <span class="hljs-built_in">assert_eq!</span>(vec, <span class="hljs-built_in">vec!</span>[<span class="hljs-number">1.0</span>, <span class="hljs-number">2.0</span>, <span class="hljs-number">5.6</span>, <span class="hljs-number">10.3</span>, <span class="hljs-number">15f32</span>]);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>OK，现在可以正确执行了。</p>
+<h3 id="对结构体数组进行排序">9.3 对结构体数组进行排序</h3>
+<p>有了上述浮点数排序的经验，我们推而广之，那么对结构体是否也可以使用这种自定义对比函数的方式来进行呢？马上来试一下：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-meta">#[derive(Debug)]</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Person</span> &#123;<br>    name: <span class="hljs-type">String</span>,<br>    age: <span class="hljs-type">u32</span>,<br>&#125;<br><br><span class="hljs-keyword">impl</span> <span class="hljs-title class_">Person</span> &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">new</span>(name: <span class="hljs-type">String</span>, age: <span class="hljs-type">u32</span>) <span class="hljs-punctuation">-&gt;</span> Person &#123;<br>        Person &#123; name, age &#125;<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">people</span> = <span class="hljs-built_in">vec!</span>[<br>        Person::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-string">&quot;Zoe&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>(), <span class="hljs-number">25</span>),<br>        Person::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-string">&quot;Al&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>(), <span class="hljs-number">60</span>),<br>        Person::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-string">&quot;John&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>(), <span class="hljs-number">1</span>),<br>    ];<br>    <span class="hljs-comment">// 定义一个按照年龄倒序排序的对比函数</span><br>    people.<span class="hljs-title function_ invoke__">sort_unstable_by</span>(|a, b| b.age.<span class="hljs-title function_ invoke__">cmp</span>(&amp;a.age));<br><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;:?&#125;&quot;</span>, people);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>执行后输出：</p>
+<figure class="highlight excel"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs excel">[Person &#123; <span class="hljs-built_in">na</span><span class="hljs-symbol">me:</span> <span class="hljs-string">&quot;Al&quot;</span>, a<span class="hljs-symbol">ge:</span> <span class="hljs-number">60</span> &#125;, Person &#123; <span class="hljs-built_in">na</span><span class="hljs-symbol">me:</span> <span class="hljs-string">&quot;Zoe&quot;</span>, a<span class="hljs-symbol">ge:</span> <span class="hljs-number">25</span> &#125;, Person &#123; <span class="hljs-built_in">na</span><span class="hljs-symbol">me:</span> <span class="hljs-string">&quot;John&quot;</span>, a<span class="hljs-symbol">ge:</span> <span class="hljs-number">1</span> &#125;]<br></code></pre></td></tr></table></figure>
+<p>结果正确。</p>
+<p>从上面我们学习过程当中，排序需要我们实现 <code>Ord</code>
+特性，那么如果我们把我们的结构体实现了该特性，是否就不需要我们自定义对比函数了呢？</p>
+<p>是，但不完全是，实现 <code>Ord</code> 需要我们实现
+<code>Ord</code>、<code>Eq</code>、<code>PartialEq</code>、<code>PartialOrd</code>
+这些属性。好消息是，你可以 <code>derive</code> 这些属性：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-meta">#[derive(Debug, Ord, Eq, PartialEq, PartialOrd)]</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Person</span> &#123;<br>    name: <span class="hljs-type">String</span>,<br>    age: <span class="hljs-type">u32</span>,<br>&#125;<br><br><span class="hljs-keyword">impl</span> <span class="hljs-title class_">Person</span> &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">new</span>(name: <span class="hljs-type">String</span>, age: <span class="hljs-type">u32</span>) <span class="hljs-punctuation">-&gt;</span> Person &#123;<br>        Person &#123; name, age &#125;<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">people</span> = <span class="hljs-built_in">vec!</span>[<br>        Person::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-string">&quot;Zoe&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>(), <span class="hljs-number">25</span>),<br>        Person::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-string">&quot;Al&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>(), <span class="hljs-number">60</span>),<br>        Person::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-string">&quot;Al&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>(), <span class="hljs-number">30</span>),<br>        Person::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-string">&quot;John&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>(), <span class="hljs-number">1</span>),<br>        Person::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-string">&quot;John&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>(), <span class="hljs-number">25</span>),<br>    ];<br><br>    people.<span class="hljs-title function_ invoke__">sort_unstable</span>();<br><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;:?&#125;&quot;</span>, people);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>执行输出</p>
+<figure class="highlight excel"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs excel">[Person &#123; <span class="hljs-built_in">na</span><span class="hljs-symbol">me:</span> <span class="hljs-string">&quot;Al&quot;</span>, a<span class="hljs-symbol">ge:</span> <span class="hljs-number">30</span> &#125;, Person &#123; <span class="hljs-built_in">na</span><span class="hljs-symbol">me:</span> <span class="hljs-string">&quot;Al&quot;</span>, a<span class="hljs-symbol">ge:</span> <span class="hljs-number">60</span> &#125;, Person &#123; <span class="hljs-built_in">na</span><span class="hljs-symbol">me:</span> <span class="hljs-string">&quot;John&quot;</span>, a<span class="hljs-symbol">ge:</span> <span class="hljs-number">1</span> &#125;, Person &#123; <span class="hljs-built_in">na</span><span class="hljs-symbol">me:</span> <span class="hljs-string">&quot;John&quot;</span>, a<span class="hljs-symbol">ge:</span> <span class="hljs-number">25</span> &#125;, Person &#123; <span class="hljs-built_in">na</span><span class="hljs-symbol">me:</span> <span class="hljs-string">&quot;Zoe&quot;</span>, a<span class="hljs-symbol">ge:</span> <span class="hljs-number">25</span> &#125;]<br></code></pre></td></tr></table></figure>
+<p>需要 <code>derive</code> <code>Ord</code>
+相关特性，需要确保你的结构体中所有的属性均实现了 <code>Ord</code>
+相关特性，否则会发生编译错误。<code>derive</code>
+的默认实现会依据属性的顺序依次进行比较，如上述例子中，当
+<code>Person</code> 的 <code>name</code> 值相同，则会使用
+<code>age</code> 进行比较。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/rust/" class="category-chain-item">rust</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/rust/rust%E5%9C%A3%E7%BB%8F/" class="category-chain-item">rust圣经</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/rust/rust%E5%9C%A3%E7%BB%8F/rust%E5%9F%BA%E7%A1%80/" class="category-chain-item">rust基础</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/rust/" class="print-no-link">#rust</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>2.9.1 动态数组 Vector</div>
+      <div>http://binbo-zappy.github.io/2025/01/05/rust圣经/2-9-1-动态数组-Vector/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年1月5日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-9-2-KV%E5%AD%98%E5%82%A8-HashMap/" title="2.9.2 KV存储 HashMap">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">2.9.2 KV存储 HashMap</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-9-%E9%9B%86%E5%90%88%E7%B1%BB%E5%9E%8B/" title="2.9 集合类型">
+                        <span class="hidden-mobile">2.9 集合类型</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
