@@ -1,0 +1,893 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Box 堆对象分配 关于作者帅不帅，估计争议还挺多的，但是如果说 Box&lt;T&gt; 是不是 Rust 中最常见的智能指针，那估计没有任何争议。因为 Box&lt;T&gt; 允许你将一个值分配到堆上，然后在栈上保留一个智能指针指向堆上的数据。 之前我们在所有权章节简单讲过堆栈的概念，这里再补充一些。 Rust 中的堆栈 高级语言 Python&#x2F;Java 等往往会弱化堆栈的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="4.4.1 Box堆对象分配">
+<meta property="og:url" content="http://binbo-zappy.github.io/2025/02/05/rust%E5%9C%A3%E7%BB%8F/4-4-1-Box%E5%A0%86%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="Box 堆对象分配 关于作者帅不帅，估计争议还挺多的，但是如果说 Box&lt;T&gt; 是不是 Rust 中最常见的智能指针，那估计没有任何争议。因为 Box&lt;T&gt; 允许你将一个值分配到堆上，然后在栈上保留一个智能指针指向堆上的数据。 之前我们在所有权章节简单讲过堆栈的概念，这里再补充一些。 Rust 中的堆栈 高级语言 Python&#x2F;Java 等往往会弱化堆栈的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/rust.jpg">
+<meta property="article:published_time" content="2025-02-05T05:41:15.000Z">
+<meta property="article:modified_time" content="2025-02-05T06:11:48.412Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="rust">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/rust.jpg">
+  
+  
+  
+  <title>4.4.1 Box堆对象分配 - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="4.4.1 Box堆对象分配"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-02-05 13:41" pubdate>
+          2025年2月5日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          29 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">4.4.1 Box堆对象分配</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="box-堆对象分配"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/box.html#boxt-堆对象分配"><code>Box</code>
+堆对象分配</a></h1>
+<p>关于作者帅不帅，估计争议还挺多的，但是如果说
+<code>Box&lt;T&gt;</code> 是不是 Rust
+中最常见的智能指针，那估计没有任何争议。因为 <code>Box&lt;T&gt;</code>
+允许你将一个值分配到堆上，然后在栈上保留一个智能指针指向堆上的数据。</p>
+<p>之前我们在<a target="_blank" rel="noopener" href="https://course.rs/basic/ownership/ownership.html#栈stack与堆heap">所有权章节</a>简单讲过堆栈的概念，这里再补充一些。</p>
+<h2 id="rust-中的堆栈"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/box.html#rust-中的堆栈">Rust
+中的堆栈</a></h2>
+<p>高级语言 Python/Java 等往往会弱化堆栈的概念，但是要用好
+C/C++/Rust，就必须对堆栈有深入的了解，原因是两者的内存管理方式不同：前者有
+GC 垃圾回收机制，因此无需你去关心内存的细节。</p>
+<p>栈内存从高位地址向下增长，且栈内存是连续分配的，一般来说<strong>操作系统对栈内存的大小都有限制</strong>，因此
+C 语言中无法创建任意长度的数组。在 Rust 中，<code>main</code> 线程的<a target="_blank" rel="noopener" href="https://course.rs/compiler/pitfalls/stack-overflow.html">栈大小是
+<code>8MB</code></a>，普通线程是
+<code>2MB</code>，在函数调用时会在其中创建一个临时栈空间，调用结束后
+Rust 会让这个栈空间里的对象自动进入 <code>Drop</code>
+流程，最后栈顶指针自动移动到上一个调用栈顶，无需程序员手动干预，因而栈内存申请和释放是非常高效的。</p>
+<p>与栈相反，堆上内存则是从低位地址向上增长，<strong>堆内存通常只受物理内存限制</strong>，而且通常是不连续的，因此从性能的角度看，栈往往比堆更高。</p>
+<p>相比其它语言，Rust
+堆上对象还有一个特殊之处，它们都拥有一个所有者，因此受所有权规则的限制：当赋值时，发生的是所有权的转移（只需浅拷贝栈上的引用或智能指针即可），例如以下代码：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">b</span> = <span class="hljs-title function_ invoke__">foo</span>(<span class="hljs-string">&quot;world&quot;</span>);<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;&#125;&quot;</span>, b);<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">foo</span>(x: &amp;<span class="hljs-type">str</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">String</span> &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">a</span> = <span class="hljs-string">&quot;Hello, &quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>() + x;<br>    a<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>在 <code>foo</code> 函数中，<code>a</code> 是 <code>String</code>
+类型，它其实是一个智能指针结构体，该智能指针存储在函数栈中，指向堆上的字符串数据。当被从
+<code>foo</code> 函数转移给 <code>main</code> 中的 <code>b</code>
+变量时，栈上的智能指针被复制一份赋予给
+<code>b</code>，而底层数据无需发生改变，这样就完成了所有权从
+<code>foo</code> 函数内部到 <code>b</code> 的转移。</p>
+<h4 id="堆栈的性能"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/box.html#堆栈的性能">堆栈的性能</a></h4>
+<p>很多人可能会觉得栈的性能肯定比堆高，其实未必。
+由于我们在后面的性能专题会专门讲解堆栈的性能问题，因此这里就大概给出结论：</p>
+<ul>
+<li>小型数据，在栈上的分配性能和读取性能都要比堆上高</li>
+<li>中型数据，栈上分配性能高，但是读取性能和堆上并无区别，因为无法利用寄存器或
+CPU 高速缓存，最终还是要经过一次内存寻址</li>
+<li>大型数据，只建议在堆上分配和使用</li>
+</ul>
+<p>总之，栈的分配速度肯定比堆上快，但是读取速度往往取决于你的数据能不能放入寄存器或
+CPU 高速缓存。
+因此不要仅仅因为堆上性能不如栈这个印象，就总是优先选择栈，导致代码更复杂的实现。</p>
+<h2 id="box-的使用场景"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/box.html#box-的使用场景">Box
+的使用场景</a></h2>
+<p>由于 <code>Box</code>
+是简单的封装，除了将值存储在堆上外，并没有其它性能上的损耗。而性能和功能往往是鱼和熊掌，因此
+<code>Box</code>
+相比其它智能指针，功能较为单一，可以在以下场景中使用它：</p>
+<ul>
+<li>特意的将数据分配在堆上</li>
+<li>数据较大时，又不想在转移所有权时进行数据拷贝</li>
+<li>类型的大小在编译期无法确定，但是我们又需要固定大小的类型时</li>
+<li>特征对象，用于说明对象实现了一个特征，而不是某个特定的类型</li>
+</ul>
+<p>以上场景，我们在本章将一一讲解，后面车速较快，请系好安全带。</p>
+<h4 id="使用-box-将数据存储在堆上"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/box.html#使用-boxt-将数据存储在堆上">使用
+<code>Box</code> 将数据存储在堆上</a></h4>
+<p>如果一个变量拥有一个数值 <code>let a = 3</code>，那变量
+<code>a</code> 必然是存储在栈上的，那如果我们想要 <code>a</code>
+的值存储在堆上就需要使用 <code>Box&lt;T&gt;</code>：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">a</span> = <span class="hljs-type">Box</span>::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-number">3</span>);<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;a = &#123;&#125;&quot;</span>, a); <span class="hljs-comment">// a = 3</span><br><br>    <span class="hljs-comment">// 下面一行代码将报错</span><br>    <span class="hljs-comment">// let b = a + 1; // cannot add `&#123;integer&#125;` to `Box&lt;&#123;integer&#125;&gt;`</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这样就可以创建一个智能指针指向了存储在堆上的 <code>3</code>，并且
+<code>a</code>
+持有了该指针。在本章的引言中，我们提到了智能指针往往都实现了
+<code>Deref</code> 和 <code>Drop</code> 特征，因此：</p>
+<ul>
+<li><code>println!</code> 可以正常打印出 <code>a</code>
+的值，是因为它隐式地调用了 <code>Deref</code> 对智能指针 <code>a</code>
+进行了解引用</li>
+<li>最后一行代码 <code>let b = a + 1</code>
+报错，是因为在表达式中，我们无法自动隐式地执行 <code>Deref</code>
+解引用操作，你需要使用 <code>*</code> 操作符
+<code>let b = *a + 1</code>，来显式的进行解引用</li>
+<li><code>a</code> 持有的智能指针将在作用域结束（<code>main</code>
+函数结束）时，被释放掉，这是因为 <code>Box&lt;T&gt;</code> 实现了
+<code>Drop</code> 特征</li>
+</ul>
+<p>以上的例子在实际代码中其实很少会存在，因为将一个简单的值分配到堆上并没有太大的意义。将其分配在栈上，由于寄存器、CPU
+缓存的原因，它的性能将更好，而且代码可读性也更好。</p>
+<h4 id="避免栈上数据的拷贝"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/box.html#避免栈上数据的拷贝">避免栈上数据的拷贝</a></h4>
+<p>当栈上数据转移所有权时，实际上是把数据拷贝了一份，最终新旧变量各自拥有不同的数据，因此所有权并未转移。</p>
+<p>而堆上则不然，底层数据并不会被拷贝，转移所有权仅仅是复制一份栈中的指针，再将新的指针赋予新的变量，然后让拥有旧指针的变量失效，最终完成了所有权的转移：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-comment">// 在栈上创建一个长度为1000的数组</span><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">arr</span> = [<span class="hljs-number">0</span>;<span class="hljs-number">1000</span>];<br>    <span class="hljs-comment">// 将arr所有权转移arr1，由于 `arr` 分配在栈上，因此这里实际上是直接重新深拷贝了一份数据</span><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">arr1</span> = arr;<br><br>    <span class="hljs-comment">// arr 和 arr1 都拥有各自的栈上数组，因此不会报错</span><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;:?&#125;&quot;</span>, arr.<span class="hljs-title function_ invoke__">len</span>());<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;:?&#125;&quot;</span>, arr1.<span class="hljs-title function_ invoke__">len</span>());<br><br>    <span class="hljs-comment">// 在堆上创建一个长度为1000的数组，然后使用一个智能指针指向它</span><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">arr</span> = <span class="hljs-type">Box</span>::<span class="hljs-title function_ invoke__">new</span>([<span class="hljs-number">0</span>;<span class="hljs-number">1000</span>]);<br>    <span class="hljs-comment">// 将堆上数组的所有权转移给 arr1，由于数据在堆上，因此仅仅拷贝了智能指针的结构体，底层数据并没有被拷贝</span><br>    <span class="hljs-comment">// 所有权顺利转移给 arr1，arr 不再拥有所有权</span><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">arr1</span> = arr;<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;:?&#125;&quot;</span>, arr1.<span class="hljs-title function_ invoke__">len</span>());<br>    <span class="hljs-comment">// 由于 arr 不再拥有底层数组的所有权，因此下面代码将报错</span><br>    <span class="hljs-comment">// println!(&quot;&#123;:?&#125;&quot;, arr.len());</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>从以上代码，可以清晰看出大块的数据为何应该放入堆中，此时
+<code>Box</code> 就成为了我们最好的帮手。</p>
+<h4 id="将动态大小类型变为-sized-固定大小类型"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/box.html#将动态大小类型变为-sized-固定大小类型">将动态大小类型变为
+Sized 固定大小类型</a></h4>
+<p>Rust
+需要在编译时知道类型占用多少空间，如果一种类型在编译时无法知道具体的大小，那么被称为动态大小类型
+DST。</p>
+<p>其中一种无法在编译时知道大小的类型是<strong>递归类型</strong>：在类型定义中又使用到了自身，或者说该类型的值的一部分可以是相同类型的其它值，这种值的嵌套理论上可以无限进行下去，所以
+Rust 不知道递归类型需要多少空间：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">enum</span> <span class="hljs-title class_">List</span> &#123;<br>    <span class="hljs-title function_ invoke__">Cons</span>(<span class="hljs-type">i32</span>, List),<br>    Nil,<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>以上就是函数式语言中常见的
+<code>Cons List</code>，它的每个节点包含一个 <code>i32</code>
+值，还包含了一个新的
+<code>List</code>，因此这种嵌套可以无限进行下去，Rust 认为该类型是一个
+DST 类型，并给予报错：</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs console">error[E0072]: recursive type `List` has infinite size //递归类型 `List` 拥有无限长的大小<br><span class="hljs-meta prompt_"> --&gt; </span><span class="language-bash">src/main.rs:3:1</span><br>  |<br>3 | enum List &#123;<br>  | ^^^^^^^^^ recursive type has infinite size<br>4 |     Cons(i32, List),<br>  |               ---- recursive without indirection<br></code></pre></td></tr></table></figure>
+<p>此时若想解决这个问题，就可以使用我们的
+<code>Box&lt;T&gt;</code>：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">enum</span> <span class="hljs-title class_">List</span> &#123;<br>    <span class="hljs-title function_ invoke__">Cons</span>(<span class="hljs-type">i32</span>, <span class="hljs-type">Box</span>&lt;List&gt;),<br>    Nil,<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>只需要将 <code>List</code>
+存储到堆上，然后使用一个智能指针指向它，即可完成从 DST 到 Sized
+类型(固定大小类型)的华丽转变。</p>
+<h4 id="特征对象"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/box.html#特征对象">特征对象</a></h4>
+<p>在 Rust
+中，想实现不同类型组成的数组只有两个办法：枚举和特征对象，前者限制较多，因此后者往往是最常用的解决办法。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">trait</span> <span class="hljs-title class_">Draw</span> &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">draw</span>(&amp;<span class="hljs-keyword">self</span>);<br>&#125;<br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Button</span> &#123;<br>    id: <span class="hljs-type">u32</span>,<br>&#125;<br><span class="hljs-keyword">impl</span> <span class="hljs-title class_">Draw</span> <span class="hljs-keyword">for</span> <span class="hljs-title class_">Button</span> &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">draw</span>(&amp;<span class="hljs-keyword">self</span>) &#123;<br>        <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;这是屏幕上第&#123;&#125;号按钮&quot;</span>, <span class="hljs-keyword">self</span>.id)<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Select</span> &#123;<br>    id: <span class="hljs-type">u32</span>,<br>&#125;<br><br><span class="hljs-keyword">impl</span> <span class="hljs-title class_">Draw</span> <span class="hljs-keyword">for</span> <span class="hljs-title class_">Select</span> &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">draw</span>(&amp;<span class="hljs-keyword">self</span>) &#123;<br>        <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;这个选择框贼难用&#123;&#125;&quot;</span>, <span class="hljs-keyword">self</span>.id)<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">elems</span>: <span class="hljs-type">Vec</span>&lt;<span class="hljs-type">Box</span>&lt;<span class="hljs-keyword">dyn</span> Draw&gt;&gt; = <span class="hljs-built_in">vec!</span>[<span class="hljs-type">Box</span>::<span class="hljs-title function_ invoke__">new</span>(Button &#123; id: <span class="hljs-number">1</span> &#125;), <span class="hljs-type">Box</span>::<span class="hljs-title function_ invoke__">new</span>(Select &#123; id: <span class="hljs-number">2</span> &#125;)];<br><br>    <span class="hljs-keyword">for</span> <span class="hljs-variable">e</span> <span class="hljs-keyword">in</span> elems &#123;<br>        e.<span class="hljs-title function_ invoke__">draw</span>()<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>以上代码将不同类型的 <code>Button</code> 和 <code>Select</code>
+包装成 <code>Draw</code>
+特征的特征对象，放入一个数组中，<code>Box&lt;dyn Draw&gt;</code>
+就是特征对象。</p>
+<p>其实，特征也是 DST 类型，而特征对象在做的就是将 DST
+类型转换为固定大小类型。</p>
+<h2 id="box-内存布局"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/box.html#box-内存布局">Box
+内存布局</a></h2>
+<p>先来看看 <code>Vec&lt;i32&gt;</code> 的内存布局：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs rust">(stack)    (heap)<br>┌──────┐   ┌───┐<br>│ vec1 │──→│ <span class="hljs-number">1</span> │<br>└──────┘   ├───┤<br>           │ <span class="hljs-number">2</span> │<br>           ├───┤<br>           │ <span class="hljs-number">3</span> │<br>           ├───┤<br>           │ <span class="hljs-number">4</span> │<br>           └───┘<br></code></pre></td></tr></table></figure>
+<p>之前提到过 <code>Vec</code> 和 <code>String</code>
+都是智能指针，从上图可以看出，该智能指针存储在栈中，然后指向堆上的数组数据。</p>
+<p>那如果数组中每个元素都是一个 <code>Box</code> 对象呢？来看看
+<code>Vec&lt;Box&lt;i32&gt;&gt;</code> 的内存布局：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs rust">                    (heap)<br>(stack)    (heap)   ┌───┐<br>┌──────┐   ┌───┐ ┌─→│ <span class="hljs-number">1</span> │<br>│ vec2 │──→│B1 │─┘  └───┘<br>└──────┘   ├───┤    ┌───┐<br>           │B2 │───→│ <span class="hljs-number">2</span> │<br>           ├───┤    └───┘<br>           │B3 │─┐  ┌───┐<br>           ├───┤ └─→│ <span class="hljs-number">3</span> │<br>           │B4 │─┐  └───┘<br>           └───┘ │  ┌───┐<br>                 └─→│ <span class="hljs-number">4</span> │<br>                    └───┘<br></code></pre></td></tr></table></figure>
+<p>上面的 <code>B1</code> 代表被 <code>Box</code> 分配到堆上的值
+<code>1</code>。</p>
+<p>可以看出智能指针 <code>vec2</code>
+依然是存储在栈上，然后指针指向一个堆上的数组，该数组中每个元素都是一个
+<code>Box</code> 智能指针，最终 <code>Box</code>
+智能指针又指向了存储在堆上的实际值。</p>
+<p>因此当我们从数组中取出某个元素时，取到的是对应的智能指针
+<code>Box</code>，需要对该智能指针进行解引用，才能取出最终的值：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">arr</span> = <span class="hljs-built_in">vec!</span>[<span class="hljs-type">Box</span>::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-number">1</span>), <span class="hljs-type">Box</span>::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-number">2</span>)];<br>    <span class="hljs-keyword">let</span> (first, second) = (&amp;arr[<span class="hljs-number">0</span>], &amp;arr[<span class="hljs-number">1</span>]);<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">sum</span> = **first + **second;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>以上代码有几个值得注意的点：</p>
+<ul>
+<li>使用 <code>&amp;</code> 借用数组中的元素，否则会报所有权错误</li>
+<li>表达式不能隐式的解引用，因此必须使用 <code>**</code>
+做两次解引用，第一次将 <code>&amp;Box&lt;i32&gt;</code> 类型转成
+<code>Box&lt;i32&gt;</code>，第二次将 <code>Box&lt;i32&gt;</code> 转成
+<code>i32</code></li>
+</ul>
+<h2 id="boxleak"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/box.html#boxleak">Box::leak</a></h2>
+<p><code>Box</code>
+中还提供了一个非常有用的关联函数：<code>Box::leak</code>，它可以消费掉
+<code>Box</code>
+并且强制目标值从内存中泄漏，读者可能会觉得，这有啥用啊？</p>
+<p>其实还真有点用，例如，你可以把一个 <code>String</code> 类型，变成一个
+<code>'static</code> 生命周期的 <code>&amp;str</code> 类型：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>   <span class="hljs-keyword">let</span> <span class="hljs-variable">s</span> = <span class="hljs-title function_ invoke__">gen_static_str</span>();<br>   <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;&#125;&quot;</span>, s);<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">gen_static_str</span>() <span class="hljs-punctuation">-&gt;</span> &amp;<span class="hljs-symbol">&#x27;static</span> <span class="hljs-type">str</span>&#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">s</span> = <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">new</span>();<br>    s.<span class="hljs-title function_ invoke__">push_str</span>(<span class="hljs-string">&quot;hello, world&quot;</span>);<br><br>    <span class="hljs-type">Box</span>::<span class="hljs-title function_ invoke__">leak</span>(s.<span class="hljs-title function_ invoke__">into_boxed_str</span>())<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>在之前的代码中，如果 <code>String</code>
+创建于函数中，那么返回它的唯一方法就是转移所有权给调用者
+<code>fn move_str() -&gt; String</code>，而通过 <code>Box::leak</code>
+我们不仅返回了一个 <code>&amp;str</code> 字符串切片，它还是
+<code>'static</code> 生命周期的！</p>
+<p>要知道真正具有 <code>'static</code>
+生命周期的往往都是编译期就创建的值，例如
+<code>let v = "hello, world"</code>，这里 <code>v</code>
+是直接打包到二进制可执行文件中的，因此该字符串具有 <code>'static</code>
+生命周期，再比如 <code>const</code> 常量。</p>
+<p>又有读者要问了，我还可以手动为变量标注 <code>'static</code>
+啊。其实你标注的 <code>'static</code>
+只是用来忽悠编译器的，但是超出作用域，一样被释放回收。而使用
+<code>Box::leak</code> 就可以将一个运行期的值转为
+<code>'static</code>。</p>
+<h4 id="使用场景"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/box.html#使用场景">使用场景</a></h4>
+<p>光看上面的描述，大家可能还是云里雾里、一头雾水。</p>
+<p>那么我说一个简单的场景，<strong>你需要一个在运行期初始化的值，但是可以全局有效，也就是和整个程序活得一样久</strong>，那么就可以使用
+<code>Box::leak</code>，例如有一个存储配置的结构体实例，它是在运行期动态插入内容，那么就可以将其转为全局有效，虽然
+<code>Rc/Arc</code> 也可以实现此功能，但是 <code>Box::leak</code>
+是性能最高的。</p>
+<h2 id="总结"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/box.html#总结">总结</a></h2>
+<p><code>Box</code> 背后是调用 <code>jemalloc</code>
+来做内存管理，所以堆上的空间无需我们的手动管理。与此类似，带 GC
+的语言中的对象也是借助于 <code>Box</code>
+概念来实现的，<strong>一切皆对象 = 一切皆 Box</strong>，
+只不过我们无需自己去 <code>Box</code> 罢了。</p>
+<p>其实很多时候，编译器的鞭笞可以助我们更快的成长，例如所有权规则里的借用、move、生命周期就是编译器在教我们做人，哦不是，是教我们深刻理解堆栈、内存布局、作用域等等你在其它
+GC
+语言无需去关注的东西。刚开始是很痛苦，但是一旦熟悉了这套规则，写代码的效率和代码本身的质量将飞速上升，直到你可以用
+Java 开发的效率写出 Java 代码不可企及的性能和安全性，最终 Rust
+语言所谓的开发效率低、心智负担高，对你来说终究不是个事。</p>
+<p>因此，不要怪
+Rust，<strong>它只是在帮我们成为那个更好的程序员，而这些苦难终究成为我们走向优秀的垫脚石</strong>。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/rust/" class="category-chain-item">rust</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/rust/rust%E5%9C%A3%E7%BB%8F/" class="category-chain-item">rust圣经</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/rust/rust%E5%9C%A3%E7%BB%8F/rust%E9%AB%98%E7%BA%A7%E8%BF%9B%E9%98%B6/" class="category-chain-item">rust高级进阶</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/rust/" class="print-no-link">#rust</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>4.4.1 Box堆对象分配</div>
+      <div>http://binbo-zappy.github.io/2025/02/05/rust圣经/4-4-1-Box堆对象分配/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年2月5日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/02/05/rust%E5%9C%A3%E7%BB%8F/4-4-2-Deref%E8%A7%A3%E5%BC%95%E7%94%A8/" title="4.4.2 Deref 解引用">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">4.4.2 Deref 解引用</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/02/05/rust%E5%9C%A3%E7%BB%8F/4-4-%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88/" title="4.4 智能指针">
+                        <span class="hidden-mobile">4.4 智能指针</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

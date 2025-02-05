@@ -1,0 +1,999 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="迭代器 Iterator 如果你询问一个 Rust 资深开发：写 Rust 项目最需要掌握什么？相信迭代器往往就是答案之一。无论你是编程新手亦或是高手，实际上大概率都用过迭代器，虽然自己可能并没有意识到这一点:) 迭代器允许我们迭代一个连续的集合，例如数组、动态数组 Vec、HashMap 等，在此过程中，只需关心集合中的元素如何处理，而无需关心如何开始、如何结束、按照什么样的索引去访">
+<meta property="og:type" content="article">
+<meta property="og:title" content="4.2.2 迭代器 Iterator">
+<meta property="og:url" content="http://binbo-zappy.github.io/2025/02/05/rust%E5%9C%A3%E7%BB%8F/4-2-2-%E8%BF%AD%E4%BB%A3%E5%99%A8Iterator/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="迭代器 Iterator 如果你询问一个 Rust 资深开发：写 Rust 项目最需要掌握什么？相信迭代器往往就是答案之一。无论你是编程新手亦或是高手，实际上大概率都用过迭代器，虽然自己可能并没有意识到这一点:) 迭代器允许我们迭代一个连续的集合，例如数组、动态数组 Vec、HashMap 等，在此过程中，只需关心集合中的元素如何处理，而无需关心如何开始、如何结束、按照什么样的索引去访">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/rust.jpg">
+<meta property="article:published_time" content="2025-02-05T05:40:58.000Z">
+<meta property="article:modified_time" content="2025-02-05T06:08:16.426Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="rust">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/rust.jpg">
+  
+  
+  
+  <title>4.2.2 迭代器 Iterator - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="4.2.2 迭代器 Iterator"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-02-05 13:40" pubdate>
+          2025年2月5日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          41 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">4.2.2 迭代器 Iterator</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="迭代器-iterator"><a target="_blank" rel="noopener" href="https://course.rs/advance/functional-programing/iterator.html#迭代器-iterator">迭代器
+Iterator</a></h1>
+<p>如果你询问一个 Rust 资深开发：写 Rust
+项目最需要掌握什么？相信迭代器往往就是答案之一。无论你是编程新手亦或是高手，实际上大概率都用过迭代器，虽然自己可能并没有意识到这一点:)</p>
+<p>迭代器允许我们迭代一个连续的集合，例如数组、动态数组
+<code>Vec</code>、<code>HashMap</code>
+等，在此过程中，只需关心集合中的元素如何处理，而无需关心如何开始、如何结束、按照什么样的索引去访问等问题。</p>
+<h2 id="for-循环与迭代器"><a target="_blank" rel="noopener" href="https://course.rs/advance/functional-programing/iterator.html#for-循环与迭代器">For
+循环与迭代器</a></h2>
+<p>从用途来看，迭代器跟 <code>for</code>
+循环颇为相似，都是去遍历一个集合，但是实际上它们存在不小的差别，其中最主要的差别就是：<strong>是否通过索引来访问集合</strong>。</p>
+<p>例如以下的 JS 代码就是一个循环：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">let</span> arr = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>];<br><span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; arr.<span class="hljs-property">length</span>; i++) &#123;<br>  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(arr[i]);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>在上面代码中，我们设置索引的开始点和结束点，然后再通过索引去访问元素
+<code>arr[i]</code>，这就是典型的循环，来对比下 Rust 中的
+<code>for</code>：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">arr</span> = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>];<br><span class="hljs-keyword">for</span> <span class="hljs-variable">v</span> <span class="hljs-keyword">in</span> arr &#123;<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;&#125;&quot;</span>,v);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>首先，不得不说这两语法还挺像！与 JS
+循环不同，<code>Rust</code>中没有使用索引，它把 <code>arr</code>
+数组当成一个迭代器，直接去遍历其中的元素，从哪里开始，从哪里结束，都无需操心。因此严格来说，Rust
+中的 <code>for</code>
+循环是编译器提供的语法糖，最终还是对迭代器中的元素进行遍历。</p>
+<p>那又有同学要发问了，在 Rust
+中数组是迭代器吗？因为在之前的代码中直接对数组 <code>arr</code>
+进行了迭代，答案是
+<code>No</code>。那既然数组不是迭代器，为啥咱可以对它的元素进行迭代呢？</p>
+<p>简而言之就是数组实现了 <code>IntoIterator</code> 特征，Rust 通过
+<code>for</code>
+语法糖，自动把实现了该特征的数组类型转换为迭代器（你也可以为自己的集合类型实现此特征），最终让我们可以直接对一个数组进行迭代，类似的还有：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">for</span> <span class="hljs-variable">i</span> <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>..<span class="hljs-number">10</span> &#123;<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;&#125;&quot;</span>, i);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>直接对数值序列进行迭代，也是很常见的使用方式。</p>
+<p><code>IntoIterator</code> 特征拥有一个 <code>into_iter</code>
+方法，因此我们还可以显式的把数组转换成迭代器：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">arr</span> = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>];<br><span class="hljs-keyword">for</span> <span class="hljs-variable">v</span> <span class="hljs-keyword">in</span> arr.<span class="hljs-title function_ invoke__">into_iter</span>() &#123;<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;&#125;&quot;</span>, v);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>迭代器是函数语言的核心特性，它赋予了 Rust
+远超于循环的强大表达能力，我们将在本章中一一为大家进行展现。</p>
+<h2 id="惰性初始化"><a target="_blank" rel="noopener" href="https://course.rs/advance/functional-programing/iterator.html#惰性初始化">惰性初始化</a></h2>
+<p>在 Rust
+中，迭代器是惰性的，意味着如果你不使用它，那么它将不会发生任何事：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">v1</span> = <span class="hljs-built_in">vec!</span>[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>];<br><br><span class="hljs-keyword">let</span> <span class="hljs-variable">v1_iter</span> = v1.<span class="hljs-title function_ invoke__">iter</span>();<br><br><span class="hljs-keyword">for</span> <span class="hljs-variable">val</span> <span class="hljs-keyword">in</span> v1_iter &#123;<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;&#125;&quot;</span>, val);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>在 <code>for</code> 循环之前，我们只是简单的创建了一个迭代器
+<code>v1_iter</code>，此时不会发生任何迭代行为，只有在 <code>for</code>
+循环开始后，迭代器才会开始迭代其中的元素，最后打印出来。</p>
+<p>这种惰性初始化的方式确保了创建迭代器不会有任何额外的性能损耗，其中的元素也不会被消耗，只有使用到该迭代器的时候，一切才开始。</p>
+<h2 id="next-方法"><a target="_blank" rel="noopener" href="https://course.rs/advance/functional-programing/iterator.html#next-方法">next
+方法</a></h2>
+<p>对于 <code>for</code>
+如何遍历迭代器，还有一个问题，它如何取出迭代器中的元素？</p>
+<p>先来看一个特征：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">trait</span> <span class="hljs-title class_">Iterator</span> &#123;<br>    <span class="hljs-keyword">type</span> <span class="hljs-title class_">Item</span>;<br><br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">next</span>(&amp;<span class="hljs-keyword">mut</span> <span class="hljs-keyword">self</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">Option</span>&lt;<span class="hljs-keyword">Self</span>::Item&gt;;<br><br>    <span class="hljs-comment">// 省略其余有默认实现的方法</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>呦，该特征竟然和迭代器 <code>iterator</code>
+同名，难不成。。。没错，它们就是有一腿。<strong>迭代器之所以成为迭代器，就是因为实现了
+<code>Iterator</code>
+特征</strong>，要实现该特征，最主要的就是实现其中的 <code>next</code>
+方法，该方法控制如何从集合中取值，最终返回值的类型是<a target="_blank" rel="noopener" href="https://course.rs/basic/trait/advance-trait#关联类型">关联类型</a>
+<code>Item</code>。</p>
+<p>因此，之前问题的答案已经很明显：<code>for</code>
+循环通过不停调用迭代器上的 <code>next</code>
+方法，来获取迭代器中的元素。</p>
+<p>既然 <code>for</code> 可以调用 <code>next</code>
+方法，是不是意味着我们也可以？来试试：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">arr</span> = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>];<br>    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">arr_iter</span> = arr.<span class="hljs-title function_ invoke__">into_iter</span>();<br><br>    <span class="hljs-built_in">assert_eq!</span>(arr_iter.<span class="hljs-title function_ invoke__">next</span>(), <span class="hljs-title function_ invoke__">Some</span>(<span class="hljs-number">1</span>));<br>    <span class="hljs-built_in">assert_eq!</span>(arr_iter.<span class="hljs-title function_ invoke__">next</span>(), <span class="hljs-title function_ invoke__">Some</span>(<span class="hljs-number">2</span>));<br>    <span class="hljs-built_in">assert_eq!</span>(arr_iter.<span class="hljs-title function_ invoke__">next</span>(), <span class="hljs-title function_ invoke__">Some</span>(<span class="hljs-number">3</span>));<br>    <span class="hljs-built_in">assert_eq!</span>(arr_iter.<span class="hljs-title function_ invoke__">next</span>(), <span class="hljs-literal">None</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>果不其然，将 <code>arr</code> 转换成迭代器后，通过调用其上的
+<code>next</code> 方法，我们获取了 <code>arr</code>
+中的元素，有两点需要注意：</p>
+<ul>
+<li><code>next</code> 方法返回的是 <code>Option</code>
+类型，当有值时返回 <code>Some(i32)</code>，无值时返回
+<code>None</code></li>
+<li>遍历是按照迭代器中元素的排列顺序依次进行的，因此我们严格按照数组中元素的顺序取出了
+<code>Some(1)</code>，<code>Some(2)</code>，<code>Some(3)</code></li>
+<li>手动迭代必须将迭代器声明为 <code>mut</code> 可变，因为调用
+<code>next</code> 会改变迭代器其中的状态数据（当前遍历的位置等），而
+<code>for</code> 循环去迭代则无需标注
+<code>mut</code>，因为它会帮我们自动完成</li>
+</ul>
+<p>总之，<code>next</code>
+方法对<strong>迭代器的遍历是消耗性的</strong>，每次消耗它一个元素，最终迭代器中将没有任何元素，只能返回
+<code>None</code>。</p>
+<h4 id="例子模拟实现-for-循环"><a target="_blank" rel="noopener" href="https://course.rs/advance/functional-programing/iterator.html#例子模拟实现-for-循环">例子：模拟实现
+for 循环</a></h4>
+<p>因为 <code>for</code>
+循环是迭代器的语法糖，因此我们完全可以通过迭代器来模拟实现它：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">values</span> = <span class="hljs-built_in">vec!</span>[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>];<br><br>&#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">result</span> = <span class="hljs-keyword">match</span> <span class="hljs-built_in">IntoIterator</span>::<span class="hljs-title function_ invoke__">into_iter</span>(values) &#123;<br>        <span class="hljs-keyword">mut</span> iter =&gt; <span class="hljs-keyword">loop</span> &#123;<br>            <span class="hljs-keyword">match</span> iter.<span class="hljs-title function_ invoke__">next</span>() &#123;<br>                <span class="hljs-title function_ invoke__">Some</span>(x) =&gt; &#123; <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;&#125;&quot;</span>, x); &#125;,<br>                <span class="hljs-literal">None</span> =&gt; <span class="hljs-keyword">break</span>,<br>            &#125;<br>        &#125;,<br>    &#125;;<br>    result<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><code>IntoIterator::into_iter</code> 是使用<a target="_blank" rel="noopener" href="https://course.rs/basic/trait/advance-trait.html#完全限定语法">完全限定</a>的方式去调用
+<code>into_iter</code> 方法，这种调用方式跟
+<code>values.into_iter()</code> 是等价的。</p>
+<p>同时我们使用了 <code>loop</code> 循环配合 <code>next</code>
+方法来遍历迭代器中的元素，当迭代器返回 <code>None</code>
+时，跳出循环。</p>
+<h2 id="intoiterator-特征"><a target="_blank" rel="noopener" href="https://course.rs/advance/functional-programing/iterator.html#intoiterator-特征">IntoIterator
+特征</a></h2>
+<p>其实有一个细节，由于 <code>Vec</code> 动态数组实现了
+<code>IntoIterator</code> 特征，因此可以通过 <code>into_iter</code>
+将其转换为迭代器，那如果本身就是一个迭代器，该怎么办？实际上，迭代器自身也实现了
+<code>IntoIterator</code>，标准库早就帮我们考虑好了：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">impl</span>&lt;I: <span class="hljs-built_in">Iterator</span>&gt; <span class="hljs-built_in">IntoIterator</span> <span class="hljs-keyword">for</span> <span class="hljs-title class_">I</span> &#123;<br>    <span class="hljs-keyword">type</span> <span class="hljs-title class_">Item</span> = I::Item;<br>    <span class="hljs-keyword">type</span> <span class="hljs-title class_">IntoIter</span> = I;<br><br>    <span class="hljs-meta">#[inline]</span><br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">into_iter</span>(<span class="hljs-keyword">self</span>) <span class="hljs-punctuation">-&gt;</span> I &#123;<br>        <span class="hljs-keyword">self</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>最终你完全可以写出这样的奇怪代码：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">values</span> = <span class="hljs-built_in">vec!</span>[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>];<br><br>    <span class="hljs-keyword">for</span> <span class="hljs-variable">v</span> <span class="hljs-keyword">in</span> values.<span class="hljs-title function_ invoke__">into_iter</span>().<span class="hljs-title function_ invoke__">into_iter</span>().<span class="hljs-title function_ invoke__">into_iter</span>() &#123;<br>        <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;&#125;&quot;</span>,v)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="into_iter-iter-iter_mut"><a target="_blank" rel="noopener" href="https://course.rs/advance/functional-programing/iterator.html#into_iter-iter-iter_mut">into_iter,
+iter, iter_mut</a></h4>
+<p>在之前的代码中，我们统一使用了 <code>into_iter</code>
+的方式将数组转化为迭代器，除此之外，还有 <code>iter</code> 和
+<code>iter_mut</code>，聪明的读者应该大概能猜到这三者的区别：</p>
+<ul>
+<li><code>into_iter</code> 会夺走所有权</li>
+<li><code>iter</code> 是借用</li>
+<li><code>iter_mut</code> 是可变借用</li>
+</ul>
+<p>其实如果以后见多识广了，你会发现这种问题一眼就能看穿，<code>into_</code>
+之类的，都是拿走所有权，<code>_mut</code>
+之类的都是可变借用，剩下的就是不可变借用。</p>
+<p>使用一段代码来解释下：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">values</span> = <span class="hljs-built_in">vec!</span>[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>];<br><br>    <span class="hljs-keyword">for</span> <span class="hljs-variable">v</span> <span class="hljs-keyword">in</span> values.<span class="hljs-title function_ invoke__">into_iter</span>() &#123;<br>        <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;&#125;&quot;</span>, v)<br>    &#125;<br><br>    <span class="hljs-comment">// 下面的代码将报错，因为 values 的所有权在上面 `for` 循环中已经被转移走</span><br>    <span class="hljs-comment">// println!(&quot;&#123;:?&#125;&quot;,values);</span><br><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">values</span> = <span class="hljs-built_in">vec!</span>[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>];<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">_values_iter</span> = values.<span class="hljs-title function_ invoke__">iter</span>();<br><br>    <span class="hljs-comment">// 不会报错，因为 values_iter 只是借用了 values 中的元素</span><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;:?&#125;&quot;</span>, values);<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">values</span> = <span class="hljs-built_in">vec!</span>[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>];<br>    <span class="hljs-comment">// 对 values 中的元素进行可变借用</span><br>    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">values_iter_mut</span> = values.<span class="hljs-title function_ invoke__">iter_mut</span>();<br><br>    <span class="hljs-comment">// 取出第一个元素，并修改为0</span><br>    <span class="hljs-keyword">if</span> <span class="hljs-keyword">let</span> <span class="hljs-variable">Some</span>(v) = values_iter_mut.<span class="hljs-title function_ invoke__">next</span>() &#123;<br>        *v = <span class="hljs-number">0</span>;<br>    &#125;<br><br>    <span class="hljs-comment">// 输出[0, 2, 3]</span><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;:?&#125;&quot;</span>, values);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>具体解释在代码注释中，就不再赘述，不过有两点需要注意的是：</p>
+<ul>
+<li><code>.iter()</code> 方法实现的迭代器，调用 <code>next</code>
+方法返回的类型是 <code>Some(&amp;T)</code></li>
+<li><code>.iter_mut()</code> 方法实现的迭代器，调用 <code>next</code>
+方法返回的类型是 <code>Some(&amp;mut T)</code>，因此在
+<code>if let Some(v) = values_iter_mut.next()</code> 中，<code>v</code>
+的类型是 <code>&amp;mut i32</code>，最终我们可以通过 <code>*v = 0</code>
+的方式修改其值</li>
+</ul>
+<h4 id="iterator-和-intoiterator-的区别"><a target="_blank" rel="noopener" href="https://course.rs/advance/functional-programing/iterator.html#iterator-和-intoiterator-的区别">Iterator
+和 IntoIterator 的区别</a></h4>
+<p>这两个其实还蛮容易搞混的，但我们只需要记住，<code>Iterator</code>
+就是迭代器特征，只有实现了它才能称为迭代器，才能调用
+<code>next</code>。</p>
+<p>而 <code>IntoIterator</code>
+强调的是某一个类型如果实现了该特征，它可以通过
+<code>into_iter</code>，<code>iter</code> 等方法变成一个迭代器。</p>
+<h2 id="消费者与适配器"><a target="_blank" rel="noopener" href="https://course.rs/advance/functional-programing/iterator.html#消费者与适配器">消费者与适配器</a></h2>
+<p>消费者是迭代器上的方法，它会消费掉迭代器中的元素，然后返回其类型的值，这些消费者都有一个共同的特点：在它们的定义中，都依赖
+<code>next</code> 方法来消费元素，因此这也是为什么迭代器要实现
+<code>Iterator</code> 特征，而该特征必须要实现 <code>next</code>
+方法的原因。</p>
+<h4 id="消费者适配器"><a target="_blank" rel="noopener" href="https://course.rs/advance/functional-programing/iterator.html#消费者适配器">消费者适配器</a></h4>
+<p>只要迭代器上的某个方法 <code>A</code> 在其内部调用了
+<code>next</code> 方法，那么 <code>A</code>
+就被称为<strong>消费性适配器</strong>：因为 <code>next</code>
+方法会消耗掉迭代器上的元素，所以方法 <code>A</code>
+的调用也会消耗掉迭代器上的元素。</p>
+<p>其中一个例子是 <code>sum</code>
+方法，它会拿走迭代器的所有权，然后通过不断调用 <code>next</code>
+方法对里面的元素进行求和：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">v1</span> = <span class="hljs-built_in">vec!</span>[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>];<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">v1_iter</span> = v1.<span class="hljs-title function_ invoke__">iter</span>();<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">total</span>: <span class="hljs-type">i32</span> = v1_iter.<span class="hljs-title function_ invoke__">sum</span>();<br><br>    <span class="hljs-built_in">assert_eq!</span>(total, <span class="hljs-number">6</span>);<br><br>    <span class="hljs-comment">// v1_iter 是借用了 v1，因此 v1 可以照常使用</span><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;:?&#125;&quot;</span>,v1);<br><br>    <span class="hljs-comment">// 以下代码会报错，因为 `sum` 拿到了迭代器 `v1_iter` 的所有权</span><br>    <span class="hljs-comment">// println!(&quot;&#123;:?&#125;&quot;,v1_iter);</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>如代码注释中所说明的：在使用 <code>sum</code>
+方法后，我们将无法再使用 <code>v1_iter</code>，因为 <code>sum</code>
+拿走了该迭代器的所有权：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">sum</span>&lt;S&gt;(<span class="hljs-keyword">self</span>) <span class="hljs-punctuation">-&gt;</span> S<br>    <span class="hljs-keyword">where</span><br>        <span class="hljs-keyword">Self</span>: <span class="hljs-built_in">Sized</span>,<br>        S: Sum&lt;<span class="hljs-keyword">Self</span>::Item&gt;,<br>    &#123;<br>        Sum::<span class="hljs-title function_ invoke__">sum</span>(<span class="hljs-keyword">self</span>)<br>    &#125;<br></code></pre></td></tr></table></figure>
+<p>从 <code>sum</code> 源码中也可以清晰看出，<code>self</code>
+类型的方法参数拿走了所有权。</p>
+<h4 id="迭代器适配器"><a target="_blank" rel="noopener" href="https://course.rs/advance/functional-programing/iterator.html#迭代器适配器">迭代器适配器</a></h4>
+<p>既然消费者适配器是消费掉迭代器，然后返回一个值。那么迭代器适配器，顾名思义，会返回一个新的迭代器，这是实现链式方法调用的关键：<code>v.iter().map().filter()...</code>。</p>
+<p>与消费者适配器不同，迭代器适配器是惰性的，意味着你<strong>需要一个消费者适配器来收尾，最终将迭代器转换成一个具体的值</strong>：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">v1</span>: <span class="hljs-type">Vec</span>&lt;<span class="hljs-type">i32</span>&gt; = <span class="hljs-built_in">vec!</span>[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>];<br><br>v1.<span class="hljs-title function_ invoke__">iter</span>().<span class="hljs-title function_ invoke__">map</span>(|x| x + <span class="hljs-number">1</span>);<br></code></pre></td></tr></table></figure>
+<p>运行后输出:</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs console">warning: unused `Map` that must be used<br><span class="hljs-meta prompt_"> --&gt; </span><span class="language-bash">src/main.rs:4:5</span><br>  |<br>4 |     v1.iter().map(|x| x + 1);<br>  |     ^^^^^^^^^^^^^^^^^^^^^^^^^<br>  |<br>  = note: `#[warn(unused_must_use)]` on by default<br>  = note: iterators are lazy and do nothing unless consumed // 迭代器 map 是惰性的，这里不产生任何效果<br></code></pre></td></tr></table></figure>
+<p>如上述中文注释所说，这里的 <code>map</code>
+方法是一个迭代者适配器，它是惰性的，不产生任何行为，因此我们还需要一个消费者适配器进行收尾：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">v1</span>: <span class="hljs-type">Vec</span>&lt;<span class="hljs-type">i32</span>&gt; = <span class="hljs-built_in">vec!</span>[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>];<br><br><span class="hljs-keyword">let</span> <span class="hljs-variable">v2</span>: <span class="hljs-type">Vec</span>&lt;_&gt; = v1.<span class="hljs-title function_ invoke__">iter</span>().<span class="hljs-title function_ invoke__">map</span>(|x| x + <span class="hljs-number">1</span>).<span class="hljs-title function_ invoke__">collect</span>();<br><br><span class="hljs-built_in">assert_eq!</span>(v2, <span class="hljs-built_in">vec!</span>[<span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>]);<br></code></pre></td></tr></table></figure>
+<h4 id="collect"><a target="_blank" rel="noopener" href="https://course.rs/advance/functional-programing/iterator.html#collect">collect</a></h4>
+<p>上面代码中，使用了 <code>collect</code>
+方法，该方法就是一个消费者适配器，使用它可以将一个迭代器中的元素收集到指定类型中，这里我们为
+<code>v2</code> 标注了 <code>Vec&lt;_&gt;</code> 类型，就是为了告诉
+<code>collect</code>：请把迭代器中的元素消费掉，然后把值收集成
+<code>Vec&lt;_&gt;</code> 类型，至于为何使用
+<code>_</code>，因为编译器会帮我们自动推导。</p>
+<p>为何 <code>collect</code>
+在消费时要指定类型？是因为该方法其实很强大，可以收集成多种不同的集合类型，<code>Vec&lt;T&gt;</code>
+仅仅是其中之一，因此我们必须显式的告诉编译器我们想要收集成的集合类型。</p>
+<p>还有一点值得注意，<code>map</code>
+会对迭代器中的每一个值进行一系列操作，然后把该值转换成另外一个新值，该操作是通过闭包
+<code>|x| x + 1</code> 来完成：最终迭代器中的每个值都增加了
+<code>1</code>，从 <code>[1, 2, 3]</code> 变为
+<code>[2, 3, 4]</code>。</p>
+<p>再来看看如何使用 <code>collect</code> 收集成 <code>HashMap</code>
+集合：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">use</span> std::collections::HashMap;<br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">names</span> = [<span class="hljs-string">&quot;sunface&quot;</span>, <span class="hljs-string">&quot;sunfei&quot;</span>];<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">ages</span> = [<span class="hljs-number">18</span>, <span class="hljs-number">18</span>];<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">folks</span>: HashMap&lt;_, _&gt; = names.<span class="hljs-title function_ invoke__">into_iter</span>().<span class="hljs-title function_ invoke__">zip</span>(ages.<span class="hljs-title function_ invoke__">into_iter</span>()).<span class="hljs-title function_ invoke__">collect</span>();<br><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;:?&#125;&quot;</span>,folks);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><code>zip</code>
+是一个迭代器适配器，它的作用就是将两个迭代器的内容压缩到一起，形成
+<code>Iterator&lt;Item=(ValueFromA, ValueFromB)&gt;</code>
+这样的新的迭代器，在此处就是形如
+<code>[(name1, age1), (name2, age2)]</code> 的迭代器。</p>
+<p>然后再通过 <code>collect</code> 将新迭代器中<code>(K, V)</code>
+形式的值收集成
+<code>HashMap&lt;K, V&gt;</code>，同样的，这里必须显式声明类型，然后
+<code>HashMap</code> 内部的 <code>KV</code>
+类型可以交给编译器去推导，最终编译器会推导出
+<code>HashMap&lt;&amp;str, i32&gt;</code>，完全正确！</p>
+<h4 id="闭包作为适配器参数"><a target="_blank" rel="noopener" href="https://course.rs/advance/functional-programing/iterator.html#闭包作为适配器参数">闭包作为适配器参数</a></h4>
+<p>之前的 <code>map</code>
+方法中，我们使用闭包来作为迭代器适配器的参数，它最大的好处不仅在于可以就地实现迭代器中元素的处理，还在于可以捕获环境值：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Shoe</span> &#123;<br>    size: <span class="hljs-type">u32</span>,<br>    style: <span class="hljs-type">String</span>,<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">shoes_in_size</span>(shoes: <span class="hljs-type">Vec</span>&lt;Shoe&gt;, shoe_size: <span class="hljs-type">u32</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">Vec</span>&lt;Shoe&gt; &#123;<br>    shoes.<span class="hljs-title function_ invoke__">into_iter</span>().<span class="hljs-title function_ invoke__">filter</span>(|s| s.size == shoe_size).<span class="hljs-title function_ invoke__">collect</span>()<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><code>filter</code> 是迭代器适配器，用于对迭代器中的每个值进行过滤。
+它使用闭包作为参数，该闭包的参数 <code>s</code>
+是来自迭代器中的值，然后使用 <code>s</code> 跟外部环境中的
+<code>shoe_size</code> 进行比较，若相等，则在迭代器中保留 <code>s</code>
+值，若不相等，则从迭代器中剔除 <code>s</code> 值，最终通过
+<code>collect</code> 收集为 <code>Vec&lt;Shoe&gt;</code> 类型。</p>
+<h2 id="实现-iterator-特征"><a target="_blank" rel="noopener" href="https://course.rs/advance/functional-programing/iterator.html#实现-iterator-特征">实现
+Iterator 特征</a></h2>
+<p>之前的内容我们一直基于数组来创建迭代器，实际上，不仅仅是数组，基于其它集合类型一样可以创建迭代器，例如
+<code>HashMap</code>。 你也可以创建自己的迭代器 —— 只要为自定义类型实现
+<code>Iterator</code> 特征即可。</p>
+<p>首先，创建一个计数器：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Counter</span> &#123;<br>    count: <span class="hljs-type">u32</span>,<br>&#125;<br><br><span class="hljs-keyword">impl</span> <span class="hljs-title class_">Counter</span> &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">new</span>() <span class="hljs-punctuation">-&gt;</span> Counter &#123;<br>        Counter &#123; count: <span class="hljs-number">0</span> &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>我们为计数器 <code>Counter</code> 实现了一个关联函数
+<code>new</code>，用于创建新的计数器实例。下面我们继续为计数器实现
+<code>Iterator</code> 特征：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">impl</span> <span class="hljs-title class_">Iterator</span> <span class="hljs-keyword">for</span> <span class="hljs-title class_">Counter</span> &#123;<br>    <span class="hljs-keyword">type</span> <span class="hljs-title class_">Item</span> = <span class="hljs-type">u32</span>;<br><br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">next</span>(&amp;<span class="hljs-keyword">mut</span> <span class="hljs-keyword">self</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">Option</span>&lt;<span class="hljs-keyword">Self</span>::Item&gt; &#123;<br>        <span class="hljs-keyword">if</span> <span class="hljs-keyword">self</span>.count &lt; <span class="hljs-number">5</span> &#123;<br>            <span class="hljs-keyword">self</span>.count += <span class="hljs-number">1</span>;<br>            <span class="hljs-title function_ invoke__">Some</span>(<span class="hljs-keyword">self</span>.count)<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-literal">None</span><br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>首先，将该特征的关联类型设置为
+<code>u32</code>，由于我们的计数器保存的 <code>count</code> 字段就是
+<code>u32</code> 类型， 因此在 <code>next</code>
+方法中，最后返回的是实际上是 <code>Option&lt;u32&gt;</code> 类型。</p>
+<p>每次调用 <code>next</code>
+方法，都会让计数器的值加一，然后返回最新的计数值，一旦计数大于 5，就返回
+<code>None</code>。</p>
+<p>最后，使用我们新建的 <code>Counter</code> 进行迭代：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs rust"> <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">counter</span> = Counter::<span class="hljs-title function_ invoke__">new</span>();<br><br><span class="hljs-built_in">assert_eq!</span>(counter.<span class="hljs-title function_ invoke__">next</span>(), <span class="hljs-title function_ invoke__">Some</span>(<span class="hljs-number">1</span>));<br><span class="hljs-built_in">assert_eq!</span>(counter.<span class="hljs-title function_ invoke__">next</span>(), <span class="hljs-title function_ invoke__">Some</span>(<span class="hljs-number">2</span>));<br><span class="hljs-built_in">assert_eq!</span>(counter.<span class="hljs-title function_ invoke__">next</span>(), <span class="hljs-title function_ invoke__">Some</span>(<span class="hljs-number">3</span>));<br><span class="hljs-built_in">assert_eq!</span>(counter.<span class="hljs-title function_ invoke__">next</span>(), <span class="hljs-title function_ invoke__">Some</span>(<span class="hljs-number">4</span>));<br><span class="hljs-built_in">assert_eq!</span>(counter.<span class="hljs-title function_ invoke__">next</span>(), <span class="hljs-title function_ invoke__">Some</span>(<span class="hljs-number">5</span>));<br><span class="hljs-built_in">assert_eq!</span>(counter.<span class="hljs-title function_ invoke__">next</span>(), <span class="hljs-literal">None</span>);<br></code></pre></td></tr></table></figure>
+<h4 id="实现-iterator-特征的其它方法"><a target="_blank" rel="noopener" href="https://course.rs/advance/functional-programing/iterator.html#实现-iterator-特征的其它方法">实现
+Iterator 特征的其它方法</a></h4>
+<p>可以看出，实现自己的迭代器非常简单，但是 <code>Iterator</code>
+特征中，不仅仅是只有 <code>next</code>
+一个方法，那为什么我们只需要实现它呢？因为其它方法都具有<a target="_blank" rel="noopener" href="https://course.rs/basic/trait/trait.html#默认实现">默认实现</a>，所以无需像
+<code>next</code> 这样手动去实现，而且这些默认实现的方法其实都是基于
+<code>next</code> 方法实现的。</p>
+<p>下面的代码演示了部分方法的使用：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">sum</span>: <span class="hljs-type">u32</span> = Counter::<span class="hljs-title function_ invoke__">new</span>()<br>    .<span class="hljs-title function_ invoke__">zip</span>(Counter::<span class="hljs-title function_ invoke__">new</span>().<span class="hljs-title function_ invoke__">skip</span>(<span class="hljs-number">1</span>))<br>    .<span class="hljs-title function_ invoke__">map</span>(|(a, b)| a * b)<br>    .<span class="hljs-title function_ invoke__">filter</span>(|x| x % <span class="hljs-number">3</span> == <span class="hljs-number">0</span>)<br>    .<span class="hljs-title function_ invoke__">sum</span>();<br><span class="hljs-built_in">assert_eq!</span>(<span class="hljs-number">18</span>, sum);<br></code></pre></td></tr></table></figure>
+<p>其中 <code>zip</code>，<code>map</code>，<code>filter</code>
+是迭代器适配器：</p>
+<ul>
+<li><code>zip</code>
+把两个迭代器合并成一个迭代器，新迭代器中，每个元素都是一个元组，由之前两个迭代器的元素组成。例如将<strong>形如</strong>
+<code>[1, 2, 3, 4, 5]</code> 和 <code>[2, 3, 4, 5]</code>
+的迭代器合并后，新的迭代器形如
+<code>[(1, 2),(2, 3),(3, 4),(4, 5)]</code></li>
+<li><code>map</code> 是将迭代器中的值经过映射后，转换成新的值[2, 6, 12,
+20]</li>
+<li><code>filter</code> 对迭代器中的元素进行过滤，若闭包返回
+<code>true</code> 则保留元素[6, 12]，反之剔除</li>
+</ul>
+<p>而 <code>sum</code>
+是消费者适配器，对迭代器中的所有元素求和，最终返回一个 <code>u32</code>
+值 <code>18</code>。</p>
+<h5 id="enumerate"><a target="_blank" rel="noopener" href="https://course.rs/advance/functional-programing/iterator.html#enumerate">enumerate</a></h5>
+<p>在之前的流程控制章节，针对 <code>for</code>
+循环，我们提供了一种方法可以获取迭代时的索引：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">v</span> = <span class="hljs-built_in">vec!</span>[<span class="hljs-number">1u64</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>];<br><span class="hljs-keyword">for</span> (i,v) <span class="hljs-keyword">in</span> v.<span class="hljs-title function_ invoke__">iter</span>().<span class="hljs-title function_ invoke__">enumerate</span>() &#123;<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;第&#123;&#125;个值是&#123;&#125;&quot;</span>,i,v)<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>相信当时，很多读者还是很迷茫的，不知道为什么要这么复杂才能获取到索引，学习本章节后，相信你有了全新的理解，首先
+<code>v.iter()</code> 创建迭代器，其次 调用 <code>Iterator</code>
+特征上的方法
+<code>enumerate</code>，该方法产生一个新的迭代器，其中每个元素均是元组
+<code>(索引，值)</code>。</p>
+<p>因为 <code>enumerate</code>
+是迭代器适配器，因此我们可以对它返回的迭代器调用其它
+<code>Iterator</code> 特征方法：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">v</span> = <span class="hljs-built_in">vec!</span>[<span class="hljs-number">1u64</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>];<br><span class="hljs-keyword">let</span> <span class="hljs-variable">val</span> = v.<span class="hljs-title function_ invoke__">iter</span>()<br>    .<span class="hljs-title function_ invoke__">enumerate</span>()<br>    <span class="hljs-comment">// 每两个元素剔除一个</span><br>    <span class="hljs-comment">// [1, 3, 5]</span><br>    .<span class="hljs-title function_ invoke__">filter</span>(|&amp;(idx, _)| idx % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>)<br>    .<span class="hljs-title function_ invoke__">map</span>(|(_, val)| val)<br>    <span class="hljs-comment">// 累加 1+3+5 = 9</span><br>    .<span class="hljs-title function_ invoke__">fold</span>(<span class="hljs-number">0u64</span>, |sum, acm| sum + acm);<br><br><span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;&#125;&quot;</span>, val);<br></code></pre></td></tr></table></figure>
+<h2 id="迭代器的性能"><a target="_blank" rel="noopener" href="https://course.rs/advance/functional-programing/iterator.html#迭代器的性能">迭代器的性能</a></h2>
+<p>前面提到，要完成集合遍历，既可以使用 <code>for</code>
+循环也可以使用迭代器，那么二者之间该怎么选择呢，性能有多大差距呢？</p>
+<p>理论分析不会有结果，直接测试最为靠谱：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-meta">#![feature(test)]</span><br><br><span class="hljs-keyword">extern</span> <span class="hljs-keyword">crate</span> rand;<br><span class="hljs-keyword">extern</span> <span class="hljs-keyword">crate</span> test;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">sum_for</span>(x: &amp;[<span class="hljs-type">f64</span>]) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">f64</span> &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">result</span>: <span class="hljs-type">f64</span> = <span class="hljs-number">0.0</span>;<br>    <span class="hljs-keyword">for</span> <span class="hljs-variable">i</span> <span class="hljs-keyword">in</span> <span class="hljs-number">0</span>..x.<span class="hljs-title function_ invoke__">len</span>() &#123;<br>        result += x[i];<br>    &#125;<br>    result<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">sum_iter</span>(x: &amp;[<span class="hljs-type">f64</span>]) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">f64</span> &#123;<br>    x.<span class="hljs-title function_ invoke__">iter</span>().sum::&lt;<span class="hljs-type">f64</span>&gt;()<br>&#125;<br><br><span class="hljs-meta">#[cfg(test)]</span><br><span class="hljs-keyword">mod</span> bench &#123;<br>    <span class="hljs-keyword">use</span> test::Bencher;<br>    <span class="hljs-keyword">use</span> rand::&#123;Rng,thread_rng&#125;;<br>    <span class="hljs-keyword">use</span> super::*;<br><br>    <span class="hljs-keyword">const</span> LEN: <span class="hljs-type">usize</span> = <span class="hljs-number">1024</span>*<span class="hljs-number">1024</span>;<br><br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">rand_array</span>(cnt: <span class="hljs-type">u32</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">Vec</span>&lt;<span class="hljs-type">f64</span>&gt; &#123;<br>        <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">rng</span> = <span class="hljs-title function_ invoke__">thread_rng</span>();<br>        (<span class="hljs-number">0</span>..cnt).<span class="hljs-title function_ invoke__">map</span>(|_| rng.gen::&lt;<span class="hljs-type">f64</span>&gt;()).<span class="hljs-title function_ invoke__">collect</span>()<br>    &#125;<br><br>    <span class="hljs-meta">#[bench]</span><br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">bench_for</span>(b: &amp;<span class="hljs-keyword">mut</span> Bencher) &#123;<br>        <span class="hljs-keyword">let</span> <span class="hljs-variable">samples</span> = <span class="hljs-title function_ invoke__">rand_array</span>(LEN <span class="hljs-keyword">as</span> <span class="hljs-type">u32</span>);<br>        b.<span class="hljs-title function_ invoke__">iter</span>(|| &#123;<br>            <span class="hljs-title function_ invoke__">sum_for</span>(&amp;samples)<br>        &#125;)<br>    &#125;<br><br>    <span class="hljs-meta">#[bench]</span><br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">bench_iter</span>(b: &amp;<span class="hljs-keyword">mut</span> Bencher) &#123;<br>        <span class="hljs-keyword">let</span> <span class="hljs-variable">samples</span> = <span class="hljs-title function_ invoke__">rand_array</span>(LEN <span class="hljs-keyword">as</span> <span class="hljs-type">u32</span>);<br>        b.<span class="hljs-title function_ invoke__">iter</span>(|| &#123;<br>            <span class="hljs-title function_ invoke__">sum_iter</span>(&amp;samples)<br>        &#125;)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>上面的代码对比了 <code>for</code> 循环和迭代器 <code>iterator</code>
+完成同样的求和任务的性能对比，可以看到迭代器还要更快一点。</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs console">test bench::bench_for  ... bench:     998,331 ns/iter (+/- 36,250)<br>test bench::bench_iter ... bench:     983,858 ns/iter (+/- 44,673)<br></code></pre></td></tr></table></figure>
+<p>迭代器是 Rust 的 <strong>零成本抽象</strong>（zero-cost
+abstractions）之一，意味着抽象并不会引入运行时开销，这与
+<code>Bjarne Stroustrup</code>（C++ 的设计和实现者）在
+<code>Foundations of C++（2012）</code> 中所定义的
+<strong>零开销</strong>（zero-overhead）如出一辙：</p>
+<blockquote>
+<p>In general, C++ implementations obey the zero-overhead principle:
+What you don’t use, you don’t pay for. And further: What you do use, you
+couldn’t hand code any better.</p>
+<p>一般来说，C++的实现遵循零开销原则：没有使用时，你不必为其买单。
+更进一步说，需要使用时，你也无法写出更优的代码了。
+（翻译一下：用就完事了）</p>
+</blockquote>
+<p>总之，迭代器是 Rust
+受函数式语言启发而提供的高级语言特性，可以写出更加简洁、逻辑清晰的代码。编译器还可以通过循环展开（Unrolling）、向量化、消除边界检查等优化手段，使得迭代器和
+<code>for</code> 循环都有极为高效的执行效率。</p>
+<p>所以请放心大胆的使用迭代器，在获得更高的表达力的同时，也不会导致运行时的损失，何乐而不为呢！</p>
+<h2 id="学习其它方法"><a target="_blank" rel="noopener" href="https://course.rs/advance/functional-programing/iterator.html#学习其它方法">学习其它方法</a></h2>
+<p>迭代器用的好不好，就在于你是否掌握了它的常用方法，且能活学活用，因此多多看看<a target="_blank" rel="noopener" href="https://doc.rust-lang.org/std/iter/trait.Iterator.html">标准库</a>是有好处的，只有知道有什么方法，在需要的时候你才能知道该用什么，就和算法学习一样。</p>
+<p>同时，本书在后续章节还提供了对迭代器常用方法的<a target="_blank" rel="noopener" href="https://course.rs/std/iterator">深入讲解</a>，方便大家学习和查阅。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/rust/" class="category-chain-item">rust</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/rust/rust%E5%9C%A3%E7%BB%8F/" class="category-chain-item">rust圣经</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/rust/rust%E5%9C%A3%E7%BB%8F/rust%E9%AB%98%E7%BA%A7%E8%BF%9B%E9%98%B6/" class="category-chain-item">rust高级进阶</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/rust/" class="print-no-link">#rust</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>4.2.2 迭代器 Iterator</div>
+      <div>http://binbo-zappy.github.io/2025/02/05/rust圣经/4-2-2-迭代器Iterator/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年2月5日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/02/05/rust%E5%9C%A3%E7%BB%8F/4-3-%E6%B7%B1%E5%85%A5%E7%B1%BB%E5%9E%8B/" title="4.3 深入类型">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">4.3 深入类型</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/02/05/rust%E5%9C%A3%E7%BB%8F/4-2-1-%E9%97%AD%E5%8C%85Closure/" title="4.2.1 闭包 Closure">
+                        <span class="hidden-mobile">4.2.1 闭包 Closure</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

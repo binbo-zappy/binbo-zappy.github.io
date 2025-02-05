@@ -225,23 +225,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/27/cpp/14-STL%20%E5%87%BD%E6%95%B0%E5%AF%B9%E8%B1%A1/" target="_self">
-          <img src="/imgs/cpp.jpg" srcset="/img/loading.gif" lazyload alt="14. STL 函数对象">
+        <a href="/2024/12/07/Redis/15-%E9%9B%86%E7%BE%A4/" target="_self">
+          <img src="/imgs/redis.jpg" srcset="/img/loading.gif" lazyload alt="15. 集群">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/27/cpp/14-STL%20%E5%87%BD%E6%95%B0%E5%AF%B9%E8%B1%A1/" target="_self">
-          14. STL 函数对象
+        <a href="/2024/12/07/Redis/15-%E9%9B%86%E7%BE%A4/" target="_self">
+          15. 集群
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/27/cpp/14-STL%20%E5%87%BD%E6%95%B0%E5%AF%B9%E8%B1%A1/" target="_self">
+      <a class="index-excerpt " href="/2024/12/07/Redis/15-%E9%9B%86%E7%BE%A4/" target="_self">
         <div>
-          4.1 函数对象 概念： 重载函数调用操作符的类，其对象常称为函数对象 函数对象使用重载的(0时，行为类似函数调用，也叫仿函数 本质： 函数对象（仿函数）是一个类，不是一个函数 4.1.1 函数对象使用 特点： 函数对象在使用时，可以像普通函数那样调用，可以有参数，可以有返回值 函数对象超出普通函数的概念，函数对象可以有自己的状态 函数对象可以作为参数传递 123456789
+          集群架构 集群就是使用网络将若干台计算机连通起来，并提供统一的管理方式，使其对外呈现单机的服务效果。 作用：  分散单台服务器的访问压力，实现负载均衡 分散单台服务器的存储压力，实现可扩展性 降低单台服务器宕机带来的业务灾难  集群架构的数据存储设计： 先将 key 通过CRC16(key)%16384进行计算，得到的数用来确定这个key在集群中哪台计算机的存储空间位置。 r
         </div>
       </a>
 
@@ -249,8 +249,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-27 19:13" pubdate>
-              2024-11-27
+            <time datetime="2024-12-07 14:22" pubdate>
+              2024-12-07
             </time>
           </div>
         
@@ -265,12 +265,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/c/" class="category-chain-item">c++</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/" class="category-chain-item">后端开发</a>
   
   
     <span>></span>
     
-  <a href="/categories/c/c-%E9%BB%91%E9%A9%AC/" class="category-chain-item">c++ 黑马</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Redis/" class="category-chain-item">Redis</a>
   
   
 
@@ -287,7 +287,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/c/">#c++</a>
+              <a href="/tags/Redis/">#Redis</a>
             
           </div>
         
@@ -299,23 +299,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/27/cpp/13-STL%E5%B8%B8%E7%94%A8%E5%AE%B9%E5%99%A8/" target="_self">
-          <img src="/imgs/cpp.jpg" srcset="/img/loading.gif" lazyload alt="13. STL常用容器">
+        <a href="/2024/12/07/Redis/14-%E5%93%A8%E5%85%B5/" target="_self">
+          <img src="/imgs/redis.jpg" srcset="/img/loading.gif" lazyload alt="14. 哨兵">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/27/cpp/13-STL%E5%B8%B8%E7%94%A8%E5%AE%B9%E5%99%A8/" target="_self">
-          13. STL常用容器
+        <a href="/2024/12/07/Redis/14-%E5%93%A8%E5%85%B5/" target="_self">
+          14. 哨兵
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/27/cpp/13-STL%E5%B8%B8%E7%94%A8%E5%AE%B9%E5%99%A8/" target="_self">
+      <a class="index-excerpt " href="/2024/12/07/Redis/14-%E5%93%A8%E5%85%B5/" target="_self">
         <div>
-          3.1 string 容器 3.1.1 string基本概念 本质： 。string是C++风格的字符串，而string本质上是一个类 stringi和char*区别： ·char*是一个指针 ·string是一个类，类内部封装了char,管理这个字符串，是一个char型的容器。 特点： string类内部封装了很多成员方法I 例如：查找find,拷贝copy,删除delete替
+          master宕机 如果主从模式下的master宕机，一般处理流程：  将宕机的master下线 找一个slave作为master 通知所有的slave连接新的master 启动新的master与slave 全量复制*N + 部分复制*N  出现的问题：  谁来确认master宕机了 选新的master如何选？ 修改配置后，原来的master恢复了怎么办？  哨兵 哨
         </div>
       </a>
 
@@ -323,8 +323,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-27 19:13" pubdate>
-              2024-11-27
+            <time datetime="2024-12-07 14:22" pubdate>
+              2024-12-07
             </time>
           </div>
         
@@ -339,12 +339,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/c/" class="category-chain-item">c++</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/" class="category-chain-item">后端开发</a>
   
   
     <span>></span>
     
-  <a href="/categories/c/c-%E9%BB%91%E9%A9%AC/" class="category-chain-item">c++ 黑马</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Redis/" class="category-chain-item">Redis</a>
   
   
 
@@ -361,7 +361,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/c/">#c++</a>
+              <a href="/tags/Redis/">#Redis</a>
             
           </div>
         
@@ -373,23 +373,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/27/cpp/12-STL%E5%88%9D%E8%AF%86/" target="_self">
-          <img src="/imgs/cpp.jpg" srcset="/img/loading.gif" lazyload alt="12. STL初识">
+        <a href="/2024/12/07/Redis/13-%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/" target="_self">
+          <img src="/imgs/redis.jpg" srcset="/img/loading.gif" lazyload alt="13. 主从复制">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/27/cpp/12-STL%E5%88%9D%E8%AF%86/" target="_self">
-          12. STL初识
+        <a href="/2024/12/07/Redis/13-%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/" target="_self">
+          13. 主从复制
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/27/cpp/12-STL%E5%88%9D%E8%AF%86/" target="_self">
+      <a class="index-excerpt " href="/2024/12/07/Redis/13-%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/" target="_self">
         <div>
-          长久以来，软件界一直希望建立一种可重复利用的东西 C+的面向对象和泛型编程思想，目的就是复用性的提升 大多情况下，数据结构和算法都未能有一套标准，导致被迫从事大量重复工作 为了建立数据结构和算法的一套标准，诞生了ST礼 STL(Standard Template Library,标准模板库) STL从广义上分为：容器(container)算法(algorithm)迭代器(iterator
+          互联网三高架构 互联网“三高”架构：  高并发 高性能 高可用  大数据时代的“3V”：  海量（Volume） 多样（Variety） 实时（Velocity）  可用性：（全年的秒数 - 当年宕机停用的秒数）/ 全年的秒数 * 100%。 高可用：业界高可用性目标5个9（即99.999%)，即服务器年宕机时长低于315秒，约5.25分钟。 为了避免单点Redis服
         </div>
       </a>
 
@@ -397,8 +397,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-27 19:13" pubdate>
-              2024-11-27
+            <time datetime="2024-12-07 14:22" pubdate>
+              2024-12-07
             </time>
           </div>
         
@@ -413,12 +413,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/c/" class="category-chain-item">c++</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/" class="category-chain-item">后端开发</a>
   
   
     <span>></span>
     
-  <a href="/categories/c/c-%E9%BB%91%E9%A9%AC/" class="category-chain-item">c++ 黑马</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Redis/" class="category-chain-item">Redis</a>
   
   
 
@@ -435,7 +435,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/c/">#c++</a>
+              <a href="/tags/Redis/">#Redis</a>
             
           </div>
         
@@ -447,23 +447,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/27/cpp/11-%E6%A8%A1%E6%9D%BF/" target="_self">
-          <img src="/imgs/cpp.jpg" srcset="/img/loading.gif" lazyload alt="11. 模板">
+        <a href="/2024/12/07/Redis/12-%E9%AB%98%E7%BA%A7%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" target="_self">
+          <img src="/imgs/redis.jpg" srcset="/img/loading.gif" lazyload alt="12. 高级数据类型">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/27/cpp/11-%E6%A8%A1%E6%9D%BF/" target="_self">
-          11. 模板
+        <a href="/2024/12/07/Redis/12-%E9%AB%98%E7%BA%A7%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" target="_self">
+          12. 高级数据类型
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/27/cpp/11-%E6%A8%A1%E6%9D%BF/" target="_self">
+      <a class="index-excerpt " href="/2024/12/07/Redis/12-%E9%AB%98%E7%BA%A7%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" target="_self">
         <div>
-          模板就是简历通用的模具，大大提高 复用性。 1.1 概念 特点：  模板不可以直接使用，只是一个框架 模板的通用并不是万能的  1.2 函数模板 泛型编程，主要利用的技术 是模板 两种模板：函数模板和类模板 1.2.1 函数模板用法 建立一个通用函数，返回类型和形参类型可以不具体制定，用一个虚拟的类型来代表 123456789101112131415161718192021
+          Bitmaps 按位操作。 基础操作：  获取指定Kye对应偏移量上的bit值  1getbit key offset  设置指定key对应偏移量上的bit值，value只能是1或0  1setbit key offset value 扩展操作：  对指定key按位进行交、并、非、异或操作，并将结果保存到destKey中  1bitop op destKey key1
         </div>
       </a>
 
@@ -471,8 +471,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-27 19:13" pubdate>
-              2024-11-27
+            <time datetime="2024-12-07 14:22" pubdate>
+              2024-12-07
             </time>
           </div>
         
@@ -487,12 +487,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/c/" class="category-chain-item">c++</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/" class="category-chain-item">后端开发</a>
   
   
     <span>></span>
     
-  <a href="/categories/c/c-%E9%BB%91%E9%A9%AC/" class="category-chain-item">c++ 黑马</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Redis/" class="category-chain-item">Redis</a>
   
   
 
@@ -509,7 +509,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/c/">#c++</a>
+              <a href="/tags/Redis/">#Redis</a>
             
           </div>
         
@@ -521,23 +521,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/27/cpp/10-%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/" target="_self">
-          <img src="/imgs/cpp.jpg" srcset="/img/loading.gif" lazyload alt="10. 文件操作">
+        <a href="/2024/12/07/Redis/11-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE/" target="_self">
+          <img src="/imgs/redis.jpg" srcset="/img/loading.gif" lazyload alt="11. 服务器配置">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/27/cpp/10-%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/" target="_self">
-          10. 文件操作
+        <a href="/2024/12/07/Redis/11-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE/" target="_self">
+          11. 服务器配置
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/27/cpp/10-%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/" target="_self">
+      <a class="index-excerpt " href="/2024/12/07/Redis/11-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE/" target="_self">
         <div>
-          程序运行时产生的数据都属于时数据，程序一旦运行结束都会被释放 通过文件可以将数据持久化 C++中对文件操作需要包含头文件fstream 文件类型分为两种： 1.文本文件·文件以文本的ASCII码形式存储在计算机中 2.二进制文件-文件以文本的二进制形式存储在计算机中，用户一般不能直接读懂它们 操作文件的三大类： 1,ofstream:写操作 2.ifstream:读操作 3.fs
+          服务器基础配置 单位： Redis的单位大小写不敏感。 123456# 1k =&gt; 1000 bytes# 1kb =&gt; 1024 bytes# 1m =&gt; 1000000 bytes# 1mb =&gt; 1024*1024 bytes# 1g =&gt; 1000000000 bytes# 1gb =&gt; 1024*1024*1024 bytes 网络配置：
         </div>
       </a>
 
@@ -545,8 +545,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-27 19:12" pubdate>
-              2024-11-27
+            <time datetime="2024-12-07 14:22" pubdate>
+              2024-12-07
             </time>
           </div>
         
@@ -561,12 +561,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/c/" class="category-chain-item">c++</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/" class="category-chain-item">后端开发</a>
   
   
     <span>></span>
     
-  <a href="/categories/c/c-%E9%BB%91%E9%A9%AC/" class="category-chain-item">c++ 黑马</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Redis/" class="category-chain-item">Redis</a>
   
   
 
@@ -583,7 +583,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/c/">#c++</a>
+              <a href="/tags/Redis/">#Redis</a>
             
           </div>
         
@@ -595,23 +595,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/27/cpp/9-%E7%B1%BB%E5%92%8C%E5%AF%B9%E8%B1%A1/" target="_self">
-          <img src="/imgs/cpp.jpg" srcset="/img/loading.gif" lazyload alt="9. 类和对象">
+        <a href="/2024/12/07/Redis/10-%E5%88%A0%E9%99%A4%E7%AD%96%E7%95%A5/" target="_self">
+          <img src="/imgs/redis.jpg" srcset="/img/loading.gif" lazyload alt="10. 删除策略">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/27/cpp/9-%E7%B1%BB%E5%92%8C%E5%AF%B9%E8%B1%A1/" target="_self">
-          9. 类和对象
+        <a href="/2024/12/07/Redis/10-%E5%88%A0%E9%99%A4%E7%AD%96%E7%95%A5/" target="_self">
+          10. 删除策略
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/27/cpp/9-%E7%B1%BB%E5%92%8C%E5%AF%B9%E8%B1%A1/" target="_self">
+      <a class="index-excerpt " href="/2024/12/07/Redis/10-%E5%88%A0%E9%99%A4%E7%AD%96%E7%95%A5/" target="_self">
         <div>
-          c++面向对象三大特性：封装、继承、多态 4.1 封装 将属性和行为作为一个整体 加以权限限制  访问权限  公共权限 public 类内可访问，类外可以访问 保护权限 protected 类内可访问，类外不可访问 儿子可以访问 父亲保护内容 私有权限 private 类内可访问，类外不可访问 儿子不可以访问父亲私有内容   4.1.1 pstruct 和 class
+          Redis中的数据特征 Redis是一种内存级数据库，所有数据均存放在内存中，内存中的数据可以通过TTL指令获取其状态。  XX：具有时效性的数据 -1 ：永久有效的数据 -2 ：已经过期的数据，或被删除的数据，或未定义的数据  Redis的数据删除策略：  定时删除 惰性删除 定期删除  删除策略的目的：在内存占用与CPU占用之间寻求平衡（删除不及时会占用大量内存，删除
         </div>
       </a>
 
@@ -619,8 +619,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-27 19:12" pubdate>
-              2024-11-27
+            <time datetime="2024-12-07 14:22" pubdate>
+              2024-12-07
             </time>
           </div>
         
@@ -635,12 +635,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/c/" class="category-chain-item">c++</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/" class="category-chain-item">后端开发</a>
   
   
     <span>></span>
     
-  <a href="/categories/c/c-%E9%BB%91%E9%A9%AC/" class="category-chain-item">c++ 黑马</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Redis/" class="category-chain-item">Redis</a>
   
   
 
@@ -657,7 +657,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/c/">#c++</a>
+              <a href="/tags/Redis/">#Redis</a>
             
           </div>
         
@@ -669,23 +669,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/27/cpp/8-%E5%87%BD%E6%95%B0%E6%8F%90%E9%AB%98/" target="_self">
-          <img src="/imgs/cpp.jpg" srcset="/img/loading.gif" lazyload alt="8. 函数提高">
+        <a href="/2024/12/07/Redis/09-%E4%BA%8B%E5%8A%A1/" target="_self">
+          <img src="/imgs/redis.jpg" srcset="/img/loading.gif" lazyload alt="09. 事务">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/27/cpp/8-%E5%87%BD%E6%95%B0%E6%8F%90%E9%AB%98/" target="_self">
-          8. 函数提高
+        <a href="/2024/12/07/Redis/09-%E4%BA%8B%E5%8A%A1/" target="_self">
+          09. 事务
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/27/cpp/8-%E5%87%BD%E6%95%B0%E6%8F%90%E9%AB%98/" target="_self">
+      <a class="index-excerpt " href="/2024/12/07/Redis/09-%E4%BA%8B%E5%8A%A1/" target="_self">
         <div>
-          3.1 函数默认参数 函数的形参列表中的形参是可以有默认值的 语法： 返回值类型 函数名 （参数=默认值）{} 3.2 函数占位参数 占位参数可以有默认参数 1234567891011121314151617#include &lt;iostream&gt; using namespace std;  void func(int a, int) &#123;     cout &lt;&
+          Redis事务 Redis事务就是一个命令执行的队列，将一系列预定义命令包装成一个整体（一个队列）。当执行时，一次性按照添加顺序依次执行，中间不会被打断或者干扰。 一个队列中，一次性、顺序性、排他性的执行一系列命令。 基本操作：  开启事务  1multi 设定事务的开始位置，执行此指令后，后续的所有指令均加入到事务中。  执行事务  1exec 设置事务的结束位置，同时
         </div>
       </a>
 
@@ -693,8 +693,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-27 19:12" pubdate>
-              2024-11-27
+            <time datetime="2024-12-07 14:22" pubdate>
+              2024-12-07
             </time>
           </div>
         
@@ -709,12 +709,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/c/" class="category-chain-item">c++</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/" class="category-chain-item">后端开发</a>
   
   
     <span>></span>
     
-  <a href="/categories/c/c-%E9%BB%91%E9%A9%AC/" class="category-chain-item">c++ 黑马</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Redis/" class="category-chain-item">Redis</a>
   
   
 
@@ -731,7 +731,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/c/">#c++</a>
+              <a href="/tags/Redis/">#Redis</a>
             
           </div>
         
@@ -743,23 +743,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/27/cpp/7-%E5%BC%95%E7%94%A8/" target="_self">
-          <img src="/imgs/cpp.jpg" srcset="/img/loading.gif" lazyload alt="7. 引用">
+        <a href="/2024/12/07/Redis/08-%E6%8C%81%E4%B9%85%E5%8C%96/" target="_self">
+          <img src="/imgs/redis.jpg" srcset="/img/loading.gif" lazyload alt="08. 持久化">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/27/cpp/7-%E5%BC%95%E7%94%A8/" target="_self">
-          7. 引用
+        <a href="/2024/12/07/Redis/08-%E6%8C%81%E4%B9%85%E5%8C%96/" target="_self">
+          08. 持久化
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/27/cpp/7-%E5%BC%95%E7%94%A8/" target="_self">
+      <a class="index-excerpt " href="/2024/12/07/Redis/08-%E6%8C%81%E4%B9%85%E5%8C%96/" target="_self">
         <div>
-          给变量起一个别名 引用必须初始化，初始化后不可以改变 12int a = 10; int &amp;b = a; 2.1 引用做函数参数 函数传参时，可以利用引用让形参修饰实参，可以简化指针修改实参 2.2 引用做函数返回值 不要返回局部变量引用 用法：函数调用作为左值 2.3 引用的本质 在c++内部实现是一个指针常量 int &amp;ref = a int* const
+          持久化 利用永久性存储介质将数据进行保存，在特定的时间将保存的数据进行恢复的工作机制称为持久化。 目的：防止数据意外丢失，确保数据安全性 持久化过程保存的内容：  将当前数据状态进行保存，快照形式，存储数据结果，存储格式简单，关注点在数据   对应Redis的RDB   将数据的操作过程进行保存，日志形式，存储操作过程，存储格式复杂，关注点在数据的操作过程。   对应R
         </div>
       </a>
 
@@ -767,8 +767,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-27 19:12" pubdate>
-              2024-11-27
+            <time datetime="2024-12-07 14:22" pubdate>
+              2024-12-07
             </time>
           </div>
         
@@ -783,12 +783,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/c/" class="category-chain-item">c++</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/" class="category-chain-item">后端开发</a>
   
   
     <span>></span>
     
-  <a href="/categories/c/c-%E9%BB%91%E9%A9%AC/" class="category-chain-item">c++ 黑马</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Redis/" class="category-chain-item">Redis</a>
   
   
 
@@ -805,7 +805,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/c/">#c++</a>
+              <a href="/tags/Redis/">#Redis</a>
             
           </div>
         
@@ -817,23 +817,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/27/cpp/6-%E5%86%85%E5%AD%98%E5%88%86%E5%8C%BA%E6%A8%A1%E5%9E%8B/" target="_self">
-          <img src="/imgs/cpp.jpg" srcset="/img/loading.gif" lazyload alt="6. 内存分区模型">
+        <a href="/2024/12/07/Redis/07-Linux%E6%93%8D%E4%BD%9CRedis/" target="_self">
+          <img src="/imgs/redis.jpg" srcset="/img/loading.gif" lazyload alt="07. Linux操作Redis">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/27/cpp/6-%E5%86%85%E5%AD%98%E5%88%86%E5%8C%BA%E6%A8%A1%E5%9E%8B/" target="_self">
-          6. 内存分区模型
+        <a href="/2024/12/07/Redis/07-Linux%E6%93%8D%E4%BD%9CRedis/" target="_self">
+          07. Linux操作Redis
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/27/cpp/6-%E5%86%85%E5%AD%98%E5%88%86%E5%8C%BA%E6%A8%A1%E5%9E%8B/" target="_self">
+      <a class="index-excerpt " href="/2024/12/07/Redis/07-Linux%E6%93%8D%E4%BD%9CRedis/" target="_self">
         <div>
-          内存分为四个区域：代码区、全局区、栈区、堆区 1.1 程序运行前 代码区是共享的、只读的，存放CPU的机器指令 全局区存放全局变量和静态变量以及常量（字符串常量、全局常量），该区域的数据在程序结束后由操作系统释放 1.2 程序运行后 栈区：由编译器自动分配释放，存放函数的参数值（形参），局部变量等 不要返回局部变量的地址 12345678910111213141516#include
+          CentOS7安装Redis  Redis官网下载源码包：redis-6.0.10.tar.gz 上传至服务器，解压  1tar -xvf redis-6.0.10.tar.gz  安装GCC相关   redis源码需要使用gcc进行编译  12345678yum install cppyum install binutilsyum install glibcyum ins
         </div>
       </a>
 
@@ -841,8 +841,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-27 19:12" pubdate>
-              2024-11-27
+            <time datetime="2024-12-07 14:22" pubdate>
+              2024-12-07
             </time>
           </div>
         
@@ -857,12 +857,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/c/" class="category-chain-item">c++</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/" class="category-chain-item">后端开发</a>
   
   
     <span>></span>
     
-  <a href="/categories/c/c-%E9%BB%91%E9%A9%AC/" class="category-chain-item">c++ 黑马</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Redis/" class="category-chain-item">Redis</a>
   
   
 
@@ -879,7 +879,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/c/">#c++</a>
+              <a href="/tags/Redis/">#Redis</a>
             
           </div>
         
@@ -891,23 +891,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/27/cpp/5-%E7%BB%93%E6%9E%84%E4%BD%93/" target="_self">
-          <img src="/imgs/cpp.jpg" srcset="/img/loading.gif" lazyload alt="5. 结构体">
+        <a href="/2024/12/07/Redis/06-Jedis/" target="_self">
+          <img src="/imgs/redis.jpg" srcset="/img/loading.gif" lazyload alt="06. Jedis">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/27/cpp/5-%E7%BB%93%E6%9E%84%E4%BD%93/" target="_self">
-          5. 结构体
+        <a href="/2024/12/07/Redis/06-Jedis/" target="_self">
+          06. Jedis
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/27/cpp/5-%E7%BB%93%E6%9E%84%E4%BD%93/" target="_self">
+      <a class="index-excerpt " href="/2024/12/07/Redis/06-Jedis/" target="_self">
         <div>
-          5.1 定义 1234567891011struct student &#123;     string name;     int age;     int score; &#125;s3; int main() &#123;     student s1;     student s2 = &#123;&quot;李四&quot;, 19, 80&#125;; &#125; 5.2 结构体
+          Java语言连接Redis服务的工具：  Jedis SpringData Redis Lettuce  Jedis操作Redis  引入对应的依赖  12345&lt;dependency&gt;    &lt;groupId&gt;redis.clients&lt;/groupId&gt;    &lt;artifactId&gt;jedis&lt;/artifactId&
         </div>
       </a>
 
@@ -915,8 +915,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-27 19:12" pubdate>
-              2024-11-27
+            <time datetime="2024-12-07 14:22" pubdate>
+              2024-12-07
             </time>
           </div>
         
@@ -931,12 +931,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/c/" class="category-chain-item">c++</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/" class="category-chain-item">后端开发</a>
   
   
     <span>></span>
     
-  <a href="/categories/c/c-%E9%BB%91%E9%A9%AC/" class="category-chain-item">c++ 黑马</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Redis/" class="category-chain-item">Redis</a>
   
   
 
@@ -953,7 +953,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/c/">#c++</a>
+              <a href="/tags/Redis/">#Redis</a>
             
           </div>
         
@@ -965,7 +965,7 @@
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/page/15/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/#board">14</a><a class="page-number" href="/page/15/#board">15</a><span class="page-number current">16</span><a class="page-number" href="/page/17/#board">17</a><a class="page-number" href="/page/18/#board">18</a><span class="space">&hellip;</span><a class="page-number" href="/page/29/#board">29</a><a class="extend next" rel="next" href="/page/17/#board"><i class="iconfont icon-arrowright"></i></a>
+      <a class="extend prev" rel="prev" href="/page/15/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/#board">14</a><a class="page-number" href="/page/15/#board">15</a><span class="page-number current">16</span><a class="page-number" href="/page/17/#board">17</a><a class="page-number" href="/page/18/#board">18</a><span class="space">&hellip;</span><a class="page-number" href="/page/38/#board">38</a><a class="extend next" rel="next" href="/page/17/#board"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
 

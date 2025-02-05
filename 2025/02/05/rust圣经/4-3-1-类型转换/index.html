@@ -1,0 +1,977 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="类型转换 Rust 是类型安全的语言，因此在 Rust 中做类型转换不是一件简单的事，这一章节我们将对 Rust 中的类型转换进行详尽讲解。  高能预警：本章节有些难，可以考虑学了进阶后回头再看  as转换 先来看一段代码： 12345678fn main() &#123;  let a: i32 &#x3D; 10;  let b: u16 &#x3D; 100;  if a &lt; b &amp;#1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="4.3.1 类型转换">
+<meta property="og:url" content="http://binbo-zappy.github.io/2025/02/05/rust%E5%9C%A3%E7%BB%8F/4-3-1-%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="类型转换 Rust 是类型安全的语言，因此在 Rust 中做类型转换不是一件简单的事，这一章节我们将对 Rust 中的类型转换进行详尽讲解。  高能预警：本章节有些难，可以考虑学了进阶后回头再看  as转换 先来看一段代码： 12345678fn main() &#123;  let a: i32 &#x3D; 10;  let b: u16 &#x3D; 100;  if a &lt; b &amp;#1">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/rust.jpg">
+<meta property="article:published_time" content="2025-02-05T05:41:03.000Z">
+<meta property="article:modified_time" content="2025-02-05T06:08:51.485Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="rust">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/rust.jpg">
+  
+  
+  
+  <title>4.3.1 类型转换 - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="4.3.1 类型转换"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-02-05 13:41" pubdate>
+          2025年2月5日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          37 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">4.3.1 类型转换</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="类型转换"><a target="_blank" rel="noopener" href="https://course.rs/advance/into-types/converse.html#类型转换">类型转换</a></h1>
+<p>Rust 是类型安全的语言，因此在 Rust
+中做类型转换不是一件简单的事，这一章节我们将对 Rust
+中的类型转换进行详尽讲解。</p>
+<blockquote>
+<p>高能预警：本章节有些难，可以考虑学了进阶后回头再看</p>
+</blockquote>
+<h2 id="as转换"><a target="_blank" rel="noopener" href="https://course.rs/advance/into-types/converse.html#as转换"><code>as</code>转换</a></h2>
+<p>先来看一段代码：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>  <span class="hljs-keyword">let</span> <span class="hljs-variable">a</span>: <span class="hljs-type">i32</span> = <span class="hljs-number">10</span>;<br>  <span class="hljs-keyword">let</span> <span class="hljs-variable">b</span>: <span class="hljs-type">u16</span> = <span class="hljs-number">100</span>;<br><br>  <span class="hljs-keyword">if</span> a &lt; b &#123;<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Ten is less than one hundred.&quot;</span>);<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>能跟着这本书一直学习到这里，说明你对 Rust
+已经有了一定的理解，那么一眼就能看出这段代码注定会报错，因为
+<code>a</code> 和 <code>b</code> 拥有不同的类型，Rust
+不允许两种不同的类型进行比较。</p>
+<p>解决办法很简单，只要把 <code>b</code> 转换成 <code>i32</code>
+类型即可，Rust 中内置了一些基本类型之间的转换，这里使用 <code>as</code>
+操作符来完成： <code>if a &lt; (b as i32) &#123;...&#125;</code>。那么为什么不把
+<code>a</code> 转换成 <code>u16</code> 类型呢？</p>
+<p>因为每个类型能表达的数据范围不同，如果把范围较大的类型转换成较小的类型，会造成错误，因此我们需要把范围较小的类型转换成较大的类型，来避免这些问题的发生。</p>
+<blockquote>
+<p>使用类型转换需要小心，因为如果执行以下操作
+<code>300_i32 as i8</code>，你将获得 <code>44</code> 这个值，而不是
+<code>300</code>，因为 <code>i8</code> 类型能表达的的最大值为
+<code>2^7 - 1</code>，使用以下代码可以查看 <code>i8</code>
+的最大值：</p>
+</blockquote>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">a</span> = <span class="hljs-type">i8</span>::MAX;<br><span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;&#125;&quot;</span>,a);<br></code></pre></td></tr></table></figure>
+<p>下面列出了常用的转换形式：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>   <span class="hljs-keyword">let</span> <span class="hljs-variable">a</span> = <span class="hljs-number">3.1</span> <span class="hljs-keyword">as</span> <span class="hljs-type">i8</span>;<br>   <span class="hljs-keyword">let</span> <span class="hljs-variable">b</span> = <span class="hljs-number">100_i8</span> <span class="hljs-keyword">as</span> <span class="hljs-type">i32</span>;<br>   <span class="hljs-keyword">let</span> <span class="hljs-variable">c</span> = <span class="hljs-string">&#x27;a&#x27;</span> <span class="hljs-keyword">as</span> <span class="hljs-type">u8</span>; <span class="hljs-comment">// 将字符&#x27;a&#x27;转换为整数，97</span><br><br>   <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;&#125;,&#123;&#125;,&#123;&#125;&quot;</span>,a,b,c)<br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="内存地址转换为指针"><a target="_blank" rel="noopener" href="https://course.rs/advance/into-types/converse.html#内存地址转换为指针">内存地址转换为指针</a></h4>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">values</span>: [<span class="hljs-type">i32</span>; <span class="hljs-number">2</span>] = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>];<br><span class="hljs-keyword">let</span> <span class="hljs-variable">p1</span>: *<span class="hljs-keyword">mut</span> <span class="hljs-type">i32</span> = values.<span class="hljs-title function_ invoke__">as_mut_ptr</span>();<br><span class="hljs-keyword">let</span> <span class="hljs-variable">first_address</span> = p1 <span class="hljs-keyword">as</span> <span class="hljs-type">usize</span>; <span class="hljs-comment">// 将p1内存地址转换为一个整数</span><br><span class="hljs-keyword">let</span> <span class="hljs-variable">second_address</span> = first_address + <span class="hljs-number">4</span>; <span class="hljs-comment">// 4 == std::mem::size_of::&lt;i32&gt;()，i32类型占用4个字节，因此将内存地址 + 4</span><br><span class="hljs-keyword">let</span> <span class="hljs-variable">p2</span> = second_address <span class="hljs-keyword">as</span> *<span class="hljs-keyword">mut</span> <span class="hljs-type">i32</span>; <span class="hljs-comment">// 访问该地址指向的下一个整数p2</span><br><span class="hljs-keyword">unsafe</span> &#123;<br>    *p2 += <span class="hljs-number">1</span>;<br>&#125;<br><span class="hljs-built_in">assert_eq!</span>(values[<span class="hljs-number">1</span>], <span class="hljs-number">3</span>);<br></code></pre></td></tr></table></figure>
+<h4 id="强制类型转换的边角知识"><a target="_blank" rel="noopener" href="https://course.rs/advance/into-types/converse.html#强制类型转换的边角知识">强制类型转换的边角知识</a></h4>
+<ol type="1">
+<li>转换不具有传递性 就算 <code>e as U1 as U2</code>
+是合法的，也不能说明 <code>e as U2</code> 是合法的（<code>e</code>
+不能直接转换成 <code>U2</code>）。</li>
+</ol>
+<h2 id="tryinto-转换"><a target="_blank" rel="noopener" href="https://course.rs/advance/into-types/converse.html#tryinto-转换">TryInto
+转换</a></h2>
+<p>在一些场景中，使用 <code>as</code>
+关键字会有比较大的限制。如果你想要在类型转换上拥有完全的控制而不依赖内置的转换，例如处理转换错误，那么可以使用
+<code>TryInto</code> ：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">use</span> std::convert::TryInto;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>   <span class="hljs-keyword">let</span> <span class="hljs-variable">a</span>: <span class="hljs-type">u8</span> = <span class="hljs-number">10</span>;<br>   <span class="hljs-keyword">let</span> <span class="hljs-variable">b</span>: <span class="hljs-type">u16</span> = <span class="hljs-number">1500</span>;<br><br>   <span class="hljs-keyword">let</span> <span class="hljs-variable">b_</span>: <span class="hljs-type">u8</span> = b.<span class="hljs-title function_ invoke__">try_into</span>().<span class="hljs-title function_ invoke__">unwrap</span>();<br><br>   <span class="hljs-keyword">if</span> a &lt; b_ &#123;<br>     <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Ten is less than one hundred.&quot;</span>);<br>   &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>上面代码中引入了 <code>std::convert::TryInto</code>
+特征，但是却没有使用它，可能有些同学会为此困惑，主要原因在于<strong>如果你要使用一个特征的方法，那么你需要引入该特征到当前的作用域中</strong>，我们在上面用到了
+<code>try_into</code> 方法，因此需要引入对应的特征。但是 Rust
+又提供了一个非常便利的办法，把最常用的标准库中的特征通过<a target="_blank" rel="noopener" href="https://course.rs/appendix/prelude.html"><code>std::prelude</code></a>模块提前引入到当前作用域中，其中包括了
+<code>std::convert::TryInto</code>，你可以尝试删除第一行的代码
+<code>use ...</code>，看看是否会报错。</p>
+<p><code>try_into</code> 会尝试进行一次转换，并返回一个
+<code>Result</code>，此时就可以对其进行相应的错误处理。由于我们的例子只是为了快速测试，因此使用了
+<code>unwrap</code> 方法，该方法在发现错误时，会直接调用
+<code>panic</code>
+导致程序的崩溃退出，在实际项目中，请不要这么使用，具体见<a target="_blank" rel="noopener" href="https://course.rs/basic/result-error/panic.html#调用-panic">panic</a>部分。</p>
+<p>最主要的是 <code>try_into</code>
+转换会捕获大类型向小类型转换时导致的溢出错误：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">b</span>: <span class="hljs-type">i16</span> = <span class="hljs-number">1500</span>;<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">b_</span>: <span class="hljs-type">u8</span> = <span class="hljs-keyword">match</span> b.<span class="hljs-title function_ invoke__">try_into</span>() &#123;<br>        <span class="hljs-title function_ invoke__">Ok</span>(b1) =&gt; b1,<br>        <span class="hljs-title function_ invoke__">Err</span>(e) =&gt; &#123;<br>            <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;:?&#125;&quot;</span>, e.<span class="hljs-title function_ invoke__">to_string</span>());<br>            <span class="hljs-number">0</span><br>        &#125;<br>    &#125;;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>运行后输出如下
+<code>"out of range integral type conversion attempted"</code>，在这里我们程序捕获了错误，编译器告诉我们类型范围超出的转换是不被允许的，因为我们试图把
+<code>1500_i16</code> 转换为 <code>u8</code>
+类型，后者明显不足以承载这么大的值。</p>
+<h2 id="通用类型转换"><a target="_blank" rel="noopener" href="https://course.rs/advance/into-types/converse.html#通用类型转换">通用类型转换</a></h2>
+<p>虽然 <code>as</code> 和 <code>TryInto</code>
+很强大，但是只能应用在数值类型上，可是 Rust
+有如此多的类型，想要为这些类型实现转换，我们需要另谋出路，先来看看在一个笨办法，将一个结构体转换为另外一个结构体：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Foo</span> &#123;<br>    x: <span class="hljs-type">u32</span>,<br>    y: <span class="hljs-type">u16</span>,<br>&#125;<br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Bar</span> &#123;<br>    a: <span class="hljs-type">u32</span>,<br>    b: <span class="hljs-type">u16</span>,<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">reinterpret</span>(foo: Foo) <span class="hljs-punctuation">-&gt;</span> Bar &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">Foo</span> &#123; x, y &#125; = foo;<br>    Bar &#123; a: x, b: y &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>简单粗暴，但是从另外一个角度来看，也挺啰嗦的，好在 Rust
+为我们提供了更通用的方式来完成这个目的。</p>
+<h4 id="强制类型转换"><a target="_blank" rel="noopener" href="https://course.rs/advance/into-types/converse.html#强制类型转换">强制类型转换</a></h4>
+<p>在某些情况下，类型是可以进行隐式强制转换的，虽然这些转换弱化了 Rust
+的类型系统，但是它们的存在是为了让 Rust
+在大多数场景可以工作(说白了，帮助用户省事)，而不是报各种类型上的编译错误。</p>
+<p>首先，在匹配特征时，不会做任何强制转换(除了方法)。一个类型
+<code>T</code> 可以强制转换为 <code>U</code>，不代表 <code>impl T</code>
+可以强制转换为
+<code>impl U</code>，例如下面的代码就无法通过编译检查：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">trait</span> <span class="hljs-title class_">Trait</span> &#123;&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">foo</span>&lt;X: Trait&gt;(t: X) &#123;&#125;<br><br><span class="hljs-keyword">impl</span>&lt;<span class="hljs-symbol">&#x27;a</span>&gt; Trait <span class="hljs-keyword">for</span> &amp;<span class="hljs-symbol">&#x27;a</span> <span class="hljs-type">i32</span> &#123;&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">t</span>: &amp;<span class="hljs-keyword">mut</span> <span class="hljs-type">i32</span> = &amp;<span class="hljs-keyword">mut</span> <span class="hljs-number">0</span>;<br>    <span class="hljs-title function_ invoke__">foo</span>(t);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>报错如下：</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs console">error[E0277]: the trait bound `&amp;mut i32: Trait` is not satisfied<br><span class="hljs-meta prompt_">--&gt; </span><span class="language-bash">src/main.rs:9:9</span><br>|<br>9 |     foo(t);<br>|         ^ the trait `Trait` is not implemented for `&amp;mut i32`<br>|<br>= help: the following implementations were found:<br>        &lt;&amp;&#x27;a i32 as Trait&gt;<br>= note: `Trait` is implemented for `&amp;i32`, but not for `&amp;mut i32`<br></code></pre></td></tr></table></figure>
+<p><code>&amp;i32</code> 实现了特征 <code>Trait</code>，
+<code>&amp;mut i32</code> 可以转换为 <code>&amp;i32</code>，但是
+<code>&amp;mut i32</code> 依然无法作为 <code>Trait</code> 来使用。</p>
+<h4 id="点操作符"><a target="_blank" rel="noopener" href="https://course.rs/advance/into-types/converse.html#点操作符">点操作符</a></h4>
+<p>方法调用的点操作符看起来简单，实际上非常不简单，它在调用时，会发生很多魔法般的类型转换，例如：自动引用、自动解引用，强制类型转换直到类型能匹配等。</p>
+<p>假设有一个方法 <code>foo</code>，它有一个接收器(接收器就是
+<code>self</code>、<code>&amp;self</code>、<code>&amp;mut self</code>
+参数)。如果调用 <code>value.foo()</code>，编译器在调用 <code>foo</code>
+之前，需要决定到底使用哪个 <code>Self</code> 类型来调用。现在假设
+<code>value</code> 拥有类型 <code>T</code>。</p>
+<p>再进一步，我们使用<a target="_blank" rel="noopener" href="https://course.rs/basic/trait/advance-trait.html#完全限定语法">完全限定语法</a>来进行准确的函数调用:</p>
+<ol type="1">
+<li>首先，编译器检查它是否可以直接调用
+<code>T::foo(value)</code>，称之为<strong>值方法调用</strong></li>
+<li>如果上一步调用无法完成(例如方法类型错误或者特征没有针对
+<code>Self</code>
+进行实现，上文提到过特征不能进行强制转换)，那么编译器会尝试增加自动引用，例如会尝试以下调用：
+<code>&lt;&amp;T&gt;::foo(value)</code> 和
+<code>&lt;&amp;mut T&gt;::foo(value)</code>，称之为<strong>引用方法调用</strong></li>
+<li>若上面两个方法依然不工作，编译器会试着解引用 <code>T</code>
+，然后再进行尝试。这里使用了 <code>Deref</code> 特征 —— 若
+<code>T: Deref&lt;Target = U&gt;</code> (<code>T</code> 可以被解引用为
+<code>U</code>)，那么编译器会使用 <code>U</code>
+类型进行尝试，称之为<strong>解引用方法调用</strong></li>
+<li>若 <code>T</code> 不能被解引用，且 <code>T</code>
+是一个定长类型(在编译期类型长度是已知的)，那么编译器也会尝试将
+<code>T</code> 从定长类型转为不定长类型，例如将 <code>[i32; 2]</code>
+转为 <code>[i32]</code></li>
+<li>若还是不行，那...没有那了，最后编译器大喊一声：汝欺我甚，不干了！</li>
+</ol>
+<p>下面我们来用一个例子来解释上面的方法查找算法:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">array</span>: Rc&lt;<span class="hljs-type">Box</span>&lt;[T; <span class="hljs-number">3</span>]&gt;&gt; = ...;<br><span class="hljs-keyword">let</span> <span class="hljs-variable">first_entry</span> = array[<span class="hljs-number">0</span>];<br></code></pre></td></tr></table></figure>
+<p><code>array</code>
+数组的底层数据隐藏在了重重封锁之后，那么编译器如何使用
+<code>array[0]</code>
+这种数组原生访问语法通过重重封锁，准确的访问到数组中的第一个元素？</p>
+<ol type="1">
+<li>首先， <code>array[0]</code> 只是<a target="_blank" rel="noopener" href="https://doc.rust-lang.org/std/ops/trait.Index.html"><code>Index</code></a>特征的语法糖：编译器会将
+<code>array[0]</code> 转换为 <code>array.index(0)</code>
+调用，当然在调用之前，编译器会先检查 <code>array</code> 是否实现了
+<code>Index</code> 特征。</li>
+<li>接着，编译器检查 <code>Rc&lt;Box&lt;[T; 3]&gt;&gt;</code> 是否有实现
+<code>Index</code>
+特征，结果是否，不仅如此，<code>&amp;Rc&lt;Box&lt;[T; 3]&gt;&gt;</code>
+与 <code>&amp;mut Rc&lt;Box&lt;[T; 3]&gt;&gt;</code> 也没有实现。</li>
+<li>上面的都不能工作，编译器开始对
+<code>Rc&lt;Box&lt;[T; 3]&gt;&gt;</code> 进行解引用，把它转变成
+<code>Box&lt;[T; 3]&gt;</code></li>
+<li>此时继续对 <code>Box&lt;[T; 3]&gt;</code> 进行上面的操作
+：<code>Box&lt;[T; 3]&gt;</code>，
+<code>&amp;Box&lt;[T; 3]&gt;</code>，和
+<code>&amp;mut Box&lt;[T; 3]&gt;</code> 都没有实现 <code>Index</code>
+特征，所以编译器开始对 <code>Box&lt;[T; 3]&gt;</code>
+进行解引用，然后我们得到了 <code>[T; 3]</code></li>
+<li><code>[T; 3]</code> 以及它的各种引用都没有实现 <code>Index</code>
+索引(是不是很反直觉:D，在直觉中，数组都可以通过索引访问，实际上只有数组切片才可以!)，它也不能再进行解引用，因此编译器只能祭出最后的大杀器：将定长转为不定长，因此
+<code>[T; 3]</code> 被转换成 <code>[T]</code>，也就是数组切片，它实现了
+<code>Index</code> 特征，因此最终我们可以通过 <code>index</code>
+方法访问到对应的元素。</li>
+</ol>
+<p>过程看起来很复杂，但是也还好，挺好理解，如果你现在不能彻底理解，也不要紧，等以后对
+Rust 理解更深了，同时需要深入理解类型转换时，再来细细品读本章。</p>
+<p>再来看看以下更复杂的例子：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">do_stuff</span>&lt;T: <span class="hljs-built_in">Clone</span>&gt;(value: &amp;T) &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">cloned</span> = value.<span class="hljs-title function_ invoke__">clone</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>上面例子中 <code>cloned</code>
+的类型是什么？首先编译器检查能不能进行<strong>值方法调用</strong>，
+<code>value</code> 的类型是 <code>&amp;T</code>，同时 <code>clone</code>
+方法的签名也是 <code>&amp;T</code> ：
+<code>fn clone(&amp;T) -&gt; T</code>，因此可以进行值方法调用，再加上编译器知道了
+<code>T</code> 实现了 <code>Clone</code>，因此 <code>cloned</code>
+的类型是 <code>T</code>。</p>
+<p>如果 <code>T: Clone</code> 的特征约束被移除呢？</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">do_stuff</span>&lt;T&gt;(value: &amp;T) &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">cloned</span> = value.<span class="hljs-title function_ invoke__">clone</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>首先，从直觉上来说，该方法会报错，因为 <code>T</code> 没有实现
+<code>Clone</code> 特征，但是真实情况是什么呢？</p>
+<p>我们先来推导一番。 首先通过值方法调用就不再可行，因为 <code>T</code>
+没有实现 <code>Clone</code> 特征，也就无法调用 <code>T</code> 的
+<code>clone</code>
+方法。接着编译器尝试<strong>引用方法调用</strong>，此时 <code>T</code>
+变成 <code>&amp;T</code>，在这种情况下， <code>clone</code>
+方法的签名如下：
+<code>fn clone(&amp;&amp;T) -&gt; &amp;T</code>，接着我们现在对
+<code>value</code> 进行了引用。 编译器发现 <code>&amp;T</code> 实现了
+<code>Clone</code>
+类型(所有的引用类型都可以被复制，因为其实就是复制一份地址)，因此可以推出
+<code>cloned</code> 也是 <code>&amp;T</code> 类型。</p>
+<p>最终，我们复制出一份引用指针，这很合理，因为值类型 <code>T</code>
+没有实现 <code>Clone</code>，只能去复制一个指针了。</p>
+<p>下面的例子也是自动引用生效的地方：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-meta">#[derive(Clone)]</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Container</span>&lt;T&gt;(Arc&lt;T&gt;);<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">clone_containers</span>&lt;T&gt;(foo: &amp;Container&lt;<span class="hljs-type">i32</span>&gt;, bar: &amp;Container&lt;T&gt;) &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">foo_cloned</span> = foo.<span class="hljs-title function_ invoke__">clone</span>();<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">bar_cloned</span> = bar.<span class="hljs-title function_ invoke__">clone</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>推断下上面的 <code>foo_cloned</code> 和 <code>bar_cloned</code>
+是什么类型？提示: 关键在 <code>Container</code> 的泛型参数，一个是
+<code>i32</code> 的具体类型，一个是泛型类型，其中 <code>i32</code>
+实现了 <code>Clone</code>，但是 <code>T</code> 并没有。</p>
+<p>首先要复习一下复杂类型派生 <code>Clone</code>
+的规则：一个复杂类型能否派生
+<code>Clone</code>，需要它内部的所有子类型都能进行
+<code>Clone</code>。因此 <code>Container&lt;T&gt;(Arc&lt;T&gt;)</code>
+是否实现 <code>Clone</code> 的关键在于 <code>T</code> 类型是否实现了
+<code>Clone</code> 特征。</p>
+<p>上面代码中，<code>Container&lt;i32&gt;</code> 实现了
+<code>Clone</code>
+特征，因此编译器可以直接进行值方法调用，此时相当于直接调用
+<code>foo.clone</code>，其中 <code>clone</code> 的函数签名是
+<code>fn clone(&amp;T) -&gt; T</code>，由此可以看出
+<code>foo_cloned</code> 的类型是 <code>Container&lt;i32&gt;</code>。</p>
+<p>然而，<code>bar_cloned</code> 的类型却是
+<code>&amp;Container&lt;T&gt;</code>，这个不合理啊，明明我们为
+<code>Container&lt;T&gt;</code> 派生了 <code>Clone</code>
+特征，因此它也应该是 <code>Container&lt;T&gt;</code>
+类型才对。万事皆有因，我们先来看下 <code>derive</code>
+宏最终生成的代码大概是啥样的：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">impl</span>&lt;T&gt; <span class="hljs-built_in">Clone</span> <span class="hljs-keyword">for</span> <span class="hljs-title class_">Container</span>&lt;T&gt; <span class="hljs-keyword">where</span> T: <span class="hljs-built_in">Clone</span> &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">clone</span>(&amp;<span class="hljs-keyword">self</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-keyword">Self</span> &#123;<br>        <span class="hljs-title function_ invoke__">Self</span>(Arc::<span class="hljs-title function_ invoke__">clone</span>(&amp;<span class="hljs-keyword">self</span>.<span class="hljs-number">0</span>))<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>从上面代码可以看出，派生 <code>Clone</code> 能实现的根本是
+<code>T</code> 实现了<a target="_blank" rel="noopener" href="https://doc.rust-lang.org/std/clone/trait.Clone.html#derivable"><code>Clone</code>特征</a>：<code>where T: Clone</code>，
+因此 <code>Container&lt;T&gt;</code> 就没有实现 <code>Clone</code>
+特征。</p>
+<p>编译器接着会去尝试引用方法调用，此时
+<code>&amp;Container&lt;T&gt;</code> 引用实现了
+<code>Clone</code>，最终可以得出 <code>bar_cloned</code> 的类型是
+<code>&amp;Container&lt;T&gt;</code>。</p>
+<p>当然，也可以为 <code>Container&lt;T&gt;</code> 手动实现
+<code>Clone</code> 特征：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">impl</span>&lt;T&gt; <span class="hljs-built_in">Clone</span> <span class="hljs-keyword">for</span> <span class="hljs-title class_">Container</span>&lt;T&gt; &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">clone</span>(&amp;<span class="hljs-keyword">self</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-keyword">Self</span> &#123;<br>        <span class="hljs-title function_ invoke__">Self</span>(Arc::<span class="hljs-title function_ invoke__">clone</span>(&amp;<span class="hljs-keyword">self</span>.<span class="hljs-number">0</span>))<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>此时，编译器首次尝试值方法调用即可通过，因此 <code>bar_cloned</code>
+的类型变成 <code>Container&lt;T&gt;</code>。</p>
+<p>这一块儿内容真的挺复杂，每一个坚持看完的读者都是真正的勇士，我也是：为了写好这块儿内容，作者足足花了
+<strong>4</strong> 个小时！</p>
+<h4 id="变形记transmutes"><a target="_blank" rel="noopener" href="https://course.rs/advance/into-types/converse.html#变形记transmutes">变形记(Transmutes)</a></h4>
+<p>前方危险，敬请绕行！</p>
+<p>类型系统，你让开！我要自己转换这些类型，不成功便成仁！虽然本书大多是关于安全的内容，我还是希望你能仔细考虑避免使用本章讲到的内容。这是你在
+Rust
+中所能做到的真真正正、彻彻底底、最最可怕的非安全行为，在这里，所有的保护机制都形同虚设。</p>
+<p>先让你看看深渊长什么样，开开眼，然后你再决定是否深入：
+<code>mem::transmute&lt;T, U&gt;</code> 将类型 <code>T</code>
+直接转成类型
+<code>U</code>，唯一的要求就是，这两个类型占用同样大小的字节数！我的天，这也算限制？这简直就是无底线的转换好吧？看看会导致什么问题：</p>
+<ol type="1">
+<li><p>首先也是最重要的，转换后创建一个任意类型的实例会造成无法想象的混乱，而且根本无法预测。不要把
+<code>3</code> 转换成 <code>bool</code> 类型，就算你根本不会去使用该
+<code>bool</code> 类型，也不要去这样转换</p></li>
+<li><p>变形后会有一个重载的返回类型，即使你没有指定返回类型，为了满足类型推导的需求，依然会产生千奇百怪的类型</p></li>
+<li><p>将</p>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs 1c"><span class="hljs-meta">&amp;</span><br></code></pre></td></tr></table></figure>
+<p>变形为</p>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs 1c"><span class="hljs-meta">&amp;mut</span><br></code></pre></td></tr></table></figure>
+<p>是未定义的行为</p>
+<ul>
+<li>这种转换永远都是未定义的</li>
+<li>不，你不能这么做</li>
+<li>不要多想，你没有那种幸运</li>
+</ul></li>
+<li><p>变形为一个未指定生命周期的引用会导致<a target="_blank" rel="noopener" href="https://course.rs/advance/lifetime/advance.html">无界生命周期</a></p></li>
+<li><p>在复合类型之间互相变换时，你需要保证它们的排列布局是一模一样的！一旦不一样，那么字段就会得到不可预期的值，这也是未定义的行为，至于你会不会因此愤怒，
+<strong>WHO CARES</strong> ，你都用了变形了，老兄！</p></li>
+</ol>
+<p>对于第 5 条，你该如何知道内存的排列布局是一样的呢？对于
+<code>repr(C)</code> 类型和 <code>repr(transparent)</code>
+类型来说，它们的布局是有着精确定义的。但是对于你自己的"普通却自信"的
+Rust 类型 <code>repr(Rust)</code>
+来说，它可不是有着精确定义的。甚至同一个泛型类型的不同实例都可以有不同的内存布局。
+<code>Vec&lt;i32&gt;</code> 和 <code>Vec&lt;u32&gt;</code>
+它们的字段可能有着相同的顺序，也可能没有。对于数据排列布局来说，<strong>什么能保证，什么不能保证</strong>目前还在
+Rust 开发组的<a target="_blank" rel="noopener" href="https://rust-lang.github.io/unsafe-code-guidelines/layout.html">工作任务</a>中呢。</p>
+<p>你以为你之前凝视的是深渊吗？不，你凝视的只是深渊的大门。
+<code>mem::transmute_copy&lt;T, U&gt;</code>
+才是真正的深渊，它比之前的还要更加危险和不安全。它从 <code>T</code>
+类型中拷贝出 <code>U</code> 类型所需的字节数，然后转换成
+<code>U</code>。 <code>mem::transmute</code>
+尚有大小检查，能保证两个数据的内存大小一致，现在这哥们干脆连这个也丢了，只不过
+<code>U</code> 的尺寸若是比 <code>T</code> 大，会是一个未定义行为。</p>
+<p>当然，你也可以通过裸指针转换和 <code>unions</code>
+(todo!)获得所有的这些功能，但是你将无法获得任何编译提示或者检查。裸指针转换和
+<code>unions</code> 也不是魔法，无法逃避上面说的规则。</p>
+<p><code>transmute</code>
+虽然危险，但作为一本工具书，知识当然要全面，下面列举两个有用的
+<code>transmute</code> 应用场景 :)。</p>
+<ul>
+<li>将裸指针变成函数指针：</li>
+</ul>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">foo</span>() <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">i32</span> &#123;<br>    <span class="hljs-number">0</span><br>&#125;<br><br><span class="hljs-keyword">let</span> <span class="hljs-variable">pointer</span> = foo <span class="hljs-keyword">as</span> *<span class="hljs-title function_ invoke__">const</span> ();<br><span class="hljs-keyword">let</span> <span class="hljs-variable">function</span> = <span class="hljs-keyword">unsafe</span> &#123; <br>    <span class="hljs-comment">// 将裸指针转换为函数指针</span><br>    std::mem::transmute::&lt;*<span class="hljs-title function_ invoke__">const</span> (), <span class="hljs-title function_ invoke__">fn</span>() <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">i32</span>&gt;(pointer) <br>&#125;;<br><span class="hljs-built_in">assert_eq!</span>(<span class="hljs-title function_ invoke__">function</span>(), <span class="hljs-number">0</span>);<br></code></pre></td></tr></table></figure>
+<ul>
+<li>延长生命周期，或者缩短一个静态生命周期寿命：</li>
+</ul>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">R</span>&lt;<span class="hljs-symbol">&#x27;a</span>&gt;(&amp;<span class="hljs-symbol">&#x27;a</span> <span class="hljs-type">i32</span>);<br><br><span class="hljs-comment">// 将 &#x27;b 生命周期延长至 &#x27;static 生命周期</span><br><span class="hljs-keyword">unsafe</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">extend_lifetime</span>&lt;<span class="hljs-symbol">&#x27;b</span>&gt;(r: R&lt;<span class="hljs-symbol">&#x27;b</span>&gt;) <span class="hljs-punctuation">-&gt;</span> R&lt;<span class="hljs-symbol">&#x27;static</span>&gt; &#123;<br>    std::mem::transmute::&lt;R&lt;<span class="hljs-symbol">&#x27;b</span>&gt;, R&lt;<span class="hljs-symbol">&#x27;static</span>&gt;&gt;(r)<br>&#125;<br><br><span class="hljs-comment">// 将 &#x27;static 生命周期缩短至 &#x27;c 生命周期</span><br><span class="hljs-keyword">unsafe</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">shorten_invariant_lifetime</span>&lt;<span class="hljs-symbol">&#x27;b</span>, <span class="hljs-symbol">&#x27;c</span>&gt;(r: &amp;<span class="hljs-symbol">&#x27;b</span> <span class="hljs-keyword">mut</span> R&lt;<span class="hljs-symbol">&#x27;static</span>&gt;) <span class="hljs-punctuation">-&gt;</span> &amp;<span class="hljs-symbol">&#x27;b</span> <span class="hljs-keyword">mut</span> R&lt;<span class="hljs-symbol">&#x27;c</span>&gt; &#123;<br>    std::mem::transmute::&lt;&amp;<span class="hljs-symbol">&#x27;b</span> <span class="hljs-keyword">mut</span> R&lt;<span class="hljs-symbol">&#x27;static</span>&gt;, &amp;<span class="hljs-symbol">&#x27;b</span> <span class="hljs-keyword">mut</span> R&lt;<span class="hljs-symbol">&#x27;c</span>&gt;&gt;(r)<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>以上例子非常先进！但是是非常不安全的 Rust 行为！</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/rust/" class="category-chain-item">rust</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/rust/rust%E5%9C%A3%E7%BB%8F/" class="category-chain-item">rust圣经</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/rust/rust%E5%9C%A3%E7%BB%8F/rust%E9%AB%98%E7%BA%A7%E8%BF%9B%E9%98%B6/" class="category-chain-item">rust高级进阶</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/rust/" class="print-no-link">#rust</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>4.3.1 类型转换</div>
+      <div>http://binbo-zappy.github.io/2025/02/05/rust圣经/4-3-1-类型转换/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年2月5日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/02/05/rust%E5%9C%A3%E7%BB%8F/4-3-2-newtype%E5%92%8C%E7%B1%BB%E5%9E%8B%E5%88%AB%E5%90%8D/" title="4.3.2 newtype 和 类型别名">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">4.3.2 newtype 和 类型别名</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/02/05/rust%E5%9C%A3%E7%BB%8F/4-3-%E6%B7%B1%E5%85%A5%E7%B1%BB%E5%9E%8B/" title="4.3 深入类型">
+                        <span class="hidden-mobile">4.3 深入类型</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

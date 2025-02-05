@@ -1,0 +1,1197 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1. 实现基本功能 对于一个文件查找命令而言，首先得指定文件和待查找的字符串，它们需要用户从命令行给予输入，然后我们在程序内进行读取。 1.1 接收命令行参数 创建一个新的项目 minigrep 123cargo new minigrep     Created binary (application) &#96;minigrep&#96; project$ cd minigrep 传入文件路径和待搜索">
+<meta property="og:type" content="article">
+<meta property="og:title" content="3. 文件搜索工具">
+<meta property="og:url" content="http://binbo-zappy.github.io/2025/02/05/rust%E5%9C%A3%E7%BB%8F/3-mini-grep/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="1. 实现基本功能 对于一个文件查找命令而言，首先得指定文件和待查找的字符串，它们需要用户从命令行给予输入，然后我们在程序内进行读取。 1.1 接收命令行参数 创建一个新的项目 minigrep 123cargo new minigrep     Created binary (application) &#96;minigrep&#96; project$ cd minigrep 传入文件路径和待搜索">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/rust.jpg">
+<meta property="article:published_time" content="2025-02-05T03:25:45.000Z">
+<meta property="article:modified_time" content="2025-02-05T06:31:57.797Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="rust">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/rust.jpg">
+  
+  
+  
+  <title>3. 文件搜索工具 - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="3. 文件搜索工具"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-02-05 11:25" pubdate>
+          2025年2月5日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          9.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          79 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">3. 文件搜索工具</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="实现基本功能">1. 实现基本功能</h1>
+<p>对于一个文件查找命令而言，首先得指定文件和待查找的字符串，它们需要用户从命令行给予输入，然后我们在程序内进行读取。</p>
+<h2 id="接收命令行参数">1.1 接收命令行参数</h2>
+<p>创建一个新的项目 <code>minigrep</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">cargo new minigrep<br>     Created binary (application) `minigrep` project<br><span class="hljs-meta prompt_">$ </span><span class="language-bash"><span class="hljs-built_in">cd</span> minigrep</span><br></code></pre></td></tr></table></figure>
+<p>传入文件路径和待搜索的字符串，命令:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">cargo run -- searchstring example-filename.txt<br></code></pre></td></tr></table></figure>
+<p><code>--</code> 告诉 <code>cargo</code>
+后面的参数是给我们的程序使用的，而不是给 <code>cargo</code>
+自己使用，例如 <code>--</code> 前的 <code>run</code> 就是给它用的。</p>
+<p>接下来就是在程序中读取传入的参数，这个很简单，下面代码就可以:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-comment">// in main.rs</span><br><span class="hljs-keyword">use</span> std::env;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">args</span>: <span class="hljs-type">Vec</span>&lt;<span class="hljs-type">String</span>&gt; = env::<span class="hljs-title function_ invoke__">args</span>().<span class="hljs-title function_ invoke__">collect</span>();<br>    dbg!(args);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>首先通过 <code>use</code> 引入标准库中的 <code>env</code> 包，然后
+<code>env::args</code> 方法会读取并分析传入的命令行参数，最终通过
+<code>collect</code> 方法输出一个集合类型 <code>Vector</code>。</p>
+<blockquote>
+<h3 id="不可信的输入">不可信的输入</h3>
+<p>所有的用户输入都不可信！不可信！不可信！</p>
+<p>重要的话说三遍，我们的命令行程序也是，用户会输入什么你根本就不知道，例如他输入了一个非
+Unicode
+字符，你能阻止吗？显然不能，但是这种输入会直接让我们的程序崩溃！</p>
+<p>原因是当传入的命令行参数包含非 Unicode 字符时，
+<code>std::env::args</code> 会直接崩溃，如果有这种特殊需求，建议大家使用
+<code>std::env::args_os</code>，该方法产生的数组将包含
+<code>OsString</code> 类型，而不是之前的 <code>String</code>
+类型，前者对于非 Unicode 字符会有更好的处理。</p>
+<p>至于为啥我们不用，两个理由，你信哪个：1.
+用户爱输入啥输入啥，反正崩溃了，他就知道自己错了 2. <code>args_os</code>
+会引入额外的跨平台复杂性</p>
+</blockquote>
+<p><code>collect</code>
+方法其实并不是<code>std::env</code>包提供的，而是迭代器自带的方法(<code>env::args()</code>
+会返回一个迭代器)，它会将迭代器消费后转换成我们想要的集合类型，关于迭代器和
+<code>collect</code> 的具体介绍，请参考<a target="_blank" rel="noopener" href="https://course.rs/advance/functional-programing/iterator.html">这里</a>。</p>
+<p>最后，代码中使用 <code>dbg!</code>
+宏来输出读取到的数组内容，来看看长啥样：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">$ </span><span class="language-bash">cargo run</span><br>   Compiling minigrep v0.1.0 (file:///projects/minigrep)<br>    Finished dev [unoptimized + debuginfo] target(s) in 0.61s<br>     Running `target/debug/minigrep`<br>[src/main.rs:5] args = [<br>    &quot;target/debug/minigrep&quot;,<br>]<br><span class="hljs-meta prompt_">$ </span><span class="language-bash">cargo run -- needle haystack</span><br>   Compiling minigrep v0.1.0 (file:///projects/minigrep)<br>    Finished dev [unoptimized + debuginfo] target(s) in 1.57s<br>     Running `target/debug/minigrep needle haystack`<br>[src/main.rs:5] args = [<br>    &quot;target/debug/minigrep&quot;,<br>    &quot;needle&quot;,<br>    &quot;haystack&quot;,<br>]<br></code></pre></td></tr></table></figure>
+<p>上面两个版本分别是无参数和两个参数，其中无参数版本实际上也会读取到一个字符串，仔细看，是不是长得很像我们的程序名，Bingo!
+<code>env::args</code> 读取到的参数中第一个就是程序的可执行路径名。</p>
+<h2 id="存储读取到的参数">1.2 存储读取到的参数</h2>
+<p>在编程中，给予清晰合理的变量名是一项基本功，咱总不能到处都是
+<code>args[1]</code> 、<code>args[2]</code> 这样的糟糕代码吧。</p>
+<p>因此我们需要两个变量来存储文件路径和待搜索的字符串:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">use</span> std::env;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">args</span>: <span class="hljs-type">Vec</span>&lt;<span class="hljs-type">String</span>&gt; = env::<span class="hljs-title function_ invoke__">args</span>().<span class="hljs-title function_ invoke__">collect</span>();<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">query</span> = &amp;args[<span class="hljs-number">1</span>];<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">file_path</span> = &amp;args[<span class="hljs-number">2</span>];<br><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Searching for &#123;&#125;&quot;</span>, query);<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;In file &#123;&#125;&quot;</span>, file_path);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>很简单的代码，来运行下:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">$ </span><span class="language-bash">cargo run -- <span class="hljs-built_in">test</span> sample.txt</span><br>   Compiling minigrep v0.1.0 (file:///projects/minigrep)<br>    Finished dev [unoptimized + debuginfo] target(s) in 0.0s<br>     Running `target/debug/minigrep test sample.txt`<br>Searching for test<br>In file sample.txt<br></code></pre></td></tr></table></figure>
+<p>输出结果很清晰的说明了我们的目标：在文件 <code>sample.txt</code>
+中搜索包含 <code>test</code> 字符串的内容。</p>
+<p>事实上，就算作为一个简单的程序，它也太过于简单了，例如用户不提供任何参数怎么办？因此，错误处理显然是不可少的，但是在添加之前，先来看看如何读取文件内容。</p>
+<h2 id="文件读取">1.3 文件读取</h2>
+<p>在项目根目录创建 <code>poem.txt</code> 文件。</p>
+<p>接下来修改 <code>main.rs</code> 来读取文件内容：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">use</span> std::env;<br><span class="hljs-keyword">use</span> std::fs;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-comment">// --省略之前的内容--</span><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;In file &#123;&#125;&quot;</span>, file_path);<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">contents</span> = fs::<span class="hljs-title function_ invoke__">read_to_string</span>(file_path)<br>        .<span class="hljs-title function_ invoke__">expect</span>(<span class="hljs-string">&quot;Should have been able to read the file&quot;</span>);<br><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;With text:\n&#123;contents&#125;&quot;</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>首先，通过 <code>use std::fs</code> 引入文件操作包，然后通过
+<code>fs::read_to_string</code> 读取指定的文件内容，最后返回的
+<code>contents</code> 是 <code>std::io::Result&lt;String&gt;</code>
+类型。</p>
+<p>运行下试试，这里无需输入第二个参数，因为我们还没有实现查询功能:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">$ </span><span class="language-bash">cargo run -- the poem.txt</span><br>   Compiling minigrep v0.1.0 (file:///projects/minigrep)<br>    Finished dev [unoptimized + debuginfo] target(s) in 0.0s<br>     Running `target/debug/minigrep the poem.txt`<br>Searching for the<br>In file poem.txt<br>With text:<br>I&#x27;m nobody! Who are you?<br>Are you nobody, too?<br>Then there&#x27;s a pair of us - don&#x27;t tell!<br>They&#x27;d banish us, you know.<br><br>How dreary to be somebody!<br>How public, like a frog<br>To tell your name the livelong day<br>To an admiring bog!<br></code></pre></td></tr></table></figure>
+<h1 id="增加模块化和错误处理">2.增加模块化和错误处理</h1>
+<p>但凡稍微没那么糟糕的程序，都应该具有代码模块化和错误处理，不然连玩具都谈不上。</p>
+<p>梳理我们的代码和目标后，可以整理出大致四个改进点:</p>
+<ul>
+<li><strong>单一且庞大的函数</strong>。对于 <code>minigrep</code>
+程序而言， <code>main</code>
+函数当前执行两个任务：解析命令行参数和读取文件。但随着代码的增加，<code>main</code>
+函数承载的功能也将快速增加。从软件工程角度来看，一个函数具有的功能越多，越是难以阅读和维护。因此最好的办法是将大的函数拆分成更小的功能单元。</li>
+<li><strong>配置变量散乱在各处</strong>。还有一点要考虑的是，当前
+<code>main</code>
+函数中的变量都是独立存在的，这些变量很可能被整个程序所访问，在这个背景下，独立的变量越多，越是难以维护，因此我们还可以将这些用于配置的变量整合到一个结构体中。</li>
+<li><strong>细化错误提示</strong>。 目前的实现中，我们使用
+<code>expect</code>
+方法来输出文件读取失败时的错误信息，这个没问题，但是无论任何情况下，都只输出
+<code>Should have been able to read the file</code>
+这条错误提示信息，显然是有问题的，毕竟文件不存在、无权限等等都是可能的错误，一条大一统的消息无法给予用户更多的提示。</li>
+<li><strong>使用错误而不是异常</strong>。
+假如用户不给任何命令行参数，那我们的程序显然会无情崩溃，原因很简单：<code>index out of bounds</code>，一个数组访问越界的
+<code>panic</code>，但问题来了，用户能看懂吗？甚至于未来接收的维护者能看懂吗？因此需要增加合适的错误处理代码，来给予使用者给详细友善的提示。还有就是需要在一个统一的位置来处理所有错误，利人利己！</li>
+</ul>
+<h2 id="分离-main-函数">2.1 分离 main 函数</h2>
+<p>关于如何处理庞大的 <code>main</code> 函数，Rust
+社区给出了统一的指导方案:</p>
+<ul>
+<li>将程序分割为 <code>main.rs</code> 和
+<code>lib.rs</code>，并将程序的逻辑代码移动到后者内</li>
+<li>命令行解析属于非常基础的功能，严格来说不算是逻辑代码的一部分，因此还可以放在
+<code>main.rs</code> 中</li>
+</ul>
+<p>按照这个方案，将我们的代码重新梳理后，可以得出 <code>main</code>
+函数应该包含的功能:</p>
+<ul>
+<li>解析命令行参数</li>
+<li>初始化其它配置</li>
+<li>调用 <code>lib.rs</code> 中的 <code>run</code>
+函数，以启动逻辑代码的运行</li>
+<li>如果 <code>run</code> 返回一个错误，需要对该错误进行处理</li>
+</ul>
+<p>这个方案有一个很优雅的名字: 关注点分离(Separation of
+Concerns)。简而言之，<code>main.rs</code>
+负责启动程序，<code>lib.rs</code>
+负责逻辑代码的运行。从测试的角度而言，这种分离也非常合理：
+<code>lib.rs</code> 中的主体逻辑代码可以得到简单且充分的测试，至于
+<code>main.rs</code>
+？确实没办法针对其编写额外的测试代码，但是它的代码也很少啊，很容易就能保证它的正确性。</p>
+<blockquote>
+<p>关于如何在 Rust
+中编写测试代码，请参见如下章节：https://course.rs/test/intro.html</p>
+</blockquote>
+<h3 id="分离命令行解析">分离命令行解析</h3>
+<p>根据之前的分析，我们需要将命令行解析的代码分离到一个单独的函数，然后将该函数放置在
+<code>main.rs</code> 中：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-comment">// in main.rs</span><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">args</span>: <span class="hljs-type">Vec</span>&lt;<span class="hljs-type">String</span>&gt; = env::<span class="hljs-title function_ invoke__">args</span>().<span class="hljs-title function_ invoke__">collect</span>();<br><br>    <span class="hljs-keyword">let</span> (query, file_path) = <span class="hljs-title function_ invoke__">parse_config</span>(&amp;args);<br><br>    <span class="hljs-comment">// --省略--</span><br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">parse_config</span>(args: &amp;[<span class="hljs-type">String</span>]) <span class="hljs-punctuation">-&gt;</span> (&amp;<span class="hljs-type">str</span>, &amp;<span class="hljs-type">str</span>) &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">query</span> = &amp;args[<span class="hljs-number">1</span>];<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">file_path</span> = &amp;args[<span class="hljs-number">2</span>];<br><br>    (query, file_path)<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>经过分离后，之前的设计目标完美达成，即精简了 <code>main</code>
+函数，又将配置相关的代码放在了 <code>main.rs</code> 文件里。</p>
+<h3 id="聚合配置变量">聚合配置变量</h3>
+<p>前文提到，配置变量并不适合分散的到处都是，因此使用一个结构体来统一存放是非常好的选择，这样修改后，后续的使用以及未来的代码维护都将更加简单明了。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">args</span>: <span class="hljs-type">Vec</span>&lt;<span class="hljs-type">String</span>&gt; = env::<span class="hljs-title function_ invoke__">args</span>().<span class="hljs-title function_ invoke__">collect</span>();<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">config</span> = <span class="hljs-title function_ invoke__">parse_config</span>(&amp;args);<br><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Searching for &#123;&#125;&quot;</span>, config.query);<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;In file &#123;&#125;&quot;</span>, config.file_path);<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">contents</span> = fs::<span class="hljs-title function_ invoke__">read_to_string</span>(config.file_path)<br>        .<span class="hljs-title function_ invoke__">expect</span>(<span class="hljs-string">&quot;Should have been able to read the file&quot;</span>);<br><br>    <span class="hljs-comment">// --snip--</span><br>&#125;<br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Config</span> &#123;<br>    query: <span class="hljs-type">String</span>,<br>    file_path: <span class="hljs-type">String</span>,<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">parse_config</span>(args: &amp;[<span class="hljs-type">String</span>]) <span class="hljs-punctuation">-&gt;</span> Config &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">query</span> = args[<span class="hljs-number">1</span>].<span class="hljs-title function_ invoke__">clone</span>();<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">file_path</span> = args[<span class="hljs-number">2</span>].<span class="hljs-title function_ invoke__">clone</span>();<br><br>    Config &#123; query, file_path &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>值得注意的是，<code>Config</code> 中存储的并不是
+<code>&amp;str</code> 这样的引用类型，而是一个 <code>String</code>
+字符串，也就是 <code>Config</code>
+并没有去借用外部的字符串，而是拥有内部字符串的所有权。<code>clone</code>
+方法的使用也可以佐证这一点。大家可以尝试不用 <code>clone</code>
+方法，看看该如何解决相关的报错 :D</p>
+<blockquote>
+<p><code>clone</code> 的得与失</p>
+<p>在上面的代码中，除了使用 <code>clone</code>
+，还有其它办法来达成同样的目的，但 <code>clone</code>
+无疑是最简单的方法：直接完整的复制目标数据，无需被所有权、借用等问题所困扰，但是它也有其缺点，那就是有一定的性能损耗。</p>
+<p>因此是否使用 <code>clone</code>
+更多是一种性能上的权衡，对于上面的使用而言，由于是配置的初始化，因此整个程序只需要执行一次，性能损耗几乎是可以忽略不计的。</p>
+<p>总之，判断是否使用 <code>clone</code>:</p>
+<ul>
+<li>是否严肃的项目，玩具项目直接用 <code>clone</code>
+就行，简单不好吗？</li>
+<li>要看所在的代码路径是否是热点路径(hot
+path)，例如执行次数较多的显然就是热点路径，热点路径就值得去使用性能更好的实现方式</li>
+</ul>
+</blockquote>
+<p>好了，言归正传，从 <code>C</code>
+语言过来的同学可能会觉得上面的代码已经很棒了，但是从 OO
+语言角度来说，还差了那么一点意思。</p>
+<p>下面我们试着来优化下，通过构造函数来初始化一个 <code>Config</code>
+实例，而不是直接通过函数返回实例，典型的，标准库中的
+<code>String::new</code> 函数就是一个范例。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">args</span>: <span class="hljs-type">Vec</span>&lt;<span class="hljs-type">String</span>&gt; = env::<span class="hljs-title function_ invoke__">args</span>().<span class="hljs-title function_ invoke__">collect</span>();<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">config</span> = Config::<span class="hljs-title function_ invoke__">new</span>(&amp;args);<br><br>    <span class="hljs-comment">// --snip--</span><br>&#125;<br><br><span class="hljs-comment">// --snip--</span><br><br><span class="hljs-keyword">impl</span> <span class="hljs-title class_">Config</span> &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">new</span>(args: &amp;[<span class="hljs-type">String</span>]) <span class="hljs-punctuation">-&gt;</span> Config &#123;<br>        <span class="hljs-keyword">let</span> <span class="hljs-variable">query</span> = args[<span class="hljs-number">1</span>].<span class="hljs-title function_ invoke__">clone</span>();<br>        <span class="hljs-keyword">let</span> <span class="hljs-variable">file_path</span> = args[<span class="hljs-number">2</span>].<span class="hljs-title function_ invoke__">clone</span>();<br><br>        Config &#123; query, file_path &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>修改后，类似 <code>String::new</code> 的调用，我们可以通过
+<code>Config::new</code> 来创建一个实例，看起来代码是不是更有那味儿了
+：）</p>
+<h2 id="错误处理">2.2 错误处理</h2>
+<p>回顾一下，如果用户不输入任何命令行参数，我们的程序会怎么样？</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">$ </span><span class="language-bash">cargo run</span><br>   Compiling minigrep v0.1.0 (file:///projects/minigrep)<br>    Finished dev [unoptimized + debuginfo] target(s) in 0.0s<br>     Running `target/debug/minigrep`<br>thread &#x27;main&#x27; panicked at &#x27;index out of bounds: the len is 1 but the index is 1&#x27;, src/main.rs:27:21<br>note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace<br></code></pre></td></tr></table></figure>
+<p>结果喜闻乐见，由于 <code>args</code>
+数组没有任何元素，因此通过索引访问时，会直接报出数组访问越界的
+<code>panic</code>。</p>
+<p>报错信息对于开发者会很明确，但是对于使用者而言，就相当难理解了，下面一起来解决它。</p>
+<h3 id="改进报错信息"><a target="_blank" rel="noopener" href="https://course.rs/basic-practice/refactoring.html#改进报错信息">改进报错信息</a></h3>
+<p>还记得在错误处理章节，我们提到过 <code>panic</code> 的两种用法:
+被动触发和主动调用嘛？上面代码的出现方式很明显是被动触发，这种报错信息是不可控的，下面我们先改成主动调用的方式:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-comment">// in main.rs</span><br> <span class="hljs-comment">// --snip--</span><br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">new</span>(args: &amp;[<span class="hljs-type">String</span>]) <span class="hljs-punctuation">-&gt;</span> Config &#123;<br>        <span class="hljs-keyword">if</span> args.<span class="hljs-title function_ invoke__">len</span>() &lt; <span class="hljs-number">3</span> &#123;<br>            <span class="hljs-built_in">panic!</span>(<span class="hljs-string">&quot;not enough arguments&quot;</span>);<br>        &#125;<br>        <span class="hljs-comment">// --snip--</span><br></code></pre></td></tr></table></figure>
+<p>目的很明确，一旦传入的参数数组长度小于
+3，则报错并让程序崩溃推出，这样后续的数组访问就不会再越界了。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">$ </span><span class="language-bash">cargo run</span><br>   Compiling minigrep v0.1.0 (file:///projects/minigrep)<br>    Finished dev [unoptimized + debuginfo] target(s) in 0.0s<br>     Running `target/debug/minigrep`<br>thread &#x27;main&#x27; panicked at &#x27;not enough arguments&#x27;, src/main.rs:26:13<br>note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace<br></code></pre></td></tr></table></figure>
+<p>不错，用户看到了更为明确的提示，但是还是有一大堆 <code>debug</code>
+输出，这些我们其实是不想让用户看到的。这么看来，想要输出对用户友好的信息,
+<code>panic</code>
+是不太适合的，它更适合告知开发者，哪里出现了问题。</p>
+<h3 id="返回-result-来替代直接-panic">返回 Result 来替代直接 panic</h3>
+<p>那只能祭出之前学过的错误处理大法了，也就是返回一个
+<code>Result</code>：成功时包含 <code>Config</code>
+实例，失败时包含一条错误信息。</p>
+<p>有一点需要额外注意下，从代码惯例的角度出发，<code>new</code>
+往往不会失败，毕竟新建一个实例没道理失败，对不？因此修改为
+<code>build</code> 会更加合适。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">impl</span> <span class="hljs-title class_">Config</span> &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">build</span>(args: &amp;[<span class="hljs-type">String</span>]) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">Result</span>&lt;Config, &amp;<span class="hljs-symbol">&#x27;static</span> <span class="hljs-type">str</span>&gt; &#123;<br>        <span class="hljs-keyword">if</span> args.<span class="hljs-title function_ invoke__">len</span>() &lt; <span class="hljs-number">3</span> &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-title function_ invoke__">Err</span>(<span class="hljs-string">&quot;not enough arguments&quot;</span>);<br>        &#125;<br><br>        <span class="hljs-keyword">let</span> <span class="hljs-variable">query</span> = args[<span class="hljs-number">1</span>].<span class="hljs-title function_ invoke__">clone</span>();<br>        <span class="hljs-keyword">let</span> <span class="hljs-variable">file_path</span> = args[<span class="hljs-number">2</span>].<span class="hljs-title function_ invoke__">clone</span>();<br><br>        <span class="hljs-title function_ invoke__">Ok</span>(Config &#123; query, file_path &#125;)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这里的 <code>Result</code> 可能包含一个 <code>Config</code>
+实例，也可能包含一条错误信息
+<code>&amp;static str</code>，不熟悉这种字符串类型的同学可以回头看看字符串章节，代码中的字符串字面量都是该类型，且拥有
+<code>'static</code> 生命周期。</p>
+<h3 id="处理返回的-result"><a target="_blank" rel="noopener" href="https://course.rs/basic-practice/refactoring.html#处理返回的-result">处理返回的
+Result</a></h3>
+<p>接下来就是在调用 <code>build</code> 函数时，对返回的
+<code>Result</code> 进行处理了，目的就是给出准确且友好的报错提示,
+为了让大家更好的回顾我们修改过的内容，这里给出整体代码:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">use</span> std::env;<br><span class="hljs-keyword">use</span> std::fs;<br><span class="hljs-keyword">use</span> std::process;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">args</span>: <span class="hljs-type">Vec</span>&lt;<span class="hljs-type">String</span>&gt; = env::<span class="hljs-title function_ invoke__">args</span>().<span class="hljs-title function_ invoke__">collect</span>();<br><br>    <span class="hljs-comment">// 对 build 返回的 `Result` 进行处理</span><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">config</span> = Config::<span class="hljs-title function_ invoke__">build</span>(&amp;args).<span class="hljs-title function_ invoke__">unwrap_or_else</span>(|err| &#123;<br>        <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Problem parsing arguments: &#123;err&#125;&quot;</span>);<br>        process::<span class="hljs-title function_ invoke__">exit</span>(<span class="hljs-number">1</span>);<br>    &#125;);<br><br><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Searching for &#123;&#125;&quot;</span>, config.query);<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;In file &#123;&#125;&quot;</span>, config.file_path);<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">contents</span> = fs::<span class="hljs-title function_ invoke__">read_to_string</span>(config.file_path)<br>        .<span class="hljs-title function_ invoke__">expect</span>(<span class="hljs-string">&quot;Should have been able to read the file&quot;</span>);<br><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;With text:\n&#123;contents&#125;&quot;</span>);<br>&#125;<br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Config</span> &#123;<br>    query: <span class="hljs-type">String</span>,<br>    file_path: <span class="hljs-type">String</span>,<br>&#125;<br><br><span class="hljs-keyword">impl</span> <span class="hljs-title class_">Config</span> &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">build</span>(args: &amp;[<span class="hljs-type">String</span>]) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">Result</span>&lt;Config, &amp;<span class="hljs-symbol">&#x27;static</span> <span class="hljs-type">str</span>&gt; &#123;<br>        <span class="hljs-keyword">if</span> args.<span class="hljs-title function_ invoke__">len</span>() &lt; <span class="hljs-number">3</span> &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-title function_ invoke__">Err</span>(<span class="hljs-string">&quot;not enough arguments&quot;</span>);<br>        &#125;<br><br>        <span class="hljs-keyword">let</span> <span class="hljs-variable">query</span> = args[<span class="hljs-number">1</span>].<span class="hljs-title function_ invoke__">clone</span>();<br>        <span class="hljs-keyword">let</span> <span class="hljs-variable">file_path</span> = args[<span class="hljs-number">2</span>].<span class="hljs-title function_ invoke__">clone</span>();<br><br>        <span class="hljs-title function_ invoke__">Ok</span>(Config &#123; query, file_path &#125;)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>上面代码有几点值得注意:</p>
+<ul>
+<li>当 <code>Result</code> 包含错误时，我们不再调用 <code>panic</code>
+让程序崩溃，而是通过 <code>process::exit(1)</code> 来终结进程，其中
+<code>1</code> 是一个信号值(事实上非 0
+值都可以)，通知调用我们程序的进程，程序是因为错误而退出的。</li>
+<li><code>unwrap_or_else</code> 是定义在 <code>Result&lt;T,E&gt;</code>
+上的常用方法，如果 <code>Result</code> 是
+<code>Ok</code>，那该方法就类似 <code>unwrap</code>：返回
+<code>Ok</code> 内部的值；如果是 <code>Err</code>，就调用<a target="_blank" rel="noopener" href="https://course.rs/advance/functional-programing/closure.html">闭包</a>中的自定义代码对错误进行进一步处理</li>
+</ul>
+<p>综上可知，<code>config</code> 变量的值是一个 <code>Config</code>
+实例，而 <code>unwrap_or_else</code> 闭包中的 <code>err</code>
+参数，它的类型是 <code>'static str</code>，值是 "not enough arguments"
+那个字符串字面量。</p>
+<p>运行后，可以看到以下输出：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">$ </span><span class="language-bash">cargo run</span><br>   Compiling minigrep v0.1.0 (file:///projects/minigrep)<br>    Finished dev [unoptimized + debuginfo] target(s) in 0.48s<br>     Running `target/debug/minigrep`<br>Problem parsing arguments: not enough arguments<br></code></pre></td></tr></table></figure>
+<p>终于，我们得到了自己想要的输出：既告知了用户为何报错，又消除了多余的
+debug 信息，非常棒。可能有用户疑惑，<code>cargo run</code>
+底下还有一大堆 <code>debug</code> 信息呢，实际上，这是
+<code>cargo run</code>
+自带的，大家可以试试编译成二进制可执行文件后再调用，会是什么效果。</p>
+<h2 id="分离主体逻辑"><a target="_blank" rel="noopener" href="https://course.rs/basic-practice/refactoring.html#分离主体逻辑">分离主体逻辑</a></h2>
+<p>接下来可以继续精简 <code>main</code> 函数，那就是将主体逻辑(
+例如业务逻辑 )从 <code>main</code> 中分离出去，这样 <code>main</code>
+函数就保留主流程调用，非常简洁。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-comment">// in main.rs</span><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">args</span>: <span class="hljs-type">Vec</span>&lt;<span class="hljs-type">String</span>&gt; = env::<span class="hljs-title function_ invoke__">args</span>().<span class="hljs-title function_ invoke__">collect</span>();<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">config</span> = Config::<span class="hljs-title function_ invoke__">build</span>(&amp;args).<span class="hljs-title function_ invoke__">unwrap_or_else</span>(|err| &#123;<br>        <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Problem parsing arguments: &#123;err&#125;&quot;</span>);<br>        process::<span class="hljs-title function_ invoke__">exit</span>(<span class="hljs-number">1</span>);<br>    &#125;);<br><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Searching for &#123;&#125;&quot;</span>, config.query);<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;In file &#123;&#125;&quot;</span>, config.file_path);<br><br>    <span class="hljs-title function_ invoke__">run</span>(config);<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">run</span>(config: Config) &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">contents</span> = fs::<span class="hljs-title function_ invoke__">read_to_string</span>(config.file_path)<br>        .<span class="hljs-title function_ invoke__">expect</span>(<span class="hljs-string">&quot;Should have been able to read the file&quot;</span>);<br><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;With text:\n&#123;contents&#125;&quot;</span>);<br>&#125;<br><br><span class="hljs-comment">// --snip--</span><br></code></pre></td></tr></table></figure>
+<p>如上所示，<code>main</code>
+函数仅保留主流程各个环节的调用，一眼看过去非常简洁清晰。</p>
+<p>继续之前，先请大家仔细看看 <code>run</code>
+函数，你们觉得还缺少什么？提示：参考 <code>build</code>
+函数的改进过程。</p>
+<h3 id="使用-和特征对象来返回错误"><a target="_blank" rel="noopener" href="https://course.rs/basic-practice/refactoring.html#使用--和特征对象来返回错误">使用
+? 和特征对象来返回错误</a></h3>
+<p>答案就是 <code>run</code>
+函数没有错误处理，因为在文章开头我们提到过，错误处理最好统一在一个地方完成，这样极其有利于后续的代码维护。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-comment">//in main.rs</span><br><span class="hljs-keyword">use</span> std::error::Error;<br><br><span class="hljs-comment">// --snip--</span><br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">run</span>(config: Config) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">Result</span>&lt;(), <span class="hljs-type">Box</span>&lt;<span class="hljs-keyword">dyn</span> Error&gt;&gt; &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">contents</span> = fs::<span class="hljs-title function_ invoke__">read_to_string</span>(config.file_path)?;<br><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;With text:\n&#123;contents&#125;&quot;</span>);<br><br>    <span class="hljs-title function_ invoke__">Ok</span>(())<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>值得注意的是这里的
+<code>Result&lt;(), Box&lt;dyn Error&gt;&gt;</code>
+返回类型，首先我们的程序无需返回任何值，但是为了满足
+<code>Result&lt;T,E&gt;</code> 的要求，因此使用了 <code>Ok(())</code>
+返回一个单元类型 <code>()</code>。</p>
+<p>最重要的是 <code>Box&lt;dyn Error&gt;</code>，
+如果按照顺序学到这里，大家应该知道这是一个<code>Error</code>
+的特征对象(为了使用 <code>Error</code>，我们通过
+<code>use std::error::Error;</code>
+进行了引入)，它表示函数返回一个类型，该类型实现了 <code>Error</code>
+特征，这样我们就无需指定具体的错误类型，否则你还需要查看
+<code>fs::read_to_string</code> 返回的错误类型，然后复制到我们的
+<code>run</code>
+函数返回中，这么做一个是麻烦，最主要的是，一旦这么做，意味着我们无法在上层调用时统一处理错误，但是
+<code>Box&lt;dyn Error&gt;</code>
+不同，其它函数也可以返回这个特征对象，然后调用者就可以使用统一的方式来处理不同函数返回的
+<code>Box&lt;dyn Error&gt;</code>。</p>
+<p>明白了 <code>Box&lt;dyn Error&gt;</code>
+的重要战略地位，接下来大家分析下，<code>fs::read_to_string</code>
+返回的具体错误类型是怎么被转化为 <code>Box&lt;dyn Error&gt;</code>
+的？其实原因在之前章节都有讲过，这里就不直接给出答案了，参见 <a target="_blank" rel="noopener" href="https://course.rs/basic/result-error/result.html#传播界的大明星-">?-传播界的大明星</a>。</p>
+<p>运行代码看看效果：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">$ </span><span class="language-bash">cargo run the poem.txt</span><br>   Compiling minigrep v0.1.0 (file:///projects/minigrep)<br>warning: unused `Result` that must be used<br><span class="hljs-meta prompt_">  --&gt; </span><span class="language-bash">src/main.rs:19:5</span><br>   |<br>19 |     run(config);<br>   |     ^^^^^^^^^^^^<br>   |<br>   = note: `#[warn(unused_must_use)]` on by default<br>   = note: this `Result` may be an `Err` variant, which should be handled<br><br>warning: `minigrep` (bin &quot;minigrep&quot;) generated 1 warning<br>    Finished dev [unoptimized + debuginfo] target(s) in 0.71s<br>     Running `target/debug/minigrep the poem.txt`<br>Searching for the<br>In file poem.txt<br>With text:<br>I&#x27;m nobody! Who are you?<br>Are you nobody, too?<br>Then there&#x27;s a pair of us - don&#x27;t tell!<br>They&#x27;d banish us, you know.<br><br>How dreary to be somebody!<br>How public, like a frog<br>To tell your name the livelong day<br>To an admiring bog!<br></code></pre></td></tr></table></figure>
+<p>没任何问题，不过 Rust 编译器也给出了善意的提示，那就是
+<code>Result</code> 并没有被使用，这可能意味着存在错误的潜在可能性。</p>
+<h3 id="处理返回的错误"><a target="_blank" rel="noopener" href="https://course.rs/basic-practice/refactoring.html#处理返回的错误">处理返回的错误</a></h3>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-comment">// --snip--</span><br><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Searching for &#123;&#125;&quot;</span>, config.query);<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;In file &#123;&#125;&quot;</span>, config.file_path);<br><br>    <span class="hljs-keyword">if</span> <span class="hljs-keyword">let</span> <span class="hljs-variable">Err</span>(e) = <span class="hljs-title function_ invoke__">run</span>(config) &#123;<br>        <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Application error: &#123;e&#125;&quot;</span>);<br>        process::<span class="hljs-title function_ invoke__">exit</span>(<span class="hljs-number">1</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>先回忆下在 <code>build</code>
+函数调用时，我们怎么处理错误的？然后与这里的方式做一下对比，是不是发现了一些区别？</p>
+<p>没错 <code>if let</code>
+的使用让代码变得更简洁，可读性也更加好，原因是，我们并不关注
+<code>run</code> 返回的 <code>Ok</code> 值，因此只需要用
+<code>if let</code> 去匹配是否存在错误即可。</p>
+<p>好了，截止目前，代码看起来越来越美好了，距离我们的目标也只差一个：将主体逻辑代码分离到一个独立的文件
+<code>lib.rs</code> 中。</p>
+<h2 id="分离逻辑代码到库包中"><a target="_blank" rel="noopener" href="https://course.rs/basic-practice/refactoring.html#分离逻辑代码到库包中">分离逻辑代码到库包中</a></h2>
+<blockquote>
+<p>对于 Rust 的代码组织( 包和模块 )还不熟悉的同学，强烈建议回头温习下<a target="_blank" rel="noopener" href="https://course.rs/basic/crate-module/intro.html">这一章</a>。</p>
+</blockquote>
+<p>首先，创建一个 <code>src/lib.rs</code> 文件，然后将所有的非
+<code>main</code> 函数都移动到其中。代码大概类似：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">use</span> std::error::Error;<br><span class="hljs-keyword">use</span> std::fs;<br><br><span class="hljs-keyword">pub</span> <span class="hljs-keyword">struct</span> <span class="hljs-title class_">Config</span> &#123;<br>    <span class="hljs-keyword">pub</span> query: <span class="hljs-type">String</span>,<br>    <span class="hljs-keyword">pub</span> file_path: <span class="hljs-type">String</span>,<br>&#125;<br><br><span class="hljs-keyword">impl</span> <span class="hljs-title class_">Config</span> &#123;<br>    <span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">build</span>(args: &amp;[<span class="hljs-type">String</span>]) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">Result</span>&lt;Config, &amp;<span class="hljs-symbol">&#x27;static</span> <span class="hljs-type">str</span>&gt; &#123;<br>        <span class="hljs-comment">// --snip--</span><br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">run</span>(config: Config) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">Result</span>&lt;(), <span class="hljs-type">Box</span>&lt;<span class="hljs-keyword">dyn</span> Error&gt;&gt; &#123;<br>    <span class="hljs-comment">// --snip--</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>为了内容的简洁性，这里忽略了具体的实现，下一步就是在
+<code>main.rs</code> 中引入 <code>lib.rs</code> 中定义的
+<code>Config</code> 类型。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">use</span> std::env;<br><span class="hljs-keyword">use</span> std::process;<br><br><span class="hljs-keyword">use</span> minigrep::Config;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-comment">// --snip--</span><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">args</span>: <span class="hljs-type">Vec</span>&lt;<span class="hljs-type">String</span>&gt; = env::<span class="hljs-title function_ invoke__">args</span>().<span class="hljs-title function_ invoke__">collect</span>();<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">config</span> = Config::<span class="hljs-title function_ invoke__">build</span>(&amp;args).<span class="hljs-title function_ invoke__">unwrap_or_else</span>(|err| &#123;<br>        <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Problem parsing arguments: &#123;err&#125;&quot;</span>);<br>        process::<span class="hljs-title function_ invoke__">exit</span>(<span class="hljs-number">1</span>);<br>    &#125;);<br><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Searching for &#123;&#125;&quot;</span>, config.query);<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;In file &#123;&#125;&quot;</span>, config.file_path);<br><br>    <span class="hljs-keyword">if</span> <span class="hljs-keyword">let</span> <span class="hljs-variable">Err</span>(e) = minigrep::<span class="hljs-title function_ invoke__">run</span>(config) &#123;<br>        <span class="hljs-comment">// --snip--</span><br>        <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Application error: &#123;e&#125;&quot;</span>);<br>        process::<span class="hljs-title function_ invoke__">exit</span>(<span class="hljs-number">1</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>很明显，这里的 <code>mingrep::run</code> 的调用，以及
+<code>Config</code>
+的引入，跟使用其它第三方包已经没有任何区别，也意味着我们成功的将逻辑代码放置到一个独立的库包中，其它包只要引入和调用就行。</p>
+<p>呼，一顿书写猛如虎，回头一看。。。这么长的篇幅就写了这么点简单的代码？？只能说，我也希望像很多国内的大学教材一样，只要列出定理和解题方法，然后留下足够的习题，就万事大吉了，但是咱们不行。</p>
+<p>接下来，到了最喜(令)闻(人)乐(讨)见(厌)的环节：写测试代码，一起来开心吧。</p>
+<h1 id="测试驱动开发"><a target="_blank" rel="noopener" href="https://course.rs/basic-practice/tests.html#测试驱动开发">测试驱动开发</a></h1>
+<blockquote>
+<p>开始之前，推荐大家先了解下<a target="_blank" rel="noopener" href="https://course.rs/test/intro.html">如何在 Rust
+中编写测试代码</a>，这块儿内容不复杂，先了解下有利于本章的继续阅读</p>
+</blockquote>
+<p>在之前的章节中，我们完成了对项目结构的重构，并将进入逻辑代码编程的环节，但在此之前，我们需要先编写一些测试代码，也是最近颇为流行的测试驱动开发模式(TDD,
+Test Driven Development)：</p>
+<ol type="1">
+<li>编写一个注定失败的测试，并且失败的原因和你指定的一样</li>
+<li>编写一个成功的测试</li>
+<li>编写你的逻辑代码，直到通过测试</li>
+</ol>
+<p>这三个步骤将在我们的开发过程中不断循环，直到所有的代码都开发完成并成功通过所有测试。</p>
+<h2 id="注定失败的测试用例"><a target="_blank" rel="noopener" href="https://course.rs/basic-practice/tests.html#注定失败的测试用例">注定失败的测试用例</a></h2>
+<p>既然要添加测试，那之前的 <code>println!</code>
+语句将没有大的用处，毕竟 <code>println!</code>
+存在的目的就是为了让我们看到结果是否正确，而现在测试用例将取而代之。</p>
+<p>接下来，在 <code>lib.rs</code> 文件中，添加 <code>tests</code> 模块和
+<code>test</code> 函数:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-meta">#[cfg(test)]</span><br><span class="hljs-keyword">mod</span> tests &#123;<br>    <span class="hljs-keyword">use</span> super::*;<br><br>    <span class="hljs-meta">#[test]</span><br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">one_result</span>() &#123;<br>        <span class="hljs-keyword">let</span> <span class="hljs-variable">query</span> = <span class="hljs-string">&quot;duct&quot;</span>;<br>        <span class="hljs-keyword">let</span> <span class="hljs-variable">contents</span> = <span class="hljs-string">&quot;\</span><br><span class="hljs-string">Rust:</span><br><span class="hljs-string">safe, fast, productive.</span><br><span class="hljs-string">Pick three.&quot;</span>;<br><br>        <span class="hljs-built_in">assert_eq!</span>(<span class="hljs-built_in">vec!</span>[<span class="hljs-string">&quot;safe, fast, productive.&quot;</span>], <span class="hljs-title function_ invoke__">search</span>(query, contents));<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>测试用例将在指定的内容中搜索 <code>duct</code>
+字符串，目测可得：其中有一行内容是包含有目标字符串的。</p>
+<p>但目前为止，还无法运行该测试用例，更何况还想幸灾乐祸的看其失败，原因是
+<code>search</code> 函数还没有实现！毕竟是测试驱动、测试先行。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-comment">// in lib.rs</span><br><span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">search</span>&lt;<span class="hljs-symbol">&#x27;a</span>&gt;(query: &amp;<span class="hljs-type">str</span>, contents: &amp;<span class="hljs-symbol">&#x27;a</span> <span class="hljs-type">str</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">Vec</span>&lt;&amp;<span class="hljs-symbol">&#x27;a</span> <span class="hljs-type">str</span>&gt; &#123;<br>    <span class="hljs-built_in">vec!</span>[]<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>先添加一个简单的 <code>search</code>
+函数实现，非常简单粗暴的返回一个空的数组，显而易见测试用例将成功通过，真是一个居心叵测的测试用例！</p>
+<p>注意这里生命周期 <code>'a</code> 的使用，之前的章节有<a target="_blank" rel="noopener" href="https://course.rs/basic/lifetime.html#函数签名中的生命周期标注">详细介绍</a>，不太明白的同学可以回头看看。</p>
+<p>喔，这么复杂的代码，都用上生命周期了！嘚瑟两下试试：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">$ </span><span class="language-bash">cargo <span class="hljs-built_in">test</span></span><br>   Compiling minigrep v0.1.0 (file:///projects/minigrep)<br>    Finished test [unoptimized + debuginfo] target(s) in 0.97s<br>     Running unittests src/lib.rs (target/debug/deps/minigrep-9cd200e5fac0fc94)<br><br>running 1 test<br>test tests::one_result ... FAILED<br><br>failures:<br><br>---- tests::one_result stdout ----<br>thread &#x27;main&#x27; panicked at &#x27;assertion failed: `(left == right)`<br>  left: `[&quot;safe, fast, productive.&quot;]`,<br> right: `[]`&#x27;, src/lib.rs:44:9<br>note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace<br><br><br>failures:<br>    tests::one_result<br><br>test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s<br><br>error: test failed, to rerun pass `--lib`<br></code></pre></td></tr></table></figure>
+<p>太棒了！它失败了...</p>
+<h2 id="务必成功的测试用例"><a target="_blank" rel="noopener" href="https://course.rs/basic-practice/tests.html#务必成功的测试用例">务必成功的测试用例</a></h2>
+<p>接着就是测试驱动的第二步：编写注定成功的测试。当然，前提条件是实现我们的
+<code>search</code> 函数。它包含以下步骤：</p>
+<ul>
+<li>遍历迭代 <code>contents</code> 的每一行</li>
+<li>检查该行内容是否包含我们的目标字符串</li>
+<li>若包含，则放入返回值列表中，否则忽略</li>
+<li>返回匹配到的返回值列表</li>
+</ul>
+<h3 id="遍历迭代每一行"><a target="_blank" rel="noopener" href="https://course.rs/basic-practice/tests.html#遍历迭代每一行">遍历迭代每一行</a></h3>
+<p>Rust 提供了一个很便利的 <code>lines</code>
+方法将目标字符串进行按行分割:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-comment">// in lib.rs</span><br><span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">search</span>&lt;<span class="hljs-symbol">&#x27;a</span>&gt;(query: &amp;<span class="hljs-type">str</span>, contents: &amp;<span class="hljs-symbol">&#x27;a</span> <span class="hljs-type">str</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">Vec</span>&lt;&amp;<span class="hljs-symbol">&#x27;a</span> <span class="hljs-type">str</span>&gt; &#123;<br>    <span class="hljs-keyword">for</span> <span class="hljs-variable">line</span> <span class="hljs-keyword">in</span> contents.<span class="hljs-title function_ invoke__">lines</span>() &#123;<br>        <span class="hljs-comment">// do something with line</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这里的 <code>lines</code> 返回一个<a target="_blank" rel="noopener" href="https://course.rs/advance/functional-programing/iterator.html">迭代器</a>，关于迭代器在后续章节会详细讲解，现在只要知道
+<code>for</code> 可以遍历取出迭代器中的值即可。</p>
+<h3 id="在每一行中查询目标字符串"><a target="_blank" rel="noopener" href="https://course.rs/basic-practice/tests.html#在每一行中查询目标字符串">在每一行中查询目标字符串</a></h3>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-comment">// in lib.rs</span><br><span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">search</span>&lt;<span class="hljs-symbol">&#x27;a</span>&gt;(query: &amp;<span class="hljs-type">str</span>, contents: &amp;<span class="hljs-symbol">&#x27;a</span> <span class="hljs-type">str</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">Vec</span>&lt;&amp;<span class="hljs-symbol">&#x27;a</span> <span class="hljs-type">str</span>&gt; &#123;<br>    <span class="hljs-keyword">for</span> <span class="hljs-variable">line</span> <span class="hljs-keyword">in</span> contents.<span class="hljs-title function_ invoke__">lines</span>() &#123;<br>        <span class="hljs-keyword">if</span> line.<span class="hljs-title function_ invoke__">contains</span>(query) &#123;<br>            <span class="hljs-comment">// do something with line</span><br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>与之前的 <code>lines</code> 函数类似，Rust 的字符串还提供了
+<code>contains</code> 方法，用于检查 <code>line</code> 是否包含待查询的
+<code>query</code>。</p>
+<p>接下来，只要返回合适的值，就可以完成 <code>search</code>
+函数的编写。</p>
+<h3 id="存储匹配到的结果"><a target="_blank" rel="noopener" href="https://course.rs/basic-practice/tests.html#存储匹配到的结果">存储匹配到的结果</a></h3>
+<p>简单，创建一个 <code>Vec</code> 动态数组，然后将查询到的每一个
+<code>line</code> 推进数组中即可：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-comment">// in lib.rs</span><br><span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">search</span>&lt;<span class="hljs-symbol">&#x27;a</span>&gt;(query: &amp;<span class="hljs-type">str</span>, contents: &amp;<span class="hljs-symbol">&#x27;a</span> <span class="hljs-type">str</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">Vec</span>&lt;&amp;<span class="hljs-symbol">&#x27;a</span> <span class="hljs-type">str</span>&gt; &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">results</span> = <span class="hljs-type">Vec</span>::<span class="hljs-title function_ invoke__">new</span>();<br><br>    <span class="hljs-keyword">for</span> <span class="hljs-variable">line</span> <span class="hljs-keyword">in</span> contents.<span class="hljs-title function_ invoke__">lines</span>() &#123;<br>        <span class="hljs-keyword">if</span> line.<span class="hljs-title function_ invoke__">contains</span>(query) &#123;<br>            results.<span class="hljs-title function_ invoke__">push</span>(line);<br>        &#125;<br>    &#125;<br><br>    results<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>至此，<code>search</code>
+函数已经完成了既定目标，为了检查功能是否正确，运行下我们之前编写的测试用例:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">$ </span><span class="language-bash">cargo <span class="hljs-built_in">test</span></span><br>   Compiling minigrep v0.1.0 (file:///projects/minigrep)<br>    Finished test [unoptimized + debuginfo] target(s) in 1.22s<br>     Running unittests src/lib.rs (target/debug/deps/minigrep-9cd200e5fac0fc94)<br><br>running 1 test<br>test tests::one_result ... ok<br><br>test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s<br><br>     Running unittests src/main.rs (target/debug/deps/minigrep-9cd200e5fac0fc94)<br><br>running 0 tests<br><br>test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s<br><br>   Doc-tests minigrep<br><br>running 0 tests<br><br>test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s<br></code></pre></td></tr></table></figure>
+<p>测试通过，意味着我们的代码也完美运行，接下来就是在 <code>run</code>
+函数中大显身手了。</p>
+<h3 id="在-run-函数中调用-search-函数"><a target="_blank" rel="noopener" href="https://course.rs/basic-practice/tests.html#在-run-函数中调用-search-函数">在
+run 函数中调用 search 函数</a></h3>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-comment">// in src/lib.rs</span><br><span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">run</span>(config: Config) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">Result</span>&lt;(), <span class="hljs-type">Box</span>&lt;<span class="hljs-keyword">dyn</span> Error&gt;&gt; &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">contents</span> = fs::<span class="hljs-title function_ invoke__">read_to_string</span>(config.file_path)?;<br><br>    <span class="hljs-keyword">for</span> <span class="hljs-variable">line</span> <span class="hljs-keyword">in</span> <span class="hljs-title function_ invoke__">search</span>(&amp;config.query, &amp;contents) &#123;<br>        <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;line&#125;&quot;</span>);<br>    &#125;<br><br>    <span class="hljs-title function_ invoke__">Ok</span>(())<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>好，再运行下看看结果，看起来我们距离成功从未如此之近！</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">$ </span><span class="language-bash">cargo run -- frog poem.txt</span><br>   Compiling minigrep v0.1.0 (file:///projects/minigrep)<br>    Finished dev [unoptimized + debuginfo] target(s) in 0.38s<br>     Running `target/debug/minigrep frog poem.txt`<br>How public, like a frog<br></code></pre></td></tr></table></figure>
+<p>酷！成功查询到包含 <code>frog</code> 的行，再来试试 <code>body</code>
+:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">$ </span><span class="language-bash">cargo run -- body poem.txt</span><br>   Compiling minigrep v0.1.0 (file:///projects/minigrep)<br>    Finished dev [unoptimized + debuginfo] target(s) in 0.0s<br>     Running `target/debug/minigrep body poem.txt`<br>I&#x27;m nobody! Who are you?<br>Are you nobody, too?<br>How dreary to be somebody!<br></code></pre></td></tr></table></figure>
+<p>完美，三行，一行不少，为了确保万无一失，再来试试查询一个不存在的单词:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell">cargo run -- monomorphization poem.txt<br>   Compiling minigrep v0.1.0 (file:///projects/minigrep)<br>    Finished dev [unoptimized + debuginfo] target(s) in 0.0s<br>     Running `target/debug/minigrep monomorphization poem.txt`<br></code></pre></td></tr></table></figure>
+<p>至此，章节开头的目标已经全部完成，接下来思考一个小问题：如果要为程序加上大小写不敏感的控制命令，由用户进行输入，该怎么实现比较好呢？毕竟在实际搜索查询中，同时支持大小写敏感和不敏感还是很重要的。</p>
+<p>答案留待下一章节揭晓。</p>
+<h1 id="使用环境变量来增强程序"><a target="_blank" rel="noopener" href="https://course.rs/basic-practice/envs.html#使用环境变量来增强程序">使用环境变量来增强程序</a></h1>
+<p>在上一章节中，留下了一个悬念，该如何实现用户控制的大小写敏感，其实答案很简单，你在其它程序中肯定也遇到过不少，例如如何控制
+<code>panic</code> 后的栈展开？ Rust
+提供的解决方案是通过命令行参数来控制:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">RUST_BACKTRACE=1 cargo run<br></code></pre></td></tr></table></figure>
+<p>与之类似，我们也可以使用环境变量来控制大小写敏感，例如:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">IGNORE_CASE=1 cargo run -- to poem.txt<br></code></pre></td></tr></table></figure>
+<p>既然有了目标，那么一起来看看该如何实现吧。</p>
+<h2 id="编写大小写不敏感的测试用例"><a target="_blank" rel="noopener" href="https://course.rs/basic-practice/envs.html#编写大小写不敏感的测试用例">编写大小写不敏感的测试用例</a></h2>
+<p>还是遵循之前的规则：测试驱动，这次是对一个新的大小写不敏感函数进行测试
+<code>search_case_insensitive</code>。</p>
+<p>还记得 TDD 的测试步骤嘛？首先编写一个注定失败的用例:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-comment">// in src/lib.rs</span><br><span class="hljs-meta">#[cfg(test)]</span><br><span class="hljs-keyword">mod</span> tests &#123;<br>    <span class="hljs-keyword">use</span> super::*;<br><br>    <span class="hljs-meta">#[test]</span><br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">case_sensitive</span>() &#123;<br>        <span class="hljs-keyword">let</span> <span class="hljs-variable">query</span> = <span class="hljs-string">&quot;duct&quot;</span>;<br>        <span class="hljs-keyword">let</span> <span class="hljs-variable">contents</span> = <span class="hljs-string">&quot;\</span><br><span class="hljs-string">Rust:</span><br><span class="hljs-string">safe, fast, productive.</span><br><span class="hljs-string">Pick three.</span><br><span class="hljs-string">Duct tape.&quot;</span>;<br><br>        <span class="hljs-built_in">assert_eq!</span>(<span class="hljs-built_in">vec!</span>[<span class="hljs-string">&quot;safe, fast, productive.&quot;</span>], <span class="hljs-title function_ invoke__">search</span>(query, contents));<br>    &#125;<br><br>    <span class="hljs-meta">#[test]</span><br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">case_insensitive</span>() &#123;<br>        <span class="hljs-keyword">let</span> <span class="hljs-variable">query</span> = <span class="hljs-string">&quot;rUsT&quot;</span>;<br>        <span class="hljs-keyword">let</span> <span class="hljs-variable">contents</span> = <span class="hljs-string">&quot;\</span><br><span class="hljs-string">Rust:</span><br><span class="hljs-string">safe, fast, productive.</span><br><span class="hljs-string">Pick three.</span><br><span class="hljs-string">Trust me.&quot;</span>;<br><br>        <span class="hljs-built_in">assert_eq!</span>(<br>            <span class="hljs-built_in">vec!</span>[<span class="hljs-string">&quot;Rust:&quot;</span>, <span class="hljs-string">&quot;Trust me.&quot;</span>],<br>            <span class="hljs-title function_ invoke__">search_case_insensitive</span>(query, contents)<br>        );<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>可以看到，这里新增了一个 <code>case_insensitive</code> 测试用例，并对
+<code>search_case_insensitive</code>
+进行了测试，结果显而易见，函数都没有实现，自然会失败。</p>
+<p>接着来实现这个大小写不敏感的搜索函数:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">search_case_insensitive</span>&lt;<span class="hljs-symbol">&#x27;a</span>&gt;(<br>    query: &amp;<span class="hljs-type">str</span>,<br>    contents: &amp;<span class="hljs-symbol">&#x27;a</span> <span class="hljs-type">str</span>,<br>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">Vec</span>&lt;&amp;<span class="hljs-symbol">&#x27;a</span> <span class="hljs-type">str</span>&gt; &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">query</span> = query.<span class="hljs-title function_ invoke__">to_lowercase</span>();<br>    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">results</span> = <span class="hljs-type">Vec</span>::<span class="hljs-title function_ invoke__">new</span>();<br><br>    <span class="hljs-keyword">for</span> <span class="hljs-variable">line</span> <span class="hljs-keyword">in</span> contents.<span class="hljs-title function_ invoke__">lines</span>() &#123;<br>        <span class="hljs-keyword">if</span> line.<span class="hljs-title function_ invoke__">to_lowercase</span>().<span class="hljs-title function_ invoke__">contains</span>(&amp;query) &#123;<br>            results.<span class="hljs-title function_ invoke__">push</span>(line);<br>        &#125;<br>    &#125;<br><br>    results<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>跟之前一样，但是引入了一个新的方法 <code>to_lowercase</code>，它会将
+<code>line</code>
+转换成全小写的字符串，类似的方法在其它语言中也差不多，就不再赘述。</p>
+<p>还要注意的是 <code>query</code> 现在是 <code>String</code>
+类型，而不是之前的 <code>&amp;str</code>，因为 <code>to_lowercase</code>
+返回的是 <code>String</code>。</p>
+<p>修改后，再来跑一次测试，看能否通过。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">$ </span><span class="language-bash">cargo <span class="hljs-built_in">test</span></span><br>   Compiling minigrep v0.1.0 (file:///projects/minigrep)<br>    Finished test [unoptimized + debuginfo] target(s) in 1.33s<br>     Running unittests src/lib.rs (target/debug/deps/minigrep-9cd200e5fac0fc94)<br><br>running 2 tests<br>test tests::case_insensitive ... ok<br>test tests::case_sensitive ... ok<br><br>test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s<br><br>     Running unittests src/main.rs (target/debug/deps/minigrep-9cd200e5fac0fc94)<br><br>running 0 tests<br><br>test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s<br><br>   Doc-tests minigrep<br><br>running 0 tests<br><br>test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s<br></code></pre></td></tr></table></figure>
+<p>Ok，TDD的第二步也完成了，测试通过，接下来就是最后一步，在
+<code>run</code>
+中调用新的搜索函数。但是在此之前，要新增一个配置项，用于控制是否开启大小写敏感。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-comment">// in lib.rs</span><br><span class="hljs-keyword">pub</span> <span class="hljs-keyword">struct</span> <span class="hljs-title class_">Config</span> &#123;<br>    <span class="hljs-keyword">pub</span> query: <span class="hljs-type">String</span>,<br>    <span class="hljs-keyword">pub</span> file_path: <span class="hljs-type">String</span>,<br>    <span class="hljs-keyword">pub</span> ignore_case: <span class="hljs-type">bool</span>,<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>接下来就是检查该字段，来判断是否启动大小写敏感：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">run</span>(config: Config) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">Result</span>&lt;(), <span class="hljs-type">Box</span>&lt;<span class="hljs-keyword">dyn</span> Error&gt;&gt; &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">contents</span> = fs::<span class="hljs-title function_ invoke__">read_to_string</span>(config.file_path)?;<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">results</span> = <span class="hljs-keyword">if</span> config.ignore_case &#123;<br>        <span class="hljs-title function_ invoke__">search_case_insensitive</span>(&amp;config.query, &amp;contents)<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-title function_ invoke__">search</span>(&amp;config.query, &amp;contents)<br>    &#125;;<br><br>    <span class="hljs-keyword">for</span> <span class="hljs-variable">line</span> <span class="hljs-keyword">in</span> results &#123;<br>        <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;line&#125;&quot;</span>);<br>    &#125;<br><br>    <span class="hljs-title function_ invoke__">Ok</span>(())<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>现在的问题来了，该如何控制这个配置项呢。这个就要借助于章节开头提到的环境变量，好在
+Rust 的 <code>env</code> 包提供了相应的方法。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">use</span> std::env;<br><span class="hljs-comment">// --snip--</span><br><br><span class="hljs-keyword">impl</span> <span class="hljs-title class_">Config</span> &#123;<br>    <span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">build</span>(args: &amp;[<span class="hljs-type">String</span>]) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">Result</span>&lt;Config, &amp;<span class="hljs-symbol">&#x27;static</span> <span class="hljs-type">str</span>&gt; &#123;<br>        <span class="hljs-keyword">if</span> args.<span class="hljs-title function_ invoke__">len</span>() &lt; <span class="hljs-number">3</span> &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-title function_ invoke__">Err</span>(<span class="hljs-string">&quot;not enough arguments&quot;</span>);<br>        &#125;<br><br>        <span class="hljs-keyword">let</span> <span class="hljs-variable">query</span> = args[<span class="hljs-number">1</span>].<span class="hljs-title function_ invoke__">clone</span>();<br>        <span class="hljs-keyword">let</span> <span class="hljs-variable">file_path</span> = args[<span class="hljs-number">2</span>].<span class="hljs-title function_ invoke__">clone</span>();<br><br>        <span class="hljs-keyword">let</span> <span class="hljs-variable">ignore_case</span> = env::<span class="hljs-title function_ invoke__">var</span>(<span class="hljs-string">&quot;IGNORE_CASE&quot;</span>).<span class="hljs-title function_ invoke__">is_ok</span>();<br><br>        <span class="hljs-title function_ invoke__">Ok</span>(Config &#123;<br>            query,<br>            file_path,<br>            ignore_case,<br>        &#125;)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><code>env::var</code> 没啥好说的，倒是 <code>is_ok</code>
+值得说道下。该方法是 <code>Result</code>
+提供的，用于检查是否有值，有就返回 <code>true</code>，没有则返回
+<code>false</code>，刚好完美符合我们的使用场景，因为我们并不关心
+<code>Ok&lt;T&gt;</code> 中具体的值。</p>
+<p>运行下试试：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">$ </span><span class="language-bash">cargo run -- to poem.txt</span><br>   Compiling minigrep v0.1.0 (file:///projects/minigrep)<br>    Finished dev [unoptimized + debuginfo] target(s) in 0.0s<br>     Running `target/debug/minigrep to poem.txt`<br>Are you nobody, too?<br>How dreary to be somebody!<br></code></pre></td></tr></table></figure>
+<p>看起来没有问题，接下来测试下大小写不敏感:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">$ </span><span class="language-bash">IGNORE_CASE=1 cargo run -- to poem.txt</span><br>Are you nobody, too?<br>How dreary to be somebody!<br>To tell your name the livelong day<br>To an admiring bog!<br></code></pre></td></tr></table></figure>
+<p>大小写不敏感后，查询到的内容明显多了很多，也很符合我们的预期。</p>
+<p>最后，给大家留一个小作业：同时使用命令行参数和环境变量的方式来控制大小写不敏感，其中环境变量的优先级更高，也就是两个都设置的情况下，优先使用环境变量的设置。</p>
+<h1 id="重定向错误信息的输出"><a target="_blank" rel="noopener" href="https://course.rs/basic-practice/stderr.html#重定向错误信息的输出">重定向错误信息的输出</a></h1>
+<p>迄今为止，所有的输出信息，无论 debug 还是 error 类型，都是通过
+<code>println!</code> 宏输出到终端的标准输出( <code>stdout</code>
+)，但是对于程序来说，错误信息更适合输出到标准错误输出(stderr)。</p>
+<p>这样修改后，用户就可以选择将普通的日志类信息输出到日志文件
+1，然后将错误信息输出到日志文件 2，甚至还可以输出到终端命令行。</p>
+<h2 id="目前的错误输出位置"><a target="_blank" rel="noopener" href="https://course.rs/basic-practice/stderr.html#目前的错误输出位置">目前的错误输出位置</a></h2>
+<p>我们先来观察下，目前的输出信息包括错误，是否是如上面所说，都写到标准错误输出。</p>
+<p>测试方式很简单，将标准错误输出的内容重定向到文件中，看看是否包含故意生成的错误信息即可。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">$ </span><span class="language-bash">cargo run &gt; output.txt</span><br></code></pre></td></tr></table></figure>
+<p>首先，这里的运行没有带任何参数，因此会报出类如文件不存在的错误，其次，通过
+<code>&gt;</code> 操作符，标准输出上的内容被重定向到文件
+<code>output.txt</code> 中，不再打印到控制上。</p>
+<p>大家先观察下控制台，然后再看看
+<code>output.txt</code>，是否发现如下的错误信息已经如期被写入到文件中？</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">Problem parsing arguments: not enough arguments<br></code></pre></td></tr></table></figure>
+<p>所以，可以得出一个结论，如果错误信息输出到标准输出，那么它们将跟普通的日志信息混在一起，难以分辨，因此我们需要将错误信息进行单独输出。</p>
+<h2 id="标准错误输出-stderr"><a target="_blank" rel="noopener" href="https://course.rs/basic-practice/stderr.html#标准错误输出-stderr">标准错误输出
+stderr</a></h2>
+<p>将错误信息重定向到 <code>stderr</code>
+很简单，只需在打印错误的地方，将 <code>println!</code> 宏替换为
+<code>eprintln!</code>即可。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">args</span>: <span class="hljs-type">Vec</span>&lt;<span class="hljs-type">String</span>&gt; = env::<span class="hljs-title function_ invoke__">args</span>().<span class="hljs-title function_ invoke__">collect</span>();<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">config</span> = Config::<span class="hljs-title function_ invoke__">build</span>(&amp;args).<span class="hljs-title function_ invoke__">unwrap_or_else</span>(|err| &#123;<br>        <span class="hljs-built_in">eprintln!</span>(<span class="hljs-string">&quot;Problem parsing arguments: &#123;err&#125;&quot;</span>);<br>        process::<span class="hljs-title function_ invoke__">exit</span>(<span class="hljs-number">1</span>);<br>    &#125;);<br><br>    <span class="hljs-keyword">if</span> <span class="hljs-keyword">let</span> <span class="hljs-variable">Err</span>(e) = minigrep::<span class="hljs-title function_ invoke__">run</span>(config) &#123;<br>        <span class="hljs-built_in">eprintln!</span>(<span class="hljs-string">&quot;Application error: &#123;e&#125;&quot;</span>);<br>        process::<span class="hljs-title function_ invoke__">exit</span>(<span class="hljs-number">1</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>接下来，还是同样的运行命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">$ </span><span class="language-bash">cargo run &gt; output.txt</span><br>Problem parsing arguments: not enough arguments<br></code></pre></td></tr></table></figure>
+<p>可以看到，日志信息成功的重定向到 <code>output.txt</code>
+文件中，而错误信息由于 <code>eprintln!</code>
+的使用，被写入到标准错误输出中，默认还是输出在控制台中。</p>
+<p>再来试试没有错误的情况:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">$ </span><span class="language-bash">cargo run -- to poem.txt &gt; output.txt</span><br></code></pre></td></tr></table></figure>
+<p>这次运行参数很正确，因此也没有任何错误信息产生，同时由于我们重定向了标准输出，因此相应的输出日志会写入到
+<code>output.txt</code> 中，打开可以看到如下内容：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">Are you nobody, too?<br>How dreary to be somebody!<br></code></pre></td></tr></table></figure>
+<p>至此，简易搜索程序 <code>minigrep</code>
+已经基本完成，下一章节将使用迭代器进行部分改进，请大家在看完<a target="_blank" rel="noopener" href="https://course.rs/advance/functional-programing/iterator.html">迭代器章节</a>后，再回头阅读。</p>
+<h1 id="使用迭代器来改进我们的程序"><a target="_blank" rel="noopener" href="https://course.rs/basic-practice/iterators.html#使用迭代器来改进我们的程序">使用迭代器来改进我们的程序</a></h1>
+<blockquote>
+<p>本章节是可选内容，请大家在看完<a target="_blank" rel="noopener" href="https://course.rs/advance/functional-programing/iterator.html">迭代器章节</a>后，再来阅读</p>
+</blockquote>
+<p>在之前的 <code>minigrep</code> 中，功能虽然已经
+ok，但是一些细节上还值得打磨下，下面一起看看如何使用迭代器来改进
+<code>Config::build</code> 和 <code>search</code> 的实现。</p>
+<h2 id="移除-clone-的使用"><a target="_blank" rel="noopener" href="https://course.rs/basic-practice/iterators.html#移除-clone-的使用">移除
+<code>clone</code> 的使用</a></h2>
+<p>虽然之前有讲过为什么这里可以使用
+<code>clone</code>，但是也许总有同学心有芥蒂，毕竟程序员嘛，都希望代码处处完美，而不是丑陋的处处妥协。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">impl</span> <span class="hljs-title class_">Config</span> &#123;<br>    <span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">build</span>(args: &amp;[<span class="hljs-type">String</span>]) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">Result</span>&lt;Config, &amp;<span class="hljs-symbol">&#x27;static</span> <span class="hljs-type">str</span>&gt; &#123;<br>        <span class="hljs-keyword">if</span> args.<span class="hljs-title function_ invoke__">len</span>() &lt; <span class="hljs-number">3</span> &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-title function_ invoke__">Err</span>(<span class="hljs-string">&quot;not enough arguments&quot;</span>);<br>        &#125;<br><br>        <span class="hljs-keyword">let</span> <span class="hljs-variable">query</span> = args[<span class="hljs-number">1</span>].<span class="hljs-title function_ invoke__">clone</span>();<br>        <span class="hljs-keyword">let</span> <span class="hljs-variable">file_path</span> = args[<span class="hljs-number">2</span>].<span class="hljs-title function_ invoke__">clone</span>();<br><br>        <span class="hljs-keyword">let</span> <span class="hljs-variable">ignore_case</span> = env::<span class="hljs-title function_ invoke__">var</span>(<span class="hljs-string">&quot;IGNORE_CASE&quot;</span>).<span class="hljs-title function_ invoke__">is_ok</span>();<br><br>        <span class="hljs-title function_ invoke__">Ok</span>(Config &#123;<br>            query,<br>            file_path,<br>            ignore_case,<br>        &#125;)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>之前的代码大致长这样，两行 <code>clone</code>
+着实有点啰嗦，好在，在学习完迭代器后，我们知道了 <code>build</code>
+函数实际上可以<strong>直接拿走迭代器的所有权</strong>，而不是去借用一个数组切片
+<code>&amp;[String]</code>。</p>
+<p>这里先不给出代码，下面统一给出。</p>
+<h2 id="直接使用返回的迭代器"><a target="_blank" rel="noopener" href="https://course.rs/basic-practice/iterators.html#直接使用返回的迭代器">直接使用返回的迭代器</a></h2>
+<p>在之前的实现中，我们的 <code>args</code> 是一个动态数组:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">args</span>: <span class="hljs-type">Vec</span>&lt;<span class="hljs-type">String</span>&gt; = env::<span class="hljs-title function_ invoke__">args</span>().<span class="hljs-title function_ invoke__">collect</span>();<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">config</span> = Config::<span class="hljs-title function_ invoke__">build</span>(&amp;args).<span class="hljs-title function_ invoke__">unwrap_or_else</span>(|err| &#123;<br>        <span class="hljs-built_in">eprintln!</span>(<span class="hljs-string">&quot;Problem parsing arguments: &#123;err&#125;&quot;</span>);<br>        process::<span class="hljs-title function_ invoke__">exit</span>(<span class="hljs-number">1</span>);<br>    &#125;);<br><br>    <span class="hljs-comment">// --snip--</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>当时还提到了 <code>collect</code>
+方法的使用，相信大家学完迭代器后，对这个方法会有更加深入的认识。</p>
+<p>现在呢，无需数组了，直接传入迭代器即可：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">config</span> = Config::<span class="hljs-title function_ invoke__">build</span>(env::<span class="hljs-title function_ invoke__">args</span>()).<span class="hljs-title function_ invoke__">unwrap_or_else</span>(|err| &#123;<br>        <span class="hljs-built_in">eprintln!</span>(<span class="hljs-string">&quot;Problem parsing arguments: &#123;err&#125;&quot;</span>);<br>        process::<span class="hljs-title function_ invoke__">exit</span>(<span class="hljs-number">1</span>);<br>    &#125;);<br><br>    <span class="hljs-comment">// --snip--</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>如上所示，我们甚至省去了一行代码，原因是 <code>env::args</code>
+可以直接返回一个迭代器，再作为 <code>Config::build</code>
+的参数传入，下面再来改写 <code>build</code> 方法。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">impl</span> <span class="hljs-title class_">Config</span> &#123;<br>    <span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">build</span>(<br>        <span class="hljs-keyword">mut</span> args: <span class="hljs-keyword">impl</span> <span class="hljs-title class_">Iterator</span>&lt;Item = <span class="hljs-type">String</span>&gt;,<br>    ) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">Result</span>&lt;Config, &amp;<span class="hljs-symbol">&#x27;static</span> <span class="hljs-type">str</span>&gt; &#123;<br>        <span class="hljs-comment">// --snip--</span><br></code></pre></td></tr></table></figure>
+<p>为了可读性和更好的通用性，这里的 <code>args</code>
+类型并没有使用本身的 <code>std::env::Args</code>
+，而是使用了特征约束的方式来描述
+<code>impl Iterator&lt;Item = String&gt;</code>，这样意味着
+<code>arg</code> 可以是任何实现了 <code>String</code> 迭代器的类型。</p>
+<p>还有一点值得注意，由于迭代器的所有权已经转移到 <code>build</code>
+内，因此可以直接对其进行修改，这里加上了 <code>mut</code> 关键字。</p>
+<h2 id="移除数组索引的使用"><a target="_blank" rel="noopener" href="https://course.rs/basic-practice/iterators.html#移除数组索引的使用">移除数组索引的使用</a></h2>
+<p>数组索引会越界，为了安全性和简洁性，使用 <code>Iterator</code>
+特征自带的 <code>next</code> 方法是一个更好的选择:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">impl</span> <span class="hljs-title class_">Config</span> &#123;<br>    <span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">build</span>(<br>        <span class="hljs-keyword">mut</span> args: <span class="hljs-keyword">impl</span> <span class="hljs-title class_">Iterator</span>&lt;Item = <span class="hljs-type">String</span>&gt;,<br>    ) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">Result</span>&lt;Config, &amp;<span class="hljs-symbol">&#x27;static</span> <span class="hljs-type">str</span>&gt; &#123;<br>        <span class="hljs-comment">// 第一个参数是程序名，由于无需使用，因此这里直接空调用一次</span><br>        args.<span class="hljs-title function_ invoke__">next</span>();<br><br>        <span class="hljs-keyword">let</span> <span class="hljs-variable">query</span> = <span class="hljs-keyword">match</span> args.<span class="hljs-title function_ invoke__">next</span>() &#123;<br>            <span class="hljs-title function_ invoke__">Some</span>(arg) =&gt; arg,<br>            <span class="hljs-literal">None</span> =&gt; <span class="hljs-keyword">return</span> <span class="hljs-title function_ invoke__">Err</span>(<span class="hljs-string">&quot;Didn&#x27;t get a query string&quot;</span>),<br>        &#125;;<br><br>        <span class="hljs-keyword">let</span> <span class="hljs-variable">file_path</span> = <span class="hljs-keyword">match</span> args.<span class="hljs-title function_ invoke__">next</span>() &#123;<br>            <span class="hljs-title function_ invoke__">Some</span>(arg) =&gt; arg,<br>            <span class="hljs-literal">None</span> =&gt; <span class="hljs-keyword">return</span> <span class="hljs-title function_ invoke__">Err</span>(<span class="hljs-string">&quot;Didn&#x27;t get a file path&quot;</span>),<br>        &#125;;<br><br>        <span class="hljs-keyword">let</span> <span class="hljs-variable">ignore_case</span> = env::<span class="hljs-title function_ invoke__">var</span>(<span class="hljs-string">&quot;IGNORE_CASE&quot;</span>).<span class="hljs-title function_ invoke__">is_ok</span>();<br><br>        <span class="hljs-title function_ invoke__">Ok</span>(Config &#123;<br>            query,<br>            file_path,<br>            ignore_case,<br>        &#125;)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>喔，上面使用了迭代器和模式匹配的代码，看上去是不是很
+Rust？我想我们已经走在了正确的道路上。</p>
+<h2 id="使用迭代器适配器让代码更简洁"><a target="_blank" rel="noopener" href="https://course.rs/basic-practice/iterators.html#使用迭代器适配器让代码更简洁">使用迭代器适配器让代码更简洁</a></h2>
+<p>为了帮大家更好的回忆和对比，之前的 <code>search</code> 长这样：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-comment">// in lib.rs</span><br><span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">search</span>&lt;<span class="hljs-symbol">&#x27;a</span>&gt;(query: &amp;<span class="hljs-type">str</span>, contents: &amp;<span class="hljs-symbol">&#x27;a</span> <span class="hljs-type">str</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">Vec</span>&lt;&amp;<span class="hljs-symbol">&#x27;a</span> <span class="hljs-type">str</span>&gt; &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">results</span> = <span class="hljs-type">Vec</span>::<span class="hljs-title function_ invoke__">new</span>();<br><br>    <span class="hljs-keyword">for</span> <span class="hljs-variable">line</span> <span class="hljs-keyword">in</span> contents.<span class="hljs-title function_ invoke__">lines</span>() &#123;<br>        <span class="hljs-keyword">if</span> line.<span class="hljs-title function_ invoke__">contains</span>(query) &#123;<br>            results.<span class="hljs-title function_ invoke__">push</span>(line);<br>        &#125;<br>    &#125;<br><br>    results<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>引入了迭代器后，就连古板的 <code>search</code> 函数也可以变得更 rusty
+些:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">search</span>&lt;<span class="hljs-symbol">&#x27;a</span>&gt;(query: &amp;<span class="hljs-type">str</span>, contents: &amp;<span class="hljs-symbol">&#x27;a</span> <span class="hljs-type">str</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">Vec</span>&lt;&amp;<span class="hljs-symbol">&#x27;a</span> <span class="hljs-type">str</span>&gt; &#123;<br>    contents<br>        .<span class="hljs-title function_ invoke__">lines</span>()<br>        .<span class="hljs-title function_ invoke__">filter</span>(|line| line.<span class="hljs-title function_ invoke__">contains</span>(query))<br>        .<span class="hljs-title function_ invoke__">collect</span>()<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>Rock，让我们的函数编程 Style rock
+起来，这种一行到底的写法有时真的让人沉迷。</p>
+<h2 id="总结"><a target="_blank" rel="noopener" href="https://course.rs/basic-practice/iterators.html#总结">总结</a></h2>
+<p>至此，整个大章节全部结束，本章没有试图覆盖已学的方方面面( 也许未来会
+)，而是聚焦于 Rust
+的一些核心知识：所有权、生命周期、借用、模式匹配等等。</p>
+<p>强烈推荐大家忘记已有的一切，自己重新实现一遍
+<code>minigrep</code>，甚至可以根据自己的想法和喜好，来完善一些，也欢迎在评论中附上自己的练习项目，供其它人学习参考(
+提个小建议，项目主页写清楚新增的功能、亮点等 )。</p>
+<p>从下一章开始，我们将正式开始 Rust
+进阶学习，请深呼吸一口，然后问自己：你..准备好了吗？</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/rust/" class="category-chain-item">rust</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/rust/rust%E5%9C%A3%E7%BB%8F/" class="category-chain-item">rust圣经</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/rust/rust%E5%9C%A3%E7%BB%8F/mini-grep/" class="category-chain-item">mini-grep</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/rust/" class="print-no-link">#rust</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>3. 文件搜索工具</div>
+      <div>http://binbo-zappy.github.io/2025/02/05/rust圣经/3-mini-grep/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年2月5日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/02/05/rust%E5%9C%A3%E7%BB%8F/4-1-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" title="4.1 生命周期">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">4.1 生命周期</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-14-%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%BE%93%E5%87%BA/" title="2.14 格式化输出">
+                        <span class="hidden-mobile">2.14 格式化输出</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

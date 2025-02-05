@@ -1,0 +1,950 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="特征 Trait 特征定义了一组可以被共享的行为，只要实现了特征，你就能使用这组行为。 1. 定义特征 如果不同的类型具有相同的行为，那么我们就可以定义一个特征，然后为这些类型实现该特征。定义特征是把一些方法组合在一起，目的是定义一个实现某些目标所必需的行为的集合。 例如，我们现在有文章 Post 和微博 Weibo 两种内容载体，而我们想对相应的内容进行总结，也就是无论是文章内容，还是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2.8.2 特征 Trait">
+<meta property="og:url" content="http://binbo-zappy.github.io/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-8-2-%E7%89%B9%E5%BE%81-Trait/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="特征 Trait 特征定义了一组可以被共享的行为，只要实现了特征，你就能使用这组行为。 1. 定义特征 如果不同的类型具有相同的行为，那么我们就可以定义一个特征，然后为这些类型实现该特征。定义特征是把一些方法组合在一起，目的是定义一个实现某些目标所必需的行为的集合。 例如，我们现在有文章 Post 和微博 Weibo 两种内容载体，而我们想对相应的内容进行总结，也就是无论是文章内容，还是">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/rust.jpg">
+<meta property="article:published_time" content="2025-01-05T14:37:26.000Z">
+<meta property="article:modified_time" content="2025-01-08T03:40:19.614Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="rust">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/rust.jpg">
+  
+  
+  
+  <title>2.8.2 特征 Trait - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="2.8.2 特征 Trait"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-01-05 22:37" pubdate>
+          2025年1月5日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          43 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">2.8.2 特征 Trait</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="特征-trait">特征 Trait</h1>
+<p>特征定义了<strong>一组可以被共享的行为，只要实现了特征，你就能使用这组行为</strong>。</p>
+<h2 id="定义特征">1. 定义特征</h2>
+<p>如果不同的类型具有相同的行为，那么我们就可以定义一个特征，然后为这些类型实现该特征。<strong>定义特征</strong>是把一些方法组合在一起，目的是定义一个实现某些目标所必需的行为的集合。</p>
+<p>例如，我们现在有文章 <code>Post</code> 和微博 <code>Weibo</code>
+两种内容载体，而我们想对相应的内容进行总结，也就是无论是文章内容，还是微博内容，都可以在某个时间点进行总结，那么总结这个行为就是共享的，因此可以用特征来定义：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">trait</span> <span class="hljs-title class_">Summary</span> &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">summarize</span>(&amp;<span class="hljs-keyword">self</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">String</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这里使用 <code>trait</code>
+关键字来声明一个特征，<code>Summary</code>
+是特征名。在大括号中定义了该特征的所有方法，在这个例子中是：
+<code>fn summarize(&amp;self) -&gt; String</code>。</p>
+<p><strong>特征只定义行为看起来是什么样的，而不定义行为具体是怎么样的。因此，我们只定义特征方法的签名，而不进行实现，此时方法签名结尾是
+<code>;</code>，而不是一个 <code>&#123;&#125;</code>。</strong></p>
+<p>接下来，每一个实现这个特征的类型都需要具体实现该特征的相应方法，编译器也会确保任何实现
+<code>Summary</code> 特征的类型都拥有与这个签名的定义完全一致的
+<code>summarize</code> 方法。</p>
+<h2 id="为类型实现特征">2. 为类型实现特征</h2>
+<p>因为特征只定义行为看起来是什么样的，因此我们需要为类型实现具体的特征，定义行为具体是怎么样的。</p>
+<p>首先来为 <code>Post</code> 和 <code>Weibo</code> 实现
+<code>Summary</code> 特征：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">trait</span> <span class="hljs-title class_">Summary</span> &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">summarize</span>(&amp;<span class="hljs-keyword">self</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">String</span>;<br>&#125;<br><span class="hljs-keyword">pub</span> <span class="hljs-keyword">struct</span> <span class="hljs-title class_">Post</span> &#123;<br>    <span class="hljs-keyword">pub</span> title: <span class="hljs-type">String</span>, <span class="hljs-comment">// 标题</span><br>    <span class="hljs-keyword">pub</span> author: <span class="hljs-type">String</span>, <span class="hljs-comment">// 作者</span><br>    <span class="hljs-keyword">pub</span> content: <span class="hljs-type">String</span>, <span class="hljs-comment">// 内容</span><br>&#125;<br><br><span class="hljs-keyword">impl</span> <span class="hljs-title class_">Summary</span> <span class="hljs-keyword">for</span> <span class="hljs-title class_">Post</span> &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">summarize</span>(&amp;<span class="hljs-keyword">self</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">String</span> &#123;<br>        <span class="hljs-built_in">format!</span>(<span class="hljs-string">&quot;文章&#123;&#125;, 作者是&#123;&#125;&quot;</span>, <span class="hljs-keyword">self</span>.title, <span class="hljs-keyword">self</span>.author)<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">pub</span> <span class="hljs-keyword">struct</span> <span class="hljs-title class_">Weibo</span> &#123;<br>    <span class="hljs-keyword">pub</span> username: <span class="hljs-type">String</span>,<br>    <span class="hljs-keyword">pub</span> content: <span class="hljs-type">String</span><br>&#125;<br><br><span class="hljs-keyword">impl</span> <span class="hljs-title class_">Summary</span> <span class="hljs-keyword">for</span> <span class="hljs-title class_">Weibo</span> &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">summarize</span>(&amp;<span class="hljs-keyword">self</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">String</span> &#123;<br>        <span class="hljs-built_in">format!</span>(<span class="hljs-string">&quot;&#123;&#125;发表了微博&#123;&#125;&quot;</span>, <span class="hljs-keyword">self</span>.username, <span class="hljs-keyword">self</span>.content)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>实现特征的语法与为结构体、枚举实现方法很像：<code>impl Summary for Post</code>，读作“为
+<code>Post</code> 类型实现 <code>Summary</code> 特征”，然后在
+<code>impl</code> 的花括号中实现该特征的具体方法。</p>
+<p>接下来就可以在这个类型上调用特征的方法：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">post</span> = Post&#123;title: <span class="hljs-string">&quot;Rust语言简介&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>(),author: <span class="hljs-string">&quot;Sunface&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>(), content: <span class="hljs-string">&quot;Rust棒极了!&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>()&#125;;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">weibo</span> = Weibo&#123;username: <span class="hljs-string">&quot;sunface&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>(),content: <span class="hljs-string">&quot;好像微博没Tweet好用&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>()&#125;;<br><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;&#125;&quot;</span>,post.<span class="hljs-title function_ invoke__">summarize</span>());<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;&#125;&quot;</span>,weibo.<span class="hljs-title function_ invoke__">summarize</span>());<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>运行输出：</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs console">文章 Rust 语言简介, 作者是Sunface<br>sunface发表了微博好像微博没Tweet好用<br></code></pre></td></tr></table></figure>
+<p>说实话，如果特征仅仅如此，你可能会觉得花里胡哨没啥用，接下来就让你见识下
+<code>trait</code> 真正的威力。</p>
+<h3 id="特征定义与实现的位置孤儿规则">2.1
+特征定义与实现的位置(孤儿规则)</h3>
+<p>上面我们将 <code>Summary</code> 定义成了 <code>pub</code>
+公开的。这样，如果他人想要使用我们的 <code>Summary</code>
+特征，则可以引入到他们的包中，然后再进行实现。</p>
+<p>关于特征实现与定义的位置，有一条非常重要的原则：<strong>如果你想要为类型</strong>
+<code>A</code> <strong>实现特征</strong>
+<code>T</code><strong>，那么</strong> <code>A</code>
+<strong>或者</strong> <code>T</code>
+<strong>至少有一个是在当前作用域中定义的！</strong> 例如我们可以为上面的
+<code>Post</code> 类型实现标准库中的 <code>Display</code> 特征，这是因为
+<code>Post</code> 类型定义在当前的作用域中。同时，我们也可以在当前包中为
+<code>String</code> 类型实现 <code>Summary</code> 特征，因为
+<code>Summary</code> 定义在当前作用域中。</p>
+<p>但是你无法在当前作用域中，为 <code>String</code> 类型实现
+<code>Display</code>
+特征，因为它们俩都定义在标准库中，其定义所在的位置都不在当前作用域，跟你半毛钱关系都没有，看看就行了。</p>
+<p>该规则被称为<strong>孤儿规则</strong>，可以确保其它人编写的代码不会破坏你的代码，也确保了你不会莫名其妙就破坏了风马牛不相及的代码。</p>
+<h3 id="默认实现">2.2 默认实现</h3>
+<p>你可以在特征中定义具有<strong>默认实现</strong>的方法，这样其它类型无需再实现该方法，或者也可以选择重载该方法：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">trait</span> <span class="hljs-title class_">Summary</span> &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">summarize</span>(&amp;<span class="hljs-keyword">self</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">String</span> &#123;<br>        <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;(Read more...)&quot;</span>)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>上面为 <code>Summary</code>
+定义了一个默认实现，下面我们编写段代码来测试下：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">impl</span> <span class="hljs-title class_">Summary</span> <span class="hljs-keyword">for</span> <span class="hljs-title class_">Post</span> &#123;&#125;<br><br><span class="hljs-keyword">impl</span> <span class="hljs-title class_">Summary</span> <span class="hljs-keyword">for</span> <span class="hljs-title class_">Weibo</span> &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">summarize</span>(&amp;<span class="hljs-keyword">self</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">String</span> &#123;<br>        <span class="hljs-built_in">format!</span>(<span class="hljs-string">&quot;&#123;&#125;发表了微博&#123;&#125;&quot;</span>, <span class="hljs-keyword">self</span>.username, <span class="hljs-keyword">self</span>.content)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>可以看到，<code>Post</code> 选择了默认实现，而 <code>Weibo</code>
+重载了该方法，调用和输出如下：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs rust">    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;&#125;&quot;</span>,post.<span class="hljs-title function_ invoke__">summarize</span>());<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;&#125;&quot;</span>,weibo.<span class="hljs-title function_ invoke__">summarize</span>());<br>(Read more...)<br>sunface发表了微博好像微博没Tweet好用<br></code></pre></td></tr></table></figure>
+<p>默认实现允许调用相同特征中的其他方法，哪怕这些方法没有默认实现。如此，特征可以提供很多有用的功能而只需要实现指定的一小部分内容。例如，我们可以定义
+<code>Summary</code> 特征，使其具有一个需要实现的
+<code>summarize_author</code> 方法，然后定义一个 <code>summarize</code>
+方法，此方法的默认实现调用 <code>summarize_author</code> 方法：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">trait</span> <span class="hljs-title class_">Summary</span> &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">summarize_author</span>(&amp;<span class="hljs-keyword">self</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">String</span>;<br><br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">summarize</span>(&amp;<span class="hljs-keyword">self</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">String</span> &#123;<br>        <span class="hljs-built_in">format!</span>(<span class="hljs-string">&quot;(Read more from &#123;&#125;...)&quot;</span>, <span class="hljs-keyword">self</span>.<span class="hljs-title function_ invoke__">summarize_author</span>())<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>为了使用 <code>Summary</code>，只需要实现
+<code>summarize_author</code> 方法即可：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">impl</span> <span class="hljs-title class_">Summary</span> <span class="hljs-keyword">for</span> <span class="hljs-title class_">Weibo</span> &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">summarize_author</span>(&amp;<span class="hljs-keyword">self</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">String</span> &#123;<br>        <span class="hljs-built_in">format!</span>(<span class="hljs-string">&quot;@&#123;&#125;&quot;</span>, <span class="hljs-keyword">self</span>.username)<br>    &#125;<br>&#125;<br><span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;1 new weibo: &#123;&#125;&quot;</span>, weibo.<span class="hljs-title function_ invoke__">summarize</span>());<br></code></pre></td></tr></table></figure>
+<p><code>weibo.summarize()</code> 会先调用 <code>Summary</code>
+特征默认实现的 <code>summarize</code> 方法，通过该方法进而调用
+<code>Weibo</code> 为 <code>Summary</code> 实现的
+<code>summarize_author</code>
+方法，最终输出：<code>1 new weibo: (Read more from @horse_ebooks...)</code>。</p>
+<h2 id="使用特征作为函数参数">3. 使用特征作为函数参数</h2>
+<p>之前提到过，特征如果仅仅是用来实现方法，那真的有些大材小用，现在我们来讲下，真正可以让特征大放光彩的地方。</p>
+<p>现在，先定义一个函数，使用特征作为函数参数：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">notify</span>(item: &amp;<span class="hljs-keyword">impl</span> <span class="hljs-title class_">Summary</span>) &#123;<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Breaking news! &#123;&#125;&quot;</span>, item.<span class="hljs-title function_ invoke__">summarize</span>());<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><code>impl Summary</code>，只能说想出这个类型的人真的是起名鬼才，简直太贴切了，顾名思义，它的意思是
+<strong>实现了<code>Summary</code>特征</strong> 的 <code>item</code>
+参数。</p>
+<p>你可以使用任何实现了 <code>Summary</code>
+特征的类型作为该函数的参数，同时在函数体内，还可以调用该特征的方法，例如
+<code>summarize</code> 方法。具体的说，可以传递 <code>Post</code> 或
+<code>Weibo</code> 的实例来作为参数，而其它类如 <code>String</code> 或者
+<code>i32</code> 的类型则不能用做该函数的参数，因为它们没有实现
+<code>Summary</code> 特征。</p>
+<h2 id="特征约束trait-bound">4. 特征约束(trait bound)</h2>
+<p>虽然 <code>impl Trait</code>
+这种语法非常好理解，但是实际上它只是一个语法糖：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">notify</span>&lt;T: Summary&gt;(item: &amp;T) &#123;<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Breaking news! &#123;&#125;&quot;</span>, item.<span class="hljs-title function_ invoke__">summarize</span>());<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>真正的完整书写形式如上所述，形如 <code>T: Summary</code>
+被称为<strong>特征约束</strong>。</p>
+<p>在简单的场景下 <code>impl Trait</code>
+这种语法糖就足够使用，但是对于复杂的场景，特征约束可以让我们拥有更大的灵活性和语法表现能力，例如一个函数接受两个
+<code>impl Summary</code> 的参数：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">notify</span>(item1: &amp;<span class="hljs-keyword">impl</span> <span class="hljs-title class_">Summary</span>, item2: &amp;<span class="hljs-keyword">impl</span> <span class="hljs-title class_">Summary</span>) &#123;&#125;<br></code></pre></td></tr></table></figure>
+<p>如果函数两个参数是不同的类型，那么上面的方法很好，只要这两个类型都实现了
+<code>Summary</code>
+特征即可。但是如果我们想要强制函数的两个参数是同一类型呢？上面的语法就无法做到这种限制，此时我们只能使特征约束来实现：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">notify</span>&lt;T: Summary&gt;(item1: &amp;T, item2: &amp;T) &#123;&#125;<br></code></pre></td></tr></table></figure>
+<p>泛型类型 <code>T</code> 说明了 <code>item1</code> 和
+<code>item2</code> 必须拥有同样的类型，同时 <code>T: Summary</code>
+说明了 <code>T</code> 必须实现 <code>Summary</code> 特征。</p>
+<h3 id="多重约束">4.1 多重约束</h3>
+<p>除了单个约束条件，我们还可以指定多个约束条件，例如除了让参数实现
+<code>Summary</code> 特征外，还可以让参数实现 <code>Display</code>
+特征以控制它的格式化输出：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">notify</span>(item: &amp;(<span class="hljs-keyword">impl</span> <span class="hljs-title class_">Summary</span> + Display)) &#123;&#125;<br></code></pre></td></tr></table></figure>
+<p>除了上述的语法糖形式，还能使用特征约束的形式：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">notify</span>&lt;T: Summary + Display&gt;(item: &amp;T) &#123;&#125;<br></code></pre></td></tr></table></figure>
+<p>通过这两个特征，就可以使用 <code>item.summarize</code> 方法，以及通过
+<code>println!("&#123;&#125;", item)</code> 来格式化输出 <code>item</code>。</p>
+<h3 id="where-约束">4.2 Where 约束</h3>
+<p>当特征约束变得很多时，函数的签名将变得很复杂：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">some_function</span>&lt;T: Display + <span class="hljs-built_in">Clone</span>, U: <span class="hljs-built_in">Clone</span> + <span class="hljs-built_in">Debug</span>&gt;(t: &amp;T, u: &amp;U) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">i32</span> &#123;&#125;<br></code></pre></td></tr></table></figure>
+<p>严格来说，上面的例子还是不够复杂，但是我们还是能对其做一些形式上的改进，通过
+<code>where</code>：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">some_function</span>&lt;T, U&gt;(t: &amp;T, u: &amp;U) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">i32</span><br>    <span class="hljs-keyword">where</span> T: Display + <span class="hljs-built_in">Clone</span>,<br>          U: <span class="hljs-built_in">Clone</span> + <span class="hljs-built_in">Debug</span><br>&#123;&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="使用特征约束有条件地实现方法或特征">4.3
+使用特征约束有条件地实现方法或特征</h3>
+<p>特征约束，可以让我们在指定类型 +
+指定特征的条件下去实现方法，例如：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">use</span> std::fmt::Display;<br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Pair</span>&lt;T&gt; &#123;<br>    x: T,<br>    y: T,<br>&#125;<br><br><span class="hljs-keyword">impl</span>&lt;T&gt; Pair&lt;T&gt; &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">new</span>(x: T, y: T) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-keyword">Self</span> &#123;<br>        <span class="hljs-keyword">Self</span> &#123;<br>            x,<br>            y,<br>        &#125;<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">impl</span>&lt;T: Display + <span class="hljs-built_in">PartialOrd</span>&gt; Pair&lt;T&gt; &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">cmp_display</span>(&amp;<span class="hljs-keyword">self</span>) &#123;<br>        <span class="hljs-keyword">if</span> <span class="hljs-keyword">self</span>.x &gt;= <span class="hljs-keyword">self</span>.y &#123;<br>            <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;The largest member is x = &#123;&#125;&quot;</span>, <span class="hljs-keyword">self</span>.x);<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;The largest member is y = &#123;&#125;&quot;</span>, <span class="hljs-keyword">self</span>.y);<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><code>cmp_display</code> 方法，并不是所有的
+<code>Pair&lt;T&gt;</code> 结构体对象都可以拥有，只有 <code>T</code>
+同时实现了 <code>Display + PartialOrd</code> 的
+<code>Pair&lt;T&gt;</code> 才可以拥有此方法。
+该函数可读性会更好，因为泛型参数、参数、返回值都在一起，可以快速的阅读，同时每个泛型参数的特征也在新的代码行中通过<strong>特征约束</strong>进行了约束。</p>
+<p><strong>也可以有条件地实现特征</strong>，例如，标准库为任何实现了
+<code>Display</code> 特征的类型实现了 <code>ToString</code> 特征：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">impl</span>&lt;T: Display&gt; <span class="hljs-built_in">ToString</span> <span class="hljs-keyword">for</span> <span class="hljs-title class_">T</span> &#123;<br>    <span class="hljs-comment">// --snip--</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>我们可以对任何实现了 <code>Display</code> 特征的类型调用由
+<code>ToString</code> 定义的 <code>to_string</code>
+方法。例如，可以将整型转换为对应的 <code>String</code>
+值，因为整型实现了 <code>Display</code>：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">s</span> = <span class="hljs-number">3</span>.<span class="hljs-title function_ invoke__">to_string</span>();<br></code></pre></td></tr></table></figure>
+<h2 id="函数返回中的-impl-trait">5. 函数返回中的
+<code>impl Trait</code></h2>
+<p>可以通过 <code>impl Trait</code>
+来说明一个函数返回了一个类型，该类型实现了某个特征：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">returns_summarizable</span>() <span class="hljs-punctuation">-&gt;</span> <span class="hljs-keyword">impl</span> <span class="hljs-title class_">Summary</span> &#123;<br>    Weibo &#123;<br>        username: <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;sunface&quot;</span>),<br>        content: <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<br>            <span class="hljs-string">&quot;m1 max太厉害了，电脑再也不会卡&quot;</span>,<br>        )<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>因为 <code>Weibo</code> 实现了
+<code>Summary</code>，因此这里可以用它来作为返回值。要注意的是，虽然我们知道这里是一个
+<code>Weibo</code> 类型，但是对于 <code>returns_summarizable</code>
+的调用者而言，他只知道返回了一个实现了 <code>Summary</code>
+特征的对象，但是并不知道返回了一个 <code>Weibo</code> 类型。</p>
+<p>这种 <code>impl Trait</code>
+形式的返回值，在一种场景下非常非常有用，那就是返回的真实类型非常复杂，你不知道该怎么声明时（毕竟
+Rust 要求你必须标出所有的类型），此时就可以用 <code>impl Trait</code>
+的方式简单返回。例如，闭包和迭代器就是很复杂，只有编译器才知道那玩意的真实类型，如果让你写出来它们的具体类型，估计内心有一万只草泥马奔腾，好在你可以用
+<code>impl Iterator</code>
+来告诉调用者，返回了一个迭代器，因为所有迭代器都会实现
+<code>Iterator</code> 特征。</p>
+<p>但是这种返回值方式有一个很大的限制：只能有一个具体的类型，例如：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">returns_summarizable</span>(switch: <span class="hljs-type">bool</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-keyword">impl</span> <span class="hljs-title class_">Summary</span> &#123;<br>    <span class="hljs-keyword">if</span> switch &#123;<br>        Post &#123;<br>            title: <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<br>                <span class="hljs-string">&quot;Penguins win the Stanley Cup Championship!&quot;</span>,<br>            ),<br>            author: <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;Iceburgh&quot;</span>),<br>            content: <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<br>                <span class="hljs-string">&quot;The Pittsburgh Penguins once again are the best \</span><br><span class="hljs-string">                 hockey team in the NHL.&quot;</span>,<br>            ),<br>        &#125;<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        Weibo &#123;<br>            username: <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;horse_ebooks&quot;</span>),<br>            content: <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<br>                <span class="hljs-string">&quot;of course, as you probably already know, people&quot;</span>,<br>            ),<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>以上的代码就无法通过编译，因为它返回了两个不同的类型
+<code>Post</code> 和 <code>Weibo</code>。</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs console">`if` and `else` have incompatible types<br>expected struct `Post`, found struct `Weibo`<br></code></pre></td></tr></table></figure>
+<p>报错提示我们 <code>if</code> 和 <code>else</code>
+返回了不同的类型。如果想要实现返回不同的类型，需要使用下一章节中的<a target="_blank" rel="noopener" href="https://course.rs/basic/trait/trait-object.html">特征对象</a>。</p>
+<h2 id="修复上一节中的-largest-函数">6. 修复上一节中的
+<code>largest</code> 函数</h2>
+<p>还记得上一节中的<a target="_blank" rel="noopener" href="https://course.rs/basic/trait/generic.html#泛型详解">例子</a>吧，当时留下一个疑问，该如何解决编译报错：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs rust">error[E0369]: binary operation `&gt;` cannot be applied to <span class="hljs-keyword">type</span> `T` <span class="hljs-comment">// 无法在 `T` 类型上应用`&gt;`运算符</span><br> -<span class="hljs-punctuation">-&gt;</span> src/main.rs:<span class="hljs-number">5</span>:<span class="hljs-number">17</span><br>  |<br><span class="hljs-number">5</span> |         <span class="hljs-keyword">if</span> item &gt; largest &#123;<br>  |            ---- ^ ------- T<br>  |            |<br>  |            T<br>  |<br>help: consider restricting <span class="hljs-keyword">type</span> <span class="hljs-title class_">parameter</span> `T` <span class="hljs-comment">// 考虑使用以下的特征来约束 `T`</span><br>  |<br><span class="hljs-number">1</span> | <span class="hljs-keyword">fn</span> <span class="hljs-title function_">largest</span>&lt;T: std::cmp::<span class="hljs-built_in">PartialOrd</span>&gt;(list: &amp;[T]) <span class="hljs-punctuation">-&gt;</span> T &#123;<br>  |             ^^^^^^^^^^^^^^^^^^^^^^<br></code></pre></td></tr></table></figure>
+<p>在 <code>largest</code>
+函数体中我们想要使用大于运算符（<code>&gt;</code>）比较两个
+<code>T</code> 类型的值。这个运算符是标准库中特征
+<code>std::cmp::PartialOrd</code> 的一个默认方法。所以需要在
+<code>T</code> 的特征约束中指定 <code>PartialOrd</code>，这样
+<code>largest</code> 函数可以用于内部元素类型可比较大小的数组切片。</p>
+<p>由于 <code>PartialOrd</code> 位于 <code>prelude</code>
+中所以并不需要通过 <code>std::cmp</code> 手动将其引入作用域。所以可以将
+<code>largest</code> 的签名修改为如下：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">largest</span>&lt;T: <span class="hljs-built_in">PartialOrd</span>&gt;(list: &amp;[T]) <span class="hljs-punctuation">-&gt;</span> T &#123;&#125;<br></code></pre></td></tr></table></figure>
+<p>但是此时编译，又会出现新的错误：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs rust">error[E0508]: cannot <span class="hljs-keyword">move</span> out of <span class="hljs-keyword">type</span> `[T]`, a non-copy slice<br> -<span class="hljs-punctuation">-&gt;</span> src/main.rs:<span class="hljs-number">2</span>:<span class="hljs-number">23</span><br>  |<br><span class="hljs-number">2</span> |     <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">largest</span> = list[<span class="hljs-number">0</span>];<br>  |                       ^^^^^^^<br>  |                       |<br>  |                       cannot <span class="hljs-keyword">move</span> out of here<br>  |                       help: consider using a reference instead: `&amp;list[<span class="hljs-number">0</span>]`<br><br>error[E0507]: cannot <span class="hljs-keyword">move</span> out of borrowed content<br> -<span class="hljs-punctuation">-&gt;</span> src/main.rs:<span class="hljs-number">4</span>:<span class="hljs-number">9</span><br>  |<br><span class="hljs-number">4</span> |     <span class="hljs-keyword">for</span> &amp;item <span class="hljs-keyword">in</span> list.<span class="hljs-title function_ invoke__">iter</span>() &#123;<br>  |         ^----<br>  |         ||<br>  |         |hint: to prevent <span class="hljs-keyword">move</span>, <span class="hljs-keyword">use</span> `<span class="hljs-keyword">ref</span> item` or `<span class="hljs-keyword">ref</span> <span class="hljs-keyword">mut</span> item`<br>  |         cannot <span class="hljs-keyword">move</span> out of borrowed content<br></code></pre></td></tr></table></figure>
+<p>错误的核心是
+<code>cannot move out of type [T], a non-copy slice</code>，原因是
+<code>T</code> 没有<a target="_blank" rel="noopener" href="https://course.rs/basic/ownership/ownership.html#拷贝浅拷贝">实现
+<code>Copy</code> 特性</a>，因此我们只能把所有权进行转移，毕竟只有
+<code>i32</code> 等基础类型才实现了 <code>Copy</code>
+特性，可以存储在栈上，而 <code>T</code>
+可以指代任何类型（严格来说是实现了 <code>PartialOrd</code>
+特征的所有类型）。</p>
+<p>因此，为了让 <code>T</code> 拥有 <code>Copy</code>
+特性，我们可以增加特征约束：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">largest</span>&lt;T: <span class="hljs-built_in">PartialOrd</span> + <span class="hljs-built_in">Copy</span>&gt;(list: &amp;[T]) <span class="hljs-punctuation">-&gt;</span> T &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">largest</span> = list[<span class="hljs-number">0</span>];<br><br>    <span class="hljs-keyword">for</span> &amp;item <span class="hljs-keyword">in</span> list.<span class="hljs-title function_ invoke__">iter</span>() &#123;<br>        <span class="hljs-keyword">if</span> item &gt; largest &#123;<br>            largest = item;<br>        &#125;<br>    &#125;<br><br>    largest<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">number_list</span> = <span class="hljs-built_in">vec!</span>[<span class="hljs-number">34</span>, <span class="hljs-number">50</span>, <span class="hljs-number">25</span>, <span class="hljs-number">100</span>, <span class="hljs-number">65</span>];<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">result</span> = <span class="hljs-title function_ invoke__">largest</span>(&amp;number_list);<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;The largest number is &#123;&#125;&quot;</span>, result);<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">char_list</span> = <span class="hljs-built_in">vec!</span>[<span class="hljs-string">&#x27;y&#x27;</span>, <span class="hljs-string">&#x27;m&#x27;</span>, <span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-string">&#x27;q&#x27;</span>];<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">result</span> = <span class="hljs-title function_ invoke__">largest</span>(&amp;char_list);<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;The largest char is &#123;&#125;&quot;</span>, result);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>如果并不希望限制 <code>largest</code> 函数只能用于实现了
+<code>Copy</code> 特征的类型，我们可以在 <code>T</code> 的特征约束中指定
+<a target="_blank" rel="noopener" href="https://course.rs/basic/ownership/ownership.html#克隆深拷贝"><code>Clone</code>
+特征</a> 而不是 <code>Copy</code> 特征。并克隆 <code>list</code>
+中的每一个值使得 <code>largest</code> 函数拥有其所有权。使用
+<code>clone</code> 函数意味着对于类似 <code>String</code>
+这样拥有堆上数据的类型，会潜在地分配更多堆上空间，而堆分配在涉及大量数据时可能会相当缓慢。</p>
+<p>另一种 <code>largest</code> 的实现方式是返回在 <code>list</code> 中
+<code>T</code> 值的引用。如果我们将函数返回值从 <code>T</code> 改为
+<code>&amp;T</code> 并改变函数体使其能够返回一个引用，我们将不需要任何
+<code>Clone</code> 或 <code>Copy</code>
+的特征约束而且也不会有任何的堆分配。尝试自己实现这种替代解决方式吧！</p>
+<h2 id="通过-derive-派生特征">7. 通过 <code>derive</code> 派生特征</h2>
+<p>在本书中，形如 <code>#[derive(Debug)]</code>
+的代码已经出现了很多次，这种是一种特征派生语法，被 <code>derive</code>
+标记的对象会自动实现对应的默认特征代码，继承相应的功能。</p>
+<p>例如 <code>Debug</code>
+特征，它有一套自动实现的默认代码，当你给一个结构体标记后，就可以使用
+<code>println!("&#123;:?&#125;", s)</code> 的形式打印该结构体的对象。</p>
+<p>再如 <code>Copy</code>
+特征，它也有一套自动实现的默认代码，当标记到一个类型上时，可以让这个类型自动实现
+<code>Copy</code> 特征，进而可以调用 <code>copy</code>
+方法，进行自我复制。</p>
+<p>总之，<code>derive</code> 派生出来的是 Rust
+默认给我们提供的特征，在开发过程中极大的简化了自己手动实现相应特征的需求，当然，如果你有特殊的需求，还可以自己手动重载该实现。</p>
+<p>详细的 <code>derive</code> 列表参见<a target="_blank" rel="noopener" href="https://course.rs/appendix/derive.html">附录-派生特征</a>。</p>
+<h2 id="调用方法需要引入特征">8. 调用方法需要引入特征</h2>
+<p>在一些场景中，使用 <code>as</code>
+关键字做类型转换会有比较大的限制，因为你想要在类型转换上拥有完全的控制，例如处理转换错误，那么你将需要
+<code>TryInto</code>：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">use</span> std::convert::TryInto;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>  <span class="hljs-keyword">let</span> <span class="hljs-variable">a</span>: <span class="hljs-type">i32</span> = <span class="hljs-number">10</span>;<br>  <span class="hljs-keyword">let</span> <span class="hljs-variable">b</span>: <span class="hljs-type">u16</span> = <span class="hljs-number">100</span>;<br><br>  <span class="hljs-keyword">let</span> <span class="hljs-variable">b_</span> = b.<span class="hljs-title function_ invoke__">try_into</span>()<br>            .<span class="hljs-title function_ invoke__">unwrap</span>();<br><br>  <span class="hljs-keyword">if</span> a &lt; b_ &#123;<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Ten is less than one hundred.&quot;</span>);<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>上面代码中引入了 <code>std::convert::TryInto</code>
+特征，但是却没有使用它，可能有些同学会为此困惑，主要原因在于<strong>如果你要使用一个特征的方法，那么你需要将该特征引入当前的作用域中</strong>，我们在上面用到了
+<code>try_into</code> 方法，因此需要引入对应的特征。</p>
+<p>但是 Rust 又提供了一个非常便利的办法，即把最常用的标准库中的特征通过
+<a target="_blank" rel="noopener" href="https://course.rs/appendix/prelude.html"><code>std::prelude</code></a>
+模块提前引入到当前作用域中，其中包括了
+<code>std::convert::TryInto</code>，你可以尝试删除第一行的代码
+<code>use ...</code>，看看是否会报错。</p>
+<h2 id="几个综合例子">9. 几个综合例子</h2>
+<h3 id="为自定义类型实现-操作">9.1 为自定义类型实现 <code>+</code>
+操作</h3>
+<p>在 Rust 中除了数值类型的加法，<code>String</code> 也可以做<a target="_blank" rel="noopener" href="https://course.rs/basic/compound-type/string-slice.html#操作字符串">加法</a>，因为
+Rust 为该类型实现了 <code>std::ops::Add</code>
+特征，同理，如果我们为自定义类型实现了该特征，那就可以自己实现
+<code>Point1 + Point2</code> 的操作:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">use</span> std::ops::Add;<br><br><span class="hljs-comment">// 泛型参数限制：T: Add&lt;T, Output = T&gt; 这个约束确保了 T 类型可以与自身进行加法操作，并且加法的结果类型仍然是 T。</span><br><span class="hljs-comment">// 为Point结构体派生Debug特征，用于格式化输出</span><br><span class="hljs-meta">#[derive(Debug)]</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Point</span>&lt;T: Add&lt;T, Output = T&gt;&gt; &#123; <span class="hljs-comment">//限制类型T必须实现了Add特征，否则无法进行+操作。</span><br>    x: T,<br>    y: T,<br>&#125;<br><br><span class="hljs-keyword">impl</span>&lt;T: Add&lt;T, Output = T&gt;&gt; Add <span class="hljs-keyword">for</span> <span class="hljs-title class_">Point</span>&lt;T&gt; &#123;<br>    <span class="hljs-comment">// type Output = Point&lt;T&gt;：指定了加法操作的结果类型为 Point&lt;T&gt;。</span><br>    <span class="hljs-keyword">type</span> <span class="hljs-title class_">Output</span> = Point&lt;T&gt;;<br><br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">add</span>(<span class="hljs-keyword">self</span>, p: Point&lt;T&gt;) <span class="hljs-punctuation">-&gt;</span> Point&lt;T&gt; &#123;<br>        Point&#123;<br>            x: <span class="hljs-keyword">self</span>.x + p.x,<br>            y: <span class="hljs-keyword">self</span>.y + p.y,<br>        &#125;<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">add</span>&lt;T: Add&lt;T, Output=T&gt;&gt;(a:T, b:T) <span class="hljs-punctuation">-&gt;</span> T &#123;<br>    a + b<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">p1</span> = Point&#123;x: <span class="hljs-number">1.1f32</span>, y: <span class="hljs-number">1.1f32</span>&#125;;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">p2</span> = Point&#123;x: <span class="hljs-number">2.1f32</span>, y: <span class="hljs-number">2.1f32</span>&#125;;<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;:?&#125;&quot;</span>, <span class="hljs-title function_ invoke__">add</span>(p1, p2));<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">p3</span> = Point&#123;x: <span class="hljs-number">1i32</span>, y: <span class="hljs-number">1i32</span>&#125;;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">p4</span> = Point&#123;x: <span class="hljs-number">2i32</span>, y: <span class="hljs-number">2i32</span>&#125;;<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;:?&#125;&quot;</span>, <span class="hljs-title function_ invoke__">add</span>(p3, p4));<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="自定义类型的打印输出">9.2 自定义类型的打印输出</h3>
+<p>在开发过程中，往往只要使用 <code>#[derive(Debug)]</code>
+对我们的自定义类型进行标注，即可实现打印输出的功能：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-meta">#[derive(Debug)]</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Point</span>&#123;<br>    x: <span class="hljs-type">i32</span>,<br>    y: <span class="hljs-type">i32</span><br>&#125;<br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">p</span> = Point&#123;x:<span class="hljs-number">3</span>,y:<span class="hljs-number">3</span>&#125;;<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;:?&#125;&quot;</span>,p);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>但是在实际项目中，往往需要对我们的自定义类型进行自定义的格式化输出，以让用户更好的阅读理解我们的类型，此时就要为自定义类型实现
+<code>std::fmt::Display</code> 特征：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-meta">#![allow(dead_code)]</span><br><br><span class="hljs-keyword">use</span> std::fmt;<br><span class="hljs-keyword">use</span> std::fmt::&#123;Display&#125;;<br><br><span class="hljs-meta">#[derive(Debug,PartialEq)]</span><br><span class="hljs-keyword">enum</span> <span class="hljs-title class_">FileState</span> &#123;<br>  Open,<br>  Closed,<br>&#125;<br><br><span class="hljs-meta">#[derive(Debug)]</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">File</span> &#123;<br>  name: <span class="hljs-type">String</span>,<br>  data: <span class="hljs-type">Vec</span>&lt;<span class="hljs-type">u8</span>&gt;,<br>  state: FileState,<br>&#125;<br><br><span class="hljs-keyword">impl</span> <span class="hljs-title class_">Display</span> <span class="hljs-keyword">for</span> <span class="hljs-title class_">FileState</span> &#123;<br>    <span class="hljs-comment">// f: &amp;mut fmt::Formatter：这是一个可变引用，指向 fmt::Formatter 类型的格式化器对象。</span><br>    <span class="hljs-comment">// fmt::Formatter 是 Rust 标准库中的一个结构体，它封装了格式化操作所需的信息和方法。</span><br>    <span class="hljs-comment">// 通过 f，你可以将数据写入最终的输出流（例如控制台、文件等）。</span><br>    <br>    <span class="hljs-comment">// fmt::Formatter 提供了一些方法和字段，用于控制格式化过程。</span><br>    <span class="hljs-comment">// 例如，你可以通过 f.write_str 方法将字符串写入输出流，</span><br>    <span class="hljs-comment">// 或者通过 f.precision 字段获取格式化精度等.</span><br>    <br>    <span class="hljs-comment">// -&gt; fmt::Result：这是方法的返回类型，表示格式化操作的结果。</span><br>    <span class="hljs-comment">// fmt::Result 是一个类型别名，通常等价于 Result&lt;(), fmt::Error&gt;。</span><br>    <span class="hljs-comment">// 它表示格式化操作可能成功或失败.</span><br>    <span class="hljs-comment">// 如果格式化成功，返回 Ok(())，表示没有发生错误，格式化操作顺利完成.</span><br>    <span class="hljs-comment">// 如果格式化失败，返回 Err(fmt::Error)，表示发生了错误。</span><br>    <span class="hljs-comment">// fmt::Error 是一个错误类型，表示格式化过程中遇到的问题，例如写入输出流失败等.</span><br>    <br>   <span class="hljs-keyword">fn</span> <span class="hljs-title function_">fmt</span>(&amp;<span class="hljs-keyword">self</span>, f: &amp;<span class="hljs-keyword">mut</span> fmt::Formatter) <span class="hljs-punctuation">-&gt;</span> fmt::<span class="hljs-type">Result</span> &#123;<br>     <span class="hljs-keyword">match</span> *<span class="hljs-keyword">self</span> &#123;<br>         FileState::Open =&gt; <span class="hljs-built_in">write!</span>(f, <span class="hljs-string">&quot;OPEN&quot;</span>),<br>         FileState::Closed =&gt; <span class="hljs-built_in">write!</span>(f, <span class="hljs-string">&quot;CLOSED&quot;</span>),<br>     &#125;<br>   &#125;<br>&#125;<br><br><span class="hljs-keyword">impl</span> <span class="hljs-title class_">Display</span> <span class="hljs-keyword">for</span> <span class="hljs-title class_">File</span> &#123;<br>   <span class="hljs-keyword">fn</span> <span class="hljs-title function_">fmt</span>(&amp;<span class="hljs-keyword">self</span>, f: &amp;<span class="hljs-keyword">mut</span> fmt::Formatter) <span class="hljs-punctuation">-&gt;</span> fmt::<span class="hljs-type">Result</span> &#123;<br>      <span class="hljs-built_in">write!</span>(f, <span class="hljs-string">&quot;&lt;&#123;&#125; (&#123;&#125;)&gt;&quot;</span>,<br>             <span class="hljs-keyword">self</span>.name, <span class="hljs-keyword">self</span>.state)<br>   &#125;<br>&#125;<br><br><span class="hljs-keyword">impl</span> <span class="hljs-title class_">File</span> &#123;<br>  <span class="hljs-keyword">fn</span> <span class="hljs-title function_">new</span>(name: &amp;<span class="hljs-type">str</span>) <span class="hljs-punctuation">-&gt;</span> File &#123;<br>    File &#123;<br>        name: <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(name),<br>        data: <span class="hljs-type">Vec</span>::<span class="hljs-title function_ invoke__">new</span>(),<br>        state: FileState::Closed,<br>    &#125;<br>  &#125;<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>  <span class="hljs-keyword">let</span> <span class="hljs-variable">f6</span> = File::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-string">&quot;f6.txt&quot;</span>);<br>  <span class="hljs-comment">//...</span><br>  <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;:?&#125;&quot;</span>, f6);<br>  <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;&#125;&quot;</span>, f6);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/rust/" class="category-chain-item">rust</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/rust/rust%E5%9C%A3%E7%BB%8F/" class="category-chain-item">rust圣经</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/rust/rust%E5%9C%A3%E7%BB%8F/rust%E5%9F%BA%E7%A1%80/" class="category-chain-item">rust基础</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/rust/" class="print-no-link">#rust</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>2.8.2 特征 Trait</div>
+      <div>http://binbo-zappy.github.io/2025/01/05/rust圣经/2-8-2-特征-Trait/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年1月5日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-8-3-%E7%89%B9%E5%BE%81%E5%AF%B9%E8%B1%A1/" title="2.8.3 特征对象">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">2.8.3 特征对象</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-8-1-%E6%B3%9B%E5%9E%8B-Generics/" title="2.8.1 泛型 Generics">
+                        <span class="hidden-mobile">2.8.1 泛型 Generics</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,935 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Deref 解引用 在开始之前，我们先来看一段代码： 123456789101112131415#[derive(Debug)]struct Person &#123;    name: String,    age: u8&#125;impl Person &#123;    fn new(name: String, age: u8) -&gt; Self &#123;        Pe">
+<meta property="og:type" content="article">
+<meta property="og:title" content="4.4.2 Deref 解引用">
+<meta property="og:url" content="http://binbo-zappy.github.io/2025/02/05/rust%E5%9C%A3%E7%BB%8F/4-4-2-Deref%E8%A7%A3%E5%BC%95%E7%94%A8/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="Deref 解引用 在开始之前，我们先来看一段代码： 123456789101112131415#[derive(Debug)]struct Person &#123;    name: String,    age: u8&#125;impl Person &#123;    fn new(name: String, age: u8) -&gt; Self &#123;        Pe">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/rust.jpg">
+<meta property="article:published_time" content="2025-02-05T05:41:18.000Z">
+<meta property="article:modified_time" content="2025-02-05T06:12:10.656Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="rust">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/rust.jpg">
+  
+  
+  
+  <title>4.4.2 Deref 解引用 - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="4.4.2 Deref 解引用"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-02-05 13:41" pubdate>
+          2025年2月5日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          29 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">4.4.2 Deref 解引用</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="deref-解引用"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/deref.html#deref-解引用">Deref
+解引用</a></h1>
+<p>在开始之前，我们先来看一段代码：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-meta">#[derive(Debug)]</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Person</span> &#123;<br>    name: <span class="hljs-type">String</span>,<br>    age: <span class="hljs-type">u8</span><br>&#125;<br><br><span class="hljs-keyword">impl</span> <span class="hljs-title class_">Person</span> &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">new</span>(name: <span class="hljs-type">String</span>, age: <span class="hljs-type">u8</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-keyword">Self</span> &#123;<br>        Person &#123; name, age&#125;<br>    &#125;<br><br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">display</span>(<span class="hljs-keyword">self</span>: &amp;<span class="hljs-keyword">mut</span> Person, age: <span class="hljs-type">u8</span>) &#123;<br>        <span class="hljs-keyword">let</span> <span class="hljs-variable">Person</span>&#123;name, age&#125; = &amp;<span class="hljs-keyword">self</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>以上代码有一个很奇怪的地方：在 <code>display</code>
+方法中，<code>self</code> 是 <code>&amp;mut Person</code>
+的类型，接着我们对其取了一次引用 <code>&amp;self</code>，此时
+<code>&amp;self</code> 的类型是
+<code>&amp;&amp;mut Person</code>，然后我们又将其和 <code>Person</code>
+类型进行匹配，取出其中的值。</p>
+<p>那么问题来了，Rust 不是号称安全的语言吗？为何允许将
+<code>&amp;&amp;mut Person</code> 跟 <code>Person</code>
+进行匹配呢？答案就在本章节中，等大家学完后，再回头自己来解决这个问题 :)
+下面正式开始咱们的新章节学习。</p>
+<p>何为智能指针？能不让你写出 <code>****s</code>
+形式的解引用，我认为就是智能: )，智能指针的名称来源，主要就在于它实现了
+<code>Deref</code> 和 <code>Drop</code>
+特征，这两个特征可以智能地帮助我们节省使用上的负担：</p>
+<ul>
+<li><code>Deref</code>
+可以让智能指针像引用那样工作，这样你就可以写出同时支持智能指针和引用的代码，例如
+<code>*T</code></li>
+<li><code>Drop</code>
+允许你指定智能指针超出作用域后自动执行的代码，例如做一些数据清除等收尾工作</li>
+</ul>
+<p>先来看看 <code>Deref</code> 特征是如何工作的。</p>
+<h2 id="通过-获取引用背后的值"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/deref.html#通过--获取引用背后的值">通过
+<code>*</code> 获取引用背后的值</a></h2>
+<p>在正式讲解 <code>Deref</code>
+之前，我们先来看下常规引用的解引用。</p>
+<p>常规引用是一个指针类型，包含了目标数据存储的内存地址。对常规引用使用
+<code>*</code>
+操作符，就可以通过解引用的方式获取到内存地址对应的数据值：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">x</span> = <span class="hljs-number">5</span>;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">y</span> = &amp;x;<br><br>    <span class="hljs-built_in">assert_eq!</span>(<span class="hljs-number">5</span>, x);<br>    <span class="hljs-built_in">assert_eq!</span>(<span class="hljs-number">5</span>, *y);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这里 <code>y</code> 就是一个常规引用，包含了值 <code>5</code>
+所在的内存地址，然后通过解引用 <code>*y</code>，我们获取到了值
+<code>5</code>。如果你试图执行
+<code>assert_eq!(5, y);</code>，代码就会无情报错，因为你无法将一个引用与一个数值做比较：</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs console">error[E0277]: can&#x27;t compare `&#123;integer&#125;` with `&amp;&#123;integer&#125;` //无法将&#123;integer&#125; 与&amp;&#123;integer&#125;进行比较<br><span class="hljs-meta prompt_"> --&gt; </span><span class="language-bash">src/main.rs:6:5</span><br>  |<br>6 |     assert_eq!(5, y);<br>  |     ^^^^^^^^^^^^^^^^^ no implementation for `&#123;integer&#125; == &amp;&#123;integer&#125;`<br>  |<br>  = help: the trait `PartialEq&lt;&amp;&#123;integer&#125;&gt;` is not implemented for `&#123;integer&#125;`<br>                    // 你需要为&#123;integer&#125;实现用于比较的特征PartialEq&lt;&amp;&#123;integer&#125;&gt;<br></code></pre></td></tr></table></figure>
+<h2 id="智能指针解引用"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/deref.html#智能指针解引用">智能指针解引用</a></h2>
+<p>上面所说的解引用方式和其它大多数语言并无区别，但是 Rust
+中将解引用提升到了一个新高度。考虑一下智能指针，它是一个结构体类型，如果你直接对它进行
+<code>*myStruct</code>，显然编译器不知道该如何办，因此我们可以为智能指针结构体实现
+<code>Deref</code> 特征。</p>
+<p>实现 <code>Deref</code>
+后的智能指针结构体，就可以像普通引用一样，通过 <code>*</code>
+进行解引用，例如 <code>Box&lt;T&gt;</code> 智能指针：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">x</span> = <span class="hljs-type">Box</span>::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-number">1</span>);<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">sum</span> = *x + <span class="hljs-number">1</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>智能指针 <code>x</code> 被 <code>*</code> 解引用为 <code>i32</code>
+类型的值 <code>1</code>，然后再进行求和。</p>
+<h4 id="定义自己的智能指针"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/deref.html#定义自己的智能指针">定义自己的智能指针</a></h4>
+<p>现在，让我们一起来实现一个智能指针，功能上类似
+<code>Box&lt;T&gt;</code>。由于 <code>Box&lt;T&gt;</code>
+本身很简单，并没有包含类如长度、最大长度等信息，因此用一个元组结构体即可。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">MyBox</span>&lt;T&gt;(T);<br><br><span class="hljs-keyword">impl</span>&lt;T&gt; MyBox&lt;T&gt; &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">new</span>(x: T) <span class="hljs-punctuation">-&gt;</span> MyBox&lt;T&gt; &#123;<br>        <span class="hljs-title function_ invoke__">MyBox</span>(x)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>跟 <code>Box&lt;T&gt;</code> 一样，我们的智能指针也持有一个
+<code>T</code> 类型的值，然后使用关联函数 <code>MyBox::new</code>
+来创建智能指针。由于还未实现 <code>Deref</code> 特征，此时使用
+<code>*</code> 肯定会报错：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">y</span> = MyBox::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-number">5</span>);<br><br>    <span class="hljs-built_in">assert_eq!</span>(<span class="hljs-number">5</span>, *y);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>运行后，报错如下：</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs console">error[E0614]: type `MyBox&lt;&#123;integer&#125;&gt;` cannot be dereferenced<br><span class="hljs-meta prompt_">  --&gt; </span><span class="language-bash">src/main.rs:12:19</span><br>   |<br>12 |     assert_eq!(5, *y);<br>   |                   ^^<br></code></pre></td></tr></table></figure>
+<h5 id="为智能指针实现-deref-特征"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/deref.html#为智能指针实现-deref-特征">为智能指针实现
+Deref 特征</a></h5>
+<p>现在来为 <code>MyBox</code> 实现 <code>Deref</code> 特征，以支持
+<code>*</code> 解引用操作符：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">use</span> std::ops::Deref;<br><br><span class="hljs-keyword">impl</span>&lt;T&gt; Deref <span class="hljs-keyword">for</span> <span class="hljs-title class_">MyBox</span>&lt;T&gt; &#123;<br>    <span class="hljs-keyword">type</span> <span class="hljs-title class_">Target</span> = T;<br><br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">deref</span>(&amp;<span class="hljs-keyword">self</span>) <span class="hljs-punctuation">-&gt;</span> &amp;<span class="hljs-keyword">Self</span>::Target &#123;<br>        &amp;<span class="hljs-keyword">self</span>.<span class="hljs-number">0</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>很简单，当解引用 <code>MyBox</code>
+智能指针时，返回元组结构体中的元素
+<code>&amp;self.0</code>，有几点要注意的：</p>
+<ul>
+<li>在 <code>Deref</code> 特征中声明了关联类型
+<code>Target</code>，在之前章节中介绍过，关联类型主要是为了提升代码可读性</li>
+<li><code>deref</code> 返回的是一个常规引用，可以被 <code>*</code>
+进行解引用</li>
+</ul>
+<p>之前报错的代码此时已能顺利编译通过。当然，标准库实现的智能指针要考虑很多边边角角情况，肯定比我们的实现要复杂。</p>
+<h2 id="背后的原理"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/deref.html#-背后的原理"><code>*</code>
+背后的原理</a></h2>
+<p>当我们对智能指针 <code>Box</code> 进行解引用时，实际上 Rust
+为我们调用了以下方法：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs rust">*(y.<span class="hljs-title function_ invoke__">deref</span>())<br></code></pre></td></tr></table></figure>
+<p>首先调用 <code>deref</code> 方法返回值的常规引用，然后通过
+<code>*</code> 对常规引用进行解引用，最终获取到目标值。</p>
+<p>至于 Rust
+为何要使用这个有点啰嗦的方式实现，原因在于所有权系统的存在。如果
+<code>deref</code>
+方法直接返回一个值，而不是引用，那么该值的所有权将被转移给调用者，而我们不希望调用者仅仅只是
+<code>*T</code> 一下，就拿走了智能指针中包含的值。</p>
+<p>需要注意的是，<code>*</code> 不会无限递归替换，从 <code>*y</code> 到
+<code>*(y.deref())</code> 只会发生一次，而不会继续进行替换然后产生形如
+<code>*((y.deref()).deref())</code> 的怪物。</p>
+<h2 id="函数和方法中的隐式-deref-转换"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/deref.html#函数和方法中的隐式-deref-转换">函数和方法中的隐式
+Deref 转换</a></h2>
+<p>对于函数和方法的传参，Rust
+提供了一个极其有用的隐式转换：<code>Deref</code>转换。若一个类型实现了
+<code>Deref</code>
+特征，那它的引用在传给函数或方法时，会根据参数签名来决定是否进行隐式的
+<code>Deref</code> 转换，例如：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">s</span> = <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;hello world&quot;</span>);<br>    <span class="hljs-title function_ invoke__">display</span>(&amp;s)<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">display</span>(s: &amp;<span class="hljs-type">str</span>) &#123;<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;&#125;&quot;</span>,s);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>以上代码有几点值得注意：</p>
+<ul>
+<li><code>String</code> 实现了 <code>Deref</code>
+特征，可以在需要时自动被转换为 <code>&amp;str</code> 类型</li>
+<li><code>&amp;s</code> 是一个 <code>&amp;String</code> 类型，当它被传给
+<code>display</code> 函数时，自动通过 <code>Deref</code> 转换成了
+<code>&amp;str</code></li>
+<li>必须使用 <code>&amp;s</code> 的方式来触发
+<code>Deref</code>(仅引用类型的实参才会触发自动解引用)</li>
+</ul>
+<h4 id="连续的隐式-deref-转换"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/deref.html#连续的隐式-deref-转换">连续的隐式
+Deref 转换</a></h4>
+<p>如果你以为 <code>Deref</code>
+仅仅这点作用，那就大错特错了。<code>Deref</code>
+可以支持连续的隐式转换，直到找到适合的形式为止：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">s</span> = MyBox::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;hello world&quot;</span>));<br>    <span class="hljs-title function_ invoke__">display</span>(&amp;s)<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">display</span>(s: &amp;<span class="hljs-type">str</span>) &#123;<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;&#125;&quot;</span>,s);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这里我们使用了之前自定义的智能指针
+<code>MyBox</code>，并将其通过连续的隐式转换变成 <code>&amp;str</code>
+类型：首先 <code>MyBox</code> 被 <code>Deref</code> 成
+<code>String</code> 类型，结果并不能满足 <code>display</code>
+函数参数的要求，编译器发现 <code>String</code> 还可以继续
+<code>Deref</code> 成
+<code>&amp;str</code>，最终成功的匹配了函数参数。</p>
+<p>想象一下，假如 <code>Rust</code> 没有提供这种隐式转换，我们该如何调用
+<code>display</code> 函数？</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">m</span> = MyBox::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;Rust&quot;</span>));<br>    <span class="hljs-title function_ invoke__">display</span>(&amp;(*m)[..]);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>结果不言而喻，肯定是 <code>&amp;s</code>
+的方式优秀得多。总之，当参与其中的类型定义了 <code>Deref</code>
+特征时，Rust 会分析该类型并且连续使用 <code>Deref</code>
+直到最终获得一个引用来匹配函数或者方法的参数类型，这种行为完全不会造成任何的性能损耗，因为完全是在编译期完成。</p>
+<p>但是 <code>Deref</code>
+并不是没有缺点，缺点就是：如果你不知道某个类型是否实现了
+<code>Deref</code>
+特征，那么在看到某段代码时，并不能在第一时间反应过来该代码发生了隐式的
+<code>Deref</code> 转换。事实上，不仅仅是 <code>Deref</code>，在 Rust
+中还有各种 <code>From/Into</code>
+等等会给阅读代码带来一定负担的特征。还是那句话，一切选择都是权衡，有得必有失，得了代码的简洁性，往往就失去了可读性，Go
+语言就是一个刚好相反的例子。</p>
+<p>再来看一下在方法、赋值中自动应用 <code>Deref</code> 的例子：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">s</span> = MyBox::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;hello, world&quot;</span>));<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">s1</span>: &amp;<span class="hljs-type">str</span> = &amp;s;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">s2</span>: <span class="hljs-type">String</span> = s.<span class="hljs-title function_ invoke__">to_string</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>对于 <code>s1</code>，我们通过两次 <code>Deref</code> 将
+<code>&amp;str</code>
+类型的值赋给了它（<strong>赋值操作需要手动解引用</strong>）；而对于
+<code>s2</code>，我们在其上直接调用方法 <code>to_string</code>，实际上
+<code>MyBox</code> 根本没有没有实现该方法，能调用
+<code>to_string</code>，完全是因为编译器对 <code>MyBox</code> 应用了
+<code>Deref</code> 的结果（<strong>方法调用会自动解引用</strong>）。</p>
+<h2 id="deref-规则总结"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/deref.html#deref-规则总结">Deref
+规则总结</a></h2>
+<p>在上面，我们零碎的介绍了不少关于 <code>Deref</code>
+特征的知识，下面来通过较为正式的方式来对其规则进行下总结。</p>
+<p>一个类型为 <code>T</code> 的对象 <code>foo</code>，如果
+<code>T: Deref&lt;Target=U&gt;</code>，那么，相关 <code>foo</code>
+的引用 <code>&amp;foo</code> 在应用的时候会自动转换为
+<code>&amp;U</code>。</p>
+<p>粗看这条规则，貌似有点类似于 <code>AsRef</code>，而跟
+<code>解引用</code> 似乎风马牛不相及，实际里面有些玄妙之处。</p>
+<h4 id="引用归一化"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/deref.html#引用归一化">引用归一化</a></h4>
+<p>Rust 编译器实际上只能对 <code>&amp;v</code>
+形式的引用进行解引用操作，那么问题来了，如果是一个智能指针或者
+<code>&amp;&amp;&amp;&amp;v</code> 类型的呢？
+该如何对这两个进行解引用？</p>
+<p>答案是：Rust 会在解引用时自动把智能指针和
+<code>&amp;&amp;&amp;&amp;v</code> 做引用归一化操作，转换成
+<code>&amp;v</code> 形式，最终再对 <code>&amp;v</code> 进行解引用：</p>
+<ul>
+<li>把智能指针（比如在库中定义的，Box、Rc、Arc、Cow
+等）从结构体脱壳为内部的引用类型，也就是转成结构体内部的
+<code>&amp;v</code></li>
+<li>把多重<code>&amp;</code>，例如
+<code>&amp;&amp;&amp;&amp;&amp;&amp;&amp;v</code>，归一成
+<code>&amp;v</code></li>
+</ul>
+<p>关于第二种情况，这么干巴巴的说，也许大家会迷迷糊糊的，我们来看一段标准库源码：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">impl</span>&lt;T: ?<span class="hljs-built_in">Sized</span>&gt; Deref <span class="hljs-keyword">for</span> &amp;T &#123;<br>    <span class="hljs-keyword">type</span> <span class="hljs-title class_">Target</span> = T;<br><br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">deref</span>(&amp;<span class="hljs-keyword">self</span>) <span class="hljs-punctuation">-&gt;</span> &amp;T &#123;<br>        *<span class="hljs-keyword">self</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>在这段源码中，<code>&amp;T</code> 被自动解引用为
+<code>T</code>，也就是 <code>&amp;T: Deref&lt;Target=T&gt;</code> 。
+按照这个代码，<code>&amp;&amp;&amp;&amp;T</code> 会被自动解引用为
+<code>&amp;&amp;&amp;T</code>，然后再自动解引用为
+<code>&amp;&amp;T</code>，以此类推， 直到最终变成
+<code>&amp;T</code>。</p>
+<p>PS: 以下是 <code>LLVM</code> 编译后的部分中间层代码：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-comment">// Rust 代码</span><br><span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">_2</span>: &amp;<span class="hljs-type">i32</span>;<br><span class="hljs-keyword">let</span> <span class="hljs-variable">_3</span>: &amp;&amp;&amp;&amp;<span class="hljs-type">i32</span>;<br><br>bb0: &#123;<br>    _2 = (*(*(*_3)))<br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="几个例子"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/deref.html#几个例子">几个例子</a></h4>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">foo</span>(s: &amp;<span class="hljs-type">str</span>) &#123;&#125;<br><br><span class="hljs-comment">// 由于 String 实现了 Deref&lt;Target=str&gt;</span><br><span class="hljs-keyword">let</span> <span class="hljs-variable">owned</span> = <span class="hljs-string">&quot;Hello&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>();<br><br><span class="hljs-comment">// 因此下面的函数可以正常运行：</span><br><span class="hljs-title function_ invoke__">foo</span>(&amp;owned);<br><span class="hljs-keyword">use</span> std::rc::Rc;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">foo</span>(s: &amp;<span class="hljs-type">str</span>) &#123;&#125;<br><br><span class="hljs-comment">// String 实现了 Deref&lt;Target=str&gt;</span><br><span class="hljs-keyword">let</span> <span class="hljs-variable">owned</span> = <span class="hljs-string">&quot;Hello&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>();<br><span class="hljs-comment">// 且 Rc 智能指针可以被自动脱壳为内部的 `owned` 引用： &amp;String ，然后 &amp;String 再自动解引用为 &amp;str</span><br><span class="hljs-keyword">let</span> <span class="hljs-variable">counted</span> = Rc::<span class="hljs-title function_ invoke__">new</span>(owned);<br><br><span class="hljs-comment">// 因此下面的函数可以正常运行:</span><br><span class="hljs-title function_ invoke__">foo</span>(&amp;counted);<br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Foo</span>;<br><br><span class="hljs-keyword">impl</span> <span class="hljs-title class_">Foo</span> &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">foo</span>(&amp;<span class="hljs-keyword">self</span>) &#123; <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Foo&quot;</span>); &#125;<br>&#125;<br><br><span class="hljs-keyword">let</span> <span class="hljs-variable">f</span> = &amp;&amp;Foo;<br><br>f.<span class="hljs-title function_ invoke__">foo</span>();<br>(&amp;f).<span class="hljs-title function_ invoke__">foo</span>();<br>(&amp;&amp;f).<span class="hljs-title function_ invoke__">foo</span>();<br>(&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;f).<span class="hljs-title function_ invoke__">foo</span>();<br></code></pre></td></tr></table></figure>
+<h2 id="三种-deref-转换"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/deref.html#三种-deref-转换">三种
+Deref 转换</a></h2>
+<p>在之前，我们讲的都是不可变的 <code>Deref</code> 转换，实际上 Rust
+还支持将一个可变的引用转换成另一个可变的引用以及将一个可变引用转换成不可变的引用，规则如下：</p>
+<ul>
+<li>当 <code>T: Deref&lt;Target=U&gt;</code>，可以将 <code>&amp;T</code>
+转换成 <code>&amp;U</code>，也就是我们之前看到的例子</li>
+<li>当 <code>T: DerefMut&lt;Target=U&gt;</code>，可以将
+<code>&amp;mut T</code> 转换成 <code>&amp;mut U</code></li>
+<li>当 <code>T: Deref&lt;Target=U&gt;</code>，可以将
+<code>&amp;mut T</code> 转换成 <code>&amp;U</code></li>
+</ul>
+<p>来看一个关于 <code>DerefMut</code> 的例子：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">MyBox</span>&lt;T&gt; &#123;<br>    v: T,<br>&#125;<br><br><span class="hljs-keyword">impl</span>&lt;T&gt; MyBox&lt;T&gt; &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">new</span>(x: T) <span class="hljs-punctuation">-&gt;</span> MyBox&lt;T&gt; &#123;<br>        MyBox &#123; v: x &#125;<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">use</span> std::ops::Deref;<br><br><span class="hljs-keyword">impl</span>&lt;T&gt; Deref <span class="hljs-keyword">for</span> <span class="hljs-title class_">MyBox</span>&lt;T&gt; &#123;<br>    <span class="hljs-keyword">type</span> <span class="hljs-title class_">Target</span> = T;<br><br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">deref</span>(&amp;<span class="hljs-keyword">self</span>) <span class="hljs-punctuation">-&gt;</span> &amp;<span class="hljs-keyword">Self</span>::Target &#123;<br>        &amp;<span class="hljs-keyword">self</span>.v<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">use</span> std::ops::DerefMut;<br><br><span class="hljs-keyword">impl</span>&lt;T&gt; DerefMut <span class="hljs-keyword">for</span> <span class="hljs-title class_">MyBox</span>&lt;T&gt; &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">deref_mut</span>(&amp;<span class="hljs-keyword">mut</span> <span class="hljs-keyword">self</span>) <span class="hljs-punctuation">-&gt;</span> &amp;<span class="hljs-keyword">mut</span> <span class="hljs-keyword">Self</span>::Target &#123;<br>        &amp;<span class="hljs-keyword">mut</span> <span class="hljs-keyword">self</span>.v<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">s</span> = MyBox::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;hello, &quot;</span>));<br>    <span class="hljs-title function_ invoke__">display</span>(&amp;<span class="hljs-keyword">mut</span> s)<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">display</span>(s: &amp;<span class="hljs-keyword">mut</span> <span class="hljs-type">String</span>) &#123;<br>    s.<span class="hljs-title function_ invoke__">push_str</span>(<span class="hljs-string">&quot;world&quot;</span>);<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;&#125;&quot;</span>, s);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>以上代码有几点值得注意:</p>
+<ul>
+<li>要实现 <code>DerefMut</code> 必须要先实现 <code>Deref</code>
+特征：<code>pub trait DerefMut: Deref</code></li>
+<li><code>T: DerefMut&lt;Target=U&gt;</code> 解读：将
+<code>&amp;mut T</code> 类型通过 <code>DerefMut</code> 特征的方法转换为
+<code>&amp;mut U</code> 类型，对应上例中，就是将
+<code>&amp;mut MyBox&lt;String&gt;</code> 转换为
+<code>&amp;mut String</code></li>
+</ul>
+<p>对于上述三条规则中的第三条，它比另外两条稍微复杂了点：Rust
+可以把可变引用隐式的转换成不可变引用，但反之则不行。</p>
+<p>如果从 Rust
+的所有权和借用规则的角度考虑，当你拥有一个可变的引用，那该引用肯定是对应数据的唯一借用，那么此时将可变引用变成不可变引用并不会破坏借用规则；但是如果你拥有一个不可变引用，那同时可能还存在其它几个不可变的引用，如果此时将其中一个不可变引用转换成可变引用，就变成了可变引用与不可变引用的共存，最终破坏了借用规则。</p>
+<h2 id="总结"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/deref.html#总结">总结</a></h2>
+<p><code>Deref</code> 可以说是 Rust
+中最常见的隐式类型转换，而且它可以连续的实现如
+<code>Box&lt;String&gt; -&gt; String -&gt; &amp;str</code>
+的隐式转换，只要链条上的类型实现了 <code>Deref</code> 特征。</p>
+<p>我们也可以为自己的类型实现 <code>Deref</code>
+特征，但是原则上来说，只应该为自定义的智能指针实现
+<code>Deref</code>。例如，虽然你可以为自己的自定义数组类型实现
+<code>Deref</code> 以避免 <code>myArr.0[0]</code> 的使用形式，但是 Rust
+官方并不推荐这么做，特别是在你开发三方库时。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/rust/" class="category-chain-item">rust</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/rust/rust%E5%9C%A3%E7%BB%8F/" class="category-chain-item">rust圣经</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/rust/rust%E5%9C%A3%E7%BB%8F/rust%E9%AB%98%E7%BA%A7%E8%BF%9B%E9%98%B6/" class="category-chain-item">rust高级进阶</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/rust/" class="print-no-link">#rust</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>4.4.2 Deref 解引用</div>
+      <div>http://binbo-zappy.github.io/2025/02/05/rust圣经/4-4-2-Deref解引用/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年2月5日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/02/05/rust%E5%9C%A3%E7%BB%8F/4-4-3-Drop%E9%87%8A%E6%94%BE%E8%B5%84%E6%BA%90/" title="4.4.3 Drop 释放资源">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">4.4.3 Drop 释放资源</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/02/05/rust%E5%9C%A3%E7%BB%8F/4-4-1-Box%E5%A0%86%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D/" title="4.4.1 Box堆对象分配">
+                        <span class="hidden-mobile">4.4.1 Box堆对象分配</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

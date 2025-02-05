@@ -1,0 +1,844 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="方法 Method 在 Rust 中，方法和对象成对出现： 1object.method() 例如读取一个文件写入缓冲区，如果用函数的写法 read(f, buffer)，用方法的写法 f.read(buffer)。不过与其它语言 class 跟方法的联动使用不同（这里可能要修改下），Rust 的方法往往跟结构体、枚举、特征(Trait)一起使用，特征将在后面几章进行介绍。 1.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2.7 方法">
+<meta property="og:url" content="http://binbo-zappy.github.io/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-7-%E6%96%B9%E6%B3%95-Method/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="方法 Method 在 Rust 中，方法和对象成对出现： 1object.method() 例如读取一个文件写入缓冲区，如果用函数的写法 read(f, buffer)，用方法的写法 f.read(buffer)。不过与其它语言 class 跟方法的联动使用不同（这里可能要修改下），Rust 的方法往往跟结构体、枚举、特征(Trait)一起使用，特征将在后面几章进行介绍。 1.">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/rust.jpg">
+<meta property="article:published_time" content="2025-01-05T14:37:21.000Z">
+<meta property="article:modified_time" content="2025-02-04T01:37:08.309Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="rust">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/rust.jpg">
+  
+  
+  
+  <title>2.7 方法 - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="2.7 方法"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-01-05 22:37" pubdate>
+          2025年1月5日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          20 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">2.7 方法</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="方法-method">方法 Method</h1>
+<p>在 Rust 中，方法和对象成对出现：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs rust">object.<span class="hljs-title function_ invoke__">method</span>()<br></code></pre></td></tr></table></figure>
+<p>例如读取一个文件写入缓冲区，如果用函数的写法
+<code>read(f, buffer)</code>，用方法的写法
+<code>f.read(buffer)</code>。不过与其它语言 <code>class</code>
+跟方法的联动使用不同（这里可能要修改下），Rust
+的方法往往跟结构体、枚举、特征(Trait)一起使用，特征将在后面几章进行介绍。</p>
+<h2 id="定义方法">1. 定义方法</h2>
+<p>Rust 使用 <code>impl</code> 来定义方法，例如以下代码：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Circle</span> &#123;<br>    x: <span class="hljs-type">f64</span>,<br>    y: <span class="hljs-type">f64</span>,<br>    radius: <span class="hljs-type">f64</span>,<br>&#125;<br><br><span class="hljs-keyword">impl</span> <span class="hljs-title class_">Circle</span> &#123;<br>    <span class="hljs-comment">// new是Circle的关联函数，因为它的第一个参数不是self，且new并不是关键字</span><br>    <span class="hljs-comment">// 这种方法往往用于初始化当前结构体的实例</span><br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">new</span>(x: <span class="hljs-type">f64</span>, y: <span class="hljs-type">f64</span>, radius: <span class="hljs-type">f64</span>) <span class="hljs-punctuation">-&gt;</span> Circle &#123;<br>        Circle &#123;<br>            x: x,<br>            y: y,<br>            radius: radius,<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-comment">// Circle的方法，&amp;self表示借用当前的Circle结构体</span><br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">area</span>(&amp;<span class="hljs-keyword">self</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">f64</span> &#123;<br>        std::<span class="hljs-type">f64</span>::consts::PI * (<span class="hljs-keyword">self</span>.radius * <span class="hljs-keyword">self</span>.radius)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>我们这里先不详细展开讲解，只是先建立对方法定义的大致印象。下面的图片将
+Rust 方法定义与其它语言的方法定义做了对比：</p>
+<figure>
+<img src="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-7-%E6%96%B9%E6%B3%95-Method/v2-0d848e960f3279999eab4b1317f6538e_1440w.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>可以看出，其它语言中所有定义都在 <code>class</code> 中，但是 Rust
+的对象定义和方法定义是分离的，这种数据和使用分离的方式，会给予使用者极高的灵活度。</p>
+<p>再来看一个例子：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-meta">#[derive(Debug)]</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Rectangle</span> &#123;<br>    width: <span class="hljs-type">u32</span>,<br>    height: <span class="hljs-type">u32</span>,<br>&#125;<br><br><span class="hljs-keyword">impl</span> <span class="hljs-title class_">Rectangle</span> &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">area</span>(&amp;<span class="hljs-keyword">self</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">u32</span> &#123;<br>        <span class="hljs-keyword">self</span>.width * <span class="hljs-keyword">self</span>.height<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">rect1</span> = Rectangle &#123; width: <span class="hljs-number">30</span>, height: <span class="hljs-number">50</span> &#125;;<br><br>    <span class="hljs-built_in">println!</span>(<br>        <span class="hljs-string">&quot;The area of the rectangle is &#123;&#125; square pixels.&quot;</span>,<br>        rect1.<span class="hljs-title function_ invoke__">area</span>()<br>    );<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>该例子定义了一个 <code>Rectangle</code> 结构体，并且在其上定义了一个
+<code>area</code> 方法，用于计算该矩形的面积。</p>
+<p><code>impl Rectangle &#123;&#125;</code> 表示为 <code>Rectangle</code>
+实现方法（<code>impl</code> 是实现 <em>implementation</em>
+的缩写），这样的写法表明 <code>impl</code> 语句块中的一切都是跟
+<code>Rectangle</code> 相关联的。</p>
+<h3 id="selfself-和-mut-self">1.1 self、&amp;self 和 &amp;mut self</h3>
+<p>接下来的内容非常重要，请大家仔细看。在 <code>area</code>
+的签名中，我们使用 <strong><code>&amp;self</code> 替代
+<code>rectangle: &amp;Rectangle</code></strong>，<code>&amp;self</code>
+其实是 <code>self: &amp;Self</code> 的简写（注意大小写）。在一个
+<code>impl</code> 块内，<strong><code>Self</code>
+指代被实现方法的结构体类型</strong>，<strong><code>self</code>
+指代此类型的实例</strong>，换句话说，<code>self</code> 指代的是
+<code>Rectangle</code>
+结构体实例，这样的写法会让我们的代码简洁很多，而且非常便于理解：我们为哪个结构体实现方法，那么
+<code>self</code> 就是指代哪个结构体的实例。</p>
+<p>需要注意的是，<code>self</code> 依然有所有权的概念：</p>
+<ul>
+<li><code>self</code> 表示 <code>Rectangle</code>
+的所有权转移到该方法中，这种形式用的较少</li>
+<li><code>&amp;self</code> 表示该方法对 <code>Rectangle</code>
+的不可变借用</li>
+<li><code>&amp;mut self</code> 表示可变借用</li>
+</ul>
+<p>总之，<code>self</code> 的使用就跟函数参数一样，要严格遵守 Rust
+的所有权规则。</p>
+<p>回到上面的例子中，选择 <code>&amp;self</code> 的理由跟在函数中使用
+<code>&amp;Rectangle</code>
+是相同的：我们并不想获取所有权，也无需去改变它，只是希望能够读取结构体中的数据。如果想要在方法中去改变当前的结构体，需要将第一个参数改为
+<code>&amp;mut self</code>。仅仅通过使用 <code>self</code>
+作为第一个参数来使方法获取实例的所有权是很少见的，这种使用方式往往用于把当前的对象转成另外一个对象时使用，转换完后，就不再关注之前的对象，且可以防止对之前对象的误调用。</p>
+<p>简单总结下，使用方法代替函数有以下好处：</p>
+<ul>
+<li>不用在函数签名中重复书写 <code>self</code> 对应的类型</li>
+<li>代码的组织性和内聚性更强，对于代码维护和阅读来说，好处巨大</li>
+</ul>
+<h3 id="方法名跟结构体字段名相同">1.2 方法名跟结构体字段名相同</h3>
+<p>在 Rust 中，允许方法名跟结构体的字段名相同：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">impl</span> <span class="hljs-title class_">Rectangle</span> &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">width</span>(&amp;<span class="hljs-keyword">self</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">bool</span> &#123;<br>        <span class="hljs-keyword">self</span>.width &gt; <span class="hljs-number">0</span><br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">rect1</span> = Rectangle &#123;<br>        width: <span class="hljs-number">30</span>,<br>        height: <span class="hljs-number">50</span>,<br>    &#125;;<br><br>    <span class="hljs-keyword">if</span> rect1.<span class="hljs-title function_ invoke__">width</span>() &#123;<br>        <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;The rectangle has a nonzero width; it is &#123;&#125;&quot;</span>, rect1.width);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>当我们使用 <code>rect1.width()</code> 时，Rust
+知道我们调用的是它的方法，如果使用
+<code>rect1.width</code>，则是访问它的字段。</p>
+<p>一般来说，方法跟字段同名，往往适用于实现 <code>getter</code>
+访问器，例如:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">mod</span> my &#123;<br>    <span class="hljs-keyword">pub</span> <span class="hljs-keyword">struct</span> <span class="hljs-title class_">Rectangle</span> &#123;<br>        width: <span class="hljs-type">u32</span>,<br>        <span class="hljs-keyword">pub</span> height: <span class="hljs-type">u32</span>,<br>    &#125;<br><br>    <span class="hljs-keyword">impl</span> <span class="hljs-title class_">Rectangle</span> &#123;<br>        <span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">new</span>(width: <span class="hljs-type">u32</span>, height: <span class="hljs-type">u32</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-keyword">Self</span> &#123;<br>            Rectangle &#123; width, height &#125;<br>        &#125;<br>        <span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">width</span>(&amp;<span class="hljs-keyword">self</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">u32</span> &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">self</span>.width;<br>        &#125;<br>        <span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">height</span>(&amp;<span class="hljs-keyword">self</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">u32</span> &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">self</span>.height;<br>        &#125;<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">rect1</span> = my::Rectangle::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-number">30</span>, <span class="hljs-number">50</span>);<br><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;&#125;&quot;</span>, rect1.<span class="hljs-title function_ invoke__">width</span>()); <span class="hljs-comment">// OK</span><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;&#125;&quot;</span>, rect1.<span class="hljs-title function_ invoke__">height</span>()); <span class="hljs-comment">// OK</span><br>    <span class="hljs-comment">// println!(&quot;&#123;&#125;&quot;, rect1.width); // Error - the visibility of field defaults to private</span><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;&#125;&quot;</span>, rect1.height); <span class="hljs-comment">// OK</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>当从模块外部访问结构体时，结构体的字段默认是私有的，其目的是隐藏信息（封装）。我们如果想要从模块外部获取
+<code>Rectangle</code> 的字段，只需把它的 <code>new</code>，
+<code>width</code> 和 <code>height</code>
+方法设置为公开可见，那么用户就可以创建一个矩形，同时通过访问器
+<code>rect1.width()</code> 和 <code>rect1.height()</code>
+方法来获取矩形的宽度和高度。</p>
+<p>因为 <code>width</code> 字段是私有的，当用户访问
+<code>rect1.width</code>
+字段时，就会报错。注意在此例中，<code>Self</code>
+指代的就是被实现方法的结构体 <code>Rectangle</code>。</p>
+<p>特别的是，这种默认的可见性（私有的）可以通过 <code>pub</code>
+进行覆盖，这样对于模块外部来说，就可以直接访问使用 <code>pub</code>
+修饰的字段而无需通过访问器。这种可见性仅当从定义结构的模块外部访问时才重要，并且具有隐藏信息（封装）的目的。</p>
+<h3 id="运算符到哪去了">1.3 <code>-&gt;</code> 运算符到哪去了？</h3>
+<blockquote>
+<p>在 C/C++ 语言中，有两个不同的运算符来调用方法：<code>.</code>
+直接在对象上调用方法，而 <code>-&gt;</code>
+在一个对象的指针上调用方法，这时需要先解引用指针。换句话说，如果
+<code>object</code> 是一个指针，那么 <code>object-&gt;something()</code>
+和 <code>(*object).something()</code> 是一样的。</p>
+<p>Rust 并没有一个与 <code>-&gt;</code> 等效的运算符；相反，Rust
+有一个叫 <strong>自动引用和解引用</strong>的功能。方法调用是 Rust
+中少数几个拥有这种行为的地方。</p>
+<p>他是这样工作的：当使用 <code>object.something()</code>
+调用方法时，Rust 会自动为 <code>object</code> 添加
+<code>&amp;</code>、<code>&amp;mut</code> 或 <code>*</code> 以便使
+<code>object</code> 与方法签名匹配。也就是说，这些代码是等价的：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs rust">p1.<span class="hljs-title function_ invoke__">distance</span>(&amp;p2);<br>(&amp;p1).<span class="hljs-title function_ invoke__">distance</span>(&amp;p2);<br></code></pre></td></tr></table></figure>
+<p>第一行看起来简洁的多。这种自动引用的行为之所以有效，是因为方法有一个明确的接收者————
+<code>self</code> 的类型。在给出接收者和方法名的前提下，Rust
+可以明确地计算出方法是仅仅读取（<code>&amp;self</code>），做出修改（<code>&amp;mut self</code>）或者是获取所有权（<code>self</code>）。事实上，Rust
+对方法接收者的隐式借用让所有权在实践中更友好。</p>
+</blockquote>
+<h2 id="带有多个参数的方法">2. 带有多个参数的方法</h2>
+<p>方法和函数一样，可以使用多个参数：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">impl</span> <span class="hljs-title class_">Rectangle</span> &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">area</span>(&amp;<span class="hljs-keyword">self</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">u32</span> &#123;<br>        <span class="hljs-keyword">self</span>.width * <span class="hljs-keyword">self</span>.height<br>    &#125;<br><br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">can_hold</span>(&amp;<span class="hljs-keyword">self</span>, other: &amp;Rectangle) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">bool</span> &#123;<br>        <span class="hljs-keyword">self</span>.width &gt; other.width &amp;&amp; <span class="hljs-keyword">self</span>.height &gt; other.height<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">rect1</span> = Rectangle &#123; width: <span class="hljs-number">30</span>, height: <span class="hljs-number">50</span> &#125;;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">rect2</span> = Rectangle &#123; width: <span class="hljs-number">10</span>, height: <span class="hljs-number">40</span> &#125;;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">rect3</span> = Rectangle &#123; width: <span class="hljs-number">60</span>, height: <span class="hljs-number">45</span> &#125;;<br><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Can rect1 hold rect2? &#123;&#125;&quot;</span>, rect1.<span class="hljs-title function_ invoke__">can_hold</span>(&amp;rect2));<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Can rect1 hold rect3? &#123;&#125;&quot;</span>, rect1.<span class="hljs-title function_ invoke__">can_hold</span>(&amp;rect3));<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="关联函数">3. 关联函数</h2>
+<p>现在大家可以思考一个问题，如何为一个结构体定义一个构造器方法？也就是接受几个参数，然后构造并返回该结构体的实例。其实答案在开头的代码片段中就给出了，很简单，参数中不包含
+<code>self</code> 即可。</p>
+<p>这种定义在 <code>impl</code> 中且没有 <code>self</code>
+的函数被称之为<strong>关联函数</strong>： 因为它没有
+<code>self</code>，不能用 <code>f.read()</code>
+的形式调用，因此它是一个函数而不是方法，它又在 <code>impl</code>
+中，与结构体紧密关联，因此称为关联函数。</p>
+<p>在之前的代码中，我们已经多次使用过关联函数，例如
+<code>String::from</code>，用于创建一个动态字符串。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">impl</span> <span class="hljs-title class_">Rectangle</span> &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">new</span>(w: <span class="hljs-type">u32</span>, h: <span class="hljs-type">u32</span>) <span class="hljs-punctuation">-&gt;</span> Rectangle &#123;<br>        Rectangle &#123; width: w, height: h &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>Rust 中有一个约定俗成的规则，使用 <code>new</code>
+来作为构造器的名称，出于设计上的考虑，Rust 特地没有用 <code>new</code>
+作为关键字。</p>
+</blockquote>
+<p>因为是函数，所以不能用 <code>.</code> 的方式来调用，我们需要用
+<code>::</code> 来调用，例如
+<code>let sq = Rectangle::new(3, 3);</code>。这个方法位于结构体的命名空间中：<code>::</code>
+语法用于关联函数和模块创建的命名空间。</p>
+<h2 id="多个-impl-定义">4. 多个 impl 定义</h2>
+<p>Rust 允许我们为一个结构体定义多个 <code>impl</code>
+块，目的是提供更多的灵活性和代码组织性，例如当方法多了后，可以把相关的方法组织在同一个
+<code>impl</code> 块中，那么就可以形成多个 <code>impl</code>
+块，各自完成一块儿目标：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">impl</span> <span class="hljs-title class_">Rectangle</span> &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">area</span>(&amp;<span class="hljs-keyword">self</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">u32</span> &#123;<br>        <span class="hljs-keyword">self</span>.width * <span class="hljs-keyword">self</span>.height<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">impl</span> <span class="hljs-title class_">Rectangle</span> &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">can_hold</span>(&amp;<span class="hljs-keyword">self</span>, other: &amp;Rectangle) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">bool</span> &#123;<br>        <span class="hljs-keyword">self</span>.width &gt; other.width &amp;&amp; <span class="hljs-keyword">self</span>.height &gt; other.height<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="为枚举实现方法">5. 为枚举实现方法</h2>
+<p>枚举类型之所以强大，不仅仅在于它好用、可以<a target="_blank" rel="noopener" href="https://course.rs/basic/compound-type/enum.html#同一化类型">同一化类型</a>，还在于，我们可以像结构体一样，为枚举实现方法：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-meta">#![allow(unused)]</span><br><span class="hljs-keyword">enum</span> <span class="hljs-title class_">Message</span> &#123;<br>    Quit,<br>    Move &#123; x: <span class="hljs-type">i32</span>, y: <span class="hljs-type">i32</span> &#125;,<br>    <span class="hljs-title function_ invoke__">Write</span>(<span class="hljs-type">String</span>),<br>    <span class="hljs-title function_ invoke__">ChangeColor</span>(<span class="hljs-type">i32</span>, <span class="hljs-type">i32</span>, <span class="hljs-type">i32</span>),<br>&#125;<br><br><span class="hljs-keyword">impl</span> <span class="hljs-title class_">Message</span> &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">call</span>(&amp;<span class="hljs-keyword">self</span>) &#123;<br>        <span class="hljs-comment">// 在这里定义方法体</span><br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">m</span> = Message::<span class="hljs-title function_ invoke__">Write</span>(<span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;hello&quot;</span>));<br>    m.<span class="hljs-title function_ invoke__">call</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/rust/" class="category-chain-item">rust</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/rust/rust%E5%9C%A3%E7%BB%8F/" class="category-chain-item">rust圣经</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/rust/rust%E5%9C%A3%E7%BB%8F/rust%E5%9F%BA%E7%A1%80/" class="category-chain-item">rust基础</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/rust/" class="print-no-link">#rust</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>2.7 方法</div>
+      <div>http://binbo-zappy.github.io/2025/01/05/rust圣经/2-7-方法-Method/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年1月5日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-8-%E6%B3%9B%E5%9E%8B%E5%92%8C%E7%89%B9%E5%BE%81/" title="2.8 泛型和特征">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">2.8 泛型和特征</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-6-4-%E5%85%A8%E6%A8%A1%E5%BC%8F%E5%88%97%E8%A1%A8/" title="2.6.4 全模式列表">
+                        <span class="hidden-mobile">2.6.4 全模式列表</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
