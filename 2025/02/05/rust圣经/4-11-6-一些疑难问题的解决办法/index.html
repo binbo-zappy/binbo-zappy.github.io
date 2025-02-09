@@ -19,14 +19,16 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta property="og:type" content="article">
+    <meta name="description" content="一些疑难问题的解决办法 async 在 Rust 依然比较新，疑难杂症少不了，而它们往往还处于活跃开发状态，短时间内无法被解决，因此才有了本文。下面一起来看看这些问题以及相应的临时解决方案。 在 async 语句块中使用 ? async 语句块和 async fn 最大的区别就是前者无法显式的声明返回值，在大多数时候这都不是问题，但是当配合 ? 一起使用时，问题就有所不同: 123">
+<meta property="og:type" content="article">
 <meta property="og:title" content="4.11.6 一些疑难问题的解决办法">
 <meta property="og:url" content="http://binbo-zappy.github.io/2025/02/05/rust%E5%9C%A3%E7%BB%8F/4-11-6-%E4%B8%80%E4%BA%9B%E7%96%91%E9%9A%BE%E9%97%AE%E9%A2%98%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/index.html">
 <meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="一些疑难问题的解决办法 async 在 Rust 依然比较新，疑难杂症少不了，而它们往往还处于活跃开发状态，短时间内无法被解决，因此才有了本文。下面一起来看看这些问题以及相应的临时解决方案。 在 async 语句块中使用 ? async 语句块和 async fn 最大的区别就是前者无法显式的声明返回值，在大多数时候这都不是问题，但是当配合 ? 一起使用时，问题就有所不同: 123">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/rust.jpg">
 <meta property="article:published_time" content="2025-02-05T05:42:22.000Z">
-<meta property="article:modified_time" content="2025-02-05T05:42:22.918Z">
+<meta property="article:modified_time" content="2025-02-09T02:51:05.779Z">
 <meta property="article:author" content="Binbo">
 <meta property="article:tag" content="rust">
 <meta name="twitter:card" content="summary_large_image">
@@ -223,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          0 字
+          1.6k 字
         
       </span>
     
@@ -234,7 +236,7 @@
         
         
         
-          1 分钟
+          14 分钟
         
       </span>
     
@@ -276,7 +278,94 @@
             
               <div class="markdown-body">
                 
-                
+                <h1 id="一些疑难问题的解决办法"><a target="_blank" rel="noopener" href="https://course.rs/advance/async/pain-points-and-workarounds.html#一些疑难问题的解决办法">一些疑难问题的解决办法</a></h1>
+<p><code>async</code> 在 Rust
+依然比较新，疑难杂症少不了，而它们往往还处于活跃开发状态，短时间内无法被解决，因此才有了本文。下面一起来看看这些问题以及相应的临时解决方案。</p>
+<h2 id="在-async-语句块中使用"><a target="_blank" rel="noopener" href="https://course.rs/advance/async/pain-points-and-workarounds.html#在-async-语句块中使用-">在
+async 语句块中使用 ?</a></h2>
+<p><code>async</code> 语句块和 <code>async fn</code>
+最大的区别就是前者无法显式的声明返回值，在大多数时候这都不是问题，但是当配合
+<code>?</code> 一起使用时，问题就有所不同:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">async</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">foo</span>() <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">Result</span>&lt;<span class="hljs-type">u8</span>, <span class="hljs-type">String</span>&gt; &#123;<br>    <span class="hljs-title function_ invoke__">Ok</span>(<span class="hljs-number">1</span>)<br>&#125;<br><span class="hljs-keyword">async</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">bar</span>() <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">Result</span>&lt;<span class="hljs-type">u8</span>, <span class="hljs-type">String</span>&gt; &#123;<br>    <span class="hljs-title function_ invoke__">Ok</span>(<span class="hljs-number">1</span>)<br>&#125;<br><span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">fut</span> = <span class="hljs-keyword">async</span> &#123;<br>        <span class="hljs-title function_ invoke__">foo</span>().<span class="hljs-keyword">await</span>?;<br>        <span class="hljs-title function_ invoke__">bar</span>().<span class="hljs-keyword">await</span>?;<br>        <span class="hljs-title function_ invoke__">Ok</span>(())<br>    &#125;;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>以上代码编译后会报错:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs shell">error[E0282]: type annotations needed<br><span class="hljs-meta prompt_">  --&gt; </span><span class="language-bash">src/main.rs:14:9</span><br>   |<br>11 |     let fut = async &#123;<br>   |         --- consider giving `fut` a type<br>...<br>14 |         Ok(1)<br>   |         ^^ cannot infer type for type parameter `E` declared on the enum `Result`<br></code></pre></td></tr></table></figure>
+<p>原因在于编译器无法推断出 <code>Result&lt;T, E&gt;</code> 中的
+<code>E</code> 的类型， 而且编译器的提示
+<code>consider giving</code>fut<code>a type</code>
+你也别傻乎乎的相信，然后尝试半天，最后无奈放弃：目前还没有办法为
+<code>async</code> 语句块指定返回类型。</p>
+<p>既然编译器无法推断出类型，那咱就给它更多提示，可以使用
+<code>::&lt; ... &gt;</code> 的方式来增加类型注释：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">fut</span> = <span class="hljs-keyword">async</span> &#123;<br>    <span class="hljs-title function_ invoke__">foo</span>().<span class="hljs-keyword">await</span>?;<br>    <span class="hljs-title function_ invoke__">bar</span>().<span class="hljs-keyword">await</span>?;<br>    Ok::&lt;(), <span class="hljs-type">String</span>&gt;(()) <span class="hljs-comment">// 在这一行进行显式的类型注释</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>给予类型注释后此时编译器就知道 <code>Result&lt;T, E&gt;</code> 中的
+<code>E</code> 的类型是 <code>String</code>，进而成功通过编译。</p>
+<h2 id="async-函数和-send-特征"><a target="_blank" rel="noopener" href="https://course.rs/advance/async/pain-points-and-workarounds.html#async-函数和-send-特征">async
+函数和 Send 特征</a></h2>
+<p>在多线程章节我们深入讲过 <code>Send</code>
+特征对于多线程间数据传递的重要性，对于 <code>async fn</code>
+也是如此，它返回的 <code>Future</code> 能否在线程间传递的关键在于
+<code>.await</code> 运行过程中，作用域中的变量类型是否是
+<code>Send</code>。</p>
+<p>学到这里，相信大家已经很清楚 <code>Rc</code>
+无法在多线程环境使用，原因就在于它并未实现 <code>Send</code>
+特征，那咱就用它来做例子:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">use</span> std::rc::Rc;<br><br><span class="hljs-meta">#[derive(Default)]</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">NotSend</span>(Rc&lt;()&gt;);<br></code></pre></td></tr></table></figure>
+<p>事实上，未实现 <code>Send</code> 特征的变量可以出现在
+<code>async fn</code> 语句块中:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">async</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">bar</span>() &#123;&#125;<br><span class="hljs-keyword">async</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">foo</span>() &#123;<br>    NotSend::<span class="hljs-title function_ invoke__">default</span>();<br>    <span class="hljs-title function_ invoke__">bar</span>().<span class="hljs-keyword">await</span>;<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">require_send</span>(_: <span class="hljs-keyword">impl</span> <span class="hljs-title class_">Send</span>) &#123;&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-title function_ invoke__">require_send</span>(<span class="hljs-title function_ invoke__">foo</span>());<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>即使上面的 <code>foo</code> 返回的 <code>Future</code> 是
+<code>Send</code>， 但是在它内部短暂的使用 <code>NotSend</code>
+依然是安全的，原因在于它的作用域并没有影响到
+<code>.await</code>，下面来试试声明一个变量，然后让 <code>.await</code>
+的调用处于变量的作用域中试试:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">async</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">foo</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">x</span> = NotSend::<span class="hljs-title function_ invoke__">default</span>();<br>    <span class="hljs-title function_ invoke__">bar</span>().<span class="hljs-keyword">await</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>不出所料，错误如期而至:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs shell">error: future cannot be sent between threads safely<br><span class="hljs-meta prompt_">  --&gt; </span><span class="language-bash">src/main.rs:17:18</span><br>   |<br>17 |     require_send(foo());<br>   |                  ^^^^^ future returned by `foo` is not `Send`<br>   |<br>   = help: within `impl futures::Future&lt;Output = ()&gt;`, the trait `std::marker::Send` is not implemented for `Rc&lt;()&gt;`<br>note: future is not `Send` as this value is used across an await<br><span class="hljs-meta prompt_">  --&gt; </span><span class="language-bash">src/main.rs:11:5</span><br>   |<br>10 |     let x = NotSend::default();<br>   |         - has type `NotSend` which is not `Send`<br>11 |     bar().await;<br>   |     ^^^^^^^^^^^ await occurs here, with `x` maybe used later<br>12 | &#125;<br>   | - `x` is later dropped here<br></code></pre></td></tr></table></figure>
+<p>提示很清晰，<code>.await</code>在运行时处于 <code>x</code>
+的作用域内。在之前章节有提到过， <code>.await</code>
+有可能被执行器调度到另一个线程上运行，而 <code>Rc</code> 并没有实现
+<code>Send</code>，因此编译器无情拒绝了咱们。</p>
+<p>其中一个可能的解决方法是在 <code>.await</code> 之前就使用
+<code>std::mem::drop</code> 释放掉
+<code>Rc</code>，但是很可惜，截止今天，该方法依然不能解决这种问题。</p>
+<p>不知道有多少同学还记得语句块 <code>&#123; ... &#125;</code> 在 Rust
+中其实具有非常重要的作用(特别是相比其它大多数语言来说时)：可以将变量声明在语句块内，当语句块结束时，变量会自动被
+Drop，这个规则可以帮助我们解决很多借用冲突问题，特别是在
+<code>NLL</code> 出来之前。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">async</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">foo</span>() &#123;<br>    &#123;<br>        <span class="hljs-keyword">let</span> <span class="hljs-variable">x</span> = NotSend::<span class="hljs-title function_ invoke__">default</span>();<br>    &#125;<br>    <span class="hljs-title function_ invoke__">bar</span>().<span class="hljs-keyword">await</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>是不是很简单？最终我们还是通过 Drop
+的方式解决了这个问题，当然，还是期待未来 <code>std::mem::drop</code>
+也能派上用场。</p>
+<h2 id="递归使用-async-fn"><a target="_blank" rel="noopener" href="https://course.rs/advance/async/pain-points-and-workarounds.html#递归使用-async-fn">递归使用
+async fn</a></h2>
+<p>在内部实现中，<code>async fn</code>
+被编译成一个状态机，这会导致递归使用 <code>async fn</code>
+变得较为复杂， 因为编译后的状态机还需要包含自身。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-comment">// foo函数:</span><br><span class="hljs-keyword">async</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">foo</span>() &#123;<br>    <span class="hljs-title function_ invoke__">step_one</span>().<span class="hljs-keyword">await</span>;<br>    <span class="hljs-title function_ invoke__">step_two</span>().<span class="hljs-keyword">await</span>;<br>&#125;<br><span class="hljs-comment">// 会被编译成类似下面的类型：</span><br><span class="hljs-keyword">enum</span> <span class="hljs-title class_">Foo</span> &#123;<br>    <span class="hljs-title function_ invoke__">First</span>(StepOne),<br>    <span class="hljs-title function_ invoke__">Second</span>(StepTwo),<br>&#125;<br><br><span class="hljs-comment">// 因此 recursive 函数</span><br><span class="hljs-keyword">async</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">recursive</span>() &#123;<br>    <span class="hljs-title function_ invoke__">recursive</span>().<span class="hljs-keyword">await</span>;<br>    <span class="hljs-title function_ invoke__">recursive</span>().<span class="hljs-keyword">await</span>;<br>&#125;<br><br><span class="hljs-comment">// 会生成类似以下的类型</span><br><span class="hljs-keyword">enum</span> <span class="hljs-title class_">Recursive</span> &#123;<br>    <span class="hljs-title function_ invoke__">First</span>(Recursive),<br>    <span class="hljs-title function_ invoke__">Second</span>(Recursive),<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这是典型的<a target="_blank" rel="noopener" href="https://course.rs/advance/into-types/sized.html#动态大小类型-dst">动态大小类型</a>，它的大小会无限增长，因此编译器会直接报错:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs shell">error[E0733]: recursion in an `async fn` requires boxing<br><span class="hljs-meta prompt_"> --&gt; </span><span class="language-bash">src/lib.rs:1:22</span><br>  |<br>1 | async fn recursive() &#123;<br>  |                      ^ an `async fn` cannot invoke itself directly<br>  |<br>  = note: a recursive `async fn` must be rewritten to return a boxed future.<br></code></pre></td></tr></table></figure>
+<p>如果认真学过之前的章节，大家应该知道只要将其使用 <code>Box</code>
+放到堆上而不是栈上，就可以解决，在这里还是要称赞下 Rust
+的编译器，给出的提示总是这么精确 <code>recursion in an</code>async
+fn<code>requires boxing</code>。</p>
+<p>就算是使用 <code>Box</code>，这里也大有讲究。如果我们试图使用
+<code>Box::pin</code>
+这种方式去包裹是不行的，因为编译器自身的限制限制了我们(刚夸过它。。。)。为了解决这种问题，我们只能将
+<code>recursive</code> 转变成一个正常的函数，该函数返回一个使用
+<code>Box</code> 包裹的 <code>async</code> 语句块：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">use</span> futures::future::&#123;BoxFuture, FutureExt&#125;;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">recursive</span>() <span class="hljs-punctuation">-&gt;</span> BoxFuture&lt;<span class="hljs-symbol">&#x27;static</span>, ()&gt; &#123;<br>    <span class="hljs-keyword">async</span> <span class="hljs-keyword">move</span> &#123;<br>        <span class="hljs-title function_ invoke__">recursive</span>().<span class="hljs-keyword">await</span>;<br>        <span class="hljs-title function_ invoke__">recursive</span>().<span class="hljs-keyword">await</span>;<br>    &#125;.<span class="hljs-title function_ invoke__">boxed</span>()<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="在特征中使用-async"><a target="_blank" rel="noopener" href="https://course.rs/advance/async/pain-points-and-workarounds.html#在特征中使用-async">在特征中使用
+async</a></h2>
+<p>在目前版本中，我们还无法在特征中定义 <code>async fn</code>
+函数，不过大家也不用担心，目前已经有计划在未来移除这个限制了。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">trait</span> <span class="hljs-title class_">Test</span> &#123;<br>    <span class="hljs-keyword">async</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">test</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>运行后报错:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs shell">error[E0706]: functions in traits cannot be declared `async`<br><span class="hljs-meta prompt_"> --&gt; </span><span class="language-bash">src/main.rs:5:5</span><br>  |<br>5 |     async fn test();<br>  |     -----^^^^^^^^^^^<br>  |     |<br>  |     `async` because of this<br>  |<br>  = note: `async` trait functions are not currently supported<br>  = note: consider using the `async-trait` crate: https://crates.io/crates/async-trait<br></code></pre></td></tr></table></figure>
+<p>好在编译器给出了提示，让我们使用 <a target="_blank" rel="noopener" href="https://github.com/dtolnay/async-trait"><code>async-trait</code></a>
+解决这个问题:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">use</span> async_trait::async_trait;<br><br><span class="hljs-meta">#[async_trait]</span><br><span class="hljs-keyword">trait</span> <span class="hljs-title class_">Advertisement</span> &#123;<br>    <span class="hljs-keyword">async</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">run</span>(&amp;<span class="hljs-keyword">self</span>);<br>&#125;<br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Modal</span>;<br><br><span class="hljs-meta">#[async_trait]</span><br><span class="hljs-keyword">impl</span> <span class="hljs-title class_">Advertisement</span> <span class="hljs-keyword">for</span> <span class="hljs-title class_">Modal</span> &#123;<br>    <span class="hljs-keyword">async</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">run</span>(&amp;<span class="hljs-keyword">self</span>) &#123;<br>        <span class="hljs-keyword">self</span>.<span class="hljs-title function_ invoke__">render_fullscreen</span>().<span class="hljs-keyword">await</span>;<br>        <span class="hljs-keyword">for</span> <span class="hljs-variable">_</span> <span class="hljs-keyword">in</span> <span class="hljs-number">0</span>..<span class="hljs-number">4u16</span> &#123;<br>            <span class="hljs-title function_ invoke__">remind_user_to_join_mailing_list</span>().<span class="hljs-keyword">await</span>;<br>        &#125;<br>        <span class="hljs-keyword">self</span>.<span class="hljs-title function_ invoke__">hide_for_now</span>().<span class="hljs-keyword">await</span>;<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">AutoplayingVideo</span> &#123;<br>    media_url: <span class="hljs-type">String</span>,<br>&#125;<br><br><span class="hljs-meta">#[async_trait]</span><br><span class="hljs-keyword">impl</span> <span class="hljs-title class_">Advertisement</span> <span class="hljs-keyword">for</span> <span class="hljs-title class_">AutoplayingVideo</span> &#123;<br>    <span class="hljs-keyword">async</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">run</span>(&amp;<span class="hljs-keyword">self</span>) &#123;<br>        <span class="hljs-keyword">let</span> <span class="hljs-variable">stream</span> = <span class="hljs-title function_ invoke__">connect</span>(&amp;<span class="hljs-keyword">self</span>.media_url).<span class="hljs-keyword">await</span>;<br>        stream.<span class="hljs-title function_ invoke__">play</span>().<span class="hljs-keyword">await</span>;<br><br>        <span class="hljs-comment">// 用视频说服用户加入我们的邮件列表</span><br>        Modal.<span class="hljs-title function_ invoke__">run</span>().<span class="hljs-keyword">await</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>不过使用该包并不是免费的，每一次特征中的 <code>async</code>
+函数被调用时，都会产生一次堆内存分配。对于大多数场景，这个性能开销都可以接受，但是当函数一秒调用几十万、几百万次时，就得小心这块儿代码的性能了！</p>
 
                 
               </div>

@@ -225,23 +225,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/12/07/Redis/15-%E9%9B%86%E7%BE%A4/" target="_self">
-          <img src="/imgs/redis.jpg" srcset="/img/loading.gif" lazyload alt="15. 集群">
+        <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/5-3-Dueling-Network/" target="_self">
+          <img src="/imgs/RL-WSS.png" srcset="/img/loading.gif" lazyload alt="5.3 Dueling Network">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/12/07/Redis/15-%E9%9B%86%E7%BE%A4/" target="_self">
-          15. 集群
+        <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/5-3-Dueling-Network/" target="_self">
+          5.3 Dueling Network
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/12/07/Redis/15-%E9%9B%86%E7%BE%A4/" target="_self">
+      <a class="index-excerpt " href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/5-3-Dueling-Network/" target="_self">
         <div>
-          集群架构 集群就是使用网络将若干台计算机连通起来，并提供统一的管理方式，使其对外呈现单机的服务效果。 作用：  分散单台服务器的访问压力，实现负载均衡 分散单台服务器的存储压力，实现可扩展性 降低单台服务器宕机带来的业务灾难  集群架构的数据存储设计： 先将 key 通过CRC16(key)%16384进行计算，得到的数用来确定这个key在集群中哪台计算机的存储空间位置。 r
+          对决网络 (Dueling Network) 本节介绍对决网络 (dueling network), 它是对 DQN 的神经网络结构的改进。它的基本想法是将最优动作价值\(Q^*\)分解成最优状态价值\(V^*\)加最优优势\(D^*\)。对决网络的训练与 DQN 完全相同，可以用 Q 学习算法或者双 Q 学习算法 。 最优优势函数 在介绍对决网络 (dueling network)之
         </div>
       </a>
 
@@ -249,8 +249,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-12-07 14:22" pubdate>
-              2024-12-07
+            <time datetime="2024-12-04 16:02" pubdate>
+              2024-12-04
             </time>
           </div>
         
@@ -265,13 +265,20 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/" class="category-chain-item">后端开发</a>
+  <a href="/categories/AI/" class="category-chain-item">AI</a>
   
   
     <span>></span>
     
-  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Redis/" class="category-chain-item">Redis</a>
+  <a href="/categories/AI/RL/" class="category-chain-item">RL</a>
   
+  
+    <span>></span>
+    
+  <a href="/categories/AI/RL/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/" class="category-chain-item">DRL-王树森</a>
+  
+  
+
   
 
   
@@ -287,7 +294,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/Redis/">#Redis</a>
+              <a href="/tags/RL/">#RL</a>
             
           </div>
         
@@ -299,23 +306,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/12/07/Redis/14-%E5%93%A8%E5%85%B5/" target="_self">
-          <img src="/imgs/redis.jpg" srcset="/img/loading.gif" lazyload alt="14. 哨兵">
+        <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/5-2-%E9%AB%98%E4%BC%B0%E9%97%AE%E9%A2%98/" target="_self">
+          <img src="/imgs/RL-WSS.png" srcset="/img/loading.gif" lazyload alt="5.2 高估问题">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/12/07/Redis/14-%E5%93%A8%E5%85%B5/" target="_self">
-          14. 哨兵
+        <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/5-2-%E9%AB%98%E4%BC%B0%E9%97%AE%E9%A2%98/" target="_self">
+          5.2 高估问题
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/12/07/Redis/14-%E5%93%A8%E5%85%B5/" target="_self">
+      <a class="index-excerpt " href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/5-2-%E9%AB%98%E4%BC%B0%E9%97%AE%E9%A2%98/" target="_self">
         <div>
-          master宕机 如果主从模式下的master宕机，一般处理流程：  将宕机的master下线 找一个slave作为master 通知所有的slave连接新的master 启动新的master与slave 全量复制*N + 部分复制*N  出现的问题：  谁来确认master宕机了 选新的master如何选？ 修改配置后，原来的master恢复了怎么办？  哨兵 哨
+          高估问题及解决方法 Q 学习算法有一个缺陷：用 Q 学习训练出的 DQN 会高估真实的价值，而且高估通常是非均匀的。这个缺陷导致 DQN 的表现很差。高估问题并不是 DQN 模型的缺陷，而是 Q 学习算法的缺陷。 Q 学习产生高估的原因有两个：第一，自举导致偏差的传播；第二，最大化导致 TD 目标高估真实价值。为了缓解高估，需要从导致高估的两个原因下手，改进 Q学习算法。双 Q学习算
         </div>
       </a>
 
@@ -323,8 +330,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-12-07 14:22" pubdate>
-              2024-12-07
+            <time datetime="2024-12-04 16:02" pubdate>
+              2024-12-04
             </time>
           </div>
         
@@ -339,13 +346,20 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/" class="category-chain-item">后端开发</a>
+  <a href="/categories/AI/" class="category-chain-item">AI</a>
   
   
     <span>></span>
     
-  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Redis/" class="category-chain-item">Redis</a>
+  <a href="/categories/AI/RL/" class="category-chain-item">RL</a>
   
+  
+    <span>></span>
+    
+  <a href="/categories/AI/RL/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/" class="category-chain-item">DRL-王树森</a>
+  
+  
+
   
 
   
@@ -361,7 +375,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/Redis/">#Redis</a>
+              <a href="/tags/RL/">#RL</a>
             
           </div>
         
@@ -373,23 +387,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/12/07/Redis/13-%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/" target="_self">
-          <img src="/imgs/redis.jpg" srcset="/img/loading.gif" lazyload alt="13. 主从复制">
+        <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/5-1-%E7%BB%8F%E9%AA%8C%E5%9B%9E%E6%94%BE/" target="_self">
+          <img src="/imgs/RL-WSS.png" srcset="/img/loading.gif" lazyload alt="5.1 经验回放">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/12/07/Redis/13-%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/" target="_self">
-          13. 主从复制
+        <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/5-1-%E7%BB%8F%E9%AA%8C%E5%9B%9E%E6%94%BE/" target="_self">
+          5.1 经验回放
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/12/07/Redis/13-%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/" target="_self">
+      <a class="index-excerpt " href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/5-1-%E7%BB%8F%E9%AA%8C%E5%9B%9E%E6%94%BE/" target="_self">
         <div>
-          互联网三高架构 互联网“三高”架构：  高并发 高性能 高可用  大数据时代的“3V”：  海量（Volume） 多样（Variety） 实时（Velocity）  可用性：（全年的秒数 - 当年宕机停用的秒数）/ 全年的秒数 * 100%。 高可用：业界高可用性目标5个9（即99.999%)，即服务器年宕机时长低于315秒，约5.25分钟。 为了避免单点Redis服
+          价值学习高级技巧 前面介绍了 DQN, 并且用 Q学习算法训练 DQN。如果用最原始的 Q 学习算法，那么训练出的 DQN 效果会很不理想。想要提升 DQN 的表现，需要用本章的高级技巧。文献中已经有充分实验结果表明这些高级技巧对 DQN 非常有效，而且这些技巧不冲突，可以一起使用。有些技巧并不局限于DQN，而是可以应用于多种价值学习和策略学习方法。 介绍经验回放 (experienc
         </div>
       </a>
 
@@ -397,8 +411,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-12-07 14:22" pubdate>
-              2024-12-07
+            <time datetime="2024-12-04 16:02" pubdate>
+              2024-12-04
             </time>
           </div>
         
@@ -413,13 +427,20 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/" class="category-chain-item">后端开发</a>
+  <a href="/categories/AI/" class="category-chain-item">AI</a>
   
   
     <span>></span>
     
-  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Redis/" class="category-chain-item">Redis</a>
+  <a href="/categories/AI/RL/" class="category-chain-item">RL</a>
   
+  
+    <span>></span>
+    
+  <a href="/categories/AI/RL/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/" class="category-chain-item">DRL-王树森</a>
+  
+  
+
   
 
   
@@ -435,7 +456,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/Redis/">#Redis</a>
+              <a href="/tags/RL/">#RL</a>
             
           </div>
         
@@ -447,23 +468,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/12/07/Redis/12-%E9%AB%98%E7%BA%A7%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" target="_self">
-          <img src="/imgs/redis.jpg" srcset="/img/loading.gif" lazyload alt="12. 高级数据类型">
+        <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/4-3-%E5%A4%9A%E6%AD%A5-TD%E7%9B%AE%E6%A0%87/" target="_self">
+          <img src="/imgs/RL-WSS.png" srcset="/img/loading.gif" lazyload alt="4.3 多步 TD目标">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/12/07/Redis/12-%E9%AB%98%E7%BA%A7%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" target="_self">
-          12. 高级数据类型
+        <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/4-3-%E5%A4%9A%E6%AD%A5-TD%E7%9B%AE%E6%A0%87/" target="_self">
+          4.3 多步 TD目标
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/12/07/Redis/12-%E9%AB%98%E7%BA%A7%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" target="_self">
+      <a class="index-excerpt " href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/4-3-%E5%A4%9A%E6%AD%A5-TD%E7%9B%AE%E6%A0%87/" target="_self">
         <div>
-          Bitmaps 按位操作。 基础操作：  获取指定Kye对应偏移量上的bit值  1getbit key offset  设置指定key对应偏移量上的bit值，value只能是1或0  1setbit key offset value 扩展操作：  对指定key按位进行交、并、非、异或操作，并将结果保存到destKey中  1bitop op destKey key1
+          多步 TD 目标 首先回顾一下 SARSA 算法。给定五元组\((s_t, a_t, r_t, s_{t+1}, a_{t+1})\), SARSA 计算 TD 目标： \(\hat{y}_t = r_t + \gamma \cdot q(s_{t+1}, a_{t+1}; \boldsymbol{w}).\) 公式中只用到一个奖励\(r_t\),这样得到的\(\hat{y}_t\)叫做
         </div>
       </a>
 
@@ -471,8 +492,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-12-07 14:22" pubdate>
-              2024-12-07
+            <time datetime="2024-12-04 16:02" pubdate>
+              2024-12-04
             </time>
           </div>
         
@@ -487,13 +508,20 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/" class="category-chain-item">后端开发</a>
+  <a href="/categories/AI/" class="category-chain-item">AI</a>
   
   
     <span>></span>
     
-  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Redis/" class="category-chain-item">Redis</a>
+  <a href="/categories/AI/RL/" class="category-chain-item">RL</a>
   
+  
+    <span>></span>
+    
+  <a href="/categories/AI/RL/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/" class="category-chain-item">DRL-王树森</a>
+  
+  
+
   
 
   
@@ -509,7 +537,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/Redis/">#Redis</a>
+              <a href="/tags/RL/">#RL</a>
             
           </div>
         
@@ -521,23 +549,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/12/07/Redis/11-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE/" target="_self">
-          <img src="/imgs/redis.jpg" srcset="/img/loading.gif" lazyload alt="11. 服务器配置">
+        <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/4-2-Q-learning%E7%AE%97%E6%B3%95/" target="_self">
+          <img src="/imgs/RL-WSS.png" srcset="/img/loading.gif" lazyload alt="4.2 Q-learning算法">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/12/07/Redis/11-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE/" target="_self">
-          11. 服务器配置
+        <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/4-2-Q-learning%E7%AE%97%E6%B3%95/" target="_self">
+          4.2 Q-learning算法
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/12/07/Redis/11-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE/" target="_self">
+      <a class="index-excerpt " href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/4-2-Q-learning%E7%AE%97%E6%B3%95/" target="_self">
         <div>
-          服务器基础配置 单位： Redis的单位大小写不敏感。 123456# 1k =&gt; 1000 bytes# 1kb =&gt; 1024 bytes# 1m =&gt; 1000000 bytes# 1mb =&gt; 1024*1024 bytes# 1g =&gt; 1000000000 bytes# 1gb =&gt; 1024*1024*1024 bytes 网络配置：
+          Q 学习与 SARSA 的对比： Q学习不依赖于\(\pi\), 因此Q学习属于异策略 (off-policy), 可以用经验回放。而 SARSA 依赖于\(\pi\), 因此 SARSA 属于同策略(on-policy), 不能用经验回放。两种算法的对比如图 5.2 所示。 Q学习的目标是学到表格\(\tilde{Q}\), 作为最优动作价值函数\(Q^*\)的近似。因为\(Q^*\)
         </div>
       </a>
 
@@ -545,8 +573,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-12-07 14:22" pubdate>
-              2024-12-07
+            <time datetime="2024-12-04 16:02" pubdate>
+              2024-12-04
             </time>
           </div>
         
@@ -561,13 +589,20 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/" class="category-chain-item">后端开发</a>
+  <a href="/categories/AI/" class="category-chain-item">AI</a>
   
   
     <span>></span>
     
-  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Redis/" class="category-chain-item">Redis</a>
+  <a href="/categories/AI/RL/" class="category-chain-item">RL</a>
   
+  
+    <span>></span>
+    
+  <a href="/categories/AI/RL/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/" class="category-chain-item">DRL-王树森</a>
+  
+  
+
   
 
   
@@ -583,7 +618,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/Redis/">#Redis</a>
+              <a href="/tags/RL/">#RL</a>
             
           </div>
         
@@ -595,23 +630,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/12/07/Redis/10-%E5%88%A0%E9%99%A4%E7%AD%96%E7%95%A5/" target="_self">
-          <img src="/imgs/redis.jpg" srcset="/img/loading.gif" lazyload alt="10. 删除策略">
+        <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/4-1-Sarsa%E7%AE%97%E6%B3%95/" target="_self">
+          <img src="/imgs/RL-WSS.png" srcset="/img/loading.gif" lazyload alt="4.1 Sarsa算法">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/12/07/Redis/10-%E5%88%A0%E9%99%A4%E7%AD%96%E7%95%A5/" target="_self">
-          10. 删除策略
+        <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/4-1-Sarsa%E7%AE%97%E6%B3%95/" target="_self">
+          4.1 Sarsa算法
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/12/07/Redis/10-%E5%88%A0%E9%99%A4%E7%AD%96%E7%95%A5/" target="_self">
+      <a class="index-excerpt " href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/4-1-Sarsa%E7%AE%97%E6%B3%95/" target="_self">
         <div>
-          Redis中的数据特征 Redis是一种内存级数据库，所有数据均存放在内存中，内存中的数据可以通过TTL指令获取其状态。  XX：具有时效性的数据 -1 ：永久有效的数据 -2 ：已经过期的数据，或被删除的数据，或未定义的数据  Redis的数据删除策略：  定时删除 惰性删除 定期删除  删除策略的目的：在内存占用与CPU占用之间寻求平衡（删除不及时会占用大量内存，删除
+          TD 算法是一大类算法的总称。Q 学习是一种 TD 算法，Q 学习的目的是学习最优动作价值函数\(Q^*\)。这里介绍 SARSA, 它也是一种 TD 算法，SARSA 的目的是学习动作价值函数\(Q_\pi(s, a)\)。 表格形式的 SARSA 假设状态空间\(S\)和动作空间\(\mathcal{A}\)都是有限集，即集合中元素数量有限。比如，\(S\)中一共有 3 种状态，\(
         </div>
       </a>
 
@@ -619,8 +654,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-12-07 14:22" pubdate>
-              2024-12-07
+            <time datetime="2024-12-04 16:02" pubdate>
+              2024-12-04
             </time>
           </div>
         
@@ -635,13 +670,20 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/" class="category-chain-item">后端开发</a>
+  <a href="/categories/AI/" class="category-chain-item">AI</a>
   
   
     <span>></span>
     
-  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Redis/" class="category-chain-item">Redis</a>
+  <a href="/categories/AI/RL/" class="category-chain-item">RL</a>
   
+  
+    <span>></span>
+    
+  <a href="/categories/AI/RL/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/" class="category-chain-item">DRL-王树森</a>
+  
+  
+
   
 
   
@@ -657,7 +699,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/Redis/">#Redis</a>
+              <a href="/tags/RL/">#RL</a>
             
           </div>
         
@@ -669,23 +711,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/12/07/Redis/09-%E4%BA%8B%E5%8A%A1/" target="_self">
-          <img src="/imgs/redis.jpg" srcset="/img/loading.gif" lazyload alt="09. 事务">
+        <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/3-1-Random-Permutation/" target="_self">
+          <img src="/imgs/RL-WSS.png" srcset="/img/loading.gif" lazyload alt="3.1 随机排列">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/12/07/Redis/09-%E4%BA%8B%E5%8A%A1/" target="_self">
-          09. 事务
+        <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/3-1-Random-Permutation/" target="_self">
+          3.1 随机排列
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/12/07/Redis/09-%E4%BA%8B%E5%8A%A1/" target="_self">
+      <a class="index-excerpt " href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/3-1-Random-Permutation/" target="_self">
         <div>
-          Redis事务 Redis事务就是一个命令执行的队列，将一系列预定义命令包装成一个整体（一个队列）。当执行时，一次性按照添加顺序依次执行，中间不会被打断或者干扰。 一个队列中，一次性、顺序性、排他性的执行一系列命令。 基本操作：  开启事务  1multi 设定事务的开始位置，执行此指令后，后续的所有指令均加入到事务中。  执行事务  1exec 设置事务的结束位置，同时
+          Random Permutation（随机排列） What is uniform random permutation? Fisher-Yates 洗牌算法 排列数等于n!  “uniform random permutation”（均匀随机排列）是指生成一个排列，其中每个可能的排列都以相等的概率出现。具体来说，对于含有n个元素的集合，它的所有n!个排列中的每一个都有相同的概率被选中。
         </div>
       </a>
 
@@ -693,8 +735,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-12-07 14:22" pubdate>
-              2024-12-07
+            <time datetime="2024-12-04 16:02" pubdate>
+              2024-12-04
             </time>
           </div>
         
@@ -709,13 +751,20 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/" class="category-chain-item">后端开发</a>
+  <a href="/categories/AI/" class="category-chain-item">AI</a>
   
   
     <span>></span>
     
-  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Redis/" class="category-chain-item">Redis</a>
+  <a href="/categories/AI/RL/" class="category-chain-item">RL</a>
   
+  
+    <span>></span>
+    
+  <a href="/categories/AI/RL/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/" class="category-chain-item">DRL-王树森</a>
+  
+  
+
   
 
   
@@ -731,7 +780,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/Redis/">#Redis</a>
+              <a href="/tags/RL/">#RL</a>
             
           </div>
         
@@ -743,23 +792,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/12/07/Redis/08-%E6%8C%81%E4%B9%85%E5%8C%96/" target="_self">
-          <img src="/imgs/redis.jpg" srcset="/img/loading.gif" lazyload alt="08. 持久化">
+        <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/2-1-%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E4%BC%B0%E8%AE%A1/" target="_self">
+          <img src="/imgs/RL-WSS.png" srcset="/img/loading.gif" lazyload alt="2.1 蒙特卡洛估计">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/12/07/Redis/08-%E6%8C%81%E4%B9%85%E5%8C%96/" target="_self">
-          08. 持久化
+        <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/2-1-%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E4%BC%B0%E8%AE%A1/" target="_self">
+          2.1 蒙特卡洛估计
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/12/07/Redis/08-%E6%8C%81%E4%B9%85%E5%8C%96/" target="_self">
+      <a class="index-excerpt " href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/2-1-%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E4%BC%B0%E8%AE%A1/" target="_self">
         <div>
-          持久化 利用永久性存储介质将数据进行保存，在特定的时间将保存的数据进行恢复的工作机制称为持久化。 目的：防止数据意外丢失，确保数据安全性 持久化过程保存的内容：  将当前数据状态进行保存，快照形式，存储数据结果，存储格式简单，关注点在数据   对应Redis的RDB   将数据的操作过程进行保存，日志形式，存储操作过程，存储格式复杂，关注点在数据的操作过程。   对应R
+          ChatGPT对蒙特卡洛方法的介绍 蒙特卡洛方法是一类基于随机抽样和统计学原理的数值计算方法，其核心思想是通过随机抽样来近似解决问题。这种方法在强化学习、优化问题、概率估计等领域都有广泛的应用。以下是关于蒙特卡洛方法的一些基本概念：  基本思想  随机抽样： 蒙特卡洛方法利用随机抽样的方式来近似计算某个问题的数值解。通过大量的随机样本，可以得到对问题的概率分布、期望值等进行估计的结果。
         </div>
       </a>
 
@@ -767,8 +816,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-12-07 14:22" pubdate>
-              2024-12-07
+            <time datetime="2024-12-04 16:02" pubdate>
+              2024-12-04
             </time>
           </div>
         
@@ -783,13 +832,20 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/" class="category-chain-item">后端开发</a>
+  <a href="/categories/AI/" class="category-chain-item">AI</a>
   
   
     <span>></span>
     
-  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Redis/" class="category-chain-item">Redis</a>
+  <a href="/categories/AI/RL/" class="category-chain-item">RL</a>
   
+  
+    <span>></span>
+    
+  <a href="/categories/AI/RL/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/" class="category-chain-item">DRL-王树森</a>
+  
+  
+
   
 
   
@@ -805,7 +861,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/Redis/">#Redis</a>
+              <a href="/tags/RL/">#RL</a>
             
           </div>
         
@@ -817,23 +873,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/12/07/Redis/07-Linux%E6%93%8D%E4%BD%9CRedis/" target="_self">
-          <img src="/imgs/redis.jpg" srcset="/img/loading.gif" lazyload alt="07. Linux操作Redis">
+        <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/" target="_self">
+          <img src="/imgs/RL-WSS.png" srcset="/img/loading.gif" lazyload alt="1.5 ALPHAGO">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/12/07/Redis/07-Linux%E6%93%8D%E4%BD%9CRedis/" target="_self">
-          07. Linux操作Redis
+        <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/" target="_self">
+          1.5 ALPHAGO
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/12/07/Redis/07-Linux%E6%93%8D%E4%BD%9CRedis/" target="_self">
+      <a class="index-excerpt " href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-5-ALPHAGO/" target="_self">
         <div>
-          CentOS7安装Redis  Redis官网下载源码包：redis-6.0.10.tar.gz 上传至服务器，解压  1tar -xvf redis-6.0.10.tar.gz  安装GCC相关   redis源码需要使用gcc进行编译  12345678yum install cppyum install binutilsyum install glibcyum ins
+          围棋游戏介绍  High level Ideas 训练包含3步：  用behavior cloning初始化策略网络 用策略梯度训练策略网络 策略网络训练完之后，用它来训练价值网络。  Behavior Cloning ChatGPT介绍什么是Behavior cloning： Behavior cloning（行为克隆）是一种强化学习中的学习方法，其中一个模型（通常是神
         </div>
       </a>
 
@@ -841,8 +897,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-12-07 14:22" pubdate>
-              2024-12-07
+            <time datetime="2024-12-04 16:02" pubdate>
+              2024-12-04
             </time>
           </div>
         
@@ -857,13 +913,20 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/" class="category-chain-item">后端开发</a>
+  <a href="/categories/AI/" class="category-chain-item">AI</a>
   
   
     <span>></span>
     
-  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Redis/" class="category-chain-item">Redis</a>
+  <a href="/categories/AI/RL/" class="category-chain-item">RL</a>
   
+  
+    <span>></span>
+    
+  <a href="/categories/AI/RL/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/" class="category-chain-item">DRL-王树森</a>
+  
+  
+
   
 
   
@@ -879,7 +942,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/Redis/">#Redis</a>
+              <a href="/tags/RL/">#RL</a>
             
           </div>
         
@@ -891,23 +954,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/12/07/Redis/06-Jedis/" target="_self">
-          <img src="/imgs/redis.jpg" srcset="/img/loading.gif" lazyload alt="06. Jedis">
+        <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-4-Actor-Critic-Method/" target="_self">
+          <img src="/imgs/RL-WSS.png" srcset="/img/loading.gif" lazyload alt="1.4 Actor-Critic Method">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/12/07/Redis/06-Jedis/" target="_self">
-          06. Jedis
+        <a href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-4-Actor-Critic-Method/" target="_self">
+          1.4 Actor-Critic Method
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/12/07/Redis/06-Jedis/" target="_self">
+      <a class="index-excerpt " href="/2024/12/04/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/1-4-Actor-Critic-Method/" target="_self">
         <div>
-          Java语言连接Redis服务的工具：  Jedis SpringData Redis Lettuce  Jedis操作Redis  引入对应的依赖  12345&lt;dependency&gt;    &lt;groupId&gt;redis.clients&lt;/groupId&gt;    &lt;artifactId&gt;jedis&lt;/artifactId&
+          Actor-Critic方法把价值学习和策略学习结合起来。 Value Network and Policy Network 离散状态下状态价值函数可以写成： \(V_{\pi}(s) = \sum_{a} \pi(a|s) \cdot Q_{\pi}(s,a).\) 但是其中策略函数\(\pi(a|s)\)和动作价值函数\(Q_{\pi}(s,a)\)都不知道，可以分别用两个神经网络
         </div>
       </a>
 
@@ -915,8 +978,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-12-07 14:22" pubdate>
-              2024-12-07
+            <time datetime="2024-12-04 16:02" pubdate>
+              2024-12-04
             </time>
           </div>
         
@@ -931,13 +994,20 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/" class="category-chain-item">后端开发</a>
+  <a href="/categories/AI/" class="category-chain-item">AI</a>
   
   
     <span>></span>
     
-  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Redis/" class="category-chain-item">Redis</a>
+  <a href="/categories/AI/RL/" class="category-chain-item">RL</a>
   
+  
+    <span>></span>
+    
+  <a href="/categories/AI/RL/DRL-%E7%8E%8B%E6%A0%91%E6%A3%AE/" class="category-chain-item">DRL-王树森</a>
+  
+  
+
   
 
   
@@ -953,7 +1023,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/Redis/">#Redis</a>
+              <a href="/tags/RL/">#RL</a>
             
           </div>
         
@@ -965,7 +1035,7 @@
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/page/15/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/#board">14</a><a class="page-number" href="/page/15/#board">15</a><span class="page-number current">16</span><a class="page-number" href="/page/17/#board">17</a><a class="page-number" href="/page/18/#board">18</a><span class="space">&hellip;</span><a class="page-number" href="/page/38/#board">38</a><a class="extend next" rel="next" href="/page/17/#board"><i class="iconfont icon-arrowright"></i></a>
+      <a class="extend prev" rel="prev" href="/page/15/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/#board">14</a><a class="page-number" href="/page/15/#board">15</a><span class="page-number current">16</span><a class="page-number" href="/page/17/#board">17</a><a class="page-number" href="/page/18/#board">18</a><span class="space">&hellip;</span><a class="page-number" href="/page/34/#board">34</a><a class="extend next" rel="next" href="/page/17/#board"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
 

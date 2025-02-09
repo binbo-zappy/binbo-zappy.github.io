@@ -225,23 +225,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/12/15/nginx/6-Nginx%E9%85%8D%E7%BD%AE%E5%AE%9E%E4%BE%8B-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" target="_self">
-          <img src="/imgs/nginx.png" srcset="/img/loading.gif" lazyload alt="6. Nginx 配置实例-负载均衡">
+        <a href="/2024/12/07/Redis/08-%E6%8C%81%E4%B9%85%E5%8C%96/" target="_self">
+          <img src="/imgs/redis.jpg" srcset="/img/loading.gif" lazyload alt="08. 持久化">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/12/15/nginx/6-Nginx%E9%85%8D%E7%BD%AE%E5%AE%9E%E4%BE%8B-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" target="_self">
-          6. Nginx 配置实例-负载均衡
+        <a href="/2024/12/07/Redis/08-%E6%8C%81%E4%B9%85%E5%8C%96/" target="_self">
+          08. 持久化
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/12/15/nginx/6-Nginx%E9%85%8D%E7%BD%AE%E5%AE%9E%E4%BE%8B-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" target="_self">
+      <a class="index-excerpt " href="/2024/12/07/Redis/08-%E6%8C%81%E4%B9%85%E5%8C%96/" target="_self">
         <div>
-          以下是文章内容的Markdown格式输出，注意数学公式已经使用$公式$格式： 1. 实现效果  浏览器地址栏输入地址 http://192.168.17.129/edu/a.html，负载均衡效果，平均到 8080和8081 端口中。  2. 准备工作  准备两台 tomcat 服务器，一台 8080，一台 8081。 在两台 tomcat 里面 webapps 目录中，创建名
+          持久化 利用永久性存储介质将数据进行保存，在特定的时间将保存的数据进行恢复的工作机制称为持久化。 目的：防止数据意外丢失，确保数据安全性 持久化过程保存的内容：  将当前数据状态进行保存，快照形式，存储数据结果，存储格式简单，关注点在数据   对应Redis的RDB   将数据的操作过程进行保存，日志形式，存储操作过程，存储格式复杂，关注点在数据的操作过程。   对应R
         </div>
       </a>
 
@@ -249,8 +249,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-12-15 10:29" pubdate>
-              2024-12-15
+            <time datetime="2024-12-07 14:22" pubdate>
+              2024-12-07
             </time>
           </div>
         
@@ -270,7 +270,7 @@
   
     <span>></span>
     
-  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Nginx/" class="category-chain-item">Nginx</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Redis/" class="category-chain-item">Redis</a>
   
   
 
@@ -287,7 +287,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/Nginx/">#Nginx</a>
+              <a href="/tags/Redis/">#Redis</a>
             
           </div>
         
@@ -299,23 +299,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/12/15/nginx/5-Nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%AE%9E%E4%BE%8B2/" target="_self">
-          <img src="/imgs/nginx.png" srcset="/img/loading.gif" lazyload alt="5. Nginx 反向代理实例 2">
+        <a href="/2024/12/07/Redis/07-Linux%E6%93%8D%E4%BD%9CRedis/" target="_self">
+          <img src="/imgs/redis.jpg" srcset="/img/loading.gif" lazyload alt="07. Linux操作Redis">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/12/15/nginx/5-Nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%AE%9E%E4%BE%8B2/" target="_self">
-          5. Nginx 反向代理实例 2
+        <a href="/2024/12/07/Redis/07-Linux%E6%93%8D%E4%BD%9CRedis/" target="_self">
+          07. Linux操作Redis
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/12/15/nginx/5-Nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%AE%9E%E4%BE%8B2/" target="_self">
+      <a class="index-excerpt " href="/2024/12/07/Redis/07-Linux%E6%93%8D%E4%BD%9CRedis/" target="_self">
         <div>
-          1. 实现效果 使用 nginx 反向代理，根据访问的路径跳转到不同端口的服务中， nginx 监听端口为 9001  访问 http://192.168.17.129:9001/edu/ 直接跳转到 127.0.0.1:8080 访问 http://192.168.17.129:9001/vod/ 直接跳转到 127.0.0.1:8081  2、准备工作 （1）准备两个 tomc
+          CentOS7安装Redis  Redis官网下载源码包：redis-6.0.10.tar.gz 上传至服务器，解压  1tar -xvf redis-6.0.10.tar.gz  安装GCC相关   redis源码需要使用gcc进行编译  12345678yum install cppyum install binutilsyum install glibcyum ins
         </div>
       </a>
 
@@ -323,8 +323,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-12-15 10:29" pubdate>
-              2024-12-15
+            <time datetime="2024-12-07 14:22" pubdate>
+              2024-12-07
             </time>
           </div>
         
@@ -344,7 +344,7 @@
   
     <span>></span>
     
-  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Nginx/" class="category-chain-item">Nginx</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Redis/" class="category-chain-item">Redis</a>
   
   
 
@@ -361,7 +361,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/Nginx/">#Nginx</a>
+              <a href="/tags/Redis/">#Redis</a>
             
           </div>
         
@@ -373,23 +373,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/12/15/nginx/4-Nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%AE%9E%E4%BE%8B2/" target="_self">
-          <img src="/imgs/nginx.png" srcset="/img/loading.gif" lazyload alt="4. Nginx 反向代理实例 1">
+        <a href="/2024/12/07/Redis/06-Jedis/" target="_self">
+          <img src="/imgs/redis.jpg" srcset="/img/loading.gif" lazyload alt="06. Jedis">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/12/15/nginx/4-Nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%AE%9E%E4%BE%8B2/" target="_self">
-          4. Nginx 反向代理实例 1
+        <a href="/2024/12/07/Redis/06-Jedis/" target="_self">
+          06. Jedis
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/12/15/nginx/4-Nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%AE%9E%E4%BE%8B2/" target="_self">
+      <a class="index-excerpt " href="/2024/12/07/Redis/06-Jedis/" target="_self">
         <div>
-          1. 实现效果 打开浏览器，在浏览器地址栏输入地址 www.123.com，跳转到 liunx 系统 tomcat 主页面中。 2. 准备工作 2.1 下载 tomcat 官网：https://tomcat.apache.org/download-70.cgi 2.2 liunx 系统安装 tomcat 将 tomcat 安装文件放到 liunx 系统中，解压， 1tar -xvf
+          Java语言连接Redis服务的工具：  Jedis SpringData Redis Lettuce  Jedis操作Redis  引入对应的依赖  12345&lt;dependency&gt;    &lt;groupId&gt;redis.clients&lt;/groupId&gt;    &lt;artifactId&gt;jedis&lt;/artifactId&
         </div>
       </a>
 
@@ -397,8 +397,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-12-15 10:29" pubdate>
-              2024-12-15
+            <time datetime="2024-12-07 14:22" pubdate>
+              2024-12-07
             </time>
           </div>
         
@@ -418,7 +418,7 @@
   
     <span>></span>
     
-  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Nginx/" class="category-chain-item">Nginx</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Redis/" class="category-chain-item">Redis</a>
   
   
 
@@ -435,7 +435,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/Nginx/">#Nginx</a>
+              <a href="/tags/Redis/">#Redis</a>
             
           </div>
         
@@ -447,23 +447,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/12/15/nginx/3-nginx-conf%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/" target="_self">
-          <img src="/imgs/nginx.png" srcset="/img/loading.gif" lazyload alt="3. nginx.conf配置文件">
+        <a href="/2024/12/07/Redis/05-%E9%80%9A%E7%94%A8%E6%8C%87%E5%AE%9A/" target="_self">
+          <img src="/imgs/redis.jpg" srcset="/img/loading.gif" lazyload alt="05. 通用指定">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/12/15/nginx/3-nginx-conf%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/" target="_self">
-          3. nginx.conf配置文件
+        <a href="/2024/12/07/Redis/05-%E9%80%9A%E7%94%A8%E6%8C%87%E5%AE%9A/" target="_self">
+          05. 通用指定
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/12/15/nginx/3-nginx-conf%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/" target="_self">
+      <a class="index-excerpt " href="/2024/12/07/Redis/05-%E9%80%9A%E7%94%A8%E6%8C%87%E5%AE%9A/" target="_self">
         <div>
-          nginx 安装目录下，其默认的配置文件都放在这个目录的 conf 目录下，而主配置文件 nginx.conf 也在其中，后续对 nginx 的使用基本上都是对此配置文件进行相应的修改。  12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455
+          Key通用操作 Key 是一个字符串，通过key获取redis中保存的数据。 基本操作：  获取当前数据库的key数量  1dbsize  删除指定key  1del key  获取key是否存在  1exists key  获取key对应值的类型  1type key 扩展操作（时效性控制）  为指定key设置有效期  1234expire key
         </div>
       </a>
 
@@ -471,8 +471,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-12-15 10:29" pubdate>
-              2024-12-15
+            <time datetime="2024-12-07 14:22" pubdate>
+              2024-12-07
             </time>
           </div>
         
@@ -492,7 +492,7 @@
   
     <span>></span>
     
-  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Nginx/" class="category-chain-item">Nginx</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Redis/" class="category-chain-item">Redis</a>
   
   
 
@@ -509,7 +509,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/Nginx/">#Nginx</a>
+              <a href="/tags/Redis/">#Redis</a>
             
           </div>
         
@@ -521,23 +521,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/12/15/nginx/2-Nginx%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" target="_self">
-          <img src="/imgs/nginx.png" srcset="/img/loading.gif" lazyload alt="2. Nginx常用命令">
+        <a href="/2024/12/07/Redis/04-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" target="_self">
+          <img src="/imgs/redis.jpg" srcset="/img/loading.gif" lazyload alt="04. 数据类型">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/12/15/nginx/2-Nginx%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" target="_self">
-          2. Nginx常用命令
+        <a href="/2024/12/07/Redis/04-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" target="_self">
+          04. 数据类型
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/12/15/nginx/2-Nginx%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" target="_self">
+      <a class="index-excerpt " href="/2024/12/07/Redis/04-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" target="_self">
         <div>
-          nginx 常用的命令 执行前提：进入 nginx 目录中 1cd /usr/local/nginx/sbin 1、查看 nginx 版本号 1./nginx -v 2、启动 nginx 1./nginx 3、停止 nginx 1./nginx -s stop 4、重新加载 nginx 1./nginx -s reload
+          Redis数据类型 5种常用数据类型：  string   类比java的String   hash   类比java的HashMap   list   类比java的 LinkedList   set   类比Java的 HashSet   sorted_set   也称Zset，类比java的 TreeSet  redis数据存储
         </div>
       </a>
 
@@ -545,8 +545,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-12-15 10:29" pubdate>
-              2024-12-15
+            <time datetime="2024-12-07 14:22" pubdate>
+              2024-12-07
             </time>
           </div>
         
@@ -566,7 +566,7 @@
   
     <span>></span>
     
-  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Nginx/" class="category-chain-item">Nginx</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Redis/" class="category-chain-item">Redis</a>
   
   
 
@@ -583,7 +583,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/Nginx/">#Nginx</a>
+              <a href="/tags/Redis/">#Redis</a>
             
           </div>
         
@@ -595,23 +595,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/12/15/nginx/1-%E5%AE%89%E8%A3%85Nginx/" target="_self">
-          <img src="/imgs/nginx.png" srcset="/img/loading.gif" lazyload alt="1. 安装Nginx">
+        <a href="/2024/12/07/Redis/03-%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" target="_self">
+          <img src="/imgs/redis.jpg" srcset="/img/loading.gif" lazyload alt="03. 基本操作">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/12/15/nginx/1-%E5%AE%89%E8%A3%85Nginx/" target="_self">
-          1. 安装Nginx
+        <a href="/2024/12/07/Redis/03-%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" target="_self">
+          03. 基本操作
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/12/15/nginx/1-%E5%AE%89%E8%A3%85Nginx/" target="_self">
+      <a class="index-excerpt " href="/2024/12/07/Redis/03-%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" target="_self">
         <div>
-          1. 准备工作 （1）打开虚拟机，使用远程连接工具连接 linux 操作系统。  如何在windows上使用 Xshell 连接 Linux，可以参照我这篇博客：Xshell连接到 Linux  （2）到 nginx 官网下载软件：http://nginx.org/ （3）需要准备的素材： 1234pcre-8.37.tar.gzopenssl-1.0.1t.tar.gzzlib-
+          常用命令 测试是否连通 功能：测试客户端是否连上了redis服务 命令格式： 1ping 成功时响应： 1PONG 信息添加 功能：设置 key, value数据 命令格式： 1set key value 示例： 1set name zhangsan 信息查询 功能：根据key查询对应的value，如果不存在，返回空（nil） 命令格式： 1get key 示例：
         </div>
       </a>
 
@@ -619,8 +619,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-12-15 10:29" pubdate>
-              2024-12-15
+            <time datetime="2024-12-07 14:22" pubdate>
+              2024-12-07
             </time>
           </div>
         
@@ -640,7 +640,7 @@
   
     <span>></span>
     
-  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Nginx/" class="category-chain-item">Nginx</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Redis/" class="category-chain-item">Redis</a>
   
   
 
@@ -657,7 +657,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/Nginx/">#Nginx</a>
+              <a href="/tags/Redis/">#Redis</a>
             
           </div>
         
@@ -669,23 +669,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/12/15/nginx/0-Nginx%E7%AE%80%E4%BB%8B/" target="_self">
-          <img src="/imgs/nginx.png" srcset="/img/loading.gif" lazyload alt="0. Nginx简介">
+        <a href="/2024/12/07/Redis/02-Redis%E7%AE%80%E4%BB%8B/" target="_self">
+          <img src="/imgs/redis.jpg" srcset="/img/loading.gif" lazyload alt="02. Redis简介">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/12/15/nginx/0-Nginx%E7%AE%80%E4%BB%8B/" target="_self">
-          0. Nginx简介
+        <a href="/2024/12/07/Redis/02-Redis%E7%AE%80%E4%BB%8B/" target="_self">
+          02. Redis简介
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/12/15/nginx/0-Nginx%E7%AE%80%E4%BB%8B/" target="_self">
+      <a class="index-excerpt " href="/2024/12/07/Redis/02-Redis%E7%AE%80%E4%BB%8B/" target="_self">
         <div>
-          1. Nginx 概述 Nginx (“engine x”) 是一个高性能的 HTTP 和反向代理服务器，特点是占有内存少，并发能力强，能经受高负载的考验，有报告表明能支持高达 \(50,000\) 个并发连接数。 2. 正向代理 正向代理：如果把局域网外的 Internet 想象成一个巨大的资源库，则局域网中的客户端要访问 Internet，则需要通过代理服务器来访问，这种代理服务
+          Redis简介 Redis：(Remote Dictionary Server 的每个单词前两个字母），是用C语言开发的一个开源高性能键值对（Key-Value）数据库。 遵守BSD协议，完全开源免费，基于内存运行，并支持持久化。也称为数据结构服务器。 特征：  数据间没有必然的关联关系 内部采用单线程机制进行工作 高性能 多数据类型支持  字符串类型    stri
         </div>
       </a>
 
@@ -693,8 +693,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-12-15 09:42" pubdate>
-              2024-12-15
+            <time datetime="2024-12-07 14:22" pubdate>
+              2024-12-07
             </time>
           </div>
         
@@ -714,7 +714,7 @@
   
     <span>></span>
     
-  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Nginx/" class="category-chain-item">Nginx</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Redis/" class="category-chain-item">Redis</a>
   
   
 
@@ -731,7 +731,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/Nginx/">#Nginx</a>
+              <a href="/tags/Redis/">#Redis</a>
             
           </div>
         
@@ -743,23 +743,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/12/14/ubuntu/Centos7%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85vmtools%E5%A4%8D%E5%88%B6%E7%9A%84%E9%97%AE%E9%A2%98/" target="_self">
-          <img src="/imgs/centos7.jpg" srcset="/img/loading.gif" lazyload alt="Centos7虚拟机安装vmtools复制的问题">
+        <a href="/2024/12/07/Redis/01-NoSql%E7%AE%80%E4%BB%8B/" target="_self">
+          <img src="/imgs/redis.jpg" srcset="/img/loading.gif" lazyload alt="01. NoSql简介">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/12/14/ubuntu/Centos7%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85vmtools%E5%A4%8D%E5%88%B6%E7%9A%84%E9%97%AE%E9%A2%98/" target="_self">
-          Centos7虚拟机安装vmtools复制的问题
+        <a href="/2024/12/07/Redis/01-NoSql%E7%AE%80%E4%BB%8B/" target="_self">
+          01. NoSql简介
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/12/14/ubuntu/Centos7%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85vmtools%E5%A4%8D%E5%88%B6%E7%9A%84%E9%97%AE%E9%A2%98/" target="_self">
+      <a class="index-excerpt " href="/2024/12/07/Redis/01-NoSql%E7%AE%80%E4%BB%8B/" target="_self">
         <div>
-          安装完vmtools之后，依然不能复制，解决方案：  查询版本号  1rpm -q centos-release centos版本号后有x86_64  重新安装  123yum install open-vm-tools.x86_64yum install open-vm-tools-desktop.x86_64  重启虚拟机  安装完之后，可能会出现可以复制小文件以及剪
+          NoSql简介 关系型数据库：  性能瓶颈：磁盘IO性能低下 扩展瓶颈：数据关系复杂，扩展性差，不便于大规模集群。  解决思路：  降低磁盘IO次数，越低越好。   使用内存存储   尽量去除数据间的关系，越简单越好   不存储关系，仅存储数据  NoSql ： 即 Not-Only SQL （泛指非关系型数据库），作为关系型数据库的补充。 作用：应对基于
         </div>
       </a>
 
@@ -767,8 +767,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-12-14 18:11" pubdate>
-              2024-12-14
+            <time datetime="2024-12-07 14:22" pubdate>
+              2024-12-07
             </time>
           </div>
         
@@ -783,12 +783,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/linux/" class="category-chain-item">linux</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/" class="category-chain-item">后端开发</a>
   
   
     <span>></span>
     
-  <a href="/categories/linux/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" class="category-chain-item">常见问题</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Redis/" class="category-chain-item">Redis</a>
   
   
 
@@ -805,7 +805,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/centos7/">#centos7</a>
+              <a href="/tags/Redis/">#Redis</a>
             
           </div>
         
@@ -817,23 +817,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/12/14/ubuntu/Centos7-Docker-yum%E9%98%BF%E9%87%8C%E6%BA%90%E6%8A%A5%E9%94%99Failed%20connect%20to%20mirrors%20aliyuncs%20com80%20%E6%8B%92%E7%BB%9D%E8%BF%9E%E6%8E%A5/" target="_self">
-          <img src="/imgs/centos7.jpg" srcset="/img/loading.gif" lazyload alt="Centos7-Docker-yum阿里源报错Failed connect to mirrors aliyuncs com80 拒绝连接">
+        <a href="/2024/12/07/PR-ML/12-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/" target="_self">
+          <img src="/imgs/pr-ml.jpg" srcset="/img/loading.gif" lazyload alt="12. 强化学习">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/12/14/ubuntu/Centos7-Docker-yum%E9%98%BF%E9%87%8C%E6%BA%90%E6%8A%A5%E9%94%99Failed%20connect%20to%20mirrors%20aliyuncs%20com80%20%E6%8B%92%E7%BB%9D%E8%BF%9E%E6%8E%A5/" target="_self">
-          Centos7-Docker-yum阿里源报错Failed connect to mirrors aliyuncs com80 拒绝连接
+        <a href="/2024/12/07/PR-ML/12-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/" target="_self">
+          12. 强化学习
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/12/14/ubuntu/Centos7-Docker-yum%E9%98%BF%E9%87%8C%E6%BA%90%E6%8A%A5%E9%94%99Failed%20connect%20to%20mirrors%20aliyuncs%20com80%20%E6%8B%92%E7%BB%9D%E8%BF%9E%E6%8E%A5/" target="_self">
+      <a class="index-excerpt " href="/2024/12/07/PR-ML/12-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/" target="_self">
         <div>
-          Dockerfile下载vim报错 1234567891011121314151617181920212223242526FROM centosMAINTAINER zzyy&lt;zzyybs@126.com&gt;ENV MYPATH /usr/localWORKDIR $MYPATH#安装vim编辑器RUN yum -y install vim#安装ifconfig命令查看网络IPRUN
+          强化学习应用  两个应用  强化学习常用什么过程描述  马尔科夫性是什么  强化学习问题基本设置  机器所处环境E 状态空间：是机器感知到的环境的描述 机器能采取的行为空间A 策略(policy)π：X→A(或π：X×A→R) 潜在的状态转移(概率)函数Ｐ：X×X×A→R 潜在的奖赏(reward)函数Ｒ：X×X×A→R或Ｒ：X×X→R 强化学习对应四元组
         </div>
       </a>
 
@@ -841,8 +841,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-12-14 10:14" pubdate>
-              2024-12-14
+            <time datetime="2024-12-07 12:58" pubdate>
+              2024-12-07
             </time>
           </div>
         
@@ -857,13 +857,20 @@
     
       <span class="category-chain">
         
-  <a href="/categories/linux/" class="category-chain-item">linux</a>
+  <a href="/categories/AI/" class="category-chain-item">AI</a>
   
   
     <span>></span>
     
-  <a href="/categories/linux/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" class="category-chain-item">常见问题</a>
+  <a href="/categories/AI/ML/" class="category-chain-item">ML</a>
   
+  
+    <span>></span>
+    
+  <a href="/categories/AI/ML/PR-ML/" class="category-chain-item">PR &amp; ML</a>
+  
+  
+
   
 
   
@@ -879,9 +886,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/centos7/">#centos7</a>
-            
-              <a href="/tags/docker/">#docker</a>
+              <a href="/tags/ML/">#ML</a>
             
           </div>
         
@@ -893,23 +898,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/12/14/ubuntu/Centos7%20yum%E9%98%BF%E9%87%8C%E6%BA%90%E6%8A%A5%E9%94%99Failed%20connect%20to%20mirrors%20aliyuncs%20com80%20%E6%8B%92%E7%BB%9D%E8%BF%9E%E6%8E%A5/" target="_self">
-          <img src="/imgs/centos7.jpg" srcset="/img/loading.gif" lazyload alt="Centos7 yum阿里源报错Failed connect to mirrors aliyuncs com80 拒绝连接">
+        <a href="/2024/12/07/PR-ML/11-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" target="_self">
+          <img src="/imgs/pr-ml.jpg" srcset="/img/loading.gif" lazyload alt="11. 深度学习">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/12/14/ubuntu/Centos7%20yum%E9%98%BF%E9%87%8C%E6%BA%90%E6%8A%A5%E9%94%99Failed%20connect%20to%20mirrors%20aliyuncs%20com80%20%E6%8B%92%E7%BB%9D%E8%BF%9E%E6%8E%A5/" target="_self">
-          Centos7 yum阿里源报错Failed connect to mirrors aliyuncs com80 拒绝连接
+        <a href="/2024/12/07/PR-ML/11-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" target="_self">
+          11. 深度学习
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/12/14/ubuntu/Centos7%20yum%E9%98%BF%E9%87%8C%E6%BA%90%E6%8A%A5%E9%94%99Failed%20connect%20to%20mirrors%20aliyuncs%20com80%20%E6%8B%92%E7%BB%9D%E8%BF%9E%E6%8E%A5/" target="_self">
+      <a class="index-excerpt " href="/2024/12/07/PR-ML/11-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" target="_self">
         <div>
-          报错记录：  原因是由于非阿里云ECS用户无法解析主机“mirrors.cloud.aliyuncs.com”，只需将CentOS-Base里包含aliyuncs.com的行删除即可。 12345678910# 1、备份原来源mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup# 2、下载阿
+          神经网络  神经网络是由具有适应性的简单单元组成的广泛并行互联的网络,它的组织能够模拟生物神经系统对真实世界物体所作出的反应 机器学习中的神经网络通常是指“神经网络学习”或者机器学习与神经网络两个学科的交叉部分  神经元模型  M-P神经元模型  输入：来自其他个神经元传递过来的输入信号 处理：输入信号通过带权重的连接进行传递,神经元接受到总输入值将与神经元的阈值进行比较
         </div>
       </a>
 
@@ -917,8 +922,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-12-14 10:11" pubdate>
-              2024-12-14
+            <time datetime="2024-12-07 12:58" pubdate>
+              2024-12-07
             </time>
           </div>
         
@@ -933,13 +938,20 @@
     
       <span class="category-chain">
         
-  <a href="/categories/linux/" class="category-chain-item">linux</a>
+  <a href="/categories/AI/" class="category-chain-item">AI</a>
   
   
     <span>></span>
     
-  <a href="/categories/linux/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" class="category-chain-item">常见问题</a>
+  <a href="/categories/AI/ML/" class="category-chain-item">ML</a>
   
+  
+    <span>></span>
+    
+  <a href="/categories/AI/ML/PR-ML/" class="category-chain-item">PR &amp; ML</a>
+  
+  
+
   
 
   
@@ -955,7 +967,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/centos7/">#centos7</a>
+              <a href="/tags/ML/">#ML</a>
             
           </div>
         
@@ -967,7 +979,7 @@
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/page/12/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/#board">11</a><a class="page-number" href="/page/12/#board">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/#board">14</a><a class="page-number" href="/page/15/#board">15</a><span class="space">&hellip;</span><a class="page-number" href="/page/38/#board">38</a><a class="extend next" rel="next" href="/page/14/#board"><i class="iconfont icon-arrowright"></i></a>
+      <a class="extend prev" rel="prev" href="/page/12/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/#board">11</a><a class="page-number" href="/page/12/#board">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/#board">14</a><a class="page-number" href="/page/15/#board">15</a><span class="space">&hellip;</span><a class="page-number" href="/page/34/#board">34</a><a class="extend next" rel="next" href="/page/14/#board"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
 

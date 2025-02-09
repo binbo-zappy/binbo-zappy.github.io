@@ -19,14 +19,16 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta property="og:type" content="article">
+    <meta name="description" content="Weak 与循环引用 Rust 的安全性是众所周知的，但是不代表它不会内存泄漏。一个典型的例子就是同时使用 Rc&lt;T&gt; 和 RefCell&lt;T&gt; 创建循环引用，最终这些引用的计数都无法被归零，因此 Rc&lt;T&gt; 拥有的值也不会被释放清理。 何为循环引用 关于内存泄漏，如果你没有充足的 Rust 经验，可能都无法造出一份代码来再现它： 12345">
+<meta property="og:type" content="article">
 <meta property="og:title" content="4.5.1 Weak 与循环引用">
 <meta property="og:url" content="http://binbo-zappy.github.io/2025/02/05/rust%E5%9C%A3%E7%BB%8F/4-5-1-Weak%E4%B8%8E%E5%BE%AA%E7%8E%AF%E5%BC%95%E7%94%A8/index.html">
 <meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="Weak 与循环引用 Rust 的安全性是众所周知的，但是不代表它不会内存泄漏。一个典型的例子就是同时使用 Rc&lt;T&gt; 和 RefCell&lt;T&gt; 创建循环引用，最终这些引用的计数都无法被归零，因此 Rc&lt;T&gt; 拥有的值也不会被释放清理。 何为循环引用 关于内存泄漏，如果你没有充足的 Rust 经验，可能都无法造出一份代码来再现它： 12345">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/rust.jpg">
 <meta property="article:published_time" content="2025-02-05T05:41:30.000Z">
-<meta property="article:modified_time" content="2025-02-05T05:41:30.749Z">
+<meta property="article:modified_time" content="2025-02-09T02:52:32.540Z">
 <meta property="article:author" content="Binbo">
 <meta property="article:tag" content="rust">
 <meta name="twitter:card" content="summary_large_image">
@@ -223,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          0 字
+          2.8k 字
         
       </span>
     
@@ -234,7 +236,7 @@
         
         
         
-          1 分钟
+          24 分钟
         
       </span>
     
@@ -276,7 +278,175 @@
             
               <div class="markdown-body">
                 
-                
+                <h1 id="weak-与循环引用"><a target="_blank" rel="noopener" href="https://course.rs/advance/circle-self-ref/circle-reference.html#weak-与循环引用">Weak
+与循环引用</a></h1>
+<p>Rust
+的安全性是众所周知的，但是不代表它不会内存泄漏。一个典型的例子就是同时使用
+<code>Rc&lt;T&gt;</code> 和 <code>RefCell&lt;T&gt;</code>
+创建循环引用，最终这些引用的计数都无法被归零，因此
+<code>Rc&lt;T&gt;</code> 拥有的值也不会被释放清理。</p>
+<h2 id="何为循环引用"><a target="_blank" rel="noopener" href="https://course.rs/advance/circle-self-ref/circle-reference.html#何为循环引用">何为循环引用</a></h2>
+<p>关于内存泄漏，如果你没有充足的 Rust
+经验，可能都无法造出一份代码来再现它：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">use</span> crate::List::&#123;Cons, Nil&#125;;<br><span class="hljs-keyword">use</span> std::cell::RefCell;<br><span class="hljs-keyword">use</span> std::rc::Rc;<br><br><span class="hljs-meta">#[derive(Debug)]</span><br><span class="hljs-keyword">enum</span> <span class="hljs-title class_">List</span> &#123;<br>    <span class="hljs-title function_ invoke__">Cons</span>(<span class="hljs-type">i32</span>, RefCell&lt;Rc&lt;List&gt;&gt;),<br>    Nil,<br>&#125;<br><br><span class="hljs-keyword">impl</span> <span class="hljs-title class_">List</span> &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">tail</span>(&amp;<span class="hljs-keyword">self</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">Option</span>&lt;&amp;RefCell&lt;Rc&lt;List&gt;&gt;&gt; &#123;<br>        <span class="hljs-keyword">match</span> <span class="hljs-keyword">self</span> &#123;<br>            <span class="hljs-title function_ invoke__">Cons</span>(_, item) =&gt; <span class="hljs-title function_ invoke__">Some</span>(item),<br>            Nil =&gt; <span class="hljs-literal">None</span>,<br>        &#125;<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;&#125;<br></code></pre></td></tr></table></figure>
+<p>这里我们创建一个有些复杂的枚举类型
+<code>List</code>，这个类型很有意思，它的每个值都指向了另一个
+<code>List</code>，此外，得益于 <code>Rc</code>
+的使用还允许多个值指向一个 <code>List</code>：</p>
+<figure>
+<img src="/2025/02/05/rust%E5%9C%A3%E7%BB%8F/4-5-1-Weak%E4%B8%8E%E5%BE%AA%E7%8E%AF%E5%BC%95%E7%94%A8/v2-0db007dfb4167ebc22f50cf5b5a85f53_1440w.png" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>如上图所示，每个矩形框节点都是一个 <code>List</code>
+类型，它们或者是拥有值且指向另一个 <code>List</code>
+的<code>Cons</code>，或者是一个没有值的终结点
+<code>Nil</code>。同时，由于 <code>RefCell</code> 的使用，每个
+<code>List</code> 所指向的 <code>List</code> 还能够被修改。</p>
+<p>下面来使用一下这个复杂的 <code>List</code> 枚举：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">a</span> = Rc::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-title function_ invoke__">Cons</span>(<span class="hljs-number">5</span>, RefCell::<span class="hljs-title function_ invoke__">new</span>(Rc::<span class="hljs-title function_ invoke__">new</span>(Nil))));<br><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;a的初始化rc计数 = &#123;&#125;&quot;</span>, Rc::<span class="hljs-title function_ invoke__">strong_count</span>(&amp;a));<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;a指向的节点 = &#123;:?&#125;&quot;</span>, a.<span class="hljs-title function_ invoke__">tail</span>());<br><br>    <span class="hljs-comment">// 创建`b`到`a`的引用</span><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">b</span> = Rc::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-title function_ invoke__">Cons</span>(<span class="hljs-number">10</span>, RefCell::<span class="hljs-title function_ invoke__">new</span>(Rc::<span class="hljs-title function_ invoke__">clone</span>(&amp;a))));<br><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;在b创建后，a的rc计数 = &#123;&#125;&quot;</span>, Rc::<span class="hljs-title function_ invoke__">strong_count</span>(&amp;a));<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;b的初始化rc计数 = &#123;&#125;&quot;</span>, Rc::<span class="hljs-title function_ invoke__">strong_count</span>(&amp;b));<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;b指向的节点 = &#123;:?&#125;&quot;</span>, b.<span class="hljs-title function_ invoke__">tail</span>());<br><br>    <span class="hljs-comment">// 利用RefCell的可变性，创建了`a`到`b`的引用</span><br>    <span class="hljs-keyword">if</span> <span class="hljs-keyword">let</span> <span class="hljs-variable">Some</span>(link) = a.<span class="hljs-title function_ invoke__">tail</span>() &#123;<br>        *link.<span class="hljs-title function_ invoke__">borrow_mut</span>() = Rc::<span class="hljs-title function_ invoke__">clone</span>(&amp;b);<br>    &#125;<br><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;在更改a后，b的rc计数 = &#123;&#125;&quot;</span>, Rc::<span class="hljs-title function_ invoke__">strong_count</span>(&amp;b));<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;在更改a后，a的rc计数 = &#123;&#125;&quot;</span>, Rc::<span class="hljs-title function_ invoke__">strong_count</span>(&amp;a));<br><br>    <span class="hljs-comment">// 下面一行println!将导致循环引用</span><br>    <span class="hljs-comment">// 我们可怜的8MB大小的main线程栈空间将被它冲垮，最终造成栈溢出</span><br>    <span class="hljs-comment">// println!(&quot;a next item = &#123;:?&#125;&quot;, a.tail());</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这个类型定义看着复杂，使用起来更复杂！不过排除这些因素，我们可以清晰看出：</p>
+<ol type="1">
+<li>在创建了 <code>a</code> 后，紧接着就使用 <code>a</code> 创建了
+<code>b</code>，因此 <code>b</code> 引用了 <code>a</code></li>
+<li>然后我们又利用 <code>Rc</code> 克隆了 <code>b</code>，然后通过
+<code>RefCell</code> 的可变性，让 <code>a</code> 引用了
+<code>b</code></li>
+</ol>
+<p>至此我们成功创建了循环引用<code>a</code>-&gt; <code>b</code> -&gt;
+<code>a</code> -&gt; <code>b</code> ····</p>
+<p>先来观察下引用计数：</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs console">a的初始化rc计数 = 1<br>a指向的节点 = Some(RefCell &#123; value: Nil &#125;)<br>在b创建后，a的rc计数 = 2<br>b的初始化rc计数 = 1<br>b指向的节点 = Some(RefCell &#123; value: Cons(5, RefCell &#123; value: Nil &#125;) &#125;)<br>在更改a后，b的rc计数 = 2<br>在更改a后，a的rc计数 = 2<br></code></pre></td></tr></table></figure>
+<p>在 <code>main</code> 函数结束前，<code>a</code> 和 <code>b</code>
+的引用计数均是 <code>2</code>，随后 <code>b</code> 触发
+<code>Drop</code>，此时引用计数会变为 <code>1</code>，并不会归
+<code>0</code>，因此 <code>b</code> 所指向内存不会被释放，同理可得
+<code>a</code> 指向的内存也不会被释放，最终发生了内存泄漏。</p>
+<p>下面一张图很好的展示了这种引用循环关系： <img src="/2025/02/05/rust%E5%9C%A3%E7%BB%8F/4-5-1-Weak%E4%B8%8E%E5%BE%AA%E7%8E%AF%E5%BC%95%E7%94%A8/v2-2dbfc981f05019bf70bf81c93f956c35_1440w.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>现在我们还需要轻轻的推一下，让塔米诺骨牌轰然倒塌。反注释最后一行代码，试着运行下：</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs console">RefCell &#123; value: Cons(5, RefCell &#123; value: Cons(10, RefCell &#123; value: Cons(5, RefCell &#123; value: Cons(10, RefCell &#123; value: Cons(5, RefCell &#123; value: Cons(10, RefCell &#123;<br>...无穷无尽<br>thread &#x27;main&#x27; has overflowed its stack<br>fatal runtime error: stack overflow<br></code></pre></td></tr></table></figure>
+<p>通过 <code>a.tail</code> 的调用，Rust 试图打印出
+<code>a -&gt; b -&gt; a ···</code>
+的所有内容，但是在不懈的努力后，<code>main</code>
+线程终于不堪重负，发生了<a target="_blank" rel="noopener" href="https://course.rs/pitfalls/stack-overflow.html">栈溢出</a>。</p>
+<p>以上的代码可能并不会造成什么大的问题，但是在一个更加复杂的程序中，类似的问题可能会造成你的程序不断地分配内存、泄漏内存，最终程序会不幸<strong>OOM</strong>，当然这其中的
+CPU 损耗也不可小觑。</p>
+<p>总之，创建循环引用并不简单，但是也并不是完全遇不到，当你使用
+<code>RefCell&lt;Rc&lt;T&gt;&gt;</code>
+或者类似的类型嵌套组合（具备内部可变性和引用计数）时，就要打起万分精神，前面可能是深渊！</p>
+<p>那么问题来了？ 如果我们确实需要实现上面的功能，该怎么办？答案是使用
+<code>Weak</code>。</p>
+<h2 id="weak"><a target="_blank" rel="noopener" href="https://course.rs/advance/circle-self-ref/circle-reference.html#weak">Weak</a></h2>
+<p><code>Weak</code> 非常类似于 <code>Rc</code>，但是与 <code>Rc</code>
+持有所有权不同，<code>Weak</code>
+不持有所有权，它仅仅保存一份指向数据的弱引用：如果你想要访问数据，需要通过
+<code>Weak</code> 指针的 <code>upgrade</code>
+方法实现，该方法返回一个类型为 <code>Option&lt;Rc&lt;T&gt;&gt;</code>
+的值。</p>
+<p>看到这个返回，相信大家就懂了：何为弱引用？就是<strong>不保证引用关系依然存在</strong>，如果不存在，就返回一个
+<code>None</code>！</p>
+<p>因为 <code>Weak</code>
+引用不计入所有权，因此它<strong>无法阻止所引用的内存值被释放掉</strong>，而且
+<code>Weak</code> 本身不对值的存在性做任何担保，引用的值还存在就返回
+<code>Some</code>，不存在就返回 <code>None</code>。</p>
+<h4 id="weak-与-rc-对比"><a target="_blank" rel="noopener" href="https://course.rs/advance/circle-self-ref/circle-reference.html#weak-与-rc-对比">Weak
+与 Rc 对比</a></h4>
+<p>我们来将 <code>Weak</code> 与 <code>Rc</code> 进行以下简单对比：</p>
+<table>
+
+<thead>
+<tr>
+<th><code>Weak</code></th>
+<th><code>Rc</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>不计数</td>
+<td>引用计数</td>
+</tr>
+<tr>
+<td>不拥有所有权</td>
+<td>拥有值的所有权</td>
+</tr>
+<tr>
+<td>不阻止值被释放(drop)</td>
+<td>所有权计数归零，才能 drop</td>
+</tr>
+<tr>
+<td>引用的值存在返回 <code>Some</code>，不存在返回
+<code>None</code></td>
+<td>引用的值必定存在</td>
+</tr>
+<tr>
+<td>通过 <code>upgrade</code> 取到
+<code>Option&lt;Rc&lt;T&gt;&gt;</code>，然后再取值</td>
+<td>通过 <code>Deref</code> 自动解引用，取值无需任何操作</td>
+</tr>
+</tbody>
+</table>
+<p>通过这个对比，可以非常清晰的看出 <code>Weak</code>
+为何这么弱，而这种弱恰恰非常适合我们实现以下的场景：</p>
+<ul>
+<li>持有一个 <code>Rc</code>
+对象的临时引用，并且不在乎引用的值是否依然存在</li>
+<li>阻止 <code>Rc</code> 导致的循环引用，因为 <code>Rc</code>
+的所有权机制，会导致多个 <code>Rc</code> 都无法计数归零</li>
+</ul>
+<p>使用方式简单总结下：<strong>对于父子引用关系，可以让父节点通过
+<code>Rc</code> 来引用子节点，然后让子节点通过 <code>Weak</code>
+来引用父节点</strong>。</p>
+<h4 id="weak-总结"><a target="_blank" rel="noopener" href="https://course.rs/advance/circle-self-ref/circle-reference.html#weak-总结">Weak
+总结</a></h4>
+<p>因为 <code>Weak</code>
+本身并不是很好理解，因此我们再来帮大家梳理总结下，然后再通过一个例子，来彻底掌握。</p>
+<p><code>Weak</code> 通过 <code>use std::rc::Weak</code>
+来引入，它具有以下特点:</p>
+<ul>
+<li>可访问，但没有所有权，不增加引用计数，因此不会影响被引用值的释放回收</li>
+<li>可由 <code>Rc&lt;T&gt;</code> 调用 <code>downgrade</code> 方法转换成
+<code>Weak&lt;T&gt;</code></li>
+<li><code>Weak&lt;T&gt;</code> 可使用 <code>upgrade</code> 方法转换成
+<code>Option&lt;Rc&lt;T&gt;&gt;</code>，如果资源已经被释放，则
+<code>Option</code> 的值是 <code>None</code></li>
+<li>常用于解决循环引用的问题</li>
+</ul>
+<p>一个简单的例子：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">use</span> std::rc::Rc;<br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-comment">// 创建Rc，持有一个值5</span><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">five</span> = Rc::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-number">5</span>);<br><br>    <span class="hljs-comment">// 通过Rc，创建一个Weak指针</span><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">weak_five</span> = Rc::<span class="hljs-title function_ invoke__">downgrade</span>(&amp;five);<br><br>    <span class="hljs-comment">// Weak引用的资源依然存在，取到值5</span><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">strong_five</span>: <span class="hljs-type">Option</span>&lt;Rc&lt;_&gt;&gt; = weak_five.<span class="hljs-title function_ invoke__">upgrade</span>();<br>    <span class="hljs-built_in">assert_eq!</span>(*strong_five.<span class="hljs-title function_ invoke__">unwrap</span>(), <span class="hljs-number">5</span>);<br><br>    <span class="hljs-comment">// 手动释放资源`five`</span><br>    <span class="hljs-title function_ invoke__">drop</span>(five);<br><br>    <span class="hljs-comment">// Weak引用的资源已不存在，因此返回None</span><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">strong_five</span>: <span class="hljs-type">Option</span>&lt;Rc&lt;_&gt;&gt; = weak_five.<span class="hljs-title function_ invoke__">upgrade</span>();<br>    <span class="hljs-built_in">assert_eq!</span>(strong_five, <span class="hljs-literal">None</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>需要承认的是，使用 <code>Weak</code> 让 Rust
+本来就堪忧的代码可读性又下降了不少，但是。。。真香，因为可以解决循环引用了。</p>
+<h2 id="使用-weak-解决循环引用"><a target="_blank" rel="noopener" href="https://course.rs/advance/circle-self-ref/circle-reference.html#使用-weak-解决循环引用">使用
+Weak 解决循环引用</a></h2>
+<p>理论知识已经足够，现在用两个例子来模拟下真实场景下可能会遇到的循环引用。</p>
+<h4 id="工具间的故事"><a target="_blank" rel="noopener" href="https://course.rs/advance/circle-self-ref/circle-reference.html#工具间的故事">工具间的故事</a></h4>
+<p>工具间里，每个工具都有其主人，且多个工具可以拥有一个主人；同时一个主人也可以拥有多个工具，在这种场景下，就很容易形成循环引用，好在我们有
+<code>Weak</code>：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">use</span> std::rc::Rc;<br><span class="hljs-keyword">use</span> std::rc::Weak;<br><span class="hljs-keyword">use</span> std::cell::RefCell;<br><br><span class="hljs-comment">// 主人</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Owner</span> &#123;<br>    name: <span class="hljs-type">String</span>,<br>    gadgets: RefCell&lt;<span class="hljs-type">Vec</span>&lt;Weak&lt;Gadget&gt;&gt;&gt;,<br>&#125;<br><br><span class="hljs-comment">// 工具</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Gadget</span> &#123;<br>    id: <span class="hljs-type">i32</span>,<br>    owner: Rc&lt;Owner&gt;,<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-comment">// 创建一个 Owner</span><br>    <span class="hljs-comment">// 需要注意，该 Owner 也拥有多个 `gadgets`</span><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">gadget_owner</span> : Rc&lt;Owner&gt; = Rc::<span class="hljs-title function_ invoke__">new</span>(<br>        Owner &#123;<br>            name: <span class="hljs-string">&quot;Gadget Man&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>(),<br>            gadgets: RefCell::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-type">Vec</span>::<span class="hljs-title function_ invoke__">new</span>()),<br>        &#125;<br>    );<br><br>    <span class="hljs-comment">// 创建工具，同时与主人进行关联：创建两个 gadget，他们分别持有 gadget_owner 的一个引用。</span><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">gadget1</span> = Rc::<span class="hljs-title function_ invoke__">new</span>(Gadget&#123;id: <span class="hljs-number">1</span>, owner: gadget_owner.<span class="hljs-title function_ invoke__">clone</span>()&#125;);<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">gadget2</span> = Rc::<span class="hljs-title function_ invoke__">new</span>(Gadget&#123;id: <span class="hljs-number">2</span>, owner: gadget_owner.<span class="hljs-title function_ invoke__">clone</span>()&#125;);<br><br>    <span class="hljs-comment">// 为主人更新它所拥有的工具</span><br>    <span class="hljs-comment">// 因为之前使用了 `Rc`，现在必须要使用 `Weak`，否则就会循环引用</span><br>    gadget_owner.gadgets.<span class="hljs-title function_ invoke__">borrow_mut</span>().<span class="hljs-title function_ invoke__">push</span>(Rc::<span class="hljs-title function_ invoke__">downgrade</span>(&amp;gadget1));<br>    gadget_owner.gadgets.<span class="hljs-title function_ invoke__">borrow_mut</span>().<span class="hljs-title function_ invoke__">push</span>(Rc::<span class="hljs-title function_ invoke__">downgrade</span>(&amp;gadget2));<br><br>    <span class="hljs-comment">// 遍历 gadget_owner 的 gadgets 字段</span><br>    <span class="hljs-keyword">for</span> <span class="hljs-variable">gadget_opt</span> <span class="hljs-keyword">in</span> gadget_owner.gadgets.<span class="hljs-title function_ invoke__">borrow</span>().<span class="hljs-title function_ invoke__">iter</span>() &#123;<br><br>        <span class="hljs-comment">// gadget_opt 是一个 Weak&lt;Gadget&gt; 。 因为 weak 指针不能保证他所引用的对象</span><br>        <span class="hljs-comment">// 仍然存在。所以我们需要显式的调用 upgrade() 来通过其返回值(Option&lt;_&gt;)来判</span><br>        <span class="hljs-comment">// 断其所指向的对象是否存在。</span><br>        <span class="hljs-comment">// 当然，Option 为 None 的时候这个引用原对象就不存在了。</span><br>        <span class="hljs-keyword">let</span> <span class="hljs-variable">gadget</span> = gadget_opt.<span class="hljs-title function_ invoke__">upgrade</span>().<span class="hljs-title function_ invoke__">unwrap</span>();<br>        <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Gadget &#123;&#125; owned by &#123;&#125;&quot;</span>, gadget.id, gadget.owner.name);<br>    &#125;<br><br>    <span class="hljs-comment">// 在 main 函数的最后，gadget_owner，gadget1 和 gadget2 都被销毁。</span><br>    <span class="hljs-comment">// 具体是，因为这几个结构体之间没有了强引用（`Rc&lt;T&gt;`），所以，当他们销毁的时候。</span><br>    <span class="hljs-comment">// 首先 gadget2 和 gadget1 被销毁。</span><br>    <span class="hljs-comment">// 然后因为 gadget_owner 的引用数量为 0，所以这个对象可以被销毁了。</span><br>    <span class="hljs-comment">// 循环引用问题也就避免了</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="tree-数据结构"><a target="_blank" rel="noopener" href="https://course.rs/advance/circle-self-ref/circle-reference.html#tree-数据结构">tree
+数据结构</a></h4>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">use</span> std::cell::RefCell;<br><span class="hljs-keyword">use</span> std::rc::&#123;Rc, Weak&#125;;<br><br><span class="hljs-meta">#[derive(Debug)]</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Node</span> &#123;<br>    value: <span class="hljs-type">i32</span>,<br>    parent: RefCell&lt;Weak&lt;Node&gt;&gt;,<br>    children: RefCell&lt;<span class="hljs-type">Vec</span>&lt;Rc&lt;Node&gt;&gt;&gt;,<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">leaf</span> = Rc::<span class="hljs-title function_ invoke__">new</span>(Node &#123;<br>        value: <span class="hljs-number">3</span>,<br>        parent: RefCell::<span class="hljs-title function_ invoke__">new</span>(Weak::<span class="hljs-title function_ invoke__">new</span>()),<br>        children: RefCell::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-built_in">vec!</span>[]),<br>    &#125;);<br><br>    <span class="hljs-built_in">println!</span>(<br>        <span class="hljs-string">&quot;leaf strong = &#123;&#125;, weak = &#123;&#125;&quot;</span>,<br>        Rc::<span class="hljs-title function_ invoke__">strong_count</span>(&amp;leaf),<br>        Rc::<span class="hljs-title function_ invoke__">weak_count</span>(&amp;leaf),<br>    );<br><br>    &#123;<br>        <span class="hljs-keyword">let</span> <span class="hljs-variable">branch</span> = Rc::<span class="hljs-title function_ invoke__">new</span>(Node &#123;<br>            value: <span class="hljs-number">5</span>,<br>            parent: RefCell::<span class="hljs-title function_ invoke__">new</span>(Weak::<span class="hljs-title function_ invoke__">new</span>()),<br>            children: RefCell::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-built_in">vec!</span>[Rc::<span class="hljs-title function_ invoke__">clone</span>(&amp;leaf)]),<br>        &#125;);<br><br>        *leaf.parent.<span class="hljs-title function_ invoke__">borrow_mut</span>() = Rc::<span class="hljs-title function_ invoke__">downgrade</span>(&amp;branch);<br><br>        <span class="hljs-built_in">println!</span>(<br>            <span class="hljs-string">&quot;branch strong = &#123;&#125;, weak = &#123;&#125;&quot;</span>,<br>            Rc::<span class="hljs-title function_ invoke__">strong_count</span>(&amp;branch),<br>            Rc::<span class="hljs-title function_ invoke__">weak_count</span>(&amp;branch),<br>        );<br><br>        <span class="hljs-built_in">println!</span>(<br>            <span class="hljs-string">&quot;leaf strong = &#123;&#125;, weak = &#123;&#125;&quot;</span>,<br>            Rc::<span class="hljs-title function_ invoke__">strong_count</span>(&amp;leaf),<br>            Rc::<span class="hljs-title function_ invoke__">weak_count</span>(&amp;leaf),<br>        );<br>    &#125;<br><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;leaf parent = &#123;:?&#125;&quot;</span>, leaf.parent.<span class="hljs-title function_ invoke__">borrow</span>().<span class="hljs-title function_ invoke__">upgrade</span>());<br>    <span class="hljs-built_in">println!</span>(<br>        <span class="hljs-string">&quot;leaf strong = &#123;&#125;, weak = &#123;&#125;&quot;</span>,<br>        Rc::<span class="hljs-title function_ invoke__">strong_count</span>(&amp;leaf),<br>        Rc::<span class="hljs-title function_ invoke__">weak_count</span>(&amp;leaf),<br>    );<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这个例子就留给读者自己解读和分析，我们就不画蛇添足了:）</p>
+<h2 id="unsafe-解决循环引用"><a target="_blank" rel="noopener" href="https://course.rs/advance/circle-self-ref/circle-reference.html#unsafe-解决循环引用">unsafe
+解决循环引用</a></h2>
+<p>除了使用 Rust 标准库提供的这些类型，你还可以使用 <code>unsafe</code>
+里的裸指针来解决这些棘手的问题，但是由于我们还没有讲解
+<code>unsafe</code>，因此这里就不进行展开，只附上<a target="_blank" rel="noopener" href="https://github.com/sunface/rust-algos/blob/fbcdccf3e8178a9039329562c0de0fd01a3372fb/src/unsafe/self-ref.md">源码链接</a>，挺长的，需要耐心
+o_o</p>
+<p>虽然 <code>unsafe</code>
+不安全，但是在各种库的代码中依然很常见用它来实现自引用结构，主要优点如下:</p>
+<ul>
+<li>性能高，毕竟直接用裸指针操作</li>
+<li>代码更简单更符合直觉: 对比下
+<code>Option&lt;Rc&lt;RefCell&lt;Node&gt;&gt;&gt;</code></li>
+</ul>
+<h2 id="总结"><a target="_blank" rel="noopener" href="https://course.rs/advance/circle-self-ref/circle-reference.html#总结">总结</a></h2>
+<p>本文深入讲解了何为循环引用以及如何使用 <code>Weak</code>
+来解决，同时还结合
+<code>Rc</code>、<code>RefCell</code>、<code>Weak</code>
+等实现了两个有实战价值的例子，让大家对智能指针的使用更加融会贯通。</p>
+<p>至此，智能指针一章即将结束（严格来说还有一个 <code>Mutex</code>
+放在多线程一章讲解），而 Rust
+语言本身的学习之旅也即将结束，后面我们将深入多线程、项目工程、应用实践、性能分析等特色专题，来一睹
+Rust 在这些领域的风采。</p>
 
                 
               </div>

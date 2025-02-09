@@ -225,23 +225,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/27/cpp/6-%E5%86%85%E5%AD%98%E5%88%86%E5%8C%BA%E6%A8%A1%E5%9E%8B/" target="_self">
-          <img src="/imgs/cpp.jpg" srcset="/img/loading.gif" lazyload alt="6. 内存分区模型">
+        <a href="/2024/11/27/MySQL/11-%E9%94%81/" target="_self">
+          <img src="/imgs/MySQL.png" srcset="/img/loading.gif" lazyload alt="11. 锁">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/27/cpp/6-%E5%86%85%E5%AD%98%E5%88%86%E5%8C%BA%E6%A8%A1%E5%9E%8B/" target="_self">
-          6. 内存分区模型
+        <a href="/2024/11/27/MySQL/11-%E9%94%81/" target="_self">
+          11. 锁
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/27/cpp/6-%E5%86%85%E5%AD%98%E5%88%86%E5%8C%BA%E6%A8%A1%E5%9E%8B/" target="_self">
+      <a class="index-excerpt " href="/2024/11/27/MySQL/11-%E9%94%81/" target="_self">
         <div>
-          内存分为四个区域：代码区、全局区、栈区、堆区 1.1 程序运行前 代码区是共享的、只读的，存放CPU的机器指令 全局区存放全局变量和静态变量以及常量（字符串常量、全局常量），该区域的数据在程序结束后由操作系统释放 1.2 程序运行后 栈区：由编译器自动分配释放，存放函数的参数值（形参），局部变量等 不要返回局部变量的地址 12345678910111213141516#include
+          五、锁 1. 概述 介绍 锁是计算机协调多个进程或线程并发访问某一资源的机制。在数据库中，除传统的计算资源（CPU、RAM、I/O）的争用以外，数据也是一种供许多用户共享的资源。如何保证数据并发访问的一致性、有效性是所有数据库必须解决的一个问题，锁冲突也是影响数据库并发访问性能的一个重要因素。从这个角度来说，锁对数据库而言显得尤其重要，也更加复杂。 分类 MySQL中的锁，按照锁的粒度分
         </div>
       </a>
 
@@ -249,451 +249,7 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-27 19:12" pubdate>
-              2024-11-27
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/c/" class="category-chain-item">c++</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/c/c-%E9%BB%91%E9%A9%AC/" class="category-chain-item">c++ 黑马</a>
-  
-  
-
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/c/">#c++</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/27/cpp/5-%E7%BB%93%E6%9E%84%E4%BD%93/" target="_self">
-          <img src="/imgs/cpp.jpg" srcset="/img/loading.gif" lazyload alt="5. 结构体">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/11/27/cpp/5-%E7%BB%93%E6%9E%84%E4%BD%93/" target="_self">
-          5. 结构体
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt " href="/2024/11/27/cpp/5-%E7%BB%93%E6%9E%84%E4%BD%93/" target="_self">
-        <div>
-          5.1 定义 1234567891011struct student &#123;     string name;     int age;     int score; &#125;s3; int main() &#123;     student s1;     student s2 = &#123;&quot;李四&quot;, 19, 80&#125;; &#125; 5.2 结构体
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-27 19:12" pubdate>
-              2024-11-27
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/c/" class="category-chain-item">c++</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/c/c-%E9%BB%91%E9%A9%AC/" class="category-chain-item">c++ 黑马</a>
-  
-  
-
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/c/">#c++</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/27/cpp/4-%E6%8C%87%E9%92%88/" target="_self">
-          <img src="/imgs/cpp.jpg" srcset="/img/loading.gif" lazyload alt="4. 指针">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/11/27/cpp/4-%E6%8C%87%E9%92%88/" target="_self">
-          4. 指针
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt " href="/2024/11/27/cpp/4-%E6%8C%87%E9%92%88/" target="_self">
-        <div>
-          4.1 空指针 初始化 int *p = NULL; 空指针不可访问 4.2 野指针 指向非法的内存空间 4.3 const修饰指针 常量指针：指针的指向可以更改，但是指针指向的值不能更改。 1const int* p = &amp;a 指针常量：指针指向的值可以更改，但是指针的指向不能更改。 1int* const p = &amp;a 指针的指向和指向的值都不能修改 1co
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-27 19:12" pubdate>
-              2024-11-27
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/c/" class="category-chain-item">c++</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/c/c-%E9%BB%91%E9%A9%AC/" class="category-chain-item">c++ 黑马</a>
-  
-  
-
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/c/">#c++</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/27/cpp/3-%E6%95%B0%E7%BB%84/" target="_self">
-          <img src="/imgs/cpp.jpg" srcset="/img/loading.gif" lazyload alt="3. 数组">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/11/27/cpp/3-%E6%95%B0%E7%BB%84/" target="_self">
-          3. 数组
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt " href="/2024/11/27/cpp/3-%E6%95%B0%E7%BB%84/" target="_self">
-        <div>
-          3.1 一维数组  int score[10]; int score[10] = {10,11}; int score[] = {10, 11}; 根据数组名可以获取数组的长度和首地址
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-27 19:12" pubdate>
-              2024-11-27
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/c/" class="category-chain-item">c++</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/c/c-%E9%BB%91%E9%A9%AC/" class="category-chain-item">c++ 黑马</a>
-  
-  
-
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/c/">#c++</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/27/cpp/2-%E8%BF%90%E7%AE%97%E7%AC%A6/" target="_self">
-          <img src="/imgs/cpp.jpg" srcset="/img/loading.gif" lazyload alt="2. 运算符">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/11/27/cpp/2-%E8%BF%90%E7%AE%97%E7%AC%A6/" target="_self">
-          2. 运算符
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt " href="/2024/11/27/cpp/2-%E8%BF%90%E7%AE%97%E7%AC%A6/" target="_self">
-        <div>
-          2.1 逻辑运算符 ！非 &amp;&amp; 与 || 或
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-27 19:12" pubdate>
-              2024-11-27
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/c/" class="category-chain-item">c++</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/c/c-%E9%BB%91%E9%A9%AC/" class="category-chain-item">c++ 黑马</a>
-  
-  
-
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/c/">#c++</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/27/cpp/1-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" target="_self">
-          <img src="/imgs/cpp.jpg" srcset="/img/loading.gif" lazyload alt="1. 数据类型">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/11/27/cpp/1-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" target="_self">
-          1. 数据类型
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt " href="/2024/11/27/cpp/1-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" target="_self">
-        <div>
-          1.1 sizeof关键字 sizeof（数据类型/变量） 1.2 实型（浮点型） 单精度 float 4字节 7位有效数字双精度 double 8字节 15-16位有效数字float a = 3.14f;double b = 3.14;科学计数法float f1 = 3e2; 1.3 字符型 char ch = 'a'; 1.4 字符串型 C风格字符串 char str1[]
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-27 19:12" pubdate>
-              2024-11-27
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/c/" class="category-chain-item">c++</a>
-  
-  
-    <span>></span>
-    
-  <a href="/categories/c/c-%E9%BB%91%E9%A9%AC/" class="category-chain-item">c++ 黑马</a>
-  
-  
-
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/c/">#c++</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/27/mysql_bzbh/29-%E6%95%B0%E6%8D%AE%E5%BA%93%E7%BB%B4%E6%8A%A4/" target="_self">
-          <img src="/imgs/mysql_bzbh.png" srcset="/img/loading.gif" lazyload alt="29. 数据库维护">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2024/11/27/mysql_bzbh/29-%E6%95%B0%E6%8D%AE%E5%BA%93%E7%BB%B4%E6%8A%A4/" target="_self">
-          29. 数据库维护
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt " href="/2024/11/27/mysql_bzbh/29-%E6%95%B0%E6%8D%AE%E5%BA%93%E7%BB%B4%E6%8A%A4/" target="_self">
-        <div>
-          1. 备份数据  像所有数据一样，MySQL的数据也必须经常备份。 首先刷新未写数据为了保证所有数据被写到磁盘（包括索引数据），可能需要在进行备份前使用FLUSHTABLES语句。  2. 进行数据库维护  ANALYZE TABLE，用来检查表键是否正确    img   CHECK TABLE用来针对许多问题对表进行检查。    img   CHECK
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-27 18:06" pubdate>
+            <time datetime="2024-11-27 12:10" pubdate>
               2024-11-27
             </time>
           </div>
@@ -714,7 +270,7 @@
   
     <span>></span>
     
-  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/MySQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" class="category-chain-item">MySQL必知必会</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/MySQL/" class="category-chain-item">MySQL</a>
   
   
 
@@ -731,7 +287,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/MySQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/">#MySQL必知必会</a>
+              <a href="/tags/MySQL/">#MySQL</a>
             
           </div>
         
@@ -743,23 +299,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/27/mysql_bzbh/28-%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86/" target="_self">
-          <img src="/imgs/mysql_bzbh.png" srcset="/img/loading.gif" lazyload alt="28. 安全管理">
+        <a href="/2024/11/27/MySQL/10-%E8%A7%86%E5%9B%BE-%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B-%E8%A7%A6%E5%8F%91%E5%99%A8/" target="_self">
+          <img src="/imgs/MySQL.png" srcset="/img/loading.gif" lazyload alt="10. 视图/存储过程/触发器">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/27/mysql_bzbh/28-%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86/" target="_self">
-          28. 安全管理
+        <a href="/2024/11/27/MySQL/10-%E8%A7%86%E5%9B%BE-%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B-%E8%A7%A6%E5%8F%91%E5%99%A8/" target="_self">
+          10. 视图/存储过程/触发器
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/27/mysql_bzbh/28-%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86/" target="_self">
+      <a class="index-excerpt " href="/2024/11/27/MySQL/10-%E8%A7%86%E5%9B%BE-%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B-%E8%A7%A6%E5%8F%91%E5%99%A8/" target="_self">
         <div>
-          1. 访问控制  MySQL服务器的安全基础是：用户应该对他们需要的数据具有适当的访问权，既不能多也不能少  2. 管理用户  MySQL用户账号和信息存储在名为mysql的MySQL数据库中    img    img  mysql数据库有一个名为user的表，它包含所有用户账号。user表有一个名为user的列，它存储用户登录名。新安装的服务器可能只有一个用户（
+          1. 视图  视图（View）是一种虚拟存在的表。视图中的数据并不在数据库中实际存在，行和列数据来自定义视图的查询中使用的表，并且是在使用视图时动态生成的。  通俗的讲，视图只保存了查询的SQL逻辑，不保存查询结果。所以我们在创建视图的时候，主要的工作就落在创建这条SQL查询语句上。  1.1 创建视图 1234CREATE [ OR REPLACE ] VIEW 视图名称[（列名列
         </div>
       </a>
 
@@ -767,7 +323,7 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-27 18:06" pubdate>
+            <time datetime="2024-11-27 12:10" pubdate>
               2024-11-27
             </time>
           </div>
@@ -788,7 +344,7 @@
   
     <span>></span>
     
-  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/MySQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" class="category-chain-item">MySQL必知必会</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/MySQL/" class="category-chain-item">MySQL</a>
   
   
 
@@ -805,7 +361,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/MySQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/">#MySQL必知必会</a>
+              <a href="/tags/MySQL/">#MySQL</a>
             
           </div>
         
@@ -817,23 +373,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/27/mysql_bzbh/27-%E5%85%A8%E7%90%83%E5%8C%96%E5%92%8C%E6%9C%AC%E5%9C%B0%E5%8C%96/" target="_self">
-          <img src="/imgs/mysql_bzbh.png" srcset="/img/loading.gif" lazyload alt="27. 全球化和本地化">
+        <a href="/2024/11/27/MySQL/9-SQL%E4%BC%98%E5%8C%96/" target="_self">
+          <img src="/imgs/MySQL.png" srcset="/img/loading.gif" lazyload alt="9. SQL优化">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/27/mysql_bzbh/27-%E5%85%A8%E7%90%83%E5%8C%96%E5%92%8C%E6%9C%AC%E5%9C%B0%E5%8C%96/" target="_self">
-          27. 全球化和本地化
+        <a href="/2024/11/27/MySQL/9-SQL%E4%BC%98%E5%8C%96/" target="_self">
+          9. SQL优化
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/27/mysql_bzbh/27-%E5%85%A8%E7%90%83%E5%8C%96%E5%92%8C%E6%9C%AC%E5%9C%B0%E5%8C%96/" target="_self">
+      <a class="index-excerpt " href="/2024/11/27/MySQL/9-SQL%E4%BC%98%E5%8C%96/" target="_self">
         <div>
-          1. 全球化和本地化 2. 使用字符集和校对顺序  MySQL支持众多的字符集。为查看所支持的字符集完整列表  show character set; 这条语句显示所有可用的字符集以及每个字符集的描述和默认校对。  为了查看所支持校对的完整列表，使用以下语句  show collation;  通常系统管理在安装时定义一个默认的字符集和校对 在创建数据库时，指定默认的字符
+          1. 插入数据 普通插入：  采用批量插入（一次插入的数据不建议超过1000条，500 - 1000 为宜） 手动提交事务  多条插入语句统一提交  主键顺序插入（主键顺序插入的效率大于乱序插入）  大批量插入：  如果一次性需要插入大批量数据，使用insert语句插入性能较低，此时可以使用MySQL数据库提供的load指令插入。  1234567# 客户端连接服务端时
         </div>
       </a>
 
@@ -841,7 +397,7 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-27 18:06" pubdate>
+            <time datetime="2024-11-27 12:10" pubdate>
               2024-11-27
             </time>
           </div>
@@ -862,7 +418,7 @@
   
     <span>></span>
     
-  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/MySQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" class="category-chain-item">MySQL必知必会</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/MySQL/" class="category-chain-item">MySQL</a>
   
   
 
@@ -879,7 +435,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/MySQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/">#MySQL必知必会</a>
+              <a href="/tags/MySQL/">#MySQL</a>
             
           </div>
         
@@ -891,23 +447,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/27/mysql_bzbh/26-%E7%AE%A1%E7%90%86%E4%BA%8B%E5%8A%A1%E5%A4%84%E7%90%86/" target="_self">
-          <img src="/imgs/mysql_bzbh.png" srcset="/img/loading.gif" lazyload alt="26. 管理事务处理">
+        <a href="/2024/11/27/MySQL/8-%E7%B4%A2%E5%BC%95/" target="_self">
+          <img src="/imgs/MySQL.png" srcset="/img/loading.gif" lazyload alt="8. 索引">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/27/mysql_bzbh/26-%E7%AE%A1%E7%90%86%E4%BA%8B%E5%8A%A1%E5%A4%84%E7%90%86/" target="_self">
-          26. 管理事务处理
+        <a href="/2024/11/27/MySQL/8-%E7%B4%A2%E5%BC%95/" target="_self">
+          8. 索引
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/27/mysql_bzbh/26-%E7%AE%A1%E7%90%86%E4%BA%8B%E5%8A%A1%E5%A4%84%E7%90%86/" target="_self">
+      <a class="index-excerpt " href="/2024/11/27/MySQL/8-%E7%B4%A2%E5%BC%95/" target="_self">
         <div>
-          1. 事务处理  事务处理（transaction processing）可以用来维护数据库的完整性，它保证成批的MySQL操作要么完全执行，要么完全不执行。  2. 控制事务处理  MySQL使用下面的语句来标识事务的开始：  start transaction   2.1. 使用ROLLBACK  MySQL的ROLLBACK命令用来回退（撤销）MySQL语句，请看
+          1. 索引概述  索引是帮助 MySQL 高效获取数据的数据结构（有序）。在数据之外，数据库系统还维护着满足特定查找算法的数据结构，这些数据结构以某种方式引用（指向）数据，这样就可以在这些数据结构上实现高级查询算法，这种数据结构就是索引。 优点：   提高数据检索效率，降低数据库的IO成本  通过索引列对数据进行排序，降低数据排序的成本，降低CPU的消耗   缺点：
         </div>
       </a>
 
@@ -915,7 +471,7 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-27 18:06" pubdate>
+            <time datetime="2024-11-27 12:10" pubdate>
               2024-11-27
             </time>
           </div>
@@ -936,7 +492,7 @@
   
     <span>></span>
     
-  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/MySQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/" class="category-chain-item">MySQL必知必会</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/MySQL/" class="category-chain-item">MySQL</a>
   
   
 
@@ -953,7 +509,451 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/MySQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/">#MySQL必知必会</a>
+              <a href="/tags/MySQL/">#MySQL</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2024/11/27/MySQL/7-%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E/" target="_self">
+          <img src="/imgs/MySQL.png" srcset="/img/loading.gif" lazyload alt="进阶篇 - 7. 存储引擎">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/11/27/MySQL/7-%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E/" target="_self">
+          进阶篇 - 7. 存储引擎
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt " href="/2024/11/27/MySQL/7-%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E/" target="_self">
+        <div>
+          存储引擎 1. MySQL体系结构：   连接层  最上层是一些客户端和链接服务，主要完成一些类似于连接处理、授权认证、及相关的安全方案。服务器也会为安全接入的每个客户端验证它所具有的操作权限。  服务层  第二层架构主要完成大多数的核心服务功能，如SQL接口，并完成缓存的查询，SQL的分析和优化，部分内置函数的执行。所有跨存储引擎的功能也在这一层实现，如过程、函数等。
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-11-27 12:07" pubdate>
+              2024-11-27
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/" class="category-chain-item">后端开发</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/MySQL/" class="category-chain-item">MySQL</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/MySQL/">#MySQL</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2024/11/26/MySQL/6-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" target="_self">
+          <img src="/imgs/MySQL.png" srcset="/img/loading.gif" lazyload alt="6. 数据类型">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/11/26/MySQL/6-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" target="_self">
+          6. 数据类型
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt " href="/2024/11/26/MySQL/6-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" target="_self">
+        <div>
+          6. 数据类型 1. 整型    类型名称 取值范围 大小     TINYINT -128〜127 1个字节   SMALLINT -32768〜32767 2个宇节   MEDIUMINT -8388608〜8388607 3个字节   INT (INTEGHR) -2147483648〜2147483647 4个字节   BIG
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-11-26 17:30" pubdate>
+              2024-11-26
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/" class="category-chain-item">后端开发</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/MySQL/" class="category-chain-item">MySQL</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/MySQL/">#MySQL</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2024/11/26/MySQL/5-%E4%BA%8B%E5%8A%A1/" target="_self">
+          <img src="/imgs/MySQL.png" srcset="/img/loading.gif" lazyload alt="5. 事务">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/11/26/MySQL/5-%E4%BA%8B%E5%8A%A1/" target="_self">
+          5. 事务
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt " href="/2024/11/26/MySQL/5-%E4%BA%8B%E5%8A%A1/" target="_self">
+        <div>
+          5. 事务  事务是一组操作的集合，事务会把所有操作作为一个整体一起向系统提交或撤销操作请求，即这些操作要么同时成功，要么同时失败。  5.1 基本操作： 1234567891011121314151617181920212223242526272829303132create table account(	id int auto_increment primary key commen
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-11-26 16:31" pubdate>
+              2024-11-26
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/" class="category-chain-item">后端开发</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/MySQL/" class="category-chain-item">MySQL</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/MySQL/">#MySQL</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2024/11/26/MySQL/4-%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A2/" target="_self">
+          <img src="/imgs/MySQL.png" srcset="/img/loading.gif" lazyload alt="4. 多表查询">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/11/26/MySQL/4-%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A2/" target="_self">
+          4. 多表查询
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt " href="/2024/11/26/MySQL/4-%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A2/" target="_self">
+        <div>
+          4. 多表查询 1. 多表关系  项目开发中，在进行数据库表结构设计时，会根据业务需求及业务模块之间的关系，分析并设计表结构，由于业务之间相互关联，所以各个表结构之间也存在着各种联系，基本上分为三种：  一对多（多对一） 多对多 一对一   1.1 一对多  案例：部门与员工 关系：一个部门对应多个员工，一个员工对应一个部门 实现：在多的一方建立外键，指向一的一方的主键
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-11-26 16:31" pubdate>
+              2024-11-26
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/" class="category-chain-item">后端开发</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/MySQL/" class="category-chain-item">MySQL</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/MySQL/">#MySQL</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2024/11/26/MySQL/3-%E7%BA%A6%E6%9D%9F/" target="_self">
+          <img src="/imgs/MySQL.png" srcset="/img/loading.gif" lazyload alt="3. 约束">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/11/26/MySQL/3-%E7%BA%A6%E6%9D%9F/" target="_self">
+          3. 约束
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt " href="/2024/11/26/MySQL/3-%E7%BA%A6%E6%9D%9F/" target="_self">
+        <div>
+          3. 约束  概念：约束是作用于表中字段上的规则，用于限制存储在表中的数据。 目的：保证数据库中数据的正确、有效性和完整性。 分类：      约束 描述 关键字     非空约束 限制该字段的数据不能为null NOT NULL   唯一约束 保证该字段的所有数据都是唯一、不重复的 UNIQUE   主键约束 主键是一行数据的唯一标识，要求
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-11-26 16:31" pubdate>
+              2024-11-26
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/" class="category-chain-item">后端开发</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/MySQL/" class="category-chain-item">MySQL</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/MySQL/">#MySQL</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2024/11/26/MySQL/2-%E5%87%BD%E6%95%B0/" target="_self">
+          <img src="/imgs/MySQL.png" srcset="/img/loading.gif" lazyload alt="2. 函数">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2024/11/26/MySQL/2-%E5%87%BD%E6%95%B0/" target="_self">
+          2. 函数
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt " href="/2024/11/26/MySQL/2-%E5%87%BD%E6%95%B0/" target="_self">
+        <div>
+          2. 函数  字符串函数 数值函数 日期函数 流程函数  1. 字符串函数 常用函数：     函数 功能     CONCAT(s1, s2, …, sn) 字符串拼接，将s1, s2, …, sn拼接成一个字符串   LOWER(str) 将字符串全部转为小写   UPPER(str) 将字符串全部转为大写   LPAD(str,
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2024-11-26 16:31" pubdate>
+              2024-11-26
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/" class="category-chain-item">后端开发</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/MySQL/" class="category-chain-item">MySQL</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/MySQL/">#MySQL</a>
             
           </div>
         
@@ -965,7 +965,7 @@
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/page/24/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/23/#board">23</a><a class="page-number" href="/page/24/#board">24</a><span class="page-number current">25</span><a class="page-number" href="/page/26/#board">26</a><a class="page-number" href="/page/27/#board">27</a><span class="space">&hellip;</span><a class="page-number" href="/page/38/#board">38</a><a class="extend next" rel="next" href="/page/26/#board"><i class="iconfont icon-arrowright"></i></a>
+      <a class="extend prev" rel="prev" href="/page/24/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/23/#board">23</a><a class="page-number" href="/page/24/#board">24</a><span class="page-number current">25</span><a class="page-number" href="/page/26/#board">26</a><a class="page-number" href="/page/27/#board">27</a><span class="space">&hellip;</span><a class="page-number" href="/page/34/#board">34</a><a class="extend next" rel="next" href="/page/26/#board"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
 

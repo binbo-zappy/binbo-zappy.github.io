@@ -19,16 +19,16 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="深入生命周期 其实关于生命周期的常用特性，在上一节中，我们已经概括得差不多了，本章主要讲解生命周期的一些高级或者不为人知的特性。对于新手，完全可以跳过本节内容，进行下一章节的学习。 不太聪明的生命周期检查 在 Rust 语言学习中，一个很重要的部分就是阅读一些你可能不经常遇到，但是一旦遇到就难以理解的代码，这些代码往往最令人头疼的就是生命周期，这里我们就来看看一些本以为可以编译，但是却因为">
+    <meta name="description" content="深入生命周期 1. 不太聪明的生命周期检查 在 Rust 语言学习中，一个很重要的部分就是阅读一些你可能不经常遇到，但是一旦遇到就难以理解的代码，这些代码往往最令人头疼的就是生命周期，这里我们就来看看一些本以为可以编译，但是却因为生命周期系统不够聪明导致编译失败的代码。 1.1 例子 1 12345678910111213141516#[derive(Debug)]struct Foo;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="4.1 生命周期">
 <meta property="og:url" content="http://binbo-zappy.github.io/2025/02/05/rust%E5%9C%A3%E7%BB%8F/4-1-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/index.html">
 <meta property="og:site_name" content="Binbo">
-<meta property="og:description" content="深入生命周期 其实关于生命周期的常用特性，在上一节中，我们已经概括得差不多了，本章主要讲解生命周期的一些高级或者不为人知的特性。对于新手，完全可以跳过本节内容，进行下一章节的学习。 不太聪明的生命周期检查 在 Rust 语言学习中，一个很重要的部分就是阅读一些你可能不经常遇到，但是一旦遇到就难以理解的代码，这些代码往往最令人头疼的就是生命周期，这里我们就来看看一些本以为可以编译，但是却因为">
+<meta property="og:description" content="深入生命周期 1. 不太聪明的生命周期检查 在 Rust 语言学习中，一个很重要的部分就是阅读一些你可能不经常遇到，但是一旦遇到就难以理解的代码，这些代码往往最令人头疼的就是生命周期，这里我们就来看看一些本以为可以编译，但是却因为生命周期系统不够聪明导致编译失败的代码。 1.1 例子 1 12345678910111213141516#[derive(Debug)]struct Foo;">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/rust.jpg">
 <meta property="article:published_time" content="2025-02-05T05:39:23.000Z">
-<meta property="article:modified_time" content="2025-02-05T06:05:56.677Z">
+<meta property="article:modified_time" content="2025-02-08T08:02:54.239Z">
 <meta property="article:author" content="Binbo">
 <meta property="article:tag" content="rust">
 <meta name="twitter:card" content="summary_large_image">
@@ -225,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          4.9k 字
+          4.8k 字
         
       </span>
     
@@ -236,7 +236,7 @@
         
         
         
-          42 分钟
+          41 分钟
         
       </span>
     
@@ -278,13 +278,11 @@
             
               <div class="markdown-body">
                 
-                <h1 id="深入生命周期"><a target="_blank" rel="noopener" href="https://course.rs/advance/lifetime/advance.html#深入生命周期">深入生命周期</a></h1>
-<p>其实关于生命周期的常用特性，在上一节中，我们已经概括得差不多了，本章主要讲解生命周期的一些高级或者不为人知的特性。对于新手，完全可以跳过本节内容，进行下一章节的学习。</p>
-<h2 id="不太聪明的生命周期检查"><a target="_blank" rel="noopener" href="https://course.rs/advance/lifetime/advance.html#不太聪明的生命周期检查">不太聪明的生命周期检查</a></h2>
+                <h1 id="深入生命周期">深入生命周期</h1>
+<h2 id="不太聪明的生命周期检查">1. 不太聪明的生命周期检查</h2>
 <p>在 Rust
 语言学习中，一个很重要的部分就是阅读一些你可能不经常遇到，但是一旦遇到就难以理解的代码，这些代码往往最令人头疼的就是生命周期，这里我们就来看看一些本以为可以编译，但是却因为生命周期系统不够聪明导致编译失败的代码。</p>
-<h4 id="例子-1"><a target="_blank" rel="noopener" href="https://course.rs/advance/lifetime/advance.html#例子-1">例子
-1</a></h4>
+<h3 id="例子-1">1.1 例子 1</h3>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-meta">#[derive(Debug)]</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Foo</span>;<br><br><span class="hljs-keyword">impl</span> <span class="hljs-title class_">Foo</span> &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">mutate_and_share</span>(&amp;<span class="hljs-keyword">mut</span> <span class="hljs-keyword">self</span>) <span class="hljs-punctuation">-&gt;</span> &amp;<span class="hljs-keyword">Self</span> &#123;<br>        &amp;*<span class="hljs-keyword">self</span><br>    &#125;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">share</span>(&amp;<span class="hljs-keyword">self</span>) &#123;&#125;<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">foo</span> = Foo;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">loan</span> = foo.<span class="hljs-title function_ invoke__">mutate_and_share</span>();<br>    foo.<span class="hljs-title function_ invoke__">share</span>();<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;:?&#125;&quot;</span>, loan);<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>上面的代码中，<code>foo.mutate_and_share()</code> 虽然借用了
 <code>&amp;mut self</code>，但是它最终返回的是一个
@@ -317,8 +315,7 @@
 <code>foo.share()</code> 又进行了一次不可变 <code>&amp;foo</code>
 借用，违背了可变借用与不可变借用不能同时存在的规则，最终导致了编译错误。</p>
 <p>上述代码实际上完全是正确的，但是因为生命周期系统的“粗糙实现”，导致了编译错误，目前来说，遇到这种生命周期系统不够聪明导致的编译错误，我们也没有太好的办法，只能修改代码去满足它的需求，并期待以后它会更聪明。</p>
-<h4 id="例子-2"><a target="_blank" rel="noopener" href="https://course.rs/advance/lifetime/advance.html#例子-2">例子
-2</a></h4>
+<h3 id="例子-2">1.2 例子 2</h3>
 <p>再来看一个例子：</p>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-meta">#![allow(unused)]</span><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">use</span> std::collections::HashMap;<br>    <span class="hljs-keyword">use</span> std::hash::Hash;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">get_default</span>&lt;<span class="hljs-symbol">&#x27;m</span>, K, V&gt;(map: &amp;<span class="hljs-symbol">&#x27;m</span> <span class="hljs-keyword">mut</span> HashMap&lt;K, V&gt;, key: K) <span class="hljs-punctuation">-&gt;</span> &amp;<span class="hljs-symbol">&#x27;m</span> <span class="hljs-keyword">mut</span> V<br>    <span class="hljs-keyword">where</span><br>        K: <span class="hljs-built_in">Clone</span> + <span class="hljs-built_in">Eq</span> + Hash,<br>        V: <span class="hljs-built_in">Default</span>,<br>    &#123;<br>        <span class="hljs-keyword">match</span> map.<span class="hljs-title function_ invoke__">get_mut</span>(&amp;key) &#123;<br>            <span class="hljs-title function_ invoke__">Some</span>(value) =&gt; value,<br>            <span class="hljs-literal">None</span> =&gt; &#123;<br>                map.<span class="hljs-title function_ invoke__">insert</span>(key.<span class="hljs-title function_ invoke__">clone</span>(), V::<span class="hljs-title function_ invoke__">default</span>());<br>                map.<span class="hljs-title function_ invoke__">get_mut</span>(&amp;key).<span class="hljs-title function_ invoke__">unwrap</span>()<br>            &#125;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>这段代码不能通过编译的原因是编译器未能精确地判断出某个可变借用不再需要，反而谨慎的给该借用安排了一个很大的作用域，结果导致后续的借用失败：</p>
@@ -330,7 +327,7 @@
 行处)，这便造成了后续借用的失败。</p>
 <p>类似的例子还有很多，由于篇幅有限，就不在这里一一列举，如果大家想要阅读更多的类似代码，可以看看<a target="_blank" rel="noopener" href="https://github.com/sunface/rust-codes">《Rust
 代码鉴赏》</a>一书。</p>
-<h2 id="无界生命周期"><a target="_blank" rel="noopener" href="https://course.rs/advance/lifetime/advance.html#无界生命周期">无界生命周期</a></h2>
+<h2 id="无界生命周期">2. 无界生命周期</h2>
 <p>不安全代码(<code>unsafe</code>)经常会凭空产生引用或生命周期，这些生命周期被称为是
 <strong>无界(unbound)</strong> 的。</p>
 <p>无界生命周期往往是在解引用一个裸指针(裸指针 raw
@@ -347,12 +344,10 @@ pointer)时产生的，换句话说，它是凭空产生的，因为输入参数
 会被视为 <code>&amp;'a &amp;'a T</code>
 从而通过编译检查，因为它可大可小，就像孙猴子的金箍棒一般。</p>
 <p>我们在实际应用中，要尽量避免这种无界生命周期。最简单的避免无界生命周期的方式就是在函数声明中运用生命周期消除规则。<strong>若一个输出生命周期被消除了，那么必定因为有一个输入生命周期与之对应</strong>。</p>
-<h2 id="生命周期约束-hrtb"><a target="_blank" rel="noopener" href="https://course.rs/advance/lifetime/advance.html#生命周期约束-hrtb">生命周期约束
-HRTB</a></h2>
+<h2 id="生命周期约束-hrtb">3. 生命周期约束 HRTB</h2>
 <p>生命周期约束跟特征约束类似，都是通过形如 <code>'a: 'b</code>
 的语法，来说明两个生命周期的长短关系。</p>
-<h4 id="a-b"><a target="_blank" rel="noopener" href="https://course.rs/advance/lifetime/advance.html#a-b">'a:
-'b</a></h4>
+<h3 id="a-b">3.1 'a: 'b</h3>
 <p>假设有两个引用 <code>&amp;'a i32</code> 和
 <code>&amp;'b i32</code>，它们的生命周期分别是 <code>'a</code> 和
 <code>'b</code>，若 <code>'a</code> &gt;= <code>'b</code>，则可以定义
@@ -364,8 +359,7 @@ HRTB</a></h2>
 <code>'b: 'a</code>，因此 <code>'b</code> 必须活得比 <code>'a</code>
 久，也就是结构体中的 <code>s</code> 字段引用的值必须要比 <code>r</code>
 字段引用的值活得要久。</p>
-<h4 id="t-a"><a target="_blank" rel="noopener" href="https://course.rs/advance/lifetime/advance.html#t-a">T:
-'a</a></h4>
+<h3 id="t-a">3.2 T: 'a</h3>
 <p>表示类型 <code>T</code> 必须比 <code>'a</code> 活得要久：</p>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Ref</span>&lt;<span class="hljs-symbol">&#x27;a</span>, T: <span class="hljs-symbol">&#x27;a</span>&gt; &#123;<br>    r: &amp;<span class="hljs-symbol">&#x27;a</span> T<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>因为结构体字段 <code>r</code> 引用了 <code>T</code>，因此
@@ -382,7 +376,7 @@ HRTB</a></h2>
 <code>&amp;'a</code> 类型的生命周期强行转换为 <code>&amp;'b</code>
 类型，会报错，只有在 <code>'a</code> &gt;= <code>'b</code>
 的情况下，<code>'a</code> 才能转换成 <code>'b</code>。</p>
-<h2 id="闭包函数的消除规则"><a target="_blank" rel="noopener" href="https://course.rs/advance/lifetime/advance.html#闭包函数的消除规则">闭包函数的消除规则</a></h2>
+<h2 id="闭包函数的消除规则">4. 闭包函数的消除规则</h2>
 <p>先来看一段简单的代码：</p>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">fn_elision</span>(x: &amp;<span class="hljs-type">i32</span>) <span class="hljs-punctuation">-&gt;</span> &amp;<span class="hljs-type">i32</span> &#123; x &#125;<br><span class="hljs-keyword">let</span> <span class="hljs-variable">closure_slision</span> = |x: &amp;<span class="hljs-type">i32</span>| <span class="hljs-punctuation">-&gt;</span> &amp;<span class="hljs-type">i32</span> &#123; x &#125;;<br></code></pre></td></tr></table></figure>
 <p>乍一看，这段代码比古天乐还平平无奇，能有什么问题呢？来，拄拐走两圈试试：</p>
@@ -406,8 +400,7 @@ HRTB</a></h2>
 同学就带了一个解决方法，为他点赞!</p>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>   <span class="hljs-keyword">let</span> <span class="hljs-variable">closure_slision</span> = <span class="hljs-title function_ invoke__">fun</span>(|x: &amp;<span class="hljs-type">i32</span>| <span class="hljs-punctuation">-&gt;</span> &amp;<span class="hljs-type">i32</span> &#123; x &#125;);<br>   <span class="hljs-built_in">assert_eq!</span>(*<span class="hljs-title function_ invoke__">closure_slision</span>(&amp;<span class="hljs-number">45</span>), <span class="hljs-number">45</span>);<br>   <span class="hljs-comment">// Passed !</span><br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">fun</span>&lt;T, F: <span class="hljs-title function_ invoke__">Fn</span>(&amp;T) <span class="hljs-punctuation">-&gt;</span> &amp;T&gt;(f: F) <span class="hljs-punctuation">-&gt;</span> F &#123;<br>   f<br>&#125;<br></code></pre></td></tr></table></figure>
 </blockquote>
-<h2 id="nll-non-lexical-lifetime"><a target="_blank" rel="noopener" href="https://course.rs/advance/lifetime/advance.html#nll-non-lexical-lifetime">NLL
-(Non-Lexical Lifetime)</a></h2>
+<h2 id="nll-non-lexical-lifetime">5. NLL (Non-Lexical Lifetime)</h2>
 <p>之前我们在<a target="_blank" rel="noopener" href="https://course.rs/basic/ownership/borrowing.html#NLL">引用与借用</a>那一章其实有讲到过这个概念，简单来说就是：<strong>引用的生命周期正常来说应该从借用开始一直持续到作用域结束</strong>，但是这种规则会让多引用共存的情况变得更复杂：</p>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>   <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">s</span> = <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(<span class="hljs-string">&quot;hello&quot;</span>);<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">r1</span> = &amp;s;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">r2</span> = &amp;s;<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;&#125; and &#123;&#125;&quot;</span>, r1, r2);<br>    <span class="hljs-comment">// 新编译器中，r1,r2作用域在这里结束</span><br><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">r3</span> = &amp;<span class="hljs-keyword">mut</span> s;<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;&#125;&quot;</span>, r3);<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>按照上述规则，这段代码将会报错，因为 <code>r1</code> 和
@@ -430,8 +423,7 @@ HRTB</a></h2>
 <li><a target="_blank" rel="noopener" href="https://github.com/rust-lang/polonius">项目地址</a></li>
 <li><a target="_blank" rel="noopener" href="http://smallcultfollowing.com/babysteps/blog/2018/04/27/an-alias-based-formulation-of-the-borrow-checker/">具体介绍</a></li>
 </ul>
-<h1 id="reborrow-再借用"><a target="_blank" rel="noopener" href="https://course.rs/advance/lifetime/advance.html#reborrow-再借用">Reborrow
-再借用</a></h1>
+<h2 id="reborrow-再借用">6. Reborrow 再借用</h2>
 <p>学完 <code>NLL</code>
 后，我们就有了一定的基础，可以继续学习关于借用和生命周期的一个高级内容：<strong>再借用</strong>。</p>
 <p>先来看一段代码：</p>
@@ -451,11 +443,10 @@ HRTB</a></h2>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">p</span> = Point &#123; x: <span class="hljs-number">0</span>, y: <span class="hljs-number">0</span> &#125;;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">r</span> = &amp;<span class="hljs-keyword">mut</span> p;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">rr</span>: &amp;Point = &amp;*r;<br><br>    r.<span class="hljs-title function_ invoke__">move_to</span>(<span class="hljs-number">10</span>, <span class="hljs-number">10</span>);<br><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;:?&#125;&quot;</span>, rr);<br><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;:?&#125;&quot;</span>, r);<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>果然，破坏永远比重建简单 :) 只需要在 <code>rr</code>
 再借用的生命周期内使用一次原来的借用 <code>r</code> 即可！</p>
-<h2 id="生命周期消除规则补充"><a target="_blank" rel="noopener" href="https://course.rs/advance/lifetime/advance.html#生命周期消除规则补充">生命周期消除规则补充</a></h2>
+<h2 id="生命周期消除规则补充">7. 生命周期消除规则补充</h2>
 <p>在上一节中，我们介绍了三大基础生命周期消除规则，实际上，随着 Rust
 的版本进化，该规则也在不断演进，这里再介绍几个常见的消除规则：</p>
-<h4 id="impl-块消除"><a target="_blank" rel="noopener" href="https://course.rs/advance/lifetime/advance.html#impl-块消除">impl
-块消除</a></h4>
+<h3 id="impl-块消除">7.1 impl 块消除</h3>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">impl</span>&lt;<span class="hljs-symbol">&#x27;a</span>&gt; Reader <span class="hljs-keyword">for</span> <span class="hljs-title class_">BufReader</span>&lt;<span class="hljs-symbol">&#x27;a</span>&gt; &#123;<br>    <span class="hljs-comment">// methods go here</span><br>    <span class="hljs-comment">// impl内部实际上没有用到&#x27;a</span><br>&#125;<br></code></pre></td></tr></table></figure>
 <p>如果你以前写的<code>impl</code>块长上面这样，同时在 <code>impl</code>
 内部的方法中，根本就没有用到
@@ -468,13 +459,13 @@ HRTB</a></h2>
 <code>'a</code>，为何还要写出来？如果你仔细回忆下上一节的内容，里面有一句专门用粗体标注的文字：<strong>生命周期参数也是类型的一部分</strong>，因此
 <code>BufReader&lt;'a&gt;</code>
 是一个完整的类型，在实现它的时候，你不能把 <code>'a</code> 给丢了！</p>
-<h4 id="生命周期约束消除"><a target="_blank" rel="noopener" href="https://course.rs/advance/lifetime/advance.html#生命周期约束消除">生命周期约束消除</a></h4>
+<h3 id="生命周期约束消除">7.2 生命周期约束消除</h3>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-comment">// Rust 2015</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Ref</span>&lt;<span class="hljs-symbol">&#x27;a</span>, T: <span class="hljs-symbol">&#x27;a</span>&gt; &#123;<br>    field: &amp;<span class="hljs-symbol">&#x27;a</span> T<br>&#125;<br><br><span class="hljs-comment">// Rust 2018</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Ref</span>&lt;<span class="hljs-symbol">&#x27;a</span>, T&gt; &#123;<br>    field: &amp;<span class="hljs-symbol">&#x27;a</span> T<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>在本节的生命周期约束中，也提到过，新版本 Rust 中，上面情况中的
 <code>T: 'a</code>
 可以被消除掉，当然，你也可以显式的声明，但是会影响代码可读性。关于类似的场景，Rust
 团队计划在未来提供更多的消除规则，但是，你懂的，计划未来就等于未知。</p>
-<h2 id="一个复杂的例子"><a target="_blank" rel="noopener" href="https://course.rs/advance/lifetime/advance.html#一个复杂的例子">一个复杂的例子</a></h2>
+<h2 id="一个复杂的例子">8. 一个复杂的例子</h2>
 <p>下面是一个关于生命周期声明过大的例子，会较为复杂，希望大家能细细阅读，它能帮你对生命周期的理解更加深入。</p>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Interface</span>&lt;<span class="hljs-symbol">&#x27;a</span>&gt; &#123;<br>    manager: &amp;<span class="hljs-symbol">&#x27;a</span> <span class="hljs-keyword">mut</span> Manager&lt;<span class="hljs-symbol">&#x27;a</span>&gt;<br>&#125;<br><br><span class="hljs-keyword">impl</span>&lt;<span class="hljs-symbol">&#x27;a</span>&gt; Interface&lt;<span class="hljs-symbol">&#x27;a</span>&gt; &#123;<br>    <span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">noop</span>(<span class="hljs-keyword">self</span>) &#123;<br>        <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;interface consumed&quot;</span>);<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Manager</span>&lt;<span class="hljs-symbol">&#x27;a</span>&gt; &#123;<br>    text: &amp;<span class="hljs-symbol">&#x27;a</span> <span class="hljs-type">str</span><br>&#125;<br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">List</span>&lt;<span class="hljs-symbol">&#x27;a</span>&gt; &#123;<br>    manager: Manager&lt;<span class="hljs-symbol">&#x27;a</span>&gt;,<br>&#125;<br><br><span class="hljs-keyword">impl</span>&lt;<span class="hljs-symbol">&#x27;a</span>&gt; List&lt;<span class="hljs-symbol">&#x27;a</span>&gt; &#123;<br>    <span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">get_interface</span>(&amp;<span class="hljs-symbol">&#x27;a</span> <span class="hljs-keyword">mut</span> <span class="hljs-keyword">self</span>) <span class="hljs-punctuation">-&gt;</span> Interface &#123;<br>        Interface &#123;<br>            manager: &amp;<span class="hljs-keyword">mut</span> <span class="hljs-keyword">self</span>.manager<br>        &#125;<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">list</span> = List &#123;<br>        manager: Manager &#123;<br>            text: <span class="hljs-string">&quot;hello&quot;</span><br>        &#125;<br>    &#125;;<br><br>    list.<span class="hljs-title function_ invoke__">get_interface</span>().<span class="hljs-title function_ invoke__">noop</span>();<br><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Interface should be dropped here and the borrow released&quot;</span>);<br><br>    <span class="hljs-comment">// 下面的调用会失败，因为同时有不可变/可变借用</span><br>    <span class="hljs-comment">// 但是Interface在之前调用完成后就应该被释放了</span><br>    <span class="hljs-title function_ invoke__">use_list</span>(&amp;list);<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">use_list</span>(list: &amp;List) &#123;<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;&#125;&quot;</span>, list.manager.text);<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>运行后报错：</p>
@@ -494,8 +485,6 @@ HRTB</a></h2>
 方法的参数给予一个不同于 <code>List&lt;'a&gt;</code> 的生命周期
 <code>'b</code>，最终代码如下：</p>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Interface</span>&lt;<span class="hljs-symbol">&#x27;b</span>, <span class="hljs-symbol">&#x27;a</span>: <span class="hljs-symbol">&#x27;b</span>&gt; &#123;<br>    manager: &amp;<span class="hljs-symbol">&#x27;b</span> <span class="hljs-keyword">mut</span> Manager&lt;<span class="hljs-symbol">&#x27;a</span>&gt;<br>&#125;<br><br><span class="hljs-keyword">impl</span>&lt;<span class="hljs-symbol">&#x27;b</span>, <span class="hljs-symbol">&#x27;a</span>: <span class="hljs-symbol">&#x27;b</span>&gt; Interface&lt;<span class="hljs-symbol">&#x27;b</span>, <span class="hljs-symbol">&#x27;a</span>&gt; &#123;<br>    <span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">noop</span>(<span class="hljs-keyword">self</span>) &#123;<br>        <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;interface consumed&quot;</span>);<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Manager</span>&lt;<span class="hljs-symbol">&#x27;a</span>&gt; &#123;<br>    text: &amp;<span class="hljs-symbol">&#x27;a</span> <span class="hljs-type">str</span><br>&#125;<br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">List</span>&lt;<span class="hljs-symbol">&#x27;a</span>&gt; &#123;<br>    manager: Manager&lt;<span class="hljs-symbol">&#x27;a</span>&gt;,<br>&#125;<br><br><span class="hljs-keyword">impl</span>&lt;<span class="hljs-symbol">&#x27;a</span>&gt; List&lt;<span class="hljs-symbol">&#x27;a</span>&gt; &#123;<br>    <span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">get_interface</span>&lt;<span class="hljs-symbol">&#x27;b</span>&gt;(&amp;<span class="hljs-symbol">&#x27;b</span> <span class="hljs-keyword">mut</span> <span class="hljs-keyword">self</span>) <span class="hljs-punctuation">-&gt;</span> Interface&lt;<span class="hljs-symbol">&#x27;b</span>, <span class="hljs-symbol">&#x27;a</span>&gt;<br>    <span class="hljs-keyword">where</span> <span class="hljs-symbol">&#x27;a</span>: <span class="hljs-symbol">&#x27;b</span> &#123;<br>        Interface &#123;<br>            manager: &amp;<span class="hljs-keyword">mut</span> <span class="hljs-keyword">self</span>.manager<br>        &#125;<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">list</span> = List &#123;<br>        manager: Manager &#123;<br>            text: <span class="hljs-string">&quot;hello&quot;</span><br>        &#125;<br>    &#125;;<br><br>    list.<span class="hljs-title function_ invoke__">get_interface</span>().<span class="hljs-title function_ invoke__">noop</span>();<br><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Interface should be dropped here and the borrow released&quot;</span>);<br><br>    <span class="hljs-comment">// 下面的调用可以通过，因为Interface的生命周期不需要跟list一样长</span><br>    <span class="hljs-title function_ invoke__">use_list</span>(&amp;list);<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">use_list</span>(list: &amp;List) &#123;<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;&#125;&quot;</span>, list.manager.text);<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>至此，生命周期终于完结，两章超级长的内容，可以满足几乎所有对生命周期的学习目标。学完生命周期，意味着你正式入门了
-Rust，只要再掌握几个常用概念，就可以上手写项目了。</p>
 
                 
               </div>
@@ -600,9 +589,9 @@ Rust，只要再掌握几个常用概念，就可以上手写项目了。</p>
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2025/02/05/rust%E5%9C%A3%E7%BB%8F/4-1-1-%E6%B7%B1%E5%85%A5%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" title="4.1.1 深入生命周期">
+                      <a href="/2025/02/05/rust%E5%9C%A3%E7%BB%8F/4-1-2-static%E5%92%8CT-static/" title="4.1.2 静态生命周期 static 和 T static">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">4.1.1 深入生命周期</span>
+                        <span class="hidden-mobile">4.1.2 静态生命周期 static 和 T static</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     

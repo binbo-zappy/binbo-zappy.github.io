@@ -19,16 +19,16 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="&amp;&#39;static 和 T: &#39;static Rust 的难点之一就在于它有不少容易混淆的概念，例如 &amp;str 、str 与 String， 再比如本文标题那两位。不过与字符串也有不同，这两位对于普通用户来说往往是无需进行区分的，但是当大家想要深入学习或使用 Rust 时，它们就会成为成功路上的拦路虎了。 与生命周期的其它章节不同，本文短小精悍，阅读过程可谓相当轻松愉快，">
+    <meta name="description" content="&amp;&#39;static 和 T: &#39;static Rust 的难点之一就在于它有不少容易混淆的概念，例如 &amp;str 、str 与 String， 再比如本文标题那两位。不过与字符串也有不同，这两位对于普通用户来说往往是无需进行区分的，但是当大家想要深入学习或使用 Rust 时，它们就会成为成功路上的拦路虎了。 &#39;static 在 Rust 中是相当常见的，例如字符串字面值就具有">
 <meta property="og:type" content="article">
-<meta property="og:title" content="4.1.2 &amp;static 和 T:static">
+<meta property="og:title" content="4.1.2 静态生命周期 static 和 T static">
 <meta property="og:url" content="http://binbo-zappy.github.io/2025/02/05/rust%E5%9C%A3%E7%BB%8F/4-1-2-static%E5%92%8CT-static/index.html">
 <meta property="og:site_name" content="Binbo">
-<meta property="og:description" content="&amp;&#39;static 和 T: &#39;static Rust 的难点之一就在于它有不少容易混淆的概念，例如 &amp;str 、str 与 String， 再比如本文标题那两位。不过与字符串也有不同，这两位对于普通用户来说往往是无需进行区分的，但是当大家想要深入学习或使用 Rust 时，它们就会成为成功路上的拦路虎了。 与生命周期的其它章节不同，本文短小精悍，阅读过程可谓相当轻松愉快，">
+<meta property="og:description" content="&amp;&#39;static 和 T: &#39;static Rust 的难点之一就在于它有不少容易混淆的概念，例如 &amp;str 、str 与 String， 再比如本文标题那两位。不过与字符串也有不同，这两位对于普通用户来说往往是无需进行区分的，但是当大家想要深入学习或使用 Rust 时，它们就会成为成功路上的拦路虎了。 &#39;static 在 Rust 中是相当常见的，例如字符串字面值就具有">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/rust.jpg">
 <meta property="article:published_time" content="2025-02-05T05:40:50.000Z">
-<meta property="article:modified_time" content="2025-02-05T06:06:28.108Z">
+<meta property="article:modified_time" content="2025-02-08T08:37:15.515Z">
 <meta property="article:author" content="Binbo">
 <meta property="article:tag" content="rust">
 <meta name="twitter:card" content="summary_large_image">
@@ -36,7 +36,7 @@
   
   
   
-  <title>4.1.2 &amp;static 和 T:static - Binbo</title>
+  <title>4.1.2 静态生命周期 static 和 T static - Binbo</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -202,7 +202,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="4.1.2 &amp;static 和 T:static"></span>
+            <span id="subtitle" data-typed-text="4.1.2 静态生命周期 static 和 T static"></span>
           
         </div>
 
@@ -273,19 +273,16 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">4.1.2 &amp;static 和 T:static</h1>
+            <h1 id="seo-header">4.1.2 静态生命周期 static 和 T static</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="static-和-t-static"><a target="_blank" rel="noopener" href="https://course.rs/advance/lifetime/static.html#static-和-t-static">&amp;'static
-和 T: 'static</a></h1>
+                <h1 id="static-和-t-static">&amp;'static 和 T: 'static</h1>
 <p>Rust 的难点之一就在于它有不少容易混淆的概念，例如
 <code>&amp;str</code> 、<code>str</code> 与 <code>String</code>，
 再比如本文标题那两位。不过与字符串也有不同，这两位对于普通用户来说往往是无需进行区分的，但是当大家想要深入学习或使用
 Rust 时，它们就会成为成功路上的拦路虎了。</p>
-<p>与生命周期的其它章节不同，本文短小精悍，阅读过程可谓相当轻松愉快，话不多说，let's
-go。</p>
 <p><code>'static</code> 在 Rust 中是相当常见的，例如字符串字面值就具有
 <code>'static</code> 生命周期:</p>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>  <span class="hljs-keyword">let</span> <span class="hljs-variable">mark_twain</span>: &amp;<span class="hljs-type">str</span> = <span class="hljs-string">&quot;Samuel Clemens&quot;</span>;<br>  <span class="hljs-title function_ invoke__">print_author</span>(mark_twain);<br>&#125;<br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">print_author</span>(author: &amp;<span class="hljs-symbol">&#x27;static</span> <span class="hljs-type">str</span>) &#123;<br>  <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;&#125;&quot;</span>, author);<br>&#125;<br></code></pre></td></tr></table></figure>
@@ -297,10 +294,10 @@ go。</p>
 <p>在这里，很明显 <code>'static</code> 是作为生命周期约束来使用了。
 <strong>那么问题来了， <code>&amp;'static</code> 和
 <code>T: 'static</code> 的用法到底有何区别？</strong></p>
-<h2 id="static"><a target="_blank" rel="noopener" href="https://course.rs/advance/lifetime/static.html#static"><code>&amp;'static</code></a></h2>
+<h2 id="static">1. <code>&amp;'static</code></h2>
 <p><code>&amp;'static</code>
-对于生命周期有着非常强的要求：一个引用必须要活得跟剩下的程序一样久，才能被标注为
-<code>&amp;'static</code>。</p>
+对于生命周期有着非常强的要求：<strong>一个引用必须要活得跟剩下的程序一样久，才能被标注为
+<code>&amp;'static</code>。</strong></p>
 <p>对于字符串字面量来说，它直接被打包到二进制文件中，永远不会被
 <code>drop</code>，因此它能跟程序活得一样久，自然它的生命周期是
 <code>'static</code>。</p>
@@ -316,7 +313,7 @@ go。</p>
 <li>持有 <code>&amp;'static</code>
 引用的变量，它的生命周期受到作用域的限制，大家务必不要搞混了</li>
 </ul>
-<h2 id="t-static"><a target="_blank" rel="noopener" href="https://course.rs/advance/lifetime/static.html#t-static"><code>T: 'static</code></a></h2>
+<h2 id="t-static">2. <code>T: 'static</code></h2>
 <p>相比起来，这种形式的约束就有些复杂了。</p>
 <p>首先，在以下两种情况下，<code>T: 'static</code> 与
 <code>&amp;'static</code> 有相同的约束：<code>T</code>
@@ -336,8 +333,7 @@ go。</p>
 的生命周期符合规则即可，在上面代码中，它自然是符合的。</p>
 <p>再来看一个例子:</p>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">use</span> std::fmt::Display;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>  <span class="hljs-keyword">let</span> <span class="hljs-variable">r1</span>;<br>  <span class="hljs-keyword">let</span> <span class="hljs-variable">r2</span>;<br>  &#123;<br>    <span class="hljs-keyword">static</span> STATIC_EXAMPLE: <span class="hljs-type">i32</span> = <span class="hljs-number">42</span>;<br>    r1 = &amp;STATIC_EXAMPLE;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">x</span> = <span class="hljs-string">&quot;&amp;&#x27;static str&quot;</span>;<br>    r2 = x;<br>    <span class="hljs-comment">// r1 和 r2 持有的数据都是 &#x27;static 的，因此在花括号结束后，并不会被释放</span><br>  &#125;<br><br>  <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&amp;&#x27;static i32: &#123;&#125;&quot;</span>, r1); <span class="hljs-comment">// -&gt; 42</span><br>  <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&amp;&#x27;static str: &#123;&#125;&quot;</span>, r2); <span class="hljs-comment">// -&gt; &amp;&#x27;static str</span><br><br>  <span class="hljs-keyword">let</span> <span class="hljs-variable">r3</span>: &amp;<span class="hljs-type">str</span>;<br><br>  &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">s1</span> = <span class="hljs-string">&quot;String&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>();<br><br>    <span class="hljs-comment">// s1 虽然没有 &#x27;static 生命周期，但是它依然可以满足 T: &#x27;static 的约束</span><br>    <span class="hljs-comment">// 充分说明这个约束是多么的弱。。</span><br>    <span class="hljs-title function_ invoke__">static_bound</span>(&amp;s1);<br><br>    <span class="hljs-comment">// s1 是 String 类型，没有 &#x27;static 的生命周期，因此下面代码会报错</span><br>    r3 = &amp;s1;<br><br>    <span class="hljs-comment">// s1 在这里被 drop</span><br>  &#125;<br>  <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;&#125;&quot;</span>, r3);<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">static_bound</span>&lt;T: Display + <span class="hljs-symbol">&#x27;static</span>&gt;(t: &amp;T) &#123;<br>  <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;&#125;&quot;</span>, t);<br>&#125;<br></code></pre></td></tr></table></figure>
-<h2 id="static-到底针对谁"><a target="_blank" rel="noopener" href="https://course.rs/advance/lifetime/static.html#static-到底针对谁">static
-到底针对谁？</a></h2>
+<h2 id="static-到底针对谁">3. static 到底针对谁？</h2>
 <p>大家有没有想过，到底是 <code>&amp;'static</code>
 这个引用还是该引用指向的数据活得跟程序一样久呢？</p>
 <p><strong>答案是引用指向的数据</strong>，而引用本身是要遵循其作用域范围的，我们来简单验证下：</p>
@@ -346,12 +342,7 @@ go。</p>
 memory" 的生命周期是
 <code>'static</code>，但是持有它的引用并不是，它的作用域在内部花括号
 <code>&#125;</code> 处就结束了。</p>
-<h2 id="课后练习"><a target="_blank" rel="noopener" href="https://course.rs/advance/lifetime/static.html#课后练习">课后练习</a></h2>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://practice-zh.course.rs/lifetime/static.html">Rust By
-Practice</a>，支持代码在线编辑和运行，并提供详细的习题解答。（本节暂无习题解答）</p>
-</blockquote>
-<h2 id="总结"><a target="_blank" rel="noopener" href="https://course.rs/advance/lifetime/static.html#总结">总结</a></h2>
+<h2 id="总结">4. 总结</h2>
 <p>总之， <code>&amp;'static</code> 和 <code>T: 'static</code>
 大体上相似，相比起来，后者的使用形式会更加复杂一些。</p>
 <p>至此，相信大家对于 <code>'static</code> 和 <code>T: 'static</code>
@@ -427,7 +418,7 @@ Practice</a>，支持代码在线编辑和运行，并提供详细的习题解�
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>4.1.2 &amp;static 和 T:static</div>
+      <div>4.1.2 静态生命周期 static 和 T static</div>
       <div>http://binbo-zappy.github.io/2025/02/05/rust圣经/4-1-2-static和T-static/</div>
     </div>
     <div class="license-meta">
@@ -482,8 +473,8 @@ Practice</a>，支持代码在线编辑和运行，并提供详细的习题解�
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/02/05/rust%E5%9C%A3%E7%BB%8F/4-1-1-%E6%B7%B1%E5%85%A5%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" title="4.1.1 深入生命周期">
-                        <span class="hidden-mobile">4.1.1 深入生命周期</span>
+                      <a href="/2025/02/05/rust%E5%9C%A3%E7%BB%8F/4-1-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" title="4.1 生命周期">
+                        <span class="hidden-mobile">4.1 生命周期</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

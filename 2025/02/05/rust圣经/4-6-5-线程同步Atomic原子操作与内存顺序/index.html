@@ -19,14 +19,16 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta property="og:type" content="article">
+    <meta name="description" content="线程同步：Atomic 原子类型与内存顺序 Mutex用起来简单，但是无法并发读，RwLock可以并发读，但是使用场景较为受限且性能不够，那么有没有一种全能性选手呢？ 欢迎我们的Atomic闪亮登场。 从 Rust1.34 版本后，就正式支持原子类型。原子指的是一系列不可被 CPU 上下文交换的机器指令，这些指令组合在一起就形成了原子操作。在多核 CPU 下，当某个 CPU 核心开始运">
+<meta property="og:type" content="article">
 <meta property="og:title" content="4.6.5 线程同步：Atomic 原子操作与内存顺序">
 <meta property="og:url" content="http://binbo-zappy.github.io/2025/02/05/rust%E5%9C%A3%E7%BB%8F/4-6-5-%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5Atomic%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C%E4%B8%8E%E5%86%85%E5%AD%98%E9%A1%BA%E5%BA%8F/index.html">
 <meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="线程同步：Atomic 原子类型与内存顺序 Mutex用起来简单，但是无法并发读，RwLock可以并发读，但是使用场景较为受限且性能不够，那么有没有一种全能性选手呢？ 欢迎我们的Atomic闪亮登场。 从 Rust1.34 版本后，就正式支持原子类型。原子指的是一系列不可被 CPU 上下文交换的机器指令，这些指令组合在一起就形成了原子操作。在多核 CPU 下，当某个 CPU 核心开始运">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/rust.jpg">
 <meta property="article:published_time" content="2025-02-05T05:41:48.000Z">
-<meta property="article:modified_time" content="2025-02-05T05:41:48.172Z">
+<meta property="article:modified_time" content="2025-02-09T02:51:52.989Z">
 <meta property="article:author" content="Binbo">
 <meta property="article:tag" content="rust">
 <meta name="twitter:card" content="summary_large_image">
@@ -223,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          0 字
+          2.5k 字
         
       </span>
     
@@ -234,7 +236,7 @@
         
         
         
-          1 分钟
+          21 分钟
         
       </span>
     
@@ -276,7 +278,133 @@
             
               <div class="markdown-body">
                 
-                
+                <h1 id="线程同步atomic-原子类型与内存顺序"><a target="_blank" rel="noopener" href="https://course.rs/advance/concurrency-with-threads/sync2.html#线程同步atomic-原子类型与内存顺序">线程同步：Atomic
+原子类型与内存顺序</a></h1>
+<p><code>Mutex</code>用起来简单，但是无法并发读，<code>RwLock</code>可以并发读，但是使用场景较为受限且性能不够，那么有没有一种全能性选手呢？
+欢迎我们的<code>Atomic</code>闪亮登场。</p>
+<p>从 Rust1.34 版本后，就正式支持原子类型。原子指的是一系列不可被 CPU
+上下文交换的机器指令，这些指令组合在一起就形成了原子操作。在多核 CPU
+下，当某个 CPU 核心开始运行原子操作时，会先暂停其它 CPU
+内核对内存的操作，以保证原子操作不会被其它 CPU 内核所干扰。</p>
+<p>由于原子操作是通过指令提供的支持，因此它的性能相比锁和消息传递会好很多。相比较于锁而言，原子类型不需要开发者处理加锁和释放锁的问题，同时支持修改，读取等操作，还具备较高的并发性能，几乎所有的语言都支持原子类型。</p>
+<p>可以看出原子类型是无锁类型，但是无锁不代表无需等待，因为原子类型内部使用了<code>CAS</code>循环，当大量的冲突发生时，该等待还是得<a target="_blank" rel="noopener" href="https://course.rs/advance/concurrency-with-threads/thread.html#多线程的开销">等待</a>！但是总归比锁要好。</p>
+<blockquote>
+<p>CAS 全称是 Compare and swap,
+它通过一条指令读取指定的内存地址，然后判断其中的值是否等于给定的前置值，如果相等，则将其修改为新的值</p>
+</blockquote>
+<h2 id="使用-atomic-作为全局变量"><a target="_blank" rel="noopener" href="https://course.rs/advance/concurrency-with-threads/sync2.html#使用-atomic-作为全局变量">使用
+Atomic 作为全局变量</a></h2>
+<p>原子类型的一个常用场景，就是作为全局变量来使用:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">use</span> std::ops::Sub;<br><span class="hljs-keyword">use</span> std::sync::atomic::&#123;AtomicU64, Ordering&#125;;<br><span class="hljs-keyword">use</span> std::thread::&#123;<span class="hljs-keyword">self</span>, JoinHandle&#125;;<br><span class="hljs-keyword">use</span> std::time::Instant;<br><br><span class="hljs-keyword">const</span> N_TIMES: <span class="hljs-type">u64</span> = <span class="hljs-number">10000000</span>;<br><span class="hljs-keyword">const</span> N_THREADS: <span class="hljs-type">usize</span> = <span class="hljs-number">10</span>;<br><br><span class="hljs-keyword">static</span> R: AtomicU64 = AtomicU64::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-number">0</span>);<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">add_n_times</span>(n: <span class="hljs-type">u64</span>) <span class="hljs-punctuation">-&gt;</span> JoinHandle&lt;()&gt; &#123;<br>    thread::<span class="hljs-title function_ invoke__">spawn</span>(<span class="hljs-keyword">move</span> || &#123;<br>        <span class="hljs-keyword">for</span> <span class="hljs-variable">_</span> <span class="hljs-keyword">in</span> <span class="hljs-number">0</span>..n &#123;<br>            R.<span class="hljs-title function_ invoke__">fetch_add</span>(<span class="hljs-number">1</span>, Ordering::Relaxed);<br>        &#125;<br>    &#125;)<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">s</span> = Instant::<span class="hljs-title function_ invoke__">now</span>();<br>    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">threads</span> = <span class="hljs-type">Vec</span>::<span class="hljs-title function_ invoke__">with_capacity</span>(N_THREADS);<br><br>    <span class="hljs-keyword">for</span> <span class="hljs-variable">_</span> <span class="hljs-keyword">in</span> <span class="hljs-number">0</span>..N_THREADS &#123;<br>        threads.<span class="hljs-title function_ invoke__">push</span>(<span class="hljs-title function_ invoke__">add_n_times</span>(N_TIMES));<br>    &#125;<br><br>    <span class="hljs-keyword">for</span> <span class="hljs-variable">thread</span> <span class="hljs-keyword">in</span> threads &#123;<br>        thread.<span class="hljs-title function_ invoke__">join</span>().<span class="hljs-title function_ invoke__">unwrap</span>();<br>    &#125;<br><br>    <span class="hljs-built_in">assert_eq!</span>(N_TIMES * N_THREADS <span class="hljs-keyword">as</span> <span class="hljs-type">u64</span>, R.<span class="hljs-title function_ invoke__">load</span>(Ordering::Relaxed));<br><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;:?&#125;&quot;</span>,Instant::<span class="hljs-title function_ invoke__">now</span>().<span class="hljs-title function_ invoke__">sub</span>(s));<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>以上代码启动了数个线程，每个线程都在疯狂对全局变量进行加 1 操作,
+最后将它与<code>线程数 * 加1次数</code>进行比较，如果发生了因为多个线程同时修改导致了脏数据，那么这两个必将不相等。好在，它没有让我们失望，不仅快速的完成了任务，而且保证了
+100%的并发安全性。</p>
+<p>当然以上代码的功能其实也可以通过<code>Mutex</code>来实现，但是后者的强大功能是建立在额外的性能损耗基础上的，因此性能会逊色不少:</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs console">Atomic实现：673ms<br>Mutex实现: 1136ms<br></code></pre></td></tr></table></figure>
+<p>可以看到<code>Atomic</code>实现会比<code>Mutex</code>快<strong>41%</strong>，实际上在复杂场景下还能更快(甚至达到
+4 倍的性能差距)！</p>
+<p>还有一点值得注意:
+<strong>和<code>Mutex</code>一样，<code>Atomic</code>的值具有内部可变性</strong>，你无需将其声明为<code>mut</code>：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">use</span> std::sync::Mutex;<br><span class="hljs-keyword">use</span> std::sync::atomic::&#123;Ordering, AtomicU64&#125;;<br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Counter</span> &#123;<br>    count: <span class="hljs-type">u64</span><br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">n</span> = Mutex::<span class="hljs-title function_ invoke__">new</span>(Counter &#123;<br>        count: <span class="hljs-number">0</span><br>    &#125;);<br><br>    n.<span class="hljs-title function_ invoke__">lock</span>().<span class="hljs-title function_ invoke__">unwrap</span>().count += <span class="hljs-number">1</span>;<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">n</span> = AtomicU64::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-number">0</span>);<br><br>    n.<span class="hljs-title function_ invoke__">fetch_add</span>(<span class="hljs-number">0</span>, Ordering::Relaxed);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这里有一个奇怪的枚举成员<code>Ordering::Relaxed</code>,
+看上去很像是排序作用，但是我们并没有做排序操作啊？实际上它用于控制原子操作使用的<strong>内存顺序</strong>。</p>
+<h2 id="内存顺序"><a target="_blank" rel="noopener" href="https://course.rs/advance/concurrency-with-threads/sync2.html#内存顺序">内存顺序</a></h2>
+<p>内存顺序是指 CPU 在访问内存时的顺序，该顺序可能受以下因素的影响：</p>
+<ul>
+<li>代码中的先后顺序</li>
+<li>编译器优化导致在编译阶段发生改变(内存重排序 reordering)</li>
+<li>运行阶段因 CPU 的缓存机制导致顺序被打乱</li>
+</ul>
+<h4 id="编译器优化导致内存顺序的改变"><a target="_blank" rel="noopener" href="https://course.rs/advance/concurrency-with-threads/sync2.html#编译器优化导致内存顺序的改变">编译器优化导致内存顺序的改变</a></h4>
+<p>对于第二点，我们举个例子：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">static</span> <span class="hljs-keyword">mut</span> X: <span class="hljs-type">u64</span> = <span class="hljs-number">0</span>;<br><span class="hljs-keyword">static</span> <span class="hljs-keyword">mut</span> Y: <span class="hljs-type">u64</span> = <span class="hljs-number">1</span>;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    ...     <span class="hljs-comment">// A</span><br><br>    <span class="hljs-keyword">unsafe</span> &#123;<br>        ... <span class="hljs-comment">// B</span><br>        X = <span class="hljs-number">1</span>;<br>        ... <span class="hljs-comment">// C</span><br>        Y = <span class="hljs-number">3</span>;<br>        ... <span class="hljs-comment">// D</span><br>        X = <span class="hljs-number">2</span>;<br>        ... <span class="hljs-comment">// E</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>假如在<code>C</code>和<code>D</code>代码片段中，根本没有用到<code>X = 1</code>，那么编译器很可能会将<code>X = 1</code>和<code>X = 2</code>进行合并:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs rust"> ...     <span class="hljs-comment">// A</span><br><br><span class="hljs-keyword">unsafe</span> &#123;<br>    ... <span class="hljs-comment">// B</span><br>    X = <span class="hljs-number">2</span>;<br>    ... <span class="hljs-comment">// C</span><br>    Y = <span class="hljs-number">3</span>;<br>    ... <span class="hljs-comment">// D</span><br>    ... <span class="hljs-comment">// E</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>若代码<code>A</code>中创建了一个新的线程用于读取全局静态变量<code>X</code>，则该线程将无法读取到<code>X = 1</code>的结果，因为在编译阶段就已经被优化掉。</p>
+<h4 id="cpu-缓存导致的内存顺序的改变"><a target="_blank" rel="noopener" href="https://course.rs/advance/concurrency-with-threads/sync2.html#cpu-缓存导致的内存顺序的改变">CPU
+缓存导致的内存顺序的改变</a></h4>
+<p>假设之前的<code>X = 1</code>没有被优化掉，并且在代码片段<code>A</code>中有一个新的线程:</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs console">initial state: X = 0, Y = 1<br><br>THREAD Main     THREAD A<br>X = 1;          if X == 1 &#123;<br>Y = 3;              Y *= 2;<br>X = 2;          &#125;<br></code></pre></td></tr></table></figure>
+<p>我们来讨论下以上线程状态，<code>Y</code>最终的可能值(可能性依次降低):</p>
+<ul>
+<li><code>Y = 3</code>:
+线程<code>Main</code>运行完后才运行线程<code>A</code>，或者线程<code>A</code>运行完后再运行线程<code>Main</code></li>
+<li><code>Y = 6</code>:
+线程<code>Main</code>的<code>Y = 3</code>运行完，但<code>X = 2</code>还没被运行，
+此时线程 A 开始运行<code>Y *= 2</code>,
+最后才运行<code>Main</code>线程的<code>X = 2</code></li>
+<li><code>Y = 2</code>:
+线程<code>Main</code>正在运行<code>Y = 3</code>还没结束，此时线程<code>A</code>正在运行<code>Y *= 2</code>,
+因此<code>Y</code>取到了值
+1，然后<code>Main</code>的线程将<code>Y</code>设置为 3，
+紧接着就被线程<code>A</code>的<code>Y = 2</code>所覆盖</li>
+<li><code>Y = 2</code>:
+上面的还只是一般的数据竞争，这里虽然产生了相同的结果<code>2</code>，但是背后的原理大相径庭:
+线程<code>Main</code>运行完<code>Y = 3</code>，但是 CPU
+缓存中的<code>Y = 3</code>还没有被同步到其它 CPU
+缓存中，此时线程<code>A</code>中的<code>Y *= 2</code>就开始读取<code>Y</code>，结果读到了值<code>1</code>，最终计算出结果<code>2</code></li>
+</ul>
+<p>甚至更改成:</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs console">initial state: X = 0, Y = 1<br><br>THREAD Main     THREAD A<br>X = 1;          if X == 2 &#123;<br>Y = 3;              Y *= 2;<br>X = 2;          &#125;<br></code></pre></td></tr></table></figure>
+<p>还是可能出现<code>Y = 2</code>，因为<code>Main</code>线程中的<code>X</code>和<code>Y</code>被同步到其它
+CPU 缓存中的顺序未必一致。</p>
+<h4 id="限定内存顺序的-5-个规则"><a target="_blank" rel="noopener" href="https://course.rs/advance/concurrency-with-threads/sync2.html#限定内存顺序的-5-个规则">限定内存顺序的
+5 个规则</a></h4>
+<p>在理解了内存顺序可能存在的改变后，你就可以明白为什么 Rust
+提供了<code>Ordering::Relaxed</code>用于限定内存顺序了，事实上，该枚举有
+5 个成员:</p>
+<ul>
+<li><strong>Relaxed</strong>， 这是最宽松的规则，它对编译器和 CPU
+不做任何限制，可以乱序</li>
+<li><strong>Release 释放</strong>，设定内存屏障(Memory
+barrier)，保证它之前的操作永远在它之前，但是它后面的操作可能被重排到它前面</li>
+<li><strong>Acquire 获取</strong>,
+设定内存屏障，保证在它之后的访问永远在它之后，但是它之前的操作却有可能被重排到它后面，往往和<code>Release</code>在不同线程中联合使用</li>
+<li><strong>AcqRel</strong>, 是 <em>Acquire</em> 和 <em>Release</em>
+的结合，同时拥有它们俩提供的保证。比如你要对一个 <code>atomic</code>
+自增 1，同时希望该操作之前和之后的读取或写入操作不会被重新排序</li>
+<li><strong>SeqCst 顺序一致性</strong>，
+<code>SeqCst</code>就像是<code>AcqRel</code>的加强版，它不管原子操作是属于读取还是写入的操作，只要某个线程有用到<code>SeqCst</code>的原子操作，线程中该<code>SeqCst</code>操作前的数据操作绝对不会被重新排在该<code>SeqCst</code>操作之后，且该<code>SeqCst</code>操作后的数据操作也绝对不会被重新排在<code>SeqCst</code>操作前。</li>
+</ul>
+<p>这些规则由于是系统提供的，因此其它语言提供的相应规则也大同小异，大家如果不明白可以看看其它语言的相关解释。</p>
+<h4 id="内存屏障的例子"><a target="_blank" rel="noopener" href="https://course.rs/advance/concurrency-with-threads/sync2.html#内存屏障的例子">内存屏障的例子</a></h4>
+<p>下面我们以<code>Release</code>和<code>Acquire</code>为例，使用它们构筑出一对内存屏障，防止编译器和
+CPU
+将屏障前(Release)和屏障后(Acquire)中的数据操作重新排在屏障围成的范围之外:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">use</span> std::thread::&#123;<span class="hljs-keyword">self</span>, JoinHandle&#125;;<br><span class="hljs-keyword">use</span> std::sync::atomic::&#123;Ordering, AtomicBool&#125;;<br><br><span class="hljs-keyword">static</span> <span class="hljs-keyword">mut</span> DATA: <span class="hljs-type">u64</span> = <span class="hljs-number">0</span>;<br><span class="hljs-keyword">static</span> READY: AtomicBool = AtomicBool::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-literal">false</span>);<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">reset</span>() &#123;<br>    <span class="hljs-keyword">unsafe</span> &#123;<br>        DATA = <span class="hljs-number">0</span>;<br>    &#125;<br>    READY.<span class="hljs-title function_ invoke__">store</span>(<span class="hljs-literal">false</span>, Ordering::Relaxed);<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">producer</span>() <span class="hljs-punctuation">-&gt;</span> JoinHandle&lt;()&gt; &#123;<br>    thread::<span class="hljs-title function_ invoke__">spawn</span>(<span class="hljs-keyword">move</span> || &#123;<br>        <span class="hljs-keyword">unsafe</span> &#123;<br>            DATA = <span class="hljs-number">100</span>;                                 <span class="hljs-comment">// A</span><br>        &#125;<br>        READY.<span class="hljs-title function_ invoke__">store</span>(<span class="hljs-literal">true</span>, Ordering::Release);           <span class="hljs-comment">// B: 内存屏障 ↑</span><br>    &#125;)<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">consumer</span>() <span class="hljs-punctuation">-&gt;</span> JoinHandle&lt;()&gt; &#123;<br>    thread::<span class="hljs-title function_ invoke__">spawn</span>(<span class="hljs-keyword">move</span> || &#123;<br>        <span class="hljs-keyword">while</span> !READY.<span class="hljs-title function_ invoke__">load</span>(Ordering::Acquire) &#123;&#125;         <span class="hljs-comment">// C: 内存屏障 ↓</span><br><br>        <span class="hljs-built_in">assert_eq!</span>(<span class="hljs-number">100</span>, <span class="hljs-keyword">unsafe</span> &#123; DATA &#125;);               <span class="hljs-comment">// D</span><br>    &#125;)<br>&#125;<br><br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">loop</span> &#123;<br>        <span class="hljs-title function_ invoke__">reset</span>();<br><br>        <span class="hljs-keyword">let</span> <span class="hljs-variable">t_producer</span> = <span class="hljs-title function_ invoke__">producer</span>();<br>        <span class="hljs-keyword">let</span> <span class="hljs-variable">t_consumer</span> = <span class="hljs-title function_ invoke__">consumer</span>();<br><br>        t_producer.<span class="hljs-title function_ invoke__">join</span>().<span class="hljs-title function_ invoke__">unwrap</span>();<br>        t_consumer.<span class="hljs-title function_ invoke__">join</span>().<span class="hljs-title function_ invoke__">unwrap</span>();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>原则上，<code>Acquire</code>用于读取，而<code>Release</code>用于写入。但是由于有些原子操作同时拥有读取和写入的功能，此时就需要使用<code>AcqRel</code>来设置内存顺序了。在内存屏障中被写入的数据，都可以被其它线程读取到，不会有
+CPU 缓存的问题。</p>
+<p><strong>内存顺序的选择</strong></p>
+<ol type="1">
+<li>不知道怎么选择时，优先使用<code>SeqCst</code>，虽然会稍微减慢速度，但是慢一点也比出现错误好</li>
+<li>多线程只计数<code>fetch_add</code>而不使用该值触发其他逻辑分支的简单使用场景，可以使用<code>Relaxed</code>
+参考 <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/30407121/which-stdsyncatomicordering-to-use">Which
+std::sync::atomic::Ordering to use?</a></li>
+</ol>
+<h2 id="多线程中使用-atomic"><a target="_blank" rel="noopener" href="https://course.rs/advance/concurrency-with-threads/sync2.html#多线程中使用-atomic">多线程中使用
+Atomic</a></h2>
+<p>在多线程环境中要使用<code>Atomic</code>需要配合<code>Arc</code>：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">use</span> std::sync::Arc;<br><span class="hljs-keyword">use</span> std::sync::atomic::&#123;AtomicUsize, Ordering&#125;;<br><span class="hljs-keyword">use</span> std::&#123;hint, thread&#125;;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">spinlock</span> = Arc::<span class="hljs-title function_ invoke__">new</span>(AtomicUsize::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-number">1</span>));<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">spinlock_clone</span> = Arc::<span class="hljs-title function_ invoke__">clone</span>(&amp;spinlock);<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">thread</span> = thread::<span class="hljs-title function_ invoke__">spawn</span>(<span class="hljs-keyword">move</span>|| &#123;<br>        spinlock_clone.<span class="hljs-title function_ invoke__">store</span>(<span class="hljs-number">0</span>, Ordering::SeqCst);<br>    &#125;);<br><br>    <span class="hljs-comment">// 等待其它线程释放锁</span><br>    <span class="hljs-keyword">while</span> spinlock.<span class="hljs-title function_ invoke__">load</span>(Ordering::SeqCst) != <span class="hljs-number">0</span> &#123;<br>        hint::<span class="hljs-title function_ invoke__">spin_loop</span>();<br>    &#125;<br><br>    <span class="hljs-keyword">if</span> <span class="hljs-keyword">let</span> <span class="hljs-variable">Err</span>(panic) = thread.<span class="hljs-title function_ invoke__">join</span>() &#123;<br>        <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Thread had an error: &#123;:?&#125;&quot;</span>, panic);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="atomic-能替代锁吗"><a target="_blank" rel="noopener" href="https://course.rs/advance/concurrency-with-threads/sync2.html#atomic-能替代锁吗">Atomic
+能替代锁吗</a></h2>
+<p>那么原子类型既然这么全能，它可以替代锁吗？答案是不行：</p>
+<ul>
+<li>对于复杂的场景下，锁的使用简单粗暴，不容易有坑</li>
+<li><code>std::sync::atomic</code>包中仅提供了数值类型的原子操作：<code>AtomicBool</code>,
+<code>AtomicIsize</code>, <code>AtomicUsize</code>,
+<code>AtomicI8</code>,
+<code>AtomicU16</code>等，而锁可以应用于各种类型</li>
+<li>在有些情况下，必须使用锁来配合，例如上一章节中使用<code>Mutex</code>配合<code>Condvar</code></li>
+</ul>
+<h2 id="atomic-的应用场景"><a target="_blank" rel="noopener" href="https://course.rs/advance/concurrency-with-threads/sync2.html#atomic-的应用场景">Atomic
+的应用场景</a></h2>
+<p>事实上，<code>Atomic</code>虽然对于用户不太常用，但是对于高性能库的开发者、标准库开发者都非常常用，它是并发原语的基石，除此之外，还有一些场景适用：</p>
+<ul>
+<li>无锁(lock free)数据结构</li>
+<li>全局变量，例如全局自增 ID, 在后续章节会介绍</li>
+<li>跨线程计数器，例如可以用于统计指标</li>
+</ul>
+<p>以上列出的只是<code>Atomic</code>适用的部分场景，具体场景需要大家未来根据自己的需求进行权衡选择。</p>
 
                 
               </div>
