@@ -19,16 +19,16 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="底层探秘: Future 执行器与任务调度 异步编程背后到底藏有什么秘密？究竟是哪只幕后之手在操纵这一切？如果你对这些感兴趣，就继续看下去，否则可以直接跳过，因为本章节的内容对于一个 API 工程师并没有太多帮助。 但是如果你希望能深入理解 Rust 的 async&#x2F;.await 代码是如何工作、理解运行时和性能，甚至未来想要构建自己的 async 运行时或相关工具，那么本章节终究不">
+    <meta name="description" content="底层探秘: Future 执行器与任务调度 异步编程背后到底藏有什么秘密？究竟是哪只幕后之手在操纵这一切？如果你对这些感兴趣，就继续看下去，否则可以直接跳过，因为本章节的内容对于一个 API 工程师并没有太多帮助。 但是如果你希望能深入理解 Rust 的 async&#x2F;.await 代码是如何工作、理解运行时和性能，甚至未来想要构建自己的 async 运行时或相关工具，那么本章节终究不">
 <meta property="og:type" content="article">
 <meta property="og:title" content="4.11.2 底层探秘：Future 执行与任务调度">
 <meta property="og:url" content="http://binbo-zappy.github.io/2025/02/05/rust%E5%9C%A3%E7%BB%8F/4-11-2-%E5%BA%95%E5%B1%82%E6%8E%A2%E7%A7%98Future%E6%89%A7%E8%A1%8C%E4%B8%8E%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6/index.html">
 <meta property="og:site_name" content="Binbo">
-<meta property="og:description" content="底层探秘: Future 执行器与任务调度 异步编程背后到底藏有什么秘密？究竟是哪只幕后之手在操纵这一切？如果你对这些感兴趣，就继续看下去，否则可以直接跳过，因为本章节的内容对于一个 API 工程师并没有太多帮助。 但是如果你希望能深入理解 Rust 的 async&#x2F;.await 代码是如何工作、理解运行时和性能，甚至未来想要构建自己的 async 运行时或相关工具，那么本章节终究不">
+<meta property="og:description" content="底层探秘: Future 执行器与任务调度 异步编程背后到底藏有什么秘密？究竟是哪只幕后之手在操纵这一切？如果你对这些感兴趣，就继续看下去，否则可以直接跳过，因为本章节的内容对于一个 API 工程师并没有太多帮助。 但是如果你希望能深入理解 Rust 的 async&#x2F;.await 代码是如何工作、理解运行时和性能，甚至未来想要构建自己的 async 运行时或相关工具，那么本章节终究不">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/rust.jpg">
 <meta property="article:published_time" content="2025-02-05T05:42:12.000Z">
-<meta property="article:modified_time" content="2025-02-09T02:51:21.803Z">
+<meta property="article:modified_time" content="2025-02-11T09:21:31.697Z">
 <meta property="article:author" content="Binbo">
 <meta property="article:tag" content="rust">
 <meta name="twitter:card" content="summary_large_image">
@@ -225,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          5k 字
+          5.7k 字
         
       </span>
     
@@ -236,7 +236,7 @@
         
         
         
-          42 分钟
+          48 分钟
         
       </span>
     
@@ -278,16 +278,15 @@
             
               <div class="markdown-body">
                 
-                <h1 id="底层探秘-future-执行器与任务调度"><a target="_blank" rel="noopener" href="https://course.rs/advance/async/future-excuting.html#底层探秘-future-执行器与任务调度">底层探秘:
-Future 执行器与任务调度</a></h1>
+                <h1 id="底层探秘-future-执行器与任务调度">底层探秘: Future
+执行器与任务调度</h1>
 <p>异步编程背后到底藏有什么秘密？究竟是哪只幕后之手在操纵这一切？如果你对这些感兴趣，就继续看下去，否则可以直接跳过，因为本章节的内容对于一个
 API 工程师并没有太多帮助。</p>
 <p>但是如果你希望能深入理解 <code>Rust</code> 的
 <code>async/.await</code>
 代码是如何工作、理解运行时和性能，甚至未来想要构建自己的
 <code>async</code> 运行时或相关工具，那么本章节终究不会辜负于你。</p>
-<h2 id="future-特征"><a target="_blank" rel="noopener" href="https://course.rs/advance/async/future-excuting.html#future-特征">Future
-特征</a></h2>
+<h2 id="future-特征">1. Future 特征</h2>
 <p><code>Future</code> 特征是 Rust
 异步编程的核心，毕竟异步函数是异步编程的核心，而 <code>Future</code>
 恰恰是异步函数的返回值和被执行的关键。</p>
@@ -296,7 +295,7 @@ API 工程师并没有太多帮助。</p>
 <code>()</code>
 )。光看这个定义，可能会觉得很空洞，我们来看看一个简化版的
 <code>Future</code> 特征:</p>
-<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">trait</span> <span class="hljs-title class_">SimpleFuture</span> &#123;<br>    <span class="hljs-keyword">type</span> <span class="hljs-title class_">Output</span>;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">poll</span>(&amp;<span class="hljs-keyword">mut</span> <span class="hljs-keyword">self</span>, wake: <span class="hljs-title function_ invoke__">fn</span>()) <span class="hljs-punctuation">-&gt;</span> Poll&lt;<span class="hljs-keyword">Self</span>::Output&gt;;<br>&#125;<br><br><span class="hljs-keyword">enum</span> <span class="hljs-title class_">Poll</span>&lt;T&gt; &#123;<br>    <span class="hljs-title function_ invoke__">Ready</span>(T),<br>    Pending,<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">trait</span> <span class="hljs-title class_">SimpleFuture</span> &#123;<br>    <span class="hljs-keyword">type</span> <span class="hljs-title class_">Output</span>;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">poll</span>(&amp;<span class="hljs-keyword">mut</span> <span class="hljs-keyword">self</span>, wake: <span class="hljs-title function_ invoke__">fn</span>()) <span class="hljs-punctuation">-&gt;</span> Poll&lt;<span class="hljs-keyword">Self</span>::Output&gt;;<br>&#125;<br><br><span class="hljs-keyword">enum</span> <span class="hljs-title class_">Poll</span>&lt;T&gt; &#123;<br>    <span class="hljs-title function_ invoke__">Ready</span>(T),<br>    Pending,<br>&#125;<br><br>这段代码定义了一个简化版的 `Future` 特征（<span class="hljs-keyword">trait</span>），名为 `SimpleFuture`，以及一个枚举 `Poll`。它们共同用于表示异步计算的基本结构。以下是对代码的详细解释：<br><br>### <span class="hljs-number">1</span>. `SimpleFuture` 特征<br>​```rust<br><span class="hljs-keyword">trait</span> <span class="hljs-title class_">SimpleFuture</span> &#123;<br>    <span class="hljs-keyword">type</span> <span class="hljs-title class_">Output</span>;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">poll</span>(&amp;<span class="hljs-keyword">mut</span> <span class="hljs-keyword">self</span>, wake: <span class="hljs-title function_ invoke__">fn</span>()) <span class="hljs-punctuation">-&gt;</span> Poll&lt;<span class="hljs-keyword">Self</span>::Output&gt;;<br>&#125;<br>​```<br>- **`SimpleFuture`** 是一个特征（<span class="hljs-keyword">trait</span>），表示一个异步计算。它类似于 Rust 标准库中的 `Future` 特征，但更加简化。<br>- **`<span class="hljs-keyword">type</span> <span class="hljs-title class_">Output</span>;`** 是一个关联类型（associated <span class="hljs-keyword">type</span>），表示异步计算完成后返回的结果类型。具体的类型由实现 `SimpleFuture` 的类型决定。<br>- **`<span class="hljs-keyword">fn</span> <span class="hljs-title function_">poll</span>(&amp;<span class="hljs-keyword">mut</span> <span class="hljs-keyword">self</span>, wake: <span class="hljs-title function_ invoke__">fn</span>()) <span class="hljs-punctuation">-&gt;</span> Poll&lt;<span class="hljs-keyword">Self</span>::Output&gt;;`** 是一个方法，用于检查异步计算是否完成。<br>  - **`&amp;<span class="hljs-keyword">mut</span> <span class="hljs-keyword">self</span>`**：表示方法需要可变地借用 `<span class="hljs-keyword">self</span>`，以便在必要时修改内部状态。<br>  - **`wake: <span class="hljs-title function_ invoke__">fn</span>()`**：是一个回调函数（通常称为 `waker`），当异步计算尚未完成时，可以通过调用 `wake` 来通知执行器（executor）在未来的某个时刻再次调用 `poll` 方法。<br>  - **`Poll&lt;<span class="hljs-keyword">Self</span>::Output&gt;`**：是 `poll` 方法的返回类型，表示异步计算的当前状态。<br><br>### <span class="hljs-number">2</span>. `Poll` 枚举<br>​```rust<br><span class="hljs-keyword">enum</span> <span class="hljs-title class_">Poll</span>&lt;T&gt; &#123;<br>    <span class="hljs-title function_ invoke__">Ready</span>(T),<br>    Pending,<br>&#125;<br>​```<br>- **`Poll&lt;T&gt;`** 是一个枚举，表示异步计算的当前状态。<br>  - **`<span class="hljs-title function_ invoke__">Ready</span>(T)`**：表示异步计算已经完成，并返回结果 `T`。<br>  - **`Pending`**：表示异步计算尚未完成，需要等待。<br><br>### <span class="hljs-number">3</span>. 工作原理<br>- 当一个异步任务（实现了 `SimpleFuture` 的类型）被轮询时，`poll` 方法会被调用。<br>  - 如果任务完成，`poll` 返回 `Poll::<span class="hljs-title function_ invoke__">Ready</span>(T)`，其中 `T` 是任务的结果。<br>  - 如果任务未完成，`poll` 返回 `Poll::Pending`，并且通常会通过 `wake` 回调函数注册一个通知，以便在任务可以继续执行时再次调用 `poll`。<br><br>### <span class="hljs-number">4</span>. 示例<br>假设我们有一个简单的异步任务，比如等待一段时间后返回一个值。我们可以这样实现 `SimpleFuture`：<br><br>​```rust<br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Delay</span> &#123;<br>    duration: std::time::Duration,<br>    elapsed: <span class="hljs-type">bool</span>,<br>&#125;<br><br><span class="hljs-keyword">impl</span> <span class="hljs-title class_">SimpleFuture</span> <span class="hljs-keyword">for</span> <span class="hljs-title class_">Delay</span> &#123;<br>    <span class="hljs-keyword">type</span> <span class="hljs-title class_">Output</span> = ();<br><br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">poll</span>(&amp;<span class="hljs-keyword">mut</span> <span class="hljs-keyword">self</span>, wake: <span class="hljs-title function_ invoke__">fn</span>()) <span class="hljs-punctuation">-&gt;</span> Poll&lt;<span class="hljs-keyword">Self</span>::Output&gt; &#123;<br>        <span class="hljs-keyword">if</span> <span class="hljs-keyword">self</span>.elapsed &#123;<br>            Poll::<span class="hljs-title function_ invoke__">Ready</span>(())<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-comment">// 模拟时间流逝</span><br>            std::thread::<span class="hljs-title function_ invoke__">sleep</span>(<span class="hljs-keyword">self</span>.duration);<br>            <span class="hljs-keyword">self</span>.elapsed = <span class="hljs-literal">true</span>;<br>            <span class="hljs-title function_ invoke__">wake</span>(); <span class="hljs-comment">// 通知执行器再次调用 poll</span><br>            Poll::Pending<br>        &#125;<br>    &#125;<br>&#125;<br>​```<br>在这个例子中，`Delay` 是一个简单的异步任务，它会等待一段时间后返回 `()`。`poll` 方法会检查时间是否已经过去，如果过去了，返回 `Poll::<span class="hljs-title function_ invoke__">Ready</span>(())`，否则返回 `Poll::Pending` 并通过 `wake` 通知执行器再次调用 `poll`。<br><br>### 总结<br>这段代码展示了异步编程的核心概念：通过 `poll` 方法轮询任务的状态，并通过 `wake` 回调函数在任务可以继续执行时通知执行器。这种模式是 Rust 异步编程的基础。<br></code></pre></td></tr></table></figure>
 <p>在上一章中，我们提到过 <code>Future</code>
 需要被执行器<code>poll</code>(轮询)后才能运行，诺，这里
 <code>poll</code> 就来了，通过调用该方法，可以推进 <code>Future</code>
@@ -359,8 +358,7 @@ web 服务器可能有数千连接同时在线，那么同时就有数千 <code>
 <p>总之，在正式场景要进行 <code>wake</code> ，就必须携带上数据。 而
 <code>Context</code> 类型通过提供一个 <code>Waker</code>
 类型的值，就可以用来唤醒特定的的任务。</p>
-<h2 id="使用-waker-来唤醒任务"><a target="_blank" rel="noopener" href="https://course.rs/advance/async/future-excuting.html#使用-waker-来唤醒任务">使用
-Waker 来唤醒任务</a></h2>
+<h2 id="使用-waker-来唤醒任务">2. 使用 Waker 来唤醒任务</h2>
 <p>对于 <code>Future</code> 来说，第一次被 <code>poll</code>
 时无法完成任务是很正常的。但它需要确保在未来一旦准备好时，可以通知执行器再次对其进行
 <code>poll</code> 进而继续往下执行，该通知就是通过 <code>Waker</code>
@@ -368,7 +366,7 @@ Waker 来唤醒任务</a></h2>
 <p><code>Waker</code> 提供了一个 <code>wake()</code>
 方法可以用于告诉执行器：相关的任务可以被唤醒了，此时执行器就可以对相应的
 <code>Future</code> 再次进行 <code>poll</code> 操作。</p>
-<h4 id="构建一个定时器"><a target="_blank" rel="noopener" href="https://course.rs/advance/async/future-excuting.html#构建一个定时器">构建一个定时器</a></h4>
+<h3 id="构建一个定时器">2.1 构建一个定时器</h3>
 <p>下面一起来实现一个简单的定时器 <code>Future</code>
 。为了让例子尽量简单，当计时器创建时，我们会启动一个线程接着让该线程进入睡眠，等睡眠结束后再通知给
 <code>Future</code> 。</p>
@@ -392,8 +390,7 @@ Waker 来唤醒任务</a></h2>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">impl</span> <span class="hljs-title class_">TimerFuture</span> &#123;<br>    <span class="hljs-comment">/// 创建一个新的`TimerFuture`，在指定的时间结束后，该`Future`可以完成</span><br>    <span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">new</span>(duration: Duration) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-keyword">Self</span> &#123;<br>        <span class="hljs-keyword">let</span> <span class="hljs-variable">shared_state</span> = Arc::<span class="hljs-title function_ invoke__">new</span>(Mutex::<span class="hljs-title function_ invoke__">new</span>(SharedState &#123;<br>            completed: <span class="hljs-literal">false</span>,<br>            waker: <span class="hljs-literal">None</span>,<br>        &#125;));<br><br>        <span class="hljs-comment">// 创建新线程</span><br>        <span class="hljs-keyword">let</span> <span class="hljs-variable">thread_shared_state</span> = shared_state.<span class="hljs-title function_ invoke__">clone</span>();<br>        thread::<span class="hljs-title function_ invoke__">spawn</span>(<span class="hljs-keyword">move</span> || &#123;<br>            <span class="hljs-comment">// 睡眠指定时间实现计时功能</span><br>            thread::<span class="hljs-title function_ invoke__">sleep</span>(duration);<br>            <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">shared_state</span> = thread_shared_state.<span class="hljs-title function_ invoke__">lock</span>().<span class="hljs-title function_ invoke__">unwrap</span>();<br>            <span class="hljs-comment">// 通知执行器定时器已经完成，可以继续`poll`对应的`Future`了</span><br>            shared_state.completed = <span class="hljs-literal">true</span>;<br>            <span class="hljs-keyword">if</span> <span class="hljs-keyword">let</span> <span class="hljs-variable">Some</span>(waker) = shared_state.waker.<span class="hljs-title function_ invoke__">take</span>() &#123;<br>                waker.<span class="hljs-title function_ invoke__">wake</span>()<br>            &#125;<br>        &#125;);<br><br>        TimerFuture &#123; shared_state &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>至此，一个简单的定时器 <code>Future</code>
 就已创建成功，那么该如何使用它呢？相信部分爱动脑筋的读者已经猜到了：我们需要创建一个执行器，才能让程序动起来。</p>
-<h2 id="执行器-executor"><a target="_blank" rel="noopener" href="https://course.rs/advance/async/future-excuting.html#执行器-executor">执行器
-Executor</a></h2>
+<h2 id="执行器-executor">3. 执行器 Executor</h2>
 <p>Rust 的 <code>Future</code>
 是惰性的：只有屁股上拍一拍，它才会努力动一动。其中一个推动它的方式就是在
 <code>async</code> 函数中使用 <code>.await</code> 来调用另一个
@@ -408,7 +405,7 @@ Executor</a></h2>
 通过调用 <code>wake</code> 函数来通知它可以继续，它才会继续去
 <code>poll</code> 。这种 <strong>wake 通知然后 poll</strong>
 的方式会不断重复，直到 <code>Future</code> 完成。</p>
-<h4 id="构建执行器"><a target="_blank" rel="noopener" href="https://course.rs/advance/async/future-excuting.html#构建执行器">构建执行器</a></h4>
+<h3 id="构建执行器">3.1 构建执行器</h3>
 <p>下面我们将实现一个简单的执行器，它可以同时并发运行多个
 <code>Future</code> 。例子中，需要用到 <code>futures</code> 包的
 <code>ArcWake</code> 特征，它可以提供一个方便的途径去构建一个
@@ -441,8 +438,7 @@ Executor</a></h2>
 <p>恭喜！我们终于拥有了自己的执行器，下面再来写一段代码使用该执行器去运行之前的定时器
 <code>Future</code> ：</p>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> (executor, spawner) = <span class="hljs-title function_ invoke__">new_executor_and_spawner</span>();<br><br>    <span class="hljs-comment">// 生成一个任务</span><br>    spawner.<span class="hljs-title function_ invoke__">spawn</span>(<span class="hljs-keyword">async</span> &#123;<br>        <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;howdy!&quot;</span>);<br>        <span class="hljs-comment">// 创建定时器Future，并等待它完成</span><br>        TimerFuture::<span class="hljs-title function_ invoke__">new</span>(Duration::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-number">2</span>, <span class="hljs-number">0</span>)).<span class="hljs-keyword">await</span>;<br>        <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;done!&quot;</span>);<br>    &#125;);<br><br>    <span class="hljs-comment">// drop掉任务，这样执行器就知道任务已经完成，不会再有新的任务进来</span><br>    <span class="hljs-title function_ invoke__">drop</span>(spawner);<br><br>    <span class="hljs-comment">// 运行执行器直到任务队列为空</span><br>    <span class="hljs-comment">// 任务运行后，会先打印`howdy!`, 暂停2秒，接着打印 `done!`</span><br>    executor.<span class="hljs-title function_ invoke__">run</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
-<h2 id="执行器和系统-io"><a target="_blank" rel="noopener" href="https://course.rs/advance/async/future-excuting.html#执行器和系统-io">执行器和系统
-IO</a></h2>
+<h2 id="执行器和系统-io">4. 执行器和系统 IO</h2>
 <p>前面我们一起看过一个使用 <code>Future</code> 从 <code>Socket</code>
 中异步读取数据的例子:</p>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">pub</span> <span class="hljs-keyword">struct</span> <span class="hljs-title class_">SocketRead</span>&lt;<span class="hljs-symbol">&#x27;a</span>&gt; &#123;<br>    socket: &amp;<span class="hljs-symbol">&#x27;a</span> Socket,<br>&#125;<br><br><span class="hljs-keyword">impl</span> <span class="hljs-title class_">SimpleFuture</span> <span class="hljs-keyword">for</span> <span class="hljs-title class_">SocketRead</span>&lt;<span class="hljs-symbol">&#x27;_</span>&gt; &#123;<br>    <span class="hljs-keyword">type</span> <span class="hljs-title class_">Output</span> = <span class="hljs-type">Vec</span>&lt;<span class="hljs-type">u8</span>&gt;;<br><br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">poll</span>(&amp;<span class="hljs-keyword">mut</span> <span class="hljs-keyword">self</span>, wake: <span class="hljs-title function_ invoke__">fn</span>()) <span class="hljs-punctuation">-&gt;</span> Poll&lt;<span class="hljs-keyword">Self</span>::Output&gt; &#123;<br>        <span class="hljs-keyword">if</span> <span class="hljs-keyword">self</span>.socket.<span class="hljs-title function_ invoke__">has_data_to_read</span>() &#123;<br>            <span class="hljs-comment">// socket有数据，写入buffer中并返回</span><br>            Poll::<span class="hljs-title function_ invoke__">Ready</span>(<span class="hljs-keyword">self</span>.socket.<span class="hljs-title function_ invoke__">read_buf</span>())<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-comment">// socket中还没数据</span><br>            <span class="hljs-comment">//</span><br>            <span class="hljs-comment">// 注册一个`wake`函数，当数据可用时，该函数会被调用，</span><br>            <span class="hljs-comment">// 然后当前Future的执行器会再次调用`poll`方法，此时就可以读取到数据</span><br>            <span class="hljs-keyword">self</span>.socket.<span class="hljs-title function_ invoke__">set_readable_callback</span>(wake);<br>            Poll::Pending<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>

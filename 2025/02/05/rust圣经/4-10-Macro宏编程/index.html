@@ -19,16 +19,16 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Macro 宏编程 在编程世界可以说是谈“宏”色变，原因在于 C 语言中的宏是非常危险的东东，但并不是所有语言都像 C 这样，例如对于古老的语言 Lisp 来说，宏就是就是一个非常强大的好帮手。 那话说回来，在 Rust 中宏到底是好是坏呢？本章将带你揭开它的神秘面纱。 事实上，我们虽然没有见过宏，但是已经多次用过它，例如在全书的第一个例子中就用到了：println!(&quot;你好，世界&quot;">
+    <meta name="description" content="Macro 宏编程 在编程世界可以说是谈“宏”色变，原因在于 C 语言中的宏是非常危险的东东，但并不是所有语言都像 C 这样，例如对于古老的语言 Lisp 来说，宏就是就是一个非常强大的好帮手。 那话说回来，在 Rust 中宏到底是好是坏呢？本章将带你揭开它的神秘面纱。 事实上，我们虽然没有见过宏，但是已经多次用过它，例如在全书的第一个例子中就用到了：println!(&quot;你好，世界&quot;)">
 <meta property="og:type" content="article">
 <meta property="og:title" content="4.10 Macro 宏编程">
 <meta property="og:url" content="http://binbo-zappy.github.io/2025/02/05/rust%E5%9C%A3%E7%BB%8F/4-10-Macro%E5%AE%8F%E7%BC%96%E7%A8%8B/index.html">
 <meta property="og:site_name" content="Binbo">
-<meta property="og:description" content="Macro 宏编程 在编程世界可以说是谈“宏”色变，原因在于 C 语言中的宏是非常危险的东东，但并不是所有语言都像 C 这样，例如对于古老的语言 Lisp 来说，宏就是就是一个非常强大的好帮手。 那话说回来，在 Rust 中宏到底是好是坏呢？本章将带你揭开它的神秘面纱。 事实上，我们虽然没有见过宏，但是已经多次用过它，例如在全书的第一个例子中就用到了：println!(&quot;你好，世界&quot;">
+<meta property="og:description" content="Macro 宏编程 在编程世界可以说是谈“宏”色变，原因在于 C 语言中的宏是非常危险的东东，但并不是所有语言都像 C 这样，例如对于古老的语言 Lisp 来说，宏就是就是一个非常强大的好帮手。 那话说回来，在 Rust 中宏到底是好是坏呢？本章将带你揭开它的神秘面纱。 事实上，我们虽然没有见过宏，但是已经多次用过它，例如在全书的第一个例子中就用到了：println!(&quot;你好，世界&quot;)">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/rust.jpg">
 <meta property="article:published_time" content="2025-02-05T05:42:05.000Z">
-<meta property="article:modified_time" content="2025-02-09T02:51:30.434Z">
+<meta property="article:modified_time" content="2025-02-11T03:11:08.785Z">
 <meta property="article:author" content="Binbo">
 <meta property="article:tag" content="rust">
 <meta name="twitter:card" content="summary_large_image">
@@ -278,8 +278,7 @@
             
               <div class="markdown-body">
                 
-                <h1 id="macro-宏编程"><a target="_blank" rel="noopener" href="https://course.rs/advance/macro.html#macro-宏编程">Macro
-宏编程</a></h1>
+                <h1 id="macro-宏编程">Macro 宏编程</h1>
 <p>在编程世界可以说是谈“宏”色变，原因在于 C
 语言中的宏是非常危险的东东，但并不是所有语言都像 C
 这样，例如对于古老的语言 Lisp 来说，宏就是就是一个非常强大的好帮手。</p>
@@ -309,29 +308,28 @@ macros* )</strong>:</p>
 </ul>
 <p>如果感觉难以理解，也不必担心，接下来我们将逐个看看它们的庐山真面目，在此之前，先来看下为何需要宏，特别是
 Rust 的函数明明已经很强大了。</p>
-<h2 id="宏和函数的区别"><a target="_blank" rel="noopener" href="https://course.rs/advance/macro.html#宏和函数的区别">宏和函数的区别</a></h2>
+<h2 id="宏和函数的区别">1. 宏和函数的区别</h2>
 <p>宏和函数的区别并不少，而且对于宏擅长的领域，函数其实是有些无能为力的。</p>
-<h4 id="元编程"><a target="_blank" rel="noopener" href="https://course.rs/advance/macro.html#元编程">元编程</a></h4>
+<h3 id="元编程">1.1 元编程</h3>
 <p>从根本上来说，宏是通过一种代码来生成另一种代码，如果大家熟悉元编程，就会发现两者的共同点。</p>
 <p>在<a target="_blank" rel="noopener" href="https://course.rs/appendix/derive.html">附录 D</a>中讲到的
 <code>derive</code> 属性，就会自动为结构体派生出相应特征所需的代码，例如
 <code>#[derive(Debug)]</code>，还有熟悉的 <code>println!</code> 和
 <code>vec!</code>，所有的这些宏都会展开成相应的代码，且很可能是长得多的代码。</p>
 <p>总之，元编程可以帮我们减少所需编写的代码，也可以一定程度上减少维护的成本，虽然函数复用也有类似的作用，但是宏依然拥有自己独特的优势。</p>
-<h4 id="可变参数"><a target="_blank" rel="noopener" href="https://course.rs/advance/macro.html#可变参数">可变参数</a></h4>
+<h3 id="可变参数">1.2 可变参数</h3>
 <p>Rust
 的函数签名是固定的：定义了两个参数，就必须传入两个参数，多一个少一个都不行，对于从
 JS/TS 过来的同学，这一点其实是有些恼人的。</p>
 <p>而宏就可以拥有可变数量的参数，例如可以调用一个参数的
 <code>println!("hello")</code>，也可以调用两个参数的
 <code>println!("hello &#123;&#125;", name)</code>。</p>
-<h4 id="宏展开"><a target="_blank" rel="noopener" href="https://course.rs/advance/macro.html#宏展开">宏展开</a></h4>
+<h3 id="宏展开">1.3 宏展开</h3>
 <p>由于宏会被展开成其它代码，且这个展开过程是发生在编译器对代码进行解释之前。因此，宏可以为指定的类型实现某个特征：先将宏展开成实现特征的代码后，再被编译。</p>
 <p>而函数就做不到这一点，因为它直到运行时才能被调用，而特征需要在编译期被实现。</p>
-<h4 id="宏的缺点"><a target="_blank" rel="noopener" href="https://course.rs/advance/macro.html#宏的缺点">宏的缺点</a></h4>
+<h3 id="宏的缺点">1.4 宏的缺点</h3>
 <p>相对函数来说，由于宏是基于代码再展开成代码，因此实现相比函数来说会更加复杂，再加上宏的语法更为复杂，最终导致定义宏的代码相当地难读，也难以理解和维护。</p>
-<h2 id="声明式宏-macro_rules"><a target="_blank" rel="noopener" href="https://course.rs/advance/macro.html#声明式宏-macro_rules">声明式宏
-<code>macro_rules!</code></a></h2>
+<h2 id="声明式宏-macro_rules">2. 声明式宏 <code>macro_rules!</code></h2>
 <p>在 Rust 中使用最广的就是声明式宏，它们也有一些其它的称呼，例如示例宏(
 macros by example )、<code>macro_rules!</code>
 或干脆直接称呼为<strong>宏</strong>。</p>
@@ -342,8 +340,7 @@ macros by example )、<code>macro_rules!</code>
 <p>而<strong>宏也是将一个值跟对应的模式进行匹配，且该模式会与特定的代码相关联</strong>。但是与
 <code>match</code> 不同的是，<strong>宏里的值是一段 Rust
 源代码</strong>(字面量)，模式用于跟这段源代码的结构相比较，一旦匹配，传入宏的那段源代码将被模式关联的代码所替换，最终实现宏展开。值得注意的是，<strong>所有的这些都是在编译期发生，并没有运行期的性能损耗</strong>。</p>
-<h4 id="简化版的-vec"><a target="_blank" rel="noopener" href="https://course.rs/advance/macro.html#简化版的-vec">简化版的
-vec!</a></h4>
+<h3 id="简化版的-vec">2.1 简化版的 vec!</h3>
 <p>在<a target="_blank" rel="noopener" href="https://course.rs/basic/collections/vector.html#vec">动态数组
 Vector 章节</a>中，我们学习了使用 <code>vec!</code>
 来便捷的初始化一个动态数组:</p>
@@ -371,16 +368,16 @@ Rust 的另一面:) 标准库中的 <code>vec!</code>
 <p>由于 <code>vec</code>
 宏只有一个模式，因此它只能匹配一种源代码，其它类型的都将导致报错，而更复杂的宏往往会拥有更多的分支。</p>
 <p>虽然宏和 <code>match</code> 都称之为模式，但是前者跟<a target="_blank" rel="noopener" href="https://course.rs/basic/match-pattern/all-patterns.html">后者</a>的模式规则是不同的。如果大家想要更深入的了解宏的模式，可以查看<a target="_blank" rel="noopener" href="https://doc.rust-lang.org/reference/macros-by-example.html">这里</a>。</p>
-<h4 id="模式解析"><a target="_blank" rel="noopener" href="https://course.rs/advance/macro.html#模式解析">模式解析</a></h4>
+<h3 id="模式解析">2.2 模式解析</h3>
 <p>而现在，我们先来简单讲解下 <code>( $( $x:expr ),* )</code>
 的含义。</p>
-<p>首先，我们使用圆括号 <code>()</code>
-将整个宏模式包裹其中。紧随其后的是
+<p>首先，我们<strong>使用圆括号 <code>()</code>
+将整个宏模式包裹其中</strong>。紧随其后的是
 <code>$()</code>，跟括号中模式相匹配的值(传入的 Rust
 源代码)会被捕获，然后用于代码替换。在这里，模式 <code>$x:expr</code>
 会匹配任何 Rust 表达式并给予该模式一个名称：<code>$x</code>。</p>
 <p><code>$()</code> 之后的逗号说明在 <code>$()</code>
-所匹配的代码的后面会有一个可选的逗号分隔符，紧随逗号之后的
+所匹配的代码的后面会有一个<strong>可选的逗号分隔符</strong>，紧随逗号之后的
 <code>*</code> 说明 <code>*</code>
 之前的模式会被匹配零次或任意多次(类似正则表达式)。</p>
 <p>当我们使用 <code>vec![1, 2, 3]</code> 来调用该宏时，<code>$x</code>
@@ -412,8 +409,8 @@ Rust 的另一面:) 标准库中的 <code>vec!</code>
 <code>temp_vec</code> 将被赋予给变量 <code>v</code>，等同于 :</p>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">v</span> = &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">temp_vec</span> = <span class="hljs-type">Vec</span>::<span class="hljs-title function_ invoke__">new</span>();<br>    temp_vec.<span class="hljs-title function_ invoke__">push</span>(<span class="hljs-number">1</span>);<br>    temp_vec.<span class="hljs-title function_ invoke__">push</span>(<span class="hljs-number">2</span>);<br>    temp_vec.<span class="hljs-title function_ invoke__">push</span>(<span class="hljs-number">3</span>);<br>    temp_vec<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>至此，我们定义了一个宏，它可以接受任意类型和数量的参数，并且理解了其语法的含义。</p>
-<h4 id="未来将被替代的-macro_rules"><a target="_blank" rel="noopener" href="https://course.rs/advance/macro.html#未来将被替代的-macro_rules">未来将被替代的
-<code>macro_rules</code></a></h4>
+<h3 id="未来将被替代的-macro_rules">2.3 未来将被替代的
+<code>macro_rules</code></h3>
 <p>对于 <code>macro_rules</code> 来说，它是存在一些问题的，因此，Rust
 计划在未来使用新的声明式宏来替换它：工作方式类似，但是解决了目前存在的一些问题，在那之后，<code>macro_rules</code>
 将变为 <code>deprecated</code> 状态。</p>
@@ -422,7 +419,7 @@ Rust 的另一面:) 标准库中的 <code>vec!</code>
 <code>macro_rules</code>
 进行更深入的学习，如果大家感兴趣，可以看看这本书 <a target="_blank" rel="noopener" href="https://veykril.github.io/tlborm/">“The Little Book of Rust
 Macros”</a>。</p>
-<h2 id="用过程宏为属性标记生成代码"><a target="_blank" rel="noopener" href="https://course.rs/advance/macro.html#用过程宏为属性标记生成代码">用过程宏为属性标记生成代码</a></h2>
+<h2 id="用过程宏为属性标记生成代码">3. 用过程宏为属性标记生成代码</h2>
 <p>第二种常用的宏就是<a target="_blank" rel="noopener" href="https://doc.rust-lang.org/reference/procedural-macros.html"><em>过程宏</em></a>
 ( <em>procedural macros</em>
 )，从形式上来看，过程宏跟函数较为相像，但过程宏是使用源代码作为输入参数，基于代码进行一系列操作后，再输出一段全新的代码。<strong>注意，过程宏中的
@@ -444,8 +441,7 @@ Rust 的编译单元是包，因此你无法做到这一点。</p>
 <code>Token</code> 序列。</p>
 <p>在理解了过程宏的基本定义后，我们再来看看该如何创建三种类型的过程宏，首先，从大家最熟悉的
 <code>derive</code> 开始。</p>
-<h2 id="自定义-derive-过程宏"><a target="_blank" rel="noopener" href="https://course.rs/advance/macro.html#自定义-derive-过程宏">自定义
-<code>derive</code> 过程宏</a></h2>
+<h2 id="自定义-derive-过程宏">4. 自定义 <code>derive</code> 过程宏</h2>
 <p>假设我们有一个特征
 <code>HelloMacro</code>，现在有两种方式让用户使用它：</p>
 <ul>
@@ -493,7 +489,7 @@ Rust 的编译单元是包，因此你无法做到这一点。</p>
 cargo-expand 的工具，可以通过下面的命令安装</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">cargo install cargo-expand<br></code></pre></td></tr></table></figure>
 <p>接下来，就到了重头戏环节，一起来看看该如何定义过程宏。</p>
-<h4 id="定义过程宏"><a target="_blank" rel="noopener" href="https://course.rs/advance/macro.html#定义过程宏">定义过程宏</a></h4>
+<h3 id="定义过程宏">4.1 定义过程宏</h3>
 <p>首先，在 <code>hello_macro_derive/Cargo.toml</code>
 文件中添加以下内容：</p>
 <figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs toml"><span class="hljs-section">[lib]</span><br><span class="hljs-attr">proc-macro</span> = <span class="hljs-literal">true</span><br><br><span class="hljs-section">[dependencies]</span><br><span class="hljs-attr">syn</span> = <span class="hljs-string">&quot;1.0&quot;</span><br><span class="hljs-attr">quote</span> = <span class="hljs-string">&quot;1.0&quot;</span><br></code></pre></td></tr></table></figure>
@@ -590,8 +586,8 @@ cargo-expand 的工具，可以通过下面的命令安装</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">$ </span><span class="language-bash">cargo run</span><br><br>    Running `target/debug/aaa`<br>User &#123; name: &quot;&quot;, data: SomeData(0, &quot;&quot;) &#125;<br></code></pre></td></tr></table></figure>
 <p>接下来，再来看看过程宏的另外两种类型跟 <code>derive</code>
 类型有何区别。</p>
-<h2 id="类属性宏attribute-like-macros"><a target="_blank" rel="noopener" href="https://course.rs/advance/macro.html#类属性宏attribute-like-macros">类属性宏(Attribute-like
-macros)</a></h2>
+<h2 id="类属性宏attribute-like-macros">5. 类属性宏(Attribute-like
+macros)</h2>
 <p>类属性过程宏跟 <code>derive</code>
 宏类似，但是前者允许我们定义自己的属性。除此之外，<code>derive</code>
 只能用于结构体和枚举，而类属性宏可以用于其它类型项，例如函数。</p>
@@ -611,8 +607,8 @@ macros)</a></h2>
 <p>除此之外，类属性宏跟 <code>derive</code>
 宏的工作方式并无区别：创建一个包，类型是
 <code>proc-macro</code>，接着实现一个函数用于生成想要的代码。</p>
-<h2 id="类函数宏function-like-macros"><a target="_blank" rel="noopener" href="https://course.rs/advance/macro.html#类函数宏function-like-macros">类函数宏(Function-like
-macros)</a></h2>
+<h2 id="类函数宏function-like-macros">6. 类函数宏(Function-like
+macros)</h2>
 <p>类函数宏可以让我们定义像函数那样调用的宏，从这个角度来看，它跟声明宏
 <code>macro_rules</code> 较为类似。</p>
 <p>区别在于，<code>macro_rules</code> 的定义形式与 <code>match</code>
@@ -624,7 +620,7 @@ macros)</a></h2>
 来定义呢？原因是这里需要对 <code>SQL</code>
 语句进行解析并检查其正确性，这个复杂的过程是 <code>macro_rules</code>
 难以对付的，<strong>而过程宏相比起来就会灵活的多</strong>。</p>
-<h2 id="补充学习资料"><a target="_blank" rel="noopener" href="https://course.rs/advance/macro.html#补充学习资料">补充学习资料</a></h2>
+<h2 id="补充学习资料">7. 补充学习资料</h2>
 <ol type="1">
 <li><a target="_blank" rel="noopener" href="https://github.com/dtolnay/proc-macro-workshop">dtolnay/proc-macro-workshop</a>，学习如何编写过程宏</li>
 <li><a target="_blank" rel="noopener" href="https://veykril.github.io/tlborm/">The Little Book of Rust
@@ -638,7 +634,7 @@ crates</a>，从测试、debug、结构化的角度来编写过程宏</li>
 <li><a target="_blank" rel="noopener" href="https://zjp-cn.github.io/tlborm/">Rust
 宏小册中文版</a>，非常详细的解释了宏各种知识</li>
 </ol>
-<h2 id="总结"><a target="_blank" rel="noopener" href="https://course.rs/advance/macro.html#总结">总结</a></h2>
+<h2 id="总结">8. 总结</h2>
 <p>Rust 中的宏主要分为两大类：声明宏和过程宏。</p>
 <p>声明宏目前使用 <code>macro_rules</code> 进行创建，它的形式类似于
 <code>match</code>

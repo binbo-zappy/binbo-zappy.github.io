@@ -19,16 +19,16 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="结构体自引用 结构体自引用在 Rust 中是一个众所周知的难题，而且众说纷纭，也没有一篇文章能把相关的话题讲透，那本文就王婆卖瓜，来试试看能不能讲透这一块儿内容，让读者大大们舒心。 平平无奇的自引用 可能也有不少人第一次听说自引用结构体，那咱们先来看看它们长啥样。 123456struct SelfRef&lt;&#x27;a&gt; &#123;    value: String,">
+    <meta name="description" content="结构体自引用 1. 平平无奇的自引用 可能也有不少人第一次听说自引用结构体，那咱们先来看看它们长啥样。 123456struct SelfRef&lt;&#x27;a&gt; &#123;    value: String,    &#x2F;&#x2F; 该引用指向上面的value    pointer_to_value: &amp;&#x27;a str,&#125; 以上就是一个很简单的自引用结构体，看">
 <meta property="og:type" content="article">
 <meta property="og:title" content="4.5.2 结构体中的自引用">
 <meta property="og:url" content="http://binbo-zappy.github.io/2025/02/05/rust%E5%9C%A3%E7%BB%8F/4-5-2-%E7%BB%93%E6%9E%84%E4%BD%93%E4%B8%AD%E7%9A%84%E8%87%AA%E5%BC%95%E7%94%A8/index.html">
 <meta property="og:site_name" content="Binbo">
-<meta property="og:description" content="结构体自引用 结构体自引用在 Rust 中是一个众所周知的难题，而且众说纷纭，也没有一篇文章能把相关的话题讲透，那本文就王婆卖瓜，来试试看能不能讲透这一块儿内容，让读者大大们舒心。 平平无奇的自引用 可能也有不少人第一次听说自引用结构体，那咱们先来看看它们长啥样。 123456struct SelfRef&lt;&#x27;a&gt; &#123;    value: String,">
+<meta property="og:description" content="结构体自引用 1. 平平无奇的自引用 可能也有不少人第一次听说自引用结构体，那咱们先来看看它们长啥样。 123456struct SelfRef&lt;&#x27;a&gt; &#123;    value: String,    &#x2F;&#x2F; 该引用指向上面的value    pointer_to_value: &amp;&#x27;a str,&#125; 以上就是一个很简单的自引用结构体，看">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/rust.jpg">
 <meta property="article:published_time" content="2025-02-05T05:41:33.000Z">
-<meta property="article:modified_time" content="2025-02-09T02:52:30.596Z">
+<meta property="article:modified_time" content="2025-02-10T02:46:45.672Z">
 <meta property="article:author" content="Binbo">
 <meta property="article:tag" content="rust">
 <meta name="twitter:card" content="summary_large_image">
@@ -225,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.5k 字
+          3.1k 字
         
       </span>
     
@@ -236,7 +236,7 @@
         
         
         
-          22 分钟
+          26 分钟
         
       </span>
     
@@ -278,10 +278,8 @@
             
               <div class="markdown-body">
                 
-                <h2 id="结构体自引用"><a target="_blank" rel="noopener" href="https://course.rs/advance/circle-self-ref/self-referential.html#结构体自引用">结构体自引用</a></h2>
-<p>结构体自引用在 Rust
-中是一个众所周知的难题，而且众说纷纭，也没有一篇文章能把相关的话题讲透，那本文就王婆卖瓜，来试试看能不能讲透这一块儿内容，让读者大大们舒心。</p>
-<h2 id="平平无奇的自引用"><a target="_blank" rel="noopener" href="https://course.rs/advance/circle-self-ref/self-referential.html#平平无奇的自引用">平平无奇的自引用</a></h2>
+                <h1 id="结构体自引用">结构体自引用</h1>
+<h2 id="平平无奇的自引用">1. 平平无奇的自引用</h2>
 <p>可能也有不少人第一次听说自引用结构体，那咱们先来看看它们长啥样。</p>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">SelfRef</span>&lt;<span class="hljs-symbol">&#x27;a</span>&gt; &#123;<br>    value: <span class="hljs-type">String</span>,<br><br>    <span class="hljs-comment">// 该引用指向上面的value</span><br>    pointer_to_value: &amp;<span class="hljs-symbol">&#x27;a</span> <span class="hljs-type">str</span>,<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>以上就是一个很简单的自引用结构体，看上去好像没什么，那来试着运行下：</p>
@@ -289,8 +287,7 @@
 <p>运行后报错：</p>
 <figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs console"> let v = SelfRef &#123;<br>12 |         value: s,<br>   |                - value moved here<br>13 |         pointer_to_value: &amp;s<br>   |                           ^^ value borrowed here after move<br></code></pre></td></tr></table></figure>
 <p>因为我们试图同时使用值和值的引用，最终所有权转移和借用一起发生了。所以，这个问题貌似并没有那么好解决，不信你可以回想下自己具有的知识，是否可以解决？</p>
-<h2 id="使用-option"><a target="_blank" rel="noopener" href="https://course.rs/advance/circle-self-ref/self-referential.html#使用-option">使用
-Option</a></h2>
+<h2 id="使用-option">2. 使用 Option</h2>
 <p>最简单的方式就是使用 <code>Option</code> 分两步来实现：</p>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-meta">#[derive(Debug)]</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">WhatAboutThis</span>&lt;<span class="hljs-symbol">&#x27;a</span>&gt; &#123;<br>    name: <span class="hljs-type">String</span>,<br>    nickname: <span class="hljs-type">Option</span>&lt;&amp;<span class="hljs-symbol">&#x27;a</span> <span class="hljs-type">str</span>&gt;,<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">tricky</span> = WhatAboutThis &#123;<br>        name: <span class="hljs-string">&quot;Annabelle&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>(),<br>        nickname: <span class="hljs-literal">None</span>,<br>    &#125;;<br>    tricky.nickname = <span class="hljs-title function_ invoke__">Some</span>(&amp;tricky.name[..<span class="hljs-number">4</span>]);<br><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;:?&#125;&quot;</span>, tricky);<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>在某种程度上来说，<code>Option</code>
@@ -303,11 +300,61 @@ Option</a></h2>
 <p>如果是通过方法使用，你需要一个无用 <code>&amp;'a self</code>
 生命周期标识，一旦有了这个标识，代码将变得更加受限，你将很容易就获得借用错误，就连
 NLL 规则都没用：</p>
-<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-meta">#[derive(Debug)]</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">WhatAboutThis</span>&lt;<span class="hljs-symbol">&#x27;a</span>&gt; &#123;<br>    name: <span class="hljs-type">String</span>,<br>    nickname: <span class="hljs-type">Option</span>&lt;&amp;<span class="hljs-symbol">&#x27;a</span> <span class="hljs-type">str</span>&gt;,<br>&#125;<br><br><span class="hljs-keyword">impl</span>&lt;<span class="hljs-symbol">&#x27;a</span>&gt; WhatAboutThis&lt;<span class="hljs-symbol">&#x27;a</span>&gt; &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">tie_the_knot</span>(&amp;<span class="hljs-symbol">&#x27;a</span> <span class="hljs-keyword">mut</span> <span class="hljs-keyword">self</span>) &#123;<br>       <span class="hljs-keyword">self</span>.nickname = <span class="hljs-title function_ invoke__">Some</span>(&amp;<span class="hljs-keyword">self</span>.name[..<span class="hljs-number">4</span>]);<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">tricky</span> = WhatAboutThis &#123;<br>        name: <span class="hljs-string">&quot;Annabelle&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>(),<br>        nickname: <span class="hljs-literal">None</span>,<br>    &#125;;<br>    tricky.<span class="hljs-title function_ invoke__">tie_the_knot</span>();<br><br>    <span class="hljs-comment">// cannot borrow `tricky` as immutable because it is also borrowed as mutable</span><br>    <span class="hljs-comment">// println!(&quot;&#123;:?&#125;&quot;, tricky);</span><br>&#125;<br></code></pre></td></tr></table></figure>
-<h2 id="unsafe-实现"><a target="_blank" rel="noopener" href="https://course.rs/advance/circle-self-ref/self-referential.html#unsafe-实现">unsafe
-实现</a></h2>
-<p>既然借用规则妨碍了我们，那就一脚踢开：</p>
-<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-meta">#[derive(Debug)]</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">SelfRef</span> &#123;<br>    value: <span class="hljs-type">String</span>,<br>    pointer_to_value: *<span class="hljs-keyword">const</span> <span class="hljs-type">String</span>,<br>&#125;<br><br><span class="hljs-keyword">impl</span> <span class="hljs-title class_">SelfRef</span> &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">new</span>(txt: &amp;<span class="hljs-type">str</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-keyword">Self</span> &#123;<br>        SelfRef &#123;<br>            value: <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(txt),<br>            pointer_to_value: std::ptr::<span class="hljs-title function_ invoke__">null</span>(),<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">init</span>(&amp;<span class="hljs-keyword">mut</span> <span class="hljs-keyword">self</span>) &#123;<br>        <span class="hljs-keyword">let</span> <span class="hljs-variable">self_ref</span>: *<span class="hljs-keyword">const</span> <span class="hljs-type">String</span> = &amp;<span class="hljs-keyword">self</span>.value;<br>        <span class="hljs-keyword">self</span>.pointer_to_value = self_ref;<br>    &#125;<br><br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">value</span>(&amp;<span class="hljs-keyword">self</span>) <span class="hljs-punctuation">-&gt;</span> &amp;<span class="hljs-type">str</span> &#123;<br>        &amp;<span class="hljs-keyword">self</span>.value<br>    &#125;<br><br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">pointer_to_value</span>(&amp;<span class="hljs-keyword">self</span>) <span class="hljs-punctuation">-&gt;</span> &amp;<span class="hljs-type">String</span> &#123;<br>        <span class="hljs-built_in">assert!</span>(!<span class="hljs-keyword">self</span>.pointer_to_value.<span class="hljs-title function_ invoke__">is_null</span>(),<br>            <span class="hljs-string">&quot;Test::b called without Test::init being called first&quot;</span>);<br>        <span class="hljs-keyword">unsafe</span> &#123; &amp;*(<span class="hljs-keyword">self</span>.pointer_to_value) &#125;<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">t</span> = SelfRef::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-string">&quot;hello&quot;</span>);<br>    t.<span class="hljs-title function_ invoke__">init</span>();<br>    <span class="hljs-comment">// 打印值和指针地址</span><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;&#125;, &#123;:p&#125;&quot;</span>, t.<span class="hljs-title function_ invoke__">value</span>(), t.<span class="hljs-title function_ invoke__">pointer_to_value</span>());<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-meta">#[derive(Debug)]</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">WhatAboutThis</span>&lt;<span class="hljs-symbol">&#x27;a</span>&gt; &#123;<br>    name: <span class="hljs-type">String</span>,<br>    nickname: <span class="hljs-type">Option</span>&lt;&amp;<span class="hljs-symbol">&#x27;a</span> <span class="hljs-type">str</span>&gt;,<br>&#125;<br><br><span class="hljs-keyword">impl</span>&lt;<span class="hljs-symbol">&#x27;a</span>&gt; WhatAboutThis&lt;<span class="hljs-symbol">&#x27;a</span>&gt; &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">tie_the_knot</span>(&amp;<span class="hljs-symbol">&#x27;a</span> <span class="hljs-keyword">mut</span> <span class="hljs-keyword">self</span>) &#123;<br>       <span class="hljs-keyword">self</span>.nickname = <span class="hljs-title function_ invoke__">Some</span>(&amp;<span class="hljs-keyword">self</span>.name[..<span class="hljs-number">4</span>]);<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">tricky</span> = WhatAboutThis &#123;<br>        name: <span class="hljs-string">&quot;Annabelle&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>(),<br>        nickname: <span class="hljs-literal">None</span>,<br>    &#125;;<br>    tricky.<span class="hljs-title function_ invoke__">tie_the_knot</span>();<br><br>    <span class="hljs-comment">// cannot borrow `tricky` as immutable because it is also borrowed as mutable</span><br>    <span class="hljs-comment">// println!(&quot;&#123;:?&#125;&quot;, tricky);</span><br>&#125;<br><br><br>这段代码涉及到了 Rust 中的生命周期和借用规则。我们来逐步分析一下代码的行为以及为什么会出现借用错误。<br><br>### 代码分析<br><br><span class="hljs-number">1</span>. **结构体定义**：<br>   ```rust<br>   <span class="hljs-meta">#[derive(Debug)]</span><br>   <span class="hljs-keyword">struct</span> <span class="hljs-title class_">WhatAboutThis</span>&lt;<span class="hljs-symbol">&#x27;a</span>&gt; &#123;<br>       name: <span class="hljs-type">String</span>,<br>       nickname: <span class="hljs-type">Option</span>&lt;&amp;<span class="hljs-symbol">&#x27;a</span> <span class="hljs-type">str</span>&gt;,<br>   &#125;<br></code></pre></td></tr></table></figure>
+<p>这里定义了一个结构体 <code>WhatAboutThis</code>，它有一个字段
+<code>name</code> 是 <code>String</code> 类型，另一个字段
+<code>nickname</code> 是一个可选的生命周期为 <code>'a</code>
+的字符串切片引用。</p>
+<ol start="2" type="1">
+<li><p><strong>方法实现</strong>： <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">impl</span>&lt;<span class="hljs-symbol">&#x27;a</span>&gt; WhatAboutThis&lt;<span class="hljs-symbol">&#x27;a</span>&gt; &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">tie_the_knot</span>(&amp;<span class="hljs-symbol">&#x27;a</span> <span class="hljs-keyword">mut</span> <span class="hljs-keyword">self</span>) &#123;<br>       <span class="hljs-keyword">self</span>.nickname = <span class="hljs-title function_ invoke__">Some</span>(&amp;<span class="hljs-keyword">self</span>.name[..<span class="hljs-number">4</span>]);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure> 这个方法
+<code>tie_the_knot</code> 接受一个可变引用
+<code>&amp;'a mut self</code>，并将 <code>nickname</code> 设置为
+<code>name</code> 的前四个字符的引用。</p></li>
+<li><p><strong>主函数</strong>： <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">tricky</span> = WhatAboutThis &#123;<br>        name: <span class="hljs-string">&quot;Annabelle&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>(),<br>        nickname: <span class="hljs-literal">None</span>,<br>    &#125;;<br>    tricky.<span class="hljs-title function_ invoke__">tie_the_knot</span>();<br><br>    <span class="hljs-comment">// cannot borrow `tricky` as immutable because it is also borrowed as mutable</span><br>    <span class="hljs-comment">// println!(&quot;&#123;:?&#125;&quot;, tricky);</span><br>&#125;<br></code></pre></td></tr></table></figure> 在 <code>main</code>
+函数中，我们创建了一个 <code>WhatAboutThis</code> 的实例
+<code>tricky</code>，并调用了 <code>tie_the_knot</code>
+方法。然后尝试打印 <code>tricky</code>，但这里会出现编译错误。</p></li>
+</ol>
+<h3 id="为什么会出现借用错误">为什么会出现借用错误？</h3>
+<ol type="1">
+<li><strong>生命周期和借用规则</strong>：
+<ul>
+<li>在 <code>tie_the_knot</code> 方法中，<code>self</code> 的可变引用
+<code>&amp;'a mut self</code> 的生命周期是 <code>'a</code>。</li>
+<li>当 <code>tie_the_knot</code> 方法被调用时，<code>tricky</code>
+的可变引用被借用，并且这个借用的生命周期是 <code>'a</code>。</li>
+<li>由于 <code>nickname</code> 字段是一个引用，它的生命周期也是
+<code>'a</code>，这意味着 <code>nickname</code> 引用的数据（即
+<code>name</code> 的前四个字符）必须至少存活到 <code>'a</code>
+结束。</li>
+</ul></li>
+<li><strong>借用冲突</strong>：
+<ul>
+<li>在 <code>main</code> 函数中，<code>tricky.tie_the_knot()</code>
+调用后，<code>tricky</code> 的可变引用仍然处于借用状态（因为
+<code>nickname</code> 引用了 <code>name</code> 的一部分）。</li>
+<li>当你尝试在 <code>println!</code> 中打印 <code>tricky</code> 时，Rust
+会尝试获取 <code>tricky</code> 的不可变引用，但由于 <code>tricky</code>
+已经有一个可变引用（通过 <code>tie_the_knot</code>
+方法），这会导致借用冲突。</li>
+</ul></li>
+</ol>
+<h3 id="如何解决这个问题">如何解决这个问题？</h3>
+<ol start="2" type="1">
+<li><strong>使用 <code>clone</code> 或 <code>to_owned</code></strong>：
+<ul>
+<li>如果你不需要 <code>nickname</code> 是一个引用，可以将
+<code>nickname</code> 改为 <code>String</code> 类型，并在
+<code>tie_the_knot</code> 方法中使用 <code>clone</code> 或
+<code>to_owned</code> 来创建一个新的 <code>String</code>： <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-meta">#[derive(Debug)]</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">WhatAboutThis</span> &#123;<br>    name: <span class="hljs-type">String</span>,<br>    nickname: <span class="hljs-type">Option</span>&lt;<span class="hljs-type">String</span>&gt;,<br>&#125;<br><br><span class="hljs-keyword">impl</span> <span class="hljs-title class_">WhatAboutThis</span> &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">tie_the_knot</span>(&amp;<span class="hljs-keyword">mut</span> <span class="hljs-keyword">self</span>) &#123;<br>        <span class="hljs-keyword">self</span>.nickname = <span class="hljs-title function_ invoke__">Some</span>(<span class="hljs-keyword">self</span>.name[..<span class="hljs-number">4</span>].<span class="hljs-title function_ invoke__">to_owned</span>());<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+这样，<code>nickname</code>
+就不再是一个引用，而是拥有自己的数据，避免了生命周期和借用的问题。</li>
+</ul></li>
+</ol>
+<h3 id="总结">总结</h3>
+<p>这段代码的问题在于 <code>tie_the_knot</code>
+方法中的可变引用生命周期与结构体的生命周期绑定，导致后续的不可变引用无法获取。通过缩短可变引用的生命周期或改变
+<code>nickname</code> 的类型，可以避免这个问题。 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs rust"><br>## <span class="hljs-number">3</span>. <span class="hljs-keyword">unsafe</span> 实现<br><br>既然借用规则妨碍了我们，那就一脚踢开：<br><br>```rust<br><span class="hljs-meta">#[derive(Debug)]</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">SelfRef</span> &#123;<br>    value: <span class="hljs-type">String</span>,<br>    pointer_to_value: *<span class="hljs-keyword">const</span> <span class="hljs-type">String</span>,<br>&#125;<br><br><span class="hljs-keyword">impl</span> <span class="hljs-title class_">SelfRef</span> &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">new</span>(txt: &amp;<span class="hljs-type">str</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-keyword">Self</span> &#123;<br>        SelfRef &#123;<br>            value: <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">from</span>(txt),<br>            pointer_to_value: std::ptr::<span class="hljs-title function_ invoke__">null</span>(),<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">init</span>(&amp;<span class="hljs-keyword">mut</span> <span class="hljs-keyword">self</span>) &#123;<br>        <span class="hljs-keyword">let</span> <span class="hljs-variable">self_ref</span>: *<span class="hljs-keyword">const</span> <span class="hljs-type">String</span> = &amp;<span class="hljs-keyword">self</span>.value;<br>        <span class="hljs-keyword">self</span>.pointer_to_value = self_ref;<br>    &#125;<br><br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">value</span>(&amp;<span class="hljs-keyword">self</span>) <span class="hljs-punctuation">-&gt;</span> &amp;<span class="hljs-type">str</span> &#123;<br>        &amp;<span class="hljs-keyword">self</span>.value<br>    &#125;<br><br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">pointer_to_value</span>(&amp;<span class="hljs-keyword">self</span>) <span class="hljs-punctuation">-&gt;</span> &amp;<span class="hljs-type">String</span> &#123;<br>        <span class="hljs-built_in">assert!</span>(!<span class="hljs-keyword">self</span>.pointer_to_value.<span class="hljs-title function_ invoke__">is_null</span>(),<br>            <span class="hljs-string">&quot;Test::b called without Test::init being called first&quot;</span>);<br>        <span class="hljs-keyword">unsafe</span> &#123; &amp;*(<span class="hljs-keyword">self</span>.pointer_to_value) &#125;<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">t</span> = SelfRef::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-string">&quot;hello&quot;</span>);<br>    t.<span class="hljs-title function_ invoke__">init</span>();<br>    <span class="hljs-comment">// 打印值和指针地址</span><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;&#125;, &#123;:p&#125;&quot;</span>, t.<span class="hljs-title function_ invoke__">value</span>(), t.<span class="hljs-title function_ invoke__">pointer_to_value</span>());<br>&#125;<br></code></pre></td></tr></table></figure></p>
 <p>在这里，我们在 <code>pointer_to_value</code> 中直接存储裸指针，而不是
 Rust 的引用，因此不再受到 Rust
 借用规则和生命周期的限制，而且实现起来非常清晰、简洁。但是缺点就是，通过指针获取值时需要使用
@@ -321,8 +368,7 @@ Rust 的引用，因此不再受到 Rust
 <p>上面的 <code>unsafe</code>
 虽然简单好用，但是它不太安全，是否还有其他选择？还真的有，那就是
 <code>Pin</code>。</p>
-<h2 id="无法被移动的-pin"><a target="_blank" rel="noopener" href="https://course.rs/advance/circle-self-ref/self-referential.html#无法被移动的-pin">无法被移动的
-Pin</a></h2>
+<h2 id="无法被移动的-pin">4. 无法被移动的 Pin</h2>
 <p><code>Pin</code>
 在后续章节会深入讲解，目前你只需要知道它可以固定住一个值，防止该值在内存中被移动。</p>
 <p>通过开头我们知道，自引用最麻烦的就是创建引用的同时，值的所有权会被转移，而通过
@@ -335,8 +381,7 @@ Pin</a></h2>
 在这里并没有魔法，它也并不是实现自引用类型的主要原因，最关键的还是里面的裸指针的使用，而
 <code>Pin</code>
 起到的作用就是确保我们的值不会被移走，否则指针就会指向一个错误的地址！</p>
-<h2 id="使用-ouroboros"><a target="_blank" rel="noopener" href="https://course.rs/advance/circle-self-ref/self-referential.html#使用-ouroboros">使用
-ouroboros</a></h2>
+<h2 id="使用-ouroboros">5. 使用 ouroboros</h2>
 <p>对于自引用结构体，三方库也有支持的，其中一个就是 <a target="_blank" rel="noopener" href="https://github.com/joshua-maros/ouroboros">ouroboros</a>，当然它也有自己的限制，我们后面会提到，先来看看该如何使用：</p>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">use</span> ouroboros::self_referencing;<br><br><span class="hljs-meta">#[self_referencing]</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">SelfRef</span> &#123;<br>    value: <span class="hljs-type">String</span>,<br><br>    <span class="hljs-meta">#[borrows(value)]</span><br>    pointer_to_value: &amp;<span class="hljs-symbol">&#x27;this</span> <span class="hljs-type">str</span>,<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>()&#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">v</span> = SelfRefBuilder &#123;<br>        value: <span class="hljs-string">&quot;aaa&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>(),<br>        pointer_to_value_builder: |value: &amp;<span class="hljs-type">String</span>| value,<br>    &#125;.<span class="hljs-title function_ invoke__">build</span>();<br><br>    <span class="hljs-comment">// 借用value值</span><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">s</span> = v.<span class="hljs-title function_ invoke__">borrow_value</span>();<br>    <span class="hljs-comment">// 借用指针</span><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">p</span> = v.<span class="hljs-title function_ invoke__">borrow_pointer_to_value</span>();<br>    <span class="hljs-comment">// value值和指针指向的值相等</span><br>    <span class="hljs-built_in">assert_eq!</span>(s, *p);<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>可以看到，<code>ouroboros</code>
@@ -368,16 +413,15 @@ demo 进行测试，不可大意。</p>
 <p>rental
 虽然不怎么维护，但是可能依然是这三个里面最强大的，而且网上的用例也比较多，容易找到参考代码</p>
 </blockquote>
-<h2 id="rc-refcell-或-arc-mutex"><a target="_blank" rel="noopener" href="https://course.rs/advance/circle-self-ref/self-referential.html#rc--refcell-或-arc--mutex">Rc
-+ RefCell 或 Arc + Mutex</a></h2>
+<h2 id="rc-refcell-或-arc-mutex">6. Rc + RefCell 或 Arc + Mutex</h2>
 <p>类似于循环引用的解决方式，自引用也可以用这种组合来解决，但是会导致代码的类型标识到处都是，大大的影响了可读性。</p>
-<h2 id="终极大法"><a target="_blank" rel="noopener" href="https://course.rs/advance/circle-self-ref/self-referential.html#终极大法">终极大法</a></h2>
+<h2 id="终极大法">7. 终极大法</h2>
 <p>如果两个放在一起会报错，那就分开它们。对，终极大法就这么简单，当然思路上的简单不代表实现上的简单，最终结果就是导致代码复杂度的上升。</p>
-<h2 id="学习一本书如何实现链表"><a target="_blank" rel="noopener" href="https://course.rs/advance/circle-self-ref/self-referential.html#学习一本书如何实现链表">学习一本书：如何实现链表</a></h2>
+<h2 id="学习一本书如何实现链表">8. 学习一本书：如何实现链表</h2>
 <p>最后，推荐一本专门讲如何实现链表的书（真是富有 Rust
 特色，链表都能复杂到出书了 o_o），<a target="_blank" rel="noopener" href="https://rust-unofficial.github.io/too-many-lists/">Learn Rust by
 writing Entirely Too Many Linked Lists</a></p>
-<h2 id="总结"><a target="_blank" rel="noopener" href="https://course.rs/advance/circle-self-ref/self-referential.html#总结">总结</a></h2>
+<h2 id="总结-1">9. 总结</h2>
 <p>上面讲了这么多方法，但是我们依然无法正确的告诉你在某个场景应该使用哪个方法，这个需要你自己的判断，因为自引用实在是过于复杂。</p>
 <p>我们能做的就是告诉你，有这些办法可以解决自引用问题，而这些办法每个都有自己适用的范围，需要你未来去深入的挖掘和发现。</p>
 <p>偷偷说一句，就算是我，遇到自引用一样挺头疼，好在这种情况真的不常见，往往是实现特定的算法和数据结构时才需要，应用代码中几乎用不到。</p>

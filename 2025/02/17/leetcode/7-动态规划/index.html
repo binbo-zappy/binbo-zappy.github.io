@@ -1,0 +1,844 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="动态规划解题套路框架 首先，动态规划问题的一般形式就是求最值。动态规划其实是运筹学的一种最优化方法，只不过在计算机问题上应用比较多，比如说让你求最长递增子序列呀，最小编辑距离呀等等。 求解动态规划的核心问题是穷举。因为要求最值，肯定要把所有可行的答案穷举出来，然后在其中找最值。  首先，虽然动态规划的核心思想就是穷举求最值，但是问题可以千变万化，穷举所有可行解其实并不是一件容易的事，需要你">
+<meta property="og:type" content="article">
+<meta property="og:title" content="7. 动态规划">
+<meta property="og:url" content="http://binbo-zappy.github.io/2025/02/17/leetcode/7-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="动态规划解题套路框架 首先，动态规划问题的一般形式就是求最值。动态规划其实是运筹学的一种最优化方法，只不过在计算机问题上应用比较多，比如说让你求最长递增子序列呀，最小编辑距离呀等等。 求解动态规划的核心问题是穷举。因为要求最值，肯定要把所有可行的答案穷举出来，然后在其中找最值。  首先，虽然动态规划的核心思想就是穷举求最值，但是问题可以千变万化，穷举所有可行解其实并不是一件容易的事，需要你">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/leetcode.jpg">
+<meta property="article:published_time" content="2025-02-17T09:03:00.000Z">
+<meta property="article:modified_time" content="2025-02-16T13:58:31.798Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="leetcode">
+<meta property="article:tag" content="动态规划">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/leetcode.jpg">
+  
+  
+  
+  <title>7. 动态规划 - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Binbo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="7. 动态规划"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-02-17 17:03" pubdate>
+          2025年2月17日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          29 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">7. 动态规划</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="动态规划解题套路框架">动态规划解题套路框架</h1>
+<p>首先，<strong>动态规划问题的一般形式就是求最值</strong>。动态规划其实是运筹学的一种最优化方法，只不过在计算机问题上应用比较多，比如说让你求最长递增子序列呀，最小编辑距离呀等等。</p>
+<p><strong>求解动态规划的核心问题是穷举</strong>。因为要求最值，肯定要把所有可行的答案穷举出来，然后在其中找最值。</p>
+<ul>
+<li>首先，虽然动态规划的核心思想就是穷举求最值，但是问题可以千变万化，穷举所有可行解其实并不是一件容易的事，需要你熟练掌握递归思维，只有列出<strong>正确的「状态转移方程」</strong>，才能正确地穷举。</li>
+<li>而且，要判断算法问题是否<strong>具备「最优子结构」</strong>，是否能够通过子问题的最值得到原问题的最值。</li>
+<li>另外，动态规划问题<strong>存在「重叠子问题」</strong>，如果暴力穷举的话效率会很低，所以需要使用「备忘录」或者「DP
+table」来优化穷举过程，避免不必要的计算。</li>
+</ul>
+<p>以上提到的重叠子问题、最优子结构、状态转移方程就是动态规划三要素。具体什么意思等会会举例详解，但是在实际的算法问题中，写出状态转移方程是最困难的，这也就是为什么很多朋友觉得动态规划问题困难的原因：</p>
+<p><strong>明确「状态」-&gt; 明确「选择」 -&gt; 定义</strong>
+<code>dp</code> <strong>数组/函数的含义</strong>。</p>
+<p>按上面的套路走，最后的解法代码就会是如下的框架：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs plain"># 自顶向下递归的动态规划<br>def dp(状态1, 状态2, ...):<br>    for 选择 in 所有可能的选择:<br>        # 此时的状态已经因为做了选择而改变<br>        result = 求最值(result, dp(状态1, 状态2, ...))<br>    return result<br><br># 自底向上迭代的动态规划<br># 初始化 base case<br>dp[0][0][...] = base case<br># 进行状态转移<br>for 状态1 in 状态1的所有取值：<br>    for 状态2 in 状态2的所有取值：<br>        for ...<br>            dp[状态1][状态2][...] = 求最值(选择1，选择2...)<br></code></pre></td></tr></table></figure>
+<h2 id="一斐波那契数列">一、斐波那契数列</h2>
+<p>力扣第 509 题「<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/fibonacci-number/">斐波那契数</a>」。</p>
+<h3 id="暴力递归">1. 暴力递归</h3>
+<p>斐波那契数列的数学形式就是递归的，写成代码就是这样：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">fib</span><span class="hljs-params">(<span class="hljs-type">int</span> N)</span> </span>&#123;<br>    <span class="hljs-keyword">if</span> (N == <span class="hljs-number">1</span> || N == <span class="hljs-number">2</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">fib</span>(N - <span class="hljs-number">1</span>) + <span class="hljs-built_in">fib</span>(N - <span class="hljs-number">2</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>代码虽然简洁易懂，但是十分低效？假设 n = 20，请画出递归树：</p>
+<figure>
+<img src="/2025/02/17/leetcode/7-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/1722914786640-cc8e3a13-5f39-440c-b426-027e00a6ec84.jpeg" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p><strong>提示</strong></p>
+<p>但凡遇到需要递归的问题，最好都画出递归树，这对你分析算法的复杂度，寻找算法低效的原因都有巨大帮助。</p>
+<p>这个递归树怎么理解？就是说想要计算原问题
+<code>f(20)</code>，我就得先计算出子问题 <code>f(19)</code> 和
+<code>f(18)</code>，然后要计算 <code>f(19)</code>，我就要先算出子问题
+<code>f(18)</code> 和 <code>f(17)</code>，以此类推。最后遇到
+<code>f(1)</code> 或者 <code>f(2)</code>
+的时候，结果已知，就能直接返回结果，递归树不再向下生长了。</p>
+<p><strong>递归算法的时间复杂度怎么计算？就是用子问题个数乘以解决一个子问题需要的时间</strong>。</p>
+<p>首先计算子问题个数，即递归树中节点的总数。显然二叉树节点总数为指数级别，所以子问题个数为
+O(2^n)。</p>
+<p>然后计算解决一个子问题的时间，在本算法中，没有循环，只有
+<code>f(n - 1) + f(n - 2)</code> 一个加法操作，时间为 O(1)。</p>
+<p>所以，这个算法的时间复杂度为二者相乘，即 O(2^n)，指数级别，爆炸。</p>
+<p>观察递归树，很明显发现了算法低效的原因：存在大量重复计算，比如
+<code>f(18)</code> 被计算了两次，而且你可以看到，以 <code>f(18)</code>
+为根的这个递归树体量巨大，多算一遍，会耗费巨大的时间。更何况，还不止
+<code>f(18)</code> 这一个节点被重复计算，所以这个算法及其低效。</p>
+<p>这就是动态规划问题的第一个性质：<strong>重叠子问题</strong>。下面，我们想办法解决这个问题。</p>
+<h3 id="带备忘录的递归解法">2. 带备忘录的递归解法</h3>
+<p>即然耗时的原因是重复计算，那么我们可以造一个「备忘录」；</p>
+<p>每次遇到一个子问题先去「备忘录」里查一查，如果发现之前已经解决过这个问题了，直接把答案拿出来用，不要再耗时去计算了。</p>
+<p>一般使用一个数组充当这个「备忘录」，当然你也可以使用哈希表（字典），思想都是一样的。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">fib</span><span class="hljs-params">(<span class="hljs-type">int</span> N)</span> </span>&#123;<br>    <span class="hljs-comment">// 备忘录全初始化为 0</span><br>    <span class="hljs-type">int</span> memo[N + <span class="hljs-number">1</span>];<br>    <span class="hljs-built_in">memset</span>(memo, <span class="hljs-number">0</span>, <span class="hljs-built_in">sizeof</span>(memo));<br>    <span class="hljs-comment">// 进行带备忘录的递归</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">dp</span>(memo, N);<br>&#125;<br><br><span class="hljs-comment">// 带着备忘录进行递归</span><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">dp</span><span class="hljs-params">(<span class="hljs-type">int</span> memo[], <span class="hljs-type">int</span> n)</span> </span>&#123;<br>    <span class="hljs-comment">// base case</span><br>    <span class="hljs-keyword">if</span> (n == <span class="hljs-number">0</span> || n == <span class="hljs-number">1</span>) <span class="hljs-keyword">return</span> n;<br>    <span class="hljs-comment">// 已经计算过，不用再计算了</span><br>    <span class="hljs-keyword">if</span> (memo[n] != <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> memo[n];<br>    memo[n] = <span class="hljs-built_in">dp</span>(memo, n - <span class="hljs-number">1</span>) + <span class="hljs-built_in">dp</span>(memo, n - <span class="hljs-number">2</span>);<br>    <span class="hljs-keyword">return</span> memo[n];<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>实际上，带「备忘录」的递归算法，把一棵存在巨量冗余的递归树通过「剪枝」，改造成了一幅不存在冗余的递归图，极大减少了子问题（即递归图中节点）的个数。</p>
+<figure>
+<img src="/2025/02/17/leetcode/7-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/1722914785694-c9a0e6a5-6082-41f0-b929-5ecf0f91d179.jpeg" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p><strong>递归算法的时间复杂度怎么计算？就是用子问题个数乘以解决一个子问题需要的时间</strong>。</p>
+<p>子问题个数，即图中节点的总数，由于本算法不存在冗余计算，子问题就是
+<code>f(1)</code>, <code>f(2)</code>, <code>f(3)</code> ...
+<code>f(20)</code>，数量和输入规模 n = 20 成正比，所以子问题个数为
+O(n)。</p>
+<p>解决一个子问题的时间，同上，没有什么循环，时间为 O(1)。</p>
+<p>所以，本算法的时间复杂度是 O(n)，比起暴力算法，是降维打击。</p>
+<p>进一步优化，把空间复杂度降为
+O(1)。这也就是我们最常见的计算斐波那契数的算法：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">fib</span><span class="hljs-params">(<span class="hljs-type">int</span> n)</span> </span>&#123;<br>    <span class="hljs-keyword">if</span> (n == <span class="hljs-number">0</span> || n == <span class="hljs-number">1</span>) &#123;<br>        <span class="hljs-comment">// base case</span><br>        <span class="hljs-keyword">return</span> n;<br>    &#125;<br>    <span class="hljs-comment">// 分别代表 dp[i - 1] 和 dp[i - 2]</span><br>    <span class="hljs-type">int</span> dp_i_1 = <span class="hljs-number">1</span>, dp_i_2 = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">2</span>; i &lt;= n; i++) &#123;<br>        <span class="hljs-comment">// dp[i] = dp[i - 1] + dp[i - 2];</span><br>        <span class="hljs-type">int</span> dp_i = dp_i_1 + dp_i_2;<br>        <span class="hljs-comment">// 滚动更新</span><br>        dp_i_2 = dp_i_1;<br>        dp_i_1 = dp_i;<br>    &#125;<br>    <span class="hljs-keyword">return</span> dp_i_1;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="二凑零钱问题">二、凑零钱问题</h2>
+<p>这是力扣第 322 题「<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/coin-change/">零钱兑换</a>」：</p>
+<p>给你 <code>k</code> 种面值的硬币，面值分别为
+<code>c1, c2 ... ck</code>，每种硬币的数量无限，再给一个总金额
+<code>amount</code>，问你<strong>最少</strong>需要几枚硬币凑出这个金额，如果不可能凑出，算法返回
+-1 。算法的函数签名如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// coins 中是可选硬币面值，amount 是目标金额</span><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">coinChange</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; coins, <span class="hljs-type">int</span> amount)</span></span>;<br></code></pre></td></tr></table></figure>
+<p>比如说 <code>k = 3</code>，面值分别为 1，2，5，总金额
+<code>amount = 11</code>。那么最少需要 3 枚硬币凑出，即 11 = 5 + 5 +
+1。</p>
+<h3 id="暴力递归-1">1. 暴力递归</h3>
+<p>首先，这个问题是动态规划问题，因为它具有「最优子结构」的。<strong>要符合「最优子结构」，子问题间必须互相独立</strong>。</p>
+<p>假设你有面值为 <code>1, 2, 5</code> 的硬币，你想求
+<code>amount = 11</code> 时的最少硬币数（原问题），如果你知道凑出
+<code>amount = 10, 9, 6</code>
+的最少硬币数（子问题），你只需要把子问题的答案加一（再选一枚面值为
+<code>1, 2, 5</code>
+的硬币），求个最小值，就是原问题的答案。因为硬币的数量是没有限制的，所以子问题之间没有相互制，是互相独立的。</p>
+<p>那么，既然知道了这是个动态规划问题，如何列出正确的状态转移方程？</p>
+<p><strong>1、确定「状态」，也就是原问题和子问题中会变化的变量</strong>。由于硬币数量无限，硬币的面额也是题目给定的，只有目标金额会不断地向
+base case 靠近，所以唯一的「状态」就是目标金额 <code>amount</code>。</p>
+<p><strong>2、确定「选择」，也就是导致「状态」产生变化的行为</strong>。目标金额为什么变化呢，因为你在选择硬币，你每选择一枚硬币，就相当于减少了目标金额。所以说所有硬币的面值，就是你的「选择」。</p>
+<p><strong>3、明确</strong> <code>dp</code>
+<strong>函数/数组的定义</strong>。我们这里讲的是自顶向下的解法，所以会有一个递归的
+<code>dp</code>
+函数，一般来说函数的参数就是状态转移中会变化的量，也就是上面说到的「状态」；函数的返回值就是题目要求我们计算的量。就本题来说，状态只有一个，即「目标金额」，题目要求我们计算凑出目标金额所需的最少硬币数量。</p>
+<p><strong>所以我们可以这样定义</strong> <code>dp</code>
+<strong>函数：</strong><code>dp(n)</code>
+<strong>表示，输入一个目标金额</strong>
+<code>n</code><strong>，返回凑出目标金额</strong> <code>n</code>
+<strong>所需的最少硬币数量</strong>。</p>
+<p>那么根据这个定义，我们的最终答案就是 <code>dp(amount)</code>
+的返回值。</p>
+<p>搞清楚上面这几个关键点，解法的伪码就可以写出来了：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">coinChange</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; coins, <span class="hljs-type">int</span> amount)</span> </span>&#123;<br>    <span class="hljs-comment">// 题目要求的最终结果是 dp(amount)</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">dp</span>(coins, amount);<br>&#125;<br><br><span class="hljs-comment">// 定义：要凑出金额 n，至少要 dp(coins, n) 个硬币</span><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">dp</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; coins, <span class="hljs-type">int</span> n)</span> </span>&#123;<br>    <span class="hljs-comment">// 做选择，选择需要硬币最少的那个结果</span><br>    <span class="hljs-type">int</span> res = INT_MAX;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-type">int</span> coin : coins) &#123;<br>        res = <span class="hljs-built_in">min</span>(res, subProb + <span class="hljs-number">1</span>);<br>    &#125;<br>    <span class="hljs-keyword">return</span> res;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>根据伪码，我们加上 base case 即可得到最终的答案。显然目标金额为 0
+时，所需硬币数量为 0；当目标金额小于 0 时，无解，返回 -1：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">coinChange</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; coins, <span class="hljs-type">int</span> amount)</span> </span>&#123;<br>        <span class="hljs-comment">// 题目要求的最终结果是 dp(amount)</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">dp</span>(coins, amount);<br>    &#125;<br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-comment">// 定义：要凑出金额 n，至少要 dp(coins, n) 个硬币</span><br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">dp</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; coins, <span class="hljs-type">int</span> amount)</span> </span>&#123;<br>        <span class="hljs-comment">// base case</span><br>        <span class="hljs-keyword">if</span> (amount == <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">if</span> (amount &lt; <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br><br>        <span class="hljs-type">int</span> res = INT_MAX;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> coin : coins) &#123;<br>            <span class="hljs-comment">// 计算子问题的结果</span><br>            <span class="hljs-type">int</span> subProblem = <span class="hljs-built_in">dp</span>(coins, amount - coin);<br>            <span class="hljs-comment">// 子问题无解则跳过</span><br>            <span class="hljs-keyword">if</span> (subProblem == <span class="hljs-number">-1</span>) <span class="hljs-keyword">continue</span>;<br>            <span class="hljs-comment">// 在子问题中选择最优解，然后加一</span><br>            res = <span class="hljs-built_in">min</span>(res, subProblem + <span class="hljs-number">1</span>);<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> res == INT_MAX ? <span class="hljs-number">-1</span> : res;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>这里 <code>coinChange</code> 和 <code>dp</code>
+函数的签名完全一样，所以理论上不需要额外写一个 <code>dp</code>
+函数。但为了后文讲解方便，这里还是另写一个 <code>dp</code>
+函数来实现主要逻辑。</p>
+<p>消除一下重叠子问题，比如 <code>amount = 11, coins = &#123;1,2,5&#125;</code>
+时画出递归树看看：</p>
+<figure>
+<img src="/2025/02/17/leetcode/7-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/1722914786345-8b0cf527-a657-4f6f-ba61-d830a6a8ac0c.jpeg" srcset="/img/loading.gif" lazyload alt="img">
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p><strong>递归算法的时间复杂度分析：子问题总数 x
+解决每个子问题所需的时间</strong>。</p>
+<p>子问题总数为递归树的节点个数，但算法会进行剪枝，剪枝的时机和题目给定的具体硬币面额有关，所以可以想象，这棵树生长的并不规则，确切算出树上有多少节点是比较困难的。对于这种情况，我们一般的做法是按照最坏的情况估算一个时间复杂度的上界。</p>
+<p>假设目标金额为 <code>n</code>，给定的硬币个数为
+<code>k</code>，那么递归树最坏情况下高度为 <code>n</code>（全用面额为 1
+的硬币），然后再假设这是一棵满 <code>k</code> 叉树，则节点的总数在
+<code>k^n</code> 这个数量级。</p>
+<p>接下来看每个子问题的复杂度，由于每次递归包含一个 for 循环，复杂度为
+<code>O(k)</code>，相乘得到总时间复杂度为
+<code>O(k^n)</code>，指数级别。</p>
+<h3 id="带备忘录的递归">2. 带备忘录的递归</h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    vector&lt;<span class="hljs-type">int</span>&gt; memo;<br>    <br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">coinChange</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; coins, <span class="hljs-type">int</span> amount)</span> </span>&#123;<br>        memo = <span class="hljs-built_in">vector</span>&lt;<span class="hljs-type">int</span>&gt; (amount + <span class="hljs-number">1</span>, <span class="hljs-number">-666</span>);<br>        <span class="hljs-comment">// 备忘录初始化为一个不会被取到的特殊值，代表还未被计算</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">dp</span>(coins, amount);<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">dp</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; coins, <span class="hljs-type">int</span> amount)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span> (amount == <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">if</span> (amount &lt; <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>        <span class="hljs-comment">// 查备忘录，防止重复计算</span><br>        <span class="hljs-keyword">if</span> (memo[amount] != <span class="hljs-number">-666</span>)<br>            <span class="hljs-keyword">return</span> memo[amount];<br><br>        <span class="hljs-type">int</span> res = INT_MAX;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> coin : coins) &#123;<br>            <span class="hljs-comment">// 计算子问题的结果</span><br>            <span class="hljs-type">int</span> subProblem = <span class="hljs-built_in">dp</span>(coins, amount - coin);<br><br>            <span class="hljs-comment">// 子问题无解则跳过</span><br>            <span class="hljs-keyword">if</span> (subProblem == <span class="hljs-number">-1</span>) <span class="hljs-keyword">continue</span>;<br>            <span class="hljs-comment">// 在子问题中选择最优解，然后加一</span><br>            res = <span class="hljs-built_in">min</span>(res, subProblem + <span class="hljs-number">1</span>);<br>        &#125;<br>        <span class="hljs-comment">// 把计算结果存入备忘录</span><br>        memo[amount] = (res == INT_MAX) ? <span class="hljs-number">-1</span> : res;<br>        <span class="hljs-keyword">return</span> memo[amount];<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>很显然「备忘录」大大减小了子问题数目，完全消除了子问题的冗余，所以子问题总数不会超过金额数
+<code>n</code>，即子问题数目为
+<code>O(n)</code>。处理一个子问题的时间不变，仍是
+<code>O(k)</code>，所以总的时间复杂度是 <code>O(kn)</code>。</p>
+<h2 id="三最后总结">三、最后总结</h2>
+<p>第一个斐波那契数列的问题，解释了如何通过「备忘录」或者「dp
+table」的方法来优化递归树，并且明确了这两种方法本质上是一样的，只是自顶向下和自底向上的不同而已。</p>
+<p>第二个凑零钱的问题，展示了如何流程化确定「状态转移方程」，只要通过状态转移方程写出暴力递归解，剩下的也就是优化递归树，消除重叠子问题而已。</p>
+<p>如果你不太了解动态规划，还能看到这里，真得给你鼓掌，相信你已经掌握了这个算法的设计技巧。</p>
+<p><strong>计算机解决问题其实没有任何特殊的技巧，它唯一的解决办法就是穷举</strong>，穷举所有可能性。算法设计无非就是先思考“如何穷举”，然后再追求“如何聪明地穷举”。</p>
+<p>列出状态转移方程，就是在解决“如何穷举”的问题。之所以说它难，一是因为很多穷举需要递归实现，二是因为有的问题本身的解空间复杂，不那么容易穷举完整。</p>
+<p>备忘录、DP table
+就是在追求“如何聪明地穷举”。用空间换时间的思路，是降低时间复杂度的不二法门，除此之外，试问，还能玩出啥花活？</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/leetcode/" class="category-chain-item">leetcode</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/leetcode/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" class="category-chain-item">动态规划</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/leetcode/" class="print-no-link">#leetcode</a>
+      
+        <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" class="print-no-link">#动态规划</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>7. 动态规划</div>
+      <div>http://binbo-zappy.github.io/2025/02/17/leetcode/7-动态规划/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年2月17日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/02/17/leetcode/7-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92-LC509-%E6%96%90%E6%B3%A2%E9%82%A3%E5%A5%91%E6%95%B0%E5%88%97/" title="LC509. 斐波那契数列">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">LC509. 斐波那契数列</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/02/15/leetcode/1-%E9%93%BE%E8%A1%A8/" title="1. 链表">
+                        <span class="hidden-mobile">1. 链表</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

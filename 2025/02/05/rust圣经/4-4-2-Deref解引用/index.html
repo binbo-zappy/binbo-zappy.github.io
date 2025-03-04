@@ -19,16 +19,16 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Deref 解引用 在开始之前，我们先来看一段代码： 123456789101112131415#[derive(Debug)]struct Person &#123;    name: String,    age: u8&#125;impl Person &#123;    fn new(name: String, age: u8) -&gt; Self &#123;        Pe">
+    <meta name="description" content="Deref 解引用 在开始之前，我们先来看一段代码： 123456789101112131415#[derive(Debug)]struct Person &#123;    name: String,    age: u8&#125;impl Person &#123;    fn new(name: String, age: u8) -&gt; Self &#123;        Per">
 <meta property="og:type" content="article">
 <meta property="og:title" content="4.4.2 Deref 解引用">
 <meta property="og:url" content="http://binbo-zappy.github.io/2025/02/05/rust%E5%9C%A3%E7%BB%8F/4-4-2-Deref%E8%A7%A3%E5%BC%95%E7%94%A8/index.html">
 <meta property="og:site_name" content="Binbo">
-<meta property="og:description" content="Deref 解引用 在开始之前，我们先来看一段代码： 123456789101112131415#[derive(Debug)]struct Person &#123;    name: String,    age: u8&#125;impl Person &#123;    fn new(name: String, age: u8) -&gt; Self &#123;        Pe">
+<meta property="og:description" content="Deref 解引用 在开始之前，我们先来看一段代码： 123456789101112131415#[derive(Debug)]struct Person &#123;    name: String,    age: u8&#125;impl Person &#123;    fn new(name: String, age: u8) -&gt; Self &#123;        Per">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/rust.jpg">
 <meta property="article:published_time" content="2025-02-05T05:41:18.000Z">
-<meta property="article:modified_time" content="2025-02-09T02:52:44.341Z">
+<meta property="article:modified_time" content="2025-02-09T14:01:05.730Z">
 <meta property="article:author" content="Binbo">
 <meta property="article:tag" content="rust">
 <meta name="twitter:card" content="summary_large_image">
@@ -236,7 +236,7 @@
         
         
         
-          29 分钟
+          30 分钟
         
       </span>
     
@@ -278,8 +278,7 @@
             
               <div class="markdown-body">
                 
-                <h1 id="deref-解引用"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/deref.html#deref-解引用">Deref
-解引用</a></h1>
+                <h1 id="deref-解引用">Deref 解引用</h1>
 <p>在开始之前，我们先来看一段代码：</p>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-meta">#[derive(Debug)]</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Person</span> &#123;<br>    name: <span class="hljs-type">String</span>,<br>    age: <span class="hljs-type">u8</span><br>&#125;<br><br><span class="hljs-keyword">impl</span> <span class="hljs-title class_">Person</span> &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">new</span>(name: <span class="hljs-type">String</span>, age: <span class="hljs-type">u8</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-keyword">Self</span> &#123;<br>        Person &#123; name, age&#125;<br>    &#125;<br><br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">display</span>(<span class="hljs-keyword">self</span>: &amp;<span class="hljs-keyword">mut</span> Person, age: <span class="hljs-type">u8</span>) &#123;<br>        <span class="hljs-keyword">let</span> <span class="hljs-variable">Person</span>&#123;name, age&#125; = &amp;<span class="hljs-keyword">self</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>以上代码有一个很奇怪的地方：在 <code>display</code>
@@ -304,8 +303,8 @@
 允许你指定智能指针超出作用域后自动执行的代码，例如做一些数据清除等收尾工作</li>
 </ul>
 <p>先来看看 <code>Deref</code> 特征是如何工作的。</p>
-<h2 id="通过-获取引用背后的值"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/deref.html#通过--获取引用背后的值">通过
-<code>*</code> 获取引用背后的值</a></h2>
+<h2 id="通过-获取引用背后的值">1. 通过 <code>*</code>
+获取引用背后的值</h2>
 <p>在正式讲解 <code>Deref</code>
 之前，我们先来看下常规引用的解引用。</p>
 <p>常规引用是一个指针类型，包含了目标数据存储的内存地址。对常规引用使用
@@ -317,7 +316,7 @@
 <code>5</code>。如果你试图执行
 <code>assert_eq!(5, y);</code>，代码就会无情报错，因为你无法将一个引用与一个数值做比较：</p>
 <figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs console">error[E0277]: can&#x27;t compare `&#123;integer&#125;` with `&amp;&#123;integer&#125;` //无法将&#123;integer&#125; 与&amp;&#123;integer&#125;进行比较<br><span class="hljs-meta prompt_"> --&gt; </span><span class="language-bash">src/main.rs:6:5</span><br>  |<br>6 |     assert_eq!(5, y);<br>  |     ^^^^^^^^^^^^^^^^^ no implementation for `&#123;integer&#125; == &amp;&#123;integer&#125;`<br>  |<br>  = help: the trait `PartialEq&lt;&amp;&#123;integer&#125;&gt;` is not implemented for `&#123;integer&#125;`<br>                    // 你需要为&#123;integer&#125;实现用于比较的特征PartialEq&lt;&amp;&#123;integer&#125;&gt;<br></code></pre></td></tr></table></figure>
-<h2 id="智能指针解引用"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/deref.html#智能指针解引用">智能指针解引用</a></h2>
+<h2 id="智能指针解引用">2. 智能指针解引用</h2>
 <p>上面所说的解引用方式和其它大多数语言并无区别，但是 Rust
 中将解引用提升到了一个新高度。考虑一下智能指针，它是一个结构体类型，如果你直接对它进行
 <code>*myStruct</code>，显然编译器不知道该如何办，因此我们可以为智能指针结构体实现
@@ -328,7 +327,7 @@
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">x</span> = <span class="hljs-type">Box</span>::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-number">1</span>);<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">sum</span> = *x + <span class="hljs-number">1</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>智能指针 <code>x</code> 被 <code>*</code> 解引用为 <code>i32</code>
 类型的值 <code>1</code>，然后再进行求和。</p>
-<h4 id="定义自己的智能指针"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/deref.html#定义自己的智能指针">定义自己的智能指针</a></h4>
+<h3 id="定义自己的智能指针">2.1 定义自己的智能指针</h3>
 <p>现在，让我们一起来实现一个智能指针，功能上类似
 <code>Box&lt;T&gt;</code>。由于 <code>Box&lt;T&gt;</code>
 本身很简单，并没有包含类如长度、最大长度等信息，因此用一个元组结构体即可。</p>
@@ -340,8 +339,7 @@
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">y</span> = MyBox::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-number">5</span>);<br><br>    <span class="hljs-built_in">assert_eq!</span>(<span class="hljs-number">5</span>, *y);<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>运行后，报错如下：</p>
 <figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs console">error[E0614]: type `MyBox&lt;&#123;integer&#125;&gt;` cannot be dereferenced<br><span class="hljs-meta prompt_">  --&gt; </span><span class="language-bash">src/main.rs:12:19</span><br>   |<br>12 |     assert_eq!(5, *y);<br>   |                   ^^<br></code></pre></td></tr></table></figure>
-<h5 id="为智能指针实现-deref-特征"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/deref.html#为智能指针实现-deref-特征">为智能指针实现
-Deref 特征</a></h5>
+<h3 id="为智能指针实现-deref-特征">2.2 为智能指针实现 Deref 特征</h3>
 <p>现在来为 <code>MyBox</code> 实现 <code>Deref</code> 特征，以支持
 <code>*</code> 解引用操作符：</p>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">use</span> std::ops::Deref;<br><br><span class="hljs-keyword">impl</span>&lt;T&gt; Deref <span class="hljs-keyword">for</span> <span class="hljs-title class_">MyBox</span>&lt;T&gt; &#123;<br>    <span class="hljs-keyword">type</span> <span class="hljs-title class_">Target</span> = T;<br><br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">deref</span>(&amp;<span class="hljs-keyword">self</span>) <span class="hljs-punctuation">-&gt;</span> &amp;<span class="hljs-keyword">Self</span>::Target &#123;<br>        &amp;<span class="hljs-keyword">self</span>.<span class="hljs-number">0</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
@@ -355,8 +353,7 @@ Deref 特征</a></h5>
 进行解引用</li>
 </ul>
 <p>之前报错的代码此时已能顺利编译通过。当然，标准库实现的智能指针要考虑很多边边角角情况，肯定比我们的实现要复杂。</p>
-<h2 id="背后的原理"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/deref.html#-背后的原理"><code>*</code>
-背后的原理</a></h2>
+<h2 id="背后的原理">3. <code>*</code> 背后的原理</h2>
 <p>当我们对智能指针 <code>Box</code> 进行解引用时，实际上 Rust
 为我们调用了以下方法：</p>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs rust">*(y.<span class="hljs-title function_ invoke__">deref</span>())<br></code></pre></td></tr></table></figure>
@@ -370,8 +367,8 @@ Deref 特征</a></h5>
 <p>需要注意的是，<code>*</code> 不会无限递归替换，从 <code>*y</code> 到
 <code>*(y.deref())</code> 只会发生一次，而不会继续进行替换然后产生形如
 <code>*((y.deref()).deref())</code> 的怪物。</p>
-<h2 id="函数和方法中的隐式-deref-转换"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/deref.html#函数和方法中的隐式-deref-转换">函数和方法中的隐式
-Deref 转换</a></h2>
+<h2 id="函数和方法中的隐式-deref-转换">4. 函数和方法中的隐式 Deref
+转换</h2>
 <p>对于函数和方法的传参，Rust
 提供了一个极其有用的隐式转换：<code>Deref</code>转换。若一个类型实现了
 <code>Deref</code>
@@ -388,8 +385,7 @@ Deref 转换</a></h2>
 <li>必须使用 <code>&amp;s</code> 的方式来触发
 <code>Deref</code>(仅引用类型的实参才会触发自动解引用)</li>
 </ul>
-<h4 id="连续的隐式-deref-转换"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/deref.html#连续的隐式-deref-转换">连续的隐式
-Deref 转换</a></h4>
+<h3 id="连续的隐式-deref-转换">4.1 连续的隐式 Deref 转换</h3>
 <p>如果你以为 <code>Deref</code>
 仅仅这点作用，那就大错特错了。<code>Deref</code>
 可以支持连续的隐式转换，直到找到适合的形式为止：</p>
@@ -425,8 +421,7 @@ Deref 转换</a></h4>
 <code>MyBox</code> 根本没有没有实现该方法，能调用
 <code>to_string</code>，完全是因为编译器对 <code>MyBox</code> 应用了
 <code>Deref</code> 的结果（<strong>方法调用会自动解引用</strong>）。</p>
-<h2 id="deref-规则总结"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/deref.html#deref-规则总结">Deref
-规则总结</a></h2>
+<h2 id="deref-规则总结">5. Deref 规则总结</h2>
 <p>在上面，我们零碎的介绍了不少关于 <code>Deref</code>
 特征的知识，下面来通过较为正式的方式来对其规则进行下总结。</p>
 <p>一个类型为 <code>T</code> 的对象 <code>foo</code>，如果
@@ -435,7 +430,7 @@ Deref 转换</a></h4>
 <code>&amp;U</code>。</p>
 <p>粗看这条规则，貌似有点类似于 <code>AsRef</code>，而跟
 <code>解引用</code> 似乎风马牛不相及，实际里面有些玄妙之处。</p>
-<h4 id="引用归一化"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/deref.html#引用归一化">引用归一化</a></h4>
+<h3 id="引用归一化">5.1 引用归一化</h3>
 <p>Rust 编译器实际上只能对 <code>&amp;v</code>
 形式的引用进行解引用操作，那么问题来了，如果是一个智能指针或者
 <code>&amp;&amp;&amp;&amp;v</code> 类型的呢？
@@ -461,10 +456,9 @@ Deref 转换</a></h4>
 <code>&amp;T</code>。</p>
 <p>PS: 以下是 <code>LLVM</code> 编译后的部分中间层代码：</p>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-comment">// Rust 代码</span><br><span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">_2</span>: &amp;<span class="hljs-type">i32</span>;<br><span class="hljs-keyword">let</span> <span class="hljs-variable">_3</span>: &amp;&amp;&amp;&amp;<span class="hljs-type">i32</span>;<br><br>bb0: &#123;<br>    _2 = (*(*(*_3)))<br>&#125;<br></code></pre></td></tr></table></figure>
-<h4 id="几个例子"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/deref.html#几个例子">几个例子</a></h4>
+<h3 id="几个例子">5.2 几个例子</h3>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">foo</span>(s: &amp;<span class="hljs-type">str</span>) &#123;&#125;<br><br><span class="hljs-comment">// 由于 String 实现了 Deref&lt;Target=str&gt;</span><br><span class="hljs-keyword">let</span> <span class="hljs-variable">owned</span> = <span class="hljs-string">&quot;Hello&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>();<br><br><span class="hljs-comment">// 因此下面的函数可以正常运行：</span><br><span class="hljs-title function_ invoke__">foo</span>(&amp;owned);<br><span class="hljs-keyword">use</span> std::rc::Rc;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">foo</span>(s: &amp;<span class="hljs-type">str</span>) &#123;&#125;<br><br><span class="hljs-comment">// String 实现了 Deref&lt;Target=str&gt;</span><br><span class="hljs-keyword">let</span> <span class="hljs-variable">owned</span> = <span class="hljs-string">&quot;Hello&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>();<br><span class="hljs-comment">// 且 Rc 智能指针可以被自动脱壳为内部的 `owned` 引用： &amp;String ，然后 &amp;String 再自动解引用为 &amp;str</span><br><span class="hljs-keyword">let</span> <span class="hljs-variable">counted</span> = Rc::<span class="hljs-title function_ invoke__">new</span>(owned);<br><br><span class="hljs-comment">// 因此下面的函数可以正常运行:</span><br><span class="hljs-title function_ invoke__">foo</span>(&amp;counted);<br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Foo</span>;<br><br><span class="hljs-keyword">impl</span> <span class="hljs-title class_">Foo</span> &#123;<br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">foo</span>(&amp;<span class="hljs-keyword">self</span>) &#123; <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Foo&quot;</span>); &#125;<br>&#125;<br><br><span class="hljs-keyword">let</span> <span class="hljs-variable">f</span> = &amp;&amp;Foo;<br><br>f.<span class="hljs-title function_ invoke__">foo</span>();<br>(&amp;f).<span class="hljs-title function_ invoke__">foo</span>();<br>(&amp;&amp;f).<span class="hljs-title function_ invoke__">foo</span>();<br>(&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;f).<span class="hljs-title function_ invoke__">foo</span>();<br></code></pre></td></tr></table></figure>
-<h2 id="三种-deref-转换"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/deref.html#三种-deref-转换">三种
-Deref 转换</a></h2>
+<h2 id="三种-deref-转换">6. 三种 Deref 转换</h2>
 <p>在之前，我们讲的都是不可变的 <code>Deref</code> 转换，实际上 Rust
 还支持将一个可变的引用转换成另一个可变的引用以及将一个可变引用转换成不可变的引用，规则如下：</p>
 <ul>
@@ -487,11 +481,11 @@ Deref 转换</a></h2>
 <code>&amp;mut MyBox&lt;String&gt;</code> 转换为
 <code>&amp;mut String</code></li>
 </ul>
-<p>对于上述三条规则中的第三条，它比另外两条稍微复杂了点：Rust
-可以把可变引用隐式的转换成不可变引用，但反之则不行。</p>
+<p>对于上述三条规则中的第三条，它比另外两条稍微复杂了点：<strong>Rust
+可以把可变引用隐式的转换成不可变引用</strong>，但反之则不行。</p>
 <p>如果从 Rust
 的所有权和借用规则的角度考虑，当你拥有一个可变的引用，那该引用肯定是对应数据的唯一借用，那么此时将可变引用变成不可变引用并不会破坏借用规则；但是如果你拥有一个不可变引用，那同时可能还存在其它几个不可变的引用，如果此时将其中一个不可变引用转换成可变引用，就变成了可变引用与不可变引用的共存，最终破坏了借用规则。</p>
-<h2 id="总结"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/deref.html#总结">总结</a></h2>
+<h2 id="总结">7. 总结</h2>
 <p><code>Deref</code> 可以说是 Rust
 中最常见的隐式类型转换，而且它可以连续的实现如
 <code>Box&lt;String&gt; -&gt; String -&gt; &amp;str</code>

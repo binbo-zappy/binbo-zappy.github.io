@@ -19,16 +19,16 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Cell 和 RefCell Rust 的编译器之严格，可以说是举世无双。特别是在所有权方面，Rust 通过严格的规则来保证所有权和借用的正确性，最终为程序的安全保驾护航。 但是严格是一把双刃剑，带来安全提升的同时，损失了灵活性，有时甚至会让用户痛苦不堪、怨声载道。因此 Rust 提供了 Cell 和 RefCell 用于内部可变性，简而言之，可以在拥有不可变引用的同时修改目标数据，对">
+    <meta name="description" content="Cell 和 RefCell Rust 的编译器之严格，可以说是举世无双。特别是在所有权方面，Rust 通过严格的规则来保证所有权和借用的正确性，最终为程序的安全保驾护航。 但是严格是一把双刃剑，带来安全提升的同时，损失了灵活性，有时甚至会让用户痛苦不堪、怨声载道。因此 Rust 提供了 Cell 和 RefCell 用于内部可变性，简而言之，可以在拥有不可变引用的同时修改目标数据，对于">
 <meta property="og:type" content="article">
 <meta property="og:title" content="4.4.5 Cell 与 RefCell 内部可变性">
 <meta property="og:url" content="http://binbo-zappy.github.io/2025/02/05/rust%E5%9C%A3%E7%BB%8F/4-4-5-Cell%E4%B8%8ERefCell%E5%86%85%E9%83%A8%E5%8F%AF%E5%8F%98%E6%80%A7/index.html">
 <meta property="og:site_name" content="Binbo">
-<meta property="og:description" content="Cell 和 RefCell Rust 的编译器之严格，可以说是举世无双。特别是在所有权方面，Rust 通过严格的规则来保证所有权和借用的正确性，最终为程序的安全保驾护航。 但是严格是一把双刃剑，带来安全提升的同时，损失了灵活性，有时甚至会让用户痛苦不堪、怨声载道。因此 Rust 提供了 Cell 和 RefCell 用于内部可变性，简而言之，可以在拥有不可变引用的同时修改目标数据，对">
+<meta property="og:description" content="Cell 和 RefCell Rust 的编译器之严格，可以说是举世无双。特别是在所有权方面，Rust 通过严格的规则来保证所有权和借用的正确性，最终为程序的安全保驾护航。 但是严格是一把双刃剑，带来安全提升的同时，损失了灵活性，有时甚至会让用户痛苦不堪、怨声载道。因此 Rust 提供了 Cell 和 RefCell 用于内部可变性，简而言之，可以在拥有不可变引用的同时修改目标数据，对于">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/rust.jpg">
 <meta property="article:published_time" content="2025-02-05T05:41:25.000Z">
-<meta property="article:modified_time" content="2025-02-09T02:52:37.009Z">
+<meta property="article:modified_time" content="2025-02-10T01:02:48.571Z">
 <meta property="article:author" content="Binbo">
 <meta property="article:tag" content="rust">
 <meta name="twitter:card" content="summary_large_image">
@@ -278,8 +278,7 @@
             
               <div class="markdown-body">
                 
-                <h1 id="cell-和-refcell"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/cell-refcell.html#cell-和-refcell">Cell
-和 RefCell</a></h1>
+                <h1 id="cell-和-refcell">Cell 和 RefCell</h1>
 <p>Rust 的编译器之严格，可以说是举世无双。特别是在所有权方面，Rust
 通过严格的规则来保证所有权和借用的正确性，最终为程序的安全保驾护航。</p>
 <p>但是严格是一把双刃剑，带来安全提升的同时，损失了灵活性，有时甚至会让用户痛苦不堪、怨声载道。因此
@@ -290,7 +289,7 @@ Rust 提供了 <code>Cell</code> 和 <code>RefCell</code>
 来做到这一点，但是对于使用者来说，这些都是透明的，因为这些不安全代码都被封装到了安全的
 API 中</p>
 </blockquote>
-<h2 id="cell"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/cell-refcell.html#cell">Cell</a></h2>
+<h2 id="cell">1. Cell</h2>
 <p><code>Cell</code> 和 <code>RefCell</code> 在功能上没有区别，区别在于
 <code>Cell&lt;T&gt;</code> 适用于 <code>T</code> 实现 <code>Copy</code>
 的情况：</p>
@@ -309,7 +308,7 @@ Rust 的借用规则，但是由于 <code>Cell</code>
 <p>编译器会立刻报错，因为 <code>String</code> 没有实现 <code>Copy</code>
 特征：</p>
 <figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs console">| pub struct String &#123;<br>| ----------------- doesn&#x27;t satisfy `String: Copy`<br>|<br>= note: the following trait bounds were not satisfied:<br>        `String: Copy`<br></code></pre></td></tr></table></figure>
-<h2 id="refcell"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/cell-refcell.html#refcell">RefCell</a></h2>
+<h2 id="refcell">2. RefCell</h2>
 <p>由于 <code>Cell</code> 类型针对的是实现了 <code>Copy</code>
 特征的值类型，因此在实际开发中，<code>Cell</code>
 使用的并不多，因为我们要解决的往往是可变、不可变引用共存导致的问题，此时就需要借助于
@@ -349,8 +348,7 @@ Rust 的借用规则，但是由于 <code>Cell</code>
 <figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs console">thread &#x27;main&#x27; panicked at &#x27;already borrowed: BorrowMutError&#x27;, src/main.rs:6:16<br>note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace<br></code></pre></td></tr></table></figure>
 <p>但是依然会因为违背了借用规则导致了运行期
 <code>panic</code>，这非常像中国的天网，它也许会被罪犯蒙蔽一时，但是并不会被蒙蔽一世，任何导致安全风险的存在都将不能被容忍，法网恢恢，疏而不漏。</p>
-<h4 id="refcell-为何存在"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/cell-refcell.html#refcell-为何存在">RefCell
-为何存在</a></h4>
+<h3 id="refcell-为何存在">2.1 RefCell 为何存在</h3>
 <p>相信肯定有读者有疑问了，这么做有任何意义吗？还不如在编译期报错，至少能提前发现问题，而且性能还更好。</p>
 <p>存在即合理，究其根因，在于 Rust
 编译期的<strong>宁可错杀，绝不放过</strong>的原则，当编译器不能确定你的代码是否正确时，就统统会判定为错误，因此难免会导致一些误报。</p>
@@ -366,8 +364,7 @@ Rust 的借用规则，但是由于 <code>Cell</code>
 <code>panic</code>，然后告诉我们哪些借用冲突了。</p>
 <p>总之，当你确信编译器误报但不知道该如何解决时，或者你有一个引用类型，需要被四处使用和修改然后导致借用关系难以管理时，都可以优先考虑使用
 <code>RefCell</code>。</p>
-<h4 id="refcell-简单总结"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/cell-refcell.html#refcell-简单总结">RefCell
-简单总结</a></h4>
+<h3 id="refcell-简单总结">2.2 RefCell 简单总结</h3>
 <ul>
 <li>与 <code>Cell</code> 用于可 <code>Copy</code>
 的值不同，<code>RefCell</code> 用于引用</li>
@@ -378,8 +375,8 @@ Rust 的借用规则，但是由于 <code>Cell</code>
 <li>使用 <code>RefCell</code> 时，违背借用规则会导致运行期的
 <code>panic</code></li>
 </ul>
-<h2 id="选择-cell-还是-refcell"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/cell-refcell.html#选择-cell-还是-refcell">选择
-<code>Cell</code> 还是 <code>RefCell</code></a></h2>
+<h2 id="选择-cell-还是-refcell">3. 选择 <code>Cell</code> 还是
+<code>RefCell</code></h2>
 <p>根据本文的内容，我们可以大概总结下两者的区别：</p>
 <ul>
 <li><code>Cell</code> 只适用于 <code>Copy</code> 类型，用于提供值，而
@@ -387,7 +384,7 @@ Rust 的借用规则，但是由于 <code>Cell</code>
 <li><code>Cell</code> 不会 <code>panic</code>，而 <code>RefCell</code>
 会</li>
 </ul>
-<h4 id="性能比较"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/cell-refcell.html#性能比较">性能比较</a></h4>
+<h3 id="性能比较">3.1 性能比较</h3>
 <p><code>Cell</code>
 没有额外的性能损耗，例如以下两段代码的性能其实是一致的：</p>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-comment">// code snipet 1</span><br><span class="hljs-keyword">let</span> <span class="hljs-variable">x</span> = Cell::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-number">1</span>);<br><span class="hljs-keyword">let</span> <span class="hljs-variable">y</span> = &amp;x;<br><span class="hljs-keyword">let</span> <span class="hljs-variable">z</span> = &amp;x;<br>x.<span class="hljs-title function_ invoke__">set</span>(<span class="hljs-number">2</span>);<br>y.<span class="hljs-title function_ invoke__">set</span>(<span class="hljs-number">3</span>);<br>z.<span class="hljs-title function_ invoke__">set</span>(<span class="hljs-number">4</span>);<br><span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;&#125;&quot;</span>, x.<span class="hljs-title function_ invoke__">get</span>());<br><br><span class="hljs-comment">// code snipet 2</span><br><span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">x</span> = <span class="hljs-number">1</span>;<br><span class="hljs-keyword">let</span> <span class="hljs-variable">y</span> = &amp;<span class="hljs-keyword">mut</span> x;<br><span class="hljs-keyword">let</span> <span class="hljs-variable">z</span> = &amp;<span class="hljs-keyword">mut</span> x;<br>x = <span class="hljs-number">2</span>;<br>*y = <span class="hljs-number">3</span>;<br>*z = <span class="hljs-number">4</span>;<br><span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;&#125;&quot;</span>, x);<br></code></pre></td></tr></table></figure>
@@ -399,7 +396,7 @@ Rust 的借用规则，但是由于 <code>Cell</code>
 <p>总之，当非要使用内部可变性时，首选
 <code>Cell</code>，只有你的类型没有实现 <code>Copy</code> 时，才去选择
 <code>RefCell</code>。</p>
-<h2 id="内部可变性"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/cell-refcell.html#内部可变性">内部可变性</a></h2>
+<h2 id="内部可变性">4. 内部可变性</h2>
 <p>之前我们提到 <code>RefCell</code>
 具有内部可变性，何为内部可变性？简单来说，对一个不可变的值进行可变借用，但这个并不符合
 Rust 的基本借用规则：</p>
@@ -427,8 +424,7 @@ Rust
 功能很弱，但是并不妨碍我们演示内部可变性的核心用法：通过包裹一层
 <code>RefCell</code>，成功的让 <code>&amp;self</code> 中的
 <code>msg_cache</code> 成为一个可变值，然后实现对其的修改。</p>
-<h2 id="rc-refcell-组合使用"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/cell-refcell.html#rc--refcell-组合使用">Rc
-+ RefCell 组合使用</a></h2>
+<h2 id="rc-refcell-组合使用">5. Rc + RefCell 组合使用</h2>
 <p>在 Rust 中，一个常见的组合就是 <code>Rc</code> 和
 <code>RefCell</code>
 在一起使用，前者可以实现一个数据拥有多个所有者，后者可以实现数据的可变性：</p>
@@ -441,17 +437,16 @@ Rust
 的所有者们共享同一个底层的数据，因此当一个所有者修改了数据时，会导致全部所有者持有的数据都发生了变化。</p>
 <p>程序的运行结果也在预料之中：</p>
 <figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs console">RefCell &#123; value: &quot;我很善变，还拥有多个主人, oh yeah!&quot; &#125;<br>RefCell &#123; value: &quot;我很善变，还拥有多个主人, oh yeah!&quot; &#125;<br>RefCell &#123; value: &quot;我很善变，还拥有多个主人, oh yeah!&quot; &#125;<br></code></pre></td></tr></table></figure>
-<h4 id="性能损耗"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/cell-refcell.html#性能损耗">性能损耗</a></h4>
+<h3 id="性能损耗">5.1 性能损耗</h3>
 <p>相信这两者组合在一起使用时，很多人会好奇到底性能如何，下面我们来简单分析下。</p>
 <p>首先给出一个大概的结论，这两者结合在一起使用的性能其实非常高，大致相当于没有线程安全版本的
 C++ <code>std::shared_ptr</code> 指针，事实上，C++
 这个指针的主要开销也在于原子性这个并发原语上，毕竟线程安全在哪个语言中开销都不小。</p>
-<h4 id="内存损耗"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/cell-refcell.html#内存损耗">内存损耗</a></h4>
+<h3 id="内存损耗">5.2 内存损耗</h3>
 <p>两者结合的数据结构与下面类似：</p>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Wrapper</span>&lt;T&gt; &#123;<br>    <span class="hljs-comment">// Rc</span><br>    strong_count: <span class="hljs-type">usize</span>,<br>    weak_count: <span class="hljs-type">usize</span>,<br><br>    <span class="hljs-comment">// Refcell</span><br>    borrow_count: <span class="hljs-type">isize</span>,<br><br>    <span class="hljs-comment">// 包裹的数据</span><br>    item: T,<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>从上面可以看出，从对内存的影响来看，仅仅多分配了三个<code>usize/isize</code>，并没有其它额外的负担。</p>
-<h4 id="cpu-损耗"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/cell-refcell.html#cpu-损耗">CPU
-损耗</a></h4>
+<h3 id="cpu-损耗">5.3 CPU 损耗</h3>
 <p>从 CPU 来看，损耗如下：</p>
 <ul>
 <li>对 <code>Rc&lt;T&gt;</code> 解引用是免费的（编译期），但是
@@ -471,8 +466,7 @@ C++ <code>std::shared_ptr</code> 指针，事实上，C++
 </ul>
 <p>其实这些细节不必过于关注，只要知道 CPU
 消耗也非常低，甚至编译器还会对此进行进一步优化！</p>
-<h4 id="cpu-缓存-miss"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/cell-refcell.html#cpu-缓存-miss">CPU
-缓存 Miss</a></h4>
+<h3 id="cpu-缓存-miss">5.4 CPU 缓存 Miss</h3>
 <p>唯一需要担心的可能就是这种组合数据结构对于 CPU
 缓存是否亲和，这个我们无法证明，只能提出来存在这个可能性，最终的性能影响还需要在实际场景中进行测试。</p>
 <p>总之，分析这两者组合的性能还挺复杂的，大概总结下：</p>
@@ -482,8 +476,8 @@ C++ <code>std::shared_ptr</code> 指针，事实上，C++
 额外的引入了一次间接取值（<code>*</code>），在少数场景下可能会造成性能上的显著损失</li>
 <li>CPU 缓存可能也不够亲和</li>
 </ul>
-<h2 id="通过-cellfrom_mut-解决借用冲突"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/cell-refcell.html#通过-cellfrom_mut-解决借用冲突">通过
-<code>Cell::from_mut</code> 解决借用冲突</a></h2>
+<h2 id="通过-cellfrom_mut-解决借用冲突">6. 通过
+<code>Cell::from_mut</code> 解决借用冲突</h2>
 <p>在 Rust 1.37 版本中新增了两个非常实用的方法：</p>
 <ul>
 <li>Cell::from_mut，该方法将 <code>&amp;mut T</code> 转为
@@ -505,7 +499,7 @@ C++ <code>std::shared_ptr</code> 指针，事实上，C++
 <p>当然，以上代码的本质还是对 <code>Cell</code>
 的运用，只不过这两个方法可以很方便的帮我们把 <code>&amp;mut [T]</code>
 类型转换成 <code>&amp;[Cell&lt;T&gt;]</code> 类型。</p>
-<h2 id="总结"><a target="_blank" rel="noopener" href="https://course.rs/advance/smart-pointer/cell-refcell.html#总结">总结</a></h2>
+<h2 id="总结">7. 总结</h2>
 <p><code>Cell</code> 和 <code>RefCell</code>
 都为我们带来了内部可变性这个重要特性，同时还将借用规则的检查从编译期推迟到运行期，但是这个检查并不能被绕过，该来早晚还是会来，<code>RefCell</code>
 在运行期的报错会造成 <code>panic</code>。</p>

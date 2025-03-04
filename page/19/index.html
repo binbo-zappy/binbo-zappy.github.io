@@ -225,23 +225,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/27/effective-cpp/5-%E5%AE%9E%E7%8E%B0/" target="_self">
-          <img src="/imgs/effective-cpp.png" srcset="/img/loading.gif" lazyload alt="5. 实现">
+        <a href="/2024/12/07/Redis/04-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" target="_self">
+          <img src="/imgs/redis.jpg" srcset="/img/loading.gif" lazyload alt="04. 数据类型">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/27/effective-cpp/5-%E5%AE%9E%E7%8E%B0/" target="_self">
-          5. 实现
+        <a href="/2024/12/07/Redis/04-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" target="_self">
+          04. 数据类型
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/27/effective-cpp/5-%E5%AE%9E%E7%8E%B0/" target="_self">
+      <a class="index-excerpt " href="/2024/12/07/Redis/04-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" target="_self">
         <div>
-          26. 尽可能延后变量定义式的出现时间  当定义了一个变量而其类型带有一个构造函数或析构函数，那么当程序的控制流(control flow)到达这个变量定义式时，你便得承受构造成本；当这个变量离开其作用域时，你便得承受析构成本。即使这个变量最终并未被使用，仍需耗费这些成本，所以你应该尽可能避免这种情形。 这让我们联想起本条款所谓“尽可能延后”的真正意义。你不只应该延后变量的定义，直到非得
+          Redis数据类型 5种常用数据类型：  string   类比java的String   hash   类比java的HashMap   list   类比java的 LinkedList   set   类比Java的 HashSet   sorted_set   也称Zset，类比java的 TreeSet  redis数据存储
         </div>
       </a>
 
@@ -249,8 +249,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-27 20:17" pubdate>
-              2024-11-27
+            <time datetime="2024-12-07 14:22" pubdate>
+              2024-12-07
             </time>
           </div>
         
@@ -265,12 +265,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/c/" class="category-chain-item">c++</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/" class="category-chain-item">后端开发</a>
   
   
     <span>></span>
     
-  <a href="/categories/c/effective-c/" class="category-chain-item">effective c++</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Redis/" class="category-chain-item">Redis</a>
   
   
 
@@ -287,7 +287,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/c/">#c++</a>
+              <a href="/tags/Redis/">#Redis</a>
             
           </div>
         
@@ -299,23 +299,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/27/effective-cpp/4-%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%A3%B0%E6%98%8E/" target="_self">
-          <img src="/imgs/effective-cpp.png" srcset="/img/loading.gif" lazyload alt="4. 设计与声明">
+        <a href="/2024/12/07/Redis/03-%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" target="_self">
+          <img src="/imgs/redis.jpg" srcset="/img/loading.gif" lazyload alt="03. 基本操作">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/27/effective-cpp/4-%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%A3%B0%E6%98%8E/" target="_self">
-          4. 设计与声明
+        <a href="/2024/12/07/Redis/03-%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" target="_self">
+          03. 基本操作
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/27/effective-cpp/4-%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%A3%B0%E6%98%8E/" target="_self">
+      <a class="index-excerpt " href="/2024/12/07/Redis/03-%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" target="_self">
         <div>
-          18. 让接口容易被正确使用，不易被误用 1234class Date&#123;public:    Date(int month, int day, int year);&#125;;  函数接口 可能以错误的次序传递参数，或者传递一个无效的月份或天数 导入简单的外覆类型来区别天数，月份等  1234567891011121314151617struct Day&#123;exp
+          常用命令 测试是否连通 功能：测试客户端是否连上了redis服务 命令格式： 1ping 成功时响应： 1PONG 信息添加 功能：设置 key, value数据 命令格式： 1set key value 示例： 1set name zhangsan 信息查询 功能：根据key查询对应的value，如果不存在，返回空（nil） 命令格式： 1get key 示例：
         </div>
       </a>
 
@@ -323,8 +323,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-27 20:17" pubdate>
-              2024-11-27
+            <time datetime="2024-12-07 14:22" pubdate>
+              2024-12-07
             </time>
           </div>
         
@@ -339,12 +339,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/c/" class="category-chain-item">c++</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/" class="category-chain-item">后端开发</a>
   
   
     <span>></span>
     
-  <a href="/categories/c/effective-c/" class="category-chain-item">effective c++</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Redis/" class="category-chain-item">Redis</a>
   
   
 
@@ -361,7 +361,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/c/">#c++</a>
+              <a href="/tags/Redis/">#Redis</a>
             
           </div>
         
@@ -373,23 +373,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/27/effective-cpp/3-%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86/" target="_self">
-          <img src="/imgs/effective-cpp.png" srcset="/img/loading.gif" lazyload alt="3. 资源管理">
+        <a href="/2024/12/07/Redis/02-Redis%E7%AE%80%E4%BB%8B/" target="_self">
+          <img src="/imgs/redis.jpg" srcset="/img/loading.gif" lazyload alt="02. Redis简介">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/27/effective-cpp/3-%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86/" target="_self">
-          3. 资源管理
+        <a href="/2024/12/07/Redis/02-Redis%E7%AE%80%E4%BB%8B/" target="_self">
+          02. Redis简介
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/27/effective-cpp/3-%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86/" target="_self">
+      <a class="index-excerpt " href="/2024/12/07/Redis/02-Redis%E7%AE%80%E4%BB%8B/" target="_self">
         <div>
-          13. 以对象管理资源 123456void f()&#123;	Investment *pInv = createInvestment();	···	delete pInv;&#125;  可能无法执行delete  在···中过早return 若delete位于某循环中，由于continue或者goto语句过早退出 ···内抛出异常 泄露的不只是内含投资对象的那块内存，还包括那
+          Redis简介 Redis：(Remote Dictionary Server 的每个单词前两个字母），是用C语言开发的一个开源高性能键值对（Key-Value）数据库。 遵守BSD协议，完全开源免费，基于内存运行，并支持持久化。也称为数据结构服务器。 特征：  数据间没有必然的关联关系 内部采用单线程机制进行工作 高性能 多数据类型支持  字符串类型    stri
         </div>
       </a>
 
@@ -397,8 +397,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-27 20:17" pubdate>
-              2024-11-27
+            <time datetime="2024-12-07 14:22" pubdate>
+              2024-12-07
             </time>
           </div>
         
@@ -413,12 +413,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/c/" class="category-chain-item">c++</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/" class="category-chain-item">后端开发</a>
   
   
     <span>></span>
     
-  <a href="/categories/c/effective-c/" class="category-chain-item">effective c++</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Redis/" class="category-chain-item">Redis</a>
   
   
 
@@ -435,7 +435,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/c/">#c++</a>
+              <a href="/tags/Redis/">#Redis</a>
             
           </div>
         
@@ -447,23 +447,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/27/effective-cpp/2-%E6%9E%84%E9%80%A0%E3%80%81%E6%9E%90%E6%9E%84%E3%80%81%E8%B5%8B%E5%80%BC%E8%BF%90%E7%AE%97/" target="_self">
-          <img src="/imgs/effective-cpp.png" srcset="/img/loading.gif" lazyload alt="2. 构造、析构、赋值运算">
+        <a href="/2024/12/07/Redis/01-NoSql%E7%AE%80%E4%BB%8B/" target="_self">
+          <img src="/imgs/redis.jpg" srcset="/img/loading.gif" lazyload alt="01. NoSql简介">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/27/effective-cpp/2-%E6%9E%84%E9%80%A0%E3%80%81%E6%9E%90%E6%9E%84%E3%80%81%E8%B5%8B%E5%80%BC%E8%BF%90%E7%AE%97/" target="_self">
-          2. 构造、析构、赋值运算
+        <a href="/2024/12/07/Redis/01-NoSql%E7%AE%80%E4%BB%8B/" target="_self">
+          01. NoSql简介
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/27/effective-cpp/2-%E6%9E%84%E9%80%A0%E3%80%81%E6%9E%90%E6%9E%84%E3%80%81%E8%B5%8B%E5%80%BC%E8%BF%90%E7%AE%97/" target="_self">
+      <a class="index-excerpt " href="/2024/12/07/Redis/01-NoSql%E7%AE%80%E4%BB%8B/" target="_self">
         <div>
-          5. 了解c++默默编写并调用那些函数  在C++处理之后，empty class（空类）不再是个空类，如果没有声明，编译器就会为它声明一个copy构造函数，一个copy assignment 操作符和一个析构函数，所有这些函数都是public且inline的。 如果声明了一个构造函数，编译器不再为它创建default构造函数 在一个“内含reference成员”的class内支持赋
+          NoSql简介 关系型数据库：  性能瓶颈：磁盘IO性能低下 扩展瓶颈：数据关系复杂，扩展性差，不便于大规模集群。  解决思路：  降低磁盘IO次数，越低越好。   使用内存存储   尽量去除数据间的关系，越简单越好   不存储关系，仅存储数据  NoSql ： 即 Not-Only SQL （泛指非关系型数据库），作为关系型数据库的补充。 作用：应对基于
         </div>
       </a>
 
@@ -471,8 +471,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-27 20:17" pubdate>
-              2024-11-27
+            <time datetime="2024-12-07 14:22" pubdate>
+              2024-12-07
             </time>
           </div>
         
@@ -487,12 +487,12 @@
     
       <span class="category-chain">
         
-  <a href="/categories/c/" class="category-chain-item">c++</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/" class="category-chain-item">后端开发</a>
   
   
     <span>></span>
     
-  <a href="/categories/c/effective-c/" class="category-chain-item">effective c++</a>
+  <a href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Redis/" class="category-chain-item">Redis</a>
   
   
 
@@ -509,7 +509,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/c/">#c++</a>
+              <a href="/tags/Redis/">#Redis</a>
             
           </div>
         
@@ -521,23 +521,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/27/effective-cpp/1-%E8%AE%A9%E8%87%AA%E5%B7%B1%E4%B9%A0%E6%83%AFC++/" target="_self">
-          <img src="/imgs/effective-cpp.png" srcset="/img/loading.gif" lazyload alt="1. 让自己习惯C++">
+        <a href="/2024/12/07/PR-ML/12-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/" target="_self">
+          <img src="/imgs/pr-ml.jpg" srcset="/img/loading.gif" lazyload alt="12. 强化学习">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/27/effective-cpp/1-%E8%AE%A9%E8%87%AA%E5%B7%B1%E4%B9%A0%E6%83%AFC++/" target="_self">
-          1. 让自己习惯C++
+        <a href="/2024/12/07/PR-ML/12-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/" target="_self">
+          12. 强化学习
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/27/effective-cpp/1-%E8%AE%A9%E8%87%AA%E5%B7%B1%E4%B9%A0%E6%83%AFC++/" target="_self">
+      <a class="index-excerpt " href="/2024/12/07/PR-ML/12-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/" target="_self">
         <div>
-          1. 视C++为一个语言联邦  C语言 Object-Oriented C++ Template C++。这是C++的泛型编程 STL。STL是个template程序库，  2. 尽量以const,enum,inline替换#define 1#define ASPECT_RATIO 1.653  记号名称ASPECT_RATIO也许从未被编译器看见：也许在编译器开始处理源码之
+          强化学习应用  两个应用  强化学习常用什么过程描述  马尔科夫性是什么  强化学习问题基本设置  机器所处环境E 状态空间：是机器感知到的环境的描述 机器能采取的行为空间A 策略(policy)π：X→A(或π：X×A→R) 潜在的状态转移(概率)函数Ｐ：X×X×A→R 潜在的奖赏(reward)函数Ｒ：X×X×A→R或Ｒ：X×X→R 强化学习对应四元组
         </div>
       </a>
 
@@ -545,8 +545,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-27 20:15" pubdate>
-              2024-11-27
+            <time datetime="2024-12-07 12:58" pubdate>
+              2024-12-07
             </time>
           </div>
         
@@ -561,13 +561,20 @@
     
       <span class="category-chain">
         
-  <a href="/categories/c/" class="category-chain-item">c++</a>
+  <a href="/categories/AI/" class="category-chain-item">AI</a>
   
   
     <span>></span>
     
-  <a href="/categories/c/effective-c/" class="category-chain-item">effective c++</a>
+  <a href="/categories/AI/ML/" class="category-chain-item">ML</a>
   
+  
+    <span>></span>
+    
+  <a href="/categories/AI/ML/PR-ML/" class="category-chain-item">PR &amp; ML</a>
+  
+  
+
   
 
   
@@ -583,7 +590,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/c/">#c++</a>
+              <a href="/tags/ML/">#ML</a>
             
           </div>
         
@@ -595,23 +602,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/27/cpp-primer-plus/17-io%E3%80%81file/" target="_self">
-          <img src="/imgs/cpp-primer-plus.jpg" srcset="/img/loading.gif" lazyload alt="17. io、file">
+        <a href="/2024/12/07/PR-ML/11-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" target="_self">
+          <img src="/imgs/pr-ml.jpg" srcset="/img/loading.gif" lazyload alt="11. 深度学习">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/27/cpp-primer-plus/17-io%E3%80%81file/" target="_self">
-          17. io、file
+        <a href="/2024/12/07/PR-ML/11-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" target="_self">
+          11. 深度学习
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/27/cpp-primer-plus/17-io%E3%80%81file/" target="_self">
+      <a class="index-excerpt " href="/2024/12/07/PR-ML/11-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" target="_self">
         <div>
-          17.1 C++输入和输出概述 17.1.1 流和缓冲区  C++程序把输入和输出看作字节流 streambuf类为缓冲区提供了内存，并提供了用于填充缓冲区、访问缓冲区内容、刷新缓冲区和管理缓冲区内存的类方法 ios base类表示流的一般特征，如是否可读取、是二进制流还是文本流等： ios类基于ios base,其中包括了一个指向streambuf对象的指针成员； ostream
+          神经网络  神经网络是由具有适应性的简单单元组成的广泛并行互联的网络,它的组织能够模拟生物神经系统对真实世界物体所作出的反应 机器学习中的神经网络通常是指“神经网络学习”或者机器学习与神经网络两个学科的交叉部分  神经元模型  M-P神经元模型  输入：来自其他个神经元传递过来的输入信号 处理：输入信号通过带权重的连接进行传递,神经元接受到总输入值将与神经元的阈值进行比较
         </div>
       </a>
 
@@ -619,8 +626,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-27 19:34" pubdate>
-              2024-11-27
+            <time datetime="2024-12-07 12:58" pubdate>
+              2024-12-07
             </time>
           </div>
         
@@ -635,13 +642,20 @@
     
       <span class="category-chain">
         
-  <a href="/categories/c/" class="category-chain-item">c++</a>
+  <a href="/categories/AI/" class="category-chain-item">AI</a>
   
   
     <span>></span>
     
-  <a href="/categories/c/c-primer-plus/" class="category-chain-item">c++ primer plus</a>
+  <a href="/categories/AI/ML/" class="category-chain-item">ML</a>
   
+  
+    <span>></span>
+    
+  <a href="/categories/AI/ML/PR-ML/" class="category-chain-item">PR &amp; ML</a>
+  
+  
+
   
 
   
@@ -657,7 +671,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/c/">#c++</a>
+              <a href="/tags/ML/">#ML</a>
             
           </div>
         
@@ -669,23 +683,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/27/cpp-primer-plus/16-string%E7%B1%BB%E5%92%8C%E6%A0%87%E5%87%86%E6%A8%A1%E6%9D%BF%E5%BA%93/" target="_self">
-          <img src="/imgs/cpp-primer-plus.jpg" srcset="/img/loading.gif" lazyload alt="16. string类和标准模板库">
+        <a href="/2024/12/07/PR-ML/10-%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/" target="_self">
+          <img src="/imgs/pr-ml.jpg" srcset="/img/loading.gif" lazyload alt="10. 集成学习">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/27/cpp-primer-plus/16-string%E7%B1%BB%E5%92%8C%E6%A0%87%E5%87%86%E6%A8%A1%E6%9D%BF%E5%BA%93/" target="_self">
-          16. string类和标准模板库
+        <a href="/2024/12/07/PR-ML/10-%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/" target="_self">
+          10. 集成学习
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/27/cpp-primer-plus/16-string%E7%B1%BB%E5%92%8C%E6%A0%87%E5%87%86%E6%A8%A1%E6%9D%BF%E5%BA%93/" target="_self">
+      <a class="index-excerpt " href="/2024/12/07/PR-ML/10-%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/" target="_self">
         <div>
-          string类 1. 1.构造字符串 size_type是一个依赖于实现的整型，是在头文件string中定义的。string类将string:: npos定义为字符串的最大长度，通常为unsigned int的最大值。另外，表格中使用缩写NBTS(null-terminated string)来表示以空字符结束的字符串一传统的C字符串。   img  指定分割字符： 123s
+          个体与集成  集成学习(ensemblelearning)通过构建并结合多个学习器来提升性能 集成个体应：好而不同 假设基分类器的错误率相互独立，则由Hoeffding不等式可得集成的错误率为： 上式显示，在一定条件下，随着集成分类器数目的增加，集成的错误率将指数级下降，最终趋向于0 分析  上面的分析有一个关键假设：基学习器的误差相互独立 现实任务中，个体学习器是为解决同一
         </div>
       </a>
 
@@ -693,8 +707,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-27 19:34" pubdate>
-              2024-11-27
+            <time datetime="2024-12-07 12:58" pubdate>
+              2024-12-07
             </time>
           </div>
         
@@ -709,13 +723,20 @@
     
       <span class="category-chain">
         
-  <a href="/categories/c/" class="category-chain-item">c++</a>
+  <a href="/categories/AI/" class="category-chain-item">AI</a>
   
   
     <span>></span>
     
-  <a href="/categories/c/c-primer-plus/" class="category-chain-item">c++ primer plus</a>
+  <a href="/categories/AI/ML/" class="category-chain-item">ML</a>
   
+  
+    <span>></span>
+    
+  <a href="/categories/AI/ML/PR-ML/" class="category-chain-item">PR &amp; ML</a>
+  
+  
+
   
 
   
@@ -731,7 +752,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/c/">#c++</a>
+              <a href="/tags/ML/">#ML</a>
             
           </div>
         
@@ -743,23 +764,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/27/cpp-primer-plus/15-%E5%8F%8B%E5%85%83%E3%80%81%E5%BC%82%E5%B8%B8%E5%92%8C%E5%85%B6%E4%BB%96/" target="_self">
-          <img src="/imgs/cpp-primer-plus.jpg" srcset="/img/loading.gif" lazyload alt="15. 友元、异常和其他">
+        <a href="/2024/12/07/PR-ML/9-%E9%9D%9E%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/" target="_self">
+          <img src="/imgs/pr-ml.jpg" srcset="/img/loading.gif" lazyload alt="9. 非监督学习">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/27/cpp-primer-plus/15-%E5%8F%8B%E5%85%83%E3%80%81%E5%BC%82%E5%B8%B8%E5%92%8C%E5%85%B6%E4%BB%96/" target="_self">
-          15. 友元、异常和其他
+        <a href="/2024/12/07/PR-ML/9-%E9%9D%9E%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/" target="_self">
+          9. 非监督学习
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/27/cpp-primer-plus/15-%E5%8F%8B%E5%85%83%E3%80%81%E5%BC%82%E5%B8%B8%E5%92%8C%E5%85%B6%E4%BB%96/" target="_self">
+      <a class="index-excerpt " href="/2024/12/07/PR-ML/9-%E9%9D%9E%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/" target="_self">
         <div>
-          1. 友元 友元类、友元函数、类彼此成为对方的友元   img  共同的友元   img  2. 嵌套类 在另一个类中声明的类 被称为嵌套类，通过提供新的类型类作用域来避免名称混乱。   img  模板中也可以嵌套类 3. 异常 1.调用abort()   img    img  2.返回错误码   img    img
+          非监督学习  监督学习  根据一些给定的已知类别标号的样本，训练某种学习机器，使其能够对未知类别的样本进行分类  非监督学习  事先并不知道任何样本的类别标号，希望通过某种算法把一组未知类别的样本划分成若干类别。也称为聚类问题   聚类分析  基本思想  相似的归为一类。 模式相似性的度量。 无监督分类算法。  特征量的类型  物理量：重量、长度、速度
         </div>
       </a>
 
@@ -767,8 +788,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-27 19:34" pubdate>
-              2024-11-27
+            <time datetime="2024-12-07 12:58" pubdate>
+              2024-12-07
             </time>
           </div>
         
@@ -783,13 +804,20 @@
     
       <span class="category-chain">
         
-  <a href="/categories/c/" class="category-chain-item">c++</a>
+  <a href="/categories/AI/" class="category-chain-item">AI</a>
   
   
     <span>></span>
     
-  <a href="/categories/c/c-primer-plus/" class="category-chain-item">c++ primer plus</a>
+  <a href="/categories/AI/ML/" class="category-chain-item">ML</a>
   
+  
+    <span>></span>
+    
+  <a href="/categories/AI/ML/PR-ML/" class="category-chain-item">PR &amp; ML</a>
+  
+  
+
   
 
   
@@ -805,7 +833,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/c/">#c++</a>
+              <a href="/tags/ML/">#ML</a>
             
           </div>
         
@@ -817,23 +845,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/27/cpp-primer-plus/14-c++%E4%B8%AD%E7%9A%84%E4%BB%A3%E7%A0%81%E9%87%8D%E7%94%A8/" target="_self">
-          <img src="/imgs/cpp-primer-plus.jpg" srcset="/img/loading.gif" lazyload alt="14. c++中的代码重用">
+        <a href="/2024/12/07/PR-ML/8-SVM/" target="_self">
+          <img src="/imgs/pr-ml.jpg" srcset="/img/loading.gif" lazyload alt="8. SVM">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/27/cpp-primer-plus/14-c++%E4%B8%AD%E7%9A%84%E4%BB%A3%E7%A0%81%E9%87%8D%E7%94%A8/" target="_self">
-          14. c++中的代码重用
+        <a href="/2024/12/07/PR-ML/8-SVM/" target="_self">
+          8. SVM
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/27/cpp-primer-plus/14-c++%E4%B8%AD%E7%9A%84%E4%BB%A3%E7%A0%81%E9%87%8D%E7%94%A8/" target="_self">
+      <a class="index-excerpt " href="/2024/12/07/PR-ML/8-SVM/" target="_self">
         <div>
-          1. 包含对象成员的类 1.1. valaray类简介 使用explicit关闭隐式转换 valarray类是由头文件valarray支持的。顾名思义，这个类用于处理数值（或具有类似特性的类），它支持诸如将数组中所有元素的值相加以及在数组中找出最大和最小的值等操作。valarray被定义为一个模板类，以便能够处理不同的数据类型。 valaray类的方法：   img  C++包含
+          将训练样本分开的超平面可能有很多,哪一个好呢?  应选择”正中间”,容忍性好,鲁棒性高,泛化能力最强  超平面方程 svm基本型  最大间隔:寻找参数w和b,使得γ最大.  解的稀疏性   支持向量机解的稀疏性:训练完成后,大部分的训练样本都不需保留,最终模型仅与支持向量有关.  核函数  难以知道显式的核映射函数基本想法：不显式地设计核映射,而是设计核函数
         </div>
       </a>
 
@@ -841,8 +869,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-27 19:34" pubdate>
-              2024-11-27
+            <time datetime="2024-12-07 12:58" pubdate>
+              2024-12-07
             </time>
           </div>
         
@@ -857,13 +885,20 @@
     
       <span class="category-chain">
         
-  <a href="/categories/c/" class="category-chain-item">c++</a>
+  <a href="/categories/AI/" class="category-chain-item">AI</a>
   
   
     <span>></span>
     
-  <a href="/categories/c/c-primer-plus/" class="category-chain-item">c++ primer plus</a>
+  <a href="/categories/AI/ML/" class="category-chain-item">ML</a>
   
+  
+    <span>></span>
+    
+  <a href="/categories/AI/ML/PR-ML/" class="category-chain-item">PR &amp; ML</a>
+  
+  
+
   
 
   
@@ -879,7 +914,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/c/">#c++</a>
+              <a href="/tags/ML/">#ML</a>
             
           </div>
         
@@ -891,23 +926,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2024/11/27/cpp-primer-plus/13-%E7%B1%BB%E7%BB%A7%E6%89%BF/" target="_self">
-          <img src="/imgs/cpp-primer-plus.jpg" srcset="/img/loading.gif" lazyload alt="13. 类继承">
+        <a href="/2024/12/07/PR-ML/7-%E5%86%B3%E7%AD%96%E6%A0%91/" target="_self">
+          <img src="/imgs/pr-ml.jpg" srcset="/img/loading.gif" lazyload alt="7. 决策树">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2024/11/27/cpp-primer-plus/13-%E7%B1%BB%E7%BB%A7%E6%89%BF/" target="_self">
-          13. 类继承
+        <a href="/2024/12/07/PR-ML/7-%E5%86%B3%E7%AD%96%E6%A0%91/" target="_self">
+          7. 决策树
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2024/11/27/cpp-primer-plus/13-%E7%B1%BB%E7%BB%A7%E6%89%BF/" target="_self">
+      <a class="index-excerpt " href="/2024/12/07/PR-ML/7-%E5%86%B3%E7%AD%96%E6%A0%91/" target="_self">
         <div>
-          13.2 继承： is-a关系 c++三种继承方式：  公有继承  建立一种is-a关系，即派生类对象也是一个基类对象，可以对基类对象执行的任何操作，也可以对派生类对象执行  保护继承 私有继承  13.3 多态公有继承  在派生类中重新定义基类的方法。 使用虚方法，使用关键词virtual 基类声明了一个虚析构函数，为了确保释放派生对象时，按正确的顺序调用析构函数，
+          决策树  基于树结构来进行预测 决策过程中提出的每个判定问题都是对某个属性的“测试” 决策过程的最终结论对应了我们所希望的判定结果 每个测试的结果或是导出最终结论，或者导出进一步的判定问题，其考虑范围是在上次决策结果的限定范围之内 从根结点到每个叶结点的路径对应了一个判定测试序列 决策树学习的目的:为了产生一棵泛化能力强，即处理未见示例能力强的决策树  基本算法  当前结
         </div>
       </a>
 
@@ -915,8 +950,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2024-11-27 19:34" pubdate>
-              2024-11-27
+            <time datetime="2024-12-07 12:58" pubdate>
+              2024-12-07
             </time>
           </div>
         
@@ -931,13 +966,20 @@
     
       <span class="category-chain">
         
-  <a href="/categories/c/" class="category-chain-item">c++</a>
+  <a href="/categories/AI/" class="category-chain-item">AI</a>
   
   
     <span>></span>
     
-  <a href="/categories/c/c-primer-plus/" class="category-chain-item">c++ primer plus</a>
+  <a href="/categories/AI/ML/" class="category-chain-item">ML</a>
   
+  
+    <span>></span>
+    
+  <a href="/categories/AI/ML/PR-ML/" class="category-chain-item">PR &amp; ML</a>
+  
+  
+
   
 
   
@@ -953,7 +995,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/c/">#c++</a>
+              <a href="/tags/ML/">#ML</a>
             
           </div>
         
@@ -965,7 +1007,7 @@
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/page/18/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/#board">17</a><a class="page-number" href="/page/18/#board">18</a><span class="page-number current">19</span><a class="page-number" href="/page/20/#board">20</a><a class="page-number" href="/page/21/#board">21</a><span class="space">&hellip;</span><a class="page-number" href="/page/34/#board">34</a><a class="extend next" rel="next" href="/page/20/#board"><i class="iconfont icon-arrowright"></i></a>
+      <a class="extend prev" rel="prev" href="/page/18/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/#board">17</a><a class="page-number" href="/page/18/#board">18</a><span class="page-number current">19</span><a class="page-number" href="/page/20/#board">20</a><a class="page-number" href="/page/21/#board">21</a><span class="space">&hellip;</span><a class="page-number" href="/page/39/#board">39</a><a class="extend next" rel="next" href="/page/20/#board"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
 

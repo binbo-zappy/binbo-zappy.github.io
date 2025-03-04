@@ -28,7 +28,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/rust.jpg">
 <meta property="article:published_time" content="2025-02-05T05:40:56.000Z">
-<meta property="article:modified_time" content="2025-02-09T02:53:05.745Z">
+<meta property="article:modified_time" content="2025-02-09T07:39:08.241Z">
 <meta property="article:author" content="Binbo">
 <meta property="article:tag" content="rust">
 <meta name="twitter:card" content="summary_large_image">
@@ -225,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          6.5k 字
+          6.9k 字
         
       </span>
     
@@ -236,7 +236,7 @@
         
         
         
-          55 分钟
+          58 分钟
         
       </span>
     
@@ -300,7 +300,7 @@
 <code>muuuuu</code> 函数了，是不是得把所有 <code>muuuuu</code>
 都替换成，比如说 <code>woooo</code> ？如果 <code>muuuuu</code>
 出现了几十次，那意味着我们要修改几十处地方。</p>
-<h4 id="函数变量实现"><a target="_blank" rel="noopener" href="https://course.rs/advance/functional-programing/closure.html#函数变量实现">函数变量实现</a></h4>
+<h3 id="函数变量实现">1.2 函数变量实现</h3>
 <p>一个可行的办法是，把函数赋值给一个变量，然后通过变量调用：</p>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">use</span> std::thread;<br><span class="hljs-keyword">use</span> std::time::Duration;<br><br><span class="hljs-comment">// 开始健身，好累，我得发出声音：muuuu...</span><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">muuuuu</span>(intensity: <span class="hljs-type">u32</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">u32</span> &#123;<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;muuuu.....&quot;</span>);<br>    thread::<span class="hljs-title function_ invoke__">sleep</span>(Duration::<span class="hljs-title function_ invoke__">from_secs</span>(<span class="hljs-number">2</span>));<br>    intensity<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">workout</span>(intensity: <span class="hljs-type">u32</span>, random_number: <span class="hljs-type">u32</span>) &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">action</span> = muuuuu;<br>    <span class="hljs-keyword">if</span> intensity &lt; <span class="hljs-number">25</span> &#123;<br>        <span class="hljs-built_in">println!</span>(<br>            <span class="hljs-string">&quot;今天活力满满, 先做 &#123;&#125; 个俯卧撑!&quot;</span>,<br>            <span class="hljs-title function_ invoke__">action</span>(intensity)<br>        );<br>        <span class="hljs-built_in">println!</span>(<br>            <span class="hljs-string">&quot;旁边有妹子在看，俯卧撑太low, 再来 &#123;&#125; 组卧推!&quot;</span>,<br>            <span class="hljs-title function_ invoke__">action</span>(intensity)<br>        );<br>    &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> random_number == <span class="hljs-number">3</span> &#123;<br>        <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;昨天练过度了，今天还是休息下吧！&quot;</span>);<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-built_in">println!</span>(<br>            <span class="hljs-string">&quot;昨天练过度了，今天干干有氧, 跑步 &#123;&#125; 分钟!&quot;</span>,<br>            <span class="hljs-title function_ invoke__">action</span>(intensity)<br>        );<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-comment">// 强度</span><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">intensity</span> = <span class="hljs-number">10</span>;<br>    <span class="hljs-comment">// 随机值用来决定某个选择</span><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">random_number</span> = <span class="hljs-number">7</span>;<br><br>    <span class="hljs-comment">// 开始健身</span><br>    <span class="hljs-title function_ invoke__">workout</span>(intensity, random_number);<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>经过上面修改后，所有的调用都通过 <code>action</code>
@@ -309,7 +309,7 @@
 <p>但是问题又来了，若 <code>intensity</code> 也变了怎么办？例如变成
 <code>action(intensity + 1)</code>，那你又得哐哐哐修改几十处调用。</p>
 <p>该怎么办？没太好的办法了，只能祭出大杀器：闭包。</p>
-<h4 id="闭包实现"><a target="_blank" rel="noopener" href="https://course.rs/advance/functional-programing/closure.html#闭包实现">闭包实现</a></h4>
+<h3 id="闭包实现">1.3 闭包实现</h3>
 <p>上面提到 <code>intensity</code>
 要是变化怎么办，简单，使用闭包来捕获它，这是我们的拿手好戏：</p>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">use</span> std::thread;<br><span class="hljs-keyword">use</span> std::time::Duration;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">workout</span>(intensity: <span class="hljs-type">u32</span>, random_number: <span class="hljs-type">u32</span>) &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">action</span> = || &#123;<br>        <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;muuuu.....&quot;</span>);<br>        thread::<span class="hljs-title function_ invoke__">sleep</span>(Duration::<span class="hljs-title function_ invoke__">from_secs</span>(<span class="hljs-number">2</span>));<br>        intensity<br>    &#125;;<br><br>    <span class="hljs-keyword">if</span> intensity &lt; <span class="hljs-number">25</span> &#123;<br>        <span class="hljs-built_in">println!</span>(<br>            <span class="hljs-string">&quot;今天活力满满，先做 &#123;&#125; 个俯卧撑!&quot;</span>,<br>            <span class="hljs-title function_ invoke__">action</span>()<br>        );<br>        <span class="hljs-built_in">println!</span>(<br>            <span class="hljs-string">&quot;旁边有妹子在看，俯卧撑太low，再来 &#123;&#125; 组卧推!&quot;</span>,<br>            <span class="hljs-title function_ invoke__">action</span>()<br>        );<br>    &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> random_number == <span class="hljs-number">3</span> &#123;<br>        <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;昨天练过度了，今天还是休息下吧！&quot;</span>);<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-built_in">println!</span>(<br>            <span class="hljs-string">&quot;昨天练过度了，今天干干有氧，跑步 &#123;&#125; 分钟!&quot;</span>,<br>            <span class="hljs-title function_ invoke__">action</span>()<br>        );<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-comment">// 动作次数</span><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">intensity</span> = <span class="hljs-number">10</span>;<br>    <span class="hljs-comment">// 随机值用来决定某个选择</span><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">random_number</span> = <span class="hljs-number">7</span>;<br><br>    <span class="hljs-comment">// 开始健身</span><br>    <span class="hljs-title function_ invoke__">workout</span>(intensity, random_number);<br>&#125;<br></code></pre></td></tr></table></figure>
@@ -332,7 +332,7 @@
 <code>action</code>，因此这里 <code>action</code>
 就相当于闭包函数，可以跟函数一样进行调用：<code>action()</code></li>
 </ul>
-<h2 id="闭包的类型推导"><a target="_blank" rel="noopener" href="https://course.rs/advance/functional-programing/closure.html#闭包的类型推导">闭包的类型推导</a></h2>
+<h2 id="闭包的类型推导">2. 闭包的类型推导</h2>
 <p>Rust
 是静态语言，因此所有的变量都具有类型，但是得益于编译器的强大类型推导能力，在很多时候我们并不需要显式地去声明类型，但是显然函数并不在此列，必须手动为函数的所有参数和返回值指定类型，原因在于函数往往会作为
 API
@@ -360,7 +360,7 @@ API
 这个整型去调用闭包，跟编译器之前推导的 <code>String</code>
 类型不符，因此报错：</p>
 <figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs console">error[E0308]: mismatched types<br><span class="hljs-meta prompt_"> --&gt; </span><span class="language-bash">src/main.rs:5:29</span><br>  |<br>5 |     let n = example_closure(5);<br>  |                             ^<br>  |                             |<br>  |                             expected struct `String`, found integer // 期待String类型，却发现一个整数<br>  |                             help: try using a conversion method: `5.to_string()`<br></code></pre></td></tr></table></figure>
-<h2 id="结构体中的闭包"><a target="_blank" rel="noopener" href="https://course.rs/advance/functional-programing/closure.html#结构体中的闭包">结构体中的闭包</a></h2>
+<h2 id="结构体中的闭包">3. 结构体中的闭包</h2>
 <p>假设我们要实现一个简易缓存，功能是获取一个值，然后将其缓存起来，那么可以这样设计：</p>
 <ul>
 <li>一个闭包用于获取值</li>
@@ -370,9 +370,7 @@ API
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Cacher</span>&lt;T&gt;<br><span class="hljs-keyword">where</span><br>    T: <span class="hljs-title function_ invoke__">Fn</span>(<span class="hljs-type">u32</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">u32</span>,<br>&#123;<br>    query: T,<br>    value: <span class="hljs-type">Option</span>&lt;<span class="hljs-type">u32</span>&gt;,<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>等等，我都跟着这本教程学完 Rust
 基础了，为何还有我不认识的东东？<code>Fn(u32) -&gt; u32</code>
-是什么鬼？别急，先回答你第一个问题：骚年，too young too naive，你以为
-Rust
-的语法特性就基础入门那一些吗？太年轻了！如果是长征，你才刚到赤水河。</p>
+是什么鬼？</p>
 <p>其实，可以看得出这一长串是 <code>T</code>
 的特征约束，再结合之前的已知信息：<code>query</code>
 是一个闭包，大概可以推测出，<code>Fn(u32) -&gt; u32</code>
@@ -400,26 +398,25 @@ Rust 团队的鬼才设计。。。</p>
 类型的值，若我们想要缓存 <code>&amp;str</code>
 类型，显然就行不通了，因此需要将 <code>u32</code> 替换成泛型
 <code>E</code>，该练习就留给读者自己完成，具体代码可以参考<a target="_blank" rel="noopener" href="https://practice-zh.course.rs/functional-programing/closure.html#closure-in-structs">这里</a></p>
-<h2 id="捕获作用域中的值"><a target="_blank" rel="noopener" href="https://course.rs/advance/functional-programing/closure.html#捕获作用域中的值">捕获作用域中的值</a></h2>
+<h2 id="捕获作用域中的值">4. 捕获作用域中的值</h2>
 <p>在之前代码中，我们一直在用闭包的匿名函数特性（赋值给变量），然而闭包还拥有一项函数所不具备的特性：捕获作用域中的值。</p>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">x</span> = <span class="hljs-number">4</span>;<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">equal_to_x</span> = |z| z == x;<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">y</span> = <span class="hljs-number">4</span>;<br><br>    <span class="hljs-built_in">assert!</span>(<span class="hljs-title function_ invoke__">equal_to_x</span>(y));<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>上面代码中，<code>x</code> 并不是闭包 <code>equal_to_x</code>
 的参数，但是它依然可以去使用 <code>x</code>，因为
 <code>equal_to_x</code> 在 <code>x</code> 的作用域范围内。</p>
-<p>对于函数来说，就算你把函数定义在 <code>main</code>
-函数体中，它也不能访问 <code>x</code>：</p>
+<p><strong>对于函数来说，就算你把函数定义在 <code>main</code>
+函数体中，它也不能访问 <code>x</code>：</strong></p>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">x</span> = <span class="hljs-number">4</span>;<br><br>    <span class="hljs-keyword">fn</span> <span class="hljs-title function_">equal_to_x</span>(z: <span class="hljs-type">i32</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">bool</span> &#123;<br>        z == x<br>    &#125;<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">y</span> = <span class="hljs-number">4</span>;<br><br>    <span class="hljs-built_in">assert!</span>(<span class="hljs-title function_ invoke__">equal_to_x</span>(y));<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>报错如下：</p>
 <figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs console">error[E0434]: can&#x27;t capture dynamic environment in a fn item // 在函数中无法捕获动态的环境<br><span class="hljs-meta prompt_"> --&gt; </span><span class="language-bash">src/main.rs:5:14</span><br>  |<br>5 |         z == x<br>  |              ^<br>  |<br>  = help: use the `|| &#123; ... &#125;` closure form instead // 使用闭包替代<br></code></pre></td></tr></table></figure>
 <p>如上所示，编译器准确地告诉了我们错误，甚至同时给出了提示：使用闭包来替代函数，这种聪明令我有些无所适从，总感觉会显得我很笨。</p>
-<h3 id="闭包对内存的影响"><a target="_blank" rel="noopener" href="https://course.rs/advance/functional-programing/closure.html#闭包对内存的影响">闭包对内存的影响</a></h3>
+<h3 id="闭包对内存的影响">4.1 闭包对内存的影响</h3>
 <p>当闭包从环境中捕获一个值时，会分配内存去存储这些值。对于有些场景来说，这种额外的内存分配会成为一种负担。与之相比，函数就不会去捕获这些环境值，因此定义和使用函数不会拥有这种内存负担。</p>
-<h3 id="三种-fn-特征"><a target="_blank" rel="noopener" href="https://course.rs/advance/functional-programing/closure.html#三种-fn-特征">三种
-Fn 特征</a></h3>
+<h2 id="三种-fn-特征">5. 三种 Fn 特征</h2>
 <p>闭包捕获变量有三种途径，恰好对应函数参数的三种传入方式：转移所有权、可变借用、不可变借用，因此相应的
 <code>Fn</code> 特征也有三种：</p>
 <ol type="1">
-<li><code>FnOnce</code>，该类型的闭包会拿走被捕获变量的所有权。<code>Once</code>
+<li><code>FnOnce</code>，该类型的闭包会<strong>拿走被捕获变量的所有权</strong>。<code>Once</code>
 顾名思义，说明该闭包只能运行一次：</li>
 </ol>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">fn_once</span>&lt;F&gt;(func: F)<br><span class="hljs-keyword">where</span><br>    F: <span class="hljs-title function_ invoke__">FnOnce</span>(<span class="hljs-type">usize</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">bool</span>,<br>&#123;<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;&#125;&quot;</span>, <span class="hljs-title function_ invoke__">func</span>(<span class="hljs-number">3</span>));<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;&#125;&quot;</span>, <span class="hljs-title function_ invoke__">func</span>(<span class="hljs-number">4</span>));<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">x</span> = <span class="hljs-built_in">vec!</span>[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>];<br>    <span class="hljs-title function_ invoke__">fn_once</span>(|z|&#123;z == x.<span class="hljs-title function_ invoke__">len</span>()&#125;)<br>&#125;<br></code></pre></td></tr></table></figure>
@@ -434,12 +431,48 @@ Fn 特征</a></h3>
 <code>Copy</code>
 特征，调用时使用的将是它的拷贝，所以并没有发生所有权的转移。</p>
 <figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs console">true<br>false<br></code></pre></td></tr></table></figure>
-<p>如果你想强制闭包取得捕获变量的所有权，可以在参数列表前添加
+<p>如果你想<strong>强制闭包取得捕获变量的所有权</strong>，可以在参数列表前添加
 <code>move</code>
-关键字，这种用法通常用于闭包的生命周期大于捕获变量的生命周期时，例如将闭包返回或移入其他线程。</p>
+关键字，这种用法通常用于<strong>闭包的生命周期大于捕获变量的生命周期时</strong>，例如将闭包返回或移入其他线程。</p>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">use</span> std::thread;<br><span class="hljs-keyword">let</span> <span class="hljs-variable">v</span> = <span class="hljs-built_in">vec!</span>[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>];<br><span class="hljs-keyword">let</span> <span class="hljs-variable">handle</span> = thread::<span class="hljs-title function_ invoke__">spawn</span>(<span class="hljs-keyword">move</span> || &#123;<br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Here&#x27;s a vector: &#123;:?&#125;&quot;</span>, v);<br>&#125;);<br>handle.<span class="hljs-title function_ invoke__">join</span>().<span class="hljs-title function_ invoke__">unwrap</span>();<br></code></pre></td></tr></table></figure>
+<hr>
+<p>在这段代码中，闭包的作用是捕获并移动（<code>move</code>）向量
+<code>v</code> 的所有权，然后在新线程中打印该向量的内容。具体来说：</p>
 <ol type="1">
-<li><code>FnMut</code>，它以可变借用的方式捕获了环境中的值，因此可以修改该值：</li>
+<li><strong>捕获变量 <code>v</code></strong>：
+<ul>
+<li>闭包通过 <code>move</code> 关键字捕获了变量 <code>v</code>
+的所有权。这意味着在闭包内部，<code>v</code>
+的所有权被转移到了闭包中，外部的 <code>v</code> 不再可用。</li>
+<li>如果没有 <code>move</code>
+关键字，闭包默认会尝试通过引用捕获变量，但在多线程环境下，引用可能会导致数据竞争或生命周期问题。因此，使用
+<code>move</code> 确保闭包拥有 <code>v</code>
+的所有权，避免了这些问题。</li>
+</ul></li>
+<li><strong>在新线程中执行</strong>：
+<ul>
+<li><code>thread::spawn</code>
+创建了一个新线程，并将闭包作为线程的执行体。闭包在新线程中运行，打印出向量
+<code>v</code> 的内容。</li>
+<li>由于 <code>v</code>
+的所有权已经移动到闭包中，闭包可以在新线程中安全地访问
+<code>v</code>，而不必担心数据竞争或悬垂引用。</li>
+</ul></li>
+<li><strong>线程同步</strong>：
+<ul>
+<li><code>handle.join().unwrap()</code>
+用于等待新线程执行完毕。<code>join</code>
+方法会阻塞当前线程，直到新线程完成执行。<code>unwrap</code>
+用于处理可能的错误（例如线程崩溃）。</li>
+</ul></li>
+</ol>
+<p>总结来说，闭包的作用是捕获并移动 <code>v</code>
+的所有权，然后在新线程中安全地使用 <code>v</code>，并打印其内容。通过
+<code>move</code>
+关键字，闭包确保了线程安全，避免了数据竞争和生命周期问题。</p>
+<hr>
+<ol start="2" type="1">
+<li><code>FnMut</code>，它<strong>以可变借用的方式捕获了环境中的值</strong>，因此可以修改该值：</li>
 </ol>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">s</span> = <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">new</span>();<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">update_string</span> =  |<span class="hljs-type">str</span>| s.<span class="hljs-title function_ invoke__">push_str</span>(<span class="hljs-type">str</span>);<br>    <span class="hljs-title function_ invoke__">update_string</span>(<span class="hljs-string">&quot;hello&quot;</span>);<br><br>    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;:?&#125;&quot;</span>,s);<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>在闭包中，我们调用 <code>s.push_str</code> 去改变外部 <code>s</code>
@@ -461,12 +494,12 @@ Fn 特征</a></h3>
 <p>为什么<code>update_string</code>没有用<code>mut</code>修饰却是一个可变类型的闭包？事实上，<code>FnMut</code>只是trait的名字，声明变量为<code>FnMut</code>和要不要mut没啥关系，<code>FnMut</code>是推导出的特征类型，<code>mut</code>是rust语言层面的一个修饰符，用于声明一个绑定是可变的。Rust从特征类型系统和语言修饰符两方面保障了我们的程序正确运行。</p>
 <p>我们在使用<code>FnMut</code>类型闭包时需要捕获外界的可变借用，因此我们常常搭配<code>mut</code>修饰符使用。但我们要始终记住，二者是相互独立的。</p>
 <p>因此，让我们再回头分析一下这段代码：在<code>main</code>函数中，首先创建了一个可变的字符串<code>s</code>，然后定义了一个可变类型闭包<code>update_string</code>，该闭包接受一个字符串参数并将其追加到<code>s</code>中。接下来调用了<code>exec</code>函数，并将<code>update_string</code>闭包的所有权移交给它。最后打印出了字符串<code>s</code>的内容。</p>
-<p>细心的读者可能注意到，我们在上文的分析中提到<code>update_string</code>闭包的所有权被移交给了<code>exec</code>函数。这说明<code>update_string</code>没有实现<code>Copy</code>特征，但并不是所有闭包都没有实现<code>Copy</code>特征，闭包自动实现<code>Copy</code>特征的规则是，只要闭包捕获的类型都实现了<code>Copy</code>特征的话，这个闭包就会默认实现<code>Copy</code>特征。</p>
+<p>细心的读者可能注意到，我们在上文的分析中提到<code>update_string</code>闭包的所有权被移交给了<code>exec</code>函数。这说明<code>update_string</code>没有实现<code>Copy</code>特征，但并不是所有闭包都没有实现<code>Copy</code>特征，闭包自动实现<code>Copy</code>特征的规则是，<strong>只要闭包捕获的类型都实现了<code>Copy</code>特征的话，这个闭包就会默认实现<code>Copy</code>特征。</strong></p>
 <p>我们来看一个例子：</p>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">s</span> = <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">new</span>();<br><span class="hljs-keyword">let</span> <span class="hljs-variable">update_string</span> =  || <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;&#125;&quot;</span>,s);<br></code></pre></td></tr></table></figure>
 <p>这里取得的是<code>s</code>的不可变引用，所以是能<code>Copy</code>的。而如果拿到的是<code>s</code>的所有权或可变引用，都是不能<code>Copy</code>的。我们刚刚的代码就属于第二类，取得的是<code>s</code>的可变引用，没有实现<code>Copy</code>。</p>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-comment">// 拿所有权</span><br><span class="hljs-keyword">let</span> <span class="hljs-variable">s</span> = <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">new</span>();<br><span class="hljs-keyword">let</span> <span class="hljs-variable">update_string</span> = <span class="hljs-keyword">move</span> || <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;&#125;&quot;</span>, s);<br><br><span class="hljs-title function_ invoke__">exec</span>(update_string);<br><span class="hljs-comment">// exec2(update_string); // 不能再用了</span><br><br><span class="hljs-comment">// 可变引用</span><br><span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">s</span> = <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">new</span>();<br><span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">update_string</span> = || s.<span class="hljs-title function_ invoke__">push_str</span>(<span class="hljs-string">&quot;hello&quot;</span>);<br><span class="hljs-title function_ invoke__">exec</span>(update_string);<br><span class="hljs-comment">// exec1(update_string); // 不能再用了</span><br></code></pre></td></tr></table></figure>
-<ol type="1">
+<ol start="3" type="1">
 <li><code>Fn</code> 特征，它以不可变借用的方式捕获环境中的值
 让我们把上面的代码中 <code>exec</code> 的 <code>F</code>
 泛型参数类型修改为 <code>Fn(&amp;'a str)</code>：</li>
@@ -482,8 +515,7 @@ Fn 特征</a></h3>
 <p>在这里，因为无需改变 <code>s</code>，因此闭包中只对 <code>s</code>
 进行了不可变借用，那么在 <code>exec</code> 中，将其标记为
 <code>Fn</code> 特征就完全正确。</p>
-<h4 id="move-和-fn"><a target="_blank" rel="noopener" href="https://course.rs/advance/functional-programing/closure.html#move-和-fn">move
-和 Fn</a></h4>
+<h3 id="move-和-fn">5.1 move 和 Fn</h3>
 <p>在上面，我们讲到了 <code>move</code> 关键字对于 <code>FnOnce</code>
 特征的重要性，但是实际上使用了 <code>move</code> 的闭包依然可以使用
 <code>Fn</code> 或 <code>FnMut</code> 特征。</p>
@@ -498,16 +530,16 @@ Fn 特征</a></h3>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">s</span> = <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">new</span>();<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">update_string</span> =  <span class="hljs-keyword">move</span> || <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;&#125;&quot;</span>,s);<br><br>    <span class="hljs-title function_ invoke__">exec</span>(update_string);<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">exec</span>&lt;F: <span class="hljs-title function_ invoke__">Fn</span>()&gt;(f: F)  &#123;<br>    <span class="hljs-title function_ invoke__">f</span>()<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>奇怪， 明明是闭包实现的是 <code>FnOnce</code> 的特征，
 为什么编译器居然允许 <code>Fn</code> 特征通过编译呢？</p>
-<h4 id="三种-fn-的关系"><a target="_blank" rel="noopener" href="https://course.rs/advance/functional-programing/closure.html#三种-fn-的关系">三种
-Fn 的关系</a></h4>
+<h3 id="三种-fn-的关系">5.2 三种 Fn 的关系</h3>
 <p>实际上，一个闭包并不仅仅实现某一种 <code>Fn</code>
 特征，规则如下：</p>
 <ul>
-<li>所有的闭包都自动实现了 <code>FnOnce</code>
-特征，因此任何一个闭包都至少可以被调用一次</li>
-<li>没有移出所捕获变量的所有权的闭包自动实现了 <code>FnMut</code>
-特征</li>
-<li>不需要对捕获变量进行改变的闭包自动实现了 <code>Fn</code> 特征</li>
+<li><strong>所有的闭包都自动实现了 <code>FnOnce</code>
+特征，因此任何一个闭包都至少可以被调用一次</strong></li>
+<li><strong>没有移出所捕获变量的所有权的闭包自动实现了
+<code>FnMut</code> 特征</strong></li>
+<li><strong>不需要对捕获变量进行改变的闭包自动实现了 <code>Fn</code>
+特征</strong></li>
 </ul>
 <p>用一段代码来简单诠释上述规则：</p>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">s</span> = <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">new</span>();<br><br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">update_string</span> =  || <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;&#123;&#125;&quot;</span>,s);<br><br>    <span class="hljs-title function_ invoke__">exec</span>(update_string);<br>    <span class="hljs-title function_ invoke__">exec1</span>(update_string);<br>    <span class="hljs-title function_ invoke__">exec2</span>(update_string);<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">exec</span>&lt;F: <span class="hljs-title function_ invoke__">FnOnce</span>()&gt;(f: F)  &#123;<br>    <span class="hljs-title function_ invoke__">f</span>()<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">exec1</span>&lt;F: <span class="hljs-title function_ invoke__">FnMut</span>()&gt;(<span class="hljs-keyword">mut</span> f: F)  &#123;<br>    <span class="hljs-title function_ invoke__">f</span>()<br>&#125;<br><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">exec2</span>&lt;F: <span class="hljs-title function_ invoke__">Fn</span>()&gt;(f: F)  &#123;<br>    <span class="hljs-title function_ invoke__">f</span>()<br>&#125;<br></code></pre></td></tr></table></figure>
@@ -536,7 +568,7 @@ Fn 的关系</a></h4>
 <code>&amp;mut self</code>，而 <code>FnOnce</code> 获取
 <code>self</code>。 在实际项目中，<strong>建议先使用 <code>Fn</code>
 特征</strong>，然后编译器会告诉你正误以及该如何选择。</p>
-<h2 id="闭包作为函数返回值"><a target="_blank" rel="noopener" href="https://course.rs/advance/functional-programing/closure.html#闭包作为函数返回值">闭包作为函数返回值</a></h2>
+<h2 id="闭包作为函数返回值">6. 闭包作为函数返回值</h2>
 <p>看到这里，相信大家对于如何使用闭包作为函数参数，已经很熟悉了，但是如果要使用闭包作为函数返回值，该如何做？</p>
 <p>先来看一段代码：</p>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">factory</span>() <span class="hljs-punctuation">-&gt;</span> <span class="hljs-title function_ invoke__">Fn</span>(<span class="hljs-type">i32</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">i32</span> &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">num</span> = <span class="hljs-number">5</span>;<br><br>    |x| x + num<br>&#125;<br><br><span class="hljs-keyword">let</span> <span class="hljs-variable">f</span> = <span class="hljs-title function_ invoke__">factory</span>();<br><br><span class="hljs-keyword">let</span> <span class="hljs-variable">answer</span> = <span class="hljs-title function_ invoke__">f</span>(<span class="hljs-number">1</span>);<br><span class="hljs-built_in">assert_eq!</span>(<span class="hljs-number">6</span>, answer);<br></code></pre></td></tr></table></figure>
@@ -565,11 +597,12 @@ Fn 的关系</a></h4>
 <code>impl Trait</code> 的方式去返回闭包。</p>
 <p>怎么办？再看看编译器提示，里面有这样一行小字：</p>
 <figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs console">= help: consider boxing your closure and/or using it as a trait object<br></code></pre></td></tr></table></figure>
-<p>哦，相信你已经恍然大悟，可以用特征对象！只需要用 <code>Box</code>
-的方式即可实现：</p>
+<p>哦，相信你已经恍然大悟，可以用特征对象！<strong>只需要用
+<code>Box</code> 的方式即可实现</strong>：</p>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">factory</span>(x:<span class="hljs-type">i32</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">Box</span>&lt;<span class="hljs-keyword">dyn</span> <span class="hljs-title function_ invoke__">Fn</span>(<span class="hljs-type">i32</span>) <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">i32</span>&gt; &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">num</span> = <span class="hljs-number">5</span>;<br><br>    <span class="hljs-keyword">if</span> x &gt; <span class="hljs-number">1</span>&#123;<br>        <span class="hljs-type">Box</span>::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-keyword">move</span> |x| x + num)<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-type">Box</span>::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-keyword">move</span> |x| x - num)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>至此，闭包作为函数返回值就已完美解决，若以后你再遇到报错时，一定要仔细阅读编译器的提示，很多时候，转角都能遇到爱。</p>
-<h2 id="闭包的生命周期"><a target="_blank" rel="noopener" href="https://course.rs/advance/functional-programing/closure.html#闭包的生命周期">闭包的生命周期</a></h2>
+<h2 id="闭包的生命周期">7. 闭包的生命周期</h2>
+<p>在进阶生命周期章节中有讲。</p>
 
                 
               </div>

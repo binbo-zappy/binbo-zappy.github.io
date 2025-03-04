@@ -19,16 +19,16 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Sized 和不定长类型 DST 在 Rust 中类型有多种抽象的分类方式，例如本书之前章节的：基本类型、集合类型、复合类型等。再比如说，如果从编译器何时能获知类型大小的角度出发，可以分成两类:  定长类型( sized )，这些类型的大小在编译时是已知的 不定长类型( unsized )，与定长类型相反，它的大小只有到了程序运行时才能动态获知，这种类型又被称之为 DST  首">
+    <meta name="description" content="Sized 和不定长类型 DST 在 Rust 中类型有多种抽象的分类方式，例如本书之前章节的：基本类型、集合类型、复合类型等。再比如说，如果从编译器何时能获知类型大小的角度出发，可以分成两类:  定长类型( sized )，这些类型的大小在编译时是已知的 不定长类型( unsized )，与定长类型相反，它的大小只有到了程序运行时才能动态获知，这种类型又被称之为 DST  首先">
 <meta property="og:type" content="article">
 <meta property="og:title" content="4.3.3 Sized 和不定长类型 DST">
 <meta property="og:url" content="http://binbo-zappy.github.io/2025/02/05/rust%E5%9C%A3%E7%BB%8F/4-3-3-Sized%E5%92%8C%E4%B8%8D%E5%AE%9A%E9%95%BF%E7%B1%BB%E5%9E%8BDST/index.html">
 <meta property="og:site_name" content="Binbo">
-<meta property="og:description" content="Sized 和不定长类型 DST 在 Rust 中类型有多种抽象的分类方式，例如本书之前章节的：基本类型、集合类型、复合类型等。再比如说，如果从编译器何时能获知类型大小的角度出发，可以分成两类:  定长类型( sized )，这些类型的大小在编译时是已知的 不定长类型( unsized )，与定长类型相反，它的大小只有到了程序运行时才能动态获知，这种类型又被称之为 DST  首">
+<meta property="og:description" content="Sized 和不定长类型 DST 在 Rust 中类型有多种抽象的分类方式，例如本书之前章节的：基本类型、集合类型、复合类型等。再比如说，如果从编译器何时能获知类型大小的角度出发，可以分成两类:  定长类型( sized )，这些类型的大小在编译时是已知的 不定长类型( unsized )，与定长类型相反，它的大小只有到了程序运行时才能动态获知，这种类型又被称之为 DST  首先">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/rust.jpg">
 <meta property="article:published_time" content="2025-02-05T05:41:08.000Z">
-<meta property="article:modified_time" content="2025-02-09T02:52:54.397Z">
+<meta property="article:modified_time" content="2025-02-09T10:51:26.440Z">
 <meta property="article:author" content="Binbo">
 <meta property="article:tag" content="rust">
 <meta name="twitter:card" content="summary_large_image">
@@ -278,8 +278,7 @@
             
               <div class="markdown-body">
                 
-                <h1 id="sized-和不定长类型-dst"><a target="_blank" rel="noopener" href="https://course.rs/advance/into-types/sized.html#sized-和不定长类型-dst">Sized
-和不定长类型 DST</a></h1>
+                <h1 id="sized-和不定长类型-dst">Sized 和不定长类型 DST</h1>
 <p>在 Rust
 中类型有多种抽象的分类方式，例如本书之前章节的：基本类型、集合类型、复合类型等。再比如说，如果从编译器何时能获知类型大小的角度出发，可以分成两类:</p>
 <ul>
@@ -289,8 +288,7 @@
 DST</li>
 </ul>
 <p>首先，我们来深入看看何为 DST。</p>
-<h2 id="动态大小类型-dst"><a target="_blank" rel="noopener" href="https://course.rs/advance/into-types/sized.html#动态大小类型-dst">动态大小类型
-DST</a></h2>
+<h2 id="动态大小类型">1. 动态大小类型</h2>
 <p>读者大大们之前学过的几乎所有类型，都是固定大小的类型，包括集合
 <code>Vec</code>、<code>String</code> 和 <code>HashMap</code>
 等，而动态大小类型刚好与之相反：<strong>编译器无法在编译期得知该类型值的大小，只有到了程序运行时，才能动态获知</strong>。对于动态类型，我们使用
@@ -302,15 +300,15 @@ DST 类型，将无法通过编译。</strong></p>
 <p>现在给你一个挑战：想出几个 DST
 类型。俺厚黑地说一句，估计大部分人都想不出这样的一个类型，就连我，如果不是查询着资料在写，估计一时半会儿也想不到一个。</p>
 <p>先来看一个最直白的：</p>
-<h4 id="试图创建动态大小的数组"><a target="_blank" rel="noopener" href="https://course.rs/advance/into-types/sized.html#试图创建动态大小的数组">试图创建动态大小的数组</a></h4>
+<h3 id="试图创建动态大小的数组">1.1 试图创建动态大小的数组</h3>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">my_function</span>(n: <span class="hljs-type">usize</span>) &#123;<br>    <span class="hljs-keyword">let</span> <span class="hljs-variable">array</span> = [<span class="hljs-number">123</span>; n];<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>以上代码就会报错(错误输出的内容并不是因为
 DST，但根本原因是类似的)，因为 <code>n</code>
 在编译期无法得知，而数组类型的一个组成部分就是长度，长度变为动态的，自然类型就变成了
 unsized 。</p>
-<h4 id="切片"><a target="_blank" rel="noopener" href="https://course.rs/advance/into-types/sized.html#切片">切片</a></h4>
+<h3 id="切片">1.2 切片</h3>
 <p>切片也是一个典型的 DST 类型，具体详情参见另一篇文章: <a target="_blank" rel="noopener" href="https://course.rs/difficulties/slice.html">易混淆的切片和切片引用</a>。</p>
-<h4 id="str"><a target="_blank" rel="noopener" href="https://course.rs/advance/into-types/sized.html#str">str</a></h4>
+<h3 id="str">1.3 str</h3>
 <p>考虑一下这个类型：<code>str</code>，感觉有点眼生？是的，它既不是
 <code>String</code> 动态字符串，也不是 <code>&amp;str</code>
 字符串切片，而是一个 <code>str</code>。它是一个动态类型，同时还是
@@ -333,12 +331,11 @@ Rust 允许我们使用这种动态类型，那么这两个 <code>str</code>
 字符串也是固定大小的类型。</p>
 <p>正是因为 <code>&amp;str</code>
 的引用有了底层堆数据的明确信息，它才是固定大小类型。假设如果它没有这些信息呢？那它也将变成一个动态类型。因此，将动态数据固定化的秘诀就是<strong>使用引用指向这些动态数据，然后在引用中存储相关的内存位置、长度等信息</strong>。</p>
-<h4 id="特征对象"><a target="_blank" rel="noopener" href="https://course.rs/advance/into-types/sized.html#特征对象">特征对象</a></h4>
+<h3 id="特征对象">1.4 特征对象</h3>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">foobar_1</span>(thing: &amp;<span class="hljs-keyword">dyn</span> MyThing) &#123;&#125;     <span class="hljs-comment">// OK</span><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">foobar_2</span>(thing: <span class="hljs-type">Box</span>&lt;<span class="hljs-keyword">dyn</span> MyThing&gt;) &#123;&#125; <span class="hljs-comment">// OK</span><br><span class="hljs-keyword">fn</span> <span class="hljs-title function_">foobar_3</span>(thing: MyThing) &#123;&#125;          <span class="hljs-comment">// ERROR!</span><br></code></pre></td></tr></table></figure>
 <p>如上所示，只能通过引用或 <code>Box</code>
 的方式来使用特征对象，直接使用将报错！</p>
-<h4 id="总结只能间接使用的-dst"><a target="_blank" rel="noopener" href="https://course.rs/advance/into-types/sized.html#总结只能间接使用的-dst">总结：只能间接使用的
-DST</a></h4>
+<h3 id="总结只能间接使用的-dst">1.5 总结：只能间接使用的 DST</h3>
 <p>Rust 中常见的 <code>DST</code> 类型有:
 <code>str</code>、<code>[T]</code>、<code>dyn Trait</code>，<strong>它们都无法单独被使用，必须要通过引用或者
 <code>Box</code> 来间接使用</strong> 。</p>
@@ -346,16 +343,15 @@ DST</a></h4>
 将一个没有固定大小的特征变成一个有固定大小的特征对象，那能否故技重施，将
 <code>str</code> 封装成一个固定大小类型？留个悬念先，我们来看看
 <code>Sized</code> 特征。</p>
-<h2 id="sized-特征"><a target="_blank" rel="noopener" href="https://course.rs/advance/into-types/sized.html#sized-特征">Sized
-特征</a></h2>
+<h2 id="sized-特征">2. Sized 特征</h2>
 <p>既然动态类型的问题这么大，那么在使用泛型时，Rust
 如何保证我们的泛型参数是固定大小的类型呢？例如以下泛型函数：</p>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">generic</span>&lt;T&gt;(t: T) &#123;<br>    <span class="hljs-comment">// --snip--</span><br>&#125;<br></code></pre></td></tr></table></figure>
 <p>该函数很简单，就一个泛型参数 T，那么如何保证 <code>T</code>
 是固定大小的类型？仔细回想下，貌似在之前的课程章节中，我们也没有做过任何事情去做相关的限制，那
 <code>T</code>
-怎么就成了固定大小的类型了？奥秘在于编译器自动帮我们加上了
-<code>Sized</code> 特征约束：</p>
+怎么就成了固定大小的类型了？奥秘在于<strong>编译器自动帮我们加上了
+<code>Sized</code> 特征约束</strong>：</p>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">generic</span>&lt;T: <span class="hljs-built_in">Sized</span>&gt;(t: T) &#123;<br>    <span class="hljs-comment">// --snip--</span><br>&#125;<br></code></pre></td></tr></table></figure>
 <p>在上面，Rust 自动添加的特征约束
 <code>T: Sized</code>，表示泛型函数只能用于一切实现了 <code>Sized</code>
@@ -375,7 +371,7 @@ Rusty，竟然有点幽默)：</p>
 既有可能是固定大小的类型，也可能是动态大小的类型。还有一点要注意的是，函数参数类型从
 <code>T</code> 变成了 <code>&amp;T</code>，因为 <code>T</code>
 可能是动态大小的，因此需要用一个固定大小的指针(引用)来包裹它。</p>
-<h2 id="box"><a target="_blank" rel="noopener" href="https://course.rs/advance/into-types/sized.html#boxstr"><code>Box</code></a></h2>
+<h2 id="box">3. <code>Box</code></h2>
 <p>在结束前，再来看看之前遗留的问题：使用 <code>Box</code>
 可以将一个动态大小的特征变成一个具有固定大小的特征对象，能否故技重施，将
 <code>str</code> 封装成一个固定大小类型？</p>
