@@ -19,23 +19,25 @@
   <meta name="author" content="Binbo">
   <meta name="keywords" content="">
   
-    <meta property="og:type" content="article">
-<meta property="og:title" content="1. 链表">
-<meta property="og:url" content="http://binbo-zappy.github.io/2025/02/15/leetcode/1-%E9%93%BE%E8%A1%A8/index.html">
+    <meta name="description" content="LC26. 删除有序数组中的重复项 给你一个 非严格递增排列 的数组 nums ，请你原地 删除重复出现的元素，使每个元素 只出现一次 ，返回删除后数组的新长度。元素的 相对顺序 应该保持 一致 。然后返回 nums 中唯一元素的个数。 考虑 nums 的唯一元素的数量为 k ，你需要做以下事情确保你的题解可以被通过：  更改数组 nums ，使 nums 的前 k 个元素">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LC26. 删除有序数组中的重复项">
+<meta property="og:url" content="http://binbo-zappy.github.io/2025/03/05/leetcode/LC26-%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E9%A1%B9/index.html">
 <meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="LC26. 删除有序数组中的重复项 给你一个 非严格递增排列 的数组 nums ，请你原地 删除重复出现的元素，使每个元素 只出现一次 ，返回删除后数组的新长度。元素的 相对顺序 应该保持 一致 。然后返回 nums 中唯一元素的个数。 考虑 nums 的唯一元素的数量为 k ，你需要做以下事情确保你的题解可以被通过：  更改数组 nums ，使 nums 的前 k 个元素">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://binbo-zappy.github.io/imgs/leetcode.jpg">
-<meta property="article:published_time" content="2025-02-15T09:03:34.000Z">
-<meta property="article:modified_time" content="2025-02-25T05:25:07.183Z">
+<meta property="article:published_time" content="2025-03-05T02:53:04.000Z">
+<meta property="article:modified_time" content="2025-03-07T09:07:44.385Z">
 <meta property="article:author" content="Binbo">
 <meta property="article:tag" content="leetcode">
-<meta property="article:tag" content="链表">
+<meta property="article:tag" content="数组">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/leetcode.jpg">
   
   
   
-  <title>1. 链表 - Binbo</title>
+  <title>LC26. 删除有序数组中的重复项 - Binbo</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -201,7 +203,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="1. 链表"></span>
+            <span id="subtitle" data-typed-text="LC26. 删除有序数组中的重复项"></span>
           
         </div>
 
@@ -212,8 +214,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-02-15 17:03" pubdate>
-          2025年2月15日 下午
+        <time datetime="2025-03-05 10:53" pubdate>
+          2025年3月5日 上午
         </time>
       </span>
     
@@ -224,7 +226,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          0 字
+          472 字
         
       </span>
     
@@ -235,7 +237,7 @@
         
         
         
-          1 分钟
+          4 分钟
         
       </span>
     
@@ -272,12 +274,43 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">1. 链表</h1>
+            <h1 id="seo-header">LC26. 删除有序数组中的重复项</h1>
             
             
               <div class="markdown-body">
                 
-                
+                <h1 id="lc26.-删除有序数组中的重复项"><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/remove-duplicates-from-sorted-array/">LC26.
+删除有序数组中的重复项</a></h1>
+<p>给你一个 <strong>非严格递增排列</strong> 的数组 <code>nums</code>
+，请你<strong><a target="_blank" rel="noopener" href="http://baike.baidu.com/item/原地算法">原地</a></strong>
+删除重复出现的元素，使每个元素 <strong>只出现一次</strong>
+，返回删除后数组的新长度。元素的 <strong>相对顺序</strong> 应该保持
+<strong>一致</strong> 。然后返回 <code>nums</code>
+中唯一元素的个数。</p>
+<p>考虑 <code>nums</code> 的唯一元素的数量为 <code>k</code>
+，你需要做以下事情确保你的题解可以被通过：</p>
+<ul>
+<li>更改数组 <code>nums</code> ，使 <code>nums</code> 的前
+<code>k</code> 个元素包含唯一元素，并按照它们最初在 <code>nums</code>
+中出现的顺序排列。<code>nums</code> 的其余元素与 <code>nums</code>
+的大小不重要。</li>
+<li>返回 <code>k</code> 。</li>
+</ul>
+<p><strong>判题标准:</strong></p>
+<p>系统会用下面的代码来测试你的题解:</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs abnf">int[] nums <span class="hljs-operator">=</span> [...]<span class="hljs-comment">; // 输入数组</span><br>int[] expectedNums <span class="hljs-operator">=</span> [...]<span class="hljs-comment">; // 长度正确的期望答案</span><br><br>int k <span class="hljs-operator">=</span> removeDuplicates(nums)<span class="hljs-comment">; // 调用</span><br><br>assert k <span class="hljs-operator">=</span><span class="hljs-operator">=</span> expectedNums.length<span class="hljs-comment">;</span><br>for (int i <span class="hljs-operator">=</span> <span class="hljs-number">0</span><span class="hljs-comment">; i &lt; k; i++) &#123;</span><br>    assert nums[i] <span class="hljs-operator">=</span><span class="hljs-operator">=</span> expectedNums[i]<span class="hljs-comment">;</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>如果所有断言都通过，那么您的题解将被 <strong>通过</strong>。</p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs inform7">输入：nums = <span class="hljs-comment">[1,1,2]</span><br>输出：2, nums = <span class="hljs-comment">[1,2,_]</span><br>解释：函数应该返回新的长度 2 ，并且原数组 nums 的前两个元素被修改为 1, 2 。不需要考虑数组中超出新长度后面的元素。<br></code></pre></td></tr></table></figure>
+<p><strong>示例 2：</strong></p>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs dns">输入：nums = [<span class="hljs-number">0,0,1,1</span>,<span class="hljs-number">1,2,2,3</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>]<br>输出：<span class="hljs-number">5</span>, nums = [<span class="hljs-number">0,1,2,3</span>,<span class="hljs-number">4</span>]<br>解释：函数应该返回新的长度 <span class="hljs-number">5</span> ， 并且原数组 nums 的前五个元素被修改为 <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span> 。不需要考虑数组中超出新长度后面的元素。<br></code></pre></td></tr></table></figure>
+<p><strong>提示：</strong></p>
+<ul>
+<li><code>1 &lt;= nums.length &lt;= 3 * 104</code></li>
+<li><code>-104 &lt;= nums[i] &lt;= 104</code></li>
+<li><code>nums</code> 已按 <strong>非严格递增</strong> 排列</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">removeDuplicates</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span> (nums.<span class="hljs-built_in">size</span>() == <span class="hljs-number">0</span>) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>        &#125;<br>        <span class="hljs-type">int</span> slow = <span class="hljs-number">0</span>, fast = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">while</span> (fast &lt; nums.<span class="hljs-built_in">size</span>()) &#123;<br>            <span class="hljs-keyword">if</span> (nums[fast] != nums[slow]) &#123;<br>                slow++;<br>                <span class="hljs-comment">// 维护 nums[0..slow] 无重复</span><br>                nums[slow] = nums[fast];<br>            &#125;<br>            fast++;<br>        &#125;<br>        <span class="hljs-comment">// 数组长度为索引 + 1</span><br>        <span class="hljs-keyword">return</span> slow + <span class="hljs-number">1</span>;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
 
                 
               </div>
@@ -301,7 +334,7 @@
   
     <span>></span>
     
-  <a href="/categories/leetcode/%E9%93%BE%E8%A1%A8/" class="category-chain-item">链表</a>
+  <a href="/categories/leetcode/%E6%95%B0%E7%BB%84/" class="category-chain-item">数组</a>
   
   
 
@@ -320,7 +353,7 @@
       
         <a href="/tags/leetcode/" class="print-no-link">#leetcode</a>
       
-        <a href="/tags/%E9%93%BE%E8%A1%A8/" class="print-no-link">#链表</a>
+        <a href="/tags/%E6%95%B0%E7%BB%84/" class="print-no-link">#数组</a>
       
     </div>
   
@@ -332,8 +365,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>1. 链表</div>
-      <div>http://binbo-zappy.github.io/2025/02/15/leetcode/1-链表/</div>
+      <div>LC26. 删除有序数组中的重复项</div>
+      <div>http://binbo-zappy.github.io/2025/03/05/leetcode/LC26-删除有序数组中的重复项/</div>
     </div>
     <div class="license-meta">
       
@@ -345,7 +378,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2025年2月15日</div>
+          <div>2025年3月5日</div>
         </div>
       
       
@@ -377,9 +410,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2025/02/17/leetcode/7-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" title="7. 动态规划">
+                      <a href="/2025/03/05/leetcode/LC27-%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0/" title="LC27. 移除元素">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">7. 动态规划</span>
+                        <span class="hidden-mobile">LC27. 移除元素</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -387,8 +420,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/02/15/leetcode/2-%E6%95%B0%E7%BB%84/" title="2. 数组">
-                        <span class="hidden-mobile">2. 数组</span>
+                      <a href="/2025/03/05/leetcode/LC61-%E6%97%8B%E8%BD%AC%E9%93%BE%E8%A1%A8/" title="LC61. 旋转链表">
+                        <span class="hidden-mobile">LC61. 旋转链表</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

@@ -225,23 +225,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-10-%E8%AE%A4%E8%AF%86%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" target="_self">
-          <img src="/imgs/rust.jpg" srcset="/img/loading.gif" lazyload alt="2.10 认识生命周期">
+        <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-3-%E6%89%80%E6%9C%89%E6%9D%83%E5%92%8C%E5%80%9F%E7%94%A8/" target="_self">
+          <img src="/imgs/rust.jpg" srcset="/img/loading.gif" lazyload alt="2.3 所有权和借用">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-10-%E8%AE%A4%E8%AF%86%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" target="_self">
-          2.10 认识生命周期
+        <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-3-%E6%89%80%E6%9C%89%E6%9D%83%E5%92%8C%E5%80%9F%E7%94%A8/" target="_self">
+          2.3 所有权和借用
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-10-%E8%AE%A4%E8%AF%86%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" target="_self">
+      <a class="index-excerpt " href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-3-%E6%89%80%E6%9C%89%E6%9D%83%E5%92%8C%E5%80%9F%E7%94%A8/" target="_self">
         <div>
-          认识生命周期 生命周期，简而言之就是引用的有效作用域。在大多数时候，我们无需手动的声明生命周期，因为编译器可以自动进行推导，用类型来类比下：  就像编译器大部分时候可以自动推导类型 &lt;-&gt; 一样，编译器大多数时候也可以自动推导生命周期 在多种类型存在时，编译器往往要求我们手动标明类型 &lt;-&gt; 当多个生命周期存在，且编译器无法推导出某个引用的生命周期时，就需要我们
+          1 所有权和借用 Rust 之所以能成为万众瞩目的语言，就是因为其内存安全性。在以往，内存安全几乎都是通过 GC 的方式实现，但是 GC 会引来性能、内存占用以及 Stop the world 等问题，在高性能场景和系统编程上是不可接受的，因此 Rust 采用了与众不同的方式：所有权系统。 理解 所有权 和 借用，对于 Rust 学习是至关重要的。
         </div>
       </a>
 
@@ -249,7 +249,7 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2025-01-05 22:37" pubdate>
+            <time datetime="2025-01-05 22:36" pubdate>
               2025-01-05
             </time>
           </div>
@@ -306,23 +306,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-9-2-KV%E5%AD%98%E5%82%A8-HashMap/" target="_self">
-          <img src="/imgs/rust.jpg" srcset="/img/loading.gif" lazyload alt="2.9.2 KV存储 HashMap">
+        <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-2-4-%E5%87%BD%E6%95%B0/" target="_self">
+          <img src="/imgs/rust.jpg" srcset="/img/loading.gif" lazyload alt="2.2.4 函数">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-9-2-KV%E5%AD%98%E5%82%A8-HashMap/" target="_self">
-          2.9.2 KV存储 HashMap
+        <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-2-4-%E5%87%BD%E6%95%B0/" target="_self">
+          2.2.4 函数
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-9-2-KV%E5%AD%98%E5%82%A8-HashMap/" target="_self">
+      <a class="index-excerpt " href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-2-4-%E5%87%BD%E6%95%B0/" target="_self">
         <div>
-          KV 存储 HashMap 和动态数组一样，HashMap 也是 Rust 标准库中提供的集合类型，但是又与动态数组不同，HashMap 中存储的是一一映射的 KV 键值对，并提供了平均复杂度为 O(1) 的查询方法，当我们希望通过一个 Key 去查询值时，该类型非常有用，以致于 Go 语言将该类型设置成了语言级别的内置特性。 Rust 中哈希类型（哈希映射）为 HashMap&l
+          1 函数 123fn add(i: i32, j: i32) -&gt; i32 &#123;   i + j &#125; 该函数如此简单，但是又是如此的五脏俱全，声明函数的关键字 fn，函数名 add()，参数 i 和 j，参数类型和返回值类型都是 i32，总之一切那么的普通，但是又那么的自信，直到你看到了下面这张图：   img  1.1 函数要点  函数名和变量名使
         </div>
       </a>
 
@@ -330,7 +330,7 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2025-01-05 22:37" pubdate>
+            <time datetime="2025-01-05 22:36" pubdate>
               2025-01-05
             </time>
           </div>
@@ -387,23 +387,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-9-1-%E5%8A%A8%E6%80%81%E6%95%B0%E7%BB%84-Vector/" target="_self">
-          <img src="/imgs/rust.jpg" srcset="/img/loading.gif" lazyload alt="2.9.1 动态数组 Vector">
+        <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-2-3-%E8%AF%AD%E5%8F%A5%E4%B8%8E%E8%A1%A8%E8%BE%BE%E5%BC%8F/" target="_self">
+          <img src="/imgs/rust.jpg" srcset="/img/loading.gif" lazyload alt="2.2.3 语句与表达式">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-9-1-%E5%8A%A8%E6%80%81%E6%95%B0%E7%BB%84-Vector/" target="_self">
-          2.9.1 动态数组 Vector
+        <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-2-3-%E8%AF%AD%E5%8F%A5%E4%B8%8E%E8%A1%A8%E8%BE%BE%E5%BC%8F/" target="_self">
+          2.2.3 语句与表达式
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-9-1-%E5%8A%A8%E6%80%81%E6%95%B0%E7%BB%84-Vector/" target="_self">
+      <a class="index-excerpt " href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-2-3-%E8%AF%AD%E5%8F%A5%E4%B8%8E%E8%A1%A8%E8%BE%BE%E5%BC%8F/" target="_self">
         <div>
-          动态数组 Vector 动态数组类型用 Vec&lt;T&gt; 表示，事实上，在之前的章节，它的身影多次出现，我们一直没有细讲，只是简单的把它当作数组处理。 动态数组允许你存储多个值，这些值在内存中一个紧挨着另一个排列，因此访问其中某个元素的成本非常低。动态数组只能存储相同类型的元素，如果你想存储不同类型的元素，可以使用之前讲过的枚举类型或者特征对象。 总之，当我们想拥有一个列表，里面都
+          1 语句和表达式 Rust 的函数体是由一系列语句组成，最后由一个表达式来返回值，例如： 12345678#![allow(unused)]fn main() &#123;fn add_with_extra(x: i32, y: i32) -&gt; i32 &#123;    let x = x + 1; // 语句    let y = y + 5; // 语句    x + y // 表
         </div>
       </a>
 
@@ -411,7 +411,7 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2025-01-05 22:37" pubdate>
+            <time datetime="2025-01-05 22:36" pubdate>
               2025-01-05
             </time>
           </div>
@@ -468,23 +468,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-9-%E9%9B%86%E5%90%88%E7%B1%BB%E5%9E%8B/" target="_self">
-          <img src="/imgs/rust.jpg" srcset="/img/loading.gif" lazyload alt="2.9 集合类型">
+        <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-2-2-%E5%AD%97%E7%AC%A6%E5%B8%83%E5%B0%94%E5%8D%95%E5%85%83%E7%B1%BB%E5%9E%8B/" target="_self">
+          <img src="/imgs/rust.jpg" srcset="/img/loading.gif" lazyload alt="2.2.2 字符、布尔、单元类型">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-9-%E9%9B%86%E5%90%88%E7%B1%BB%E5%9E%8B/" target="_self">
-          2.9 集合类型
+        <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-2-2-%E5%AD%97%E7%AC%A6%E5%B8%83%E5%B0%94%E5%8D%95%E5%85%83%E7%B1%BB%E5%9E%8B/" target="_self">
+          2.2.2 字符、布尔、单元类型
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-9-%E9%9B%86%E5%90%88%E7%B1%BB%E5%9E%8B/" target="_self">
+      <a class="index-excerpt " href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-2-2-%E5%AD%97%E7%AC%A6%E5%B8%83%E5%B0%94%E5%8D%95%E5%85%83%E7%B1%BB%E5%9E%8B/" target="_self">
         <div>
-          集合类型 集合在 Rust 中是一类比较特殊的类型，因为 Rust 中大多数数据类型都只能代表一个特定的值，但是集合却可以代表一大堆值。而且与语言级别的数组、字符串类型不同，标准库里的这些家伙是分配在堆上，因此都可以进行动态的增加和减少。 瞧，第一个集合排着整齐的队列登场了，它里面的每个元素都雄赳赳气昂昂跟在另外一个元素后面，大小、宽度、高度竟然全部一致，真是令人惊叹。 它就是 Vecto
+          1 字符、布尔、单元类型 1.1 字符类型(char) 下面的代码展示了几个颇具异域风情的字符： 123456fn main() &#123;    let c = &#x27;z&#x27;;    let z = &#x27;ℤ&#x27;;    let g = &#x27;国&#x27;;    let heart_eyed_cat = &#x27;😻&#x27;;&#125;
         </div>
       </a>
 
@@ -492,7 +492,7 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2025-01-05 22:37" pubdate>
+            <time datetime="2025-01-05 22:36" pubdate>
               2025-01-05
             </time>
           </div>
@@ -549,23 +549,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-8-4-%E8%BF%9B%E4%B8%80%E6%AD%A5%E6%B7%B1%E5%85%A5%E7%89%B9%E5%BE%81/" target="_self">
-          <img src="/imgs/rust.jpg" srcset="/img/loading.gif" lazyload alt="2.8.4 进一步深入特征">
+        <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-2-1-%E6%95%B0%E5%80%BC%E7%B1%BB%E5%9E%8B/" target="_self">
+          <img src="/imgs/rust.jpg" srcset="/img/loading.gif" lazyload alt="2.2.1 数值类型">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-8-4-%E8%BF%9B%E4%B8%80%E6%AD%A5%E6%B7%B1%E5%85%A5%E7%89%B9%E5%BE%81/" target="_self">
-          2.8.4 进一步深入特征
+        <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-2-1-%E6%95%B0%E5%80%BC%E7%B1%BB%E5%9E%8B/" target="_self">
+          2.2.1 数值类型
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-8-4-%E8%BF%9B%E4%B8%80%E6%AD%A5%E6%B7%B1%E5%85%A5%E7%89%B9%E5%BE%81/" target="_self">
+      <a class="index-excerpt " href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-2-1-%E6%95%B0%E5%80%BC%E7%B1%BB%E5%9E%8B/" target="_self">
         <div>
-          深入了解特征 1. 关联类型 在方法一章中，我们讲到了关联函数，但是实际上关联类型和关联函数并没有任何交集，虽然它们的名字有一半的交集。 关联类型是在特征定义的语句块中，申明一个自定义类型，这样就可以在特征的方法签名中使用该类型： 123456789pub trait Iterator &#123;    // type Item;：这是一个关联类型（associated type），
+          1 数值类型 Rust 使用一个相对传统的语法来创建整数（ 1， 2，...）和浮点数（ 1.0， 1.1，...）。  不仅仅是数值类型，Rust 也允许在复杂类型上定义运算符，例如在自定义类型上定义 + 运算符，这种行为被称为运算符重载，Rust 具体支持的可重载运算符见 附录 B。  1.1 整数类型 整数 是没有小数部分的数字。下表显示了 Rust 中的内置的整数类
         </div>
       </a>
 
@@ -573,7 +573,7 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2025-01-05 22:37" pubdate>
+            <time datetime="2025-01-05 22:36" pubdate>
               2025-01-05
             </time>
           </div>
@@ -630,23 +630,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-8-3-%E7%89%B9%E5%BE%81%E5%AF%B9%E8%B1%A1/" target="_self">
-          <img src="/imgs/rust.jpg" srcset="/img/loading.gif" lazyload alt="2.8.3 特征对象">
+        <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-2-%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B/" target="_self">
+          <img src="/imgs/rust.jpg" srcset="/img/loading.gif" lazyload alt="2.2 基本类型">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-8-3-%E7%89%B9%E5%BE%81%E5%AF%B9%E8%B1%A1/" target="_self">
-          2.8.3 特征对象
+        <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-2-%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B/" target="_self">
+          2.2 基本类型
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-8-3-%E7%89%B9%E5%BE%81%E5%AF%B9%E8%B1%A1/" target="_self">
+      <a class="index-excerpt " href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-2-%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B/" target="_self">
         <div>
-          特征对象 在上一节中有一段代码无法通过编译： 1234567891011fn returns_summarizable(switch: bool) -&gt; impl Summary &#123;    if switch &#123;        Post &#123;           // ...        &#125;    &#125; else &#123;
+          1 基本类型 Rust 每个值都有其确切的数据类型，总的来说可以分为两类：基本类型和复合类型。 基本类型意味着它们往往是一个最小化原子类型，无法解构为其它类型（一般意义上来说），由以下组成：  数值类型：有符号整数 ( i8, i16, i32, i64, isize)、 无符号整数 ( u8, u16, u32, u64, usize) 、浮点数 ( f32, f64)、以及有
         </div>
       </a>
 
@@ -654,7 +654,7 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2025-01-05 22:37" pubdate>
+            <time datetime="2025-01-05 22:36" pubdate>
               2025-01-05
             </time>
           </div>
@@ -711,23 +711,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-8-2-%E7%89%B9%E5%BE%81-Trait/" target="_self">
-          <img src="/imgs/rust.jpg" srcset="/img/loading.gif" lazyload alt="2.8.2 特征 Trait">
+        <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-1-%E5%8F%98%E9%87%8F%E7%BB%91%E5%AE%9A%E4%B8%8E%E8%A7%A3%E6%9E%84/" target="_self">
+          <img src="/imgs/rust.jpg" srcset="/img/loading.gif" lazyload alt="2.1 变量绑定与解构">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-8-2-%E7%89%B9%E5%BE%81-Trait/" target="_self">
-          2.8.2 特征 Trait
+        <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-1-%E5%8F%98%E9%87%8F%E7%BB%91%E5%AE%9A%E4%B8%8E%E8%A7%A3%E6%9E%84/" target="_self">
+          2.1 变量绑定与解构
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-8-2-%E7%89%B9%E5%BE%81-Trait/" target="_self">
+      <a class="index-excerpt " href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-1-%E5%8F%98%E9%87%8F%E7%BB%91%E5%AE%9A%E4%B8%8E%E8%A7%A3%E6%9E%84/" target="_self">
         <div>
-          特征 Trait 特征定义了一组可以被共享的行为，只要实现了特征，你就能使用这组行为。 1. 定义特征 如果不同的类型具有相同的行为，那么我们就可以定义一个特征，然后为这些类型实现该特征。定义特征是把一些方法组合在一起，目的是定义一个实现某些目标所必需的行为的集合。 例如，我们现在有文章 Post 和微博 Weibo 两种内容载体，而我们想对相应的内容进行总结，也就是无论是文章内容，还是
+          1 变量绑定与解构 1.1 为何要手动设置变量的可变性？ Rust 支持声明可变的变量，也支持声明不可变的变量（例如函数式语言），既要灵活性又要安全性。 运行性能上的提升，因为将本身无需改变的变量声明为不可变在运行期会避免一些多余的 runtime 检查。 1.2 变量命名 在命名方面，和其它语言没有区别，不过当给变量命名时，需要遵循 Rust 命名规范。  Rust 语言有
         </div>
       </a>
 
@@ -735,7 +735,7 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2025-01-05 22:37" pubdate>
+            <time datetime="2025-01-05 22:36" pubdate>
               2025-01-05
             </time>
           </div>
@@ -792,23 +792,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-8-1-%E6%B3%9B%E5%9E%8B-Generics/" target="_self">
-          <img src="/imgs/rust.jpg" srcset="/img/loading.gif" lazyload alt="2.8.1 泛型 Generics">
+        <a href="/2025/01/05/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/16-%E5%85%B3%E4%BA%8ETCP%E5%B9%B6%E5%8F%91%E8%BF%9E%E6%8E%A5%E7%9A%84%E5%87%A0%E4%B8%AA%E6%80%9D%E8%80%83%E9%A2%98%E4%B8%8E%E8%AF%95%E9%AA%8C/" target="_self">
+          <img src="/imgs/muduo.jpg" srcset="/img/loading.gif" lazyload alt="16. 关于TCP并发连接的几个思考题与试验">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-8-1-%E6%B3%9B%E5%9E%8B-Generics/" target="_self">
-          2.8.1 泛型 Generics
+        <a href="/2025/01/05/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/16-%E5%85%B3%E4%BA%8ETCP%E5%B9%B6%E5%8F%91%E8%BF%9E%E6%8E%A5%E7%9A%84%E5%87%A0%E4%B8%AA%E6%80%9D%E8%80%83%E9%A2%98%E4%B8%8E%E8%AF%95%E9%AA%8C/" target="_self">
+          16. 关于TCP并发连接的几个思考题与试验
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-8-1-%E6%B3%9B%E5%9E%8B-Generics/" target="_self">
+      <a class="index-excerpt " href="/2025/01/05/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/16-%E5%85%B3%E4%BA%8ETCP%E5%B9%B6%E5%8F%91%E8%BF%9E%E6%8E%A5%E7%9A%84%E5%87%A0%E4%B8%AA%E6%80%9D%E8%80%83%E9%A2%98%E4%B8%8E%E8%AF%95%E9%AA%8C/" target="_self">
         <div>
-          泛型 Generics 实际上，泛型就是一种多态。泛型主要目的是为程序员提供编程的便利，减少代码的臃肿，同时可以极大地丰富语言本身的表达能力，为程序员提供了一个合适的炮管。 123456789fn add&lt;T&gt;(a:T, b:T) -&gt; T &#123;    a + b&#125;fn main() &#123;    println!(&quot;add i8: &#12
+          附录 D 关于 TCP 并发连接的几个思考题与试验 第一道初级题目 有一台机器，它有一个 IP，上面运行了一个 TCP 服务程序，程序只侦听一个端口，问：从理论上讲（只考虑 TCP/IP 这一层，不考虑 IPv6）这个服务程序可以支持多少并发 TCP 连接？（答 65536 上下的直接出局。） 具体来说，这个问题等价于：有一个 TCP 服务程序的地址是 1.2.3.4:8765，问它
         </div>
       </a>
 
@@ -816,7 +816,7 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2025-01-05 22:37" pubdate>
+            <time datetime="2025-01-05 10:32" pubdate>
               2025-01-05
             </time>
           </div>
@@ -832,20 +832,13 @@
     
       <span class="category-chain">
         
-  <a href="/categories/rust/" class="category-chain-item">rust</a>
+  <a href="/categories/c/" class="category-chain-item">c++</a>
   
   
     <span>></span>
     
-  <a href="/categories/rust/rust%E5%9C%A3%E7%BB%8F/" class="category-chain-item">rust圣经</a>
+  <a href="/categories/c/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="category-chain-item">muduo多线程服务器</a>
   
-  
-    <span>></span>
-    
-  <a href="/categories/rust/rust%E5%9C%A3%E7%BB%8F/rust%E5%9F%BA%E7%A1%80/" class="category-chain-item">rust基础</a>
-  
-  
-
   
 
   
@@ -861,7 +854,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/rust/">#rust</a>
+              <a href="/tags/muduo/">#muduo</a>
             
           </div>
         
@@ -873,23 +866,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-8-%E6%B3%9B%E5%9E%8B%E5%92%8C%E7%89%B9%E5%BE%81/" target="_self">
-          <img src="/imgs/rust.jpg" srcset="/img/loading.gif" lazyload alt="2.8 泛型和特征">
+        <a href="/2025/01/05/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/15-%E5%85%B3%E4%BA%8EBoost%E7%9A%84%E7%9C%8B%E6%B3%95/" target="_self">
+          <img src="/imgs/muduo.jpg" srcset="/img/loading.gif" lazyload alt="15. 关于Boost的看法">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-8-%E6%B3%9B%E5%9E%8B%E5%92%8C%E7%89%B9%E5%BE%81/" target="_self">
-          2.8 泛型和特征
+        <a href="/2025/01/05/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/15-%E5%85%B3%E4%BA%8EBoost%E7%9A%84%E7%9C%8B%E6%B3%95/" target="_self">
+          15. 关于Boost的看法
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-8-%E6%B3%9B%E5%9E%8B%E5%92%8C%E7%89%B9%E5%BE%81/" target="_self">
+      <a class="index-excerpt " href="/2025/01/05/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/15-%E5%85%B3%E4%BA%8EBoost%E7%9A%84%E7%9C%8B%E6%B3%95/" target="_self">
         <div>
-          泛型和特征是 Rust 中最最重要的抽象类型
+          附录 C 关于 Boost 的看法 这是我为电子工业出版社出版的《Boost 程序库完全开发指南》写的推荐序，此处节选了我对在 C++ 工程项目中使用 Boost 的看法。 最近一年我电话面试了数十位 C++ 应聘者。惯用的暖场问题是“工作中使用过 STL 的哪些组件？使用过 Boost 的哪些组件？”。得到的答案大多集中在 vector、map、shared_ptr。如果对方是在校学
         </div>
       </a>
 
@@ -897,7 +890,7 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2025-01-05 22:37" pubdate>
+            <time datetime="2025-01-05 10:32" pubdate>
               2025-01-05
             </time>
           </div>
@@ -913,20 +906,13 @@
     
       <span class="category-chain">
         
-  <a href="/categories/rust/" class="category-chain-item">rust</a>
+  <a href="/categories/c/" class="category-chain-item">c++</a>
   
   
     <span>></span>
     
-  <a href="/categories/rust/rust%E5%9C%A3%E7%BB%8F/" class="category-chain-item">rust圣经</a>
+  <a href="/categories/c/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="category-chain-item">muduo多线程服务器</a>
   
-  
-    <span>></span>
-    
-  <a href="/categories/rust/rust%E5%9C%A3%E7%BB%8F/rust%E5%9F%BA%E7%A1%80/" class="category-chain-item">rust基础</a>
-  
-  
-
   
 
   
@@ -942,7 +928,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/rust/">#rust</a>
+              <a href="/tags/muduo/">#muduo</a>
             
           </div>
         
@@ -954,23 +940,23 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-7-%E6%96%B9%E6%B3%95-Method/" target="_self">
-          <img src="/imgs/rust.jpg" srcset="/img/loading.gif" lazyload alt="2.7 方法">
+        <a href="/2025/01/05/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/14-%E4%BB%8E%E3%80%8AC++Primer(%E7%AC%AC4%E7%89%88)%E3%80%8B%E5%85%A5%E6%89%8B%E5%AD%A6%E4%B9%A0C++/" target="_self">
+          <img src="/imgs/muduo.jpg" srcset="/img/loading.gif" lazyload alt="14. 从《C++Primer(第4版)》入手学习C++">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-7-%E6%96%B9%E6%B3%95-Method/" target="_self">
-          2.7 方法
+        <a href="/2025/01/05/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/14-%E4%BB%8E%E3%80%8AC++Primer(%E7%AC%AC4%E7%89%88)%E3%80%8B%E5%85%A5%E6%89%8B%E5%AD%A6%E4%B9%A0C++/" target="_self">
+          14. 从《C++Primer(第4版)》入手学习C++
         </a>
       </h2>
 
       
-      <a class="index-excerpt " href="/2025/01/05/rust%E5%9C%A3%E7%BB%8F/2-7-%E6%96%B9%E6%B3%95-Method/" target="_self">
+      <a class="index-excerpt " href="/2025/01/05/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B/14-%E4%BB%8E%E3%80%8AC++Primer(%E7%AC%AC4%E7%89%88)%E3%80%8B%E5%85%A5%E6%89%8B%E5%AD%A6%E4%B9%A0C++/" target="_self">
         <div>
-          方法 Method 在 Rust 中，方法和对象成对出现： 1object.method() 例如读取一个文件写入缓冲区，如果用函数的写法 read(f, buffer)，用方法的写法 f.read(buffer)。不过与其它语言 class 跟方法的联动使用不同（这里可能要修改下），Rust 的方法往往跟结构体、枚举、特征(Trait)一起使用，特征将在后面几章进行介绍。 1.
+          附录 B 从《C++ Primer（第4版）》入手学习 C++ B.1 为什么要学习 C++ 2009 年本书作者 Stanley Lippman 先生应邀来华参加上海祝成科技举办的 C++ 技术大会，他表示人们现在还用 C++ 的唯一理由是其性能。相比之下，Java、C#、Python 等语言更加易学易用并且开发工具丰富，它们的开发效率都高于 C++。但 C++ 目前仍然是运行最快
         </div>
       </a>
 
@@ -978,7 +964,7 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2025-01-05 22:37" pubdate>
+            <time datetime="2025-01-05 10:32" pubdate>
               2025-01-05
             </time>
           </div>
@@ -994,20 +980,13 @@
     
       <span class="category-chain">
         
-  <a href="/categories/rust/" class="category-chain-item">rust</a>
+  <a href="/categories/c/" class="category-chain-item">c++</a>
   
   
     <span>></span>
     
-  <a href="/categories/rust/rust%E5%9C%A3%E7%BB%8F/" class="category-chain-item">rust圣经</a>
+  <a href="/categories/c/muduo%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="category-chain-item">muduo多线程服务器</a>
   
-  
-    <span>></span>
-    
-  <a href="/categories/rust/rust%E5%9C%A3%E7%BB%8F/rust%E5%9F%BA%E7%A1%80/" class="category-chain-item">rust基础</a>
-  
-  
-
   
 
   
@@ -1023,7 +1002,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/rust/">#rust</a>
+              <a href="/tags/muduo/">#muduo</a>
             
           </div>
         
@@ -1035,7 +1014,7 @@
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/page/7/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/#board">6</a><a class="page-number" href="/page/7/#board">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/#board">9</a><a class="page-number" href="/page/10/#board">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/39/#board">39</a><a class="extend next" rel="next" href="/page/9/#board"><i class="iconfont icon-arrowright"></i></a>
+      <a class="extend prev" rel="prev" href="/page/7/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/#board">6</a><a class="page-number" href="/page/7/#board">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/#board">9</a><a class="page-number" href="/page/10/#board">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/37/#board">37</a><a class="extend next" rel="next" href="/page/9/#board"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
 
