@@ -1,0 +1,783 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="第一章 初识智能体 1. 智能体  真正赋予智能体&quot;智能&quot;的，是其自主性（Autonomy）。智能体并非只是被动响应外部刺激或严格执行预设指令的程序，它能够基于其感知和内部状态进行独立决策，以达成其设计目标。 学习型智能体：不依赖预设，而是通过与环境的互动自主学习，强化学习（Reinforcement Learning, RL）是实现这一思想最具代表性的路径。  2. 智能体的构成">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第一章 初识智能体">
+<meta property="og:url" content="http://binbo-zappy.github.io/2024/11/13/hello-agents/ch1/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="第一章 初识智能体 1. 智能体  真正赋予智能体&quot;智能&quot;的，是其自主性（Autonomy）。智能体并非只是被动响应外部刺激或严格执行预设指令的程序，它能够基于其感知和内部状态进行独立决策，以达成其设计目标。 学习型智能体：不依赖预设，而是通过与环境的互动自主学习，强化学习（Reinforcement Learning, RL）是实现这一思想最具代表性的路径。  2. 智能体的构成">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/hello-agents.png">
+<meta property="article:published_time" content="2024-11-13T14:09:25.000Z">
+<meta property="article:modified_time" content="2026-01-14T13:45:52.564Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="Agent">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/hello-agents.png">
+  
+  
+  
+  <title>第一章 初识智能体 - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Liekkas</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="第一章 初识智能体"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-11-13 22:09" pubdate>
+          2024年11月13日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          24 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">第一章 初识智能体</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="第一章-初识智能体"><a target="_blank" rel="noopener" href="https://datawhalechina.github.io/hello-agents/#/./chapter1/第一章%20初识智能体?id=第一章-初识智能体">第一章
+初识智能体</a></h1>
+<h2 id="智能体">1. 智能体</h2>
+<ul>
+<li><p>真正赋予智能体"智能"的，是其<strong>自主性（Autonomy）</strong>。智能体并非只是被动响应外部刺激或严格执行预设指令的程序，它能够基于其感知和内部状态进行独立决策，以达成其设计目标。</p></li>
+<li><p><strong>学习型智能体</strong>：不依赖预设，而是通过与环境的互动自主学习，<strong>强化学习（Reinforcement
+Learning, RL）</strong>是实现这一思想最具代表性的路径。</p></li>
+</ul>
+<h2 id="智能体的构成与运行原理">2. 智能体的构成与运行原理</h2>
+<h3 id="任务环境">2.1 任务环境</h3>
+<p>在人工智能领域，通常使用<strong>PEAS
+模型</strong>来精确描述一个任务环境，即分析其<strong>性能度量(Performance)、环境(Environment)、执行器(Actuators)和传感器(Sensors)</strong>
+。</p>
+<h3 id="智能体的运行机制">2.2 智能体的运行机制</h3>
+<p>智能体并非一次性完成任务，而是通过一个持续的循环与环境进行交互，这个核心机制被称为
+<strong>智能体循环 (Agent Loop)</strong>。</p>
+<figure>
+<img src="/2024/11/13/hello-agents/ch1/1757242319667-5.png" srcset="/img/loading.gif" lazyload alt="智能体与环境交互的基本循环">
+<figcaption aria-hidden="true">智能体与环境交互的基本循环</figcaption>
+</figure>
+<p>这个循环主要包含以下几个相互关联的阶段：</p>
+<ol type="1">
+<li><strong>感知
+(Perception)</strong>：这是循环的起点。智能体通过其传感器（例如，API
+的监听端口、用户输入接口）接收来自环境的输入信息。这些信息，即<strong>观察
+(Observation)</strong>，既可以是用户的初始指令，也可以是上一步行动所导致的环境状态变化反馈。</li>
+<li><strong>思考
+(Thought)</strong>：接收到观察信息后，智能体进入其核心决策阶段。对于 LLM
+智能体而言，这通常是由大语言模型驱动的内部推理过程。如图所示，“思考”阶段可进一步细分为两个关键环节：
+<ul>
+<li><strong>规划
+(Planning)</strong>：智能体基于当前的观察和其内部记忆，更新对任务和环境的理解，并制定或调整一个行动计划。这可能涉及将复杂目标分解为一系列更具体的子任务。</li>
+<li><strong>工具选择 (Tool
+Selection)</strong>：根据当前计划，智能体从其可用的工具库中，选择最适合执行下一步骤的工具，并确定调用该工具所需的具体参数。</li>
+</ul></li>
+<li><strong>行动
+(Action)</strong>：决策完成后，智能体通过其执行器（Actuators）执行具体的行动。这通常表现为调用一个选定的工具（如代码解释器、搜索引擎
+API），从而对环境施加影响，意图改变环境的状态。</li>
+</ol>
+<p>行动并非循环的终点。智能体的行动会引起<strong>环境
+(Environment)</strong> 的<strong>状态变化 (State
+Change)</strong>，环境随即会产生一个新的<strong>观察
+(Observation)</strong>
+作为结果反馈。这个新的观察又会在下一轮循环中被智能体的感知系统捕获，形成一个持续的“感知-思考-行动-观察”的闭环。智能体正是通过不断重复这一循环，逐步推进任务，从初始状态向目标状态演进。</p>
+<h2 id="动手体验5-分钟实现第一个智能体">3. 动手体验：5
+分钟实现第一个智能体</h2>
+<p>在本案例中，我们的目标是构建一个能处理分步任务的智能旅行助手。需要解决的用户任务定义为："你好，请帮我查询一下今天北京的天气，然后根据天气推荐一个合适的旅游景点。"</p>
+<h3 id="准备工作">3.1 准备工作</h3>
+<ol type="1">
+<li><p>Python环境配置</p>
+<ol type="1">
+<li><p>为了能从 Python 程序中访问网络 API，我们需要一个 HTTP
+库。<code>requests</code>是 Python 社区中最流行、最易用的选择。</p></li>
+<li><p><code>tavily-python</code>是一个强大的 AI 搜索 API
+客户端，用于获取实时的网络搜索结果，可以在<a target="_blank" rel="noopener" href="https://www.tavily.com/">官网</a>注册后获取 API。</p></li>
+<li><p><code>openai</code>是 OpenAI 官方提供的 Python SDK，用于调用 GPT
+等大语言模型服务。</p></li>
+<li><p>安装python库</p></li>
+</ol></li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">pip install requests tavily-python openai<br></code></pre></td></tr></table></figure>
+<ol start="2" type="1">
+<li>代码</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> requests<br><span class="hljs-keyword">import</span> os<br><span class="hljs-keyword">from</span> tavily <span class="hljs-keyword">import</span> TavilyClient<br><span class="hljs-keyword">from</span> openai <span class="hljs-keyword">import</span> OpenAI<br><span class="hljs-keyword">import</span> re<br><br>AGENT_SYSTEM_PROMPT = <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">你是一个智能旅行助手。你的任务是分析用户的请求，并使用可用工具一步步地解决问题。</span><br><span class="hljs-string"></span><br><span class="hljs-string"># 可用工具:</span><br><span class="hljs-string">- `get_weather(city: str)`: 查询指定城市的实时天气。</span><br><span class="hljs-string">- `get_attraction(city: str, weather: str)`: 根据城市和天气搜索推荐的旅游景点。</span><br><span class="hljs-string"></span><br><span class="hljs-string"># 行动格式:</span><br><span class="hljs-string">你的回答必须严格遵循以下格式。首先是你的思考过程，然后是你要执行的具体行动，每次回复只输出一对Thought-Action：</span><br><span class="hljs-string">Thought: [这里是你的思考过程和下一步计划]</span><br><span class="hljs-string">Action: [这里是你要调用的工具，格式为 function_name(arg_name=&quot;arg_value&quot;)]</span><br><span class="hljs-string"></span><br><span class="hljs-string"># 任务完成:</span><br><span class="hljs-string">当你收集到足够的信息，能够回答用户的最终问题时，你必须在`Action:`字段后使用 `finish(answer=&quot;...&quot;)` 来输出最终答案。</span><br><span class="hljs-string"></span><br><span class="hljs-string">请开始吧！</span><br><span class="hljs-string">&quot;&quot;&quot;</span><br><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">get_weather</span>(<span class="hljs-params">city: <span class="hljs-built_in">str</span></span>) -&gt; <span class="hljs-built_in">str</span>:<br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    通过调用 wttr.in API 查询真实的天气信息。</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br>    <span class="hljs-comment"># API端点，我们请求JSON格式的数据</span><br>    url = <span class="hljs-string">f&quot;https://wttr.in/<span class="hljs-subst">&#123;city&#125;</span>?format=j1&quot;</span><br>    <br>    <span class="hljs-keyword">try</span>:<br>        <span class="hljs-comment"># 发起网络请求</span><br>        response = requests.get(url)<br>        <span class="hljs-comment"># 检查响应状态码是否为200 (成功)</span><br>        response.raise_for_status() <br>        <span class="hljs-comment"># 解析返回的JSON数据</span><br>        data = response.json()<br>        <br>        <span class="hljs-comment"># 提取当前天气状况</span><br>        current_condition = data[<span class="hljs-string">&#x27;current_condition&#x27;</span>][<span class="hljs-number">0</span>]<br>        weather_desc = current_condition[<span class="hljs-string">&#x27;weatherDesc&#x27;</span>][<span class="hljs-number">0</span>][<span class="hljs-string">&#x27;value&#x27;</span>]<br>        temp_c = current_condition[<span class="hljs-string">&#x27;temp_C&#x27;</span>]<br>        <br>        <span class="hljs-comment"># 格式化成自然语言返回</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-string">f&quot;<span class="hljs-subst">&#123;city&#125;</span>当前天气:<span class="hljs-subst">&#123;weather_desc&#125;</span>，气温<span class="hljs-subst">&#123;temp_c&#125;</span>摄氏度&quot;</span><br>        <br>    <span class="hljs-keyword">except</span> requests.exceptions.RequestException <span class="hljs-keyword">as</span> e:<br>        <span class="hljs-comment"># 处理网络错误</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-string">f&quot;错误:查询天气时遇到网络问题 - <span class="hljs-subst">&#123;e&#125;</span>&quot;</span><br>    <span class="hljs-keyword">except</span> (KeyError, IndexError) <span class="hljs-keyword">as</span> e:<br>        <span class="hljs-comment"># 处理数据解析错误</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-string">f&quot;错误:解析天气数据失败，可能是城市名称无效 - <span class="hljs-subst">&#123;e&#125;</span>&quot;</span><br><br><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">get_attraction</span>(<span class="hljs-params">city: <span class="hljs-built_in">str</span>, weather: <span class="hljs-built_in">str</span></span>) -&gt; <span class="hljs-built_in">str</span>:<br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    根据城市和天气，使用Tavily Search API搜索并返回优化后的景点推荐。</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br>    <span class="hljs-comment"># 1. 从环境变量中读取API密钥</span><br>    api_key = os.environ.get(<span class="hljs-string">&quot;TAVILY_API_KEY&quot;</span>)<br>    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> api_key:<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;错误:未配置TAVILY_API_KEY环境变量。&quot;</span><br><br>    <span class="hljs-comment"># 2. 初始化Tavily客户端</span><br>    tavily = TavilyClient(api_key=api_key)<br>    <br>    <span class="hljs-comment"># 3. 构造一个精确的查询</span><br>    query = <span class="hljs-string">f&quot;&#x27;<span class="hljs-subst">&#123;city&#125;</span>&#x27; 在&#x27;<span class="hljs-subst">&#123;weather&#125;</span>&#x27;天气下最值得去的旅游景点推荐及理由&quot;</span><br>    <br>    <span class="hljs-keyword">try</span>:<br>        <span class="hljs-comment"># 4. 调用API，include_answer=True会返回一个综合性的回答</span><br>        <span class="hljs-comment"># 添加 language=&quot;zh&quot; 参数确保返回中文结果</span><br>        response = tavily.search(query=query, search_depth=<span class="hljs-string">&quot;basic&quot;</span>, include_answer=<span class="hljs-literal">True</span>)<br>        <br>        <span class="hljs-comment"># 5. Tavily返回的结果已经非常干净，可以直接使用</span><br>        <span class="hljs-comment"># response[&#x27;answer&#x27;] 是一个基于所有搜索结果的总结性回答</span><br>        <span class="hljs-keyword">if</span> response.get(<span class="hljs-string">&quot;answer&quot;</span>):<br>            <span class="hljs-keyword">return</span> response[<span class="hljs-string">&quot;answer&quot;</span>]<br>        <br>        <span class="hljs-comment"># 如果没有综合性回答，则格式化原始结果</span><br>        formatted_results = []<br>        <span class="hljs-keyword">for</span> result <span class="hljs-keyword">in</span> response.get(<span class="hljs-string">&quot;results&quot;</span>, []):<br>            formatted_results.append(<span class="hljs-string">f&quot;- <span class="hljs-subst">&#123;result[<span class="hljs-string">&#x27;title&#x27;</span>]&#125;</span>: <span class="hljs-subst">&#123;result[<span class="hljs-string">&#x27;content&#x27;</span>]&#125;</span>&quot;</span>)<br>        <br>        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> formatted_results:<br>             <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;抱歉，没有找到相关的旅游景点推荐。&quot;</span><br><br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;根据搜索，为您找到以下信息:\n&quot;</span> + <span class="hljs-string">&quot;\n&quot;</span>.join(formatted_results)<br><br>    <span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">f&quot;错误:执行Tavily搜索时出现问题 - <span class="hljs-subst">&#123;e&#125;</span>&quot;</span><br><br><span class="hljs-comment"># 将所有工具函数放入一个字典，方便后续调用</span><br>available_tools = &#123;<br>    <span class="hljs-string">&quot;get_weather&quot;</span>: get_weather,<br>    <span class="hljs-string">&quot;get_attraction&quot;</span>: get_attraction,<br>&#125;<br><br><br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">OpenAICompatibleClient</span>:<br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    一个用于调用任何兼容OpenAI接口的LLM服务的客户端。</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, model: <span class="hljs-built_in">str</span>, api_key: <span class="hljs-built_in">str</span>, base_url: <span class="hljs-built_in">str</span></span>):<br>        <span class="hljs-variable language_">self</span>.model = model<br>        <span class="hljs-variable language_">self</span>.client = OpenAI(api_key=api_key, base_url=base_url)<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">generate</span>(<span class="hljs-params">self, prompt: <span class="hljs-built_in">str</span>, system_prompt: <span class="hljs-built_in">str</span></span>) -&gt; <span class="hljs-built_in">str</span>:<br>        <span class="hljs-string">&quot;&quot;&quot;调用LLM API来生成回应。&quot;&quot;&quot;</span><br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;正在调用大语言模型...&quot;</span>)<br>        <span class="hljs-keyword">try</span>:<br>            messages = [<br>                &#123;<span class="hljs-string">&#x27;role&#x27;</span>: <span class="hljs-string">&#x27;system&#x27;</span>, <span class="hljs-string">&#x27;content&#x27;</span>: system_prompt&#125;,<br>                &#123;<span class="hljs-string">&#x27;role&#x27;</span>: <span class="hljs-string">&#x27;user&#x27;</span>, <span class="hljs-string">&#x27;content&#x27;</span>: prompt&#125;<br>            ]<br>            response = <span class="hljs-variable language_">self</span>.client.chat.completions.create(<br>                model=<span class="hljs-variable language_">self</span>.model,<br>                messages=messages,<br>                stream=<span class="hljs-literal">False</span><br>            )<br>            answer = response.choices[<span class="hljs-number">0</span>].message.content<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;大语言模型响应成功。&quot;</span>)<br>            <span class="hljs-keyword">return</span> answer<br>        <span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;调用LLM API时发生错误: <span class="hljs-subst">&#123;e&#125;</span>&quot;</span>)<br>            <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;错误:调用语言模型服务时出错。&quot;</span><br><br><br><br><span class="hljs-comment"># --- 1. 配置LLM客户端 ---</span><br><span class="hljs-comment"># 请根据您使用的服务，将这里替换成对应的凭证和地址 &quot;deepseek-ai/DeepSeek-V3.2&quot; #</span><br>API_KEY = <span class="hljs-string">&quot;ms&quot;</span><br>BASE_URL = <span class="hljs-string">&quot;https://api-inference.modelscope.cn/v1&quot;</span><br>MODEL_ID = <span class="hljs-string">&quot;Qwen/Qwen2.5-7B-Instruct&quot;</span><br>TAVILY_API_KEY=<span class="hljs-string">&quot;tvly-&quot;</span><br>os.environ[<span class="hljs-string">&#x27;TAVILY_API_KEY&#x27;</span>] = TAVILY_API_KEY<br><br>llm = OpenAICompatibleClient(<br>    model=MODEL_ID,<br>    api_key=API_KEY,<br>    base_url=BASE_URL<br>)<br><br><span class="hljs-comment"># --- 2. 初始化 ---</span><br>user_prompt = <span class="hljs-string">&quot;你好，请帮我查询一下今天北京的天气，然后根据天气推荐一个合适的旅游景点。&quot;</span><br>prompt_history = [<span class="hljs-string">f&quot;用户请求: <span class="hljs-subst">&#123;user_prompt&#125;</span>&quot;</span>]<br><br><span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;用户输入: <span class="hljs-subst">&#123;user_prompt&#125;</span>\n&quot;</span> + <span class="hljs-string">&quot;=&quot;</span>*<span class="hljs-number">40</span>)<br><br><span class="hljs-comment"># --- 3. 运行主循环 ---</span><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">5</span>): <span class="hljs-comment"># 设置最大循环次数</span><br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;--- 循环 <span class="hljs-subst">&#123;i+<span class="hljs-number">1</span>&#125;</span> ---\n&quot;</span>)<br>    <br>    <span class="hljs-comment"># 3.1. 构建Prompt</span><br>    full_prompt = <span class="hljs-string">&quot;\n&quot;</span>.join(prompt_history)<br>    <br>    <span class="hljs-comment"># 3.2. 调用LLM进行思考</span><br>    llm_output = llm.generate(full_prompt, system_prompt=AGENT_SYSTEM_PROMPT)<br>    <span class="hljs-comment"># 模型可能会输出多余的Thought-Action，需要截断</span><br>    <span class="hljs-keyword">match</span> = re.search(<span class="hljs-string">r&#x27;(Thought:.*?Action:.*?)(?=\n\s*(?:Thought:|Action:|Observation:)|\Z)&#x27;</span>, llm_output, re.DOTALL)<br>    <span class="hljs-keyword">if</span> <span class="hljs-keyword">match</span>:<br>        truncated = <span class="hljs-keyword">match</span>.group(<span class="hljs-number">1</span>).strip()<br>        <span class="hljs-keyword">if</span> truncated != llm_output.strip():<br>            llm_output = truncated<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;已截断多余的 Thought-Action 对&quot;</span>)<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;模型输出:\n<span class="hljs-subst">&#123;llm_output&#125;</span>\n&quot;</span>)<br>    prompt_history.append(llm_output)<br>    <br>    <span class="hljs-comment"># 3.3. 解析并执行行动</span><br>    action_match = re.search(<span class="hljs-string">r&quot;Action: (.*)&quot;</span>, llm_output, re.DOTALL)<br>    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> action_match:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;解析错误:模型输出中未找到 Action。&quot;</span>)<br>        <span class="hljs-keyword">break</span><br>    action_str = action_match.group(<span class="hljs-number">1</span>).strip()<br><br>    <span class="hljs-keyword">if</span> action_str.startswith(<span class="hljs-string">&quot;finish&quot;</span>):<br>        final_answer = re.search(<span class="hljs-string">r&#x27;finish\(answer=&quot;(.*)&quot;\)&#x27;</span>, action_str).group(<span class="hljs-number">1</span>)<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;任务完成，最终答案: <span class="hljs-subst">&#123;final_answer&#125;</span>&quot;</span>)<br>        <span class="hljs-keyword">break</span><br>    <br>    tool_name = re.search(<span class="hljs-string">r&quot;(\w+)\(&quot;</span>, action_str).group(<span class="hljs-number">1</span>)<br>    args_str = re.search(<span class="hljs-string">r&quot;\((.*)\)&quot;</span>, action_str).group(<span class="hljs-number">1</span>)<br>    kwargs = <span class="hljs-built_in">dict</span>(re.findall(<span class="hljs-string">r&#x27;(\w+)=&quot;([^&quot;]*)&quot;&#x27;</span>, args_str))<br><br>    <span class="hljs-keyword">if</span> tool_name <span class="hljs-keyword">in</span> available_tools:<br>        observation = available_tools[tool_name](**kwargs)<br>    <span class="hljs-keyword">else</span>:<br>        observation = <span class="hljs-string">f&quot;错误:未定义的工具 &#x27;<span class="hljs-subst">&#123;tool_name&#125;</span>&#x27;&quot;</span><br><br>    <span class="hljs-comment"># 3.4. 记录观察结果</span><br>    observation_str = <span class="hljs-string">f&quot;Observation: <span class="hljs-subst">&#123;observation&#125;</span>&quot;</span><br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;<span class="hljs-subst">&#123;observation_str&#125;</span>\n&quot;</span> + <span class="hljs-string">&quot;=&quot;</span>*<span class="hljs-number">40</span>)<br>    prompt_history.append(observation_str)<br><br></code></pre></td></tr></table></figure>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs txt">用户输入: 你好，请帮我查询一下今天北京的天气，然后根据天气推荐一个合适的旅游景点。<br>========================================<br>--- 循环 1 ---<br><br>正在调用大语言模型...<br>大语言模型响应成功。<br>模型输出:<br>Thought: 首先需要查询北京今天的天气情况。<br>Action: get_weather(city=&quot;北京&quot;)<br><br>Observation: 北京当前天气:Clear，气温-6摄氏度<br>========================================<br>--- 循环 2 ---<br><br>正在调用大语言模型...<br>大语言模型响应成功。<br>模型输出:<br>Thought: 现在知道北京今天是晴天，温度较低，接下来需要根据这个信息来推荐一个合适的旅游景点。<br>Action: get_attraction(city=&quot;北京&quot;, weather=&quot;Clear&quot;)<br><br>Observation: In clear weather, Beijing&#x27;s top attractions include the Forbidden City, the Great Wall at Mutianyu, and the Summer Palace. These sites offer rich historical experiences and scenic views.<br>========================================<br>--- 循环 3 ---<br><br>正在调用大语言模型...<br>大语言模型响应成功。<br>模型输出:<br>Thought: 根据当前的天气情况，我推荐您去参观故宫、慕田峪长城或颐和园等地方，这些地方都有丰富的历史文化背景和美丽的风景。但由于今 天北京的气温较低，建议穿着保暖衣物。<br>Action: finish(answer=&quot;今天北京天气晴朗，气温-6摄氏度，我推荐您去参观故宫、慕田峪长城或颐和园等地方，但请注意保暖。&quot;)<br><br>任务完成，最终答案: 今天北京天气晴朗，气温-6摄氏度，我推荐您去参观故宫、慕田峪长城或颐和园等地方，但请注意保暖。<br></code></pre></td></tr></table></figure>
+<p>这个简单的旅行助手案例，集中演示了基于<code>Thought-Action-Observation</code>范式的智能体所具备的四项基本能力：任务分解、工具调用、上下文理解和结果合成。正是通过这个循环的不断迭代，智能体才得以将一个模糊的用户意图，转化为一系列具体、可执行的步骤，并最终达成目标。</p>
+<p><strong>智能体有哪些主流的应用范式？</strong>
+两种主流的智能体交互模式：一是以 GitHub Copilot 和 Cursor
+等为代表的、增强人类工作流的“开发者工具”；二是以 CrewAI、MetaGPT 和
+AgentScope 等框架为代表的、能够独立完成高层级目标的“自主协作者”。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/AI/" class="category-chain-item">AI</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI/Agent/" class="category-chain-item">Agent</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI/Agent/Hello-Agents/" class="category-chain-item">Hello-Agents</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Agent/" class="print-no-link">#Agent</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>第一章 初识智能体</div>
+      <div>http://binbo-zappy.github.io/2024/11/13/hello-agents/ch1/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年11月13日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/11/13/ML/class1-week3-%E6%9C%89%E7%9B%91%E7%9D%A3%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9B%9E%E5%BD%92%E5%92%8C%E5%88%86%E7%B1%BB-%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/" title="1.3 有监督机器学习回归和分类-逻辑回归-吴恩达">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">1.3 有监督机器学习回归和分类-逻辑回归-吴恩达</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/11/12/%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E4%BB%BB%E5%8A%A1%E5%88%86%E9%85%8D/%E5%9F%BA%E4%BA%8E%E6%BC%94%E5%91%98-%E8%AF%84%E8%AE%BA%E5%AE%B6%E6%A1%86%E6%9E%B6%E7%9A%84%E5%B1%82%E6%AC%A1%E5%8C%96%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%8D%8F%E5%90%8C%E5%86%B3%E7%AD%96%E6%96%B9%E6%B3%95/" title="基于演员-评论家框架的层次化多智能体协同决策方法">
+                        <span class="hidden-mobile">基于演员-评论家框架的层次化多智能体协同决策方法</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
