@@ -1,0 +1,837 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Binbo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="第三章 大语言模型基础 1. 语言模型与 Transformer 架构 1.1 从 N-gram 到 RNN 语言模型 (Language Model, LM) 是自然语言处理的核心，其根本任务是计算一个词序列（即一个句子）出现的概率。一个好的语言模型能够告诉我们什么样的句子是通顺的、自然的。 (1) 统计语言模型与N-gram的思想 在深度学习兴起之前，统计方法是语言模型的主流。其">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第三章 大语言模型基础">
+<meta property="og:url" content="http://binbo-zappy.github.io/2026/01/15/hello-agents/ch3/index.html">
+<meta property="og:site_name" content="Binbo">
+<meta property="og:description" content="第三章 大语言模型基础 1. 语言模型与 Transformer 架构 1.1 从 N-gram 到 RNN 语言模型 (Language Model, LM) 是自然语言处理的核心，其根本任务是计算一个词序列（即一个句子）出现的概率。一个好的语言模型能够告诉我们什么样的句子是通顺的、自然的。 (1) 统计语言模型与N-gram的思想 在深度学习兴起之前，统计方法是语言模型的主流。其">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://binbo-zappy.github.io/imgs/hello-agents.png">
+<meta property="article:published_time" content="2026-01-15T03:21:42.349Z">
+<meta property="article:modified_time" content="2026-01-15T09:03:10.714Z">
+<meta property="article:author" content="Binbo">
+<meta property="article:tag" content="Agent">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://binbo-zappy.github.io/imgs/hello-agents.png">
+  
+  
+  
+  <title>第三章 大语言模型基础 - Binbo</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"binbo-zappy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Liekkas</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="第三章 大语言模型基础"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-01-15 11:21" pubdate>
+          2026年1月15日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          16 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">第三章 大语言模型基础</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="第三章-大语言模型基础">第三章 大语言模型基础</h1>
+<h2 id="语言模型与-transformer-架构">1. 语言模型与 Transformer 架构</h2>
+<h3 id="从-n-gram-到-rnn">1.1 从 N-gram 到 RNN</h3>
+<p><strong>语言模型 (Language Model, LM)</strong>
+是自然语言处理的核心，其根本任务是计算一个词序列（即一个句子）出现的概率。一个好的语言模型能够告诉我们什么样的句子是通顺的、自然的。</p>
+<h4 id="统计语言模型与n-gram的思想">(1)
+<strong>统计语言模型与N-gram的思想</strong></h4>
+<p>在深度学习兴起之前，统计方法是语言模型的主流。其核心思想是，一个句子出现的概率，等于该句子中每个词出现的条件概率的连乘。对于一个由词
+<span class="math inline">\(w_1, w_2, \cdots, w_m\)</span> 构成的句子
+S，其概率 P(S) 可以表示为：</p>
+<p><span class="math display">\[P(S) = P(w_1, w_2, \dots, w_m) = P(w_1)
+\cdot P(w_2 \mid w_1) \cdot P(w_3 \mid w_1, w_2) \cdot \cdots \cdot
+P(w_m \mid w_1, \dots, w_{m-1})\]</span></p>
+<p>这个公式被称为概率的链式法则。然而，直接计算这个公式几乎是不可能的，因为像<span class="math inline">\(P(w_m \mid w_1, \dots,
+w_{m-1})\)</span>这样的条件概率太难从语料库中估计了，词序列 <span class="math inline">\(w_1, w_2, \cdots,
+w_{m-1}\)</span>可能从未在训练数据中出现过。</p>
+<p>为了解决这个问题，引入了<strong>马尔可夫假设 (Markov
+Assumption)</strong>
+核心思想是：我们不必回溯一个词的全部历史，可以近似地认为，一个词的出现概率只与它前面有限的
+<span class="math inline">\(n−1\)</span>个词有关，基于这个假设建立的语言模型，我们称之为
+<strong>N-gram模型</strong>。这些概率可以通过在大型语料库中进行<strong>最大似然估计(Maximum
+Likelihood Estimation,MLE)</strong> 来计算。</p>
+<p>N-gram 模型定义，基于 “词的出现仅与前 N-1 个词相关” 的假设，N
+代表上下文窗口大小，常见的有：</p>
+<ul>
+<li><strong>Bigram（N=2）</strong>：词的出现仅与前 1 个词相关，即 <span class="math inline">\(P(w_i \mid w_1, w_2, \dots, w_{i-1}) \approx P(w_i
+\mid w_{i-1})\)</span></li>
+<li><strong>Trigram（N=3）</strong>：词的出现仅与前 2 个词相关，即 <span class="math inline">\(P(w_i \mid w_1, w_2, \dots, w_{i-1}) \approx P(w_i
+\mid w_{i-2}, w_{i-1})\)</span></li>
+</ul>
+<p>概率计算方法（最大似然估计）:</p>
+<p>通过语料库中的词频统计来估算概率，以 Bigram 为例：</p>
+<p><span class="math display">\[P(w_i \mid w_{i-1}) =
+\frac{\text{Count}(w_{i-1}, w_i)}{\text{Count}(w_{i-1})}\]</span></p>
+<p>其中：</p>
+<ul>
+<li><span class="math inline">\(\text{Count}(w_{i-1},
+w_i)\)</span>：词对 <span class="math inline">\((w_{i-1},
+w_i)\)</span>在语料中连续出现的次数</li>
+<li><span class="math inline">\(\text{Count}(w_{i-1})\)</span>：词 <span class="math inline">\(w_{i-1}\)</span>在语料中出现的总次数</li>
+</ul>
+<p>示例（Bigram 估算句子概率）</p>
+<p>用迷你语料 <span class="math inline">\(\{\text{datawhale agent
+learns}, \text{datawhale agent works}\}\)</span>，估算句子<span class="math inline">\(\text{datawhale agent learns}\)</span>
+的概率：</p>
+<ul>
+<li>第一步：<span class="math inline">\(P(\text{datawhale}) =
+\frac{\text{Count}(\text{datawhale})}{\text{totalCount}} = \frac{2}{6}
+\approx 0.333\)</span></li>
+<li>第二步：$P( ) = = = 1 $</li>
+<li>第三步：<span class="math inline">\(P(\text{learns} \mid
+\text{agent}) = \frac{\text{Count}(\text{agent
+learns})}{\text{Count}(\text{agent})} = \frac{1}{2} = 0.5\)</span></li>
+<li>最终：<span class="math inline">\(P(\text{datawhale agent learns})
+\approx 0.333 \times 1 \times 0.5 = 0.1665\)</span></li>
+</ul>
+<p>N-gram 模型虽然简单有效，但有两个致命缺陷：</p>
+<ol type="1">
+<li><strong>数据稀疏性 (Sparsity)</strong>
+：如果一个词序列从未在语料库中出现，其概率估计就为
+0，这显然是不合理的。虽然可以通过平滑 (Smoothing)
+技术缓解，但无法根除。</li>
+<li><strong>泛化能力差：</strong>模型无法理解词与词之间的语义相似性。</li>
+</ol>
+<h4 id="神经网络语言模型与词嵌入">(2)
+<strong>神经网络语言模型与词嵌入</strong></h4>
+<p>N-gram
+模型的根本缺陷在于它将词视为孤立、离散的符号。为了克服这个问题，研究者们转向了神经网络，并提出了一种思想：用连续的向量来表示词。2003年，Bengio
+等人提出的<strong>前馈神经网络语言模型 (Feedforward Neural Network
+Language Model)</strong> 是这一领域的里程碑。</p>
+<p>其核心思想可以分为两步：</p>
+<ol type="1">
+<li><strong>构建一个语义空间</strong>：创建一个高维的连续向量空间，然后将词汇表中的每个词都映射为该空间中的一个点。这个点（即向量）就被称为<strong>词嵌入
+(Word Embedding)</strong>
+或词向量。在这个空间里，语义上相近的词，它们对应的向量在空间中的位置也相近。例如，<code>agent</code>
+和 <code>robot</code> 的向量会靠得很近，而 <code>agent</code> 和
+<code>apple</code> 的向量会离得很远。</li>
+<li><strong>学习从上下文到下一个词的映射</strong>：利用神经网络的强大拟合能力，来学习一个函数。这个函数的输入是前
+<span class="math inline">\(n−1\)</span>
+个词的词向量，输出是词汇表中每个词在当前上下文后出现的概率分布。</li>
+</ol>
+<figure>
+<img src="/2026/01/15/hello-agents/ch3/1757249275674-1.png" srcset="/img/loading.gif" lazyload alt="神经网络语言模型架构示意图">
+<figcaption aria-hidden="true">神经网络语言模型架构示意图</figcaption>
+</figure>
+<p>词嵌入是在模型训练过程中自动学习得到的。模型为了完成“预测下一个词”这个任务，会不断调整每个词的向量位置，最终使这些向量能够蕴含丰富的语义信息。一旦我们将词转换成了向量，我们就可以用数学工具来度量它们之间的关系。最常用的方法是<strong>余弦相似度
+(Cosine Similarity)</strong>
+，它通过计算两个向量夹角的余弦值来衡量它们的相似性。</p>
+<p><span class="math display">\[\text{similarity}(\vec{a}, \vec{b}) =
+\cos(\theta) = \frac{\vec{a} \cdot \vec{b}}{|\vec{a}|
+|\vec{b}|}\]</span></p>
+<p>这个公式的含义是：</p>
+<ul>
+<li>如果两个向量方向完全相同，夹角为0°，余弦值为1，表示完全相关。</li>
+<li>如果两个向量方向正交，夹角为90°，余弦值为0，表示毫无关系。</li>
+<li>如果两个向量方向完全相反，夹角为180°，余弦值为-1，表示完全负相关。</li>
+</ul>
+<p>通过这种方式，词向量不仅能捕捉到“同义词”这类简单的关系，还能捕捉到更复杂的类比关系。</p>
+<h4 id="循环神经网络-rnn-与长短时记忆网络-lstm">（3）循环神经网络 (RNN)
+与长短时记忆网络 (LSTM)</h4>
+<p><strong>循环神经网络 (Recurrent Neural Network, RNN)</strong>
+为网络增加“记忆”能力。标准的 RNN 在实践中存在<strong>长期依赖问题
+(Long-term Dependency Problem)</strong>
+。当序列很长时，梯度在从后向前传播的过程中会经过多次连乘，这会导致梯度值快速趋向于零（<strong>梯度消失</strong>）或变得极大（<strong>梯度爆炸</strong>）。梯度消失使得模型无法有效学习到序列早期信息对后期输出的影响，即难以捕捉长距离的依赖关系。</p>
+<p>LSTM 是一种特殊的 RNN，其核心创新在于引入了<strong>细胞状态 (Cell
+State)</strong> 和一套精密的<strong>门控机制 (Gating Mechanism)</strong>
+。细胞状态可以看作是一条独立于隐藏状态的信息通路，允许信息在时间步之间更顺畅地传递。门控机制则是由几个小型神经网络构成，它们可以学习如何有选择地让信息通过，从而控制细胞状态中信息的增加与移除。这些门包括：</p>
+<ul>
+<li><strong>遗忘门 (Forget
+Gate)</strong>：决定从上一时刻的细胞状态中丢弃哪些信息。</li>
+<li><strong>输入门 (Input
+Gate)</strong>：决定将当前输入中的哪些新信息存入细胞状态。</li>
+<li><strong>输出门 (Output
+Gate)</strong>：决定根据当前的细胞状态，输出哪些信息到隐藏状态。</li>
+</ul>
+<h3 id="transformer-架构解析">1.2 Transformer 架构解析</h3>
+<h4 id="encoder-decoder-整体结构">（1）Encoder-Decoder 整体结构</h4>
+<p>最初的 Transformer
+模型是为端到端任务机器翻译而设计的。如图所示，在宏观上遵循了一个经典的<strong>编码器-解码器
+(Encoder-Decoder)</strong> 架构。</p>
+<figure>
+<img src="/2026/01/15/hello-agents/ch3/1757249275674-3.png" srcset="/img/loading.gif" lazyload alt="Transformer 整体架构图">
+<figcaption aria-hidden="true">Transformer 整体架构图</figcaption>
+</figure>
+<p>我们可以将这个结构理解为一个分工明确的团队：</p>
+<ol type="1">
+<li><strong>编码器 (Encoder)</strong>
+：任务是“<strong>理解</strong>”输入的整个句子。它会读取所有输入词元(这个概念会在3.2.2节介绍)，最终为每个词元生成一个富含上下文信息的向量表示。</li>
+<li><strong>解码器 (Decoder)</strong>
+：任务是“<strong>生成</strong>”目标句子。它会参考自己已经生成的前文，并“咨询”编码器的理解结果，来生成下一个词。</li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/AI/" class="category-chain-item">AI</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI/Agent/" class="category-chain-item">Agent</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/AI/Agent/Hello-Agents/" class="category-chain-item">Hello-Agents</a>
+  
+  
+
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Agent/" class="print-no-link">#Agent</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>第三章 大语言模型基础</div>
+      <div>http://binbo-zappy.github.io/2026/01/15/hello-agents/ch3/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Binbo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年1月15日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/01/14/hello-agents/ch2/" title="第二章 智能体发展史">
+                        <span class="hidden-mobile">第二章 智能体发展史</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
